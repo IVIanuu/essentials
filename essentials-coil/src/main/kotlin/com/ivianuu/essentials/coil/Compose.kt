@@ -18,13 +18,14 @@ package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.core.Size
+import androidx.ui.core.Modifier
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun image(
@@ -46,7 +47,7 @@ fun image(
 @Composable
 fun Image(
     data: Any,
-    size: Size? = null,
+    modifier: Modifier = Modifier.None,
     placeholder: Image? = null,
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image) -> Unit
@@ -63,6 +64,8 @@ fun Image(
     )
 
     if (!wasPlaceholderNull || loadedImage != placeholder) {
-        image(loadedImage)
+        WithModifier(modifier = modifier) {
+            image(loadedImage)
+        }
     }
 }

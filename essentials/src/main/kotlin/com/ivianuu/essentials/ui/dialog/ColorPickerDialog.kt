@@ -36,6 +36,7 @@ import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
+import androidx.ui.layout.LayoutExpanded
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutMinWidth
@@ -51,7 +52,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.Expand
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
@@ -252,18 +252,17 @@ private fun ColorGridItem(
     onClick: () -> Unit
 ) {
     BaseColorGridItem(onClick = onClick) {
-        Expand {
-            EsSurface(
-                color = color,
-                contentColor = contentColorFor(color),
-                shape = RoundedCornerShape(50),
-                border = Border(
-                    color = MaterialTheme.colors().onSurface,
-                    width = 1.dp
-                ),
-                elevation = 0.dp
-            ) {
-            }
+        EsSurface(
+            modifier = LayoutExpanded,
+            color = color,
+            contentColor = contentColorFor(color),
+            shape = RoundedCornerShape(50),
+            border = Border(
+                color = MaterialTheme.colors().onSurface,
+                width = 1.dp
+            ),
+            elevation = 0.dp
+        ) {
         }
     }
 }

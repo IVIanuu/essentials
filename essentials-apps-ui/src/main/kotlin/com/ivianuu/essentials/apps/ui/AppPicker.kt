@@ -22,7 +22,7 @@ import androidx.compose.key
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
-import androidx.ui.layout.Center
+import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
@@ -31,7 +31,6 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
-import com.ivianuu.essentials.ui.layout.SizedBox
 import com.ivianuu.essentials.ui.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Icon
@@ -81,12 +80,11 @@ private fun AppInfo(
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {
-            SizedBox(size = 40.dp) {
-                Center {
-                    Image(data = AppIcon(app.packageName)) {
-                        Icon(image = it, style = AvatarIconStyle())
-                    }
-                }
+            Image(
+                data = AppIcon(app.packageName),
+                modifier = LayoutSize(width = 40.dp, height = 40.dp)
+            ) {
+                Icon(image = it, style = AvatarIconStyle())
             }
         },
         onClick = onClick

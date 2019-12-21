@@ -22,13 +22,13 @@ import androidx.ui.core.dp
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.layout.SizedBox
 import com.ivianuu.essentials.ui.material.EsSurface
 
 @Composable
@@ -79,15 +79,14 @@ fun ColorPreference(
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
         trailing = { context ->
-            SizedBox(size = 40.dp) {
-                EsSurface(
-                    color = context.currentValue,
-                    border = Border(
-                        color = MaterialTheme.colors().onSurface,
-                        width = 1.dp
-                    )
-                ) {}
-            }
+            EsSurface(
+                modifier = LayoutSize(width = 40.dp, height = 40.dp),
+                color = context.currentValue,
+                border = Border(
+                    color = MaterialTheme.colors().onSurface,
+                    width = 1.dp
+                )
+            ) {}
         },
         dialog = { context, _ ->
             ColorPickerDialog(

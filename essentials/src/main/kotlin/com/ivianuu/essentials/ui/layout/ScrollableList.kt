@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.LayoutExpandedWidth
 import com.ivianuu.essentials.ui.core.Axis
 
 @Composable
@@ -48,32 +48,32 @@ fun <T> ScrollableList(
 
 @Composable
 fun ScrollableList(
-    modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
+    modifier: Modifier = Modifier.None,
     scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     enabled: Boolean = true,
     children: @Composable() () -> Unit
 ) {
-    SizedBox(height = Dp.Infinity) {
-        when (direction) {
-            Axis.Horizontal -> {
-                HorizontalScroller(
-                    scrollerPosition = scrollerPosition,
-                    isScrollable = enabled
-                ) {
-                    Row(modifier = modifier) {
-                        children()
-                    }
+    when (direction) {
+        Axis.Horizontal -> {
+            HorizontalScroller(
+                modifier = modifier + LayoutExpandedWidth,
+                scrollerPosition = scrollerPosition,
+                isScrollable = enabled
+            ) {
+                Row {
+                    children()
                 }
             }
-            Axis.Vertical -> {
-                VerticalScroller(
-                    scrollerPosition = scrollerPosition,
-                    isScrollable = enabled
-                ) {
-                    Column(modifier = modifier) {
-                        children()
-                    }
+        }
+        Axis.Vertical -> {
+            VerticalScroller(
+                modifier = modifier + LayoutExpandedWidth,
+                scrollerPosition = scrollerPosition,
+                isScrollable = enabled
+            ) {
+                Column {
+                    children()
                 }
             }
         }

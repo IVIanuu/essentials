@@ -26,6 +26,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.core.looseMin
+import androidx.ui.layout.LayoutExpanded
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import com.ivianuu.essentials.ui.common.SafeArea
@@ -33,7 +34,7 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Stable
-import com.ivianuu.essentials.ui.layout.Expand
+import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun Scaffold(
@@ -82,42 +83,41 @@ fun Scaffold(
     }
 
     ScaffoldAmbient.Provider(value = scaffoldState) {
-        Expand {
-            val finalBody: @Composable() () -> Unit = {
-                EsSurface {
-                    ScaffoldLayout(
-                        state = scaffoldState,
-                        topAppBar = topAppBar,
-                        body = body,
-                        bottomBar = bottomBar,
-                        fab = fab
-                    )
-                }
-            }
-            val maybeBodyWithDrawer = if (drawerContent != null) {
-                {
-                    ModalDrawerLayout(
-                        drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
-                        onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
-                        gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
-                        drawerContent = {
-                            EsSurface {
-                                drawerContent()
-                            }
-                        },
-                        bodyContent = finalBody
-                    )
-                }
-            } else {
-                finalBody
-            }
-
-            if (scaffoldState.wrapInSafeArea) {
-                SafeArea(children = maybeBodyWithDrawer)
-            } else {
-                maybeBodyWithDrawer()
+        var layout: @Composable() () -> Unit = {
+            EsSurface {
+                ScaffoldLayout(
+                    state = scaffoldState,
+                    topAppBar = topAppBar,
+                    body = body,
+                    bottomBar = bottomBar,
+                    fab = fab
+                )
             }
         }
+
+        if (drawerContent != null) {
+            val tmp = layout
+            layout = {
+                ModalDrawerLayout(
+                    drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
+                    onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
+                    gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
+                    drawerContent = {
+                        EsSurface {
+                            drawerContent()
+                        }
+                    },
+                    bodyContent = tmp
+                )
+            }
+        }
+
+        if (scaffoldState.wrapInSafeArea) {
+            val tmp = layout
+            layout = { SafeArea(children = tmp) }
+        }
+
+        WithModifier(modifier = LayoutExpanded, children = layout)
     }
 }
 
