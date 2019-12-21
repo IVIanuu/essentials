@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.theming
+package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.store.prefs.BoxValueHolder
 

@@ -40,7 +40,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
-import com.ivianuu.essentials.theming.ThemeSettingsRoute
+import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.injekt.inject
@@ -257,11 +257,6 @@ enum class HomeItem(
         color = Color.Magenta,
         route = { TextInputRoute }
     ),
-    Theme(
-        title = "Theme",
-        color = Color.Gray,
-        route = { ThemeSettingsRoute }
-    ),
     Timer(
         title = "Timer",
         color = Color.Cyan,
@@ -271,5 +266,10 @@ enum class HomeItem(
         title = "Torch",
         color = Color.Blue,
         route = { TorchRoute }
+    ),
+    Twilight(
+        title = "Twilight",
+        color = Color.Gray,
+        route = { TwilightSettingsRoute }
     )
 }

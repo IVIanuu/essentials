@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.theming
+package com.ivianuu.essentials.twilight
 
 import android.app.Application
 import android.content.ComponentCallbacks2
@@ -22,10 +22,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
-import androidx.ui.graphics.Color
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -34,7 +32,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -46,53 +43,33 @@ import java.util.Calendar
 
 @ApplicationScope
 @Single
-class ThemingHelper(
+class TwilightHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    @DefaultTheme private val defaultTheme: Theme,
     private val resources: Resources,
     private val powerManager: PowerManager,
-    private val prefs: ThemePrefs
+    prefs: TwilightPrefs
 ) : AppService {
 
-    private val _state = ConflatedBroadcastChannel(ThemeState(
-        primaryColor = defaultTheme.primaryColor,
-        secondaryColor = defaultTheme.secondaryColor,
-        useBlack = defaultTheme.useBlack,
-        isDark = defaultTheme.twilightMode == TwilightMode.Dark
-    ))
-    val state: Flow<ThemeState> get() = _state.asFlow()
-    val currentState: ThemeState get() = _state.value
+    private val _isDark = ConflatedBroadcastChannel(false)
+    val isDark: Flow<Boolean> get() = _isDark.asFlow()
+    val currentIsDark: Boolean get() = _isDark.value
 
     init {
-        combine(
-            prefs.primaryColor.asFlow(),
-            prefs.secondaryColor.asFlow(),
-            prefs.useBlack.asFlow(),
-            isDark()
-        ) { primaryColor, secondaryColor, useBlack, isDark ->
-            ThemeState(
-                primaryColor = primaryColor,
-                secondaryColor = secondaryColor,
-                useBlack = useBlack,
-                isDark = isDark
-            )
-        }
-            .onEach { _state.offer(it) }
+        prefs.twilightMode.asFlow()
+            .flatMapLatest { mode ->
+                when (mode) {
+                    TwilightMode.System -> system()
+                    TwilightMode.Light -> flowOf(false)
+                    TwilightMode.Dark -> flowOf(true)
+                    TwilightMode.Battery -> battery()
+                    TwilightMode.Time -> time()
+                }
+            }
+            .distinctUntilChanged()
+            .onEach { _isDark.offer(it) }
             .launchIn(GlobalScope)
     }
-
-    private fun isDark() = prefs.twilightMode.asFlow()
-        .flatMapLatest { mode ->
-            when (mode) {
-                TwilightMode.System -> system()
-                TwilightMode.Light -> flowOf(false)
-                TwilightMode.Dark -> flowOf(true)
-                TwilightMode.Battery -> battery()
-                TwilightMode.Time -> time()
-            }
-        }
-        .distinctUntilChanged()
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
@@ -130,23 +107,4 @@ class ThemingHelper(
         app.registerComponentCallbacks(callbacks)
         awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
-}
-
-data class ThemeState(
-    val primaryColor: Color,
-    val secondaryColor: Color,
-    val useBlack: Boolean,
-    val isDark: Boolean
-) {
-    val backgroundColor =
-        if (!isDark) Color.White else if (useBlack) Color.Black else Color(0xFF121212)
-    val colors = ColorPalette(
-        isLight = !isDark,
-        primary = primaryColor,
-        primaryVariant = primaryColor,
-        secondary = secondaryColor,
-        secondaryVariant = secondaryColor,
-        background = backgroundColor,
-        surface = backgroundColor
-    )
 }

@@ -22,8 +22,8 @@ include(
     ":essentials-shortcutpicker",
     ":essentials-store",
     ":essentials-test",
-    ":essentials-theming",
     ":essentials-tile",
+    ":essentials-twilight",
     ":essentials-work",
     ":sample"
 )

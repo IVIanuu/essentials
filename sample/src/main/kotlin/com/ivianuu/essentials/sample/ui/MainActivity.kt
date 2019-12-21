@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import com.ivianuu.essentials.theming.CustomTheme
+import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
@@ -26,7 +26,7 @@ import kotlin.time.milliseconds
 class MainActivity : EsActivity() {
 
     override fun content() {
-        CustomTheme {
+        TwilightTheme {
             DefaultRouteTransitionAmbient.Provider(
                 value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
             ) {

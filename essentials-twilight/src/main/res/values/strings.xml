@@ -15,15 +15,8 @@
   -->
 
 <resources>
-    <string name="es_theming_title">Theme</string>
+    <string name="es_twilight_title">Dark mode</string>
 
-    <string name="es_pref_category_colors">Colors</string>
-    <string name="es_pref_primary_color">Primary color</string>
-    <string name="es_pref_secondary_color">Secondary color</string>
-    <string name="es_pref_use_black">Use black</string>
-    <string name="es_pref_use_black_summary">Use black background in dark mode</string>
-
-    <string name="es_pref_category_twilight">Dark mode</string>
     <string name="es_twilight_mode_light">Never</string>
     <string name="es_twilight_mode_light_desc">Always use the light theme</string>
     <string name="es_twilight_mode_dark">Always</string>
@@ -34,7 +27,5 @@
     <string name="es_twilight_mode_battery_desc">Use the dark theme while the battery saver is enabled</string>
     <string name="es_twilight_mode_system">System</string>
     <string name="es_twilight_mode_system_desc">Use the system default dark mode setting</string>
-
-    <string name="es_reset">Reset</string>
 
 </resources>

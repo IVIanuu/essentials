@@ -35,8 +35,8 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" filepath="$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-store/essentials-store.iml" filepath="$PROJECT_DIR$/essentials-store/essentials-store.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-theming/essentials-theming.iml" filepath="$PROJECT_DIR$/essentials-theming/essentials-theming.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-tile/essentials-tile.iml" filepath="$PROJECT_DIR$/essentials-tile/essentials-tile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-twilight/essentials-twilight.iml" filepath="$PROJECT_DIR$/essentials-twilight/essentials-twilight.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-work/essentials-work.iml" filepath="$PROJECT_DIR$/essentials-work/essentials-work.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" />

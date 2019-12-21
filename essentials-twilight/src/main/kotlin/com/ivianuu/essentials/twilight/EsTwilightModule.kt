@@ -16,13 +16,10 @@
 
 package com.ivianuu.essentials.theming
 
-import androidx.compose.Immutable
-import androidx.ui.graphics.Color
+import com.ivianuu.essentials.app.bindAppService
+import com.ivianuu.essentials.twilight.TwilightHelper
+import com.ivianuu.injekt.Module
 
-@Immutable
-data class Theme(
-    val primaryColor: Color,
-    val secondaryColor: Color,
-    val useBlack: Boolean,
-    val twilightMode: TwilightMode
-)
+val EsTwilightModule = Module {
+    bindAppService<TwilightHelper>()
+}
