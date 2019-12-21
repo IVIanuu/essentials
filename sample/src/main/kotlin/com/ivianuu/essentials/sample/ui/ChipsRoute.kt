@@ -32,6 +32,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.RippleColorProvider
@@ -43,7 +44,7 @@ val ChipsRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar("Chips") },
         body = {
-            Container(modifier = LayoutPadding(all = 8.dp)) {
+            WithModifier(modifier = LayoutPadding(all = 8.dp)) {
                 FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
                     Names.shuffled().forEach { name ->
                         Chip(name = name)

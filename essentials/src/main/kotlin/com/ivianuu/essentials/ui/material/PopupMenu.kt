@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.common.ref
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
+import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
@@ -92,7 +93,7 @@ private fun PopupMenuItem(
                     alignment = Alignment.CenterLeft
                 ) {
                     Wrap(Alignment.CenterLeft) {
-                        Container(
+                        WithModifier(
                             modifier = LayoutPadding(left = 16.dp, right = 16.dp),
                             children = content
                         )

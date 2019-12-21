@@ -19,16 +19,16 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutMaxWidth
 import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EsSurface
 
 @Composable
 fun Dialog(child: @Composable() () -> Unit) {
-    Container(
+    WithModifier(
         modifier = LayoutPadding(
             left = 32.dp,
             top = 32.dp,

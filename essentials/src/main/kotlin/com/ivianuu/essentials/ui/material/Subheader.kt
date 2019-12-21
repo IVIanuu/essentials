@@ -35,15 +35,12 @@ fun Subheader(text: @Composable() () -> Unit) {
     Container(
         height = 48.dp,
         expanded = true,
+        modifier = LayoutPadding(left = 16.dp, right = 16.dp),
         alignment = Alignment.CenterLeft
     ) {
-        Container(
-            modifier = LayoutPadding(left = 16.dp, right = 16.dp)
-        ) {
-            val textStyle = MaterialTheme.typography().body2.copy(
-                color = MaterialTheme.colors().secondary
-            )
-            CurrentTextStyleProvider(value = textStyle, children = text)
-        }
+        val textStyle = MaterialTheme.typography().body2.copy(
+            color = MaterialTheme.colors().secondary
+        )
+        CurrentTextStyleProvider(value = textStyle, children = text)
     }
 }

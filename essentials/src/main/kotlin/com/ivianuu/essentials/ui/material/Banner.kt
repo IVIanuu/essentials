@@ -23,7 +23,6 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.dp
 import androidx.ui.core.ipx
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
@@ -33,6 +32,8 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.layout.WithModifier
+
 @Composable
 fun Banner(
     leading: (@Composable() () -> Unit)? = null,
@@ -48,9 +49,7 @@ fun Banner(
         CurrentIconStyleProvider(value = AvatarIconStyle(), children = leading)
     })
 
-    Container(
-        modifier = LayoutExpandedWidth
-    ) {
+    WithModifier(modifier = LayoutExpandedWidth) {
         Column {
             Spacer(LayoutHeight(24.dp))
 

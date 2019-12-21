@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EmphasisProvider
 
 // todo remove hardcoded values
@@ -181,7 +182,7 @@ private fun DialogContentLayout(
     val children: @Composable() () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
-                Container(
+                WithModifier(
                     modifier = LayoutPadding(
                         left = 24.dp,
                         top = 24.dp,
@@ -201,7 +202,7 @@ private fun DialogContentLayout(
             }
 
             ParentData(DialogContentSlot.Content) {
-                Container(
+                WithModifier(
                     modifier = LayoutPadding(
                         top = if (header == null) 24.dp else 0.dp,
                         left = if (applyContentPadding) 24.dp else 0.dp,
@@ -222,7 +223,7 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
-                    Container(
+                    WithModifier(
                         modifier = LayoutPadding(top = 28.dp),
                         children = buttons
                     )
