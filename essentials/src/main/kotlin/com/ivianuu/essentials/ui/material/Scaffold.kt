@@ -43,11 +43,13 @@ fun Scaffold(
     bottomBar: (@Composable() () -> Unit)? = null,
     fab: (@Composable() () -> Unit)? = null,
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
-    bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap
+    bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
+    wrapInSafeArea: Boolean = true
 ) {
     val scaffoldState = remember { ScaffoldState() }
     remember(fabPosition) { scaffoldState.fabPosition = fabPosition }
     remember(bodyLayoutMode) { scaffoldState.bodyLayoutMode = bodyLayoutMode }
+    remember(wrapInSafeArea) { scaffoldState.wrapInSafeArea = wrapInSafeArea }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -66,8 +68,7 @@ fun Scaffold(
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null,
-    wrapInSafeArea: Boolean = true
+    fab: (@Composable() () -> Unit)? = null
 ) {
     // update state
     scaffoldState.hasTopAppBar = topAppBar != null
@@ -111,7 +112,7 @@ fun Scaffold(
                 finalBody
             }
 
-            if (wrapInSafeArea) {
+            if (scaffoldState.wrapInSafeArea) {
                 SafeArea(children = maybeBodyWithDrawer)
             } else {
                 maybeBodyWithDrawer()
@@ -139,6 +140,7 @@ class ScaffoldState {
 
     var fabPosition by framed(FabPosition.End)
     var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
+    var wrapInSafeArea by framed(true)
 
     enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 
