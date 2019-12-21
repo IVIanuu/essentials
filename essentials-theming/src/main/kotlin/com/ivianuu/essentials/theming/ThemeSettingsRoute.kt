@@ -68,18 +68,18 @@ val ThemeSettingsRoute = Route {
                 PreferenceSubheader(text = stringResource(R.string.es_pref_category_colors))
                 ColorPreference(
                     box = prefs.primaryColor,
-                    title = stringResource(R.string.es_primary_color),
+                    title = stringResource(R.string.es_pref_primary_color),
                     showAlphaSelector = false
                 )
                 ColorPreference(
                     box = prefs.secondaryColor,
-                    title = stringResource(R.string.es_secondary_color),
+                    title = stringResource(R.string.es_pref_secondary_color),
                     showAlphaSelector = false
                 )
                 CheckboxPreference(
                     box = prefs.useBlack,
-                    title = stringResource(R.string.es_use_black),
-                    summary = stringResource(R.string.es_use_black_summary)
+                    title = stringResource(R.string.es_pref_use_black),
+                    summary = stringResource(R.string.es_pref_use_black_summary)
                 )
 
                 PreferenceSubheader(text = stringResource(R.string.es_pref_category_twilight))
