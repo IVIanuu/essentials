@@ -17,14 +17,16 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.ui.core.Modifier
 import androidx.ui.core.PxPosition
 
 @Composable
 fun SquaredBox(
     fit: SquaredBoxFit,
+    modifier: Modifier = Modifier.None,
     child: @Composable() () -> Unit
 ) {
-    SingleChildLayout(child = child) { measureable, constraints ->
+    SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
         val size = when (fit) {
             SquaredBoxFit.MatchWidth -> constraints.maxWidth
             SquaredBoxFit.MatchHeight -> constraints.maxHeight

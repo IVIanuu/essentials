@@ -48,8 +48,8 @@ import androidx.ui.graphics.PointMode
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutSize
-import androidx.ui.layout.Padding
 import androidx.ui.layout.Spacer
 import androidx.ui.lerp
 import androidx.ui.material.MaterialTheme
@@ -218,7 +218,9 @@ private fun SliderImpl(position: SliderPosition, color: Color, width: Float, pre
             val fraction = with(position) { calcFraction(startValue, endValue, this.value) }
             val offset = (widthDp - thumbSize) * fraction
             DrawTrack(color, position)
-            Padding(left = offset) {
+            Container(
+                modifier = LayoutPadding(left = offset)
+            ) {
                 Ripple(bounded = false) {
                     Surface(
                         shape = CircleShape,

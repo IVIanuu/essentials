@@ -40,7 +40,7 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
@@ -166,10 +166,7 @@ private fun ColorPickerContent(
                 }
 
 
-                Padding(
-                    left = 24.dp,
-                    right = 24.dp
-                ) {
+                Container(modifier = LayoutPadding(left = 24.dp, right = 24.dp)) {
                     TabContent<ColorPickerPage>(keepState = true) { _, page ->
                         Container(height = 300.dp) {
                             when (page) {
@@ -188,9 +185,8 @@ private fun ColorPickerContent(
             }
         }
     } else {
-        Padding(
-            left = 24.dp,
-            right = 24.dp,
+        Container(
+            modifier = LayoutPadding(left = 24.dp, right = 24.dp),
             children = colorGrid
         )
     }
@@ -210,32 +206,30 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        ScrollableList {
-            Padding(padding = 4.dp) {
-                Table(
-                    columns = 4,
-                    alignment = { Alignment.Center }
-                ) {
-                    val chunkedItems = items.chunked(4)
-                    chunkedItems.forEach { rowItems ->
-                        tableRow {
-                            rowItems.forEach { item ->
-                                key(item) {
-                                    when (item) {
-                                        is ColorGridItem.Back -> ColorGridBackButton(
-                                            onClick = { setCurrentPalette(null) }
-                                        )
-                                        is ColorGridItem.Color -> ColorGridItem(
-                                            color = item.color,
-                                            onClick = {
-                                                if (currentPalette == null) {
-                                                    setCurrentPalette(colorPalettes.first { it.front == item.color })
-                                                } else {
-                                                    onColorSelected(item.color)
-                                                }
+        ScrollableList(modifier = LayoutPadding(all = 4.dp)) {
+            Table(
+                columns = 4,
+                alignment = { Alignment.Center }
+            ) {
+                val chunkedItems = items.chunked(4)
+                chunkedItems.forEach { rowItems ->
+                    tableRow {
+                        rowItems.forEach { item ->
+                            key(item) {
+                                when (item) {
+                                    is ColorGridItem.Back -> ColorGridBackButton(
+                                        onClick = { setCurrentPalette(null) }
+                                    )
+                                    is ColorGridItem.Color -> ColorGridItem(
+                                        color = item.color,
+                                        onClick = {
+                                            if (currentPalette == null) {
+                                                setCurrentPalette(colorPalettes.first { it.front == item.color })
+                                            } else {
+                                                onColorSelected(item.color)
                                             }
-                                        )
-                                    }
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -290,10 +284,11 @@ private fun BaseColorGridItem(
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
-            Padding(padding = 4.dp) {
-                SquaredBox(fit = SquaredBoxFit.MatchWidth) {
-                    Center(children = child)
-                }
+            SquaredBox(
+                fit = SquaredBoxFit.MatchWidth,
+                modifier = LayoutPadding(all = 4.dp)
+            ) {
+                Center(children = child)
             }
         }
     }

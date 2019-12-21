@@ -27,7 +27,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.FlowRow
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
@@ -43,7 +43,7 @@ val ChipsRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar("Chips") },
         body = {
-            Padding(padding = 8.dp) {
+            Container(modifier = LayoutPadding(all = 8.dp)) {
                 FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
                     Names.shuffled().forEach { name ->
                         Chip(name = name)

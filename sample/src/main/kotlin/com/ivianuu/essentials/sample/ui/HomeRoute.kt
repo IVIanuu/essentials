@@ -21,7 +21,6 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Draw
-import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -30,7 +29,6 @@ import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
-import androidx.ui.layout.Padding
 import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
@@ -167,11 +165,10 @@ private fun ColorAvatar(color: Color) {
 
 @Composable
 private fun HomeDivider() {
-    Padding(left = 72.dp) {
-        Opacity(0.12f) {
-            Divider(color = (MaterialTheme.colors().onSurface))
-        }
-    }
+    Divider(
+        color = (MaterialTheme.colors().onSurface.copy(alpha = 0.12f)),
+        indent = 72.dp
+    )
 }
 
 enum class HomeItem(

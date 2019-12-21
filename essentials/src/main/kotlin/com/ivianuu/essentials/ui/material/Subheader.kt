@@ -22,7 +22,7 @@ import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 
 @Composable
@@ -37,7 +37,9 @@ fun Subheader(text: @Composable() () -> Unit) {
         expanded = true,
         alignment = Alignment.CenterLeft
     ) {
-        Padding(left = 16.dp, right = 16.dp) {
+        Container(
+            modifier = LayoutPadding(left = 16.dp, right = 16.dp)
+        ) {
             val textStyle = MaterialTheme.typography().body2.copy(
                 color = MaterialTheme.colors().secondary
             )

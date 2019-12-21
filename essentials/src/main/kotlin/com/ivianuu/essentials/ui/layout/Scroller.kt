@@ -27,24 +27,24 @@ import com.ivianuu.essentials.ui.core.Axis
 @Composable
 fun Scroller(
     direction: Axis,
-    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     modifier: Modifier = Modifier.None,
+    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     isScrollable: Boolean = true,
     child: @Composable() () -> Unit
 ) {
     when (direction) {
         Axis.Horizontal -> {
             HorizontalScroller(
-                scrollerPosition = scrollerPosition,
                 modifier = modifier,
+                scrollerPosition = scrollerPosition,
                 isScrollable = isScrollable,
                 child = child
             )
         }
         Axis.Vertical -> {
             VerticalScroller(
-                scrollerPosition = scrollerPosition,
                 modifier = modifier,
+                scrollerPosition = scrollerPosition,
                 isScrollable = isScrollable,
                 child = child
             )

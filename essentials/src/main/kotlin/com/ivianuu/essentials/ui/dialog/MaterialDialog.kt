@@ -29,7 +29,7 @@ import androidx.ui.core.ipx
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
@@ -180,14 +180,15 @@ private fun DialogContentLayout(
     val children: @Composable() () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
-                Padding(
-                    left = 24.dp,
-                    top = 24.dp,
-                    right = 24.dp,
-                    bottom = if (buttons != null && content == null) 28.dp else 24.dp
-                ) {
-                    header()
-                }
+                Container(
+                    modifier = LayoutPadding(
+                        left = 24.dp,
+                        top = 24.dp,
+                        right = 24.dp,
+                        bottom = if (buttons != null && content == null) 28.dp else 24.dp
+                    ),
+                    children = header
+                )
             }
         }
 
@@ -199,14 +200,15 @@ private fun DialogContentLayout(
             }
 
             ParentData(DialogContentSlot.Content) {
-                Padding(
-                    top = if (header == null) 24.dp else 0.dp,
-                    left = if (applyContentPadding) 24.dp else 0.dp,
-                    right = if (applyContentPadding) 24.dp else 0.dp,
-                    bottom = if (buttons == null) 24.dp else 0.dp
-                ) {
-                    content()
-                }
+                Container(
+                    modifier = LayoutPadding(
+                        top = if (header == null) 24.dp else 0.dp,
+                        left = if (applyContentPadding) 24.dp else 0.dp,
+                        right = if (applyContentPadding) 24.dp else 0.dp,
+                        bottom = if (buttons == null) 24.dp else 0.dp
+                    ),
+                    children = content
+                )
             }
         }
 
@@ -219,9 +221,10 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
-                    Padding(top = 28.dp) {
-                        buttons()
-                    }
+                    Container(
+                        modifier = LayoutPadding(top = 28.dp),
+                        children = buttons
+                    )
                 } else {
                     buttons()
                 }
