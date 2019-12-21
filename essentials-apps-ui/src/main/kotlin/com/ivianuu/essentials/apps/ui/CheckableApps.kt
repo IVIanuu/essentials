@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -83,18 +84,15 @@ fun CheckableAppsScreen(
                 trailing = {
                     PopupMenuButton(
                         items = listOf(
-                            R.string.es_select_all,
-                            R.string.es_deselect_all
-                        ),
-                        onSelected = {
-                            when (it) {
-                                R.string.es_select_all -> viewModel.selectAllClicked()
-                                R.string.es_deselect_all -> viewModel.deselectAllClicked()
-                            }
-                        },
-                        item = {
-                            Text(stringResource(it))
-                        }
+                            PopupMenu.Item(
+                                text = stringResource(R.string.es_select_all),
+                                onSelected = { viewModel.selectAllClicked() }
+                            ),
+                            PopupMenu.Item(
+                                text = stringResource(R.string.es_deselect_all),
+                                onSelected = { viewModel.deselectAllClicked() }
+                            )
+                        )
                     )
                 }
             )

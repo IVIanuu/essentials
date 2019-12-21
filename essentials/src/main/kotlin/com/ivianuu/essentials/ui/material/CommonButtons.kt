@@ -17,12 +17,17 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupStyle
+import com.ivianuu.essentials.ui.popup.PopupStyleAmbient
+import com.ivianuu.essentials.ui.popup.PopupTrigger
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 @Composable
@@ -64,24 +69,57 @@ fun NavigationButton() {
 }
 
 @Composable
+fun PopupMenuButton(
+    alignment: Alignment = Alignment.TopLeft,
+    image: Image = drawableResource(R.drawable.es_ic_more_vert),
+    popupStyle: PopupStyle = ambient(PopupStyleAmbient),
+    onCancel: (() -> Unit)? = null,
+    items: List<PopupMenu.Item>
+) {
+    PopupTrigger(
+        alignment = alignment,
+        onCancel = onCancel,
+        popup = {
+            PopupMenu(
+                items = items,
+                style = popupStyle
+            )
+        },
+        child = { showPopup ->
+            IconButton(
+                image = image,
+                onClick = showPopup
+            )
+        }
+    )
+}
+
+@Composable
 fun <T> PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
     image: Image = drawableResource(R.drawable.es_ic_more_vert),
+    popupStyle: PopupStyle = ambient(PopupStyleAmbient),
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
 ) {
-    PopupMenuTrigger(
+    PopupTrigger(
         alignment = alignment,
         onCancel = onCancel,
-        items = items,
-        onSelected = onSelected,
-        item = item
-    ) { showPopup ->
-        IconButton(
-            image = image,
-            onClick = showPopup
-        )
-    }
+        popup = {
+            PopupMenu(
+                items = items,
+                onSelected = onSelected,
+                item = item,
+                style = popupStyle
+            )
+        },
+        child = { showPopup ->
+            IconButton(
+                image = image,
+                onClick = showPopup
+            )
+        }
+    )
 }
