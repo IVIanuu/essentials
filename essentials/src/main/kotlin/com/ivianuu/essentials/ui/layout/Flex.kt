@@ -42,6 +42,8 @@ import androidx.ui.core.toPx
 import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.LayoutScopeMarker
 
+// todo remove once we can use a LayoutModifier for crossAxisAlignment
+
 /**
  * Collects information about the children of a [FlexColumn] or [FlexColumn]
  * when its body is executed with a [FlexChildren] instance as argument.
