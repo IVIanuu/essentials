@@ -144,6 +144,7 @@ private fun ColorPickerContent(
 ) {
     val colorGrid: @Composable() () -> Unit = {
         ColorGrid(
+            currentColor = color,
             colorPalettes = colorPalettes,
             onColorSelected = onColorChanged
         )
@@ -195,6 +196,7 @@ private fun ColorPickerContent(
 
 @Composable
 private fun ColorGrid(
+    currentColor: Color,
     colorPalettes: List<ColorPickerPalette>,
     onColorSelected: (Color) -> Unit
 ) {
@@ -223,9 +225,16 @@ private fun ColorGrid(
                                     )
                                     is ColorGridItem.Color -> ColorGridItem(
                                         color = item.color,
+                                        isSelected = item.color == currentColor,
                                         onClick = {
                                             if (currentPalette == null) {
-                                                setCurrentPalette(colorPalettes.first { it.front == item.color })
+                                                val paletteForItem =
+                                                    colorPalettes.first { it.front == item.color }
+                                                if (paletteForItem.colors.size > 1) {
+                                                    setCurrentPalette(paletteForItem)
+                                                } else {
+                                                    onColorSelected(item.color)
+                                                }
                                             } else {
                                                 onColorSelected(item.color)
                                             }
@@ -249,6 +258,7 @@ private sealed class ColorGridItem {
 @Composable
 private fun ColorGridItem(
     color: Color,
+    isSelected: Boolean,
     onClick: () -> Unit
 ) {
     BaseColorGridItem(onClick = onClick) {
@@ -263,8 +273,19 @@ private fun ColorGridItem(
             ),
             elevation = 0.dp
         ) {
+            if (isSelected) {
+                Center {
+                    Icon(
+                        image = drawableResource(R.drawable.ic_check),
+                        style = currentIconStyle().copy(
+                            size = Size(width = 36.dp, height = 36.dp)
+                        )
+                    )
+                }
+            }
         }
     }
+
 }
 
 @Composable
