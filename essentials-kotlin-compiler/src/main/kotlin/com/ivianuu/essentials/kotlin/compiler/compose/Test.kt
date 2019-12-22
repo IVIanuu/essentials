@@ -466,7 +466,7 @@ private fun wrapComposableLambdasInObserve(
 
                         val argDescriptor = if (parentWithType is Node.ValueArg) {
                             (resolvedCall.getArgumentMapping(parentWithType.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
-                        } else resulting.valueParameters.last()
+                        } else resulting.valueParameters.lastOrNull() ?: return@visit
 
                         val notInlined = !resulting.isInline || argDescriptor.isNoinline
                         if (notInlined &&
