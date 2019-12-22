@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev335"
+    const val version = "${Build.versionName}-dev336"
 }
 
 object Deps {
@@ -40,9 +40,6 @@ object Deps {
         const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
-
-        const val constraintLayout =
-            "androidx.constraintlayout:constraintlayout:2.0.0-beta3" // todo remove legacy
 
         object Lifecycle {
             private const val version = "2.2.0-rc02"
