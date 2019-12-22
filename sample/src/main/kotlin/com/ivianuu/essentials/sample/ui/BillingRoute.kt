@@ -18,6 +18,9 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
 import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.Spacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.billing.PurchaseManager
@@ -49,6 +52,8 @@ val BillingRoute = Route {
                 style = MaterialTheme.typography().h6
             )
 
+            Spacer(LayoutHeight(8.dp))
+
             if (!isPurchased) {
                 Button(
                     text = "Purchase",
@@ -68,6 +73,4 @@ val BillingRoute = Route {
     }
 }
 
-val DummySku = Sku(
-    Sku.Type.InApp, "dummy"
-)
+val DummySku = Sku(skuString = "dummy", type = Sku.Type.InApp)

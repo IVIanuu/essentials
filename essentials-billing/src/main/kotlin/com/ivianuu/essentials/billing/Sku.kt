@@ -20,8 +20,8 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.SkuDetailsParams
 
 data class Sku(
-    val type: Type,
-    val skuString: String
+    val skuString: String,
+    val type: Type
 ) {
 
     internal fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
