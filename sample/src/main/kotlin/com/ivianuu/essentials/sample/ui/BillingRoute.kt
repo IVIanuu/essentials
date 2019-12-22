@@ -23,6 +23,7 @@ import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.common.SimpleScreen
@@ -58,7 +59,8 @@ val BillingRoute = Route {
                 Button(
                     text = "Purchase",
                     onClick = launchOnClick {
-                        purchaseManager.purchase(DummySku)
+                        val result = purchaseManager.purchase(DummySku)
+                        d { "purchase result $result" }
                     }
                 )
             } else {
