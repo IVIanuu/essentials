@@ -108,6 +108,8 @@ object Deps {
     const val essentialsGradlePlugin =
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev332"
 
+    const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
+
     object Injekt {
         private const val version = "0.0.1-dev85"
         const val injekt = "com.ivianuu.injekt:injekt:$version"

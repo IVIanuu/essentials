@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-about/essentials-about.iml" filepath="$PROJECT_DIR$/essentials-about/essentials-about.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-accessibility/essentials-accessibility.iml" filepath="$PROJECT_DIR$/essentials-accessibility/essentials-accessibility.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-activityresult/essentials-activityresult.iml" filepath="$PROJECT_DIR$/essentials-activityresult/essentials-activityresult.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-analytics/essentials-analytics.iml" filepath="$PROJECT_DIR$/essentials-analytics/essentials-analytics.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" />

@@ -19,6 +19,7 @@ include(
     ":essentials-about",
     ":essentials-accessibility",
     ":essentials-activityresult",
+    ":essentials-analytics",
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",
