@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.billing
 
 import android.app.Activity
-import android.content.Intent
+import android.content.Context
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
@@ -35,46 +35,27 @@ import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.RewardLoadParams
 import com.android.billingclient.api.RewardResponseListener
+import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
-import com.android.billingclient.util.BillingHelper
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
-@Factory
+@ApplicationScope
+@Single
 class DebugBillingClient(
+    private val context: Context,
     @Param private val purchasesUpdatedListener: PurchasesUpdatedListener,
     private val billingStore: BillingStore
 ) : BillingClient() {
-
-    private val resultListener = { intent: Intent ->
-        // Receiving the result from local broadcast and triggering a callback on listener.
-        @BillingResponseCode
-        val responseCode =
-            intent.getIntExtra(DebugBillingActivity.RESPONSE_CODE, BillingResponseCode.ERROR)
-                ?: BillingResponseCode.ERROR
-
-        var purchases: List<Purchase>? = null
-        if (responseCode == BillingResponseCode.OK) {
-            val resultData = intent.getBundleExtra(DebugBillingActivity.RESPONSE_BUNDLE)
-            purchases = BillingHelper.extractPurchases(resultData)
-
-            // save the purchase
-            purchases.forEach { billingStore.addPurchase(it) }
-        }
-
-        // save the result
-        purchasesUpdatedListener.onPurchasesUpdated(
-            BillingResult.newBuilder().setResponseCode(
-                responseCode
-            ).build(), purchases
-        )
-    }
 
     private var billingClientStateListener: BillingClientStateListener? = null
 
@@ -84,6 +65,8 @@ class DebugBillingClient(
         CONNECTED,
         CLOSED
     }
+
+    private val requests = ConcurrentHashMap<String, PurchaseRequest>()
 
     private var clientState = DISCONNECTED
 
@@ -100,8 +83,6 @@ class DebugBillingClient(
             return
         }
 
-        Messager.registerListener(resultListener)
-
         this.billingClientStateListener = listener
         clientState = CONNECTED
         listener.onBillingSetupFinished(
@@ -112,7 +93,6 @@ class DebugBillingClient(
     }
 
     override fun endConnection() {
-        Messager.unregisterListener(resultListener)
         billingClientStateListener?.onBillingServiceDisconnected()
         clientState = CLOSED
     }
@@ -158,10 +138,13 @@ class DebugBillingClient(
     }
 
     override fun launchBillingFlow(activity: Activity?, params: BillingFlowParams?): BillingResult {
-        val intent = Intent(activity, DebugBillingActivity::class.java)
-        intent.putExtra(DebugBillingActivity.REQUEST_SKU_TYPE, params?.skuType)
-        intent.putExtra(DebugBillingActivity.REQUEST_SKU, params?.sku)
-        activity!!.startActivity(intent)
+        if (params == null) return BillingResult.newBuilder().setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
+
+        val requestId = UUID.randomUUID().toString()
+        val request = PurchaseRequest(params.sku, params.skuType!!)
+        requests[requestId] = request
+        DebugBillingActivity.purchase(context, requestId)
+
         return BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build()
     }
 
@@ -277,5 +260,34 @@ class DebugBillingClient(
                 )
             }
         }
+    }
+
+    internal fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
+        val request = requests[requestId] ?: return null
+        return billingStore.getSkuDetails(
+            SkuDetailsParams.newBuilder()
+                .setType(request.skuType)
+                .setSkusList(listOf(request.sku))
+                .build()
+        ).firstOrNull()
+    }
+
+    internal fun onPurchaseResult(
+        requestId: String,
+        responseCode: Int,
+        purchases: List<Purchase>?
+    ) {
+        requests.remove(requestId)
+
+        if (responseCode == BillingResponseCode.OK) {
+            purchases!!.forEach { billingStore.addPurchase(it) }
+        }
+
+        // save the result
+        purchasesUpdatedListener.onPurchasesUpdated(
+            BillingResult.newBuilder().setResponseCode(
+                responseCode
+            ).build(), purchases
+        )
     }
 }

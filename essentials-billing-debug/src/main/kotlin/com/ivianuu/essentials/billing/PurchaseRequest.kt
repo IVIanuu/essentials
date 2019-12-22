@@ -16,21 +16,7 @@
 
 package com.ivianuu.essentials.billing
 
-import android.content.Intent
-
-internal object Messager {
-
-    private val listeners = mutableSetOf<(Intent) -> Unit>()
-
-    fun registerListener(listener: (Intent) -> Unit) {
-        listeners += listener
-    }
-
-    fun unregisterListener(listener: (Intent) -> Unit) {
-        listeners -= listener
-    }
-
-    fun send(intent: Intent) {
-        listeners.toList().forEach { it(intent) }
-    }
-}
+internal data class PurchaseRequest(
+    val sku: String,
+    val skuType: String
+)

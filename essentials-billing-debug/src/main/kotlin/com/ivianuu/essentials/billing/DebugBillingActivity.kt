@@ -18,132 +18,126 @@ package com.ivianuu.essentials.billing
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.ui.core.Text
+import androidx.ui.graphics.Color
+import androidx.ui.layout.Spacer
+import androidx.ui.material.ContainedButtonStyle
+import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.util.BillingHelper
-import com.ivianuu.essentials.billing.debug.R
+import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.dialog.DialogButton
+import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.ui.dialog.MaterialDialog
+import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.material.contentColorFor
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.inject
 import java.util.Date
 
-class DebugBillingActivity : AppCompatActivity() {
+class DebugBillingActivity : EsActivity() {
 
-    companion object {
-        internal const val RESPONSE_INTENT_ACTION = "proxy_activity_response_intent_action"
-        internal const val RESPONSE_CODE = "response_code_key"
-        internal const val RESPONSE_BUNDLE = "response_bundle_key"
-        internal const val RESPONSE_INAPP_PURCHASE_DATA = "INAPP_PURCHASE_DATA"
-        internal const val REQUEST_SKU_TYPE = "request_sku_type"
-        internal const val REQUEST_SKU = "request_sku"
-    }
+    private val client: DebugBillingClient by inject()
+    private lateinit var requestId: String
+    private lateinit var skuDetails: SkuDetails
 
-    private lateinit var title: TextView
-    private lateinit var description: TextView
-    private lateinit var price: TextView
-    private lateinit var buyButton: Button
-
-    private lateinit var prefs: SharedPreferences
-    @SkuType
-    private lateinit var skuType: String
-    private lateinit var item: SkuDetails
-    private lateinit var itemJson: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_debug_billing)
-
-        prefs = getSharedPreferences("dbx", MODE_PRIVATE)
-
-        title = findViewById(R.id.title)
-        description = findViewById(R.id.description)
-        price = findViewById(R.id.price)
-        buyButton = findViewById(R.id.buy)
-
-        val sku = intent.getStringExtra(REQUEST_SKU)
-        skuType = intent.getStringExtra(REQUEST_SKU_TYPE)!!
-        val items = BillingStore(this)
-            .getSkuDetails(
-                SkuDetailsParams.newBuilder()
-                    .setType(skuType)
-                    .setSkusList(listOf(sku))
-                    .build()
-            )
-            .associate { it.sku to it }
-        val it = items[sku]
-        if (it == null) {
-            Log.e("DBX", "Unknown $skuType sku: $sku")
+    override fun content() {
+        get<PurchaseManager>() // just to properly initialize the DebugBillingClient
+        val requestId = intent.getStringExtra(KEY_REQUEST_ID)
+        if (requestId == null) {
             finish()
             return
         }
-        item = it
-        title.text = item.title
-        description.text = item.description
-        price.text = item.price
+        this.requestId = requestId
 
-        // TODO get the response code from a spinner with options
-        buyButton.setOnClickListener {
-            sendResult(
-                BillingClient.BillingResponseCode.OK,
-                buildResultBundle(item.toPurchaseData(this, skuType))
-            )
+        val skuDetails = client.getSkuDetailsForRequest(requestId)
+        if (skuDetails == null) {
             finish()
+            return
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
-        window.addFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)
+        this.skuDetails = skuDetails
+
+        Navigator(startRoute = PurchaseDialogRoute)
     }
 
-    override fun onBackPressed() {
-        broadcastUserCanceled()
-        super.onBackPressed()
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_OUTSIDE) {
-            broadcastUserCanceled()
-            finish()
-            return true
-        }
-        return super.onTouchEvent(event)
-    }
-
-    private fun broadcastUserCanceled() {
-        sendResult(BillingClient.BillingResponseCode.USER_CANCELED, Bundle())
-    }
-
-    private fun buildResultBundle(purchase: Purchase): Bundle {
-        return Bundle().apply {
-            putInt(BillingHelper.RESPONSE_CODE, BillingClient.BillingResponseCode.OK)
-            putStringArrayList(
-                BillingHelper.RESPONSE_INAPP_PURCHASE_DATA_LIST,
-                arrayListOf(purchase.originalJson)
-            )
-            putStringArrayList(
-                BillingHelper.RESPONSE_INAPP_SIGNATURE_LIST,
-                arrayListOf(purchase.signature)
-            )
-        }
-    }
-
-    private fun SkuDetails.toPurchaseData(context: Context, @SkuType skuType: String): Purchase {
-        val json = """{"orderId":"$sku..0","packageName":"${context.packageName}","productId":
+    private fun SkuDetails.toPurchaseData(): Purchase {
+        val json = """{"orderId":"$sku..0","packageName":"$packageName","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
       |"0987654321"}""".trimMargin()
-        return Purchase(json, "debug-signature-$sku-$skuType")
+        return Purchase(json, "debug-signature-$sku-${skuDetails.type}")
     }
 
-    private fun sendResult(responseCode: Int, resultBundle: Bundle) {
-        val intent = Intent(RESPONSE_INTENT_ACTION)
-        intent.putExtra(RESPONSE_CODE, responseCode)
-        intent.putExtra(RESPONSE_BUNDLE, resultBundle)
-        Messager.send(intent)
+    private val PurchaseDialogRoute = DialogRoute(
+        dismissHandler = {
+            client.onPurchaseResult(
+                requestId = requestId,
+                responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
+                purchases = null
+            )
+
+            finish()
+        }
+    ) {
+        MaterialDialog(
+            title = {
+                Row {
+                    Text(
+                        text = skuDetails.title,
+                        modifier = Inflexible
+                    )
+
+                    Spacer(Flexible(1f))
+
+                    Text(
+                        text = skuDetails.price,
+                        modifier = Inflexible,
+                        style = MaterialTheme.typography().subtitle1.copy(
+                            color = GooglePlayGreen
+                        )
+                    )
+                }
+            },
+            content = { Text(skuDetails.description) },
+            positiveButton = {
+                DialogButton(
+                    text = "Purchase",
+                    style = ContainedButtonStyle(
+                        backgroundColor = GooglePlayGreen,
+                        contentColor = contentColorFor(GooglePlayGreen)
+                    ),
+                    onClick = {
+                        client.onPurchaseResult(
+                            requestId = requestId,
+                            responseCode = BillingClient.BillingResponseCode.OK,
+                            purchases = listOf(skuDetails.toPurchaseData())
+                        )
+
+                        finish()
+                    }
+                )
+            }
+        )
+    }
+
+    internal companion object {
+        private val GooglePlayGreen = Color(0xFF00A273)
+
+        private const val KEY_REQUEST_ID = "request_id"
+
+        fun purchase(
+            context: Context,
+            requestId: String
+        ) {
+            context.startActivity(
+                Intent(
+                    context,
+                    DebugBillingActivity::class.java
+                ).apply {
+                    putExtra(KEY_REQUEST_ID, requestId)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            )
+        }
     }
 }
