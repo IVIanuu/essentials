@@ -20,10 +20,10 @@ import android.content.Context
 import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
+import java.util.UUID
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 @ApplicationScope
 @Single

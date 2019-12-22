@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose
 
+import java.io.File
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
@@ -33,7 +34,6 @@ import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.LazyTopDownAnalyzer
 import org.jetbrains.kotlin.resolve.TopDownAnalysisMode
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
-import java.io.File
 
 class ComposeAnalysisHandlerExtension(
     private val outputDir: File

@@ -29,8 +29,8 @@ import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.injekt.Factory
-import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.CompletableDeferred
 
 fun RuntimePermission(
     name: String,

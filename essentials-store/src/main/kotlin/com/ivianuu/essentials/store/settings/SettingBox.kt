@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
 import com.ivianuu.essentials.store.Box
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +30,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicBoolean
 
 interface SettingBox<T> : Box<T> {
     val uri: Uri

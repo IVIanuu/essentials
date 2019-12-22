@@ -18,9 +18,9 @@ package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
-import kotlinx.coroutines.CoroutineDispatcher
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.CoroutineDispatcher
 
 class PrefBoxFactory(
     private val dispatcher: CoroutineDispatcher,

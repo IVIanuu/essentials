@@ -38,6 +38,11 @@ import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.parametersOf
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
@@ -52,11 +57,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 @ApplicationScope
 @Single
@@ -241,11 +241,9 @@ class PurchaseManager(
                     }
 
                     override fun onBillingServiceDisconnected() {
-
                     }
                 }
             )
         }
     }
-
 }

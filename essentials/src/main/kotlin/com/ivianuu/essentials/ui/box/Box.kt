@@ -21,8 +21,8 @@ import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
+import kotlinx.coroutines.launch
 
 @Composable
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {

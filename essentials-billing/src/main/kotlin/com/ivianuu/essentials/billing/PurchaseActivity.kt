@@ -63,5 +63,4 @@ class PurchaseActivity : EsActivity() {
             )
         }
     }
-
 }

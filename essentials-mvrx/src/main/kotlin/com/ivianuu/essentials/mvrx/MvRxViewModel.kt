@@ -25,6 +25,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -41,7 +42,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 /**
  * State view model

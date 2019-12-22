@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -28,9 +28,9 @@ import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.cast
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.concurrent.atomic.AtomicInteger
 
 fun ActivityResultRoute(intent: Intent) = Route(
     opaque = true

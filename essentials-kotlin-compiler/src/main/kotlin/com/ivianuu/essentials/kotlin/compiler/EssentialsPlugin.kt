@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -18,6 +18,7 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import com.google.auto.service.AutoService
 import com.ivianuu.essentials.kotlin.compiler.compose.ComposeAnalysisHandlerExtension
+import java.io.File
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
@@ -30,7 +31,6 @@ import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.CompilerConfigurationKey
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
-import java.io.File
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {

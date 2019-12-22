@@ -17,6 +17,10 @@
 package com.ivianuu.essentials.util
 
 import androidx.collection.CircularArray
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -31,10 +35,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicReference
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 /**
  * A [Flow] of type [T] that only starts emitting value after its [connect] method is called.

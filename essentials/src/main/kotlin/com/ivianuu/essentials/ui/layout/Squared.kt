@@ -38,5 +38,4 @@ data class LayoutSquared(
     enum class Fit {
         MatchWidth, MatchHeight
     }
-
 }

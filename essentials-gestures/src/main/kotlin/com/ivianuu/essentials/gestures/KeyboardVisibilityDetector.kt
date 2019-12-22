@@ -22,6 +22,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
+import java.lang.reflect.Method
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +31,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
-import java.lang.reflect.Method
 
 /**
  * Provides info about the keyboard state

@@ -122,5 +122,4 @@ class BillingStore(context: Context) {
         internal const val KEY_PURCHASES = "dbc_purchases"
         internal const val KEY_SKU_DETAILS = "dbc_sku_details"
     }
-
 }

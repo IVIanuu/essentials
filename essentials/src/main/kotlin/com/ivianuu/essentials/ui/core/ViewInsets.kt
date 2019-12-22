@@ -21,6 +21,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.view.Surface
 import android.view.View
+import android.view.WindowInsets as AndroidWindowInsets
 import android.view.WindowManager
 import androidx.compose.Ambient
 import androidx.compose.Composable
@@ -40,7 +41,6 @@ import com.ivianuu.essentials.ui.common.UpdateProvider
 import com.ivianuu.essentials.ui.common.Updateable
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.util.containsFlag
-import android.view.WindowInsets as AndroidWindowInsets
 
 @Composable
 fun WindowInsetsManager(children: @Composable() () -> Unit) {

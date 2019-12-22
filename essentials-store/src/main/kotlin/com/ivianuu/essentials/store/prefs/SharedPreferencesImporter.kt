@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.store.prefs
 
 import android.content.Context
+import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class SharedPreferencesImporter(
     private val boxFactory: PrefBoxFactory,
