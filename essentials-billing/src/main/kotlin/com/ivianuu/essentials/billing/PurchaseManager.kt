@@ -190,7 +190,7 @@ class PurchaseManager(
                                     purchase.purchaseState == Purchase.PurchaseState.PURCHASED
                         }
                     }
-                    .onStart { getIsPurchased(sku) }
+                    .onStart { emit(getIsPurchased(sku)) }
             }
     }
 
