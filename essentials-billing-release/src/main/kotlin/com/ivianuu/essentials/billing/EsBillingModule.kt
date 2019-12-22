@@ -25,6 +25,7 @@ val EsBillingModule = Module {
     single { (updateListener: PurchasesUpdatedListener) ->
         BillingClient
             .newBuilder(get())
+            .enablePendingPurchases()
             .setListener(updateListener)
             .build()
     }
