@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -29,7 +28,6 @@ import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.github.ajalt.timberkt.d
@@ -85,15 +83,12 @@ class PurchaseManager(
         val result: CompletableDeferred<Boolean>
     )
 
-    suspend fun purchase(
-        sku: Sku,
-        acknowledge: Boolean = true
-    ): Boolean = withContext(dispatchers.io) {
+    suspend fun purchase(sku: Sku): Boolean = withContext(dispatchers.io) {
         val requestId = UUID.randomUUID().toString()
         val result = CompletableDeferred<Boolean>()
         requests[requestId] = PurchaseRequest(sku = sku, result = result)
 
-        d { "purchase $sku -> acknowledge: $acknowledge, id: $requestId" }
+        d { "purchase $sku id: $requestId" }
 
         PurchaseActivity.purchase(context, requestId)
 
@@ -114,9 +109,7 @@ class PurchaseManager(
 
         requests -= requestId
 
-        if (!acknowledge) return@withContext success
-
-        return@withContext if (success) acknowledge(sku) else return@withContext false
+        return@withContext success
     }
 
     suspend fun consume(sku: Sku): Boolean = withContext(dispatchers.io) {
@@ -132,7 +125,7 @@ class PurchaseManager(
             .billingResult.responseCode == BillingClient.BillingResponseCode.OK
     }
 
-    suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.io) {
+    /*suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.io) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
 
@@ -144,7 +137,7 @@ class PurchaseManager(
 
         return@withContext billingClient.acknowledgePurchase(acknowledgeParams)
             .responseCode == BillingClient.BillingResponseCode.OK
-    }
+    }*/
 
     internal suspend fun purchaseInternal(
         requestId: String,
