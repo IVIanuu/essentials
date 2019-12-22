@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 
 fun PopupRoute(
-    alignment: Alignment = Alignment.TopLeft,
+    alignment: Alignment = Alignment.BottomLeft,
     view: View,
     onCancel: (() -> Unit)? = null,
     popup: @Composable() () -> Unit

@@ -34,15 +34,13 @@ import com.ivianuu.essentials.ui.common.Mergeable
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = currentIconStyle(),
-    size: Size = style.size,
-    color: Color? = style.color
+    style: IconStyle = currentIconStyle()
 ) {
     Container(
-        width = size.width,
-        height = size.height
+        width = style.size.width,
+        height = style.size.height
     ) {
-        DrawImage(image = image, tint = color)
+        DrawImage(image = image, tint = style.color)
     }
 }
 

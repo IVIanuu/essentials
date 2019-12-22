@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.navigation.navigator
 // todo better name?
 @Composable
 fun PopupTrigger(
-    alignment: Alignment = Alignment.TopLeft,
+    alignment: Alignment = Alignment.BottomLeft,
     onCancel: (() -> Unit)? = null,
     popup: @Composable() () -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
