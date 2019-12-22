@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))
+    releaseImplementation(project(":essentials-billing-release"))
+    debugImplementation(project(":essentials-billing-debug"))
     implementation(project(":essentials-boot"))
     implementation(project(":essentials-foreground"))
     implementation(project(":essentials-gestures"))

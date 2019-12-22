@@ -18,6 +18,9 @@
             <option value="$PROJECT_DIR$/essentials-apps" />
             <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />
+            <option value="$PROJECT_DIR$/essentials-billing" />
+            <option value="$PROJECT_DIR$/essentials-billing-debug" />
+            <option value="$PROJECT_DIR$/essentials-billing-release" />
             <option value="$PROJECT_DIR$/essentials-boot" />
             <option value="$PROJECT_DIR$/essentials-coil" />
             <option value="$PROJECT_DIR$/essentials-compiler" />

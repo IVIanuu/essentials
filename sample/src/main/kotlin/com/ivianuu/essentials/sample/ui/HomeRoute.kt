@@ -192,6 +192,11 @@ enum class HomeItem(
             )
         }
     ),
+    Billing(
+        title = "Billing",
+        color = Color.Red,
+        route = { BillingRoute }
+    ),
     BottomNavigation(
         title = "Bottom navigation",
         color = Color.Red,

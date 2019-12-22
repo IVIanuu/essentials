@@ -41,6 +41,9 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
+        const val constraintLayout =
+            "androidx.constraintlayout:constraintlayout:2.0.0-beta3" // todo remove legacy
+
         object Lifecycle {
             private const val version = "2.2.0-rc02"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
@@ -127,6 +130,8 @@ object Deps {
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+
+    const val playBilling = "com.android.billingclient:billing-ktx:2.1.0"
 
     const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
 

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
+import com.ivianuu.essentials.billing.EsBillingModule
 import com.ivianuu.essentials.boot.EsBootModule
 import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
@@ -30,13 +31,16 @@ import com.ivianuu.essentials.work.WorkerInjectionModule
 class App : EsApp() {
 
     override fun modules() = listOf(
-        BootModule,
         EsAppsCoilModule,
+        EsBillingModule,
         EsBootModule,
         EsCoilModule,
         EsGesturesModule,
         EsPermissionsModule,
         EsTwilightModule,
+
+        AppModule,
+        BootModule,
         WorkerInjectionModule,
         WorkerInitializerModule
     )
