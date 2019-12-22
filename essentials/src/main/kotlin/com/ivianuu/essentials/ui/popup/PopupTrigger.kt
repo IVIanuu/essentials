@@ -24,7 +24,7 @@ import androidx.ui.core.OnPositioned
 import androidx.ui.core.PxPosition
 import androidx.ui.core.round
 import androidx.ui.layout.Wrap
-import com.ivianuu.essentials.ui.common.ref
+import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.navigation.navigator
 
 // todo better name?
@@ -39,7 +39,7 @@ fun PopupTrigger(
 
     Wrap {
         val coordinatesHolder =
-            ref<LayoutCoordinates?> { null }
+            holder<LayoutCoordinates?> { null }
         OnPositioned { coordinatesHolder.value = it }
 
         val showPopup = {

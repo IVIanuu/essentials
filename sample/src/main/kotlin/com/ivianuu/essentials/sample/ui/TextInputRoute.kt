@@ -33,7 +33,7 @@ import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.common.ref
+import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -92,7 +92,7 @@ val TextInputRoute = Route {
             if (items.isNotEmpty()) {
                 val scrollerPosition = remember(items) { ScrollerPosition() }
                 val lastScrollPosition =
-                    ref { scrollerPosition.value }
+                    holder { scrollerPosition.value }
 
                 if (scrollerPosition.value != lastScrollPosition.value) {
                     keyboardManager.hideKeyboard()

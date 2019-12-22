@@ -22,8 +22,8 @@ import androidx.ui.core.PxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.common.ref
 
 @Composable
 fun DialogWrapper(
@@ -36,7 +36,7 @@ fun DialogWrapper(
     }
 
     val dismissed = state { false }
-    val dismissCalled = ref { false }
+    val dismissCalled = holder { false }
     if (dismissed.value) {
         if (!dismissCalled.value) {
             dismissCalled.value = true

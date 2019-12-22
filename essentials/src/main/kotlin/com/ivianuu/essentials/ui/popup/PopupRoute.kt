@@ -25,7 +25,7 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.ipx
-import com.ivianuu.essentials.ui.common.ref
+import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
@@ -86,7 +86,7 @@ fun PopupRoute(
         }
     }
 
-    val dismissed = ref { false }
+    val dismissed = holder { false }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed.value) {
