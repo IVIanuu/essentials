@@ -25,6 +25,8 @@ import androidx.ui.core.FocusManagerAmbient
 import com.ivianuu.essentials.ui.common.KeyboardManager
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
+import com.ivianuu.essentials.ui.common.RetainedObjects
+import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -35,6 +37,7 @@ import com.ivianuu.injekt.Component
 fun EsEnvironment(
     activity: ComponentActivity,
     component: Component,
+    retainedObjects: RetainedObjects,
     children: @Composable() () -> Unit
 ) {
     val focusManager = ambient(FocusManagerAmbient)
@@ -43,7 +46,8 @@ fun EsEnvironment(
         ActivityAmbient with activity,
         ComponentAmbient with component,
         CoroutineContextAmbient with coroutineScope.coroutineContext,
-        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) }
+        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
+        RetainedObjectsAmbient with retainedObjects
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
             WindowSizeProvider {

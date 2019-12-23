@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
+import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.Stable
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -276,7 +276,7 @@ class NavigatorState(
 
     private inner class RouteState(val route: Route) {
 
-        private val coroutineScope = CoroutineScope(Job() + Dispatchers.Main)
+        private val retainedObjects = RetainedObjects()
         private val result = CompletableDeferred<Any?>()
 
         private val overlayEntry = OverlayEntry(
@@ -361,7 +361,7 @@ class NavigatorState(
         }
 
         fun dispose() {
-            coroutineScope.coroutineContext[Job]!!.cancel()
+            retainedObjects.dispose()
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T

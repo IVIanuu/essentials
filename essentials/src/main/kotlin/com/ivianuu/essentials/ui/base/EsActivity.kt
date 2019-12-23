@@ -22,20 +22,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.injection.RetainedActivityComponent
-import com.ivianuu.essentials.injection.initRetainedActivityComponentIfNeeded
-import com.ivianuu.essentials.injection.retainedActivityComponent
+import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.core.EsEnvironment
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.ActivityModule
-import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.get
 
 /**
@@ -44,10 +40,7 @@ import com.ivianuu.injekt.get
 abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        Component {
-            scopes(ActivityScope)
-            dependencies(retainedActivityComponent)
-            modules(ActivityModule())
+        ActivityComponent {
             modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
@@ -58,10 +51,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open val containerId: Int
         get() = android.R.id.content
 
+    private val retainedObjects = RetainedObjects()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initRetainedActivityComponentIfNeeded { createRetainedComponent() }
 
         if (layoutRes != 0) {
             setContentView(layoutRes)
@@ -76,6 +69,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override fun onDestroy() {
         // todo use disposeComposition once fixed
+        retainedObjects.dispose()
         findViewById<ViewGroup>(containerId).setContent { }
         super.onDestroy()
     }
@@ -84,7 +78,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun WrapContentWithEnvironment(content: @Composable() () -> Unit) {
         EsEnvironment(
             activity = this,
-            component = component
+            component = component,
+            retainedObjects = retainedObjects
         ) {
             content()
         }
@@ -94,12 +89,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected abstract fun content()
 
     protected open fun modules(): List<Module> = emptyList()
-
-    protected open fun retainedModules(): List<Module> = emptyList()
-
-    protected open fun createRetainedComponent(): Component = RetainedActivityComponent {
-        modules(retainedModules())
-    }
 
     @Composable
     protected fun Navigator(startRoute: Route) {
