@@ -30,6 +30,8 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
+// todo mirror the retained objects api
+
 @Composable
 inline fun <T : Parcelable> parceledState(
     noinline init: () -> T
