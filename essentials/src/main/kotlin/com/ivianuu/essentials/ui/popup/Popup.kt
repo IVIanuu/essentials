@@ -23,6 +23,7 @@ import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.LayoutPadding
+import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EsSurface
 
 data class PopupStyle(
@@ -38,8 +39,11 @@ fun Popup(
 ) {
     EsSurface(
         elevation = 8.dp,
-        modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
-        shape = style.shape,
-        children = children
-    )
+        shape = style.shape
+    ) {
+        WithModifier(
+            modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
+            children = children
+        )
+    }
 }
