@@ -84,7 +84,7 @@ class NavigatorState(
         get() = _backStack.map { it.route }
 
     var types: List<RouteTransition.Type> by framed(
-        listOf(OpacityRouteTransitionType, CanvasRouteTransitionType)
+        listOf(OpacityRouteTransitionType, CanvasRouteTransitionType, ModifierRouteTransitionType)
     )
 
     internal var defaultRouteTransition = DefaultRouteTransition

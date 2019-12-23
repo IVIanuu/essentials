@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
+import com.ivianuu.essentials.ui.layout.LayoutPercentOffset
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -61,12 +62,9 @@ fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransi
     },
     generateOps = { transitionState, _ ->
         opsOf(
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.translate(0f, parentSize.height.value * (1f - transitionState[Fraction]))
-                drawChildren()
-                canvas.restore()
-            }
+            ModifierRouteTransitionType.Modifier with LayoutPercentOffset(
+                percentY = (1f - transitionState[Fraction])
+            )
         )
     }
 )
@@ -97,12 +95,9 @@ fun HorizontalRouteTransition(duration: Duration = 300.milliseconds) = RouteTran
     },
     generateOps = { transitionState, _ ->
         opsOf(
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.translate(parentSize.width.value * transitionState[Fraction], 0f)
-                drawChildren()
-                canvas.restore()
-            }
+            ModifierRouteTransitionType.Modifier with LayoutPercentOffset(
+                percentX = transitionState[Fraction]
+            )
         )
     }
 )
@@ -190,15 +185,9 @@ fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTr
     generateOps = { transitionState, _ ->
         opsOf(
             OpacityRouteTransitionType.Opacity with transitionState[Fraction],
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.translate(
-                    0f,
-                    parentSize.height.value * 0.3f * (1f - transitionState[Fraction])
-                )
-                drawChildren()
-                canvas.restore()
-            }
+            ModifierRouteTransitionType.Modifier with LayoutPercentOffset(
+                percentY = 0.3f * (1f - transitionState[Fraction])
+            )
         )
     }
 )

@@ -16,39 +16,36 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.Composable
+import androidx.ui.core.DensityScope
 import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
-import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.WithDensity
-import androidx.ui.core.min
-import androidx.ui.core.px
+import androidx.ui.core.IntPxPosition
+import androidx.ui.core.IntPxSize
+import androidx.ui.core.LayoutModifier
+import androidx.ui.core.dp
 
-@Composable
-fun Offset(
-    offsetX: Dp? = null,
-    offsetY: Dp? = null,
-    child: @Composable() () -> Unit
-) {
-    WithDensity {
-        SingleChildLayout(child = {
-            RepaintBoundary(children = child)
-        }) { measurable, constraints ->
-            val placeable = measurable?.measure(constraints)
-            val width: IntPx
-            val height: IntPx
-            if (placeable == null) {
-                width = constraints.minWidth
-                height = constraints.minHeight
-            } else {
-                width = min(placeable.width, constraints.maxWidth)
-                height = min(placeable.height, constraints.maxHeight)
-            }
-            layout(width, height) {
-                val offX = offsetX?.toPx() ?: 0.px
-                val offY = offsetY?.toPx() ?: 0.px
-                placeable?.place(offX, offY)
-            }
-        }
+data class LayoutOffset(
+    val offsetX: Dp = 0.dp,
+    val offsetY: Dp = 0.dp
+) : LayoutModifier {
+    override fun DensityScope.modifyPosition(
+        childSize: IntPxSize,
+        containerSize: IntPxSize
+    ): IntPxPosition {
+        return IntPxPosition(offsetX.toIntPx(), offsetY.toIntPx())
+    }
+}
+
+data class LayoutPercentOffset(
+    val percentX: Float = 0f,
+    val percentY: Float = 0f
+) : LayoutModifier {
+    override fun DensityScope.modifyPosition(
+        childSize: IntPxSize,
+        containerSize: IntPxSize
+    ): IntPxPosition {
+        return IntPxPosition(
+            childSize.width * percentX,
+            childSize.height * percentY
+        )
     }
 }
