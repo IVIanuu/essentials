@@ -67,7 +67,8 @@ val BillingRoute = Route {
                 Button(
                     text = "Consume",
                     onClick = launchOnClick {
-                        purchaseManager.consume(DummySku)
+                        val result = purchaseManager.consume(DummySku)
+                        d { "consume result $result" }
                     }
                 )
             }
