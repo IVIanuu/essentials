@@ -47,7 +47,7 @@ class Route(
         opaque: Boolean = this.opaque,
         keepState: Boolean = this.keepState,
         enterTransition: RouteTransition? = this.enterTransition,
-        exitTransition: RouteTransition?,
+        exitTransition: RouteTransition? = this.exitTransition,
         content: @Composable() () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
