@@ -54,6 +54,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -223,8 +224,11 @@ class PurchaseManager(
             ?.firstOrNull { it.sku == sku.skuString }
     }
 
+    private val connecting = AtomicBoolean(false)
+
     private suspend fun ensureConnected() {
         if (billingClient.isReady) return
+        if (connecting.getAndSet(true)) return
         suspendCoroutine<Unit> { continuation ->
             billingClient.startConnection(
                 object : BillingClientStateListener {
@@ -238,6 +242,8 @@ class PurchaseManager(
                                 )
                             )
                         }
+
+                        connecting.set(false)
                     }
 
                     override fun onBillingServiceDisconnected() {
