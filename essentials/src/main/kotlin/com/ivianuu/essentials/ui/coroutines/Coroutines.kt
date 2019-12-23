@@ -28,13 +28,13 @@ import androidx.ui.core.CoroutineContextAmbient
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.onFinalDispose
 import com.ivianuu.essentials.ui.common.retained
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 // todo retainedLaunchOnActive
 // todo retainedLoad
@@ -165,9 +165,7 @@ fun <T> collect(
 ): T {
     val state = state { placeholder }
     launchOnCommit(flow) {
-        flow.collect {
-            state.value = it
-        }
+        flow.collect { item -> state.value = item }
     }
     return state.value
 }
