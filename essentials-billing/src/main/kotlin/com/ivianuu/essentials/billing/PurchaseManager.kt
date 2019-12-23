@@ -54,6 +54,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
@@ -116,7 +117,7 @@ class PurchaseManager(
                 .map { update ->
                     update.purchases.any { purchase ->
                         purchase.sku == sku.skuString &&
-                                purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                                purchase.correctIsPurchased
                     }
                 },
 
@@ -210,7 +211,7 @@ class PurchaseManager(
                     .map { update ->
                         update.purchases.any { purchase ->
                             purchase.sku == sku.skuString &&
-                                    purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                                    purchase.correctIsPurchased
                         }
                     }
                     .onStart { emit(getIsPurchased(sku)) }
@@ -228,8 +229,8 @@ class PurchaseManager(
 
     private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.io) {
         ensureConnected()
-        val purchase = getPurchase(sku)
-        val isPurchased = purchase?.purchaseState == Purchase.PurchaseState.PURCHASED
+        val purchase = getPurchase(sku) ?: return@withContext false
+        val isPurchased = purchase.correctIsPurchased
         d { "get is purchased for $sku result is $isPurchased for $purchase" }
         return@withContext isPurchased
     }
@@ -276,5 +277,11 @@ class PurchaseManager(
                 }
             )
         }
+    }
+
+    private val Purchase.correctIsPurchased: Boolean get() {
+        val purchaseJson = JSONObject(originalJson)
+        val purchaseState = purchaseJson.optInt("purchaseState", 0)
+        return purchaseState == Purchase.PurchaseState.PURCHASED
     }
 }
