@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.coroutines
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onActive
@@ -33,26 +34,35 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+private val CoroutineScopeAmbient = Ambient.of<CoroutineScope>()
+
 @Composable
-fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope {
-    val coroutineContext = context()
-    val coroutineScope = remember { CoroutineScope(context = coroutineContext) }
-    return coroutineScope
+val coroutineScope: CoroutineScope get() = ambient(CoroutineScopeAmbient)
+
+@Composable
+fun ProvideCoroutineScope(
+    coroutineScope: CoroutineScope,
+    children: @Composable() () -> Unit
+) {
+    CoroutineContextAmbient.Provider(value = coroutineScope.coroutineContext) {
+        CoroutineScopeAmbient.Provider(value = coroutineScope) {
+            children()
+        }
+    }
 }
 
 @Composable
-fun coroutineContext(): CoroutineContext {
-    val parent = ambient(CoroutineContextAmbient)
-    val coroutineContext = remember { Job(parent = parent[Job]) + Dispatchers.Main }
-    onDispose { coroutineContext[Job]!!.cancel() }
-    return coroutineContext
+fun coroutineScope(context: CoroutineContext = remember { Job() + Dispatchers.Main }): CoroutineScope {
+    val coroutineScope = remember { CoroutineScope(context) }
+    onDispose { context[Job]!!.cancel() }
+    return coroutineScope
 }
 
 @Composable
 fun launchOnActive(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = ambient(CoroutineScopeAmbient)
     onActive {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -63,7 +73,7 @@ fun launchOnActive(
 fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = ambient(CoroutineScopeAmbient)
     onPreCommit {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -75,7 +85,7 @@ fun launchOnPreCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = ambient(CoroutineScopeAmbient)
     onPreCommit(*inputs) {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -86,7 +96,7 @@ fun launchOnPreCommit(
 fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = ambient(CoroutineScopeAmbient)
     onCommit {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -98,7 +108,7 @@ fun launchOnCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = ambient(CoroutineScopeAmbient)
     onCommit(*inputs) {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }

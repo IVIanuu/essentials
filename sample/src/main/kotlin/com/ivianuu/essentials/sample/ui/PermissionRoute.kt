@@ -88,7 +88,7 @@ val PermissionRoute = Route {
             MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
         )
 
-        val coroutineScope = coroutineScope()
+        val coroutineScope = coroutineScope
 
         Center {
             Button(

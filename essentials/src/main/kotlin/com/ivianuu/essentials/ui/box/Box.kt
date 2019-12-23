@@ -21,12 +21,12 @@ import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
-import kotlin.reflect.KProperty
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty
 
 @Composable
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = coroutineScope
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->
             coroutineScope.launch {

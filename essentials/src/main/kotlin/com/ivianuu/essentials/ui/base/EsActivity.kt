@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.injection.RetainedActivityComponent
@@ -85,8 +84,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun WrapContentWithEnvironment(content: @Composable() () -> Unit) {
         EsEnvironment(
             activity = this,
-            component = component,
-            coroutineContext = lifecycleScope.coroutineContext
+            component = component
         ) {
             content()
         }

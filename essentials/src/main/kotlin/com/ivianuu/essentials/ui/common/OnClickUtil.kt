@@ -50,7 +50,7 @@ fun openUrlOnClick(url: () -> String): () -> Unit {
 fun launchOnClick(
     block: suspend CoroutineScope.() -> Unit
 ): () -> Unit {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = coroutineScope
     return remember {
         {
             coroutineScope.launch(block = block)

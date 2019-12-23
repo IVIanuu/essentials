@@ -22,7 +22,6 @@ import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.remember
-import androidx.ui.core.CoroutineContextAmbient
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
@@ -31,11 +30,12 @@ import com.ivianuu.essentials.ui.common.OverlayState
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.Stable
-import com.ivianuu.essentials.ui.coroutines.coroutineContext
+import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -44,7 +44,7 @@ fun Navigator(
     startRoute: Route,
     handleBack: Boolean = true
 ) {
-    val coroutineScope = coroutineScope()
+    val coroutineScope = coroutineScope
     Navigator(state = remember {
         NavigatorState(
             startRoute = startRoute,
@@ -246,7 +246,10 @@ class NavigatorState(
             }
         }
 
-        removedRoutes.forEach { it.setResult(null) }
+        removedRoutes.forEach {
+            it.setResult(null)
+            it.dispose()
+        }
     }
 
     private fun performChange(
@@ -273,14 +276,14 @@ class NavigatorState(
 
     private inner class RouteState(val route: Route) {
 
+        private val coroutineScope = CoroutineScope(Job() + Dispatchers.Main)
         private val result = CompletableDeferred<Any?>()
 
         private val overlayEntry = OverlayEntry(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                val coroutineContext = coroutineContext()
-                CoroutineContextAmbient.Provider(coroutineContext) {
+                ProvideCoroutineScope(coroutineScope()) {
                     AbsorbPointer(absorb = absorbTouches) {
                         RouteTransitionWrapper(
                             transition = transition ?: defaultRouteTransition,
@@ -357,10 +360,14 @@ class NavigatorState(
             this.transition = transition
         }
 
+        fun dispose() {
+            coroutineScope.coroutineContext[Job]!!.cancel()
+        }
+
         suspend fun <T> awaitResult(): T? = result.await() as? T
 
         fun setResult(result: Any?) {
-            this.result.complete(result)
+            if (!this.result.isCompleted) this.result.complete(result)
         }
     }
 }

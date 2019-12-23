@@ -49,7 +49,7 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
             onClick = navigateOnClick { SecureSettingsInstructionsRoute }
         )
 
-        val coroutineScope = coroutineScope()
+        val coroutineScope = coroutineScope
         val secureSettingsHelper = inject<SecureSettingsHelper>()
         val toaster = inject<Toaster>()
         SimpleListItem(

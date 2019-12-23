@@ -26,30 +26,33 @@ import com.ivianuu.essentials.ui.common.KeyboardManager
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.common.with
+import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.injekt.Component
-import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun EsEnvironment(
     activity: ComponentActivity,
     component: Component,
-    coroutineContext: CoroutineContext,
     children: @Composable() () -> Unit
 ) {
     val focusManager = ambient(FocusManagerAmbient)
+    val coroutineScope = coroutineScope()
     MultiAmbientProvider(
         ActivityAmbient with activity,
         ComponentAmbient with component,
-        CoroutineContextAmbient with coroutineContext,
+        CoroutineContextAmbient with coroutineScope.coroutineContext,
         KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) }
     ) {
-        WindowSizeProvider {
-            WindowInsetsManager {
-                SystemBarManager {
-                    ConfigurationFix {
-                        OrientationProvider {
-                            children()
+        ProvideCoroutineScope(coroutineScope = coroutineScope) {
+            WindowSizeProvider {
+                WindowInsetsManager {
+                    SystemBarManager {
+                        ConfigurationFix {
+                            OrientationProvider {
+                                children()
+                            }
                         }
                     }
                 }

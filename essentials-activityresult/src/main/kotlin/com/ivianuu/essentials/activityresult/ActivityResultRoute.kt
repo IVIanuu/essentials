@@ -35,11 +35,11 @@ import java.util.concurrent.atomic.AtomicInteger
 fun ActivityResultRoute(intent: Intent) = Route(opaque = true) {
     val activity = ambient(ActivityAmbient)
 
-    val retainedScope = coroutineScope()
+    val coroutineScope = coroutineScope
     val activityResultFragment = ActivityResultFragment.get(activity.cast())
     val navigator = navigator
     remember {
-        retainedScope.launch {
+        coroutineScope.launch {
             val result = activityResultFragment.startForResult(intent)
             navigator.pop(result = result)
         }

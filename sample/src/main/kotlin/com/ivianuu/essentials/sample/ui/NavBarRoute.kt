@@ -52,7 +52,7 @@ val NavBarRoute = Route {
                 ) {
                     val navBarController = inject<NavBarController>()
 
-                    val coroutineScope = coroutineScope()
+                    val coroutineScope = coroutineScope
                     fun updateNavBarState(navBarHidden: Boolean) {
                         coroutineScope.launch {
                             navBarController.setNavBarConfig(

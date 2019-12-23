@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()
     val box = remember { boxFactory.stringSet("apps") }
-    val coroutineScope = coroutineScope()
+    val coroutineScope = coroutineScope
     CheckableAppsScreen(
         checkedAppsFlow = box.asFlow(),
         onCheckedAppsChanged = { newValue ->
