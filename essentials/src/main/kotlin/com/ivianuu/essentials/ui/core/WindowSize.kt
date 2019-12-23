@@ -30,8 +30,6 @@ import androidx.ui.core.px
 import androidx.ui.core.withDensity
 import com.github.ajalt.timberkt.d
 
-// todo use UpdateProvider
-
 val WindowSizeAmbient = Ambient.of<Size>()
 
 @Composable
