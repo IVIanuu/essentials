@@ -36,7 +36,7 @@ abstract class AbstractNotificationFactory(
     protected abstract fun createChannel(): NotificationChannel
 
     final override fun buildNotification(): Notification {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= 26) {
             context.getSystemService<NotificationManager>()!!.createNotificationChannel(
                 createChannel()
             )

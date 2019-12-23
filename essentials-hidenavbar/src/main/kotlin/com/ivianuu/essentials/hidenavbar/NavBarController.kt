@@ -22,7 +22,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.view.Surface
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.merge

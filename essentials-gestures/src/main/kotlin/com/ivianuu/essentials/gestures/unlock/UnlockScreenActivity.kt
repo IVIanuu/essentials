@@ -22,7 +22,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo

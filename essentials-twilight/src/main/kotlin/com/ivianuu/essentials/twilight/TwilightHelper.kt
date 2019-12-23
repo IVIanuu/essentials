@@ -23,10 +23,9 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import java.util.Calendar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
@@ -40,6 +39,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import java.util.Calendar
 
 @ApplicationScope
 @Single

@@ -34,5 +34,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials"))
     api(project(":essentials-accessibility"))
+    api(project(":essentials-broadcast"))
     api(project(":essentials-foreground"))
 }

@@ -27,6 +27,7 @@ include(
     ":essentials-billing-debug",
     ":essentials-billing-release",
     ":essentials-boot",
+    ":essentials-broadcast",
     ":essentials-compiler",
     ":essentials-coil",
     ":essentials-foreground",

@@ -19,8 +19,7 @@ plugins {
     id("com.github.ben-manes.versions")
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")
-    kotlin("android")
-    id("kotlin-android-extensions")
+    id("kotlin-android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -33,6 +32,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials"))
-    api(project(":essentials-broadcast"))
-    api(project(":essentials-securesettings"))
 }

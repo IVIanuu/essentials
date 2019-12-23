@@ -19,7 +19,7 @@ package com.ivianuu.essentials.boot
 import android.content.Context
 import android.content.Intent
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.messaging.EsBroadcastReceiver
+import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.injekt.Provider
 
 class StartupReceiver : EsBroadcastReceiver() {

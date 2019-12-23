@@ -18,9 +18,9 @@ package com.ivianuu.essentials.gestures.torch
 
 import android.hardware.camera2.CameraManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Single

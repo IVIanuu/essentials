@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.unlock
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.Factory
 import hu.akarnokd.kotlin.flow.takeUntil
 import kotlinx.coroutines.delay

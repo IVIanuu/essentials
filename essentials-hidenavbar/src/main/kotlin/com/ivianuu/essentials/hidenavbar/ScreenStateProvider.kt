@@ -18,7 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.os.PowerManager
-import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

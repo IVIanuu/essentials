@@ -53,7 +53,7 @@ class BitmapImage internal constructor(val bitmap: Bitmap) : Image {
         get() = bitmap.config.toImageConfig()
 
     override val colorSpace: ColorSpace
-        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        get() = if (Build.VERSION.SDK_INT >= 26) {
             bitmap.colorSpace?.toComposeColorSpace() ?: ColorSpaces.Srgb
         } else {
             ColorSpaces.Srgb
@@ -77,9 +77,9 @@ fun ImageConfig.toBitmapConfig(): Bitmap.Config {
         Bitmap.Config.ALPHA_8
     } else if (this == ImageConfig.Rgb565) {
         Bitmap.Config.RGB_565
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && this == ImageConfig.F16) {
+    } else if (Build.VERSION.SDK_INT >= 26 && this == ImageConfig.F16) {
         Bitmap.Config.RGBA_F16
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && this == ImageConfig.Gpu) {
+    } else if (Build.VERSION.SDK_INT >= 26 && this == ImageConfig.Gpu) {
         Bitmap.Config.HARDWARE
     } else {
         Bitmap.Config.ARGB_8888
@@ -93,16 +93,16 @@ fun Bitmap.Config.toImageConfig(): ImageConfig {
         ImageConfig.Rgb565
     } else if (this == Bitmap.Config.ARGB_4444) {
         ImageConfig.Argb8888 // Always upgrade to Argb_8888
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && this == Bitmap.Config.RGBA_F16) {
+    } else if (Build.VERSION.SDK_INT >= 26 && this == Bitmap.Config.RGBA_F16) {
         ImageConfig.F16
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && this == Bitmap.Config.HARDWARE) {
+    } else if (Build.VERSION.SDK_INT >= 26 && this == Bitmap.Config.HARDWARE) {
         ImageConfig.Gpu
     } else {
         ImageConfig.Argb8888
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 fun ColorSpace.toFrameworkColorSpace(): android.graphics.ColorSpace {
     val frameworkNamedSpace = when (this) {
         ColorSpaces.Srgb -> android.graphics.ColorSpace.Named.SRGB
@@ -127,7 +127,7 @@ fun ColorSpace.toFrameworkColorSpace(): android.graphics.ColorSpace {
     return android.graphics.ColorSpace.get(frameworkNamedSpace)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 internal fun android.graphics.ColorSpace.toComposeColorSpace(): ColorSpace {
     return when (this) {
         android.graphics.ColorSpace.get(android.graphics.ColorSpace.Named.SRGB)

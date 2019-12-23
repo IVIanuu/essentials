@@ -16,6 +16,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-billing-debug/essentials-billing-debug.iml" filepath="$PROJECT_DIR$/essentials-billing-debug/essentials-billing-debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-billing-release/essentials-billing-release.iml" filepath="$PROJECT_DIR$/essentials-billing-release/essentials-billing-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-boot/essentials-boot.iml" filepath="$PROJECT_DIR$/essentials-boot/essentials-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-broadcast/essentials-broadcast.iml" filepath="$PROJECT_DIR$/essentials-broadcast/essentials-broadcast.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-coil/essentials-coil.iml" filepath="$PROJECT_DIR$/essentials-coil/essentials-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />

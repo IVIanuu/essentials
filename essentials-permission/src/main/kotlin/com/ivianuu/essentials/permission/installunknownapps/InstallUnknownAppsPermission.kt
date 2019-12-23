@@ -50,5 +50,5 @@ class InstallUnknownAppsPermissionStateProvider(
         permission.metadata.contains(MetadataKeys.IsUnknownAppsPermission)
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.O || context.packageManager.canRequestPackageInstalls()
+        Build.VERSION.SDK_INT < 26 || context.packageManager.canRequestPackageInstalls()
 }

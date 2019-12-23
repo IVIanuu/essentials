@@ -18,12 +18,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-
         <activity
-            android:name="com.ivianuu.essentials.gestures.unlock.UnlockScreenActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/EsTransparent" />
-
+            android:name=".unlock.UnlockScreenActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:theme="@style/Theme.Es.Translucent" />
     </application>
 
 </manifest>
