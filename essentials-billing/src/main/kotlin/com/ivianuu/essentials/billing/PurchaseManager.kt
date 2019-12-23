@@ -102,7 +102,7 @@ class PurchaseManager(
 
         val oldPurchase = getPurchase(sku)
         if (oldPurchase != null) {
-            if (oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
+            if (oldPurchase.realPurchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
                 consume(sku)
             }
         }
@@ -117,7 +117,7 @@ class PurchaseManager(
                 .map { update ->
                     update.purchases.any { purchase ->
                         purchase.sku == sku.skuString &&
-                                purchase.correctIsPurchased
+                                purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
                     }
                 },
 
@@ -211,7 +211,7 @@ class PurchaseManager(
                     .map { update ->
                         update.purchases.any { purchase ->
                             purchase.sku == sku.skuString &&
-                                    purchase.correctIsPurchased
+                                    purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
                         }
                     }
                     .onStart { emit(getIsPurchased(sku)) }
@@ -230,7 +230,7 @@ class PurchaseManager(
     private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.io) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
-        val isPurchased = purchase.correctIsPurchased
+        val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
         d { "get is purchased for $sku result is $isPurchased for $purchase" }
         return@withContext isPurchased
     }
@@ -279,9 +279,6 @@ class PurchaseManager(
         }
     }
 
-    private val Purchase.correctIsPurchased: Boolean get() {
-        val purchaseJson = JSONObject(originalJson)
-        val purchaseState = purchaseJson.optInt("purchaseState", 0)
-        return purchaseState == Purchase.PurchaseState.PURCHASED
-    }
+    private val Purchase.realPurchaseState: Int
+        get() = JSONObject(originalJson).optInt("purchaseState", 0)
 }
