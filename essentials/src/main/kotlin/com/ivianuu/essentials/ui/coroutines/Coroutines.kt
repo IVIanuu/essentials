@@ -25,9 +25,6 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.CoroutineContextAmbient
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.onFinalDispose
-import com.ivianuu.essentials.ui.common.retained
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,31 +32,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-
-// todo retainedLaunchOnActive
-// todo retainedLoad
-
-@Composable
-fun retainedCoroutineScope(
-    key: Any,
-    context: @Composable() () -> CoroutineContext = {
-        retainedCoroutineContext(key = key)
-    }
-): CoroutineScope {
-    val coroutineContext = context()
-    val coroutineScope = remember { CoroutineScope(context = coroutineContext) }
-    return coroutineScope
-}
-
-@Composable
-fun retainedCoroutineContext(key: Any): CoroutineContext {
-    val coroutineContext = retained(key = key) { Job() + Dispatchers.Main }
-    onFinalDispose {
-        d { "on final dispose" }
-        coroutineContext[Job]!!.cancel()
-    }
-    return coroutineContext
-}
 
 @Composable
 fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope {

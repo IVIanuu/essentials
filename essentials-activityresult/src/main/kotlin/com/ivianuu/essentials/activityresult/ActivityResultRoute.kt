@@ -19,28 +19,26 @@ package com.ivianuu.essentials.activityresult
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.ambient
+import androidx.compose.remember
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.retained
 import com.ivianuu.essentials.ui.core.ActivityAmbient
-import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.cast
-import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicInteger
 
-fun ActivityResultRoute(intent: Intent) = Route(
-    opaque = true
-) {
+fun ActivityResultRoute(intent: Intent) = Route(opaque = true) {
     val activity = ambient(ActivityAmbient)
 
-    val retainedScope = retainedCoroutineScope("${System.identityHashCode(intent)}:scope")
+    val retainedScope = coroutineScope()
     val activityResultFragment = ActivityResultFragment.get(activity.cast())
     val navigator = navigator
-    retained("${System.identityHashCode(intent)}:launch") {
+    remember {
         retainedScope.launch {
             val result = activityResultFragment.startForResult(intent)
             navigator.pop(result = result)

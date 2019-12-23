@@ -20,6 +20,7 @@ import android.os.Parcelable
 import androidx.compose.Composable
 import androidx.compose.State
 import androidx.compose.ambient
+import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -58,7 +59,7 @@ fun <T : Parcelable> parceledState(
         }
     }
 
-    onFinalDispose { viewModel.handle.remove<T>(key) }
+    onDispose { viewModel.handle.remove<T>(key) }
 
     viewModel.handle.set(key, state.value)
 

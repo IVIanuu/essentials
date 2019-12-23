@@ -30,11 +30,9 @@ import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.common.retained
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.coroutines.coroutineContext
-import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
-import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +44,14 @@ fun Navigator(
     startRoute: Route,
     handleBack: Boolean = true
 ) {
-    Navigator(state = RetainedNavigatorState(startRoute = startRoute, handleBack = handleBack))
+    val coroutineScope = coroutineScope()
+    Navigator(state = remember {
+        NavigatorState(
+            startRoute = startRoute,
+            handleBack = handleBack,
+            coroutineScope = coroutineScope
+        )
+    })
 }
 
 @Composable
@@ -60,22 +65,6 @@ fun Navigator(state: NavigatorState) {
         }
         Overlay(state = state.overlayState)
     }
-}
-
-@Composable
-fun RetainedNavigatorState(
-    key: Any = sourceLocation(),
-    startRoute: Route? = null,
-    overlayState: OverlayState = remember { OverlayState() },
-    coroutineScope: CoroutineScope = retainedCoroutineScope("Scope:$key"),
-    handleBack: Boolean = true
-): NavigatorState = retained(key = "Navigator:$key") {
-    NavigatorState(
-        coroutineScope = coroutineScope,
-        overlayState = overlayState,
-        startRoute = startRoute,
-        handleBack = handleBack
-    )
 }
 
 // todo remove main thread requirement
