@@ -46,7 +46,6 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -71,14 +70,9 @@ class PurchaseManager(
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->
         d { "on purchases update ${result.responseCode} ${result.debugMessage} $purchases" }
-        updates.offer(Update(result.responseCode, purchases ?: emptyList()))
+        refreshTrigger.offer(Unit)
     }
-    private val updates = BroadcastChannel<Update>(1)
-
-    data class Update(
-        val responseCode: Int,
-        val purchases: List<Purchase>
-    )
+    private val refreshTrigger = BroadcastChannel<Unit>(1)
 
     private val billingClient = billingClientProvider { parametersOf(updateListener) }
 
@@ -98,12 +92,14 @@ class PurchaseManager(
         val result = CompletableDeferred<Boolean>()
         requests[requestId] = PurchaseRequest(sku = sku, result = result)
 
-        d { "purchase $sku -> acknowledge: $acknowledge, id: $requestId" }
+        d { "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified, id $requestId" }
 
-        val oldPurchase = getPurchase(sku)
-        if (oldPurchase != null) {
-            if (oldPurchase.realPurchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
-                consume(sku)
+        if (consumeOldPurchaseIfUnspecified) {
+            val oldPurchase = getPurchase(sku)
+            if (oldPurchase != null) {
+                if (oldPurchase.realPurchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
+                    consume(sku)
+                }
             }
         }
 
@@ -112,14 +108,9 @@ class PurchaseManager(
         }
 
         val success = merge(
-            updates.asFlow()
+            refreshTrigger.asFlow()
                 .take(1)
-                .map { update ->
-                    update.purchases.any { purchase ->
-                        purchase.sku == sku.skuString &&
-                                purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
-                    }
-                },
+                .map { getIsPurchased(sku) },
 
             flow { emit(result.await()) }
         ).first()
@@ -146,7 +137,9 @@ class PurchaseManager(
 
         d { "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}" }
 
-        return@withContext result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
+        val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
+        if (success) refreshTrigger.offer(Unit)
+        return@withContext success
     }
 
     suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.io) {
@@ -163,7 +156,9 @@ class PurchaseManager(
 
         d { "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}" }
 
-        return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
+        val success = result.responseCode == BillingClient.BillingResponseCode.OK
+        if (success) refreshTrigger.offer(Unit)
+        return@withContext success
     }
 
     internal suspend fun purchaseInternal(
@@ -193,31 +188,24 @@ class PurchaseManager(
     }
 
     fun isPurchased(sku: Sku): Flow<Boolean> {
-        val inForegroundFlow = callbackFlow {
-            val observer = LifecycleEventObserver { source, _ ->
-                offer(source.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+        val appMovedToForegroundFlow = callbackFlow {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_START) offer(Unit)
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
             awaitClose { ProcessLifecycleOwner.get().lifecycle.removeObserver(observer) }
-        }.distinctUntilChanged()
+        }
 
-        return inForegroundFlow
-            .onEach { d { "is purchased flow for $sku -> in foreground changed $it" } }
-            .map { Unit }
+        return merge(
+            appMovedToForegroundFlow,
+            refreshTrigger.asFlow()
+        )
+            .onEach { d { "is purchased flow for $sku -> refresh triggered" } }
             .onStart { emit(Unit) }
-            .flatMapLatest {
-                updates.asFlow()
-                    .onEach { d { "is purchased flow for $sku -> on update $it" } }
-                    .map { update ->
-                        update.purchases.any { purchase ->
-                            purchase.sku == sku.skuString &&
-                                    purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
-                        }
-                    }
-                    .onStart { emit(getIsPurchased(sku)) }
-                    .onEach { d { "is purchased flow for $sku -> emit $it" } }
-            }
+            .map { getIsPurchased(sku) }
+            .onEach { d { "is purchased flow for $sku -> fetched value $it" } }
             .distinctUntilChanged()
+            .onEach { d { "is purchased flow for $sku -> emit $it" } }
     }
 
     suspend fun isFeatureSupported(feature: BillingFeature): Boolean = withContext(dispatchers.io) {
