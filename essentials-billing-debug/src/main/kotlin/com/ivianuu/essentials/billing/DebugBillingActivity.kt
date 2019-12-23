@@ -64,7 +64,7 @@ class DebugBillingActivity : EsActivity() {
     private fun SkuDetails.toPurchaseData(): Purchase {
         val json = """{"orderId":"$sku..0","packageName":"$packageName","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
-      |"0987654321"}""".trimMargin()
+      |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-${skuDetails.type}")
     }
 

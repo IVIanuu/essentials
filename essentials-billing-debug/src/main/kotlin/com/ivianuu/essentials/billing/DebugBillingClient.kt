@@ -277,13 +277,12 @@ class DebugBillingClient(
         responseCode: Int,
         purchases: List<Purchase>?
     ) {
-        requests.remove(requestId)
+        requests -= requestId
 
         if (responseCode == BillingResponseCode.OK) {
             purchases!!.forEach { billingStore.addPurchase(it) }
         }
 
-        // save the result
         purchasesUpdatedListener.onPurchasesUpdated(
             BillingResult.newBuilder().setResponseCode(
                 responseCode

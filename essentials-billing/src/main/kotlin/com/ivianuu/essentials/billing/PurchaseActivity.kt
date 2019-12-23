@@ -38,7 +38,7 @@ class PurchaseActivity : EsActivity() {
 
         lifecycleScope.launch {
             manager.purchaseInternal(requestId, this@PurchaseActivity)
-            finish() // finish once purchaseInternalReturns
+            finish() // finish once purchaseInternal returns
         }
     }
 
