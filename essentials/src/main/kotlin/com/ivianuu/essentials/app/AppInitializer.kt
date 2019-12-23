@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.util.BoxLoggerAppInitializer
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.ModuleBuilder
@@ -74,4 +75,5 @@ inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): 
 val EsAppInitializersModule = Module {
     map<String, AppInitializer>(mapName = AppInitializers)
     bindAppInitializer<TimberAppInitializer>()
+    bindAppInitializer<BoxLoggerAppInitializer>()
 }

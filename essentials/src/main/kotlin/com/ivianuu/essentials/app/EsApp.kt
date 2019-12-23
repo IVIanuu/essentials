@@ -69,7 +69,9 @@ abstract class EsApp : Application(), InjektTrait {
     protected open fun invokeInitializers() {
         get<Map<String, Provider<AppInitializer>>>(name = AppInitializers)
             .forEach {
-                println("initialize ${it.key}")
+                if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
+                    println("initialize ${it.key}")
+                }
                 it.value()
             }
     }

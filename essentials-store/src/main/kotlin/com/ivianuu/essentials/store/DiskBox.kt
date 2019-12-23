@@ -16,12 +16,6 @@
 
 package com.ivianuu.essentials.store
 
-import java.io.File
-import java.io.IOException
-import java.util.UUID
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
-import kotlin.time.measureTimedValue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +30,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
+import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
     val path: String
@@ -83,7 +83,7 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file at $path", e)
         }
 
-        println("$path -> fetched raw $serialized")
+        log { "$path -> fetched raw $serialized" }
 
         return@MutexValue try {
             serializer.deserialize(serialized)
@@ -99,13 +99,13 @@ internal class DiskBoxImpl<T>(
 
     private val multiInstanceHelper =
         MultiInstanceHelper(coroutineScope, path) {
-            d { "$path -> multi instance change force refetch" }
+            log { "$path -> multi instance change force refetch" }
             cachedValue.set(this) // force refetching the value
             changeNotifier.offer(Unit)
         }
 
     init {
-        d { "$path -> init" }
+        log { "$path -> init" }
         coroutineScope.launch {
             maybeWithDispatcher {
                 check(!file.isDirectory)
@@ -115,7 +115,7 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun set(value: T) {
         checkNotDisposed()
-        d { "$path -> set $value" }
+        log { "$path -> set $value" }
         maybeWithDispatcher {
             measured("set") {
                 try {
@@ -166,24 +166,24 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun get(): T {
         checkNotDisposed()
-        d { "$path -> get" }
+        log { "$path -> get" }
         return maybeWithDispatcher {
             measured("get") {
                 writeLock.awaitWrite()
                 val cached = cachedValue.get()
                 if (cached != this) {
-                    d { "$path -> return cached $cached" }
+                    log { "$path -> return cached $cached" }
                     return@measured cached as T
                 }
 
                 return@measured if (isSet()) {
                     valueFetcher().also {
                         cachedValue.set(it)
-                        d { "$path -> return fetched $it" }
+                        log { "$path -> return fetched $it" }
                     }
                 } else {
                     defaultValue.also {
-                        d { "$path -> return default value $it" }
+                        log { "$path -> return default value $it" }
                     }
                 }
             }
@@ -192,7 +192,7 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun fetch(): T {
         checkNotDisposed()
-        d { "$path -> fetch" }
+        log { "$path -> fetch" }
         return maybeWithDispatcher {
             measured("fetch") {
                 cachedValue.set(this)
@@ -205,7 +205,7 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun delete() {
         checkNotDisposed()
-        d { "$path -> delete" }
+        log { "$path -> delete" }
         maybeWithDispatcher {
             measured("delete") {
                 if (file.exists()) {
@@ -225,14 +225,14 @@ internal class DiskBoxImpl<T>(
         return maybeWithDispatcher {
             measured("exists") {
                 file.exists().also {
-                    d { "$path -> exists $it" }
+                    log { "$path -> exists $it" }
                 }
             }
         }
     }
 
     override fun asFlow(): Flow<T> {
-        d { "$path -> as flow" }
+        log { "$path -> as flow" }
         checkNotDisposed()
         return flow {
             emit(get())
@@ -243,7 +243,7 @@ internal class DiskBoxImpl<T>(
     }
 
     override fun dispose() {
-        d { "$path -> dispose" }
+        log { "$path -> dispose" }
         if (_isDisposed.getAndSet(true)) {
             coroutineScope.coroutineContext[Job.Key]?.cancel()
         }
@@ -258,11 +258,10 @@ internal class DiskBoxImpl<T>(
 
     private inline fun <T> measured(tag: String, block: () -> T): T {
         val (result, duration) = measureTimedValue(block)
-        d { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
+        log { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
 
-    private inline fun d(block: () -> String) = println("BOX: ${block.invoke()}")
 }
 
 private class MultiInstanceHelper(
