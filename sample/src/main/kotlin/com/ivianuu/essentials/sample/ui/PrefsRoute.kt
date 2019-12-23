@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.prefs.CheckboxPreference
+import com.ivianuu.essentials.ui.prefs.ClipboardPreference
 import com.ivianuu.essentials.ui.prefs.ColorPreference
 import com.ivianuu.essentials.ui.prefs.Dependency
 import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
@@ -124,6 +125,12 @@ val PrefsRoute = Route {
                         SingleChoiceListPreference.Item("B", "B"),
                         SingleChoiceListPreference.Item("C", "C")
                     )
+                )
+
+                ClipboardPreference(
+                    title = "Clipboard",
+                    summary = "This is a clipboard preference",
+                    clipboardText = { "cool clip" }
                 )
             }
         }
