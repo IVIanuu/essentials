@@ -228,14 +228,9 @@ class PurchaseManager(
 
     private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.io) {
         ensureConnected()
-        val result = billingClient.queryPurchases(sku.type.value)
-        val isPurchased = result.purchasesList?.any { purchase ->
-            purchase.sku == sku.skuString &&
-                    purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-        } ?: false
-
-        d { "get is purchased for $sku result is $isPurchased for purchases ${result.responseCode} ${result.purchasesList}" }
-
+        val purchase = getPurchase(sku)
+        val isPurchased = purchase?.purchaseState == Purchase.PurchaseState.PURCHASED
+        d { "get is purchased for $sku result is $isPurchased for $purchase" }
         return@withContext isPurchased
     }
 
@@ -243,8 +238,8 @@ class PurchaseManager(
         ensureConnected()
         return billingClient.queryPurchases(sku.type.value)
             .purchasesList
-            .firstOrNull { it.sku == sku.skuString }
-            .also { d { "got purchase $it for $sku" } }
+            ?.firstOrNull { it.sku == sku.skuString }
+            ?.also { d { "got purchase $it for $sku" } }
     }
 
     private suspend fun getSkuDetails(sku: Sku): SkuDetails? {
