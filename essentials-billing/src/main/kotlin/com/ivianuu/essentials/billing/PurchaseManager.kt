@@ -56,7 +56,6 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @ApplicationScope
@@ -68,6 +67,7 @@ class PurchaseManager(
 ) {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->
+        d { "on purchases update ${result.responseCode} ${result.debugMessage} $purchases" }
         updates.offer(Update(result.responseCode, purchases ?: emptyList()))
     }
     private val updates = BroadcastChannel<Update>(1)
@@ -129,8 +129,11 @@ class PurchaseManager(
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        return@withContext billingClient.consumePurchase(consumeParams)
-            .billingResult.responseCode == BillingClient.BillingResponseCode.OK
+        val result = billingClient.consumePurchase(consumeParams)
+
+        d { "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}" }
+
+        return@withContext result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
     }
 
     suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.io) {
@@ -143,8 +146,11 @@ class PurchaseManager(
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        return@withContext billingClient.acknowledgePurchase(acknowledgeParams)
-            .responseCode == BillingClient.BillingResponseCode.OK
+        val result = billingClient.acknowledgePurchase(acknowledgeParams)
+
+        d { "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}" }
+
+        return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
     }
 
     internal suspend fun purchaseInternal(
@@ -167,6 +173,7 @@ class PurchaseManager(
             .build()
 
         val result = billingClient.launchBillingFlow(activity, billingFlowParams)
+        d { "launch billing flow result $request ${result.responseCode} ${result.debugMessage}" }
         if (result.responseCode != BillingClient.BillingResponseCode.OK) {
             request.result.complete(false)
         }
@@ -198,6 +205,7 @@ class PurchaseManager(
     suspend fun isFeatureSupported(feature: BillingFeature): Boolean = withContext(dispatchers.io) {
         ensureConnected()
         val result = billingClient.isFeatureSupported(feature.value)
+        d { "is feature supported $feature ? ${result.responseCode} ${result.debugMessage}" }
         return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
     }
 
@@ -215,6 +223,7 @@ class PurchaseManager(
         return billingClient.queryPurchases(sku.type.value)
             .purchasesList
             .firstOrNull { it.sku == sku.skuString }
+            .also { d { "got purchase $it for $sku" } }
     }
 
     private suspend fun getSkuDetails(sku: Sku): SkuDetails? {
@@ -222,6 +231,7 @@ class PurchaseManager(
         return billingClient.querySkuDetails(sku.toSkuDetailsParams())
             .skuDetailsList
             ?.firstOrNull { it.sku == sku.skuString }
+            .also { d { "got sku details $it for $sku" } }
     }
 
     private val connecting = AtomicBoolean(false)
@@ -230,17 +240,15 @@ class PurchaseManager(
         if (billingClient.isReady) return
         if (connecting.getAndSet(true)) return
         suspendCoroutine<Unit> { continuation ->
+            d { "start connection" }
             billingClient.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(result: BillingResult) {
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                            d { "connected" }
                             continuation.resume(Unit)
                         } else {
-                            continuation.resumeWithException(
-                                IllegalStateException(
-                                    "Failed to connect ${result.responseCode}"
-                                )
-                            )
+                            d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
                         }
 
                         connecting.set(false)
