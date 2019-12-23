@@ -69,7 +69,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
         }
 
         findViewById<ViewGroup>(containerId).setContent {
-            WrapContentWithEnvironment() {
+            WrapContentWithEnvironment {
                 content()
             }
         }
@@ -86,9 +86,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
         EsEnvironment(
             activity = this,
             component = component,
-            coroutineContext = lifecycleScope.coroutineContext,
-            children = content
-        )
+            coroutineContext = lifecycleScope.coroutineContext
+        ) {
+            content()
+        }
     }
 
     @Composable

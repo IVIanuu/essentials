@@ -23,6 +23,8 @@ import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 
+// todo use update provider
+
 enum class Orientation {
     Portrait, Landscape
 }

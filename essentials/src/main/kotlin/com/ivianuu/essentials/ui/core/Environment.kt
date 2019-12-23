@@ -48,7 +48,9 @@ fun EsEnvironment(
             WindowInsetsManager {
                 SystemBarManager {
                     ConfigurationFix {
-                        OrientationProvider(children = children)
+                        OrientationProvider {
+                            children()
+                        }
                     }
                 }
             }
