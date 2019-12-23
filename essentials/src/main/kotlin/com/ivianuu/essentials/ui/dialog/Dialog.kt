@@ -40,7 +40,6 @@ fun Dialog(
     style: DialogStyle = ambient(DialogStyleAmbient),
     child: @Composable() () -> Unit
 ) {
-    MaterialTheme.shapes()
     WithModifier(
         modifier = LayoutPadding(
             left = 32.dp,
