@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.store.Logger
@@ -26,6 +27,7 @@ import com.ivianuu.injekt.Provider
 @Factory
 class TimberBoxLogger : Logger {
     override fun log(msg: String) {
+        Timber.tag("Box")
         d { msg }
     }
 }
