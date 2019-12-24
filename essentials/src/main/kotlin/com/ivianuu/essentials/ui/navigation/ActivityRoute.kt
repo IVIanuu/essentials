@@ -32,7 +32,7 @@ fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
     val navigator = navigator
     onActive {
         activity.startActivity(intentFactory(activity))
-        navigator.pop()
+        navigator.popTop()
     }
 }
 

@@ -111,7 +111,7 @@ internal class AppPickerViewModel(
     }
 
     fun appClicked(app: AppInfo) {
-        navigator.pop(result = app)
+        navigator.popTop(result = app)
     }
 }
 

@@ -51,7 +51,7 @@ fun <T> SingleChoiceListDialog(
                         onSelect = onSelect?.let {
                             {
                                 onSelect(item)
-                                if (dismissOnSelection) navigator.pop()
+                                if (dismissOnSelection) navigator.popTop()
                             }
                         }
                     )

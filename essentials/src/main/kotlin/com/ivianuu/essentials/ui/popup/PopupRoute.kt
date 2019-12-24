@@ -82,7 +82,7 @@ fun PopupRoute(
     val configuration = ambient(ConfigurationAmbient)
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator.pop()
+        navigator.popTop()
     }
 
     val dismissed = holder { false }
@@ -90,7 +90,7 @@ fun PopupRoute(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed.value) {
             dismissed.value = true
-            navigator.pop()
+            navigator.popTop()
             if (cancelled) onCancel?.invoke()
         }
     }

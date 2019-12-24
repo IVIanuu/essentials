@@ -53,7 +53,7 @@ internal fun popNavigatorOnceSecureSettingsGranted() {
         while (true) {
             if (secureSettingsHelper.canWriteSecureSettings()) {
                 toaster.toast(R.string.es_secure_settings_permission_granted)
-                navigator.pop(result = true)
+                navigator.popTop(result = true)
                 break
             }
             delay(500)

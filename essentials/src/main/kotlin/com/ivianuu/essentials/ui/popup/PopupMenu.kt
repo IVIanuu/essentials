@@ -60,7 +60,7 @@ fun PopupMenu(
                     PopupMenuItem(
                         content = item.content,
                         onSelected = {
-                            navigator.pop()
+                            navigator.popTop()
                             item.onSelected?.invoke()
                         }
                     )

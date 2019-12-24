@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.navigation.navigator
 
 fun DialogRoute(
     dismissible: Boolean = true,
-    dismissHandler: @Composable() () -> /*// todo use Unit */ Any? = { navigator.pop() },
+    dismissHandler: @Composable() () -> /*// todo use Unit */ Any? = { navigator.popTop() },
     dialog: @Composable() () -> Unit
 ) = Route(
     opaque = true,

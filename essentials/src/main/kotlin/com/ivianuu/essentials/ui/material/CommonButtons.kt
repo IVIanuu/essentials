@@ -48,7 +48,7 @@ fun BackButton(
     val navigator = navigator
     IconButton(
         image = image,
-        onClick = { navigator.pop() }
+        onClick = { navigator.popTop() }
     )
 }
 

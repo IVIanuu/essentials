@@ -86,7 +86,7 @@ fun ColorPickerRoute(
     ColorPickerDialog(
         initialColor = initialColor,
         colorPalettes = colorPalettes,
-        onColorSelected = { navigator.pop(result = it) },
+        onColorSelected = { navigator.popTop(result = it) },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
         dismissOnSelection = false,

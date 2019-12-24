@@ -54,7 +54,7 @@ fun TextInputRoute(
                 dismissDialogOnClick = false,
                 onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                     {
-                        navigator.pop(result = currentValue)
+                        navigator.popTop(result = currentValue)
                     }
                 } else {
                     null

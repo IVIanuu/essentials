@@ -45,7 +45,7 @@ fun <T> DialogPreference(
             onClick = if (!context.shouldBeEnabled) null else {
                 {
                     navigator.push(DialogRoute {
-                        dialog(context) { navigator.pop() }
+                        dialog(context) { navigator.popTop() }
                     })
                 }
             }

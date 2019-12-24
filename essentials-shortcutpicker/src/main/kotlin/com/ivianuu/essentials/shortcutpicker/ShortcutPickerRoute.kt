@@ -142,7 +142,7 @@ internal class ShortcutPickerViewModel(
                     icon = icon
                 )
 
-                navigator.pop(result = shortcut)
+                navigator.popTop(result = shortcut)
             } catch (e: Exception) {
             }
         }

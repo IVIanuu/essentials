@@ -31,6 +31,6 @@ fun ActivityResultRoute(
     val navigator = navigator
     launchOnActive {
         val result = activityResultController.startForResult(intent, options)
-        navigator.pop(result = result)
+        navigator.popTop(result = result)
     }
 }

@@ -37,7 +37,7 @@ fun DialogButton(
             onClick = onClick?.let {
                 {
                     onClick()
-                    if (dismissDialogOnClick) navigator.pop()
+                    if (dismissDialogOnClick) navigator.popTop()
                 }
             },
             style = style
