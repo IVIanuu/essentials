@@ -23,7 +23,22 @@ import androidx.compose.Composer
 import androidx.compose.SlotEditor
 import androidx.compose.SlotReader
 import androidx.compose.composer
+import androidx.compose.remember
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.essentials.util.sourceLocation
+
+@Composable
+inline fun PointMarker(noinline children: @Composable() () -> Unit) {
+    PointMarker(key = sourceLocation(), children = children)
+}
+
+@Composable
+fun PointMarker(key: Any, children: @Composable() () -> Unit) {
+    val ambient = remember(key) { Ambient.of<Unit>() }
+    ambient.Provider(value = Unit, children = children)
+}
+
+// todo find a better way to implement this
 
 @Composable
 fun pointInComposition(): Any {

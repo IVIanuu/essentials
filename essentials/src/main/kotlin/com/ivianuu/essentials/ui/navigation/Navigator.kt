@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
+import com.ivianuu.essentials.ui.common.PointMarker
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
@@ -283,21 +284,23 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                ProvideCoroutineScope(coroutineScope()) {
-                    AbsorbPointer(absorb = absorbTouches) {
-                        RouteTransitionWrapper(
-                            transition = transition ?: defaultRouteTransition,
-                            state = transitionState,
-                            lastState = lastTransitionState,
-                            onTransitionComplete = onTransitionComplete,
-                            types = types,
-                            children = {
-                                RouteAmbient.Provider(
-                                    value = route,
-                                    children = route.content
-                                )
-                            }
-                        )
+                PointMarker(key = route) {
+                    ProvideCoroutineScope(coroutineScope()) {
+                        AbsorbPointer(absorb = absorbTouches) {
+                            RouteTransitionWrapper(
+                                transition = transition ?: defaultRouteTransition,
+                                state = transitionState,
+                                lastState = lastTransitionState,
+                                onTransitionComplete = onTransitionComplete,
+                                types = types,
+                                children = {
+                                    RouteAmbient.Provider(
+                                        value = route,
+                                        children = route.content
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
