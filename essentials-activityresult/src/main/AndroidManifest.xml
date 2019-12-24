@@ -14,4 +14,14 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.ivianuu.essentials.activityresult" />
+<manifest package="com.ivianuu.essentials.activityresult"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".ActivityResultActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:theme="@style/Theme.Es.Translucent" />
+    </application>
+</manifest>

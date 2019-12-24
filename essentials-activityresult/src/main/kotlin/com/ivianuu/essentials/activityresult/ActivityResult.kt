@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,21 +16,15 @@
 
 package com.ivianuu.essentials.activityresult
 
+import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import com.ivianuu.essentials.ui.coroutines.launchOnActive
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 
-fun ActivityResultRoute(
-    intent: Intent,
-    options: Bundle? = null
-) = Route(opaque = true) {
-    val activityResultController = inject<ActivityResultController>()
-    val navigator = navigator
-    launchOnActive {
-        val result = activityResultController.startForResult(intent, options)
-        navigator.pop(result = result)
-    }
+data class ActivityResult(
+    val requestCode: Int,
+    val resultCode: Int,
+    val data: Intent?
+) {
+    val isOk: Boolean get() = resultCode == Activity.RESULT_OK
+    val isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
+    val isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
 }
