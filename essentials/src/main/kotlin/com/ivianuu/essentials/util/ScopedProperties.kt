@@ -23,22 +23,22 @@ import java.util.concurrent.ConcurrentHashMap
 @Stable
 class Properties {
 
-    private val baking = mutableMapOf<Key<*>, Any?>()
+    private val backing = mutableMapOf<Key<*>, Any?>()
 
     val entries: Map<Key<*>, Any?>
-        get() = baking
+        get() = backing
 
     val size: Int get() = entries.size
 
-    operator fun <T> get(key: Key<T>): T? = baking[key] as? T
+    operator fun <T> get(key: Key<T>): T? = backing[key] as? T
 
     operator fun <T> set(key: Key<T>, value: T) {
-        baking[key] = value
+        backing[key] = value
     }
 
-    fun <T> remove(key: Key<T>): T? = baking.remove(key) as? T
+    fun <T> remove(key: Key<T>): T? = backing.remove(key) as? T
 
-    operator fun contains(key: Key<*>): Boolean = baking.containsKey(key)
+    operator fun contains(key: Key<*>): Boolean = backing.containsKey(key)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -46,14 +46,14 @@ class Properties {
 
         other as Properties
 
-        if (baking != other.baking) return false
+        if (backing != other.backing) return false
 
         return true
     }
 
-    override fun hashCode(): Int = baking.hashCode()
+    override fun hashCode(): Int = backing.hashCode()
 
-    override fun toString(): String = "Properties($baking)"
+    override fun toString(): String = "Properties($backing)"
 
     class Key<T>
 }

@@ -25,24 +25,24 @@ import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
 class RetainedObjects {
-    private val baking = mutableMapOf<Any, Any?>()
+    private val backing = mutableMapOf<Any, Any?>()
 
-    operator fun <T> get(key: Any): T? = baking[key] as? T
+    operator fun <T> get(key: Any): T? = backing[key] as? T
 
     operator fun <T> set(key: Any, value: T) {
         remove(key)
-        baking[key] = value
+        backing[key] = value
     }
 
-    fun contains(key: Any): Boolean = baking.containsKey(key)
+    fun contains(key: Any): Boolean = backing.containsKey(key)
 
     fun remove(key: Any) {
-        val value = baking.remove(key)
+        val value = backing.remove(key)
         (value as? Closeable)?.close()
     }
 
     fun dispose() {
-        baking.keys.toList().forEach { remove(it) }
+        backing.keys.toList().forEach { remove(it) }
     }
 }
 
