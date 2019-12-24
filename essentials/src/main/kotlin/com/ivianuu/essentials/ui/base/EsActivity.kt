@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
-import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.core.Environment
@@ -39,10 +38,7 @@ import com.ivianuu.injekt.get
 abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        ActivityComponent {
-            modules(EsActivityModule(this@EsActivity))
-            modules(this@EsActivity.modules())
-        }
+        ActivityComponent { modules(this@EsActivity.modules()) }
     }
 
     protected open val layoutRes: Int get() = 0
@@ -97,8 +93,4 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
         }
         Navigator(state = state)
     }
-}
-
-private fun EsActivityModule(activity: EsActivity) = Module {
-    single { NavigatorState(coroutineScope = activity.lifecycleScope) }
 }
