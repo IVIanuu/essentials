@@ -38,6 +38,7 @@ include(
     ":essentials-mvrx",
     ":essentials-notificationlistener",
     ":essentials-permission",
+    ":essentials-process-restart",
     ":essentials-securesettings",
     ":essentials-shell",
     ":essentials-shortcutpicker",

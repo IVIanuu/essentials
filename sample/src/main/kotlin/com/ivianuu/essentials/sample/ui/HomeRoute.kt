@@ -242,6 +242,11 @@ enum class HomeItem(
         color = Color.Magenta,
         route = { PrefsRoute }
     ),
+    RestartProcess(
+        title = "Restart process",
+        color = Color.Magenta,
+        route = { RestartProcessRoute }
+    ),
     Scaffold(
         title = "Scaffold",
         color = Color.Green,

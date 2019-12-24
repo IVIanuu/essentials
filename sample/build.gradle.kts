@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":essentials-hidenavbar"))
     implementation(project(":essentials-notificationlistener"))
     implementation(project(":essentials-permission"))
+    implementation(project(":essentials-process-restart"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-securesettings"))
     implementation(project(":essentials-shell"))
