@@ -39,6 +39,7 @@ class TestWorker(
     override suspend fun doWork(): Result {
         d { "start work" }
         delay(5000)
+        d { "finish work" }
         return Result.success()
     }
 }
