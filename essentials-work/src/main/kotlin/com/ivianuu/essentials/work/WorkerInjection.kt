@@ -17,9 +17,13 @@
 package com.ivianuu.essentials.work
 
 import android.content.Context
+import androidx.work.Configuration
 import androidx.work.ListenableWorker
+import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.bindAppInitializer
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -49,9 +53,27 @@ class InjektWorkerFactory(
 /**
  * Contains the [InjektWorkerFactory]
  */
-val WorkerInjectionModule = Module {
+val EsWorkModule = Module {
     map<String, ListenableWorker>(mapName = WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
+    bindAppInitializer<WorkerAppInitializer>()
+}
+
+/**
+ * Initializes the [WorkManager] with a injected [WorkerFactory]
+ */
+@Factory
+internal class WorkerAppInitializer(
+    context: Context,
+    workerFactory: WorkerFactory
+) : AppInitializer {
+    init {
+        WorkManager.initialize(
+            context, Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+        )
+    }
 }
 
 @Name
