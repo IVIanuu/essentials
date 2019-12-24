@@ -36,14 +36,10 @@ class ProcessRestarter(
 ) {
 
     val isRestartProcess by unsafeLazy {
-        val currentPid: Int = android.os.Process.myPid()
-        val manager =
-            context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val runningProcesses =
-            manager.runningAppProcesses?.any {
-                it.pid == currentPid && it.processName == ":restartprocess"
-            }
-        return@unsafeLazy false
+        val currentPid = android.os.Process.myPid()
+        return@unsafeLazy activityManager.runningAppProcesses?.any {
+            it.pid == currentPid && it.processName == ":restartprocess"
+        }
     }
 
     fun restartProcess(intent: Intent = getMainIntent()) {
