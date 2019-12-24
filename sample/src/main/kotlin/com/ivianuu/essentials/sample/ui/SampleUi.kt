@@ -17,19 +17,37 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.twilight.TwilightTheme
+import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.core.UiInitializer
+import com.ivianuu.essentials.ui.core.bindAppUi
+import com.ivianuu.essentials.ui.core.bindUiInitializer
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlin.time.milliseconds
 
-class MainActivity : EsActivity() {
-
-    override fun content() {
+@Factory
+class SampleUi : AppUi {
+    override fun runApp() {
         DefaultRouteTransitionAmbient.Provider(
             value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
         ) {
             Navigator(startRoute = HomeRoute)
         }
     }
+}
 
+@Factory
+class SampleUiInitializer : UiInitializer {
+    override fun apply(children: () -> Unit) {
+        TwilightTheme(children = children)
+    }
+}
+
+val UiModule = Module {
+    bindAppUi<SampleUi>()
+    bindUiInitializer<SampleUiInitializer>()
 }

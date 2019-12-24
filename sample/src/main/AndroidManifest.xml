@@ -32,22 +32,6 @@
         android:theme="@style/Theme.Es"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity
-            android:name=".ui.MainActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:enabled="false"
-            tools:ignore="ExportedContentProvider" />
-
     </application>
 
 </manifest>

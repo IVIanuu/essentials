@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.core
 
-import com.ivianuu.essentials.twilight.TwilightTheme
-import com.ivianuu.essentials.ui.core.UiInitializer
-import com.ivianuu.essentials.ui.core.bindUiInitializer
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import androidx.compose.Composable
+import com.ivianuu.injekt.ModuleBuilder
 
-@Factory
-class SampleUiInitializer : UiInitializer {
-    override fun apply(children: () -> Unit) {
-        TwilightTheme(children = children)
-    }
+interface AppUi {
+    @Composable
+    fun runApp()
 }
 
-val UiModule = Module {
-    bindUiInitializer<SampleUiInitializer>()
+inline fun <reified T> ModuleBuilder.bindAppUi(name: Any? = null) {
+    withBinding<T>(name = name) { bindType<AppUi>() }
 }
