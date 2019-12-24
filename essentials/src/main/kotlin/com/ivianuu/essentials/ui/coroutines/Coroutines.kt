@@ -62,7 +62,7 @@ fun coroutineScope(context: CoroutineContext = remember { Job() + Dispatchers.Ma
 fun launchOnActive(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = ambient(CoroutineScopeAmbient)
+    val coroutineScope = coroutineScope
     onActive {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -73,7 +73,7 @@ fun launchOnActive(
 fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = ambient(CoroutineScopeAmbient)
+    val coroutineScope = coroutineScope
     onPreCommit {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -85,7 +85,7 @@ fun launchOnPreCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = ambient(CoroutineScopeAmbient)
+    val coroutineScope = coroutineScope
     onPreCommit(*inputs) {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -96,7 +96,7 @@ fun launchOnPreCommit(
 fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = ambient(CoroutineScopeAmbient)
+    val coroutineScope = coroutineScope
     onCommit {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
@@ -108,7 +108,7 @@ fun launchOnCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val coroutineScope = ambient(CoroutineScopeAmbient)
+    val coroutineScope = coroutineScope
     onCommit(*inputs) {
         val job = coroutineScope.launch(block = block)
         onDispose { job.cancel() }
