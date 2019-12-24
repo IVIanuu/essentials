@@ -281,5 +281,10 @@ enum class HomeItem(
         title = "Twilight",
         color = Color.Gray,
         route = { TwilightSettingsRoute }
+    ),
+    Work(
+        title = "Work",
+        color = Color.Gray,
+        route = { WorkRoute }
     )
 }

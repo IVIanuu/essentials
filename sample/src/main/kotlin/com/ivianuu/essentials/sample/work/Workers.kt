@@ -24,32 +24,21 @@ import com.ivianuu.essentials.work.bindWorker
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
+import kotlinx.coroutines.delay
 
-val WorkerModule = Module {
-    bindWorker<MyWorkerOne>()
-    bindWorker<MyWorkerTwo>()
+val WorkModule = Module {
+    bindWorker<TestWorker>()
 }
 
 @Factory
-class MyWorkerOne(
+class TestWorker(
     @Param context: Context,
     @Param workerParams: WorkerParameters
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        d { "do work" }
-        return Result.success()
-    }
-}
-
-@Factory
-class MyWorkerTwo(
-    @Param context: Context,
-    @Param workerParams: WorkerParameters
-) : EsWorker(context, workerParams) {
-
-    override suspend fun doWork(): Result {
-        d { "do work" }
+        d { "start work" }
+        delay(5000)
         return Result.success()
     }
 }

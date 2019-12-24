@@ -16,20 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.remember
-import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
-import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
-import kotlin.time.milliseconds
+import androidx.ui.layout.Center
+import androidx.ui.material.Button
+import com.ivianuu.essentials.sample.work.WorkScheduler
+import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Route
 
-class MainActivity : EsActivity() {
-
-    override fun content() {
-        DefaultRouteTransitionAmbient.Provider(
-            value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
-        ) {
-            Navigator(startRoute = HomeRoute)
+val WorkRoute = Route {
+    SimpleScreen(title = "Work") {
+        Center {
+            val workScheduler = inject<WorkScheduler>()
+            Button(
+                text = "Perform work",
+                onClick = { workScheduler.scheduleWork() }
+            )
         }
     }
-
 }

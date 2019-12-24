@@ -24,9 +24,10 @@ import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
 import com.ivianuu.essentials.permission.EsPermissionsModule
 import com.ivianuu.essentials.sample.BootModule
+import com.ivianuu.essentials.sample.ui.UiModule
+import com.ivianuu.essentials.sample.work.WorkModule
 import com.ivianuu.essentials.twilight.EsTwilightModule
-import com.ivianuu.essentials.work.WorkerInitializerModule
-import com.ivianuu.essentials.work.WorkerInjectionModule
+import com.ivianuu.essentials.work.EsWorkModule
 
 class App : EsApp() {
 
@@ -38,11 +39,12 @@ class App : EsApp() {
         EsGesturesModule,
         EsPermissionsModule,
         EsTwilightModule,
+        EsWorkModule,
 
         AppModule,
         BootModule,
-        WorkerInjectionModule,
-        WorkerInitializerModule
+        UiModule,
+        WorkModule
     )
 
 }

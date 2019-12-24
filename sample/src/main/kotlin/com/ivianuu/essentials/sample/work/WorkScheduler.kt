@@ -26,8 +26,7 @@ class WorkScheduler(private val context: Context) {
 
     fun scheduleWork() {
         with(WorkManager.getInstance(context)) {
-            enqueue(OneTimeWorkRequestBuilder<MyWorkerOne>().build())
-            enqueue(OneTimeWorkRequestBuilder<MyWorkerTwo>().build())
+            enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
         }
     }
 

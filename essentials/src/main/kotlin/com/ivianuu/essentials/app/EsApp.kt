@@ -20,6 +20,7 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.EsModule
+import com.ivianuu.essentials.ui.core.EsUiInitializersModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.CodegenJustInTimeLookupFactory
@@ -61,7 +62,7 @@ abstract class EsApp : Application(), InjektTrait {
 
     protected open fun createComponent(): Component {
         return ApplicationComponent {
-            modules(EsAppModule, EsModule)
+            modules(EsAppModule, EsModule, EsUiInitializersModule)
             modules(this@EsApp.modules())
         }
     }
