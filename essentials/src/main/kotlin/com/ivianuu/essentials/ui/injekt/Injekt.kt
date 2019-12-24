@@ -42,3 +42,19 @@ fun <T> inject(
     val component = ambient(ComponentAmbient)
     return remember { component.get(type = type, name = name, parameters = parameters) }
 }
+
+@Composable
+inline fun <reified T> injectOrNull(
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
+) = injectOrNull(type = typeOf<T>(), name = name, parameters = parameters)
+
+@Composable
+fun <T> injectOrNull(
+    type: Type<T>,
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
+): T? {
+    val component = ambient(ComponentAmbient)
+    return remember { component.getOrNull(type = type, name = name, parameters = parameters) }
+}
