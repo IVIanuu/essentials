@@ -19,28 +19,23 @@ package androidx.compose;
 @SuppressWarnings("KotlinInternalInJava")
 public final class ComposeAccessor {
 
-    public static boolean isCompositionLifecycleObserverHolder(Object object) {
-        return object instanceof CompositionLifecycleObserverHolder;
+    public static Ambient getAmbientFromHolder(Object holder) {
+        return ((Ambient.Holder) holder).getAmbient();
     }
 
-    public static boolean isGroupStart(Object object) {
-        return object instanceof GroupStart;
+    public static boolean isAmbientHolder(Object object) {
+        return object instanceof Ambient.Holder;
     }
 
-    public static Object[] getSlots(SlotTable table) {
-        return table.getSlots$compose_runtime_release();
+    public static Object getProviderKey() {
+        return ViewComposerCommonKt.getProvider();
     }
 
-    public static int getSlots(Object group) {
-        return ((GroupStart) group).getSlots();
+    public static int intStackSize(Object intStack) {
+        return ((IntStack) intStack).getSize();
     }
 
-    public static Object getKey(Object group) {
-        return ((GroupStart) group).getKey();
+    public static int intStackPeek(Object intStack, int index) {
+        return ((IntStack) intStack).peek(index);
     }
-
-    public static CompositionLifecycleObserver getInstance(Object holder) {
-        return ((CompositionLifecycleObserverHolder) holder).getInstance();
-    }
-
 }

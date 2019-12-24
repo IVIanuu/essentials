@@ -16,39 +16,54 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ComposeAccessor
+import androidx.compose.Composer
+import androidx.compose.SlotEditor
+import androidx.compose.SlotReader
 import androidx.compose.composer
-import androidx.compose.onActive
-import androidx.compose.state
+import com.ivianuu.essentials.util.cast
 
 @Composable
-fun pointInComposition(): Any? {
-    val state = state<Any?> { null }
+fun pointInComposition(): Any {
     val composer = composer.composer
-    onActive {
-        val slots = ComposeAccessor.getSlots(composer.slotTable).toList()
-        val holder = slots
-            .filterNotNull()
-            .filter { ComposeAccessor.isCompositionLifecycleObserverHolder(it) }
-            .single { holder -> ComposeAccessor.getInstance(holder) == this }
 
-        val holderIndex = slots.indexOf(holder)
-        val groupsWithIndex = slots.subList(0, holderIndex)
-            .mapIndexedNotNull { index, value ->
-                if (ComposeAccessor.isGroupStart(value)) value to index else null
-            }
+    val insertedProviders = Composer::class.java.getDeclaredField("insertedProviders")
+        .also { it.isAccessible = true }
+        .get(composer)
+        .let { stack ->
+            stack.javaClass.getDeclaredField("backing")
+                .also { it.isAccessible = true }
+                .get(stack)
+                .cast<List<Any>>()
+        }
+        .map { holder -> ComposeAccessor.getAmbientFromHolder(holder) }
 
-        val keys = mutableListOf<Any>()
-        groupsWithIndex.forEach { (value, index) ->
-            val groupSlots = ComposeAccessor.getSlots(value)
-            if (holderIndex in index..index + groupSlots) {
-                keys += ComposeAccessor.getKey(value)
+    val slots = Composer::class.java.getDeclaredField("slots")
+        .also { it.isAccessible = true }
+        .get(composer) as SlotReader
+
+    val startStack = SlotEditor::class.java.getDeclaredField("startStack")
+        .also { it.isAccessible = true }
+        .get(slots)
+
+    val existingProviders = mutableListOf<Ambient<*>>()
+
+    var current = ComposeAccessor.intStackSize(startStack) - 1
+    while (current > 0) {
+        val index = ComposeAccessor.intStackPeek(startStack, current)
+        val sentinel = slots.groupKey(index)
+        if (sentinel === ComposeAccessor.getProviderKey()) {
+            val element = slots.get(index + 1)
+            if (ComposeAccessor.isAmbientHolder(element)) {
+                existingProviders.add(0, ComposeAccessor.getAmbientFromHolder(element))
             }
         }
-
-        state.value = keys.hashCode()
+        current--
     }
 
-    return state.value
+    val providers = existingProviders + insertedProviders
+
+    return providers.hashCode()
 }
