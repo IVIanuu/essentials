@@ -44,10 +44,8 @@ fun Text(
     selectable: Boolean = false,
     child: @Composable TextSpanScope.() -> Unit
 ) {
-    ToggleableSelectable(
-        selectable = selectable
-    ) {
-        Text(
+    ToggleableSelectable(selectable = selectable) {
+        androidx.ui.core.Text(
             child = child,
             modifier = modifier,
             style = applyContentColorIfNeeded(style),
@@ -68,10 +66,8 @@ fun Text(
     maxLines: Int = DefaultMaxLines,
     selectable: Boolean = false
 ) {
-    ToggleableSelectable(
-        selectable = selectable
-    ) {
-        Text(
+    ToggleableSelectable(selectable = selectable) {
+        androidx.ui.core.Text(
             text = text,
             modifier = modifier,
             style = applyContentColorIfNeeded(style),
@@ -110,7 +106,7 @@ private fun ToggleableSelectable(
     child: @Composable() () -> Unit
 ) {
     SelectionRegistrarAmbient.Provider(
-        value = if (selectable) ambient(SelectionRegistrarAmbient) else NoopSelectionRegistar,
+        value = if (selectable) ambient(SelectionRegistrarAmbient) else NoopSelectionRegistrar,
         children = child
     )
 }
@@ -122,7 +118,7 @@ fun applyContentColorIfNeeded(style: TextStyle?): TextStyle {
     return themeStyle
 }
 
-private object NoopSelectionRegistar : SelectionRegistrar {
+private object NoopSelectionRegistrar : SelectionRegistrar {
     override fun subscribe(selectable: Selectable): Selectable =
         NoopSelectable
 

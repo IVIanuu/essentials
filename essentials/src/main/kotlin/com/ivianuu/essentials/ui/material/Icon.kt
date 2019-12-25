@@ -42,8 +42,7 @@ fun Icon(
         height = style.size.height
     ) {
         val color = when (style.color) {
-            null -> contentColor()
-            IconStyle.DoNotTint -> null
+            IconStyle.ContentColor -> contentColor()
             else -> style.color
         }
         DrawImage(image = image, tint = color)
@@ -53,7 +52,7 @@ fun Icon(
 @Immutable
 data class IconStyle(
     val size: Size = Size(DefaultIconSize, DefaultIconSize),
-    val color: Color? = Color.Transparent
+    val color: Color? = ContentColor
 ) : Mergeable<IconStyle> {
     override fun merge(other: IconStyle): IconStyle = IconStyle(
         size = other.size,
@@ -61,7 +60,7 @@ data class IconStyle(
     )
 
     companion object {
-        val DoNotTint = Color(0x00000001)
+        val ContentColor = Color(0x00000001)
     }
 }
 
@@ -82,7 +81,7 @@ fun currentIconStyle(): IconStyle = ambient(CurrentIconStyleAmbient)
 
 fun AvatarIconStyle() = IconStyle(
     size = Size(AvatarSize, AvatarSize),
-    color = IconStyle.DoNotTint
+    color = null
 )
 
 private val AvatarSize = 40.dp
