@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.key
 import androidx.ui.core.Alignment
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
@@ -29,6 +28,7 @@ import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.navigator
@@ -43,7 +43,11 @@ object PopupMenu {
         constructor(
             text: String,
             onSelected: (() -> Unit)? = null
-        ) : this(onSelected = onSelected, content = { Text(text) })
+        ) : this(onSelected = onSelected, content = {
+            Text(
+                text
+            )
+        })
     }
 }
 

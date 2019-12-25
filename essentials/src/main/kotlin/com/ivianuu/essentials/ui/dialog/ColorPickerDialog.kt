@@ -26,8 +26,6 @@ import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Size
-import androidx.ui.core.Text
-import androidx.ui.core.TextField
 import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.foundation.Clickable
@@ -51,6 +49,8 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.hideKeyboardOnDispose
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
@@ -59,10 +59,10 @@ import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
@@ -91,7 +91,9 @@ fun ColorPickerRoute(
         showAlphaSelector = showAlphaSelector,
         dismissOnSelection = false,
         title = {
-            Text(title ?: stringResource(R.string.es_dialog_title_color_picker))
+            Text(
+                title ?: stringResource(R.string.es_dialog_title_color_picker)
+            )
         }
     )
 }
@@ -262,7 +264,7 @@ private fun ColorGridItem(
     onClick: () -> Unit
 ) {
     BaseColorGridItem(onClick = onClick) {
-        EsSurface(
+        Surface(
             modifier = LayoutExpanded,
             color = color,
             contentColor = contentColorFor(color),
@@ -348,7 +350,7 @@ private fun ColorEditorHeader(
     onColorChanged: (Color) -> Unit
 ) {
     CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
-        EsSurface(color = color) {
+        Surface(color = color) {
             WithModifier(
                 modifier = LayoutHeight(72.dp) +
                         LayoutExpandedWidth + LayoutPadding(all = 8.dp)

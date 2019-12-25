@@ -29,6 +29,7 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ProvideEmphasis
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -54,7 +55,7 @@ fun Banner(
                 }
 
                 CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                    EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = content)
+                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).high, children = content)
                 }
 
                 Spacer(LayoutWidth(16.dp))

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.state
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutHeight
@@ -26,6 +25,7 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
@@ -214,7 +214,11 @@ val DialogsRoute = Route {
                             listContent = {
                                 (1..100).forEach {
                                     ListItem(
-                                        title = { Text("Item: $it") },
+                                        title = {
+                                            Text(
+                                                "Item: $it"
+                                            )
+                                        },
                                         onClick = {
 
                                         }

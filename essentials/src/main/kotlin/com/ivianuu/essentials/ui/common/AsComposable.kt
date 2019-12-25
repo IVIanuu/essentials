@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Text
 import androidx.ui.graphics.Image
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Icon
 
 fun String?.asTextComposable(): (@Composable() () -> Unit)? = if (this == null) null else {

@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

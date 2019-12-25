@@ -21,14 +21,14 @@ import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Opacity
-import androidx.ui.core.Text
-import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.navigator
 
 fun TextInputRoute(

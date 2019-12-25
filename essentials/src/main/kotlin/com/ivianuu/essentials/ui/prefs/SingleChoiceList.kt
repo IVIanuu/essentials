@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 

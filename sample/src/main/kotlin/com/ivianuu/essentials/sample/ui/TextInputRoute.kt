@@ -22,8 +22,6 @@ import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
-import androidx.ui.core.Text
-import androidx.ui.core.TextField
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.layout.Center
@@ -34,6 +32,8 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold

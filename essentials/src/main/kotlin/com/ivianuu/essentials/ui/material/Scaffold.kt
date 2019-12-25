@@ -84,7 +84,7 @@ fun Scaffold(
 
     ScaffoldAmbient.Provider(value = scaffoldState) {
         var layout: @Composable() () -> Unit = {
-            EsSurface {
+            Surface {
                 ScaffoldLayout(
                     state = scaffoldState,
                     topAppBar = topAppBar,
@@ -103,7 +103,7 @@ fun Scaffold(
                     onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
                     gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
                     drawerContent = {
-                        EsSurface {
+                        Surface {
                             drawerContent()
                         }
                     },

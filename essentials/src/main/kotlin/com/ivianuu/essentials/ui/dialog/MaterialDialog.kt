@@ -34,12 +34,12 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ProvideEmphasis
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.EmphasisProvider
 
 // todo remove hardcoded values
 // todo add more styleable attributes such as corner radius
@@ -98,7 +98,7 @@ private fun DialogBody(
                     CurrentTextStyleProvider(
                         MaterialTheme.typography().h6
                     ) {
-                        EmphasisProvider(
+                        ProvideEmphasis(
                             emphasis = MaterialTheme.emphasisLevels().high,
                             children = title
                         )
@@ -108,7 +108,7 @@ private fun DialogBody(
 
             val styledIcon = icon?.let {
                 {
-                    EmphasisProvider(
+                    ProvideEmphasis(
                         emphasis = MaterialTheme.emphasisLevels().high,
                         children = icon
                     )
@@ -137,7 +137,7 @@ private fun DialogBody(
     val finalContent = if (content != null) {
         {
             CurrentTextStyleProvider(MaterialTheme.typography().subtitle1) {
-                EmphasisProvider(
+                ProvideEmphasis(
                     emphasis = MaterialTheme.emphasisLevels().medium,
                     children = content
                 )

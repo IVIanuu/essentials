@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
@@ -28,6 +27,7 @@ import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column

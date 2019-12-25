@@ -23,7 +23,6 @@ import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
-import androidx.ui.core.Text
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
 import androidx.ui.core.dp
@@ -37,6 +36,7 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.common.withDensity
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -68,7 +68,7 @@ fun <T> BottomNavigationBar(
     color: Color = MaterialTheme.colors().primary,
     item: @Composable() (Int, T) -> Unit
 ) {
-    EsSurface(color = color, elevation = BottomNavigationBarElevation) {
+    Surface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
             WithConstraints { thisConstraints ->
                 Row(
@@ -147,7 +147,10 @@ fun BottomNavigationBarItem(
                     Icon(image = icon, style = iconStyle)
 
                     val textStyle = MaterialTheme.typography().caption.copy(color = tint)
-                    Text(text = text, style = textStyle)
+                    Text(
+                        text = text,
+                        style = textStyle
+                    )
                 }
             }
         }

@@ -24,6 +24,7 @@ import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
+import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
@@ -40,19 +41,28 @@ fun Icon(
         width = style.size.width,
         height = style.size.height
     ) {
-        DrawImage(image = image, tint = style.color)
+        val color = when (style.color) {
+            null -> contentColor()
+            IconStyle.DoNotTint -> null
+            else -> style.color
+        }
+        DrawImage(image = image, tint = color)
     }
 }
 
 @Immutable
 data class IconStyle(
     val size: Size = Size(DefaultIconSize, DefaultIconSize),
-    val color: Color? = null
+    val color: Color? = Color.Transparent
 ) : Mergeable<IconStyle> {
     override fun merge(other: IconStyle): IconStyle = IconStyle(
         size = other.size,
         color = other.color
     )
+
+    companion object {
+        val DoNotTint = Color(0x00000001)
+    }
 }
 
 private val DefaultIconSize = 24.dp
@@ -70,7 +80,10 @@ fun CurrentIconStyleProvider(
 @Composable
 fun currentIconStyle(): IconStyle = ambient(CurrentIconStyleAmbient)
 
-fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)
+fun AvatarIconStyle() = IconStyle(
+    size = Size(AvatarSize, AvatarSize),
+    color = IconStyle.DoNotTint
+)
 
 private val AvatarSize = 40.dp
 

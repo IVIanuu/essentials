@@ -21,6 +21,7 @@ import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
+import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
@@ -31,7 +32,7 @@ import com.ivianuu.essentials.ui.core.Unstable
 
 @Unstable
 @Composable
-fun EsSurface(
+fun Surface(
     modifier: Modifier = Modifier.None,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors().surface,
@@ -48,7 +49,7 @@ fun EsSurface(
         border = border,
         elevation = elevation
     ) {
-        ContentColorProvider(
+        ProvideContentColor(
             color = contentColor,
             children = children
         )

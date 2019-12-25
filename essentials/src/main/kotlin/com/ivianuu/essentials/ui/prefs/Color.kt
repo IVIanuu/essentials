@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun ColorPreference(
@@ -79,7 +79,7 @@ fun ColorPreference(
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
         trailing = { context ->
-            EsSurface(
+            Surface(
                 modifier = LayoutSize(width = 40.dp, height = 40.dp),
                 color = context.currentValue,
                 border = Border(

@@ -22,7 +22,6 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Draw
 import androidx.ui.core.PxSize
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.graphics.Canvas
@@ -44,6 +43,7 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList

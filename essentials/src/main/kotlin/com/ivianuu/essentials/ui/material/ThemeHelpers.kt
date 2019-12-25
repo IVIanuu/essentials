@@ -18,12 +18,8 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.foundation.ProvideContentColor
-import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
-import androidx.ui.material.Emphasis
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.DefaultRippleEffectFactory
 import androidx.ui.material.ripple.RippleTheme
@@ -42,29 +38,6 @@ fun contentColorFor(color: Color): Color {
             error -> onError
             else -> if (color.isDark) Color.White else Color.Black
         }
-    }
-}
-
-@Composable
-fun EmphasisProvider(
-    emphasis: Emphasis,
-    children: @Composable() () -> Unit
-) {
-    ProvideEmphasis(emphasis = emphasis) {
-        ContentColorProvider(color = contentColor(), children = children)
-    }
-}
-
-@Composable
-fun ContentColorProvider(
-    color: Color,
-    children: @Composable() () -> Unit
-) {
-    ProvideContentColor(color = color) {
-        CurrentIconStyleProvider(
-            value = currentIconStyle().copy(color = contentColor()),
-            children = children
-        )
     }
 }
 

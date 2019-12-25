@@ -24,7 +24,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
 import androidx.ui.core.Size
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
@@ -34,6 +33,7 @@ import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -69,7 +69,7 @@ fun TopAppBar(
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: (@Composable() () -> Unit)? = null
 ) {
-    EsSurface(color = style.color) {
+    Surface(color = style.color) {
         Container(
             height = AppBarHeight,
             modifier = LayoutExpandedWidth,

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
@@ -30,12 +29,13 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.RippleColorProvider
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.navigation.Route
@@ -60,7 +60,7 @@ val ChipsRoute = Route {
 private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
     val color = remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
-    EsSurface(
+    Surface(
         color = color,
         shape = RoundedCornerShape(16.dp)
     ) {

@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
@@ -44,7 +44,7 @@ val TabsRoute = Route {
             },
             body = {
                 TabContent<Color> { index, item ->
-                    EsSurface(color = item) {
+                    Surface(color = item) {
                         Container(expanded = true) {
                             Text("Index: $index")
                         }

@@ -25,6 +25,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+
 @Composable
 fun SwitchPreference(
     @Pivotal box: Box<Boolean>,

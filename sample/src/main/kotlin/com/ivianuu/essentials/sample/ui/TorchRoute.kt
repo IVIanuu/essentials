@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
@@ -26,6 +25,7 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.gestures.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column

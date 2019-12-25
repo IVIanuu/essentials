@@ -19,11 +19,11 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.Text
 
 @Composable
 fun Subheader(text: String) {

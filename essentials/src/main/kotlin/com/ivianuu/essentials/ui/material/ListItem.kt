@@ -29,6 +29,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
@@ -96,7 +97,7 @@ fun ListItem(
                                 bottom = contentPadding.bottom
                             )
                         ) {
-                            EmphasisProvider(
+                            ProvideEmphasis(
                                 emphasis = ambient(EmphasisAmbient).high,
                                 children = leading
                             )
@@ -122,12 +123,12 @@ fun ListItem(
                         Column {
                             if (title != null) {
                                 CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
-                                    EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = title)
+                                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).high, children = title)
                                 }
                             }
                             if (subtitle != null) {
                                 CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                                    EmphasisProvider(emphasis = ambient(EmphasisAmbient).medium, children = subtitle)
+                                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).medium, children = subtitle)
                                 }
                             }
                         }
@@ -146,7 +147,7 @@ fun ListItem(
                                 bottom = contentPadding.bottom
                             )
                         ) {
-                            EmphasisProvider(
+                            ProvideEmphasis(
                                 emphasis = ambient(EmphasisAmbient).high,
                                 children = trailing
                             )

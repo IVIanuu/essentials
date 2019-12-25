@@ -27,7 +27,7 @@ import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.Surface
 
 data class DialogStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp)
@@ -48,7 +48,7 @@ fun Dialog(
             bottom = 32.dp
         ) + LayoutMinWidth(280.dp) + LayoutMaxWidth(356.dp)
     ) {
-        EsSurface(
+        Surface(
             color = MaterialTheme.colors().surface,
             elevation = 24.dp,
             shape = style.shape,

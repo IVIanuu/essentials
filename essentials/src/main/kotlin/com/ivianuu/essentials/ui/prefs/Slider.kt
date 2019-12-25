@@ -22,7 +22,6 @@ import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
@@ -34,6 +33,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.WithModifier

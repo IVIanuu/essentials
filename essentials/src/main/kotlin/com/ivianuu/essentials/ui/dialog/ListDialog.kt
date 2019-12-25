@@ -27,11 +27,11 @@ import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.material.EmphasisProvider
 
 // todo
 
@@ -54,7 +54,7 @@ fun SimpleDialogListItem(
                 ),
                 alignment = Alignment.CenterLeft
             ) {
-                EmphasisProvider(emphasis = MaterialTheme.emphasisLevels().high) {
+                ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
                     Row(
                         mainAxisAlignment = MainAxisAlignment.End,
                         crossAxisAlignment = CrossAxisAlignment.Center

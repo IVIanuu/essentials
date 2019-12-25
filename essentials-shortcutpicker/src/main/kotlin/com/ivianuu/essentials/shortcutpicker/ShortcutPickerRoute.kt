@@ -23,7 +23,6 @@ import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.lifecycle.viewModelScope
-import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.activityresult.ActivityResult
@@ -32,6 +31,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.billing
 
 import android.content.Context
 import android.content.Intent
-import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Spacer
 import androidx.ui.material.ContainedButtonStyle
@@ -27,6 +26,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog

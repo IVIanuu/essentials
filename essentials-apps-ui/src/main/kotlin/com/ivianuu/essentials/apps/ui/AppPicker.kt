@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.lifecycle.viewModelScope
-import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
@@ -31,6 +30,7 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem

@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
@@ -30,7 +30,7 @@ val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(
         topAppBar = { TopAppBar("Drawer") },
         drawerContent = {
-            EsSurface(color = Color.Blue) {
+            Surface(color = Color.Blue) {
                 Center {
                     Text(
                         text = "Drawer",
@@ -40,7 +40,7 @@ val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
             }
         },
         body = {
-            EsSurface(color = Color.Red) {
+            Surface(color = Color.Red) {
                 Center {
                     Text(
                         text = "Body",
