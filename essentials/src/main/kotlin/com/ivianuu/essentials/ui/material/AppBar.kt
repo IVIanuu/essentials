@@ -148,7 +148,7 @@ private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
 @Composable
 fun AppBarIconStyle(color: Color): IconStyle = IconStyle(
     size = Size(AppBarIconSize, AppBarIconSize),
-    color = contentColorFor(color)
+    color = guessingContentColorFor(color)
 )
 
 private val AppBarIconSize = 24.dp

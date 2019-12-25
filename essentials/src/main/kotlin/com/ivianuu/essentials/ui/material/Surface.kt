@@ -21,13 +21,10 @@ import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
-import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.contentColorFor
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.core.Unstable
 
 @Unstable
@@ -36,22 +33,18 @@ fun Surface(
     modifier: Modifier = Modifier.None,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors().surface,
-    contentColor: Color = MaterialTheme.colors().contentColorFor(color) ?: contentColorFor(color),
+    contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit
 ) {
-    Surface(
+    androidx.ui.material.surface.Surface(
         modifier = modifier,
         shape = shape,
         color = color,
         contentColor = contentColor,
         border = border,
-        elevation = elevation
-    ) {
-        ProvideContentColor(
-            color = contentColor,
-            children = children
-        )
-    }
+        elevation = elevation,
+        children = children
+    )
 }

@@ -70,8 +70,8 @@ import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
 import com.ivianuu.essentials.ui.material.TabRow
-import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.material.copy
+import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor
@@ -269,7 +269,7 @@ private fun ColorGridItem(
         Surface(
             modifier = LayoutExpanded,
             color = color,
-            contentColor = contentColorFor(color),
+            contentColor = guessingContentColorFor(color),
             shape = RoundedCornerShape(50),
             border = Border(
                 color = MaterialTheme.colors().onSurface,

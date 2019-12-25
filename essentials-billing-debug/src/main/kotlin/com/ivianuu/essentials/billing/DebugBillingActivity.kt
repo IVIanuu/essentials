@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.material.contentColorFor
+import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
@@ -105,7 +105,7 @@ class DebugBillingActivity : EsActivity() {
                     text = "Purchase",
                     style = ContainedButtonStyle(
                         backgroundColor = GooglePlayGreen,
-                        contentColor = contentColorFor(GooglePlayGreen)
+                        contentColor = guessingContentColorFor(GooglePlayGreen)
                     ),
                     onClick = {
                         client.onPurchaseResult(

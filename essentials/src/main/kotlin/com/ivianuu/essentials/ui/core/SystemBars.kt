@@ -36,10 +36,10 @@ import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Stack
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.layout.WithModifier
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag

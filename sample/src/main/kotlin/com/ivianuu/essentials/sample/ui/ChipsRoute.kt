@@ -29,6 +29,7 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
@@ -37,7 +38,6 @@ import com.ivianuu.essentials.ui.material.RippleColorProvider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -78,9 +78,9 @@ private fun Chip(@Pivotal name: String) {
                     }) {
                         Text(
                             text = name,
-                            style = MaterialTheme.typography().body2.copy(
-                                color = contentColorFor(color)
-                            )
+                            style = MaterialTheme.typography().body2.also {
+                                d { "body 2 color $it" }
+                            }
                         )
                     }
                 }

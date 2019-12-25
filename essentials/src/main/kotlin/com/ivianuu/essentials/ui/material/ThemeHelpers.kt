@@ -26,7 +26,7 @@ import androidx.ui.material.ripple.RippleTheme
 import com.ivianuu.essentials.util.isDark
 
 @Composable
-fun contentColorFor(color: Color): Color {
+fun guessingContentColorFor(color: Color): Color {
     return with(MaterialTheme.colors()) {
         when (color) {
             primary -> onPrimary

@@ -56,7 +56,6 @@ import androidx.ui.layout.Spacer
 import androidx.ui.lerp
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Surface
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
 import com.github.ajalt.timberkt.d

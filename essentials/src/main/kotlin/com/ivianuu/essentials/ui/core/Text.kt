@@ -37,7 +37,7 @@ import androidx.ui.text.style.TextOverflow
 @Composable
 fun Text(
     modifier: Modifier = Modifier.None,
-    style: TextStyle? = null,
+    style: TextStyle = currentTextStyle(),
     softWrap: Boolean = DefaultSoftWrap,
     overflow: TextOverflow = DefaultOverflow,
     maxLines: Int = DefaultMaxLines,
@@ -48,7 +48,7 @@ fun Text(
         androidx.ui.core.Text(
             child = child,
             modifier = modifier,
-            style = applyContentColorIfNeeded(style),
+            style = applyContentColor(style),
             softWrap = softWrap,
             overflow = overflow,
             maxLines = maxLines
@@ -60,7 +60,7 @@ fun Text(
 fun Text(
     text: String,
     modifier: Modifier = Modifier.None,
-    style: TextStyle? = null,
+    style: TextStyle = currentTextStyle(),
     softWrap: Boolean = DefaultSoftWrap,
     overflow: TextOverflow = DefaultOverflow,
     maxLines: Int = DefaultMaxLines,
@@ -70,7 +70,7 @@ fun Text(
         androidx.ui.core.Text(
             text = text,
             modifier = modifier,
-            style = applyContentColorIfNeeded(style),
+            style = applyContentColor(style),
             softWrap = softWrap,
             overflow = overflow,
             maxLines = maxLines
@@ -82,7 +82,7 @@ fun Text(
 fun Text(
     text: AnnotatedString,
     modifier: Modifier = Modifier.None,
-    style: TextStyle? = null,
+    style: TextStyle = currentTextStyle(),
     softWrap: Boolean = DefaultSoftWrap,
     overflow: TextOverflow = DefaultOverflow,
     maxLines: Int = DefaultMaxLines,
@@ -92,7 +92,7 @@ fun Text(
         androidx.ui.core.Text(
             text = text,
             modifier = modifier,
-            style = applyContentColorIfNeeded(style),
+            style = applyContentColor(style),
             softWrap = softWrap,
             overflow = overflow,
             maxLines = maxLines
@@ -112,11 +112,8 @@ private fun ToggleableSelectable(
 }
 
 @Composable
-fun applyContentColorIfNeeded(style: TextStyle?): TextStyle {
-    var themeStyle = currentTextStyle()
-    themeStyle = themeStyle.merge(style).copy(color = themeStyle.color ?: contentColor())
-    return themeStyle
-}
+fun applyContentColor(style: TextStyle): TextStyle =
+    style.copy(color = contentColor())
 
 private object NoopSelectionRegistrar : SelectionRegistrar {
     override fun subscribe(selectable: Selectable): Selectable =

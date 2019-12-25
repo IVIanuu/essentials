@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.Composable
 import androidx.ui.core.EditorModel
 import androidx.ui.core.Modifier
+import androidx.ui.core.currentTextStyle
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.VisualTransformation
@@ -32,7 +33,7 @@ fun TextField(
     value: String,
     modifier: Modifier = Modifier.None,
     onValueChange: (String) -> Unit = {},
-    textStyle: TextStyle? = null,
+    textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
     onFocus: () -> Unit = {},
@@ -45,7 +46,7 @@ fun TextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
-        textStyle = applyContentColorIfNeeded(textStyle),
+        textStyle = applyContentColor(textStyle),
         keyboardType = keyboardType,
         imeAction = imeAction,
         onFocus = onFocus,
@@ -61,7 +62,7 @@ fun TextField(
     value: EditorModel,
     modifier: Modifier = Modifier.None,
     onValueChange: (EditorModel) -> Unit = {},
-    textStyle: TextStyle? = null,
+    textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
     onFocus: () -> Unit = {},
@@ -74,7 +75,7 @@ fun TextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
-        textStyle = applyContentColorIfNeeded(textStyle),
+        textStyle = applyContentColor(textStyle),
         keyboardType = keyboardType,
         imeAction = imeAction,
         onFocus = onFocus,
@@ -91,7 +92,7 @@ fun TextField(
     compositionRange: TextRange?,
     modifier: Modifier = Modifier.None,
     onValueChange: (EditorModel, TextRange?) -> Unit = { _, _ -> },
-    textStyle: TextStyle? = null,
+    textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
     onFocus: () -> Unit = {},
@@ -105,7 +106,7 @@ fun TextField(
         compositionRange = compositionRange,
         modifier = modifier,
         onValueChange = onValueChange,
-        textStyle = applyContentColorIfNeeded(textStyle),
+        textStyle = applyContentColor(textStyle),
         keyboardType = keyboardType,
         imeAction = imeAction,
         onFocus = onFocus,
