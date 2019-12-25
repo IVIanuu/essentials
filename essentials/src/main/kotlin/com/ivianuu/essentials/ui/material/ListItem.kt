@@ -189,8 +189,6 @@ fun ListItem(
     }
 }
 
-
-
 private val TitleOnlyMinHeight = 48.dp
 private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp

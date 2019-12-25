@@ -121,7 +121,6 @@ fun TopAppBar(
             }
         }
     }
-
 }
 
 private val AppBarHeight = 56.dp

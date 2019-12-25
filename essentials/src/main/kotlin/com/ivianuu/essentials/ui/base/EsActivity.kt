@@ -85,7 +85,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected abstract fun content()
 
     protected open fun modules(): List<Module> = emptyList()
-
 }
 
 private fun EsActivityModule(activity: EsActivity) = Module {

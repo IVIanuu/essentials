@@ -261,7 +261,6 @@ internal class DiskBoxImpl<T>(
         log { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
-
 }
 
 private class MultiInstanceHelper(

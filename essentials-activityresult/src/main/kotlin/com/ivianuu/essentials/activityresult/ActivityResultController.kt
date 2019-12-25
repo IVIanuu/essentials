@@ -56,5 +56,4 @@ class ActivityResultController(
     private companion object {
         private val requestCodes = AtomicInteger()
     }
-
 }

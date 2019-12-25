@@ -87,7 +87,7 @@ fun Navigator(state: NavigatorState) {
     state.defaultRouteTransition = ambient(DefaultRouteTransitionAmbient)
     NavigatorAmbient.Provider(value = state) {
         Observe {
-            onBackPressed(enabled = state.handleBack && 
+            onBackPressed(enabled = state.handleBack &&
                     state.backStack.isNotEmpty() &&
                     (state.popsLastRoute || state.backStack.size > 1)) {
                 if (state.runningTransitions == 0) state.popTop()
