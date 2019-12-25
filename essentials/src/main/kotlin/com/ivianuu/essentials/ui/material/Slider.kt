@@ -58,7 +58,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
-import com.github.ajalt.timberkt.d
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -224,7 +223,6 @@ private fun DrawTrack(
         }
     }
     Draw { canvas: Canvas, parentSize: PxSize ->
-        d { "draw ${position.value}" }
         paint.strokeWidth = TrackHeight.toPx().value
         val fraction = with(position) { calcFraction(startValue, endValue, value) }
         val parentRect = parentSize.toRect()
