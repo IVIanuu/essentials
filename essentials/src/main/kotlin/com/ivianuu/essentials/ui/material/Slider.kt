@@ -93,7 +93,7 @@ class SliderPosition(
 
     internal val tickValues: List<Float> =
         if (steps == 0) emptyList() else List(steps + 1) { step ->
-            (endValue - startValue) / steps * step
+            startValue + (endValue - startValue) / steps * step
         }
 
     init {
