@@ -24,11 +24,8 @@ import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import androidx.ui.core.Size
 import androidx.ui.core.dp
-import androidx.ui.core.ipx
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.border.Border
@@ -61,17 +58,12 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.IconStyle
 import com.ivianuu.essentials.ui.material.IconStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.material.Tab
-import com.ivianuu.essentials.ui.material.TabContent
-import com.ivianuu.essentials.ui.material.TabController
-import com.ivianuu.essentials.ui.material.TabRow
-import com.ivianuu.essentials.ui.material.copy
-import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor
@@ -112,6 +104,15 @@ fun ColorPickerDialog(
     title: (@Composable() () -> Unit)? = null
 ) {
     val (currentColor, setCurrentColor) = state { initialColor }
+    val (currentPage, setCurrentPage) = state { ColorPickerPage.Colors }
+    val otherPage = when (currentPage) {
+        ColorPickerPage.Colors -> ColorPickerPage.Editor
+        ColorPickerPage.Editor -> ColorPickerPage.Colors
+    }
+
+    if (!allowCustomArgb && currentPage == ColorPickerPage.Editor) {
+        setCurrentPage(ColorPickerPage.Colors)
+    }
 
     MaterialDialog(
         icon = icon,
@@ -126,76 +127,39 @@ fun ColorPickerDialog(
             )
         },
         negativeButton = { DialogCloseButton(text = "Cancel") },
+        neutralButton = {
+            if (allowCustomArgb) {
+                DialogButton(
+                    text = otherPage.title,
+                    dismissDialogOnClick = false,
+                    onClick = { setCurrentPage(otherPage) }
+                )
+            }
+        },
         content = {
-            ColorPickerContent(
-                colorPalettes = colorPalettes,
-                allowCustomArgb = allowCustomArgb,
-                showAlphaSelector = showAlphaSelector,
-                color = currentColor,
-                onColorChanged = setCurrentColor
-            )
-        }
-    )
-}
-
-@Composable
-private fun ColorPickerContent(
-    colorPalettes: List<ColorPickerPalette>,
-    allowCustomArgb: Boolean,
-    showAlphaSelector: Boolean,
-    color: Color,
-    onColorChanged: (Color) -> Unit
-) {
-    val colorGrid: @Composable() () -> Unit = {
-        ColorGrid(
-            currentColor = color,
-            colorPalettes = colorPalettes,
-            onColorSelected = onColorChanged
-        )
-    }
-
-    if (allowCustomArgb) {
-        TabController(items = ColorPickerPage.values().toList()) {
-            TightColumn {
-                val currentColors = MaterialTheme.colors()
-
-                MaterialTheme(
-                    colors = currentColors.copy(
-                        primary = currentColors.surface,
-                        onPrimary = currentColors.onSurface
-                    ),
-                    typography = MaterialTheme.typography()
-                ) {
-                    TabRow<ColorPickerPage> { _, page ->
-                        Tab(text = page.title)
+            WithModifier(
+                modifier = LayoutHeight(300.dp) +
+                        LayoutPadding(left = 24.dp, right = 24.dp)
+            ) {
+                when (currentPage) {
+                    ColorPickerPage.Colors -> {
+                        ColorGrid(
+                            currentColor = currentColor,
+                            colorPalettes = colorPalettes,
+                            onColorSelected = setCurrentColor
+                        )
                     }
-                }
-
-                WithModifier(
-                    modifier = LayoutHeight(300.dp) +
-                            LayoutPadding(left = 24.dp, right = 24.dp)
-                ) {
-                    TabContent<ColorPickerPage>(keepState = false) { _, page ->
-                        when (page) {
-                            ColorPickerPage.Colors -> colorGrid()
-                            ColorPickerPage.Editor -> {
-                                ColorEditor(
-                                    color = color,
-                                    onColorChanged = onColorChanged,
-                                    showAlphaSelector = showAlphaSelector
-                                )
-                            }
-                        }
+                    ColorPickerPage.Editor -> {
+                        ColorEditor(
+                            color = currentColor,
+                            onColorChanged = setCurrentColor,
+                            showAlphaSelector = showAlphaSelector
+                        )
                     }
                 }
             }
         }
-    } else {
-        WithModifier(
-            modifier = LayoutPadding(left = 24.dp, right = 24.dp),
-            children = colorGrid
-        )
-    }
+    )
 }
 
 @Composable
@@ -269,7 +233,6 @@ private fun ColorGridItem(
         Surface(
             modifier = LayoutExpanded,
             color = color,
-            contentColor = guessingContentColorFor(color),
             shape = RoundedCornerShape(50),
             border = Border(
                 color = MaterialTheme.colors().onSurface,
@@ -281,7 +244,7 @@ private fun ColorGridItem(
                 Center {
                     Icon(
                         image = drawableResource(R.drawable.ic_check),
-                        style = ambient(IconStyleAmbient).copy(
+                        style = IconStyle(
                             size = Size(width = 36.dp, height = 36.dp)
                         )
                     )
@@ -428,6 +391,8 @@ private fun ColorComponentItem(
                 style = MaterialTheme.typography().subtitle1
             )
 
+            Spacer(LayoutWidth(8.dp))
+
             val position = remember {
                 SliderPosition(initial = value)
             }
@@ -494,28 +459,5 @@ private enum class ColorComponent(
 private enum class ColorPickerPage(
     val title: String
 ) {
-    Colors("Colors"), Editor("Color Editor")
-}
-
-@Composable
-private fun TightColumn(children: @Composable() () -> Unit) {
-    Layout(children = children) { measureables, constraints ->
-        var childConstraints = constraints
-        val placeables = measureables.map {
-            val placeable = it.measure(childConstraints)
-            childConstraints =
-                childConstraints.copy(maxHeight = childConstraints.maxHeight - placeable.height)
-            placeable
-        }
-
-        val height = placeables.sumBy { it.height.value }.ipx
-
-        layout(width = constraints.maxWidth, height = height) {
-            var offsetY = IntPx.Zero
-            placeables.forEach { placeable ->
-                placeable.place(IntPx.Zero, offsetY)
-                offsetY += placeable.height
-            }
-        }
-    }
+    Colors("Colors"), Editor("Custom")
 }
