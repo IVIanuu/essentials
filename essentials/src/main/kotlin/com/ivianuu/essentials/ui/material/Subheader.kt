@@ -23,6 +23,8 @@ import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
+import androidx.ui.foundation.ProvideContentColor
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
@@ -30,14 +32,19 @@ import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.core.Text
 
 @Immutable
-data class SubheaderStyle(val textStyle: TextStyle)
+data class SubheaderStyle(
+    val textStyle: TextStyle,
+    val textColor: Color
+)
 
 @Composable
 fun DefaultSubheaderStyle(
-    textStyle: TextStyle = MaterialTheme.typography().body2.copy(
-        color = MaterialTheme.colors().secondary
-    )
-) = SubheaderStyle(textStyle = textStyle)
+    textStyle: TextStyle = MaterialTheme.typography().body2,
+    textColor: Color = MaterialTheme.colors().secondary
+) = SubheaderStyle(
+    textStyle = textStyle,
+    textColor = textColor
+)
 
 val SubheaderStyleAmbient = Ambient.of<SubheaderStyle?>()
 
@@ -60,6 +67,8 @@ fun Subheader(
         modifier = LayoutPadding(left = 16.dp, right = 16.dp),
         alignment = Alignment.CenterLeft
     ) {
-        CurrentTextStyleProvider(value = style.textStyle, children = text)
+        ProvideContentColor(color = style.textColor) {
+            CurrentTextStyleProvider(value = style.textStyle, children = text)
+        }
     }
 }

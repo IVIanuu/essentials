@@ -24,7 +24,6 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
-import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
@@ -87,7 +86,7 @@ fun TopAppBar(
                         modifier = LayoutInflexible,
                         alignment = Alignment.CenterLeft
                     ) {
-                        IconStyleAmbient.Provider(AppBarIconStyle(style.color)) {
+                        IconStyleAmbient.Provider(IconStyle()) {
                             leading()
                         }
                     }
@@ -113,7 +112,7 @@ fun TopAppBar(
                             spacing = 8.dp,
                             modifier = LayoutInflexible
                         ) {
-                            IconStyleAmbient.Provider(AppBarIconStyle(style.color)) {
+                            IconStyleAmbient.Provider(IconStyle()) {
                                 actions()
                             }
                         }
@@ -144,11 +143,3 @@ private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
         else -> null
     }
 }
-
-@Composable
-fun AppBarIconStyle(color: Color): IconStyle = IconStyle(
-    size = Size(AppBarIconSize, AppBarIconSize),
-    color = guessingContentColorFor(color)
-)
-
-private val AppBarIconSize = 24.dp

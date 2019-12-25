@@ -25,7 +25,6 @@ import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.contentColor
-import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
@@ -33,19 +32,15 @@ import androidx.ui.material.ripple.Ripple
 @Immutable
 data class IconStyle(
     val size: Size = Size(24.dp, 24.dp),
-    val color: Color? = ContentColor
-) {
-    companion object {
-        val ContentColor = Color(0x00000001)
-    }
-}
+    val tint: Boolean = true
+)
 
 val IconStyleAmbient = Ambient.of { IconStyle() }
 
 @Composable
 fun AvatarIconStyle() = IconStyle(
     size = Size(40.dp, 40.dp),
-    color = null
+    tint = false
 )
 
 @Composable
@@ -57,10 +52,7 @@ fun Icon(
         width = style.size.width,
         height = style.size.height
     ) {
-        val color = when (style.color) {
-            IconStyle.ContentColor -> contentColor()
-            else -> style.color
-        }
+        val color = if (style.tint) contentColor() else null
         DrawImage(image = image, tint = color)
     }
 }
