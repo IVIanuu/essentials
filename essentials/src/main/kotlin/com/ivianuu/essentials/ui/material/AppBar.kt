@@ -21,25 +21,25 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.compose.remember
-import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
+import androidx.ui.core.IntPx
+import androidx.ui.core.Layout
+import androidx.ui.core.ParentData
 import androidx.ui.core.dp
+import androidx.ui.core.looseMin
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutExpanded
 import androidx.ui.layout.LayoutExpandedWidth
-import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.SpacingRow
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
 
@@ -82,51 +82,128 @@ fun TopAppBar(
             modifier = LayoutExpandedWidth,
             padding = EdgeInsets(left = 16.dp, right = 16.dp)
         ) {
-            Row(
-                modifier = LayoutExpanded,
-                mainAxisAlignment = MainAxisAlignment.SpaceBetween,
-                crossAxisAlignment = CrossAxisAlignment.Center
-            ) {
-                if (leading != null) {
-                    Container(
-                        modifier = LayoutInflexible,
-                        alignment = Alignment.CenterLeft
-                    ) {
+            TopAppBarLayout(
+                centerTitle = style.centerTitle,
+                leading = leading?.let {
+                    {
                         IconStyleAmbient.Provider(IconStyle()) {
                             leading()
                         }
                     }
-                }
-
-                if (title != null) {
-                    if (leading != null) Spacer(LayoutWidth(16.dp))
-
-                    WithModifier(
-                        modifier = LayoutFlexible(1f)
-                    ) {
-                        CurrentTextStyleProvider(MaterialTheme.typography().h6) {
-                            title()
+                },
+                title = title?.let {
+                    {
+                        Column(
+                            mainAxisAlignment = MainAxisAlignment.Start,
+                            crossAxisAlignment = CrossAxisAlignment.Start
+                        ) {
+                            CurrentTextStyleProvider(MaterialTheme.typography().h6) {
+                                title()
+                            }
                         }
                     }
-
-                    if (actions != null) Spacer(LayoutWidth(16.dp))
-                }
-
-                if (actions != null) {
-                    Container(alignment = Alignment.CenterRight) {
-                        SpacingRow(
-                            spacing = 8.dp,
-                            modifier = LayoutInflexible
-                        ) {
+                },
+                actions = actions?.let {
+                    {
+                        SpacingRow(spacing = 8.dp) {
                             IconStyleAmbient.Provider(IconStyle()) {
                                 actions()
                             }
                         }
                     }
                 }
-            }
+            )
         }
     }
+}
+
+@Composable
+private fun TopAppBarLayout(
+    centerTitle: Boolean,
+    leading: @Composable() (() -> Unit)?,
+    title: @Composable() (() -> Unit)?,
+    actions: @Composable() (() -> Unit)?
+) {
+    Layout(children = {
+        if (leading != null) {
+            ParentData(data = TopAppBarSlot.Leading) {
+                leading()
+            }
+        }
+
+        if (title != null) {
+            ParentData(data = TopAppBarSlot.Title) {
+                title()
+            }
+        }
+
+        if (actions != null) {
+            ParentData(data = TopAppBarSlot.Actions) {
+                actions()
+            }
+        }
+    }) { measureables, constraints ->
+        val leadingMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
+        val titleMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Title }
+        val actionsMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
+
+        var childConstraints = constraints.looseMin()
+
+        val leadingPlaceable = leadingMeasureable?.measure(childConstraints)
+        if (leadingPlaceable != null) {
+            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - leadingPlaceable.width)
+        }
+
+        val actionsPlaceable = actionsMeasureable?.measure(childConstraints)
+        if (actionsPlaceable != null) {
+            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - actionsPlaceable.width)
+        }
+
+        if (leadingPlaceable != null) {
+            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - 56.dp.toIntPx())
+        }
+        if (actionsPlaceable != null) {
+            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - 16.dp.toIntPx())
+        }
+
+        val titlePlaceable = titleMeasureable?.measure(childConstraints)
+
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+
+        layout(width, height) {
+            leadingPlaceable?.place(
+                x = IntPx.Zero,
+                y = height / 2 - leadingPlaceable.height / 2
+            )
+
+            if (titlePlaceable != null) {
+                val titleX = if (centerTitle) {
+                    (width / 2) - titlePlaceable.width / 2
+                } else if (leadingPlaceable != null ) {
+                    56.dp.toIntPx()
+                } else {
+                    IntPx.Zero
+                }
+
+                d { "title x $titleX" }
+
+                titlePlaceable.place(
+                    x = titleX,
+                    y = height / 2 - titlePlaceable.height / 2
+                )
+            }
+
+            actionsPlaceable?.place(
+                x = width - actionsPlaceable.width,
+                y = height / 2 - actionsPlaceable.height / 2
+            )
+        }
+    }
+}
+
+private enum class TopAppBarSlot {
+    Leading, Title, Actions
 }
 
 private val AppBarHeight = 56.dp
