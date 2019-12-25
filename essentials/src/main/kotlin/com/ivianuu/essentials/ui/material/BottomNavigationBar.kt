@@ -27,6 +27,7 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
@@ -45,17 +46,26 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperController
 
+data class BottomNavigationBarStyle(val color: Color)
+
+val BottomNavigationBarStyleAmbient = Ambient.of<BottomNavigationBarStyle?>()
+
+@Composable
+fun DefaultBottomNavigationBarStyle(
+    color: Color = MaterialTheme.colors().primary
+) = BottomNavigationBarStyle(color = color)
+
 @Unstable
 @Composable
 fun <T> BottomNavigationBar(
-    color: Color = MaterialTheme.colors().primary,
+    style: BottomNavigationBarStyle = ambient(BottomNavigationBarStyleAmbient) ?: DefaultBottomNavigationBarStyle(),
     item: @Composable() (Int, T) -> Unit
 ) {
     val bottomNavigationController = ambientBottomNavigationController<T>()
     BottomNavigationBar(
         items = bottomNavigationController.items,
         selectedIndex = bottomNavigationController.selectedIndex,
-        color = color,
+        color = style.color,
         item = item
     )
 }
@@ -140,17 +150,11 @@ fun BottomNavigationBarItem(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val tint = contentColor().copy(
-                        alpha = if (selected) 1f else 0.6f
-                    )
-                    val iconStyle = currentIconStyle().copy(color = tint)
-                    Icon(image = icon, style = iconStyle)
-
-                    val textStyle = MaterialTheme.typography().caption.copy(color = tint)
-                    Text(
-                        text = text,
-                        style = textStyle
-                    )
+                    val tint = contentColor().copy(alpha = if (selected) 1f else 0.6f)
+                    ProvideContentColor(color = tint) {
+                        Icon(image = icon)
+                        Text(text = text, style = MaterialTheme.typography().caption)
+                    }
                 }
             }
         }
@@ -184,7 +188,6 @@ fun <T> BottomNavigationSwapper(
 
 private val BottomNavigationBarHeight = 56.dp
 private val BottomNavigationBarElevation = 8.dp
-
 private val BottomNavigationBarItemMinWidth = 80.dp
 private val BottomNavigationBarItemMaxWidth = 168.dp
 private val BottomNavigationBarItemPaddingTop = 8.dp

@@ -17,17 +17,19 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.ui.core.Opacity
-import androidx.ui.material.Button
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
+import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
 import com.ivianuu.essentials.ui.navigation.navigator
 
 @Composable
 fun DialogButton(
     text: String,
     dismissDialogOnClick: Boolean = true,
-    style: ButtonStyle = TextButtonStyle(),
+    style: ButtonStyle = ambient(ButtonStyleAmbient) ?: TextButtonStyle(),
     onClick: (() -> Unit)? = null
 ) {
     val navigator = navigator

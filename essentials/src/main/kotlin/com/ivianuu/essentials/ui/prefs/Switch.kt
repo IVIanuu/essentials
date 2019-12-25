@@ -19,12 +19,11 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Switch
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.material.Switch
 
 @Composable
 fun SwitchPreference(
@@ -66,9 +65,8 @@ fun SwitchPreference(
             trailing = {
                 AbsorbPointer {
                     Switch(
-                        color = MaterialTheme.colors().secondary,
                         checked = context.currentValue,
-                        onCheckedChange = if (context.shouldBeEnabled) { newValue: Boolean -> } else null
+                        onCheckedChange = if (context.shouldBeEnabled) { _: Boolean -> } else null
                     )
                 }
             },

@@ -33,9 +33,9 @@ import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppDispatchers
@@ -64,7 +64,7 @@ private fun ShortcutInfo(
         leading = {
             Icon(
                 image = info.icon,
-                style = currentIconStyle().copy(color = null)
+                style = AvatarIconStyle()
             )
         },
         title = { Text(info.name) },

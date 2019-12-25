@@ -28,10 +28,8 @@ import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
-import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButtonStyle
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
@@ -48,6 +46,7 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.material.ListItem
@@ -108,13 +107,11 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                             actions = {
                                 Button(
                                     text = "Dismiss",
-                                    style = TextButtonStyle(),
                                     onClick = { showBanner = false }
                                 )
 
                                 Button(
                                     text = "Learn More",
-                                    style = TextButtonStyle(),
                                     onClick = navigateOnClick {
                                         showBanner = false
                                         UrlRoute("https://google.com")

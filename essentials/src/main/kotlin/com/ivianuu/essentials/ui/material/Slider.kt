@@ -20,7 +20,10 @@ import androidx.animation.AnimationEndReason
 import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
 import androidx.annotation.IntRange
+import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
+import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.Alignment
@@ -60,6 +63,15 @@ import com.github.ajalt.timberkt.d
 import kotlin.math.abs
 
 // todo remove once fixed in compose
+
+@Immutable
+data class SliderStyle(val color: Color)
+
+val SliderStyleAmbient = Ambient.of<SliderStyle?>()
+
+@Composable
+fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
+    SliderStyle(color = color)
 
 /**
  * State for Slider that represents the Slider value, its bounds and optional amount of steps
@@ -118,39 +130,13 @@ class SliderPosition(
         private set
 }
 
-/**
- * Sliders allow users to make selections from a range of values.
- *
- * Sliders reflect a range of values along a bar, from which users may select a single value.
- * They are ideal for adjusting settings such as volume, brightness, or applying image filters.
- *
- * Use continuous sliders allow users to make meaningful selections that don’t
- * require a specific value:
- *
- * @sample androidx.ui.material.samples.SliderSample
- *
- * You can allow the user to choose only between predefined set of values by providing
- * discrete values in [SliderPosition].
- *
- * You can do it by specifying the amount of steps between min and max values:
- *
- * @sample androidx.ui.material.samples.StepsSliderSample
- *
- * @param position [SliderPosition] object to represent value of the Slider
- * @param onValueChange lambda in which value should be updated
- * @param modifier modifiers for the Slider layout
- * @param onValueChangeEnd lambda to be invoked when value change has ended. This callback
- * shouldn't be used to update the slider value (use [onValueChange] for that), but rather to
- * know when the user has completed selecting a new value by ending a drag or a click.
- * @param color color of the Slider
- */
 @Composable
 fun Slider(
     position: SliderPosition,
     onValueChange: (Float) -> Unit = { position.value = it },
     modifier: Modifier = Modifier.None,
     onValueChangeEnd: () -> Unit = {},
-    color: Color = MaterialTheme.colors().primary
+    style: SliderStyle = ambient(SliderStyleAmbient) ?: DefaultSliderStyle()
 ) {
     Container(modifier = modifier) {
         val maxPx = state { 0f }
@@ -201,7 +187,7 @@ fun Slider(
                     pressed.value = false
                     gestureEndAction(velocity)
                 },
-                children = { SliderImpl(position, color, maxPx.value, pressed.value) }
+                children = { SliderImpl(position, style.color, maxPx.value, pressed.value) }
             )
         }
     }

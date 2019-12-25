@@ -29,13 +29,29 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.common.MergeProvider
-import com.ivianuu.essentials.ui.common.Mergeable
+
+@Immutable
+data class IconStyle(
+    val size: Size = Size(24.dp, 24.dp),
+    val color: Color? = ContentColor
+) {
+    companion object {
+        val ContentColor = Color(0x00000001)
+    }
+}
+
+val IconStyleAmbient = Ambient.of { IconStyle() }
+
+@Composable
+fun AvatarIconStyle() = IconStyle(
+    size = Size(40.dp, 40.dp),
+    color = null
+)
 
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = currentIconStyle()
+    style: IconStyle = ambient(IconStyleAmbient)
 ) {
     Container(
         width = style.size.width,
@@ -48,43 +64,6 @@ fun Icon(
         DrawImage(image = image, tint = color)
     }
 }
-
-@Immutable
-data class IconStyle(
-    val size: Size = Size(DefaultIconSize, DefaultIconSize),
-    val color: Color? = ContentColor
-) : Mergeable<IconStyle> {
-    override fun merge(other: IconStyle): IconStyle = IconStyle(
-        size = other.size,
-        color = other.color
-    )
-
-    companion object {
-        val ContentColor = Color(0x00000001)
-    }
-}
-
-private val DefaultIconSize = 24.dp
-
-private val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
-
-@Composable
-fun CurrentIconStyleProvider(
-    value: IconStyle,
-    children: @Composable() () -> Unit
-) {
-    CurrentIconStyleAmbient.MergeProvider(value = value, children = children)
-}
-
-@Composable
-fun currentIconStyle(): IconStyle = ambient(CurrentIconStyleAmbient)
-
-fun AvatarIconStyle() = IconStyle(
-    size = Size(AvatarSize, AvatarSize),
-    color = null
-)
-
-private val AvatarSize = 40.dp
 
 @Composable
 fun IconButton(

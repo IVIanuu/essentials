@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
@@ -60,8 +61,10 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.IconStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
+import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
@@ -69,7 +72,6 @@ import com.ivianuu.essentials.ui.material.TabController
 import com.ivianuu.essentials.ui.material.TabRow
 import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.material.copy
-import com.ivianuu.essentials.ui.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor
@@ -279,7 +281,7 @@ private fun ColorGridItem(
                 Center {
                     Icon(
                         image = drawableResource(R.drawable.ic_check),
-                        style = currentIconStyle().copy(
+                        style = ambient(IconStyleAmbient).copy(
                             size = Size(width = 36.dp, height = 36.dp)
                         )
                     )
@@ -294,7 +296,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             image = drawableResource(R.drawable.es_ic_arrow_back),
-            style = currentIconStyle().copy(size = Size(width = 36.dp, height = 36.dp))
+            style = ambient(IconStyleAmbient).copy(size = Size(width = 36.dp, height = 36.dp))
         )
     }
 }
@@ -437,7 +439,7 @@ private fun ColorComponentItem(
                     position.value = it
                     onChanged(it)
                 },
-                color = component.color()
+                style = SliderStyle(color = component.color())
             )
 
             Spacer(LayoutWidth(8.dp))

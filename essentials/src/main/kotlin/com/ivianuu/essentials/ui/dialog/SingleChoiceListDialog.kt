@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.key
-import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.navigator
 
 @Composable

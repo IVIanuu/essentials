@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
@@ -38,13 +40,27 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 
+@Immutable
+data class ListItemStyle(
+    val contentPadding: EdgeInsets = ContentPadding
+)
+
+@Composable
+fun DefaultListItemStyle(
+    contentPadding: EdgeInsets = ContentPadding
+) = ListItemStyle(
+    contentPadding = contentPadding
+)
+
+val ListItemStyleAmbient = Ambient.of<ListItemStyle?>()
+
 @Composable
 fun ListItem(
     title: String? = null,
     subtitle: String? = null,
     image: Image? = null,
     enabled: Boolean = true,
-    contentPadding: EdgeInsets = ContentPadding,
+    style: ListItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
@@ -53,7 +69,7 @@ fun ListItem(
         subtitle = subtitle.asTextComposable(),
         leading = image.asIconComposable(),
         enabled = enabled,
-        contentPadding = contentPadding,
+        style = style,
         onClick = onClick,
         onLongClick = onLongClick
     )
@@ -66,7 +82,7 @@ fun ListItem(
     leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null,
     enabled: Boolean = true,
-    contentPadding: EdgeInsets = ContentPadding,
+    style: ListItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
@@ -80,8 +96,8 @@ fun ListItem(
         Container(
             constraints = DpConstraints(minHeight = minHeight),
             padding = EdgeInsets(
-                left = contentPadding.left,
-                right = contentPadding.right
+                left = style.contentPadding.left,
+                right = style.contentPadding.right
             )
         ) {
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
@@ -93,8 +109,8 @@ fun ListItem(
                     ) {
                         AddPaddingIfNeededLayout(
                             padding = EdgeInsets(
-                                top = contentPadding.top,
-                                bottom = contentPadding.bottom
+                                top = style.contentPadding.top,
+                                bottom = style.contentPadding.bottom
                             )
                         ) {
                             ProvideEmphasis(
@@ -116,8 +132,8 @@ fun ListItem(
                 ) {
                     AddPaddingIfNeededLayout(
                         padding = EdgeInsets(
-                            top = contentPadding.top,
-                            bottom = contentPadding.bottom
+                            top = style.contentPadding.top,
+                            bottom = style.contentPadding.bottom
                         )
                     ) {
                         Column {
@@ -143,8 +159,8 @@ fun ListItem(
                     ) {
                         AddPaddingIfNeededLayout(
                             padding = EdgeInsets(
-                                top = contentPadding.top,
-                                bottom = contentPadding.bottom
+                                top = style.contentPadding.top,
+                                bottom = style.contentPadding.bottom
                             )
                         ) {
                             ProvideEmphasis(

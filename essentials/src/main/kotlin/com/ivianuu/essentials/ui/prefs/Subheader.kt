@@ -28,7 +28,7 @@ fun PreferenceSubheader(
 ) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
-            Subheader(text)
+            Subheader(text = text)
         }
     }
 }
@@ -40,7 +40,7 @@ fun PreferenceSubheader(
 ) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
-            Subheader(text)
+            Subheader(text = text)
         }
     }
 }

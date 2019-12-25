@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
@@ -43,6 +44,7 @@ import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
 
+@Immutable
 data class TopAppBarStyle(
     val color: Color,
     val elevation: Dp = DefaultAppBarElevation,
@@ -50,8 +52,8 @@ data class TopAppBarStyle(
 )
 
 @Composable
-fun DefaultTopAppBarStyle() = TopAppBarStyle(
-    color = MaterialTheme.colors().primary
+fun DefaultTopAppBarStyle(color: Color = MaterialTheme.colors().primary) = TopAppBarStyle(
+    color = color
 )
 
 val TopAppBarStyleAmbient = Ambient.of<TopAppBarStyle?>()
@@ -85,7 +87,7 @@ fun TopAppBar(
                         modifier = LayoutInflexible,
                         alignment = Alignment.CenterLeft
                     ) {
-                        CurrentIconStyleProvider(AppBarIconStyle(style.color)) {
+                        IconStyleAmbient.Provider(AppBarIconStyle(style.color)) {
                             leading()
                         }
                     }
@@ -111,8 +113,7 @@ fun TopAppBar(
                             spacing = 8.dp,
                             modifier = LayoutInflexible
                         ) {
-
-                            CurrentIconStyleProvider(AppBarIconStyle(style.color)) {
+                            IconStyleAmbient.Provider(AppBarIconStyle(style.color)) {
                                 actions()
                             }
                         }

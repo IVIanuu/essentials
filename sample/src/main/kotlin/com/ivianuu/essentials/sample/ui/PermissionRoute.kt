@@ -20,7 +20,6 @@ import android.Manifest
 import androidx.compose.ambient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.layout.Center
-import androidx.ui.material.Button
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
@@ -38,6 +37,7 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 import kotlinx.coroutines.launch

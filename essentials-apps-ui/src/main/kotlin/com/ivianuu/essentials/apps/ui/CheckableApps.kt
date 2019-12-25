@@ -24,7 +24,6 @@ import androidx.compose.remember
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
-import androidx.ui.material.Checkbox
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.AvatarIconStyle
+import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton

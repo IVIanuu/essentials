@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.layout.Center
-import androidx.ui.material.Button
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 
 val WorkRoute = Route {

@@ -19,13 +19,12 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.RadioButton
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.material.RadioButton
 
 @Composable
 fun RadioButtonPreference(
@@ -68,7 +67,6 @@ fun RadioButtonPreference(
                 AbsorbPointer {
                     d { "invoke radio" }
                     RadioButton(
-                        color = MaterialTheme.colors().secondary,
                         selected = context.currentValue,
                         onSelect = if (context.shouldBeEnabled) {
                             {}

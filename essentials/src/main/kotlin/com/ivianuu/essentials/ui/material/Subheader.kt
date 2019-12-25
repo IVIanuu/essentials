@@ -16,31 +16,50 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
+import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
+import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.core.Text
 
+@Immutable
+data class SubheaderStyle(val textStyle: TextStyle)
+
 @Composable
-fun Subheader(text: String) {
-    Subheader { Text(text) }
+fun DefaultSubheaderStyle(
+    textStyle: TextStyle = MaterialTheme.typography().body2.copy(
+        color = MaterialTheme.colors().secondary
+    )
+) = SubheaderStyle(textStyle = textStyle)
+
+val SubheaderStyleAmbient = Ambient.of<SubheaderStyle?>()
+
+@Composable
+fun Subheader(
+    text: String,
+    style: SubheaderStyle = ambient(SubheaderStyleAmbient) ?: DefaultSubheaderStyle()
+) {
+    Subheader(style = style) { Text(text) }
 }
 
 @Composable
-fun Subheader(text: @Composable() () -> Unit) {
+fun Subheader(
+    style: SubheaderStyle = ambient(SubheaderStyleAmbient) ?: DefaultSubheaderStyle(),
+    text: @Composable() () -> Unit
+) {
     Container(
         height = 48.dp,
         expanded = true,
         modifier = LayoutPadding(left = 16.dp, right = 16.dp),
         alignment = Alignment.CenterLeft
     ) {
-        val textStyle = MaterialTheme.typography().body2.copy(
-            color = MaterialTheme.colors().secondary
-        )
-        CurrentTextStyleProvider(value = textStyle, children = text)
+        CurrentTextStyleProvider(value = style.textStyle, children = text)
     }
 }
