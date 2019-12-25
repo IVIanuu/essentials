@@ -240,16 +240,17 @@ private fun DrawTrack(
         canvas.drawLine(sliderStart, sliderValue, paint)
 
         position.tickValues
-            .dropLast(1)
             .groupBy { it > position.value }
             .mapValues { (_, values) ->
                 values.map { value ->
-                    scale(position.startValue, position.endValue, value, 0f, maxPx)
+                    calcFraction(position.startValue, position.endValue, value)
                 }
             }
             .forEach { (afterFraction, list) ->
                 paint.color = if (afterFraction) inactiveTickColor else activeTickColor
-                val points = list.map { Offset(it, centerHeight) }
+                val points = list.map { fraction ->
+                    Offset(Offset.lerp(sliderStart, sliderMax, fraction).dx, centerHeight)
+                }
                 canvas.drawPoints(PointMode.points, points, paint)
             }
     }
