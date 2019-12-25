@@ -87,12 +87,16 @@ fun Navigator(state: NavigatorState) {
     state.defaultRouteTransition = ambient(DefaultRouteTransitionAmbient)
     NavigatorAmbient.Provider(value = state) {
         Observe {
-            onBackPressed(enabled = state.handleBack &&
+            val enabled = state.handleBack &&
                     state.backStack.isNotEmpty() &&
-                    (state.popsLastRoute || state.backStack.size > 1)) {
+                    (state.popsLastRoute || state.backStack.size > 1)
+            d { "back press enabled $enabled" }
+            onBackPressed(enabled = enabled) {
+                d { "on back pressed ${state.runningTransitions}" }
                 if (state.runningTransitions == 0) state.popTop()
             }
         }
+
         Overlay(state = state.overlayState)
     }
 }
@@ -415,8 +419,8 @@ class NavigatorState(
             runningTransitions++
             if (isPush) overlayState.add(overlayEntry)
             lastTransitionState = transitionState
-            transitionState =
-                if (isPush) RouteTransition.State.EnterFromPush else RouteTransition.State.EnterFromPop
+            transitionState = if (isPush) RouteTransition.State.EnterFromPush
+            else RouteTransition.State.EnterFromPop
             this.transition = transition
         }
 
@@ -430,8 +434,8 @@ class NavigatorState(
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = to
             lastTransitionState = transitionState
-            transitionState =
-                if (isPush) RouteTransition.State.ExitFromPush else RouteTransition.State.ExitFromPop
+            transitionState = if (isPush) RouteTransition.State.ExitFromPush
+            else RouteTransition.State.ExitFromPop
             this.transition = transition
         }
 
