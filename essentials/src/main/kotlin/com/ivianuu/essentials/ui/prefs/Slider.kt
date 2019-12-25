@@ -325,6 +325,8 @@ fun <T : Comparable<T>> SliderPreference(
                     }
                 }
 
+                remember(context.currentValue) { position.value = toFloat(context.currentValue) }
+
                 Slider(
                     position = position,
                     modifier = LayoutFlexible(1f) + LayoutPadding(left = 8.dp),
