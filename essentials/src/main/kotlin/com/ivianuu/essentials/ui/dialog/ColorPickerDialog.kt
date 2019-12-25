@@ -420,7 +420,7 @@ private fun ColorComponentItem(
         Row(crossAxisAlignment = CrossAxisAlignment.Center) {
             Text(
                 text = component.title,
-                modifier = Inflexible,
+                modifier = LayoutInflexible,
                 style = MaterialTheme.typography().subtitle1
             )
 
@@ -430,7 +430,7 @@ private fun ColorComponentItem(
 
             Slider(
                 position = position,
-                modifier = Flexible(flex = 1f),
+                modifier = LayoutFlexible(flex = 1f),
                 onValueChange = {
                     position.value = it
                     onChanged(it)
@@ -442,7 +442,7 @@ private fun ColorComponentItem(
 
             Text(
                 text = (255 * value).toInt().toString(),
-                modifier = LayoutMinWidth(56.dp) + Inflexible,
+                modifier = LayoutMinWidth(56.dp) + LayoutInflexible,
                 style = MaterialTheme.typography().subtitle1
             )
         }

@@ -85,14 +85,14 @@ class DebugBillingActivity : EsActivity() {
                 Row {
                     Text(
                         text = skuDetails.title,
-                        modifier = Inflexible
+                        modifier = LayoutInflexible
                     )
 
-                    Spacer(Flexible(1f))
+                    Spacer(LayoutFlexible(1f))
 
                     Text(
                         text = skuDetails.price,
-                        modifier = Inflexible,
+                        modifier = LayoutInflexible,
                         style = MaterialTheme.typography().subtitle1.copy(
                             color = GooglePlayGreen
                         )

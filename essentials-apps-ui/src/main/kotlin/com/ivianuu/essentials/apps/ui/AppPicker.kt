@@ -32,10 +32,10 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.material.AvatarIconStyle
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppDispatchers
@@ -50,7 +50,7 @@ fun AppPickerRoute(
     appFilter: AppFilter = DefaultAppFilter
 ) = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
+        topAppBar = { TopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {
             val viewModel =
                 injectMvRxViewModel<AppPickerViewModel> {
@@ -77,7 +77,7 @@ private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
 ) {
-    SimpleListItem(
+    ListItem(
         title = { Text(app.appName) },
         leading = {
             Image(

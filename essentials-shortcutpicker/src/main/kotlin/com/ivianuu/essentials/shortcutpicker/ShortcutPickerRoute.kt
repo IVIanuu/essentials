@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
@@ -60,7 +60,7 @@ private fun ShortcutInfo(
     info: ShortcutInfo,
     onClick: () -> Unit
 ) {
-    SimpleListItem(
+    ListItem(
         leading = {
             Icon(
                 image = info.icon,

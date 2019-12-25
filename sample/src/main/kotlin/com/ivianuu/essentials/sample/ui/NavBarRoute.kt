@@ -35,15 +35,15 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import kotlinx.coroutines.launch
 
 val NavBarRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar(title = "Nav bar settings") },
+        topAppBar = { TopAppBar(title = "Nav bar settings") },
         body = {
             Center {
                 Column(

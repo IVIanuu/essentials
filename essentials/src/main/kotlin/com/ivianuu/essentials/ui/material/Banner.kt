@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.ambient
+import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import androidx.ui.core.dp
-import androidx.ui.core.ipx
+import androidx.ui.layout.Container
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
@@ -32,6 +32,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.layout.SpacingRow
 import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
@@ -40,15 +41,6 @@ fun Banner(
     content: @Composable() () -> Unit,
     actions: @Composable() () -> Unit
 ) {
-    val styledContent: @Composable() () -> Unit = {
-        CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-            EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = content)
-        }
-    }
-    val styledLeading: (@Composable() () -> Unit)? = if (leading == null) null else ({
-        CurrentIconStyleProvider(value = AvatarIconStyle(), children = leading)
-    })
-
     WithModifier(modifier = LayoutExpandedWidth) {
         Column {
             Spacer(LayoutHeight(24.dp))
@@ -56,50 +48,30 @@ fun Banner(
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                 Spacer(LayoutWidth(16.dp))
 
-                if (styledLeading != null) {
-                    styledLeading()
+                if (leading != null) {
+                    CurrentIconStyleProvider(value = AvatarIconStyle(), children = leading)
                     Spacer(LayoutWidth(16.dp))
                 }
 
-                styledContent()
+                CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
+                    EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = content)
+                }
 
                 Spacer(LayoutWidth(16.dp))
             }
 
             Spacer(LayoutHeight(20.dp))
 
-            BannerActions(actions = actions)
+            Container(
+                modifier = LayoutExpandedWidth,
+                alignment = Alignment.CenterRight,
+                padding = EdgeInsets(left = 8.dp, right = 8.dp)
+            ) {
+                SpacingRow(spacing = 8.dp, children = actions)
+            }
 
             Spacer(LayoutHeight(8.dp))
         }
     }
 }
 
-@Composable
-private fun BannerActions(actions: @Composable() () -> Unit) {
-    Layout(children = actions) { measureables, constraints ->
-        var childConstraints = constraints.copy(
-            maxWidth = constraints.maxWidth - (8.dp.toIntPx() * 2)
-        )
-        val placeables = measureables.map { measureable ->
-            val placeable = measureable.measure(childConstraints)
-            childConstraints = childConstraints.copy(
-                maxWidth = childConstraints.maxWidth - placeable.width - 8.dp.toIntPx()
-            )
-            placeable
-        }
-
-        val height = placeables.maxBy { it.height.value }?.height ?: IntPx.Zero
-        val width = constraints.maxWidth
-
-        layout(width = width, height = height) {
-            var offsetX =
-                constraints.maxWidth - placeables.sumBy { it.width.value }.ipx - 8.dp.toIntPx() - (8.dp * (placeables.size - 1)).toIntPx()
-            placeables.forEach { placeable ->
-                val y = height / 2 - placeable.height / 2
-                placeable.place(offsetX, y)
-                offsetX += placeable.width + 8.dp.toIntPx()
-            }
-        }
-    }
-}

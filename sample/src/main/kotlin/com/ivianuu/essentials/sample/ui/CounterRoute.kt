@@ -27,13 +27,13 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 
 val CounterRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar("Counter") },
+        topAppBar = { TopAppBar("Counter") },
         body = {
             Center {
                 Column(

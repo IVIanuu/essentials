@@ -20,7 +20,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.BuildInfo
@@ -38,28 +38,28 @@ val SecureSettingsInstructionsRoute = Route {
             text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
         )
 
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_secure_settings_step_1),
             subtitle = stringResource(R.string.es_pref_secure_settings_step_1_summary)
         )
 
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_secure_settings_step_2),
             subtitle = stringResource(R.string.es_pref_secure_settings_step_2_summary)
         )
 
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_secure_settings_step_3),
             subtitle = stringResource(R.string.es_pref_secure_settings_step_3_summary)
         )
 
-        SimpleListItem(
+        ListItem(
             image = drawableResource(R.drawable.es_ic_link),
             title = stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary),
             onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
         )
 
-        SimpleListItem(
+        ListItem(
             image = drawableResource(R.drawable.es_ic_link),
             title = stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary),
             onClick = openUrlOnClick {
@@ -67,7 +67,7 @@ val SecureSettingsInstructionsRoute = Route {
             }
         )
 
-        SimpleListItem(
+        ListItem(
             image = drawableResource(R.drawable.es_ic_link),
             title = stringResource(R.string.es_pref_secure_settings_link_xda_summary),
             onClick = openUrlOnClick {
@@ -80,7 +80,7 @@ val SecureSettingsInstructionsRoute = Route {
         val stringProvider = inject<StringProvider>()
         val toaster = inject<Toaster>()
 
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_secure_settings_step_4),
             subtitle = stringProvider.getString(
                 R.string.es_pref_secure_settings_step_4_summary,

@@ -31,11 +31,12 @@ import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.EsSurface
-import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.ScaffoldState
-import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.material.Subheader
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.TopAppBarStyle
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 
@@ -53,7 +54,13 @@ val ScaffoldRoute = Route {
 
             val color = MaterialTheme.colors().primary.copy(alpha = alpha)
 
-            EsTopAppBar(title = { Text("Scaffold") }, color = color)
+            TopAppBar(
+                title = { Text("Scaffold") },
+                style = TopAppBarStyle(
+                    color = color,
+                    elevation = if (alpha == 1f) 8.dp else 0.dp
+                )
+            )
         }) else null,
         fabPosition = controls.fabPosition,
         fab = if (controls.showFab) ({
@@ -86,7 +93,7 @@ val ScaffoldRoute = Route {
         body = {
             ScrollableList {
                 Subheader("Top bar")
-                SimpleListItem(
+                ListItem(
                     title = { Text("Show top bar") },
                     trailing = {
                         AbsorbPointer {
@@ -95,7 +102,7 @@ val ScaffoldRoute = Route {
                     },
                     onClick = { controls.showTopAppBar = !controls.showTopAppBar }
                 )
-                SimpleListItem(
+                ListItem(
                     title = { Text("Center title") },
                     trailing = {
                         AbsorbPointer {
@@ -106,7 +113,7 @@ val ScaffoldRoute = Route {
                 )
 
                 Subheader("Body")
-                SimpleListItem(
+                ListItem(
                     title = { Text("Body layout mode") },
                     onClick = {
                         navigator.push(
@@ -123,7 +130,7 @@ val ScaffoldRoute = Route {
                 )
 
                 Subheader("Bottom bar")
-                SimpleListItem(
+                ListItem(
                     title = { Text("Show bottom bar") },
                     trailing = {
                         AbsorbPointer {
@@ -134,7 +141,7 @@ val ScaffoldRoute = Route {
                 )
 
                 Subheader("Fab")
-                SimpleListItem(
+                ListItem(
                     title = { Text("Show fab") },
                     trailing = {
                         AbsorbPointer {
@@ -143,7 +150,7 @@ val ScaffoldRoute = Route {
                     },
                     onClick = { controls.showFab = !controls.showFab }
                 )
-                SimpleListItem(
+                ListItem(
                     title = { Text("Fab location") },
                     onClick = {
                         navigator.push(

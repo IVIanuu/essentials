@@ -34,16 +34,16 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EsSurface
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.RippleColorProvider
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
 val ChipsRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar("Chips") },
+        topAppBar = { TopAppBar("Chips") },
         body = {
             WithModifier(modifier = LayoutPadding(all = 8.dp)) {
                 FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {

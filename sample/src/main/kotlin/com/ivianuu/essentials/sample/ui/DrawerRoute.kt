@@ -21,14 +21,14 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.material.EsSurface
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 
 val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(
-        topAppBar = { EsTopAppBar("Drawer") },
+        topAppBar = { TopAppBar("Drawer") },
         drawerContent = {
             EsSurface(color = Color.Blue) {
                 Center {

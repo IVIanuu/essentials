@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
 fun <T> ValueController(
@@ -90,7 +90,7 @@ fun PreferenceLayout(
     trailing: (@Composable() () -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
-    SimpleListItem(
+    ListItem(
         title = title,
         subtitle = summary,
         leading = leading,

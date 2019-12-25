@@ -23,8 +23,8 @@ import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.material.BottomNavigationController
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 
@@ -33,7 +33,7 @@ val BottomNavigationRoute = Route {
         items = BottomNavItem.values().toList()
     ) {
         Scaffold(
-            topAppBar = { EsTopAppBar("Bottom navigation") },
+            topAppBar = { TopAppBar("Bottom navigation") },
             body = {
                 BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
                     ColoredRect(item.color)

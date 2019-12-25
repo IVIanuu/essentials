@@ -21,7 +21,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.BuildInfo
@@ -102,7 +102,7 @@ fun AboutItem(
     descRes: Int? = null,
     url: () -> String
 ) {
-    SimpleListItem(
+    ListItem(
         title = stringResource(titleRes),
         subtitle = descRes?.let { stringResource(it) },
         onClick = openUrlOnClick(url)

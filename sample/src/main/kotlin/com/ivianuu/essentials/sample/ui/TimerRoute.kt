@@ -21,15 +21,15 @@ import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
 val TimerRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar(title = "Timer") },
+        topAppBar = { TopAppBar(title = "Timer") },
         body = {
             Center {
                 val value = collect(remember { timerFlow() })

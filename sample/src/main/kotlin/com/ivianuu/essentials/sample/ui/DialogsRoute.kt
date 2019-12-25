@@ -39,17 +39,17 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 val DialogsRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar("Dialogs") },
+        topAppBar = { TopAppBar("Dialogs") },
         body = {
             VerticalScroller {
                 Column(
@@ -213,7 +213,7 @@ val DialogsRoute = Route {
                             title = { Text("List") },
                             listContent = {
                                 (1..100).forEach {
-                                    SimpleListItem(
+                                    ListItem(
                                         title = { Text("Item: $it") },
                                         onClick = {
 

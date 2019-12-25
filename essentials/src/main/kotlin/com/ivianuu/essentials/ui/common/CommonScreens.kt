@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 
 @Composable
 fun SimpleScreen(
@@ -27,7 +27,7 @@ fun SimpleScreen(
     content: @Composable() () -> Unit
 ) {
     Scaffold(
-        topAppBar = { EsTopAppBar(title = title) },
+        topAppBar = { TopAppBar(title = title) },
         body = content
     )
 }
@@ -38,7 +38,7 @@ fun ListScreen(
     listContent: @Composable() () -> Unit
 ) {
     Scaffold(
-        topAppBar = { EsTopAppBar(title = title) },
+        topAppBar = { TopAppBar(title = title) },
         body = { ScrollableList(children = listContent) }
     )
 }

@@ -21,12 +21,12 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.EsSurface
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
 import com.ivianuu.essentials.ui.material.TabRow
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 
 val TabsRoute = Route {
@@ -36,7 +36,7 @@ val TabsRoute = Route {
         Scaffold(
             topAppBar = {
                 Column {
-                    EsTopAppBar("Tabs")
+                    TopAppBar("Tabs")
                     TabRow<Color> { index, item ->
                         Tab(text = "Item: $index")
                     }

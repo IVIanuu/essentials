@@ -24,7 +24,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
 
 val TwilightSettingsRoute = Route {
@@ -48,7 +48,7 @@ private fun TwilightModeItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    SimpleListItem(
+    ListItem(
         title = { Text(stringResource(mode.titleRes)) },
         subtitle = { Text(stringResource(mode.descRes)) },
         trailing = {

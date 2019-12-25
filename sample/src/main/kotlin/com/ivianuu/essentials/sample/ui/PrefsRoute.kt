@@ -25,8 +25,8 @@ import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.prefs.ClipboardPreference
@@ -44,7 +44,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 
 val PrefsRoute = Route {
     Scaffold(
-        topAppBar = { EsTopAppBar(title = "Prefs") },
+        topAppBar = { TopAppBar(title = "Prefs") },
         body = {
             ScrollableList {
                 val boxFactory = inject<PrefBoxFactory>()

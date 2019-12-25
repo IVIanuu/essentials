@@ -35,9 +35,9 @@ import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 
 val TextInputRoute = Route {
@@ -56,7 +56,7 @@ val TextInputRoute = Route {
 
     Scaffold(
         topAppBar = {
-            EsTopAppBar(
+            TopAppBar(
                 title = {
                     if (state.searchVisible) {
                         Container(
@@ -105,7 +105,7 @@ val TextInputRoute = Route {
                     // todo scrollerPosition = scrollerPosition,
                     items = items
                 ) { _, item ->
-                    SimpleListItem(
+                    ListItem(
                         title = { Text(item) },
                         onClick = {
                             d { "clicked $item" }

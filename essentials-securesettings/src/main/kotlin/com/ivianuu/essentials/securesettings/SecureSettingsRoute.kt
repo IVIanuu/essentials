@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.launch
@@ -43,7 +43,7 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
             )
         )
 
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_use_pc),
             subtitle = stringResource(R.string.es_pref_use_pc_summary),
             onClick = navigateOnClick { SecureSettingsInstructionsRoute }
@@ -52,7 +52,7 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
         val coroutineScope = coroutineScope
         val secureSettingsHelper = inject<SecureSettingsHelper>()
         val toaster = inject<Toaster>()
-        SimpleListItem(
+        ListItem(
             title = stringResource(R.string.es_pref_use_root),
             subtitle = stringResource(R.string.es_pref_use_root_summary),
             onClick = {

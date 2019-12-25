@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
-import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.injekt.Factory
@@ -101,7 +101,7 @@ private fun Permission(
     @Pivotal permission: Permission,
     onClick: () -> Unit
 ) {
-    SimpleListItem(
+    ListItem(
         title = permission.metadata[MetadataKeys.Title],
         subtitle = permission.metadata.getOrNull(MetadataKeys.Desc),
         image = permission.metadata.getOrNull(MetadataKeys.Icon),

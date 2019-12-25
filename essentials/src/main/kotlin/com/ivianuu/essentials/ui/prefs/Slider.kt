@@ -327,7 +327,7 @@ fun <T : Comparable<T>> SliderPreference(
 
                 Slider(
                     position = position,
-                    modifier = Flexible(1f) + LayoutPadding(left = 8.dp),
+                    modifier = LayoutFlexible(1f) + LayoutPadding(left = 8.dp),
                     onValueChange = { newFloatValue ->
                         if (context.shouldBeEnabled &&
                             valueController.canSetValue(fromFloat(newFloatValue))
@@ -344,7 +344,7 @@ fun <T : Comparable<T>> SliderPreference(
 
                 if (valueText != null) {
                     Container(
-                        modifier = Inflexible,
+                        modifier = LayoutInflexible,
                         alignment = Alignment.Center,
                         constraints = DpConstraints(
                             minWidth = 72.dp
