@@ -136,7 +136,7 @@ class NavigatorState(
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
         @Suppress("DeferredResultUnused")
-        coroutineScope.launch { push<Any?>(route) }
+        coroutineScope.launch(Dispatchers.Main) { push<Any?>(route) }
     }
 
     suspend fun <T> push(route: Route): T? = withContext(Dispatchers.Main) {
@@ -145,13 +145,16 @@ class NavigatorState(
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
         setBackStackInternal(newBackStack, true, null)
-        return@withContext routeState.awaitResult()
+        return@withContext routeState.awaitResult<T>()
+            .also {
+                d { "on push result $it" }
+            }
     }
 
     @JvmName("replaceWithoutResult")
     fun replace(route: Route) {
         @Suppress("DeferredResultUnused")
-        coroutineScope.launch { replace<Any?>(route) }
+        coroutineScope.launch(Dispatchers.Main) { replace<Any?>(route) }
     }
 
     suspend fun <T> replace(route: Route): T? = withContext(Dispatchers.Main) {
@@ -165,24 +168,32 @@ class NavigatorState(
     }
 
     fun pop(route: Route, result: Any? = null) {
-        val routeState = _backStack.first { it.route == route }
-        coroutineScope.launch { popInternal(route = routeState, result = result) }
+        coroutineScope.launch(Dispatchers.Main) {
+            val routeState = _backStack.first { it.route == route }
+            popInternal(route = routeState, result = result)
+        }
     }
 
     fun popTop(result: Any? = null) {
-        val topRoute = _backStack.last()
-        coroutineScope.launch { popInternal(route = topRoute, result = result) }
+        coroutineScope.launch(Dispatchers.Main) {
+            val topRoute = _backStack.last()
+            popInternal(route = topRoute, result = result)
+        }
     }
 
     fun popToRoot() {
-        val newTopRoute = _backStack.first()
-        coroutineScope.launch { setBackStackInternal(listOf(newTopRoute), false, null) }
+        coroutineScope.launch(Dispatchers.Main) {
+            val newTopRoute = _backStack.first()
+            setBackStackInternal(listOf(newTopRoute), false, null)
+        }
     }
 
     fun popToRoute(route: Route) {
-        val index = _backStack.indexOfFirst { it.route == route }
-        val newBackStack = _backStack.subList(0, index)
-        coroutineScope.launch { setBackStackInternal(newBackStack, false, null) }
+        coroutineScope.launch(Dispatchers.Main) {
+            val index = _backStack.indexOfFirst { it.route == route }
+            val newBackStack = _backStack.subList(0, index)
+            setBackStackInternal(newBackStack, false, null)
+        }
     }
 
     private suspend fun popInternal(
@@ -197,7 +208,7 @@ class NavigatorState(
     }
 
     fun clear() {
-        coroutineScope.launch { setBackStack(emptyList(), false, null) }
+        coroutineScope.launch(Dispatchers.Main) { setBackStack(emptyList(), false, null) }
     }
 
     fun setBackStack(
@@ -205,7 +216,7 @@ class NavigatorState(
         isPush: Boolean,
         transition: RouteTransition? = null
     ) {
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.Main) {
             setBackStackSuspend(newBackStack, isPush, transition)
         }
     }
@@ -216,8 +227,8 @@ class NavigatorState(
         transition: RouteTransition? = null
     ) = withContext(Dispatchers.Main) {
         setBackStackInternal(
-            newBackStack.map {
-                _backStack.firstOrNull { it.route == route } ?: RouteState(it)
+            newBackStack.map { route ->
+                _backStack.firstOrNull { it.route == route } ?: RouteState(route)
             },
             isPush,
             transition
@@ -225,7 +236,7 @@ class NavigatorState(
     }
 
     suspend fun <T> awaitResult(route: Route): T? =
-        _backStack.firstOrNull { it.route == route }?.awaitResult()
+        _backStack.first { it.route == route }.awaitResult()
 
     private suspend fun setBackStackInternal(
         newBackStack: List<RouteState>,

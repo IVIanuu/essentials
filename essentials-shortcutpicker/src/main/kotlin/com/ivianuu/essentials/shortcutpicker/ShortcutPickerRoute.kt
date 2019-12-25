@@ -144,6 +144,7 @@ internal class ShortcutPickerViewModel(
 
                 navigator.popTop(result = shortcut)
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
