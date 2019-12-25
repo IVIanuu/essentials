@@ -45,7 +45,7 @@ enum class ColorPickerPalette(
     Pink(
         front = Color(0xFFE91E63),
         colors = listOf(
-            Color(0xFFE91E63),
+            Color(0xFFFCE4EC),
             Color(0xFFF8BBD0),
             Color(0xFFF48FB1),
             Color(0xFFF06292),
