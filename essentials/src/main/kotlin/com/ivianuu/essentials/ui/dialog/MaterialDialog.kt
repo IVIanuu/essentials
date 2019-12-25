@@ -29,6 +29,7 @@ import androidx.ui.core.ipx
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
@@ -299,17 +300,37 @@ private fun DialogButtons(
         AlertDialogButtonLayout.SideBySide -> {
             Container(
                 expanded = true,
-                alignment = Alignment.CenterRight,
+                alignment = Alignment.CenterLeft,
                 height = 52.dp,
                 padding = EdgeInsets(all = 8.dp)
             ) {
                 Row(
-                    mainAxisAlignment = MainAxisAlignment.End,
+                    modifier = LayoutExpandedWidth,
+                    mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    neutralButton?.invoke()
-                    negativeButton?.invoke()
-                    positiveButton?.invoke()
+                    if (neutralButton != null) {
+                        WithModifier(
+                            modifier = LayoutInflexible,
+                            children = neutralButton
+                        )
+                    }
+
+                    Spacer(LayoutFlexible(1f))
+
+                    if (negativeButton != null) {
+                        WithModifier(
+                            modifier = LayoutInflexible,
+                            children = negativeButton
+                        )
+                    }
+
+                    if (positiveButton != null) {
+                        WithModifier(
+                            modifier = LayoutInflexible,
+                            children = positiveButton
+                        )
+                    }
                 }
             }
         }
