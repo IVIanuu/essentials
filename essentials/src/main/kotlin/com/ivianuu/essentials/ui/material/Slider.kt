@@ -30,12 +30,10 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
 import androidx.ui.core.PxSize
-import androidx.ui.core.ambientDensity
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.px
 import androidx.ui.core.toRect
-import androidx.ui.core.withDensity
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.foundation.ValueHolder
 import androidx.ui.foundation.animation.AnimatedValueHolder
@@ -58,6 +56,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
+import com.ivianuu.essentials.ui.common.withDensity
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -177,9 +176,7 @@ private fun SliderImpl(
     width: Float,
     pressed: Boolean
 ) {
-    val widthDp = withDensity(ambientDensity()) {
-        width.px.toDp()
-    }
+    val widthDp = withDensity { width.px.toDp() }
     Semantics(container = true, properties = { accessibilityValue = "${position.value}" }) {
         Container(
             expanded = true,
@@ -189,7 +186,7 @@ private fun SliderImpl(
             val thumbSize = ThumbRadius * 2
             val fraction = with(position) { calcFraction(startValue, endValue, value) }
             val offset = (widthDp - thumbSize) * fraction
-            DrawTrack(color, position, width)
+            DrawTrack(color, position)
             Container(
                 modifier = LayoutPadding(left = offset)
             ) {
@@ -210,8 +207,7 @@ private fun SliderImpl(
 @Composable
 private fun DrawTrack(
     color: Color,
-    position: SliderPosition,
-    maxPx: Float
+    position: SliderPosition
 ) {
     val activeTickColor = MaterialTheme.colors().onPrimary.copy(alpha = TickColorAlpha)
     val inactiveTickColor = color.copy(alpha = TickColorAlpha)
