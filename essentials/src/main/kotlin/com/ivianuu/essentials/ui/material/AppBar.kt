@@ -51,8 +51,14 @@ data class TopAppBarStyle(
 )
 
 @Composable
-fun DefaultTopAppBarStyle(color: Color = MaterialTheme.colors().primary) = TopAppBarStyle(
-    color = color
+fun DefaultTopAppBarStyle(
+    color: Color = MaterialTheme.colors().primary,
+    elevation: Dp = DefaultAppBarElevation,
+    centerTitle: Boolean = false
+) = TopAppBarStyle(
+    color = color,
+    elevation = elevation,
+    centerTitle = centerTitle
 )
 
 val TopAppBarStyleAmbient = Ambient.of<TopAppBarStyle?>()
