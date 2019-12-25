@@ -34,25 +34,52 @@ import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// todo remove InjectedNavigator
+
+@Composable
+fun InjectedNavigator(
+    startRoute: Route,
+    handleBack: Boolean = true,
+    popsLastRoute: Boolean = false
+) {
+    val state = inject<NavigatorState>()
+
+    state.handleBack = handleBack
+    state.popsLastRoute = popsLastRoute
+
+    if (!state.hasRoot) {
+        state.setRoot(startRoute)
+    }
+
+    Navigator(state = state)
+}
+
 @Composable
 fun Navigator(
     startRoute: Route,
-    handleBack: Boolean = true
+    handleBack: Boolean = true,
+    popsLastRoute: Boolean = false
 ) {
     val coroutineScope = coroutineScope
-    Navigator(state = remember {
+    val state = remember {
         NavigatorState(
             startRoute = startRoute,
             handleBack = handleBack,
             coroutineScope = coroutineScope
         )
-    })
+    }
+
+    state.handleBack = handleBack
+    state.popsLastRoute = popsLastRoute
+
+    Navigator(state = state)
 }
 
 @Composable
@@ -76,11 +103,12 @@ class NavigatorState(
     private val coroutineScope: CoroutineScope,
     internal val overlayState: OverlayState = OverlayState(),
     startRoute: Route? = null,
-    handleBack: Boolean = true
+    handleBack: Boolean = true,
+    popsLastRoute: Boolean = false
 ) {
 
     var handleBack by framed(handleBack)
-    var popsLastRoute by framed(false)
+    var popsLastRoute by framed(popsLastRoute)
     internal var runningTransitions by framed(0)
 
     private val _backStack = modelListOf<RouteState>()

@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.core.UiInitializer
 import com.ivianuu.essentials.ui.core.bindAppUi
 import com.ivianuu.essentials.ui.core.bindUiInitializer
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -35,7 +35,7 @@ class SampleUi : AppUi {
         DefaultRouteTransitionAmbient.Provider(
             value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
         ) {
-            Navigator(startRoute = HomeRoute)
+            InjectedNavigator(startRoute = HomeRoute)
         }
     }
 }

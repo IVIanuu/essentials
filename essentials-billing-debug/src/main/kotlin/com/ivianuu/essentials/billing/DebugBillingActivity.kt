@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.contentColorFor
+import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import java.util.Date
@@ -58,7 +59,7 @@ class DebugBillingActivity : EsActivity() {
         }
         this.skuDetails = skuDetails
 
-        Navigator(startRoute = PurchaseDialogRoute)
+        InjectedNavigator(startRoute = PurchaseDialogRoute)
     }
 
     private fun SkuDetails.toPurchaseData(): Purchase {
