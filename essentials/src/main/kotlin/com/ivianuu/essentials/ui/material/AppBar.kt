@@ -30,6 +30,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpanded
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
@@ -71,6 +72,7 @@ fun TopAppBar(
     EsSurface(color = style.color) {
         Container(
             height = AppBarHeight,
+            modifier = LayoutExpandedWidth,
             padding = EdgeInsets(left = 16.dp, right = 16.dp)
         ) {
             Row(
