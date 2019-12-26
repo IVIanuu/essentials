@@ -16,24 +16,25 @@
 
 package com.ivianuu.essentials.ui.core
 
-import android.app.Activity
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onDispose
+import androidx.ui.core.AndroidComposeView
 import androidx.ui.core.input.FocusManager
-import com.ivianuu.essentials.util.hideInputMethod
 
 class KeyboardManager(
     private val focusManager: FocusManager,
-    private val activity: Activity
+    private val composeView: AndroidComposeView,
+    private val inputMethodManager: InputMethodManager
 ) {
     fun showKeyboard(id: String) {
         focusManager.requestFocusById(id)
     }
 
     fun hideKeyboard() {
-        activity.hideInputMethod()
+        inputMethodManager.hideSoftInputFromWindow(composeView.windowToken, 0)
     }
 }
 
