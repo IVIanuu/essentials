@@ -23,7 +23,6 @@ import androidx.compose.Composer
 import androidx.compose.SlotEditor
 import androidx.compose.SlotReader
 import androidx.compose.composer
-import androidx.compose.remember
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.sourceLocation
 
@@ -34,12 +33,12 @@ inline fun PointMarker(noinline children: @Composable() () -> Unit) {
 
 @Composable
 fun PointMarker(key: Any, children: @Composable() () -> Unit) {
-    val ambient = remember(key) { Ambient.of<Unit>() }
-    ambient.Provider(value = Unit, children = children)
+    PointMarkerAmbient.Provider(value = key, children = children)
 }
 
-// todo find a better way to implement this
+val PointMarkerAmbient = Ambient.of<Any?>()
 
+// todo find a better way to implement this
 @Composable
 fun pointInComposition(): Any {
     val composer = composer.composer
@@ -53,7 +52,6 @@ fun pointInComposition(): Any {
                 .get(stack)
                 .cast<List<Any>>()
         }
-        .map { holder -> ComposeAccessor.getAmbientFromHolder(holder) }
 
     val slots = Composer::class.java.getDeclaredField("slots")
         .also { it.isAccessible = true }
@@ -63,7 +61,7 @@ fun pointInComposition(): Any {
         .also { it.isAccessible = true }
         .get(slots)
 
-    val existingProviders = mutableListOf<Ambient<*>>()
+    val existingProviders = mutableListOf<Any>()
 
     var current = ComposeAccessor.intStackSize(startStack) - 1
     while (current > 0) {
@@ -72,13 +70,21 @@ fun pointInComposition(): Any {
         if (sentinel === ComposeAccessor.getProviderKey()) {
             val element = slots.get(index + 1)
             if (ComposeAccessor.isAmbientHolder(element)) {
-                existingProviders.add(0, ComposeAccessor.getAmbientFromHolder(element))
+                existingProviders.add(0, element!!)
             }
         }
         current--
     }
 
-    val providers = existingProviders + insertedProviders
+    val values = (existingProviders + insertedProviders)
+        .map { holder ->
+            val ambient = ComposeAccessor.getAmbientFromHolder(holder)
+            if (ambient === PointMarkerAmbient) {
+                ComposeAccessor.getValueFromHolder(holder)
+            } else {
+                ambient
+            }
+        }
 
-    return providers.hashCode()
+    return values.hashCode()
 }

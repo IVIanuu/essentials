@@ -23,6 +23,10 @@ public final class ComposeAccessor {
         return ((Ambient.Holder) holder).getAmbient();
     }
 
+    public static Object getValueFromHolder(Object holder) {
+        return ((Ambient.Holder) holder).getValue();
+    }
+
     public static boolean isAmbientHolder(Object object) {
         return object instanceof Ambient.Holder;
     }

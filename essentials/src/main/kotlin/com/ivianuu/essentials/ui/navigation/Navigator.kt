@@ -207,7 +207,7 @@ class NavigatorState(
     ) = withContext(Dispatchers.Main) {
         d { "pop route $route with result $result" }
         val newBackStack = _backStack.toMutableList()
-        newBackStack.remove(route)
+        newBackStack -= route
         route.setResult(result)
         setBackStackInternal(newBackStack, false, null)
     }
@@ -361,8 +361,8 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                RetainedObjectsAmbient.Provider(retainedObjects) {
-                    PointMarker(key = route) {
+                PointMarker(key = route) {
+                    RetainedObjectsAmbient.Provider(retainedObjects) {
                         ProvideCoroutineScope(coroutineScope()) {
                             AbsorbPointer(absorb = absorbTouches) {
                                 RouteTransitionWrapper(

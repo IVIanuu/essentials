@@ -21,6 +21,8 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.ambient
 import androidx.compose.mutableStateOf
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.pointInComposition
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
@@ -96,7 +98,7 @@ val RetainedObjectsAmbient = Ambient.of<RetainedObjects>()
 @Composable
 inline fun <T> retained(noinline init: () -> T): T =
     retained(
-        key = sourceLocation(),
+        key = sourceLocation() to pointInComposition(),
         init = init
     )
 
@@ -107,6 +109,9 @@ fun <T> retained(
 ): T {
     val retainedObjects = ambient(RetainedObjectsAmbient)
     return retainedObjects.getOrSet(key, init)
+        .also {
+            d { "retained $key result is $it" }
+        }
 }
 
 @Composable
@@ -114,7 +119,7 @@ inline fun <T> retained(
     vararg inputs: Any?,
     noinline init: () -> T
 ): T = retained(
-    key = sourceLocation(),
+    key = sourceLocation() to pointInComposition(),
     inputs = *inputs,
     init = init
 )
@@ -133,7 +138,7 @@ fun <T> retained(
 inline fun <T> retainedState(
     noinline init: () -> T
 ): MutableState<T> = retainedState(
-    key = sourceLocation(),
+    key = sourceLocation() to pointInComposition(),
     init = init
 )
 
@@ -149,7 +154,7 @@ inline fun <T> retainedStateFor(
     vararg inputs: Any?,
     noinline init: () -> T
 ): MutableState<T> = retainedStateFor(
-    key = sourceLocation(),
+    key = sourceLocation() to pointInComposition(),
     inputs = *inputs,
     init = init
 )
