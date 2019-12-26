@@ -57,24 +57,22 @@ fun Environment(
         RetainedObjectsAmbient with retainedObjects
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
-            Window {
-                WindowSizeProvider {
-                    WindowInsetsManager {
-                        SystemBarManager {
-                            ConfigurationFix {
-                                OrientationProvider {
-                                    val uiInitializers = inject<Map<String, UiInitializer>>(name = UiInitializers)
-                                    uiInitializers.entries
-                                        .map { (key, initializer) ->
-                                            { children: @Composable() () -> Unit ->
-                                                d { "apply ui initializer $key" }
-                                                initializer.apply(children)
-                                            }
+            WindowSizeProvider {
+                WindowInsetsManager {
+                    SystemBarManager {
+                        ConfigurationFix {
+                            OrientationProvider {
+                                val uiInitializers = inject<Map<String, UiInitializer>>(name = UiInitializers)
+                                uiInitializers.entries
+                                    .map { (key, initializer) ->
+                                        { children: @Composable() () -> Unit ->
+                                            d { "apply ui initializer $key" }
+                                            initializer.apply(children)
                                         }
-                                        .fold(children) { current, initializer ->
-                                            { initializer(current) }
-                                        }.invoke()
-                                }
+                                    }
+                                    .fold(children) { current, initializer ->
+                                        { initializer(current) }
+                                    }.invoke()
                             }
                         }
                     }

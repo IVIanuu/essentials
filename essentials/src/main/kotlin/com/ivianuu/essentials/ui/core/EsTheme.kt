@@ -33,11 +33,9 @@ fun EsTheme(
         colors = colors,
         typography = typography
     ) {
-        ProvideWindowColor(color = colors.background) {
-            ProvideSystemBarStyle(
-                value = systemBarStyle,
-                children = children
-            )
-        }
+        ProvideSystemBarStyle(
+            value = systemBarStyle,
+            children = children
+        )
     }
 }

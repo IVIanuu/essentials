@@ -37,7 +37,7 @@ import com.ivianuu.essentials.util.setFlag
 data class SystemBarStyle(
     val statusBarColor: Color = Color.Black.copy(alpha = 0.2f),
     val lightStatusBar: Boolean = statusBarColor.isLight,
-    val navigationBarColor: Color = Color.Black.copy(alpha = 0.4f),
+    val navigationBarColor: Color = Color.Black.copy(alpha = 0.7f),
     val lightNavigationBar: Boolean = navigationBarColor.isLight,
     val navigationBarDividerColor: Color = Color.Transparent
 )
@@ -70,9 +70,9 @@ fun TintedSystemBarStyle(
 
 @Composable
 fun SurfaceSystemBarStyle(
-    statusBarAlpha: Float = 0.4f,
+    statusBarAlpha: Float = 0.7f,
     lightStatusBar: Boolean = MaterialTheme.colors().surface.isLight,
-    navigationBarAlpha: Float = 0.4f,
+    navigationBarAlpha: Float = 0.7f,
     lightNavigationBar: Boolean =  MaterialTheme.colors().surface.isLight
 ) = SystemBarStyle(
     statusBarColor = MaterialTheme.colors().surface.copy(alpha = statusBarAlpha),
