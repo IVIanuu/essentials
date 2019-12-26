@@ -23,6 +23,7 @@ import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
 import androidx.ui.core.dp
@@ -36,6 +37,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
@@ -76,33 +78,44 @@ fun <T> BottomNavigationBar(
     items: List<T>,
     selectedIndex: Int,
     color: Color = MaterialTheme.colors().primary,
+    applySafeArea: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) {
     Surface(color = color, elevation = BottomNavigationBarElevation) {
-        Container(height = BottomNavigationBarHeight, expanded = true) {
-            WithConstraints { thisConstraints ->
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    val itemWidth = (thisConstraints.maxWidth / items.size)
-                    val itemConstraints = withDensity {
-                        DpConstraints(
-                            minWidth = BottomNavigationBarItemMinWidth,
-                            maxWidth = itemWidth.toDp().coerceIn(
-                                BottomNavigationBarItemMinWidth,
-                                BottomNavigationBarItemMaxWidth
-                            ),
-                            minHeight = thisConstraints.maxHeight.toDp(),
-                            maxHeight = thisConstraints.maxHeight.toDp()
-                        )
-                    }
+        SafeArea(
+            left = false,
+            top = false,
+            right = false,
+            bottom = applySafeArea
+        ) {
+            // used to fix that the ripples go beyond the bottom bar bounds
+            RepaintBoundary {
+                Container(height = BottomNavigationBarHeight, expanded = true) {
+                    WithConstraints { thisConstraints ->
+                        Row(
+                            mainAxisAlignment = MainAxisAlignment.Center,
+                            crossAxisAlignment = CrossAxisAlignment.Center
+                        ) {
+                            val itemWidth = (thisConstraints.maxWidth / items.size)
+                            val itemConstraints = withDensity {
+                                DpConstraints(
+                                    minWidth = BottomNavigationBarItemMinWidth,
+                                    maxWidth = itemWidth.toDp().coerceIn(
+                                        BottomNavigationBarItemMinWidth,
+                                        BottomNavigationBarItemMaxWidth
+                                    ),
+                                    minHeight = thisConstraints.maxHeight.toDp(),
+                                    maxHeight = thisConstraints.maxHeight.toDp()
+                                )
+                            }
 
-                    items.forEachIndexed { index, _item ->
-                        key(index) {
-                            Container(constraints = itemConstraints) {
-                                BottomNavigationItemIndexAmbient.Provider(index) {
-                                    item(index, _item)
+                            items.forEachIndexed { index, _item ->
+                                key(index) {
+                                    Container(constraints = itemConstraints) {
+                                        BottomNavigationItemIndexAmbient.Provider(index) {
+                                            item(index, _item)
+                                        }
+                                    }
                                 }
                             }
                         }

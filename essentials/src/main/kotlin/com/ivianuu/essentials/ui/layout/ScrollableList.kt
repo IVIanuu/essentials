@@ -23,6 +23,7 @@ import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutExpandedWidth
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Axis
 
 @Composable
@@ -52,6 +53,7 @@ fun ScrollableList(
     modifier: Modifier = Modifier.None,
     scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     enabled: Boolean = true,
+    applyBottomSafeArea: Boolean = true,
     children: @Composable() () -> Unit
 ) {
     when (direction) {
@@ -72,8 +74,15 @@ fun ScrollableList(
                 scrollerPosition = scrollerPosition,
                 isScrollable = enabled
             ) {
-                Column {
-                    children()
+                SafeArea(
+                    left = false,
+                    top = false,
+                    right = false,
+                    bottom = applyBottomSafeArea
+                ) {
+                    Column {
+                        children()
+                    }
                 }
             }
         }

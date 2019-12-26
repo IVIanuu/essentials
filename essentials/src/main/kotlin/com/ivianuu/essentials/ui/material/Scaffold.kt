@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Stable
-import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun Scaffold(
@@ -45,12 +44,12 @@ fun Scaffold(
     fab: (@Composable() () -> Unit)? = null,
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
     bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
-    wrapInSafeArea: Boolean = true
+    applySideSafeArea: Boolean = true
 ) {
     val scaffoldState = remember { ScaffoldState() }
     remember(fabPosition) { scaffoldState.fabPosition = fabPosition }
     remember(bodyLayoutMode) { scaffoldState.bodyLayoutMode = bodyLayoutMode }
-    remember(wrapInSafeArea) { scaffoldState.wrapInSafeArea = wrapInSafeArea }
+    remember(applySideSafeArea) { scaffoldState.applySideSafeArea = applySideSafeArea }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -90,7 +89,11 @@ fun Scaffold(
                     topAppBar = topAppBar,
                     body = body,
                     bottomBar = bottomBar,
-                    fab = fab
+                    fab = fab?.let {
+                        {
+                            SafeArea(children = fab)
+                        }
+                    }
                 )
             }
         }
@@ -112,12 +115,14 @@ fun Scaffold(
             }
         }
 
-        if (scaffoldState.wrapInSafeArea) {
-            val tmp = layout
-            layout = { SafeArea(children = tmp) }
-        }
-
-        WithModifier(modifier = LayoutExpanded, children = layout)
+        SafeArea(
+            modifier = LayoutExpanded,
+            left = scaffoldState.applySideSafeArea,
+            top = false,
+            right = scaffoldState.applySideSafeArea,
+            bottom = false,
+            children = layout
+        )
     }
 }
 
@@ -140,7 +145,7 @@ class ScaffoldState {
 
     var fabPosition by framed(FabPosition.End)
     var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
-    var wrapInSafeArea by framed(true)
+    var applySideSafeArea by framed(true)
 
     enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 

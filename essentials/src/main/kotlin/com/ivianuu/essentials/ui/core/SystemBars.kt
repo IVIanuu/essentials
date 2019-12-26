@@ -26,34 +26,76 @@ import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
-import androidx.ui.core.Modifier
-import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
-import androidx.ui.layout.LayoutExpandedHeight
-import androidx.ui.layout.LayoutExpandedWidth
-import androidx.ui.layout.LayoutGravity
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Stack
-import com.ivianuu.essentials.ui.common.SafeArea
+import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag
 
 @Immutable
 data class SystemBarStyle(
-    val statusBarColor: Color = Color.Black,
+    val statusBarColor: Color = Color.Black.copy(alpha = 0.2f),
     val lightStatusBar: Boolean = statusBarColor.isLight,
-    val navigationBarColor: Color = Color.Black,
-    val lightNavigationBar: Boolean = navigationBarColor.isLight
+    val navigationBarColor: Color = Color.Black.copy(alpha = 0.4f),
+    val lightNavigationBar: Boolean = navigationBarColor.isLight,
+    val navigationBarDividerColor: Color = Color.Transparent
 )
 
 @Composable
-fun ProvideCurrentSystemBarStyle(
+fun ColorOverlaySystemBarStyle(
+    statusBarColor: Color = Color.Black.copy(alpha = 0.2f),
+    lightStatusBar: Boolean = statusBarColor.isLight,
+    navigationBarColor: Color = Color.Black.copy(alpha = 0.2f),
+    lightNavigationBar: Boolean = navigationBarColor.isLight
+) = SystemBarStyle(
+    statusBarColor = statusBarColor,
+    lightStatusBar = lightStatusBar,
+    navigationBarColor = navigationBarColor,
+    lightNavigationBar = lightNavigationBar
+)
+
+@Composable
+fun TintedSystemBarStyle(
+    statusBarColor: Color = MaterialTheme.colors().primary,
+    lightStatusBar: Boolean = statusBarColor.isLight,
+    navigationBarColor: Color = MaterialTheme.colors().primary,
+    lightNavigationBar: Boolean = navigationBarColor.isLight
+) = SystemBarStyle(
+    statusBarColor = statusBarColor,
+    lightStatusBar = lightStatusBar,
+    navigationBarColor = navigationBarColor,
+    lightNavigationBar = lightNavigationBar
+)
+
+@Composable
+fun SurfaceSystemBarStyle(
+    statusBarAlpha: Float = 0.4f,
+    lightStatusBar: Boolean = MaterialTheme.colors().surface.isLight,
+    navigationBarAlpha: Float = 0.4f,
+    lightNavigationBar: Boolean =  MaterialTheme.colors().surface.isLight
+) = SystemBarStyle(
+    statusBarColor = MaterialTheme.colors().surface.copy(alpha = statusBarAlpha),
+    lightStatusBar = lightStatusBar,
+    navigationBarColor = MaterialTheme.colors().surface.copy(alpha = navigationBarAlpha),
+    lightNavigationBar = lightNavigationBar
+)
+
+@Composable
+fun TransparentSystemBarStyle(
+    lightStatusBar: Boolean = false,
+    lightNavigationBar: Boolean = false
+) = SystemBarStyle(
+    statusBarColor = Color.Transparent,
+    lightStatusBar = lightStatusBar,
+    navigationBarColor = Color.Transparent,
+    lightNavigationBar = lightNavigationBar
+)
+
+@Composable
+fun ProvideSystemBarStyle(
     value: SystemBarStyle,
     children: @Composable() () -> Unit
 ) {
@@ -69,35 +111,6 @@ fun ProvideCurrentSystemBarStyle(
 }
 
 @Composable
-fun StatusBar(color: Color) {
-    SafeArea(
-        top = false,
-        bottom = false
-    ) {
-        Surface(
-            modifier = LayoutExpandedWidth + LayoutHeight(ambientWindowInsets().viewPadding.top),
-            color = color
-        ) { }
-    }
-}
-
-@Composable
-fun NavigationBar(color: Color) {
-    val windowInsets = ambientWindowInsets()
-    val viewPadding = windowInsets.viewPadding
-    val modifier = when {
-        viewPadding.bottom > 0.dp -> LayoutExpandedWidth + LayoutHeight(viewPadding.bottom)
-        viewPadding.left > 0.dp -> LayoutWidth(viewPadding.left) + LayoutExpandedHeight
-        viewPadding.right > 0.dp -> LayoutWidth(viewPadding.right) + LayoutExpandedHeight
-        else -> Modifier.None
-    }
-    Surface(
-        modifier = modifier,
-        color = color
-    ) { }
-}
-
-@Composable
 fun ambientSystemBarStyle(): SystemBarStyle =
     ambient(SystemBarStyleAmbient)
 
@@ -105,30 +118,7 @@ fun ambientSystemBarStyle(): SystemBarStyle =
 fun SystemBarManager(children: @Composable() () -> Unit) {
     val activity = ambient(ActivityAmbient)
     val systemBarManager = remember { SystemBarManager(activity) }
-    SystemBarManagerAmbient.Provider(value = systemBarManager) {
-        Stack {
-            WithModifier(
-                modifier = LayoutGravity.TopLeft,
-                children = children
-            )
-
-            WithModifier(modifier = LayoutGravity.TopLeft) {
-                StatusBar(color = systemBarManager.currentStyle.statusBarColor)
-            }
-
-            val viewPadding = ambientWindowInsets().viewPadding
-            val navBarGravity = when {
-                viewPadding.bottom > 0.dp -> LayoutGravity.BottomLeft
-                viewPadding.left > 0.dp -> LayoutGravity.TopLeft
-                viewPadding.right > 0.dp -> LayoutGravity.TopRight
-                else -> Modifier.None
-            }
-
-            WithModifier(modifier = navBarGravity) {
-                NavigationBar(color = systemBarManager.currentStyle.navigationBarColor)
-            }
-        }
-    }
+    SystemBarManagerAmbient.Provider(value = systemBarManager, children = children)
 }
 
 private val SystemBarStyleAmbient = Ambient.of { SystemBarStyle() }
@@ -139,8 +129,6 @@ internal class SystemBarManager(private val activity: Activity) {
     var currentStyle: SystemBarStyle by framed(SystemBarStyle())
 
     init {
-        activity.window.statusBarColor = Color.Black.copy(alpha = 0.2f).toArgb()
-        activity.window.navigationBarColor = Color.Transparent.toArgb()
         activity.window.decorView.systemUiVisibility =
             activity.window.decorView.systemUiVisibility.addFlag(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -161,17 +149,26 @@ internal class SystemBarManager(private val activity: Activity) {
 
     private fun update() {
         currentStyle = styles.lastOrNull() ?: SystemBarStyle()
+
+        d { "apply system bar style $currentStyle" }
+
+        activity.window.statusBarColor = currentStyle.statusBarColor.toArgb()
         activity.window.decorView.systemUiVisibility =
             activity.window.decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
                 currentStyle.lightStatusBar
             )
+        activity.window.navigationBarColor = currentStyle.navigationBarColor.toArgb()
         if (Build.VERSION.SDK_INT >= 26) {
             activity.window.decorView.systemUiVisibility =
                 activity.window.decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
                     currentStyle.lightNavigationBar
                 )
+        }
+
+        if (Build.VERSION.SDK_INT >= 28) {
+            activity.window.navigationBarDividerColor = currentStyle.navigationBarDividerColor.toArgb()
         }
     }
 }

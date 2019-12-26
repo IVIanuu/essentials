@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.material
+package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
-import com.ivianuu.essentials.ui.core.ProvideCurrentSystemBarStyle
-import com.ivianuu.essentials.ui.core.SystemBarStyle
+import com.ivianuu.essentials.ui.material.ColorPalette
 
 @Composable
 fun EsTheme(
     colors: ColorPalette = ColorPalette(),
     typography: Typography = Typography(),
-    systemBarStyle: SystemBarStyle = SystemBarStyle(
-        statusBarColor = colors.primary
-    ),
+    systemBarStyle: SystemBarStyle = ColorOverlaySystemBarStyle(),
     children: @Composable() () -> Unit
 ) {
     MaterialTheme(
         colors = colors,
         typography = typography
     ) {
-        ProvideCurrentSystemBarStyle(
-            value = systemBarStyle,
-            children = children
-        )
+        ProvideWindowColor(color = colors.background) {
+            ProvideSystemBarStyle(
+                value = systemBarStyle,
+                children = children
+            )
+        }
     }
 }

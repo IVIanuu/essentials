@@ -22,6 +22,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.VerticalScroller
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Axis
 
 @Composable
@@ -30,6 +31,7 @@ fun Scroller(
     modifier: Modifier = Modifier.None,
     scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     isScrollable: Boolean = true,
+    applyBottomSafeArea: Boolean = true,
     child: @Composable() () -> Unit
 ) {
     when (direction) {
@@ -45,9 +47,16 @@ fun Scroller(
             VerticalScroller(
                 modifier = modifier,
                 scrollerPosition = scrollerPosition,
-                isScrollable = isScrollable,
-                child = child
-            )
+                isScrollable = isScrollable
+            ) {
+                SafeArea(
+                    left = false,
+                    top = false,
+                    right = false,
+                    bottom = applyBottomSafeArea,
+                    children = child
+                )
+            }
         }
     }
 }

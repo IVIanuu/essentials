@@ -33,15 +33,18 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.material.MaterialTheme
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.SpacingRow
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
+import com.ivianuu.essentials.util.isLight
 
 @Immutable
 data class TopAppBarStyle(
@@ -74,45 +77,59 @@ fun TopAppBar(
     style: TopAppBarStyle = ambient(TopAppBarStyleAmbient) ?: DefaultTopAppBarStyle(),
     title: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
-    actions: (@Composable() () -> Unit)? = null
+    actions: (@Composable() () -> Unit)? = null,
+    primary: Boolean = true
 ) {
-    Surface(color = style.color) {
-        Container(
-            height = AppBarHeight,
-            modifier = LayoutExpandedWidth,
-            padding = EdgeInsets(left = 16.dp, right = 16.dp)
+    Surface(color = style.color, elevation = style.elevation) {
+        ProvideSystemBarStyle(
+            value = ambientSystemBarStyle().let {
+                if (primary) it.copy(lightStatusBar = style.color.isLight) else it
+            }
         ) {
-            TopAppBarLayout(
-                centerTitle = style.centerTitle,
-                leading = leading?.let {
-                    {
-                        IconStyleAmbient.Provider(IconStyle()) {
-                            leading()
-                        }
-                    }
-                },
-                title = title?.let {
-                    {
-                        Column(
-                            mainAxisAlignment = MainAxisAlignment.Start,
-                            crossAxisAlignment = CrossAxisAlignment.Start
-                        ) {
-                            CurrentTextStyleProvider(MaterialTheme.typography().h6) {
-                                title()
+            SafeArea(
+                top = primary,
+                left = false,
+                right = false,
+                bottom = false
+            ) {
+                Container(
+                    height = AppBarHeight,
+                    modifier = LayoutExpandedWidth,
+                    padding = EdgeInsets(left = 16.dp, right = 16.dp)
+                ) {
+                    TopAppBarLayout(
+                        centerTitle = style.centerTitle,
+                        leading = leading?.let {
+                            {
+                                IconStyleAmbient.Provider(IconStyle()) {
+                                    leading()
+                                }
+                            }
+                        },
+                        title = title?.let {
+                            {
+                                Column(
+                                    mainAxisAlignment = MainAxisAlignment.Start,
+                                    crossAxisAlignment = CrossAxisAlignment.Start
+                                ) {
+                                    CurrentTextStyleProvider(MaterialTheme.typography().h6) {
+                                        title()
+                                    }
+                                }
+                            }
+                        },
+                        actions = actions?.let {
+                            {
+                                SpacingRow(spacing = 8.dp) {
+                                    IconStyleAmbient.Provider(IconStyle()) {
+                                        actions()
+                                    }
+                                }
                             }
                         }
-                    }
-                },
-                actions = actions?.let {
-                    {
-                        SpacingRow(spacing = 8.dp) {
-                            IconStyleAmbient.Provider(IconStyle()) {
-                                actions()
-                            }
-                        }
-                    }
+                    )
                 }
-            )
+            }
         }
     }
 }
@@ -180,13 +197,11 @@ private fun TopAppBarLayout(
             if (titlePlaceable != null) {
                 val titleX = if (centerTitle) {
                     (width / 2) - titlePlaceable.width / 2
-                } else if (leadingPlaceable != null ) {
+                } else if (leadingPlaceable != null) {
                     56.dp.toIntPx()
                 } else {
                     IntPx.Zero
                 }
-
-                d { "title x $titleX" }
 
                 titlePlaceable.place(
                     x = titleX,

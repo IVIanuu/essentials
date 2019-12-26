@@ -18,13 +18,10 @@
     <style name="Theme.Es" parent="Theme.AppCompat.DayNight.NoActionBar"/>
 
     <style name="Theme.Es.Translucent" parent="Theme.Es">
-        <item name="android:background">#00000000</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:statusBarColor">#99000000</item>
-        <item name="android:navigationBarColor">#99000000</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
+
 </resources>
