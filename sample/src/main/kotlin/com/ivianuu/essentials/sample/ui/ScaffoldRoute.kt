@@ -64,7 +64,7 @@ val ScaffoldRoute = Route {
         }) else null,
         fabPosition = controls.fabPosition,
         fab = if (controls.showFab) ({
-            FloatingActionButton("Click me")
+            FloatingActionButton("Click me", onClick = {})
         }) else null,
         bottomBar = if (controls.showBottomBar) ({
             val alpha = remember(controls.bodyLayoutMode) {
