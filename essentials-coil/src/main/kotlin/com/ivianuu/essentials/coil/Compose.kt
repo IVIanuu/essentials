@@ -20,12 +20,12 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.Image
+import androidx.ui.layout.Container
 import coil.ImageLoader
 import coil.api.getAny
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun image(
@@ -63,8 +63,8 @@ fun Image(
         imageLoader = imageLoader
     )
 
-    if (!wasPlaceholderNull || loadedImage != placeholder) {
-        WithModifier(modifier = modifier) {
+    Container(modifier = modifier) {
+        if (!wasPlaceholderNull || loadedImage != placeholder) {
             image(loadedImage)
         }
     }
