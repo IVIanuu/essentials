@@ -6,7 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials.iml" filepath="$PROJECT_DIR$/essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-about/essentials-about.iml" filepath="$PROJECT_DIR$/essentials-about/essentials-about.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-accessibility/essentials-accessibility.iml" filepath="$PROJECT_DIR$/essentials-accessibility/essentials-accessibility.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-activityresult/essentials-activityresult.iml" filepath="$PROJECT_DIR$/essentials-activityresult/essentials-activityresult.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-activity-result/essentials-activity-result.iml" filepath="$PROJECT_DIR$/essentials-activity-result/essentials-activity-result.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-analytics/essentials-analytics.iml" filepath="$PROJECT_DIR$/essentials-analytics/essentials-analytics.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" />
@@ -27,19 +27,19 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-foreground/essentials-foreground.iml" filepath="$PROJECT_DIR$/essentials-foreground/essentials-foreground.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-hide-nav-bar/essentials-hide-nav-bar.iml" filepath="$PROJECT_DIR$/essentials-hide-nav-bar/essentials-hide-nav-bar.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-mvrx/essentials-mvrx.iml" filepath="$PROJECT_DIR$/essentials-mvrx/essentials-mvrx.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" filepath="$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-notification-listener/essentials-notification-listener.iml" filepath="$PROJECT_DIR$/essentials-notification-listener/essentials-notification-listener.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-permission/essentials-permission.iml" filepath="$PROJECT_DIR$/essentials-permission/essentials-permission.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-process-restart/essentials-process-restart.iml" filepath="$PROJECT_DIR$/essentials-process-restart/essentials-process-restart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-secure-settings/essentials-secure-settings.iml" filepath="$PROJECT_DIR$/essentials-secure-settings/essentials-secure-settings.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-service/essentials-service.iml" filepath="$PROJECT_DIR$/essentials-service/essentials-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" filepath="$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-shortcut-picker/essentials-shortcut-picker.iml" filepath="$PROJECT_DIR$/essentials-shortcut-picker/essentials-shortcut-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-store/essentials-store.iml" filepath="$PROJECT_DIR$/essentials-store/essentials-store.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-tile/essentials-tile.iml" filepath="$PROJECT_DIR$/essentials-tile/essentials-tile.iml" />

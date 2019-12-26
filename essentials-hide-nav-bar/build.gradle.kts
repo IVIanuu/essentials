@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
     id("com.android.library")
     id("com.github.ben-manes.versions")
@@ -32,6 +33,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials"))
-    api(project(":essentials-activityresult"))
-    api(project(":essentials-mvrx"))
+    api(project(":essentials-broadcast"))
+    api(project(":essentials-secure-settings"))
 }
