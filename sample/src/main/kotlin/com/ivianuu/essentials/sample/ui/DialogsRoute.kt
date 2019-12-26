@@ -20,7 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
@@ -53,6 +55,7 @@ val DialogsRoute = Route {
         body = {
             VerticalScroller {
                 Column(
+                    modifier = LayoutExpandedWidth + LayoutPadding(all = 8.dp),
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
