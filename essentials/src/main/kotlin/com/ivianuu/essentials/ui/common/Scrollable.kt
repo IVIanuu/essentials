@@ -32,8 +32,10 @@ import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
+import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.core.retained
 
+@Stable
 class ScrollPosition(
     initial: Px = Px.Zero,
     minValue: Px = Px.Zero,
