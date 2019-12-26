@@ -91,7 +91,11 @@ fun Scaffold(
                     bottomBar = bottomBar,
                     fab = fab?.let {
                         {
-                            SafeArea(children = fab)
+                            if (bottomBar != null) {
+                                fab()
+                            } else {
+                                SafeArea(children = fab)
+                            }
                         }
                     }
                 )
