@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.ui.core.Dp
+import androidx.ui.core.Modifier
 import androidx.ui.core.dp
 import androidx.ui.core.max
 import androidx.ui.layout.Container
@@ -26,10 +27,11 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
 import com.ivianuu.essentials.ui.core.WindowInsets
 import com.ivianuu.essentials.ui.core.WindowInsetsProvider
-import com.ivianuu.essentials.ui.core.WithWindowInsets
+import com.ivianuu.essentials.ui.core.ambientWindowInsets
 
 @Composable
 fun SafeArea(
+    modifier: Modifier = Modifier.None,
     left: Boolean = true,
     top: Boolean = true,
     right: Boolean = true,
@@ -37,58 +39,58 @@ fun SafeArea(
     minimum: EdgeInsets? = null,
     children: @Composable() () -> Unit
 ) {
-    WithWindowInsets { windowInsets ->
-        fun safeAreaValue(
-            enabled: Boolean,
-            insetsValue: Dp,
-            paddingValue: Dp,
-            min: Dp?
-        ): Dp {
-            if (!enabled) return 0.dp
-            return max(max(insetsValue, paddingValue), min ?: 0.dp)
-        }
+    val windowInsets = ambientWindowInsets()
 
-        Container(
-            modifier = LayoutPadding(
-                left = safeAreaValue(
-                    left,
-                    windowInsets.viewInsets.left,
-                    windowInsets.viewPadding.left,
-                    minimum?.left
+    fun safeAreaValue(
+        enabled: Boolean,
+        insetsValue: Dp,
+        paddingValue: Dp,
+        min: Dp?
+    ): Dp {
+        if (!enabled) return 0.dp
+        return max(max(insetsValue, paddingValue), min ?: 0.dp)
+    }
+
+    Container(
+        modifier = LayoutPadding(
+            left = safeAreaValue(
+                left,
+                windowInsets.viewInsets.left,
+                windowInsets.viewPadding.left,
+                minimum?.left
+            ),
+            top = safeAreaValue(
+                top,
+                windowInsets.viewInsets.top,
+                windowInsets.viewPadding.top,
+                minimum?.top
+            ),
+            right = safeAreaValue(
+                right,
+                windowInsets.viewInsets.right,
+                windowInsets.viewPadding.right,
+                minimum?.right
+            ),
+            bottom = safeAreaValue(
+                bottom,
+                windowInsets.viewInsets.bottom,
+                windowInsets.viewPadding.bottom,
+                minimum?.bottom
+            )
+        ) + modifier
+    ) {
+        WindowInsetsProvider(
+            value = WindowInsets(
+                viewPadding = EdgeInsets(
+                    left = if (left) 0.dp else windowInsets.viewPadding.left,
+                    top = if (top) 0.dp else windowInsets.viewPadding.top,
+                    right = if (right) 0.dp else windowInsets.viewPadding.right,
+                    bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
                 ),
-                top = safeAreaValue(
-                    top,
-                    windowInsets.viewInsets.top,
-                    windowInsets.viewPadding.top,
-                    minimum?.top
-                ),
-                right = safeAreaValue(
-                    right,
-                    windowInsets.viewInsets.right,
-                    windowInsets.viewPadding.right,
-                    minimum?.right
-                ),
-                bottom = safeAreaValue(
-                    bottom,
-                    windowInsets.viewInsets.bottom,
-                    windowInsets.viewPadding.bottom,
-                    minimum?.bottom
-                )
+                viewInsets = windowInsets.viewInsets
             )
         ) {
-            WindowInsetsProvider(
-                value = WindowInsets(
-                    viewPadding = EdgeInsets(
-                        left = if (left) 0.dp else windowInsets.viewPadding.left,
-                        top = if (top) 0.dp else windowInsets.viewPadding.top,
-                        right = if (right) 0.dp else windowInsets.viewPadding.right,
-                        bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
-                    ),
-                    viewInsets = windowInsets.viewInsets
-                )
-            ) {
-                Wrap(children = children)
-            }
+            Wrap(children = children)
         }
     }
 }
