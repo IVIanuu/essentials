@@ -17,46 +17,106 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
+import androidx.ui.core.Clip
+import androidx.ui.core.IntPx
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.VerticalScroller
-import com.ivianuu.essentials.ui.common.SafeArea
+import androidx.ui.core.Px
+import androidx.ui.core.RepaintBoundary
+import androidx.ui.core.max
+import androidx.ui.core.min
+import androidx.ui.core.round
+import androidx.ui.core.toPx
+import androidx.ui.foundation.shape.RectangleShape
+import androidx.ui.layout.Container
+import com.ivianuu.essentials.ui.common.ScrollPosition
+import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retained
 
 @Composable
 fun Scroller(
-    direction: Axis,
+    position: ScrollPosition = retained { ScrollPosition() },
     modifier: Modifier = Modifier.None,
-    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
-    isScrollable: Boolean = true,
-    applyBottomSafeArea: Boolean = true,
+    direction: Axis = Axis.Vertical,
+    enabled: Boolean = true,
     child: @Composable() () -> Unit
 ) {
-    when (direction) {
-        Axis.Horizontal -> {
-            HorizontalScroller(
-                modifier = modifier,
-                scrollerPosition = scrollerPosition,
-                isScrollable = isScrollable,
-                child = child
-            )
+    Scrollable(
+        position = position,
+        direction = direction,
+        enabled = enabled
+    ) {
+        ScrollerLayout(
+            position = position,
+            modifier = modifier,
+            direction = direction,
+            child = child
+        )
+    }
+}
+
+@Composable
+private fun ScrollerLayout(
+    position: ScrollPosition,
+    modifier: Modifier,
+    direction: Axis,
+    child: @Composable() () -> Unit
+) {
+    SingleChildLayout(child = {
+        Clip(RectangleShape) {
+            Container(alignment = Alignment.TopLeft) {
+                RepaintBoundary(children = child)
+            }
         }
-        Axis.Vertical -> {
-            VerticalScroller(
-                modifier = modifier,
-                scrollerPosition = scrollerPosition,
-                isScrollable = isScrollable
-            ) {
-                SafeArea(
-                    left = false,
-                    top = false,
-                    right = false,
-                    bottom = applyBottomSafeArea,
-                    children = child
+    }, modifier = modifier) { measurable, constraints ->
+        val childConstraints = constraints.copy(
+            maxHeight = when (direction) {
+                Axis.Vertical -> IntPx.Infinity
+                Axis.Horizontal -> constraints.maxHeight
+            },
+            maxWidth = when (direction) {
+                Axis.Vertical -> constraints.maxWidth
+                Axis.Horizontal -> IntPx.Infinity
+            }
+        )
+        val placeable = measurable?.measure(childConstraints)
+
+        val width: IntPx
+        val height: IntPx
+        if (placeable == null) {
+            width = constraints.minWidth
+            height = constraints.minHeight
+        } else {
+            width = min(placeable.width, constraints.maxWidth)
+            height = min(placeable.height, constraints.maxHeight)
+        }
+
+        layout(width, height) {
+            val newMaxValue = when (direction) {
+                Axis.Vertical -> max(
+                    Px.Zero,
+                    (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
+                )
+                Axis.Horizontal -> max(
+                    Px.Zero,
+                    (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
                 )
             }
+
+            if (position.maxValue != newMaxValue) {
+                position.updateBounds(Px.Zero, newMaxValue)
+            }
+
+            val childX = when (direction) {
+                Axis.Vertical -> IntPx.Zero
+                Axis.Horizontal -> -position.value.round()
+            }
+            val childY = when (direction) {
+                Axis.Vertical -> -position.value.round()
+                Axis.Horizontal -> IntPx.Zero
+            }
+            placeable?.place(childX, childY)
         }
     }
 }

@@ -18,11 +18,9 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutExpandedWidth
 import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retained
 
@@ -31,14 +29,14 @@ fun <T> ScrollableList(
     items: List<T>,
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
+    position: ScrollPosition = retained { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) {
     ScrollableList(
         modifier = modifier,
         direction = direction,
-        scrollerPosition = scrollerPosition,
+        position = position,
         enabled = enabled
     ) {
         items.forEachIndexed { index, item ->
@@ -51,17 +49,17 @@ fun <T> ScrollableList(
 fun ScrollableList(
     direction: Axis = Axis.Vertical,
     modifier: Modifier = Modifier.None,
-    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
+    position: ScrollPosition = retained { ScrollPosition() },
     enabled: Boolean = true,
     applyBottomSafeArea: Boolean = true,
     children: @Composable() () -> Unit
 ) {
     when (direction) {
         Axis.Horizontal -> {
-            HorizontalScroller(
+            Scroller(
                 modifier = modifier + LayoutExpandedWidth,
-                scrollerPosition = scrollerPosition,
-                isScrollable = enabled
+                position = position,
+                enabled = enabled
             ) {
                 Row {
                     children()
@@ -69,10 +67,10 @@ fun ScrollableList(
             }
         }
         Axis.Vertical -> {
-            VerticalScroller(
+            Scroller(
                 modifier = modifier + LayoutExpandedWidth,
-                scrollerPosition = scrollerPosition,
-                isScrollable = enabled
+                position = position,
+                enabled = enabled
             ) {
                 SafeArea(
                     left = false,
