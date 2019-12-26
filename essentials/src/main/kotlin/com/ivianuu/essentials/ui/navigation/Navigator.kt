@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.common.PointMarker
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
+import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -353,30 +354,31 @@ class NavigatorState(
 
     private inner class RouteState(val route: Route) {
 
-        private val retainedObjects =
-            RetainedObjects()
+        private val retainedObjects = RetainedObjects()
         private val result = CompletableDeferred<Any?>()
 
         private val overlayEntry = OverlayEntry(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                PointMarker(key = route) {
-                    ProvideCoroutineScope(coroutineScope()) {
-                        AbsorbPointer(absorb = absorbTouches) {
-                            RouteTransitionWrapper(
-                                transition = transition ?: defaultRouteTransition,
-                                state = transitionState,
-                                lastState = lastTransitionState,
-                                onTransitionComplete = onTransitionComplete,
-                                types = types,
-                                children = {
-                                    RouteAmbient.Provider(
-                                        value = route,
-                                        children = route.content
-                                    )
-                                }
-                            )
+                RetainedObjectsAmbient.Provider(retainedObjects) {
+                    PointMarker(key = route) {
+                        ProvideCoroutineScope(coroutineScope()) {
+                            AbsorbPointer(absorb = absorbTouches) {
+                                RouteTransitionWrapper(
+                                    transition = transition ?: defaultRouteTransition,
+                                    state = transitionState,
+                                    lastState = lastTransitionState,
+                                    onTransitionComplete = onTransitionComplete,
+                                    types = types,
+                                    children = {
+                                        RouteAmbient.Provider(
+                                            value = route,
+                                            children = route.content
+                                        )
+                                    }
+                                )
+                            }
                         }
                     }
                 }
