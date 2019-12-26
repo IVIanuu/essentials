@@ -22,8 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.core.Environment
+import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -47,7 +47,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open val containerId: Int
         get() = android.R.id.content
 
-    private val retainedObjects = RetainedObjects()
+    private val retainedObjects =
+        RetainedObjects()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

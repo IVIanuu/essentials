@@ -23,11 +23,7 @@ import androidx.compose.remember
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.KeyboardManager
-import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
-import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -52,7 +48,12 @@ fun Environment(
         ActivityAmbient with activity,
         ComponentAmbient with component,
         CoroutineContextAmbient with coroutineScope.coroutineContext,
-        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
+        KeyboardManagerAmbient with remember {
+            KeyboardManager(
+                focusManager,
+                activity
+            )
+        },
         RetainedObjectsAmbient with retainedObjects
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {

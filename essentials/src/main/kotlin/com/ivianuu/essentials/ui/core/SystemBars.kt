@@ -23,14 +23,12 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.ambient
-import androidx.compose.frames.modelListOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag
@@ -125,8 +123,7 @@ private val SystemBarStyleAmbient = Ambient.of { SystemBarStyle() }
 
 internal class SystemBarManager(private val activity: Activity) {
 
-    private val styles = modelListOf<SystemBarStyle>()
-    var currentStyle: SystemBarStyle by framed(SystemBarStyle())
+    private val styles = mutableListOf<SystemBarStyle>()
 
     init {
         activity.window.decorView.systemUiVisibility =
@@ -143,12 +140,12 @@ internal class SystemBarManager(private val activity: Activity) {
     }
 
     fun unregisterStyle(style: SystemBarStyle) {
-        styles -= style
+        styles.removeAt(styles.lastIndexOf(style))
         update()
     }
 
     private fun update() {
-        currentStyle = styles.lastOrNull() ?: SystemBarStyle()
+        val currentStyle = styles.lastOrNull() ?: SystemBarStyle()
 
         d { "apply system bar style $currentStyle" }
 

@@ -28,9 +28,9 @@ import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
 import com.ivianuu.essentials.ui.common.PointMarker
-import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -353,7 +353,8 @@ class NavigatorState(
 
     private inner class RouteState(val route: Route) {
 
-        private val retainedObjects = RetainedObjects()
+        private val retainedObjects =
+            RetainedObjects()
         private val result = CompletableDeferred<Any?>()
 
         private val overlayEntry = OverlayEntry(

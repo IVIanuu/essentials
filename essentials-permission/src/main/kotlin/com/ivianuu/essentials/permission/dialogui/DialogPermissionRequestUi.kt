@@ -23,6 +23,7 @@ import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
+import androidx.ui.graphics.Color
 import androidx.ui.res.stringResource
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.Desc
@@ -37,6 +38,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.core.ActivityAmbient
+import com.ivianuu.essentials.ui.core.ProvideWindowColor
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
@@ -63,7 +65,9 @@ class DialogPermissionRequestUi(
             DialogRoute(
                 dismissHandler = { ambient(ActivityAmbient).finish() }
             ) {
-                PermissionDialog(request = request)
+                ProvideWindowColor(color = Color.Transparent) {
+                    PermissionDialog(request = request)
+                }
             }
         )
     }

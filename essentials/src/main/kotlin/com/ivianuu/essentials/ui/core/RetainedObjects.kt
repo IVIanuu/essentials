@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
@@ -81,7 +81,10 @@ fun <T> RetainedObjects.getOrSetIfChanged(
     }
 
     if (value == null) {
-        value = ValueWithInputs(defaultValue(), inputs)
+        value = ValueWithInputs(
+            defaultValue(),
+            inputs
+        )
         set(key, value)
     }
 
@@ -91,10 +94,11 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 val RetainedObjectsAmbient = Ambient.of<RetainedObjects>()
 
 @Composable
-inline fun <T> retained(noinline init: () -> T): T = retained(
-    key = sourceLocation(),
-    init = init
-)
+inline fun <T> retained(noinline init: () -> T): T =
+    retained(
+        key = sourceLocation(),
+        init = init
+    )
 
 @Composable
 fun <T> retained(
@@ -137,7 +141,8 @@ inline fun <T> retainedState(
 fun <T> retainedState(
     key: Any,
     init: () -> T
-): MutableState<T> = retained(key) { mutableStateOf(init()) }
+): MutableState<T> =
+    retained(key) { mutableStateOf(init()) }
 
 @Composable
 inline fun <T> retainedStateFor(
@@ -154,4 +159,7 @@ fun <T> retainedStateFor(
     key: Any,
     vararg inputs: Any?,
     init: () -> T
-): MutableState<T> = retained(key, *inputs) { mutableStateOf(init()) }
+): MutableState<T> = retained(
+    key,
+    *inputs
+) { mutableStateOf(init()) }

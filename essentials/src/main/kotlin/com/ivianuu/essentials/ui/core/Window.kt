@@ -42,7 +42,7 @@ private class WindowColorState {
     }
 
     fun unregisterWindowColor(color: Color) {
-        windowColors -= color
+        windowColors.removeAt(windowColors.lastIndexOf(color))
     }
 }
 
