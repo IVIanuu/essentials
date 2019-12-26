@@ -134,13 +134,13 @@ fun FloatingActionButton(
                 Text(text = text)
             }
         } else {
-            Padding(left = 20.dp, right = 20.dp) {
+            Padding(left = 12.dp, right = 20.dp) {
                 Row(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     Icon(image = icon)
-                    Spacer(LayoutWidth(20.dp))
+                    Spacer(LayoutWidth(12.dp))
                     Text(text = text)
                 }
             }
