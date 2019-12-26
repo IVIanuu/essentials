@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.layout
 
+import androidx.compose.Immutable
 import androidx.ui.core.Constraints
 import androidx.ui.core.DensityScope
 import androidx.ui.core.Dp
@@ -23,6 +24,7 @@ import androidx.ui.core.LayoutModifier
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
 
+@Immutable
 data class LayoutLimited(
     val maxWidth: Dp = Dp.Infinity,
     val maxHeight: Dp = Dp.Infinity

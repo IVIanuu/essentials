@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.MutableState
 import androidx.compose.ambient
 import androidx.compose.key
@@ -48,6 +49,7 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperController
 
+@Immutable
 data class BottomNavigationBarStyle(val color: Color)
 
 val BottomNavigationBarStyleAmbient = Ambient.of<BottomNavigationBarStyle?>()

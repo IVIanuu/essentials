@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
@@ -26,6 +27,7 @@ import androidx.ui.layout.LayoutPadding
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Surface
 
+@Immutable
 data class PopupStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp)
 )

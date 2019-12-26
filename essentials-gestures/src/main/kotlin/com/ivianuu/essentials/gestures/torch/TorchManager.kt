@@ -29,9 +29,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 
 /**
  * Provides the torch state
@@ -54,11 +54,10 @@ class TorchManager internal constructor(
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
-            .flowOn(dispatchers.main)
             .launchIn(GlobalScope)
     }
 
-    fun toggleTorch() {
+    suspend fun toggleTorch() = withContext(dispatchers.main) {
         tryOrToast {
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {

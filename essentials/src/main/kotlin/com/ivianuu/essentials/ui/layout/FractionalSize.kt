@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.layout
 
+import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
 import androidx.ui.core.DensityScope
@@ -23,6 +24,7 @@ import androidx.ui.core.IntPxPosition
 import androidx.ui.core.IntPxSize
 import androidx.ui.core.LayoutModifier
 
+@Immutable
 data class LayoutFractionalSize(
     val widthFactor: Float? = null,
     val heightFactor: Float? = null,

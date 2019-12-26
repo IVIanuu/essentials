@@ -31,12 +31,10 @@ class Shell(private val dispatchers: AppDispatchers) {
         SU.run(commands).toList()
     }
 
+    suspend fun run(commands: Iterable<String>): List<String> =
+        run(*commands.toList().toTypedArray())
+
     suspend fun isAvailable(): Boolean = withContext(dispatchers.io) {
         SU.available()
     }
 }
-
-suspend fun Shell.run(command: String): List<String> = run(command)
-
-suspend fun Shell.run(commands: Iterable<String>): List<String> =
-    run(*commands.toList().toTypedArray())

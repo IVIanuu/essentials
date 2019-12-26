@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.layout
 
+import androidx.compose.Immutable
 import androidx.ui.core.DensityScope
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPxPosition
@@ -23,6 +24,7 @@ import androidx.ui.core.IntPxSize
 import androidx.ui.core.LayoutModifier
 import androidx.ui.core.dp
 
+@Immutable
 data class LayoutOffset(
     val offsetX: Dp = 0.dp,
     val offsetY: Dp = 0.dp
@@ -35,6 +37,7 @@ data class LayoutOffset(
     }
 }
 
+@Immutable
 data class LayoutPercentOffset(
     val percentX: Float = 0f,
     val percentY: Float = 0f

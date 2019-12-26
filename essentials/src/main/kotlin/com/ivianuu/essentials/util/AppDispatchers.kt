@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.compose.Immutable
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
  * App coroutine dispatchers
  */
+@Immutable
 data class AppDispatchers(
     val default: CoroutineDispatcher,
     val io: CoroutineDispatcher,

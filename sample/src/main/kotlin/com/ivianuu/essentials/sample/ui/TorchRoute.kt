@@ -26,11 +26,14 @@ import com.ivianuu.essentials.gestures.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
@@ -44,9 +47,14 @@ val TorchRoute = Route {
                     style = MaterialTheme.typography().h4
                 )
                 Spacer(LayoutHeight(8.dp))
+                val coroutineScope = coroutineScope
                 Button(
                     text = "Toggle torch",
-                    onClick = { torchManager.toggleTorch() }
+                    onClick = {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            torchManager.toggleTorch()
+                        }
+                    }
                 )
             }
         }

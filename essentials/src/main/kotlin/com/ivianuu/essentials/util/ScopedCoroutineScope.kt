@@ -21,15 +21,22 @@ import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-
-private val CoroutineScopeKey = Properties.Key<CoroutineScope>()
+import java.util.concurrent.ConcurrentHashMap
 
 val Scope.coroutineScope: CoroutineScope
-    get() = properties.getOrSet(CoroutineScopeKey) {
+    get() = CoroutineScopeByScope.getOrPut(this) {
         ScopedCoroutineScope(this)
+            .also {
+                onClose {
+                    CoroutineScopeByScope -= this
+                }
+            }
     }
 
 private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
     private val job = Job().cancelBy(scope)
     override val coroutineContext = job + Dispatchers.Main
 }
+
+private val CoroutineScopeByScope = ConcurrentHashMap<Scope, CoroutineScope>()
+

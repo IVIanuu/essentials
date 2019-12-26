@@ -32,11 +32,11 @@ class UnitValueTextProvider(
 ) : Function1<String, String> { // (String) -> String
 
     override fun invoke(value: String) = when (unit) {
-        Dp -> context.string(R.string.es_seek_bar_pref_format_dp, value)
-        Millis -> context.string(R.string.es_seek_bar_pref_format_millis, value)
-        Percentage -> context.string(R.string.es_seek_bar_pref_format_percentage, value)
-        Px -> context.string(R.string.es_seek_bar_pref_format_px, value)
-        Seconds -> context.string(R.string.es_seek_bar_pref_format_seconds, value)
+        Dp -> context.getString(R.string.es_seek_bar_pref_format_dp, value)
+        Millis -> context.getString(R.string.es_seek_bar_pref_format_millis, value)
+        Percentage -> context.getString(R.string.es_seek_bar_pref_format_percentage, value)
+        Px -> context.getString(R.string.es_seek_bar_pref_format_px, value)
+        Seconds -> context.getString(R.string.es_seek_bar_pref_format_seconds, value)
     }
 
     enum class Unit {

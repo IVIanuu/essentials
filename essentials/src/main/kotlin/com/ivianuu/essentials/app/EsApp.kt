@@ -19,8 +19,9 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.injection.EsModule
+import com.ivianuu.essentials.data.EsStoreModule
 import com.ivianuu.essentials.ui.core.EsUiInitializersModule
+import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.CodegenJustInTimeLookupFactory
@@ -31,6 +32,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
+import com.ivianuu.injekt.android.SystemServiceModule
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 
@@ -62,7 +64,15 @@ abstract class EsApp : Application(), InjektTrait {
 
     protected open fun createComponent(): Component {
         return ApplicationComponent {
-            modules(EsAppModule, EsModule, EsUiInitializersModule)
+            modules(
+                EsAppModule,
+                EsAppInitializersModule,
+                EsAppServicesModule,
+                EsStoreModule,
+                SystemServiceModule,
+                EsUiInitializersModule,
+                EsUtilModule
+            )
             modules(this@EsApp.modules())
         }
     }

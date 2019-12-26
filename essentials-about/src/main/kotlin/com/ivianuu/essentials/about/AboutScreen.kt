@@ -97,7 +97,7 @@ fun AboutSection(
 }
 
 @Composable
-fun AboutItem(
+private fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String

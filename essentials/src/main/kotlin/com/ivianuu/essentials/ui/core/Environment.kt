@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.core
 
+import androidx.activity.ComponentActivity
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.remember
@@ -37,6 +38,7 @@ import com.ivianuu.injekt.Name
 
 @Composable
 fun Environment(
+    activity: ComponentActivity,
     component: Component,
     retainedObjects: RetainedObjects,
     children: @Composable() () -> Unit
@@ -45,10 +47,11 @@ fun Environment(
     val focusManager = ambient(FocusManagerAmbient)
     val coroutineScope = coroutineScope()
     MultiAmbientProvider(
+        ActivityAmbient with activity,
         ComponentAmbient with component,
         CoroutineContextAmbient with coroutineScope.coroutineContext,
         KeyboardManagerAmbient with remember {
-            KeyboardManager(focusManager, composeView, inject())
+            KeyboardManager(focusManager, composeView, component.get())
         },
         RetainedObjectsAmbient with retainedObjects
     ) {

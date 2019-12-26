@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Environment
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.navigation.NavigatorState
@@ -75,12 +74,11 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     @Composable
     protected open fun WrapContentWithEnvironment(content: @Composable() () -> Unit) {
         Environment(
+            activity = this,
             component = component,
             retainedObjects = retainedObjects
         ) {
-            ActivityAmbient.Provider(this) {
-                content()
-            }
+            content()
         }
     }
 
