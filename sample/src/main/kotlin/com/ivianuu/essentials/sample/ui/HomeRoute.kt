@@ -95,12 +95,9 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
             ) { index, item ->
                 if (index == 0) {
                     var showBanner by unfoldBox(
-                        inject<PrefBoxFactory>().boolean(
-                            "show_banner",
-                            true
-                        )
+                        inject<PrefBoxFactory>().boolean("show_banner")
                     )
-                    if (showBanner) {
+                    if (showBanner == true) {
                         Banner(
                             leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
                             content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
