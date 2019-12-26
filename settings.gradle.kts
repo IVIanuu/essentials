@@ -40,6 +40,7 @@ include(
     ":essentials-permission",
     ":essentials-process-restart",
     ":essentials-securesettings",
+    ":essentials-service",
     ":essentials-shell",
     ":essentials-shortcutpicker",
     ":essentials-store",

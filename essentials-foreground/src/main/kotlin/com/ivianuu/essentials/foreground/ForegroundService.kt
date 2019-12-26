@@ -18,9 +18,9 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.work.EsService
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

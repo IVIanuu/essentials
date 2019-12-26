@@ -37,6 +37,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-permission/essentials-permission.iml" filepath="$PROJECT_DIR$/essentials-permission/essentials-permission.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-process-restart/essentials-process-restart.iml" filepath="$PROJECT_DIR$/essentials-process-restart/essentials-process-restart.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-service/essentials-service.iml" filepath="$PROJECT_DIR$/essentials-service/essentials-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" filepath="$PROJECT_DIR$/essentials-shortcutpicker/essentials-shortcutpicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-store/essentials-store.iml" filepath="$PROJECT_DIR$/essentials-store/essentials-store.iml" />

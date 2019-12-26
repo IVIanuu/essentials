@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.work
+package com.ivianuu.essentials.service
 
 import android.app.Service
 import android.content.Intent

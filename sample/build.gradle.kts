@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":essentials-process-restart"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-securesettings"))
+    implementation(project(":essentials-service"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-shortcutpicker"))
     implementation(project(":essentials-tile"))
