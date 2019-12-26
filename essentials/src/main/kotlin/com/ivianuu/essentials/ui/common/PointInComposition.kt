@@ -26,19 +26,8 @@ import androidx.compose.composer
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.sourceLocation
 
-@Composable
-inline fun PointMarker(noinline children: @Composable() () -> Unit) {
-    PointMarker(key = sourceLocation(), children = children)
-}
-
-@Composable
-fun PointMarker(key: Any, children: @Composable() () -> Unit) {
-    PointMarkerAmbient.Provider(value = key, children = children)
-}
-
-val PointMarkerAmbient = Ambient.of<Any?>()
-
 // todo find a better way to implement this
+
 @Composable
 fun pointInComposition(): Any {
     val composer = composer.composer
@@ -88,3 +77,15 @@ fun pointInComposition(): Any {
 
     return values.hashCode()
 }
+
+@Composable
+inline fun PointMarker(noinline children: @Composable() () -> Unit) {
+    PointMarker(key = sourceLocation(), children = children)
+}
+
+@Composable
+fun PointMarker(key: Any, children: @Composable() () -> Unit) {
+    PointMarkerAmbient.Provider(value = key, children = children)
+}
+
+private val PointMarkerAmbient = Ambient.of<Any?>()
