@@ -84,7 +84,7 @@ private fun AppInfo(
                 data = AppIcon(app.packageName),
                 modifier = LayoutSize(width = 40.dp, height = 40.dp)
             ) {
-                Icon(image = it, style = AvatarIconStyle())
+                if (it != null) Icon(image = it, style = AvatarIconStyle())
             }
         },
         onClick = onClick

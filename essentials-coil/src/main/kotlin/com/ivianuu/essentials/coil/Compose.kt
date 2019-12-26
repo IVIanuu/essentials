@@ -16,13 +16,15 @@
 
 package com.ivianuu.essentials.coil
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.remember
+import androidx.compose.ambient
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
 import coil.api.getAny
+import com.ivianuu.essentials.ui.core.call
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
@@ -30,9 +32,23 @@ import com.ivianuu.essentials.ui.injekt.inject
 @Composable
 fun image(
     data: Any,
+    placeholder: Image? = ambient(PlaceholderAmbient),
+    imageLoader: ImageLoader = inject()
+): Image? {
+    return if (placeholder != null) {
+        image(data = data, placeholder = placeholder, imageLoader = imageLoader)
+    } else {
+        image(data = data, imageLoader = imageLoader)
+    }
+}
+
+@JvmName("imageNonNullPlaceholder")
+@Composable
+fun image(
+    data: Any,
     placeholder: Image,
     imageLoader: ImageLoader = inject()
-): Image = image(data, imageLoader) ?: placeholder
+): Image = image(data = data, imageLoader = imageLoader) ?: placeholder
 
 @Composable
 fun image(
@@ -44,27 +60,47 @@ fun image(
     }
 }
 
+val PlaceholderAmbient = Ambient.of<Image?>()
+// todo make non null once we have something like ambientOrNull or ambientOrDefault
+
 @Composable
 fun Image(
     data: Any,
     modifier: Modifier = Modifier.None,
-    placeholder: Image? = null,
+    placeholder: Image? = ambient(PlaceholderAmbient),
+    imageLoader: ImageLoader = inject(),
+    image: @Composable() (Image?) -> Unit
+) {
+    call(data, modifier, placeholder, imageLoader, image) {
+        val loadedImage = image(
+            placeholder = placeholder,
+            data = data,
+            imageLoader = imageLoader
+        )
+
+        Container(modifier = modifier) {
+            image(loadedImage)
+        }
+    }
+}
+
+@JvmName("ImageNonNullPlaceholder")
+@Composable
+fun Image(
+    data: Any,
+    modifier: Modifier = Modifier.None,
+    placeholder: Image,
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image) -> Unit
 ) {
-    val wasPlaceholderNull = placeholder == null
-    // todo better default placeholder
-    val placeholder = remember(placeholder) {
-        placeholder ?: Image(1, 1)
-    }
-    val loadedImage = image(
-        placeholder = placeholder,
-        data = data,
-        imageLoader = imageLoader
-    )
+    call(data, modifier, placeholder, imageLoader, image) {
+        val loadedImage = image(
+            placeholder = placeholder,
+            data = data,
+            imageLoader = imageLoader
+        )
 
-    Container(modifier = modifier) {
-        if (!wasPlaceholderNull || loadedImage != placeholder) {
+        Container(modifier = modifier) {
             image(loadedImage)
         }
     }

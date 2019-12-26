@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.Composable
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.Dp
 import androidx.ui.graphics.Image
@@ -29,6 +30,7 @@ import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
 import com.ivianuu.essentials.ui.common.withDensity
 
+@Composable
 fun EmptyImage(
     width: Dp,
     height: Dp
