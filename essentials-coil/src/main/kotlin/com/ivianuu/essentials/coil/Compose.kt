@@ -60,8 +60,8 @@ fun image(
     }
 }
 
-val PlaceholderAmbient = Ambient.of<Image?>()
 // todo make non null once we have something like ambientOrNull or ambientOrDefault
+val PlaceholderAmbient = Ambient.of<Image?>()
 
 @Composable
 fun Image(
