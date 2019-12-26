@@ -17,19 +17,19 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Axis
+import com.ivianuu.essentials.ui.core.retained
 
 @Composable
 fun Scroller(
     direction: Axis,
     modifier: Modifier = Modifier.None,
-    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
+    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
     isScrollable: Boolean = true,
     applyBottomSafeArea: Boolean = true,
     child: @Composable() () -> Unit

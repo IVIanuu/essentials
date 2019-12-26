@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.ScrollerPosition
@@ -25,13 +24,14 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutExpandedWidth
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Axis
+import com.ivianuu.essentials.ui.core.retained
 
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
+    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) {
@@ -51,7 +51,7 @@ fun <T> ScrollableList(
 fun ScrollableList(
     direction: Axis = Axis.Vertical,
     modifier: Modifier = Modifier.None,
-    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
+    scrollerPosition: ScrollerPosition = retained { ScrollerPosition() },
     enabled: Boolean = true,
     applyBottomSafeArea: Boolean = true,
     children: @Composable() () -> Unit
