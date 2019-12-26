@@ -18,7 +18,7 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.EsAppInitializersModule
 import com.ivianuu.essentials.app.EsAppServicesModule
-import com.ivianuu.essentials.util.EsStoreModule
+import com.ivianuu.essentials.data.EsStoreModule
 import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.SystemServiceModule

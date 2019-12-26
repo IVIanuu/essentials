@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.data
 
 import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.SharedPreferencesImporter
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.android.ForApplication
