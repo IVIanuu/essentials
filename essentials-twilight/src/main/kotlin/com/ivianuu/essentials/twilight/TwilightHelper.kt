@@ -24,13 +24,12 @@ import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -51,8 +50,8 @@ class TwilightHelper(
     prefs: TwilightPrefs
 ) : AppService {
 
-    private val _isDark = ConflatedBroadcastChannel(false)
-    val isDark: Flow<Boolean> get() = _isDark.asFlow()
+    private val _isDark = StateFlow(false)
+    val isDark: Flow<Boolean> get() = _isDark
     val currentIsDark: Boolean get() = _isDark.value
 
     init {
@@ -67,7 +66,7 @@ class TwilightHelper(
                 }
             }
             .distinctUntilChanged()
-            .onEach { _isDark.offer(it) }
+            .onEach { _isDark.value = it }
             .launchIn(GlobalScope)
     }
 

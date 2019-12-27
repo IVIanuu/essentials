@@ -18,6 +18,7 @@ package com.ivianuu.essentials.mvrx
 
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
@@ -25,15 +26,12 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
@@ -42,15 +40,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
 /**
  * State view model
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val channel = ConflatedBroadcastChannel(initialState)
-    val flow: Flow<S>
-        get() = channel.asFlow()
+    private val channel = StateFlow(initialState)
+    val flow: Flow<S> get() = channel
 
     private var _state: S = initialState
     val state: S get() = synchronized(stateLock) { _state }
@@ -63,7 +61,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             val newState = reducer(currentState)
             if (currentState != newState) {
                 synchronized(stateLock) { _state = newState }
-                channel.offer(newState)
+                channel.value = newState
             }
         }
     }

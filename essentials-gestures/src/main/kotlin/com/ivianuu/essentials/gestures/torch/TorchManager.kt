@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.torch
 import android.hardware.camera2.CameraManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.util.AppDispatchers
@@ -26,9 +27,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -47,9 +46,8 @@ class TorchManager internal constructor(
     private val toaster: Toaster
 ) {
 
-    private val _torchState = ConflatedBroadcastChannel(false)
-    val torchState: Flow<Boolean>
-        get() = _torchState.asFlow()
+    private val _torchState = StateFlow(false)
+    val torchState: Flow<Boolean> get() = _torchState
 
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
@@ -95,7 +93,7 @@ class TorchManager internal constructor(
         } else {
             foregroundManager.stopForeground(foregroundComponent)
         }
-        _torchState.offer(enabled)
+        _torchState.value = enabled
     }
 
     companion object {

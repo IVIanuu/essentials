@@ -33,16 +33,15 @@ import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -72,7 +71,7 @@ class PurchaseManager(
         d { "on purchases update ${result.responseCode} ${result.debugMessage} $purchases" }
         refreshTrigger.offer(Unit)
     }
-    private val refreshTrigger = BroadcastChannel<Unit>(1)
+    private val refreshTrigger = EventFlow<Unit>()
 
     private val billingClient = billingClientProvider { parametersOf(updateListener) }
 
@@ -108,7 +107,7 @@ class PurchaseManager(
         }
 
         val success = merge(
-            refreshTrigger.asFlow()
+            refreshTrigger
                 .take(1)
                 .map { getIsPurchased(sku) },
 
@@ -198,7 +197,7 @@ class PurchaseManager(
 
         return merge(
             appMovedToForegroundFlow,
-            refreshTrigger.asFlow()
+            refreshTrigger
         )
             .onEach { d { "is purchased flow for $sku -> refresh triggered" } }
             .onStart { emit(Unit) }

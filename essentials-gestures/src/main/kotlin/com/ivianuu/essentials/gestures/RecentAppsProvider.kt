@@ -20,11 +20,10 @@ import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -44,9 +43,9 @@ class RecentAppsProvider : AccessibilityComponent() {
         get() = recentsApps
             .map { it.firstOrNull() }
 
-    private val _recentApps = ConflatedBroadcastChannel(emptyList<String>())
+    private val _recentApps = StateFlow(emptyList<String>())
     val recentsApps: Flow<List<String>>
-        get() = _recentApps.asFlow().distinctUntilChanged()
+        get() = _recentApps.distinctUntilChanged()
 
     private var recentAppsList = mutableListOf<String>()
 
@@ -98,7 +97,7 @@ class RecentAppsProvider : AccessibilityComponent() {
         d { "recent apps changed $result" }
 
         // push
-        _recentApps.offer(result)
+        _recentApps.value = result
     }
 
     companion object {

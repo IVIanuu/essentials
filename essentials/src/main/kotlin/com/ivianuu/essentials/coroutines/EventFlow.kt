@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
 
-interface EventFlow<T> : Flow<T>, FlowCollector<T> {
-    fun send(value: T)
+interface EventFlow<T> : Flow<T> {
+    fun offer(value: T)
 }
 
 fun <T> EventFlow(): EventFlow<T> = EventFlowImpl()
@@ -37,11 +37,7 @@ private class EventFlowImpl<T> : AbstractFlow<T>(), EventFlow<T> {
         collector.emitAll(channel.asFlow())
     }
 
-    override suspend fun emit(value: T) {
-        channel.send(value)
-    }
-
-    override fun send(value: T) {
+    override fun offer(value: T) {
         channel.offer(value)
     }
 }

@@ -29,6 +29,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
+import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
@@ -50,12 +51,8 @@ import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import com.ivianuu.scopes.ReusableScope
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -149,7 +146,7 @@ internal class CheckableAppsViewModel(
 
     private var onCheckedAppsChanged: ((Set<String>) -> Unit)? = null
     private val checkedAppsScope = ReusableScope()
-    private val checkedApps = BroadcastChannel<Set<String>>(Channel.CONFLATED)
+    private val checkedApps = StateFlow<Set<String>>()
 
     init {
         viewModelScope.launch(dispatchers.default) {
@@ -157,7 +154,7 @@ internal class CheckableAppsViewModel(
                 appStore.getInstalledApps().filter(appFilter)
             }
 
-            appsFlow.combine(checkedApps.asFlow()) { apps, checked ->
+            appsFlow.combine(checkedApps) { apps, checked ->
                 apps
                     .map {
                         CheckableApp(
@@ -177,7 +174,7 @@ internal class CheckableAppsViewModel(
         this.onCheckedAppsChanged = onCheckedAppsChanged
 
         checkedAppsFlow
-            .onEach { checkedApps.offer(it) }
+            .onEach { checkedApps.value = it }
             .launchIn(checkedAppsScope.coroutineScope)
     }
 
@@ -215,12 +212,10 @@ internal class CheckableAppsViewModel(
     }
 
     private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        checkedApps
-            .asFlow()
-            .first()
+        val newCheckedApps = checkedApps.value
             .toMutableSet()
             .apply(reducer)
-            .let { onCheckedAppsChanged?.invoke(it) }
+        onCheckedAppsChanged?.invoke(newCheckedApps)
     }
 }
 

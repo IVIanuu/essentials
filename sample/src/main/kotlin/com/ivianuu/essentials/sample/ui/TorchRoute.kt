@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.remember
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
@@ -39,7 +38,7 @@ val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
         Center {
             val torchManager = inject<TorchManager>()
-            val torchState = collect(remember { torchManager.torchState }, false)
+            val torchState = collect(torchManager.torchState, false)
 
             Column(crossAxisAlignment = CrossAxisAlignment.Center) {
                 Text(

@@ -21,7 +21,6 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.ambient
 import androidx.compose.mutableStateOf
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.pointInComposition
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
@@ -109,9 +108,6 @@ fun <T> retained(
 ): T {
     val retainedObjects = ambient(RetainedObjectsAmbient)
     return retainedObjects.getOrSet(key, init)
-        .also {
-            d { "retained $key result is $it" }
-        }
 }
 
 @Composable

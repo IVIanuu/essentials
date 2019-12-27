@@ -20,24 +20,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 
 @ApplicationScope
 @Single
 class ForegroundManager(private val context: Context) {
 
-    private val _updates = BroadcastChannel<Unit>(1)
-    val updates: Flow<Unit> get() = _updates.asFlow()
+    private val _updates = EventFlow<Unit>()
+    val updates: Flow<Unit> get() = _updates
 
     private val _components = mutableListOf<ForegroundComponent>()
     val components: List<ForegroundComponent> get() = _components.toList()
 
-    private val _stopServiceRequests = BroadcastChannel<Unit>(1)
-    internal val stopServiceRequests: Flow<Unit> get() = _stopServiceRequests.asFlow()
+    private val _stopServiceRequests = EventFlow<Unit>()
+    internal val stopServiceRequests: Flow<Unit> get() = _stopServiceRequests
 
     fun startForeground(component: ForegroundComponent) = synchronized(this) {
         if (component in _components) {

@@ -47,7 +47,7 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
 ): T {
     val viewModel = viewModel(type, from, key, factory)
     // recompose on changes
-    collect(remember { viewModel.flow })
+    collect(viewModel.flow)
     return viewModel
 }
 

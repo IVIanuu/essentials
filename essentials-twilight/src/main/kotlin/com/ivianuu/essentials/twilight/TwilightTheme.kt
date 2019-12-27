@@ -19,7 +19,6 @@ package com.ivianuu.essentials.twilight
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.remember
 import androidx.ui.animation.Transition
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
@@ -38,7 +37,7 @@ fun TwilightTheme(
     children: @Composable() () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
-    val isDark = collect(remember { helper.isDark }, helper.currentIsDark)
+    val isDark = collect(helper.isDark, helper.currentIsDark)
 
     Transition(
         definition = twilightTransitionDefinition,
