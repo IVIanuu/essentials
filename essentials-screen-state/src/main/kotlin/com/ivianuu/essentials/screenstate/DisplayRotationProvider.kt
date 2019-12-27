@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlin.time.seconds
 
 @ApplicationScope
 @Single
@@ -64,7 +65,7 @@ class DisplayRotationProvider(
         }
         .map { currentDisplayRotation }
         .distinctUntilChanged()
-        .replayShareIn(GlobalScope)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
 
     val currentDisplayRotation: DisplayRotation
         get() = when (windowManager.defaultDisplay.rotation) {

@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
 import java.lang.reflect.Method
+import kotlin.time.seconds
 
 /**
  * Provides info about the keyboard state
@@ -59,7 +60,7 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .replayShareIn(GlobalScope)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
 
     private fun getKeyboardHeight(): Int {
         return try {

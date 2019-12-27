@@ -28,6 +28,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import kotlin.time.seconds
 
 /**
  * Provides the current screen state
@@ -49,7 +50,7 @@ class ScreenStateProvider(
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getScreenState() }
-        .replayShareIn(GlobalScope)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
 
 
     suspend fun getScreenState() = withContext(dispatchers.default) {
