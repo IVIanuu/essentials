@@ -56,7 +56,9 @@ fun WindowSizeProvider(children: @Composable() () -> Unit) {
         onDispose { composeView.removeOnLayoutChangeListener(onLayoutChangeListener) }
     }
 
-    d { "window size w ${size.width} h ${size.height}" }
+    remember(size) {
+        d { "window size w ${size.width} h ${size.height}" }
+    }
 
     WindowSizeAmbient.Provider(
         value = size,

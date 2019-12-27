@@ -87,7 +87,7 @@ class NavBarController internal constructor(
         merge(flows)
             .onStart { emit(Unit) }
             .map {
-                !config.showWhileScreenOff || screenStateProvider.getScreenState() != ScreenState.Unlocked
+                !config.showWhileScreenOff || screenStateProvider.getScreenState() == ScreenState.Unlocked
             }
             .onEach {
                 prefs.wasNavBarHidden.set(it)
