@@ -23,4 +23,5 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:theme="@style/Theme.Es.Translucent" />
     </application>
+
 </manifest>
