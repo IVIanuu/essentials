@@ -157,7 +157,7 @@ private fun mergeVarArgToSingleArg(
 
         val valueParams = node.args
             .map { arg ->
-                arg to (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+                arg to ((resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter ?: return@visit)
             }
             .associateBy { it.first }
             .mapValues { it.value.second }
@@ -465,7 +465,7 @@ private fun wrapComposableLambdasInObserve(
                         val resulting = resolvedCall.resultingDescriptor as FunctionDescriptor
 
                         val argDescriptor = if (parentWithType is Node.ValueArg) {
-                            (resolvedCall.getArgumentMapping(parentWithType.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+                            (resolvedCall.getArgumentMapping(parentWithType.element as KtValueArgument) as? ArgumentMatch)?.valueParameter ?: return@visit
                         } else resulting.valueParameters.lastOrNull() ?: return@visit
 
                         val notInlined = !resulting.isInline || argDescriptor.isNoinline
@@ -725,9 +725,9 @@ private fun wrapComposableCalls(
             arg: Node.ValueArg,
             resolvedCall: ResolvedCall<*>,
             index: Int
-        ): Node.Stmt.Decl {
+        ): Node.Stmt.Decl? {
             val descriptor =
-                (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+                (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter ?: return null
 
             val argExpr = arg.expr
             val oldLabel =
@@ -952,7 +952,7 @@ private fun wrapComposableCalls(
                 stmts += initKeyStmt
                 if (node is Node.Expr.Call) {
                     node.args.forEachIndexed { index, arg ->
-                        stmts += initArgStmt(arg, resolvedCall, index)
+                        stmts += initArgStmt(arg, resolvedCall, index) ?: return@visit
                     }
 
                     resulting.valueParameters.forEachIndexed { index, param ->
