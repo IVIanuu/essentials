@@ -17,18 +17,17 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.replayShareIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -94,7 +93,7 @@ internal class DiskBoxImpl<T>(
     }
     private val writeLock = WriteLock()
 
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    private val coroutineScope = CoroutineScope(Job())
 
     private val file by lazy { File(path) }
 
@@ -104,6 +103,13 @@ internal class DiskBoxImpl<T>(
             cachedValue.set(this) // force refetching the value
             changeNotifier.offer(Unit)
         }
+
+    private val flow: Flow<T> = changeNotifier
+        .map { get() }
+        .onStart { emit(get()) }
+        .onStart { log { "$path -> start source flow" } }
+        .onCompletion { log { "$path -> end source flow" } }
+        .replayShareIn(coroutineScope)
 
     init {
         log { "$path -> init" }
@@ -235,12 +241,7 @@ internal class DiskBoxImpl<T>(
     override fun asFlow(): Flow<T> {
         log { "$path -> as flow" }
         checkNotDisposed()
-        return flow {
-            emit(get())
-            changeNotifier.collect {
-                emit(get())
-            }
-        }
+        return flow
     }
 
     override fun dispose() {
