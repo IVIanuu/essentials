@@ -95,14 +95,14 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 val RetainedObjectsAmbient = Ambient.of<RetainedObjects>()
 
 @Composable
-inline fun <T> retained(noinline init: () -> T): T =
-    retained(
+inline fun <T> retain(noinline init: () -> T): T =
+    retain(
         key = sourceLocation() to pointInComposition(),
         init = init
     )
 
 @Composable
-fun <T> retained(
+fun <T> retain(
     key: Any,
     init: () -> T
 ): T {
@@ -111,17 +111,17 @@ fun <T> retained(
 }
 
 @Composable
-inline fun <T> retained(
+inline fun <T> retainFor(
     vararg inputs: Any?,
     noinline init: () -> T
-): T = retained(
+): T = retainFor(
     key = sourceLocation() to pointInComposition(),
     inputs = *inputs,
     init = init
 )
 
 @Composable
-fun <T> retained(
+fun <T> retainFor(
     key: Any,
     vararg inputs: Any?,
     init: () -> T
@@ -143,7 +143,7 @@ fun <T> retainedState(
     key: Any,
     init: () -> T
 ): MutableState<T> =
-    retained(key) { mutableStateOf(init()) }
+    retain(key) { mutableStateOf(init()) }
 
 @Composable
 inline fun <T> retainedStateFor(
@@ -160,7 +160,7 @@ fun <T> retainedStateFor(
     key: Any,
     vararg inputs: Any?,
     init: () -> T
-): MutableState<T> = retained(
+): MutableState<T> = retainFor(
     key,
     *inputs
 ) { mutableStateOf(init()) }

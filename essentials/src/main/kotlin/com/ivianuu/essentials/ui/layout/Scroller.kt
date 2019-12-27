@@ -32,11 +32,11 @@ import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.retained
+import com.ivianuu.essentials.ui.core.retain
 
 @Composable
 fun Scroller(
-    position: ScrollPosition = retained { ScrollPosition() },
+    position: ScrollPosition = retain { ScrollPosition() },
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,

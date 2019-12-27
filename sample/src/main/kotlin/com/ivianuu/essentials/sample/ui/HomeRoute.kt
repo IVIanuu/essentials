@@ -42,7 +42,7 @@ import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.retained
+import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.ScrollableList
@@ -134,7 +134,7 @@ private fun HomeItem(
     ListItem(
         title = { Text(item.title) },
         leading = {
-            val color = retained(item) {
+            val color = retain(item) {
                 ColorPickerPalette.values()
                     .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
                     .shuffled()

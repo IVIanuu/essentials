@@ -22,14 +22,14 @@ import androidx.ui.layout.LayoutExpandedWidth
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.retained
+import com.ivianuu.essentials.ui.core.retain
 
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    position: ScrollPosition = retained { ScrollPosition() },
+    position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) {
@@ -49,7 +49,7 @@ fun <T> ScrollableList(
 fun ScrollableList(
     direction: Axis = Axis.Vertical,
     modifier: Modifier = Modifier.None,
-    position: ScrollPosition = retained { ScrollPosition() },
+    position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
     applyBottomSafeArea: Boolean = true,
     children: @Composable() () -> Unit

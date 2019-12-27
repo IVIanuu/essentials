@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.retained
+import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.Scroller
 
 @Composable
 fun ScrollableDialog(
-    scrollPosition: ScrollPosition = retained { ScrollPosition() },
+    scrollPosition: ScrollPosition = retain { ScrollPosition() },
     scrollDirection: Axis = Axis.Vertical,
     scrollingEnabled: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
