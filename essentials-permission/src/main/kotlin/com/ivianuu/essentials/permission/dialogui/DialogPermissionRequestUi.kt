@@ -43,11 +43,13 @@ import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Factory
 class DialogPermissionRequestUi(
@@ -111,6 +113,7 @@ private fun Permission(
 
 @Factory
 class PermissionDialogViewModel(
+    private val dispatchers: AppDispatchers,
     private val manager: PermissionManager,
     @Param private val request: PermissionRequest
 ) : ViewModel() {
@@ -142,8 +145,10 @@ class PermissionDialogViewModel(
             if (permissionsToProcess.isEmpty()) {
                 request.onComplete()
             } else {
-                _permissionsToProcess.clear()
-                _permissionsToProcess += permissionsToProcess
+                withContext(dispatchers.main) {
+                    _permissionsToProcess.clear()
+                    _permissionsToProcess += permissionsToProcess
+                }
             }
         }
     }
