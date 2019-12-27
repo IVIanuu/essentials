@@ -16,9 +16,20 @@
 
 package com.ivianuu.essentials.ui.base
 
-import androidx.lifecycle.ViewModel
+import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.Scope
+import java.io.Closeable
 
 /**
  * Base view model
  */
-abstract class EsViewModel : ViewModel()
+abstract class ViewModel : Closeable {
+
+    private val _scope = MutableScope()
+    val scope: Scope get() = _scope
+
+    override fun close() {
+        _scope.close()
+    }
+
+}

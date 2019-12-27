@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.mvrx
 
-import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
-import com.ivianuu.essentials.ui.base.EsViewModel
+import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
+import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -46,7 +46,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * State view model
  */
-abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
+abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
     private val _state = StateFlow(initialState)
     val flow: Flow<S> get() = _state
@@ -68,13 +68,13 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
         flow.onEach(consumer)
             .flowOn(Dispatchers.Default)
-            .launchIn(viewModelScope)
+            .launchIn(scope.coroutineScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = Dispatchers.Default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
-    ): Job = viewModelScope.execute(
+    ): Job = scope.coroutineScope.execute(
         context = context,
         start = start,
         block = { await() },

@@ -35,8 +35,7 @@ val Scope.coroutineScope: CoroutineScope
 
 private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
     private val job = Job().cancelBy(scope)
-    override val coroutineContext = job + Dispatchers.Main
+    override val coroutineContext = job + Dispatchers.Default
 }
 
 private val CoroutineScopeByScope = ConcurrentHashMap<Scope, CoroutineScope>()
-

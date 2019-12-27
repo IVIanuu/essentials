@@ -22,7 +22,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.lifecycle.viewModelScope
 import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.activityresult.ActivityResult
@@ -38,9 +37,9 @@ import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.launch
 
@@ -74,14 +73,13 @@ private fun ShortcutInfo(
 
 @Factory
 internal class ShortcutPickerViewModel(
-    private val dispatchers: AppDispatchers,
     private val navigator: NavigatorState,
     private val packageManager: PackageManager
 ) : MvRxViewModel<ShortcutPickerState>(
     ShortcutPickerState()
 ) {
     init {
-        viewModelScope.execute(
+        scope.coroutineScope.execute(
             block = {
                 val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
                 packageManager.queryIntentActivities(shortcutsIntent, 0)
@@ -109,7 +107,7 @@ internal class ShortcutPickerViewModel(
     }
 
     fun infoClicked(info: ShortcutInfo) {
-        viewModelScope.launch(dispatchers.default) {
+        scope.coroutineScope.launch {
             try {
                 val shortcutRequestResult = navigator.push<ActivityResult>(
                     ActivityResultRoute(

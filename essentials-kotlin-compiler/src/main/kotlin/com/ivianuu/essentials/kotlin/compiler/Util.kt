@@ -53,7 +53,7 @@ fun FqName.asClassName() = ClassName.bestGuess(asString()) // todo
 
 fun KotlinType.asTypeName(): TypeName? {
     if (isError) return null
-    val type = constructor.declarationDescriptor!!.fqNameSafe.asClassName()
+    val type = constructor.declarationDescriptor?.fqNameSafe?.asClassName() ?: return null
     return (if (arguments.isNotEmpty()) {
         val parameters = arguments.map { it.type.asTypeName() }
         if (parameters.any { it == null }) return null
@@ -102,14 +102,14 @@ fun KotlinType.asType(): Node.Type? {
             ) else typeRef
         )
     } else {
-        val pathSegments = constructor.declarationDescriptor!!.fqNameSafe.pathSegments()
+        val pathSegments = constructor.declarationDescriptor?.fqNameSafe?.pathSegments() ?: return null
         val pieces = pathSegments.mapIndexed { index, name ->
             val typeParams = if (index != pathSegments.lastIndex) {
                 emptyList()
             } else {
-                arguments.map { projection ->
-                    val argType = projection.type.asType() ?: return null
-                    argType.mods = when (projection.projectionKind) {
+                arguments.map { argument ->
+                    val argType = argument.type.asType() ?: return null
+                    argType.mods = when (argument.projectionKind) {
                         Variance.INVARIANT -> emptyList()
                         Variance.IN_VARIANCE -> listOf(
                             Node.Modifier.Lit(keyword = Node.Modifier.Keyword.IN)

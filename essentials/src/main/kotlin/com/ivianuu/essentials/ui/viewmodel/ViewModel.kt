@@ -18,46 +18,31 @@ package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
 import androidx.compose.ambient
-import androidx.compose.remember
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.core.retained
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.util.defaultViewModelFactory
-import com.ivianuu.essentials.util.defaultViewModelKey
-import com.ivianuu.essentials.util.getViewModel
+import com.ivianuu.essentials.util.sourceLocation
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
-import kotlin.reflect.KClass
 
 @Composable
-inline fun <reified T : ViewModel> viewModel(
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { T::class.defaultViewModelKey },
-    noinline factory: () -> T = defaultViewModelFactory(T::class)
-): T = viewModel(type = T::class, key = key, from = from, factory = factory)
+inline fun <T : ViewModel> viewModel(noinline factory: () -> T): T =
+    viewModel(key = sourceLocation(), factory = factory)
 
 @Composable
 fun <T : ViewModel> viewModel(
-    type: KClass<T>,
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { type.defaultViewModelKey },
-    factory: () -> T = defaultViewModelFactory(type)
-): T = remember {
-    from.getViewModel(type = type, key = key, from = from, factory = factory)
-}
+    key: Any,
+    factory: () -> T
+): T = retained(key = key, init = factory)
 
 @Composable
 inline fun <reified T : ViewModel> injectViewModel(
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { T::class.defaultViewModelKey },
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
 ): T = injectViewModel(
-    typeOf<T>(),
-    from,
-    key,
+    typeOf(),
+    sourceLocation(),
     name,
     parameters
 )
@@ -65,15 +50,12 @@ inline fun <reified T : ViewModel> injectViewModel(
 @Composable
 fun <T : ViewModel> injectViewModel(
     type: Type<T>,
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { type.defaultViewModelKey },
+    key: Any,
     name: Any? = null,
     parameters: ParametersDefinition? = null
 ): T {
     val component = ambient(ComponentAmbient)
     return viewModel(
-        type = type.raw as KClass<T>,
-        from = from,
         key = key,
         factory = { component.get(type = type, name = name, parameters = parameters) }
     )

@@ -45,7 +45,6 @@ object Deps {
             private const val version = "2.2.0-rc02"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
-            const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
         }
 
         object Test {
@@ -103,7 +102,7 @@ object Deps {
     }
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev365"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev372"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 

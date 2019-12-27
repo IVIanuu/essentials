@@ -22,7 +22,6 @@ import androidx.compose.Recompose
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.viewModelScope
 import androidx.ui.res.stringResource
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.Desc
@@ -35,7 +34,7 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.ui.base.EsViewModel
+import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
@@ -44,6 +43,7 @@ import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -113,7 +113,7 @@ private fun Permission(
 class PermissionDialogViewModel(
     private val manager: PermissionManager,
     @Param private val request: PermissionRequest
-) : EsViewModel() {
+) : ViewModel() {
 
     private val _permissionsToProcess = modelListOf<Permission>()
     val permissionsToProcess: List<Permission> get() = _permissionsToProcess
@@ -123,7 +123,7 @@ class PermissionDialogViewModel(
     }
 
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
-        viewModelScope.launch {
+        scope.coroutineScope.launch {
             d { "request $permission" }
             manager.requestHandlerFor(permission)
                 .request(activity, manager, permission)
@@ -133,7 +133,7 @@ class PermissionDialogViewModel(
     }
 
     private fun updatePermissionsToProcessOrFinish() {
-        viewModelScope.launch {
+        scope.coroutineScope.launch {
             val permissionsToProcess = request.permissions
                 .filterNot { manager.hasPermissions(it) }
 

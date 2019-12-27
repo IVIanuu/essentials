@@ -21,7 +21,6 @@ import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.compose.onCommit
 import androidx.compose.remember
-import androidx.lifecycle.viewModelScope
 import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
@@ -43,7 +42,6 @@ import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
@@ -140,8 +138,7 @@ private fun CheckableApp(
 @Factory
 internal class CheckableAppsViewModel(
     @Param private val appFilter: AppFilter,
-    private val appStore: AppStore,
-    private val dispatchers: AppDispatchers
+    private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
@@ -149,7 +146,7 @@ internal class CheckableAppsViewModel(
     private val checkedApps = StateFlow<Set<String>>()
 
     init {
-        viewModelScope.launch(dispatchers.default) {
+        scope.coroutineScope.launch {
             val appsFlow = flowOf {
                 appStore.getInstalledApps().filter(appFilter)
             }
@@ -184,7 +181,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun appClicked(app: CheckableApp) {
-        viewModelScope.launch(dispatchers.default) {
+        scope.coroutineScope.launch {
             pushNewCheckedApps {
                 if (!app.isChecked) {
                     it += app.info.packageName
@@ -196,7 +193,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun selectAllClicked() {
-        viewModelScope.launch(dispatchers.default) {
+        scope.coroutineScope.launch {
             state.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
@@ -206,7 +203,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun deselectAllClicked() {
-        viewModelScope.launch(dispatchers.default) {
+        scope.coroutineScope.launch {
             pushNewCheckedApps { it.clear() }
         }
     }

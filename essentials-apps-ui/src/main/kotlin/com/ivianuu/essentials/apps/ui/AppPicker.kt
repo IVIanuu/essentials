@@ -19,7 +19,6 @@ package com.ivianuu.essentials.apps.ui
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
-import androidx.lifecycle.viewModelScope
 import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
@@ -41,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -100,7 +100,7 @@ internal class AppPickerViewModel(
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
-        viewModelScope.execute(
+        scope.coroutineScope.execute(
             context = dispatchers.default,
             block = {
                 appStore.getInstalledApps()
