@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CheckableAppsScreen(
     checkedAppsFlow: Flow<Set<String>>,
-    onCheckedAppsChanged: (Set<String>) -> Unit,
+    onCheckedAppsChanged: suspend (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) {
@@ -144,7 +144,7 @@ internal class CheckableAppsViewModel(
     private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
-    private var onCheckedAppsChanged: ((Set<String>) -> Unit)? = null
+    private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = StateFlow<Set<String>>()
 
@@ -169,7 +169,7 @@ internal class CheckableAppsViewModel(
 
     fun attach(
         checkedAppsFlow: Flow<Set<String>>,
-        onCheckedAppsChanged: (Set<String>) -> Unit
+        onCheckedAppsChanged: suspend (Set<String>) -> Unit
     ) {
         this.onCheckedAppsChanged = onCheckedAppsChanged
 

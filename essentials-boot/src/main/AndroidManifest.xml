@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.ivianuu.essentials.boot"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ivianuu.essentials.boot">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 

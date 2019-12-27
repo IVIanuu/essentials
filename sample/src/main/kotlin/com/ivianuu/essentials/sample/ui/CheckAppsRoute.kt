@@ -29,14 +29,9 @@ import kotlinx.coroutines.launch
 val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()
     val box = remember { boxFactory.stringSet("apps") }
-    val coroutineScope = coroutineScope
     CheckableAppsScreen(
         checkedAppsFlow = box.asFlow(),
-        onCheckedAppsChanged = { newValue ->
-            coroutineScope.launch {
-                box.set(newValue)
-            }
-        },
+        onCheckedAppsChanged = { newValue -> box.set(newValue) },
         appBarTitle = "Send check apps",
         appFilter = inject<LaunchableAppFilter>()
     )

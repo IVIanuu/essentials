@@ -43,7 +43,7 @@ class ProcessRestarter(
     }
 
     fun restartProcess(intent: Intent = getMainIntent()) {
-        d { "restart process" }
+        d { "restart process %$intent" }
         ProcessRestartActivity.launch(context, intent)
         Runtime.getRuntime().exit(0)
     }
@@ -51,5 +51,4 @@ class ProcessRestarter(
     private fun getMainIntent(): Intent =
         packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
             .addFlags(FLAG_ACTIVITY_NEW_TASK)
-            .addFlags(FLAG_ACTIVITY_CLEAR_TASK)
 }
