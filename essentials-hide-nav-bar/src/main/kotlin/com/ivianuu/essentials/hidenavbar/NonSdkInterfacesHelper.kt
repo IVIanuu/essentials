@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.hidenavbar
 
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.store.settings.SettingBox
+import com.ivianuu.essentials.store.settings.SettingsBoxFactory
 import com.ivianuu.essentials.store.settings.int
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Factory
@@ -26,7 +28,7 @@ import com.ivianuu.injekt.Factory
  */
 @Factory
 internal class NonSdkInterfacesHelper(
-    private val settings: com.ivianuu.essentials.store.settings.SettingsBoxFactory,
+    private val settings: SettingsBoxFactory,
     private val systemBuildInfo: SystemBuildInfo
 ) {
 
@@ -35,7 +37,7 @@ internal class NonSdkInterfacesHelper(
             d { "disable non sdk on 29" }
 
             val hiddenApiPolicy = settings.int(
-                "hidden_api_policy", com.ivianuu.essentials.store.settings.SettingBox.Type.Global
+                "hidden_api_policy", SettingBox.Type.Global
             )
             hiddenApiPolicy.set(1)
         } else if (systemBuildInfo.sdk >= 28) {
@@ -43,11 +45,11 @@ internal class NonSdkInterfacesHelper(
 
             val hiddenApiPrePieAppsSetting = settings.int(
                 "hidden_api_policy_pre_p_apps",
-                com.ivianuu.essentials.store.settings.SettingBox.Type.Global
+                SettingBox.Type.Global
             )
             val hiddenApiOnPieAppsSetting = settings.int(
                 "hidden_api_policy_p_apps",
-                com.ivianuu.essentials.store.settings.SettingBox.Type.Global
+                SettingBox.Type.Global
             )
 
             hiddenApiPrePieAppsSetting.set(1)

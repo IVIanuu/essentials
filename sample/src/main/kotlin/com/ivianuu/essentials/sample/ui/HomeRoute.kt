@@ -42,8 +42,9 @@ import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.retained
+import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
@@ -89,37 +90,31 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
             )
         },
         body = {
-            val items = remember { HomeItem.values().toList().sortedBy { it.name } }
-            ScrollableList(
-                items = items
-            ) { index, item ->
-                if (index == 0) {
-                    var showBanner by unfoldBox(
-                        inject<PrefBoxFactory>().boolean("show_banner")
-                    )
-                    if (showBanner == true) {
-                        Banner(
-                            leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
-                            content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
-                            actions = {
-                                Button(
-                                    text = "Dismiss",
-                                    onClick = { showBanner = false }
-                                )
+            ScrollableList {
+                var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
+                if (showBanner) {
+                    Banner(
+                        leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
+                        content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
+                        actions = {
+                            Button(
+                                text = "Dismiss",
+                                onClick = { showBanner = false }
+                            )
 
-                                Button(
-                                    text = "Learn More",
-                                    onClick = navigateOnClick {
-                                        showBanner = false
-                                        UrlRoute("https://google.com")
-                                    }
-                                )
-                            }
-                        )
-                    }
+                            Button(
+                                text = "Learn More",
+                                onClick = navigateOnClick {
+                                    showBanner = false
+                                    UrlRoute("https://google.com")
+                                }
+                            )
+                        }
+                    )
                 }
 
-                Column {
+                val items = remember { HomeItem.values().toList().sortedBy { it.name } }
+                items.forEachIndexed { index, item ->
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
                     if (index != items.lastIndex) {
@@ -138,7 +133,16 @@ private fun HomeItem(
 ) {
     ListItem(
         title = { Text(item.title) },
-        leading = { ColorAvatar(item.color) },
+        leading = {
+            val color = retained(item) {
+                ColorPickerPalette.values()
+                    .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                    .shuffled()
+                    .first()
+                    .front
+            }
+            ColorAvatar(color)
+        },
         trailing = {
             PopupMenuButton(
                 items = listOf(1, 2, 3),
@@ -177,17 +181,14 @@ private fun HomeDivider() {
 
 enum class HomeItem(
     val title: String,
-    val color: Color,
     val route: @Composable() () -> Route
 ) {
     About(
         title = "About",
-        color = Color.Yellow,
         route = { AboutRoute() }
     ),
     AppPicker(
         title = "App picker",
-        color = Color.Blue,
         route = {
             AppPickerRoute(
                 appFilter = inject<IntentAppFilter> {
@@ -198,97 +199,82 @@ enum class HomeItem(
     ),
     Billing(
         title = "Billing",
-        color = Color.Red,
         route = { BillingRoute }
     ),
     BottomNavigation(
         title = "Bottom navigation",
-        color = Color.Red,
         route = { BottomNavigationRoute }
     ),
     CheckApps(
         title = "Check apps",
-        color = Color.Green,
         route = { CheckAppsRoute }
     ),
     Chips(
         title = "Chips",
-        color = Color.Cyan,
         route = { ChipsRoute }
     ),
     Counter(
         title = "Counter",
-        color = Color.Yellow,
         route = { CounterRoute }
     ),
     Dialogs(
         title = "Dialogs",
-        color = Color.Gray,
         route = { DialogsRoute }
     ),
     Drawer(
         title = "Drawer",
-        color = Color.Blue,
         route = { DrawerRoute }
     ),
     NavBar(
         title = "Nav bar",
-        color = Color.Green,
         route = { NavBarRoute }
     ),
     Permission(
         title = "Permission",
-        color = Color.Magenta,
         route = { PermissionRoute }
     ),
     Prefs(
         title = "Prefs",
-        color = Color.Magenta,
         route = { PrefsRoute }
     ),
     RestartProcess(
         title = "Restart process",
-        color = Color.Magenta,
         route = { RestartProcessRoute }
     ),
     Scaffold(
         title = "Scaffold",
-        color = Color.Green,
         route = { ScaffoldRoute }
     ),
     ShortcutPicker(
         title = "Shortcut picker",
-        color = Color.Green,
         route = { ShortcutPickerRoute() }
     ),
     Tabs(
         title = "Tabs",
-        color = Color.Yellow,
         route = { TabsRoute }
     ),
     TextInput(
         title = "Text input",
-        color = Color.Magenta,
         route = { TextInputRoute }
     ),
     Timer(
         title = "Timer",
-        color = Color.Cyan,
         route = { TimerRoute }
     ),
     Torch(
         title = "Torch",
-        color = Color.Blue,
         route = { TorchRoute }
     ),
     Twilight(
         title = "Twilight",
-        color = Color.Gray,
         route = { TwilightSettingsRoute }
+    ),
+    Unlock(
+        title = "Unlock",
+        route = { UnlockRoute }
     ),
     Work(
         title = "Work",
-        color = Color.Gray,
         route = { WorkRoute }
     )
 }

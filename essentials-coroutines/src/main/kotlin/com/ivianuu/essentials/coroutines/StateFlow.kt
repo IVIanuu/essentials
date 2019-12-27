@@ -31,6 +31,10 @@ interface MutableStateFlow<T> : StateFlow<T> {
     override var value: T
 }
 
+fun <T> MutableStateFlow<T>.setIfChanged(value: T) {
+    if (this.value != value) this.value = value
+}
+
 fun <T> StateFlow(): MutableStateFlow<T> =
     DataFlowImpl(Null)
 

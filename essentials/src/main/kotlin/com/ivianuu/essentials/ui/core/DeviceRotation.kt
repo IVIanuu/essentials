@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures.torch
+package com.ivianuu.essentials.ui.core
 
-import com.ivianuu.essentials.foreground.ForegroundComponent
-import com.ivianuu.injekt.Factory
-
-@Factory
-internal class TorchForegroundComponent internal constructor(
-    override val notificationFactory: TorchNotificationFactory
-) : ForegroundComponent()
+enum class DisplayRotation(val isPortrait: Boolean) {
+    // 0 degrees
+    PortraitUp(true),
+    // 90 degrees
+    LandscapeLeft(false),
+    // 180 degrees
+    PortraitDown(true),
+    // 270 degrees
+    LandscapeRight(false)
+}

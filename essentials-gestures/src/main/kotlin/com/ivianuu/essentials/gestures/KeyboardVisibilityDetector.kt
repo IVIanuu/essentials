@@ -21,10 +21,11 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -47,20 +48,18 @@ class KeyboardVisibilityDetector(
 
     private val softInputChanges = EventFlow<Unit>()
 
-    val keyboardVisible: Flow<Boolean>
-        get() {
-            return softInputChanges
-                .onStart { emit(Unit) }
-                .transformLatest {
-                    while (true) {
-                        emit(Unit)
-                        delay(100)
-                    }
-                }
-                .map { getKeyboardHeight() }
-                .map { it > 0 }
-                .distinctUntilChanged()
+    val keyboardVisible = softInputChanges
+        .onStart { emit(Unit) }
+        .transformLatest {
+            while (true) {
+                emit(Unit)
+                delay(100)
+            }
         }
+        .map { getKeyboardHeight() }
+        .map { it > 0 }
+        .distinctUntilChanged()
+        .replayShareIn(GlobalScope)
 
     private fun getKeyboardHeight(): Int {
         return try {

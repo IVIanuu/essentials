@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures.unlock
+package com.ivianuu.essentials.unlock
 
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppDispatchers
@@ -43,9 +45,30 @@ class UnlockScreenActivity : EsActivity() {
     private val screenUnlocker: ScreenUnlocker by inject()
     private val systemBuildInfo: SystemBuildInfo by inject()
 
+    private var hasResult = false
+    private var valid = true
+    private lateinit var requestId: String
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!intent.hasExtra(KEY_REQUEST_ID)) {
+            valid = false
+            finish()
+            return
+        }
+
+        requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
+
+        d { "unlock screen for $requestId" }
+
+        fun finishWithResult(success: Boolean) {
+            d { "finish with result $success" }
+            hasResult = true
+            screenUnlocker.onUnlockScreenResult(requestId, success)
+            finish()
+        }
 
         if (systemBuildInfo.sdk >= 26) {
             keyguardManager.requestDismissKeyguard(this, object :
@@ -85,8 +108,21 @@ class UnlockScreenActivity : EsActivity() {
     override fun content() {
     }
 
-    private fun finishWithResult(success: Boolean) {
-        screenUnlocker.screenUnlockResult(success)
-        finish()
+    override fun onDestroy() {
+        // just in case we didn't respond yet
+        if (valid && !hasResult) {
+            screenUnlocker.onUnlockScreenResult(requestId, false)
+        }
+        super.onDestroy()
+    }
+
+    internal companion object {
+        private const val KEY_REQUEST_ID = "request_id"
+        fun unlock(context: Context, requestId: String) {
+            context.startActivity(Intent(context, UnlockScreenActivity::class.java).apply {
+                putExtra(KEY_REQUEST_ID, requestId)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
     }
 }

@@ -20,11 +20,11 @@ import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.StateFlow
+import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @ApplicationScope
 @Single
@@ -35,9 +35,8 @@ class SecureScreenDetector : AccessibilityComponent() {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
 
-    private val _isOnSecureScreen = EventFlow<Boolean>()
-    val isOnSecureScreen: Flow<Boolean>
-        get() = _isOnSecureScreen.distinctUntilChanged()
+    private val _isOnSecureScreen = StateFlow<Boolean>()
+    val isOnSecureScreen: Flow<Boolean> get() = _isOnSecureScreen
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // ignore keyboards
@@ -60,6 +59,6 @@ class SecureScreenDetector : AccessibilityComponent() {
 
         // distinct
         d { "on secure screen changed: $isOnSecureScreen" }
-        _isOnSecureScreen.offer(isOnSecureScreen)
+        _isOnSecureScreen.setIfChanged(isOnSecureScreen)
     }
 }

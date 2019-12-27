@@ -21,7 +21,6 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.gestures.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
@@ -37,7 +36,7 @@ import kotlinx.coroutines.launch
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
         Center {
-            val torchManager = inject<TorchManager>()
+            val torchManager = inject<com.ivianuu.essentials.torch.TorchManager>()
             val torchState = collect(torchManager.torchState, false)
 
             Column(crossAxisAlignment = CrossAxisAlignment.Center) {

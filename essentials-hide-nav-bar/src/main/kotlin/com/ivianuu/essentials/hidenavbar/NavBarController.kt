@@ -17,13 +17,15 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.app.Application
-import android.app.KeyguardManager
 import android.content.Intent
 import android.graphics.Rect
-import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.merge
+import com.ivianuu.essentials.screenstate.DisplayRotationProvider
+import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.essentials.screenstate.ScreenStateProvider
+import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Single
@@ -48,7 +50,6 @@ class NavBarController internal constructor(
     private val broadcastFactory: BroadcastFactory,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppDispatchers,
-    private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
@@ -71,11 +72,11 @@ class NavBarController internal constructor(
 
         val flows = mutableListOf<Flow<*>>().apply {
             if (config.rotationMode != NavBarRotationMode.Nougat) {
-                this += displayRotationProvider.observeRotationChanges().drop(1)
+                this += displayRotationProvider.displayRotation.drop(1)
             }
 
             if (config.showWhileScreenOff) {
-                this += screenStateProvider.observeScreenState().drop(1)
+                this += screenStateProvider.screenState.drop(1)
             }
 
             /** [merge] requires at least so add a dummy here */
@@ -86,8 +87,7 @@ class NavBarController internal constructor(
         merge(flows)
             .onStart { emit(Unit) }
             .map {
-                !config.showWhileScreenOff ||
-                        (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
+                !config.showWhileScreenOff || screenStateProvider.getScreenState() != ScreenState.Unlocked
             }
             .onEach {
                 prefs.wasNavBarHidden.set(it)
@@ -126,10 +126,8 @@ class NavBarController internal constructor(
     }
 
     private fun getNavigationBarHeight(): Int {
-        val name = when (displayRotationProvider.displayRotation) {
-            Surface.ROTATION_0, Surface.ROTATION_180 -> "navigation_bar_height"
-            else -> "navigation_bar_width"
-        }
+        val name = if (displayRotationProvider.currentDisplayRotation.isPortrait) "navigation_bar_height"
+        else "navigation_bar_width"
         val id = app.resources.getIdentifier(name, "dimen", "android")
         return if (id > 0) app.resources.getDimensionPixelSize(id) else 0
     }
@@ -139,25 +137,25 @@ class NavBarController internal constructor(
         config: NavBarConfig
     ) = when (config.rotationMode) {
         NavBarRotationMode.Marshmallow -> {
-            when (displayRotationProvider.displayRotation) {
-                Surface.ROTATION_90 -> Rect(0, 0, 0, navBarHeight)
-                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
-                Surface.ROTATION_270 -> Rect(0, navBarHeight, 0, 0)
-                else -> Rect(0, 0, 0, navBarHeight)
+            when (displayRotationProvider.currentDisplayRotation) {
+                DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+                DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
+                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+                DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
             }
         }
         NavBarRotationMode.Nougat -> {
-            when (displayRotationProvider.displayRotation) {
-                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
+            when (displayRotationProvider.currentDisplayRotation) {
+                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
                 else -> Rect(0, 0, 0, navBarHeight)
             }
         }
         NavBarRotationMode.Tablet -> {
-            when (displayRotationProvider.displayRotation) {
-                Surface.ROTATION_90 -> Rect(navBarHeight, 0, 0, 0)
-                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
-                Surface.ROTATION_270 -> Rect(0, 0, navBarHeight, 0)
-                else -> Rect(0, 0, 0, navBarHeight)
+            when (displayRotationProvider.currentDisplayRotation) {
+                DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+                DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
+                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+                DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
             }
         }
     }

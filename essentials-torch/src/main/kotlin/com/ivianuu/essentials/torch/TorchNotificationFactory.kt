@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures.torch
+package com.ivianuu.essentials.torch
 
 import android.annotation.TargetApi
 import android.app.Notification
@@ -25,7 +25,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.AbstractNotificationFactory
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.util.StringProvider
 import com.ivianuu.injekt.Factory
 
@@ -43,7 +42,9 @@ internal class TorchNotificationFactory(
     )
 
     override fun buildNotification(context: Context): Notification =
-        NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        NotificationCompat.Builder(context,
+            NOTIFICATION_CHANNEL_ID
+        )
             .apply {
                 setAutoCancel(true)
                 setContentTitle(stringProvider.getString(R.string.es_notif_title_torch))

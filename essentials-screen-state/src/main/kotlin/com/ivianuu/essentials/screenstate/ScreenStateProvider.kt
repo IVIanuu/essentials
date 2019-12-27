@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -14,50 +14,58 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.screenstate
 
 import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.injekt.Factory
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.android.ApplicationScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 /**
  * Provides the current screen state
  */
-@Factory
+@ApplicationScope
+@Single
 class ScreenStateProvider(
-    private val broadcastFactory: BroadcastFactory,
+    broadcastFactory: BroadcastFactory,
+    private val dispatchers: AppDispatchers,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
 ) {
 
-    fun observeScreenState(): Flow<ScreenState> {
-        return broadcastFactory.create(
-            Intent.ACTION_SCREEN_OFF,
-            Intent.ACTION_SCREEN_ON,
-            Intent.ACTION_USER_PRESENT
-        )
-            .map { getCurrentScreenState() }
-            .onStart { emit(getCurrentScreenState()) }
-    }
+    val screenState = broadcastFactory.create(
+        Intent.ACTION_SCREEN_OFF,
+        Intent.ACTION_SCREEN_ON,
+        Intent.ACTION_USER_PRESENT
+    )
+        .map { Unit }
+        .onStart { emit(Unit) }
+        .map { getScreenState() }
+        .replayShareIn(GlobalScope)
 
-    private fun getCurrentScreenState(): ScreenState {
-        return if (powerManager.isInteractive) {
-            if (keyguardManager.isKeyguardLocked) {
+
+    suspend fun getScreenState() = withContext(dispatchers.default) {
+        if (powerManager.isInteractive) {
+            if (keyguardManager.isDeviceLocked) {
                 ScreenState.Locked
             } else {
-                ScreenState.On
+                ScreenState.Unlocked
             }
         } else {
             ScreenState.Off
         }
     }
+
 }
 
-enum class ScreenState {
-    Off, Locked, On
+enum class ScreenState(val isOn: Boolean) {
+    Off(false), Locked(true), Unlocked(true)
 }

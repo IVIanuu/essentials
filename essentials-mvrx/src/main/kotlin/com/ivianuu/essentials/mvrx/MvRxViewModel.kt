@@ -19,6 +19,7 @@ package com.ivianuu.essentials.mvrx
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.StateFlow
+import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
@@ -56,9 +57,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         withContext(Dispatchers.Default) {
             val currentState = _state.value
             val newState = reducer(currentState)
-            if (currentState != newState) {
-                _state.value = newState
-            }
+            _state.setIfChanged(newState)
         }
     }
 

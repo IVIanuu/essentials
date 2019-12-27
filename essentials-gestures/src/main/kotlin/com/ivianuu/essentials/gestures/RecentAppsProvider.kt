@@ -21,10 +21,10 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.StateFlow
+import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /**
@@ -43,12 +43,8 @@ class RecentAppsProvider : AccessibilityComponent() {
         get() = recentsApps
             .map { it.firstOrNull() }
 
-    private val _recentApps =
-        StateFlow(emptyList<String>())
-    val recentsApps: Flow<List<String>>
-        get() = _recentApps.distinctUntilChanged()
-
-    private var recentAppsList = mutableListOf<String>()
+    private val _recentApps = StateFlow(emptyList<String>())
+    val recentsApps: Flow<List<String>> get() = _recentApps
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // indicates that its a activity
@@ -73,8 +69,7 @@ class RecentAppsProvider : AccessibilityComponent() {
     }
 
     private fun handlePackage(packageName: String) {
-
-        val recentApps = recentAppsList.toMutableList()
+        val recentApps = _recentApps.value.toMutableList()
         val index = recentApps.indexOf(packageName)
 
         // app has not changed
@@ -91,14 +86,12 @@ class RecentAppsProvider : AccessibilityComponent() {
         recentApps.add(0, packageName)
 
         // make sure that were not getting bigger than the limit
-        val result = recentApps.chunked(LIMIT).first()
-        recentAppsList.clear()
-        recentAppsList.addAll(result)
+        val finalRecentApps = recentApps.chunked(LIMIT).first()
 
-        d { "recent apps changed $result" }
+        d { "recent apps changed $finalRecentApps" }
 
         // push
-        _recentApps.value = result
+        _recentApps.setIfChanged(finalRecentApps)
     }
 
     companion object {

@@ -40,6 +40,7 @@ include(
     ":essentials-notification-listener",
     ":essentials-permission",
     ":essentials-process-restart",
+    ":essentials-screen-state",
     ":essentials-secure-settings",
     ":essentials-service",
     ":essentials-shell",
@@ -47,7 +48,9 @@ include(
     ":essentials-store",
     ":essentials-test",
     ":essentials-tile",
+    ":essentials-torch",
     ":essentials-twilight",
+    ":essentials-unlock",
     ":essentials-work",
     ":sample"
 )
