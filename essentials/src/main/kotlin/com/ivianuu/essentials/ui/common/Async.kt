@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.layout.ScrollableListItem
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -41,6 +42,33 @@ fun <T> AsyncList(
         success = { items ->
             if (items.isNotEmpty()) {
                 ScrollableList(items = items, item = successItem)
+            } else {
+                successEmpty()
+            }
+        }
+    )
+}
+
+@Composable
+fun <T> AsyncList2(
+    state: Async<List<T>>,
+    fail: @Composable() (Throwable) -> Unit = {},
+    loading: @Composable() () -> Unit = { FullScreenLoading() },
+    uninitialized: @Composable() () -> Unit = loading,
+    successEmpty: @Composable() () -> Unit = {},
+    successItem: @Composable() (Int, T) -> ScrollableListItem
+) {
+    Async(
+        state = state,
+        fail = fail,
+        loading = loading,
+        uninitialized = uninitialized,
+        success = { items ->
+            if (items.isNotEmpty()) {
+                ScrollableList(
+                    items = items
+                        .mapIndexed { index, item -> successItem(index, item) }
+                )
             } else {
                 successEmpty()
             }
