@@ -22,8 +22,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 
 interface StateFlow<T> : Flow<T> {
+    val isInitialized: Boolean
     val value: T
 }
 
@@ -32,7 +35,7 @@ interface MutableStateFlow<T> : StateFlow<T> {
 }
 
 fun <T> MutableStateFlow<T>.setIfChanged(value: T) {
-    if (this.value != value) this.value = value
+    if (!isInitialized || this.value != value) this.value = value
 }
 
 fun <T> StateFlow(): MutableStateFlow<T> =
@@ -45,20 +48,30 @@ private class DataFlowImpl<T>(
     initial: Any?
 ) : AbstractFlow<T>(), MutableStateFlow<T> {
 
+    override val isInitialized: Boolean
+        get() = channel.value !== Null
+
     override var value: T
-        get() = channel.value
+        get() {
+            val value = channel.value
+            check(value !== Null)
+            return value as T
+        }
         set(value) {
             channel.offer(value)
         }
 
-    private val channel: ConflatedBroadcastChannel<T> = if (initial !== Null) {
+    private val channel: ConflatedBroadcastChannel<Any?> = if (initial !== Null) {
         ConflatedBroadcastChannel(initial as T)
     } else {
-        ConflatedBroadcastChannel()
+        ConflatedBroadcastChannel(Null)
     }
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
-        collector.emitAll(channel.asFlow())
+        collector.emitAll(
+            channel.asFlow()
+                .filter { it !== Null }
+                .map { it as T }        )
     }
 
 }
