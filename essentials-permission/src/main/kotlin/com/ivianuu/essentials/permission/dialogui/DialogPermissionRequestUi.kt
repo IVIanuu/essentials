@@ -128,8 +128,10 @@ class PermissionDialogViewModel(
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
         scope.coroutineScope.launch {
             d { "request $permission" }
-            manager.requestHandlerFor(permission)
-                .request(activity, manager, permission)
+            withContext(dispatchers.main) {
+                manager.requestHandlerFor(permission)
+                    .request(activity, manager, permission)
+            }
 
             updatePermissionsToProcessOrFinish()
         }
