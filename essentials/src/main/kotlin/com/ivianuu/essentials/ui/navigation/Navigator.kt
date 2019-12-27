@@ -21,6 +21,7 @@ import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
+import androidx.compose.onDispose
 import androidx.compose.remember
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.AbsorbPointer
@@ -100,6 +101,8 @@ fun Navigator(state: NavigatorState) {
 
         Overlay(state = state.overlayState)
     }
+
+    onDispose { state.dispose() }
 }
 
 // todo remove main thread requirement
@@ -339,6 +342,10 @@ class NavigatorState(
         val exitFrom = from != null && (to == null || !to.route.opaque)
         if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
         to?.enter(from = from, isPush = isPush, transition = transition)
+    }
+
+    internal fun dispose() {
+        _backStack.forEach { it.dispose() }
     }
 
     private fun List<RouteState>.filterVisible(): List<RouteState> {

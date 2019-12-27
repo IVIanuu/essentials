@@ -23,9 +23,9 @@ import android.graphics.Rect
 import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.merge
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope

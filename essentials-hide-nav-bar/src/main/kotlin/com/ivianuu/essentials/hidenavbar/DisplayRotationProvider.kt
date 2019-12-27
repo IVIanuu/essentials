@@ -23,7 +23,7 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.merge
+import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +47,10 @@ internal class DisplayRotationProvider(
         return screenStateProvider.observeScreenState()
             .flatMapLatest {
                 if (it) {
-                    merge(rotationChanges(), configChanges())
+                    merge(
+                        rotationChanges(),
+                        configChanges()
+                    )
                         .onStart { d { "sub for rotation" } }
                         .onCompletion { d { "dispose rotation" } }
                 } else {

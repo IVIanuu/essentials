@@ -27,6 +27,7 @@ import androidx.ui.engine.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
+import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
@@ -34,34 +35,45 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.box.unfoldBox
-import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.resources.drawableResource
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 val HomeRoute = Route(transition = DefaultRouteTransition) {
-    Scaffold(
+    Center {
+        val events = PublishSubject<Unit>()
+
+        val coroutineScope = coroutineScope
+        coroutineScope.coroutineContext[Job]!!.invokeOnCompletion {
+            d { "job complete" }
+        }
+
+        events
+            .onStart { d { "on start" } }
+            .onEach { d { "on event $it" } }
+            .onCompletion { d { "on complete" } }
+            .launchIn(coroutineScope)
+
+        Button(
+            text = "Click",
+            onClick = {
+                coroutineScope.launch {
+                    events.emit(Unit)
+                }
+            }
+        )
+    }
+    /**Scaffold(
         topAppBar = {
             TopAppBar(
                 title = { Text("Home") },
@@ -128,7 +140,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 }
             }
         }
-    )
+    )*/
 }
 
 @Composable

@@ -29,6 +29,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
+import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
@@ -45,7 +46,6 @@ import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.flowOf
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
