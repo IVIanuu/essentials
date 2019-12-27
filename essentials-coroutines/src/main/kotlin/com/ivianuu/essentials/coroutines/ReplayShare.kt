@@ -23,18 +23,24 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-
-fun <T> Flow<T>.replayShareIn(scope: CoroutineScope): Flow<T> =
-    replayShareImpl(scope = scope, defaultValue = Null)
+import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
-    defaultValue: T
-): Flow<T> = replayShareImpl(scope = scope, defaultValue = defaultValue)
+    timeout: Duration = Duration.ZERO
+): Flow<T> =
+    replayShareImpl(scope = scope, defaultValue = Null, timeout = timeout)
+
+fun <T> Flow<T>.replayShareIn(
+    scope: CoroutineScope,
+    defaultValue: T,
+    timeout: Duration = Duration.ZERO
+): Flow<T> = replayShareImpl(scope = scope, defaultValue = defaultValue, timeout = timeout)
 
 private fun <T> Flow<T>.replayShareImpl(
     scope: CoroutineScope,
-    defaultValue: Any?
+    defaultValue: Any?,
+    timeout: Duration = Duration.ZERO
 ): Flow<T> {
     var lastValue: Any? = defaultValue
 
@@ -42,7 +48,7 @@ private fun <T> Flow<T>.replayShareImpl(
         .onEach { lastValue = it }
         .onCompletion { lastValue = defaultValue }
         .catch { lastValue = defaultValue }
-        .shareIn(scope)
+        .shareIn(scope = scope, cacheSize = 0, timeout = timeout)
 
     return flow {
         if (lastValue !== Null) emit(lastValue as T)

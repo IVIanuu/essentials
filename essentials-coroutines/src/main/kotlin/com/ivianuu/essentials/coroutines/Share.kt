@@ -17,29 +17,25 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.broadcastIn
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
-fun <T> Flow<T>.cache(history: Int): Flow<T> = asCachedFlow(history)
+fun <T> Flow<T>.cache(cacheSize: Int): Flow<T> {
+    require(cacheSize > 0) { "cacheSize parameter must be greater than 0, but was $cacheSize" }
 
-fun <T> Flow<T>.shareIn(
-    scope: CoroutineScope,
-    cacheHistory: Int = 0
-): Flow<T> = asSharedFlow(scope, cacheHistory)
-
-internal fun <T> Flow<T>.asCachedFlow(cacheHistory: Int): Flow<T> {
-    require(cacheHistory > 0) { "cacheHistory parameter must be greater than 0, but was $cacheHistory" }
-
-    val cache = CircularArray<T>(cacheHistory)
+    val cache = CircularArray<T>(cacheSize)
 
     return onEach { value ->
         // While flowing, also record all values in the cache.
@@ -51,68 +47,101 @@ internal fun <T> Flow<T>.asCachedFlow(cacheHistory: Int): Flow<T> {
     }
 }
 
-internal fun <T> Flow<T>.asSharedFlow(
+fun <T> Flow<T>.shareIn(
     scope: CoroutineScope,
-    cacheHistory: Int
-): Flow<T> =
-    SharedFlow(this, scope, cacheHistory)
+    cacheSize: Int = 0,
+    timeout: Duration = Duration.ZERO
+): Flow<T> = SharedFlow(this, scope, cacheSize, timeout)
 
-internal class SharedFlow<T>(
+private class SharedFlow<T>(
     private val sourceFlow: Flow<T>,
     private val scope: CoroutineScope,
-    private val cacheHistory: Int
+    private val cacheSize: Int,
+    private val timeout: Duration
 ) : Flow<T> {
 
+    private val lock = this
+    private var cache = CircularArray<T>(cacheSize)
+
+    private var collectingJob: Job? = null
+    private var resetJob: Job? = null
     private var refCount = 0
-    private var cache = CircularArray<T>(cacheHistory)
-    private val mutex = Mutex()
+    private var channel = BroadcastChannel<T>(Channel.BUFFERED)
 
     init {
-        require(cacheHistory >= 0) { "cacheHistory parameter must be at least 0, but was $cacheHistory" }
+        require(cacheSize >= 0) { "cacheSize parameter must be at least 0, but was $cacheSize" }
     }
 
     override suspend fun collect(
         collector: FlowCollector<T>
-    ) = collector.emitAll(createFlow())
-
-    // Replay happens per new collector, if cacheHistory > 0.
-    private suspend fun createFlow(): Flow<T> = getChannel()
-        .asFlow()
-        .replayIfNeeded()
-        .onCompletion { onCollectEnd() }
-
-    // lazy holder for the BroadcastChannel, which is reset whenever all collection ends
-    private var lazyChannelRef = createLazyChannel()
-
-    // must be lazy so that the broadcast doesn't begin immediately after a reset
-    private fun createLazyChannel() = lazy(LazyThreadSafetyMode.NONE) {
-        sourceFlow.cacheIfNeeded()
-            .broadcastIn(scope)
+    ) {
+        collector.emitAll(
+            channel
+                .asFlow()
+                .onStart { onEnter() }
+                .onCompletion { onExit() }
+                .replayIfNeeded()
+        )
     }
 
-    private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheHistory > 0) {
+    private fun onEnter() {
+        synchronized(lock) {
+            refCount++
+
+            cancelPendingReset()
+
+            if (collectingJob == null) {
+                collectingJob = scope.launch {
+                    sourceFlow
+                        .cacheIfNeeded()
+                        .collect { channel.send(it) }
+                }
+            }
+        }
+    }
+
+    private fun onExit() {
+        synchronized(lock) {
+            refCount--
+            if (refCount == 0) {
+                dispatchDelayedResetOrReset()
+            }
+        }
+    }
+
+    private fun dispatchDelayedResetOrReset() {
+        if (timeout == Duration.ZERO) {
+            synchronized(lock) { reset() }
+            return
+        }
+        synchronized(lock) {
+            resetJob?.cancel()
+            resetJob = scope.launch {
+                delay(timeout.toLongMilliseconds())
+                synchronized(lock) { reset() }
+            }
+        }
+    }
+
+    private fun cancelPendingReset() {
+        resetJob?.cancel()
+        resetJob = null
+    }
+
+    private fun reset() {
+        cancelPendingReset()
+        collectingJob?.cancel()
+        collectingJob = null
+        cache = CircularArray(cacheSize)
+        channel = BroadcastChannel(Channel.BUFFERED)
+    }
+
+    private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheSize > 0) {
         onStart { cache.forEach { emit(it) } }
     } else this
 
-    private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheHistory > 0) {
-        onEach { value ->
-            // While flowing, also record all values in the cache.
-            cache.add(value)
-        }
+    private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheSize > 0) {
+        onEach { value -> cache.add(value) }
     } else this
-
-    private fun reset() {
-        cache = CircularArray(cacheHistory)
-        lazyChannelRef = createLazyChannel()
-    }
-
-    private suspend fun onCollectEnd() = mutex.withLock {
-        if (--refCount == 0) reset()
-    }
-
-    private suspend fun getChannel(): BroadcastChannel<T> = mutex.withLock {
-        refCount++
-        lazyChannelRef.value
-    }
 
 }
