@@ -101,7 +101,6 @@ internal class AppPickerViewModel(
 
     init {
         scope.coroutineScope.execute(
-            context = dispatchers.default,
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)

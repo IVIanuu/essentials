@@ -22,7 +22,6 @@ import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.inject
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -43,12 +42,10 @@ class ForegroundService : EsService() {
         foregroundManager.updates
             .onStart { emit(Unit) }
             .onEach { update() }
-            .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
 
         foregroundManager.stopServiceRequests
             .onEach { stop() }
-            .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
     }
 
