@@ -131,7 +131,8 @@ val PrefsRoute = Route {
                 ClipboardPreference(
                     title = "Clipboard",
                     summary = "This is a clipboard preference",
-                    clipboardText = { "cool clip" }
+                    clipboardText = { "cool clip" },
+                    dependencies = dependencies
                 )
             }
         }

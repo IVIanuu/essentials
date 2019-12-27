@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.store
 
+import com.ivianuu.essentials.coroutines.EventFlow
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +73,7 @@ internal class DiskBoxImpl<T>(
     override val isDisposed: Boolean
         get() = _isDisposed.get()
 
-    private val changeNotifier = BroadcastChannel<Unit>(1)
+    private val changeNotifier = EventFlow<Unit>()
     private val cachedValue = AtomicReference<Any?>(this)
     private val valueFetcher = MutexValue {
         val serialized = try {
@@ -236,7 +237,7 @@ internal class DiskBoxImpl<T>(
         checkNotDisposed()
         return flow {
             emit(get())
-            changeNotifier.asFlow().collect {
+            changeNotifier.collect {
                 emit(get())
             }
         }
@@ -264,7 +265,7 @@ internal class DiskBoxImpl<T>(
 }
 
 private class MultiInstanceHelper(
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val path: String,
     private val onChange: () -> Unit
 ) {
@@ -273,7 +274,7 @@ private class MultiInstanceHelper(
 
     init {
         coroutineScope.launch {
-            changeNotifier.asFlow()
+            changeNotifier
                 .onEach { change ->
                     if (change.path == path && change.id != id) {
                         onChange()
@@ -287,7 +288,7 @@ private class MultiInstanceHelper(
     }
 
     private companion object {
-        private val changeNotifier = BroadcastChannel<Change>(1)
+        private val changeNotifier = EventFlow<Change>()
     }
 
     private class Change(

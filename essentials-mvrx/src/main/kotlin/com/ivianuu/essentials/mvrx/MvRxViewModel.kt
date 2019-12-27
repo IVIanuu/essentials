@@ -47,21 +47,17 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val channel = StateFlow(initialState)
-    val flow: Flow<S> get() = channel
-
-    private var _state: S = initialState
-    val state: S get() = synchronized(stateLock) { _state }
-    private val stateLock = Any()
+    private val _state = StateFlow(initialState)
+    val flow: Flow<S> get() = _state
+    val state: S get() = _state.value
 
     protected suspend fun setState(reducer: suspend S.() -> S) {
         // todo we need a way to use the AppDispatchers.default dispatcher
         withContext(Dispatchers.Default) {
-            val currentState = synchronized(stateLock) { _state }
+            val currentState = _state.value
             val newState = reducer(currentState)
             if (currentState != newState) {
-                synchronized(stateLock) { _state = newState }
-                channel.value = newState
+                _state.value = newState
             }
         }
     }

@@ -30,6 +30,7 @@ include(
     ":essentials-broadcast",
     ":essentials-compiler",
     ":essentials-coil",
+    ":essentials-coroutines",
     ":essentials-foreground",
     ":essentials-gestures",
     ":essentials-gradle-plugin",

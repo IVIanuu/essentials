@@ -27,9 +27,11 @@ interface EventFlow<T> : Flow<T> {
     fun offer(value: T)
 }
 
-fun <T> EventFlow(): EventFlow<T> = EventFlowImpl()
+fun <T> EventFlow(): EventFlow<T> =
+    EventFlowImpl()
 
-private class EventFlowImpl<T> : AbstractFlow<T>(), EventFlow<T> {
+private class EventFlowImpl<T> : AbstractFlow<T>(),
+    EventFlow<T> {
 
     private val channel = BroadcastChannel<T>(1)
 

@@ -35,7 +35,8 @@ class ForegroundManager(private val context: Context) {
     private val _components = mutableListOf<ForegroundComponent>()
     val components: List<ForegroundComponent> get() = _components.toList()
 
-    private val _stopServiceRequests = EventFlow<Unit>()
+    private val _stopServiceRequests =
+        EventFlow<Unit>()
     internal val stopServiceRequests: Flow<Unit> get() = _stopServiceRequests
 
     fun startForeground(component: ForegroundComponent) = synchronized(this) {

@@ -43,7 +43,8 @@ class RecentAppsProvider : AccessibilityComponent() {
         get() = recentsApps
             .map { it.firstOrNull() }
 
-    private val _recentApps = StateFlow(emptyList<String>())
+    private val _recentApps =
+        StateFlow(emptyList<String>())
     val recentsApps: Flow<List<String>>
         get() = _recentApps.distinctUntilChanged()
 

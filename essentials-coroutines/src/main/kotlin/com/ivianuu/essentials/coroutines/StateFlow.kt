@@ -31,9 +31,11 @@ interface MutableStateFlow<T> : StateFlow<T> {
     override var value: T
 }
 
-fun <T> StateFlow(): MutableStateFlow<T> = DataFlowImpl(Null)
+fun <T> StateFlow(): MutableStateFlow<T> =
+    DataFlowImpl(Null)
 
-fun <T> StateFlow(initial: T): MutableStateFlow<T> = DataFlowImpl(initial)
+fun <T> StateFlow(initial: T): MutableStateFlow<T> =
+    DataFlowImpl(initial)
 
 private class DataFlowImpl<T>(
     initial: Any?

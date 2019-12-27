@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import androidx.collection.CircularArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -44,20 +43,19 @@ internal fun <T> Flow<T>.asCachedFlow(cacheHistory: Int): Flow<T> {
 
     return onEach { value ->
         // While flowing, also record all values in the cache.
-        cache.addLast(value)
+        cache.add(value)
     }.onStart {
         // Before emitting any values in sourceFlow,
         // emit any cached values starting with the oldest.
-        (0 until cache.size())
-            .map { cache[it] }
-            .forEach { emit(it) }
+        cache.forEach { emit(it) }
     }
 }
 
 internal fun <T> Flow<T>.asSharedFlow(
     scope: CoroutineScope,
     cacheHistory: Int
-): Flow<T> = SharedFlow(this, scope, cacheHistory)
+): Flow<T> =
+    SharedFlow(this, scope, cacheHistory)
 
 internal class SharedFlow<T>(
     private val sourceFlow: Flow<T>,
@@ -93,17 +91,13 @@ internal class SharedFlow<T>(
     }
 
     private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheHistory > 0) {
-        onStart {
-            (0 until cache.size())
-                .map { cache[it] }
-                .forEach { emit(it) }
-        }
+        onStart { cache.forEach { emit(it) } }
     } else this
 
     private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheHistory > 0) {
         onEach { value ->
             // While flowing, also record all values in the cache.
-            cache.addLast(value)
+            cache.add(value)
         }
     } else this
 
