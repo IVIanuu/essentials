@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.asIconComposable
@@ -65,7 +64,6 @@ fun RadioButtonPreference(
             leading = leading,
             trailing = {
                 AbsorbPointer {
-                    d { "invoke radio" }
                     RadioButton(
                         selected = context.currentValue,
                         onSelect = if (context.shouldBeEnabled) {

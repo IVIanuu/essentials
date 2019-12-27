@@ -70,10 +70,6 @@ class ScrollPosition(
 
     var direction by framed(ScrollDirection.Idle)
 
-    init {
-        updateBounds(_minValue, _maxValue)
-    }
-
     fun smoothScrollTo(
         value: Px,
         anim: AnimationBuilder<Float>,

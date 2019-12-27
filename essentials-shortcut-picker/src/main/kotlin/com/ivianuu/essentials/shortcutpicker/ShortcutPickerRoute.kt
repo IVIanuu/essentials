@@ -22,6 +22,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.activityresult.ActivityResult
@@ -56,7 +57,7 @@ fun ShortcutPickerRoute(
 
 @Composable
 private fun ShortcutInfo(
-    info: ShortcutInfo,
+    @Pivotal info: ShortcutInfo,
     onClick: () -> Unit
 ) {
     ListItem(
