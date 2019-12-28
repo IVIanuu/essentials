@@ -89,6 +89,17 @@ private object StringSetSerializer : DiskBox.Serializer<Set<String>> {
     override fun serialize(value: Set<String>) = value.joinToString(VALUE_DELIMITER)
 }
 
+fun PrefBoxFactory.stringList(
+    name: String,
+    defaultValue: List<String> = emptyList()
+) = box(name = name, defaultValue = defaultValue, serializer = StringListSerializer)
+
+private object StringListSerializer : DiskBox.Serializer<List<String>> {
+    private const val VALUE_DELIMITER = "^\\"
+    override fun deserialize(serialized: String) = serialized.split(VALUE_DELIMITER)
+    override fun serialize(value: List<String>) = value.joinToString(VALUE_DELIMITER)
+}
+
 fun PrefBoxFactory.stringMap(
     name: String,
     defaultValue: Map<String, String> = emptyMap()
