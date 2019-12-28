@@ -166,11 +166,14 @@ fun <T> BottomNavigationSwapper(
     keepState: Boolean = false,
     content: @Composable() (T) -> Unit
 ) {
-    val swapperController = remember {
+    val swapperController = retain {
         SwapperState(
             initial = bottomNavigationController.selectedItem,
             keepState = keepState
         )
+    }
+    remember(keepState) {
+        swapperController.keepState = keepState
     }
 
     remember(bottomNavigationController.selectedItem) {
