@@ -26,6 +26,11 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Fail
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
+import com.ivianuu.essentials.util.Uninitialized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -134,6 +139,23 @@ fun <T> load(
 ): T {
     val state = state { placeholder }
     launchOnCommit(key) { state.value = block() }
+    return state.value
+}
+
+@Composable
+fun <T> loadAsync(
+    key: Any,
+    block: suspend CoroutineScope.() -> T
+): Async<T> {
+    val state = state<Async<T>> { Uninitialized }
+    launchOnCommit(key) {
+        state.value = Loading()
+        state.value = try {
+            Success(block())
+        } catch (e: Exception) {
+            Fail(e)
+        }
+    }
     return state.value
 }
 
