@@ -34,10 +34,12 @@ import com.ivianuu.essentials.ui.common.withDensity
 fun EmptyImage(
     width: Dp,
     height: Dp
-): Image = Image(
-    width = withDensity { width.toIntPx().value },
-    height = withDensity { height.toIntPx().value }
-)
+): Image = withDensity {
+    Image(
+        width = width.toIntPx().value,
+        height = height.toIntPx().value
+    )
+}
 
 fun Drawable.toImage() = toBitmap().toImage()
 
