@@ -24,30 +24,70 @@ import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.AndroidComposeViewAmbient
-import androidx.ui.core.Size
-import androidx.ui.core.ambientDensity
+import androidx.ui.core.Px
 import androidx.ui.core.px
-import androidx.ui.core.withDensity
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.UpdateProvider
+import com.ivianuu.essentials.ui.common.Updateable
+import com.ivianuu.essentials.ui.common.framed
 
-val WindowSizeAmbient = Ambient.of<Size>()
+val WindowSizeAmbient = Ambient.of<WindowSize>()
+
+@Stable
+class WindowSize(width: Px, height: Px) : Updateable<WindowSize> {
+
+    var width by framed(width)
+        private set
+    var height by framed(height)
+        private set
+
+    override fun updateFrom(other: WindowSize) {
+        width = other.width
+        height = other.height
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as WindowSize
+
+        if (width != other.width) return false
+        if (height != other.height) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = width.hashCode()
+        result = 31 * result + height.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "WindowSize(w=${width}, h=${height})"
+    }
+
+}
 
 @Composable
 fun WindowSizeProvider(children: @Composable() () -> Unit) {
     val composeView = ambient(AndroidComposeViewAmbient)
 
-    val density = ambientDensity()
-    fun getSize() = withDensity(density) {
-        Size(
-            width = composeView.width.px.toDp(),
-            height = composeView.height.px.toDp()
+    val (windowSize, setWindowSize) = state {
+        WindowSize(
+            width = composeView.width.px,
+            height = composeView.height.px
         )
     }
-
-    val (size, setSize) = state { getSize() }
     val onLayoutChangeListener = remember {
         View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            setSize(getSize())
+            setWindowSize(
+                WindowSize(
+                    width = composeView.width.px,
+                    height = composeView.height.px
+                )
+            )
         } as View.OnLayoutChangeListener // todo remove type once fixed
     }
 
@@ -56,12 +96,12 @@ fun WindowSizeProvider(children: @Composable() () -> Unit) {
         onDispose { composeView.removeOnLayoutChangeListener(onLayoutChangeListener) }
     }
 
-    remember(size) {
-        d { "window size w ${size.width} h ${size.height}" }
+    remember(windowSize) {
+        d { "window size $windowSize" }
     }
 
-    WindowSizeAmbient.Provider(
-        value = size,
+    WindowSizeAmbient.UpdateProvider(
+        value = windowSize,
         children = children
     )
 }
