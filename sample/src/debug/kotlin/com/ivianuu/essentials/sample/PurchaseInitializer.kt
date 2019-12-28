@@ -21,10 +21,14 @@ import com.ivianuu.essentials.billing.BillingStore
 import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.Factory
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Factory
 class PurchaseInitializer(billingStore: BillingStore) : AppInitializer {
     init {
-        billingStore.addProduct(SkuDetails(DummySku))
+        GlobalScope.launch {
+            billingStore.addProduct(SkuDetails(DummySku))
+        }
     }
 }

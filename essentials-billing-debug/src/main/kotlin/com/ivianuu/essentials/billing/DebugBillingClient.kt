@@ -46,6 +46,7 @@ import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -203,7 +204,7 @@ class DebugBillingClient(
                 ).build(), /* purchasesList */ null
             )
         }
-        return billingStore.getPurchases(skuType)
+        return runBlocking { billingStore.getPurchases(skuType) }
     }
 
     override fun launchPriceChangeConfirmationFlow(
@@ -262,7 +263,7 @@ class DebugBillingClient(
         }
     }
 
-    internal fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
+    internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
         val request = requests[requestId] ?: return null
         return billingStore.getSkuDetails(
             SkuDetailsParams.newBuilder()
@@ -272,7 +273,7 @@ class DebugBillingClient(
         ).firstOrNull()
     }
 
-    internal fun onPurchaseResult(
+    internal suspend fun onPurchaseResult(
         requestId: String,
         responseCode: Int,
         purchases: List<Purchase>?

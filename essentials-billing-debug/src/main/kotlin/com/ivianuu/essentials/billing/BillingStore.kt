@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.billing
 
-import android.content.Context
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.BillingResult
@@ -25,101 +24,87 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.ivianuu.essentials.store.map
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.stringList
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import org.json.JSONArray
-import org.json.JSONObject
+import kotlinx.coroutines.withContext
 
 @ApplicationScope
 @Single
-class BillingStore(context: Context) {
+class BillingStore(
+    boxFactory: PrefBoxFactory,
+    private val dispatchers: AppDispatchers
+) {
 
-    private val prefs = context.getSharedPreferences("dbx", Context.MODE_PRIVATE)
+    private val products = boxFactory.stringList("billing_products")
+        .map(
+            fromRaw = { productsJson -> productsJson.map { SkuDetails(it) } },
+            toRaw = { products -> products.map { it.originalJson } }
+        )
 
-    fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> {
-        return prefs.getString(KEY_SKU_DETAILS, "[]")!!.toSkuDetailsList()
-            .filter { it.sku in params.skusList && it.type == params.skuType }
+    private val purchases = boxFactory.stringList("billing_purchases")
+        .map(
+            fromRaw = { purchasesJson ->
+                purchasesJson.map { purchase ->
+                    val params = purchase.split("=:=")
+                    Purchase(params[0], params[1])
+                }
+            },
+            toRaw = { purchases ->
+                purchases.map { purchase ->
+                    purchase.originalJson + "=:=" + purchase.signature
+                }
+            }
+        )
+
+    suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> = withContext(dispatchers.default) {
+        products.get().filter { it.sku in params.skusList && it.type == params.skuType }
     }
 
-    fun getPurchases(@SkuType skuType: String): PurchasesResult {
-        return InternalPurchasesResult(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build(),
-            prefs.getString(KEY_PURCHASES, "[]")!!.toPurchaseList()
-                .filter { it.signature.endsWith(skuType) })
+    suspend fun getPurchases(@SkuType skuType: String): PurchasesResult = withContext(dispatchers.default) {
+        InternalPurchasesResult(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build(),
+            purchases.get().filter { it.signature.endsWith(skuType) })
     }
 
-    fun getPurchaseByToken(purchaseToken: String): Purchase? {
-        return prefs.getString(KEY_PURCHASES, "[]")!!.toPurchaseList()
-            .firstOrNull { it.purchaseToken == purchaseToken }
+    suspend fun getPurchaseByToken(purchaseToken: String): Purchase? = withContext(dispatchers.default) {
+        purchases.get().firstOrNull { it.purchaseToken == purchaseToken }
     }
 
-    fun addProduct(skuDetails: SkuDetails): BillingStore {
-        val allDetails = JSONArray(prefs.getString(KEY_SKU_DETAILS, "[]"))
-        allDetails.put(skuDetails.toJSONObject())
-        prefs.edit().putString(KEY_SKU_DETAILS, allDetails.toString()).apply()
-        return this
+    suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
+        products.get()
+            .toMutableList()
+            .also { it += skuDetails }
+            .let { products.set(it) }
     }
 
-    fun removeProduct(sku: String): BillingStore {
-        val allDetails = prefs.getString(KEY_SKU_DETAILS, "[]")!!.toSkuDetailsList()
-        val filtered = allDetails.filter { it.sku != sku }
-        val json = JSONArray()
-        filtered.forEach { json.put(it.toJSONObject()) }
-        prefs.edit().putString(KEY_SKU_DETAILS, json.toString()).apply()
-        return this
+    suspend fun removeProduct(sku: String) = withContext(dispatchers.default) {
+        products.get()
+            .filter { it.sku != sku }
+            .let { products.set(it) }
     }
 
-    fun clearProducts(): BillingStore {
-        prefs.edit().remove(KEY_SKU_DETAILS).apply()
-        return this
+    suspend fun clearProducts() = withContext(dispatchers.default) {
+        products.delete()
     }
 
-    fun addPurchase(purchase: Purchase): BillingStore {
-        val allPurchases = JSONArray(prefs.getString(KEY_PURCHASES, "[]"))
-        allPurchases.put(purchase.toJSONObject())
-        prefs.edit().putString(KEY_PURCHASES, allPurchases.toString()).apply()
-        return this
+    suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.default) {
+        purchases.get()
+            .toMutableList()
+            .also { it += purchase }
+            .let { purchases.set(it) }
     }
 
-    fun removePurchase(purchaseToken: String): BillingStore {
-        val allPurchases = prefs.getString(KEY_PURCHASES, "[]")!!.toPurchaseList()
-        val filtered = allPurchases.filter { it.purchaseToken != purchaseToken }
-        val json = JSONArray()
-        filtered.forEach { json.put(it.toJSONObject()) }
-        prefs.edit().putString(KEY_PURCHASES, json.toString()).apply()
-        return this
+    suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.default) {
+        purchases.get()
+            .filter { it.purchaseToken != purchaseToken }
+            .let { purchases.set(it) }
     }
 
-    fun clearPurchases(): BillingStore {
-        prefs.edit().remove(KEY_PURCHASES).apply()
-        return this
+    suspend fun clearPurchases() = withContext(dispatchers.default) {
+        purchases.delete()
     }
 
-    private fun Purchase.toJSONObject(): JSONObject =
-        JSONObject().put("purchase", JSONObject(originalJson)).put("signature", signature)
-
-    private fun JSONObject.toPurchase(): Purchase =
-        Purchase(this.getJSONObject("purchase").toString(), this.getString("signature"))
-
-    private fun SkuDetails.toJSONObject(): JSONObject = JSONObject(originalJson)
-
-    private fun JSONObject.toSkuDetails(): SkuDetails = SkuDetails(toString())
-
-    private fun String.toPurchaseList(): List<Purchase> {
-        val list = mutableListOf<Purchase>()
-        val array = JSONArray(this)
-        (0 until array.length()).mapTo(list) { array.getJSONObject(it).toPurchase() }
-        return list
-    }
-
-    private fun String.toSkuDetailsList(): List<SkuDetails> {
-        val list = mutableListOf<SkuDetails>()
-        val array = JSONArray(this)
-        (0 until array.length()).mapTo(list) { array.getJSONObject(it).toSkuDetails() }
-        return list
-    }
-
-    companion object {
-        internal const val KEY_PURCHASES = "dbc_purchases"
-        internal const val KEY_SKU_DETAILS = "dbc_sku_details"
-    }
 }

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.billing
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.lifecycleScope
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Spacer
 import androidx.ui.material.ContainedButtonStyle
@@ -26,7 +27,9 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.common.Async
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.coroutines.loadAsync
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog
@@ -35,6 +38,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
+import kotlinx.coroutines.launch
 import java.util.Date
 
 class DebugBillingActivity : EsActivity() {
@@ -52,14 +56,17 @@ class DebugBillingActivity : EsActivity() {
         }
         this.requestId = requestId
 
-        val skuDetails = client.getSkuDetailsForRequest(requestId)
-        if (skuDetails == null) {
-            finish()
-            return
-        }
-        this.skuDetails = skuDetails
-
-        InjectedNavigator(startRoute = PurchaseDialogRoute)
+        Async(
+            state = loadAsync(requestId) { client.getSkuDetailsForRequest(requestId) },
+            success = {
+                if (it == null) {
+                    finish()
+                } else {
+                    this.skuDetails = it
+                    InjectedNavigator(startRoute = PurchaseDialogRoute)
+                }
+            }
+        )
     }
 
     private fun SkuDetails.toPurchaseData(): Purchase {
@@ -71,13 +78,15 @@ class DebugBillingActivity : EsActivity() {
 
     private val PurchaseDialogRoute = DialogRoute(
         dismissHandler = {
-            client.onPurchaseResult(
-                requestId = requestId,
-                responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
-                purchases = null
-            )
+            lifecycleScope.launch {
+                client.onPurchaseResult(
+                    requestId = requestId,
+                    responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
+                    purchases = null
+                )
 
-            finish()
+                finish()
+            }
         }
     ) {
         MaterialDialog(
@@ -108,13 +117,15 @@ class DebugBillingActivity : EsActivity() {
                         contentColor = guessingContentColorFor(GooglePlayGreen)
                     ),
                     onClick = {
-                        client.onPurchaseResult(
-                            requestId = requestId,
-                            responseCode = BillingClient.BillingResponseCode.OK,
-                            purchases = listOf(skuDetails.toPurchaseData())
-                        )
+                        lifecycleScope.launch {
+                            client.onPurchaseResult(
+                                requestId = requestId,
+                                responseCode = BillingClient.BillingResponseCode.OK,
+                                purchases = listOf(skuDetails.toPurchaseData())
+                            )
 
-                        finish()
+                            finish()
+                        }
                     }
                 )
             }
