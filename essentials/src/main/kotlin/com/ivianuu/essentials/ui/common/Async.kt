@@ -62,7 +62,7 @@ fun <T> Async(
     when (state) {
         Uninitialized -> uninitialized()
         is Loading -> loading()
-        is Success -> success(state())
+        is Success -> success(state.value)
         is Fail -> fail(state.error)
     }
 }
