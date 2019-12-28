@@ -124,7 +124,7 @@ class NavigatorState(
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
-    var types: List<RouteTransition.Type> by framed(
+    var routeTransitionTypes: List<RouteTransition.Type> by framed(
         listOf(OpacityRouteTransitionType, CanvasRouteTransitionType, ModifierRouteTransitionType)
     )
 
@@ -375,7 +375,7 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = types,
+                                types = routeTransitionTypes,
                                 children = {
                                     RouteAmbient.Provider(
                                         value = route,
