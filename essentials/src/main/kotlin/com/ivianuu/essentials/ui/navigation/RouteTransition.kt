@@ -159,7 +159,7 @@ private fun RouteTransitionTypes(
                 type.apply(ops) { typeChildren() }
             }
         }
-        .fold({ children() }) { current, type ->
+        .fold(children) { current, type ->
             { type(current) }
         }.invoke()
 }
