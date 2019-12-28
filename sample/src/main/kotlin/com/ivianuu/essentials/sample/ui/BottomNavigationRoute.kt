@@ -21,26 +21,26 @@ import androidx.ui.graphics.Color
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
-import com.ivianuu.essentials.ui.material.BottomNavigationController
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
+import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 val BottomNavigationRoute = Route {
-    BottomNavigationController(
+    ProvideBottomNavigationController(
         items = BottomNavItem.values().toList()
     ) {
         Scaffold(
             topAppBar = { TopAppBar("Bottom navigation") },
             body = {
-                BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
+                BottomNavigationSwapper<BottomNavItem>(keepState = true) { item ->
                     ColoredRect(item.color)
                 }
             },
             bottomBar = {
-                BottomNavigationBar<BottomNavItem> { _, item ->
+                BottomNavigationBar<BottomNavItem> { item ->
                     BottomNavigationBarItem(
                         icon = drawableResource(item.iconRes),
                         text = item.title

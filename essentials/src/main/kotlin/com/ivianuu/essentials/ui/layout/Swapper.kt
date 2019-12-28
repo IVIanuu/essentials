@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.common.framed
 
 @Composable
 fun <T> Swapper(
-    controller: SwapperController<T>,
+    controller: SwapperState<T>,
     modifier: Modifier = Modifier.None,
     child: @Composable() (T) -> Unit
 ) {
@@ -58,7 +58,7 @@ fun <T> Swapper(
     }
 }
 
-class SwapperController<T>(
+class SwapperState<T>(
     initial: T,
     keepState: Boolean = false
 ) {

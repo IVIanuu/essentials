@@ -26,7 +26,7 @@ import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.layout.Swapper
-import com.ivianuu.essentials.ui.layout.SwapperController
+import com.ivianuu.essentials.ui.layout.SwapperState
 
 @Composable
 fun <T> TabController(
@@ -101,7 +101,7 @@ fun <T> TabContent(
     keepState: Boolean = false,
     item: @Composable() (Int, T) -> Unit
 ) {
-    val swapperController = remember { SwapperController(tabController.selectedItem) }
+    val swapperController = remember { SwapperState(tabController.selectedItem) }
     remember(keepState) { swapperController.keepState = keepState }
     remember(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
     Swapper(
