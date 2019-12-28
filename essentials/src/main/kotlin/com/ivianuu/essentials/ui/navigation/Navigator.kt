@@ -369,7 +369,7 @@ class NavigatorState(
             content = {
                 RetainedObjectsAmbient.Provider(retainedObjects) {
                     ProvideCoroutineScope(coroutineScope()) {
-                        AbsorbPointer(absorb = absorbTouches) {
+                        AbsorbPointer(absorb = transitionRunning) {
                             RouteTransitionWrapper(
                                 transition = transition ?: defaultRouteTransition,
                                 state = transitionState,
@@ -391,8 +391,7 @@ class NavigatorState(
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
             if (completedState != RouteTransition.State.Init) {
-                absorbTouches = false
-                runningTransitions--
+                transitionRunning = false
             }
             lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
@@ -410,7 +409,12 @@ class NavigatorState(
         private var lastTransitionState by framed(RouteTransition.State.Init)
 
         private var other: RouteState? = null
-        private var absorbTouches by framed(false)
+
+        private var transitionRunning by framed(false, onSet = { currentValue, newValue ->
+            if (currentValue == newValue) return@framed false
+            if (newValue) runningTransitions++ else runningTransitions--
+            return@framed true
+        })
 
         private fun onOtherTransitionComplete() {
             overlayEntry.opaque = route.opaque
@@ -422,8 +426,7 @@ class NavigatorState(
             transition: RouteTransition?
         ) {
             overlayEntry.opaque = route.opaque || isPush
-            absorbTouches = true
-            runningTransitions++
+            transitionRunning = true
             if (isPush) overlayState.add(overlayEntry)
             lastTransitionState = transitionState
             transitionState = if (isPush) RouteTransition.State.EnterFromPush
@@ -436,8 +439,7 @@ class NavigatorState(
             isPush: Boolean,
             transition: RouteTransition?
         ) {
-            absorbTouches = true
-            runningTransitions++
+            transitionRunning = true
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = to
             lastTransitionState = transitionState
