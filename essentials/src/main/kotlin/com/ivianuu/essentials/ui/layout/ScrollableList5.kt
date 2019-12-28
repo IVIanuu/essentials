@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.key
 import androidx.compose.remember
@@ -24,7 +25,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.Density
 import androidx.ui.core.Dp
-import androidx.ui.core.Draw
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
@@ -38,6 +38,7 @@ import androidx.ui.core.toPx
 import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.Async
 import com.ivianuu.essentials.ui.common.FullScreenLoading
 import com.ivianuu.essentials.ui.common.ScrollPosition
@@ -49,13 +50,13 @@ import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.util.Async
 
 @Composable
-fun <T> AsyncList2(
+fun <T> AsyncList5(
     state: Async<List<T>>,
     fail: @Composable() (Throwable) -> Unit = {},
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
     successEmpty: @Composable() () -> Unit = {},
-    successItem: @Composable() (Int, T) -> ScrollableListItem2
+    successItem: @Composable() (Int, T) -> ScrollableListItem5
 ) {
     Async(
         state = state,
@@ -64,7 +65,7 @@ fun <T> AsyncList2(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                ScrollableList2(
+                ScrollableList5(
                     items = items
                         .mapIndexed { index, item -> successItem(index, item) }
                 )
@@ -76,8 +77,8 @@ fun <T> AsyncList2(
 }
 
 @Composable
-fun ScrollableList2(
-    items: List<ScrollableListItem2>,
+fun ScrollableList5(
+    items: List<ScrollableListItem5>,
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     modifier: Modifier = Modifier.None,
@@ -85,7 +86,7 @@ fun ScrollableList2(
 ) {
     val density = ambientDensity()
     // todo make this a param
-    val state = remember(position) { ScrollableListState2(density, position) }
+    val state = remember(position) { ScrollableListState5(density, position) }
 
     Observe {
         remember(items) { state.setItems(items) }
@@ -101,10 +102,10 @@ fun ScrollableList2(
                 RepaintBoundary {
                     Observe {
                         remember(state.position.value) {
-                            state.updateVisibleItems()
+                            state.updatePage()
                         }
                     }
-                    ScrollableListLayout2(
+                    ScrollableListLayout5(
                         state = state,
                         modifier = modifier
                     )
@@ -115,45 +116,34 @@ fun ScrollableList2(
 }
 
 @Composable
-private fun Item2(item: ScrollableListItem2) {
-    //d { "compose ${item.key}" }
+private fun Item5(item: ScrollableListItem5) {
     ParentData(item) {
-        Draw(
-            children = item.children,
-            onPaint = { canvas, parentSize ->
-                //d { "draw item ${item.key} ${item.shouldDraw}" }
-                if (item.isVisible) {
-                    drawChildren()
-                } else {
-                    this.javaClass.getDeclaredField("childDrawn")
-                        .also { it.isAccessible = true }
-                        .set(this, true)
-                }
-            }
-        )
+        RepaintBoundary(children = item.children)
     }
 }
 
-//@Immutable
-data class ScrollableListItem2(
+@Immutable
+data class ScrollableListItem5(
     val key: Any,
     val size: Dp,
     val children: @Composable() () -> Unit
 ) {
     internal var leading = Px.Zero
     internal var trailing = Px.Zero
-    internal var isVisible by framed(false)
-
     override fun toString(): String = key.toString()
 }
 
+private val emptyRange = (-1.px)..(-1.px)
+
 @Stable
-private class ScrollableListState2(
+private class ScrollableListState5(
     val density: Density,
     val position: ScrollPosition
 ) {
 
-    val items = mutableListOf<ScrollableListItem2>()
+    var currentPage by framed(Page(emptyList(), emptyRange, emptyRange))
+
+    private val allItems = mutableListOf<ScrollableListItem5>()
 
     var viewportSize = (-1).px
         set(value) {
@@ -163,9 +153,9 @@ private class ScrollableListState2(
 
     private var totalSize = Px.Zero
 
-    fun setItems(items: List<ScrollableListItem2>) {
-        this.items.clear()
-        this.items += items
+    fun setItems(items: List<ScrollableListItem5>) {
+        this.allItems.clear()
+        this.allItems += items
 
         var totalSize = Px.Zero
         items.forEach { item ->
@@ -186,31 +176,60 @@ private class ScrollableListState2(
         if (position.maxValue != newMaxValue) {
             position.updateBounds(Px.Zero, newMaxValue)
         }
-        updateVisibleItems()
+
+        updatePage()
     }
 
-    fun updateVisibleItems() {
-        val start = (position.value /* - viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
-        val end = (position.value + viewportSize /*+ viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
-        val visibleRange = start..end
-        //d { "visible range $visibleRange" }
-        items
-            .forEach { item ->
-                item.isVisible = item.leading in visibleRange || item.trailing in visibleRange
-            }
+    fun updatePage() {
+        if (allItems.isEmpty()) {
+            currentPage = Page(emptyList(), emptyRange, emptyRange)
+            return
+        }
+
+        if (position.value in currentPage.dirtyBounds) return
+
+        val leading = allItems.first().leading
+        val trailing = allItems.last().trailing
+
+        val pageSize = viewportSize * 2
+        val pageStart = (position.value - pageSize).coerceIn(leading, trailing)
+        val pageEnd = (position.value + viewportSize + pageSize).coerceIn(leading, trailing)
+        val pageBounds = pageStart..pageEnd
+
+        val dirtyBoundsSize = pageSize * 0.75f
+        val dirtyBoundsStart = (position.value - dirtyBoundsSize).coerceIn(leading, trailing)
+        val dirtyBoundsEnd = (position.value + viewportSize + dirtyBoundsSize).coerceIn(leading, trailing)
+        val dirtyBounds = dirtyBoundsStart..dirtyBoundsEnd
+
+        val pageItems = allItems.filter {
+            it.leading in pageBounds || it.trailing in pageBounds
+        }
+
+        currentPage = Page(
+            items = pageItems,
+            bounds = pageBounds,
+            dirtyBounds = dirtyBounds
+        )
+
+        d { "scroll pos ${position.value} updated page size $pageBounds dirty bounds $dirtyBounds items ${pageItems.map { it.key }}" }
     }
 }
 
+private data class Page(
+    val items: List<ScrollableListItem5>,
+    val bounds: ClosedRange<Px>,
+    val dirtyBounds: ClosedRange<Px>
+)
+
 @Composable
-private fun ScrollableListLayout2(
-    state: ScrollableListState2,
+private fun ScrollableListLayout5(
+    state: ScrollableListState5,
     modifier: Modifier
 ) {
     Layout(children = {
-        //d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
-        state.items.forEach { item ->
+        state.currentPage.items.forEach { item ->
             key(item.key) {
-                Item2(item)
+                Item5(item)
             }
         }
     }, modifier = modifier) { measureables, constraints ->
@@ -221,10 +240,8 @@ private fun ScrollableListLayout2(
         )
 
         val placeables = measureables.map { measureable ->
-            measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem2
+            measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem5
         }
-
-        //d { "lifecycle: measured ${placeables.map { it.second.key }}" }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             if (state.viewportSize != constraints.maxHeight.toPx()) {

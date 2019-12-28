@@ -17,16 +17,18 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Observe
+import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.Density
 import androidx.ui.core.Dp
-import androidx.ui.core.Draw
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.LayoutNode
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.core.Px
@@ -34,28 +36,29 @@ import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.max
 import androidx.ui.core.px
+import androidx.ui.core.round
 import androidx.ui.core.toPx
 import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.Async
 import com.ivianuu.essentials.ui.common.FullScreenLoading
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.util.Async
 
 @Composable
-fun <T> AsyncList2(
+fun <T> AsyncList4(
     state: Async<List<T>>,
     fail: @Composable() (Throwable) -> Unit = {},
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
     successEmpty: @Composable() () -> Unit = {},
-    successItem: @Composable() (Int, T) -> ScrollableListItem2
+    successItem: @Composable() (Int, T) -> ScrollableListItem4
 ) {
     Async(
         state = state,
@@ -64,7 +67,7 @@ fun <T> AsyncList2(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                ScrollableList2(
+                ScrollableList4(
                     items = items
                         .mapIndexed { index, item -> successItem(index, item) }
                 )
@@ -76,8 +79,8 @@ fun <T> AsyncList2(
 }
 
 @Composable
-fun ScrollableList2(
-    items: List<ScrollableListItem2>,
+fun ScrollableList4(
+    items: List<ScrollableListItem4>,
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     modifier: Modifier = Modifier.None,
@@ -85,7 +88,7 @@ fun ScrollableList2(
 ) {
     val density = ambientDensity()
     // todo make this a param
-    val state = remember(position) { ScrollableListState2(density, position) }
+    val state = remember(position) { ScrollableListState4(density, position) }
 
     Observe {
         remember(items) { state.setItems(items) }
@@ -104,7 +107,7 @@ fun ScrollableList2(
                             state.updateVisibleItems()
                         }
                     }
-                    ScrollableListLayout2(
+                    ScrollableListLayout4(
                         state = state,
                         modifier = modifier
                     )
@@ -115,45 +118,33 @@ fun ScrollableList2(
 }
 
 @Composable
-private fun Item2(item: ScrollableListItem2) {
-    //d { "compose ${item.key}" }
+private fun Item4(item: ScrollableListItem4) {
+    item.dirty = true
     ParentData(item) {
-        Draw(
-            children = item.children,
-            onPaint = { canvas, parentSize ->
-                //d { "draw item ${item.key} ${item.shouldDraw}" }
-                if (item.isVisible) {
-                    drawChildren()
-                } else {
-                    this.javaClass.getDeclaredField("childDrawn")
-                        .also { it.isAccessible = true }
-                        .set(this, true)
-                }
-            }
-        )
+        RepaintBoundary(children = item.children)
     }
 }
 
-//@Immutable
-data class ScrollableListItem2(
+@Immutable
+data class ScrollableListItem4(
     val key: Any,
     val size: Dp,
     val children: @Composable() () -> Unit
 ) {
     internal var leading = Px.Zero
     internal var trailing = Px.Zero
-    internal var isVisible by framed(false)
-
+    internal var dirty = true
     override fun toString(): String = key.toString()
 }
 
 @Stable
-private class ScrollableListState2(
+private class ScrollableListState4(
     val density: Density,
     val position: ScrollPosition
 ) {
 
-    val items = mutableListOf<ScrollableListItem2>()
+    val items = mutableListOf<ScrollableListItem4>()
+    val visibleItems = modelListOf<ScrollableListItem4>()
 
     var viewportSize = (-1).px
         set(value) {
@@ -163,7 +154,7 @@ private class ScrollableListState2(
 
     private var totalSize = Px.Zero
 
-    fun setItems(items: List<ScrollableListItem2>) {
+    fun setItems(items: List<ScrollableListItem4>) {
         this.items.clear()
         this.items += items
 
@@ -186,31 +177,28 @@ private class ScrollableListState2(
         if (position.maxValue != newMaxValue) {
             position.updateBounds(Px.Zero, newMaxValue)
         }
+
         updateVisibleItems()
     }
 
     fun updateVisibleItems() {
-        val start = (position.value /* - viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
-        val end = (position.value + viewportSize /*+ viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
-        val visibleRange = start..end
-        //d { "visible range $visibleRange" }
-        items
-            .forEach { item ->
-                item.isVisible = item.leading in visibleRange || item.trailing in visibleRange
-            }
+        val visibleRange = position.value..(position.value + viewportSize)
+        visibleItems.clear()
+        visibleItems += items.filter {
+            it.leading in visibleRange || it.trailing in visibleRange
+        }
     }
 }
 
 @Composable
-private fun ScrollableListLayout2(
-    state: ScrollableListState2,
+private fun ScrollableListLayout4(
+    state: ScrollableListState4,
     modifier: Modifier
 ) {
     Layout(children = {
-        //d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
-        state.items.forEach { item ->
+        state.visibleItems.forEach { item ->
             key(item.key) {
-                Item2(item)
+                Item4(item)
             }
         }
     }, modifier = modifier) { measureables, constraints ->
@@ -220,23 +208,31 @@ private fun ScrollableListLayout2(
             maxHeight = IntPx.Infinity
         )
 
-        val placeables = measureables.map { measureable ->
-            measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem2
-        }
+        val layoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
 
-        //d { "lifecycle: measured ${placeables.map { it.second.key }}" }
+        layoutNode.layoutChildren.forEach { child ->
+            val item = child.parentData as ScrollableListItem4
+            if (!item.dirty) {
+                child.javaClass.getDeclaredField("needsRemeasure")
+                    .also { it.isAccessible }
+                    .set(child, false)
+            }
+
+            d { "try measure ${item.key} needs remeasure -> ${child.needsRemeasure}" }
+
+            child.measure(childConstraints)
+        }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             if (state.viewportSize != constraints.maxHeight.toPx()) {
                 state.viewportSize = constraints.maxHeight.toPx()
             }
 
-            placeables.forEach { (placeable, item) ->
-                //d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
-                placeable.place(Px.Zero, item.leading - state.position.value)
-            }
-
-            //d { "lifecycle: placed ${placeables.map { it.second.key }}" }
+            layoutNode.layoutChildren
+                .forEach { child ->
+                    val item = child.parentData as ScrollableListItem4
+                    child.place(IntPx.Zero, (item.leading - state.position.value).round())
+                }
         }
     }
 }
