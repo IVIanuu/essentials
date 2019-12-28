@@ -86,10 +86,13 @@ fun PrefBoxFactory.stringSet(
 private object StringSetSerializer : DiskBox.Serializer<Set<String>> {
     private const val VALUE_DELIMITER = "^\\"
     override fun deserialize(serialized: String): Set<String> {
-        if (serialized.isEmpty()) return emptySet()
-        return serialized.split(VALUE_DELIMITER).toSet()
+        return if (serialized.isEmpty()) return emptySet()
+        else serialized.split(VALUE_DELIMITER).toSet()
     }
-    override fun serialize(value: Set<String>) = value.joinToString(VALUE_DELIMITER)
+    override fun serialize(value: Set<String>): String {
+        return if (value.isEmpty()) ""
+        else value.joinToString(VALUE_DELIMITER)
+    }
 }
 
 fun PrefBoxFactory.stringList(
@@ -100,10 +103,13 @@ fun PrefBoxFactory.stringList(
 private object StringListSerializer : DiskBox.Serializer<List<String>> {
     private const val VALUE_DELIMITER = "^\\"
     override fun deserialize(serialized: String): List<String> {
-        if (serialized.isEmpty()) return emptyList()
-        return serialized.split(VALUE_DELIMITER)
+        return if (serialized.isEmpty()) return emptyList()
+        else serialized.split(VALUE_DELIMITER)
     }
-    override fun serialize(value: List<String>) = value.joinToString(VALUE_DELIMITER)
+    override fun serialize(value: List<String>): String {
+        return if (value.isEmpty()) ""
+        else value.joinToString(VALUE_DELIMITER)
+    }
 }
 
 fun PrefBoxFactory.stringMap(
@@ -115,15 +121,16 @@ private object StringMapSerializer : DiskBox.Serializer<Map<String, String>> {
     private const val ENTRY_DELIMITER = "^]"
     private const val VALUE_DELIMITER = "^\\"
     override fun deserialize(serialized: String): Map<String, String> {
-        return if (serialized.isEmpty()) emptyMap() else serialized.split(ENTRY_DELIMITER)
+        return if (serialized.isEmpty()) emptyMap()
+        else serialized.split(ENTRY_DELIMITER)
             .map { it.split(VALUE_DELIMITER) }
             .associateBy { it[0] }
             .mapValues { it.value[1] }
     }
 
     override fun serialize(value: Map<String, String>): String {
-        return if (value.isEmpty()) "" else value.entries
-            .map { "${it.key}$VALUE_DELIMITER${it.value}" }
-            .joinToString(ENTRY_DELIMITER)
+        return if (value.isEmpty()) ""
+        else value.entries
+            .joinToString(ENTRY_DELIMITER) { "${it.key}$VALUE_DELIMITER${it.value}" }
     }
 }
