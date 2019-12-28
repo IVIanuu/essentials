@@ -17,14 +17,19 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
+import androidx.ui.graphics.Color
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
+import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.core.UiInitializer
 import com.ivianuu.essentials.ui.core.bindAppUi
 import com.ivianuu.essentials.ui.core.bindUiInitializer
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
+import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import kotlin.time.milliseconds
@@ -32,10 +37,19 @@ import kotlin.time.milliseconds
 @Factory
 class SampleUi : AppUi {
     override fun runApp() {
-        DefaultRouteTransitionAmbient.Provider(
-            value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+        ProvideSystemBarStyle(
+            SystemBarStyle(
+                statusBarColor = Color.Black.copy(alpha = 0.2f),
+                lightStatusBar = MaterialTheme.colors().onPrimary.isDark,
+                navigationBarColor = MaterialTheme.colors().surface.copy(alpha = 0.7f),
+                lightNavigationBar = MaterialTheme.colors().onSurface.isDark
+            )
         ) {
-            InjectedNavigator(startRoute = HomeRoute)
+            DefaultRouteTransitionAmbient.Provider(
+                value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+            ) {
+                InjectedNavigator(startRoute = HomeRoute)
+            }
         }
     }
 }
