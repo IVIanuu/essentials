@@ -20,6 +20,7 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.ui.core.Modifier
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
@@ -78,8 +79,10 @@ fun Image(
             imageLoader = imageLoader
         )
 
-        Container(modifier = modifier) {
-            image(loadedImage)
+        RepaintBoundary {
+            Container(modifier = modifier) {
+                image(loadedImage)
+            }
         }
     }
 }
@@ -100,8 +103,10 @@ fun Image(
             imageLoader = imageLoader
         )
 
-        Container(modifier = modifier) {
-            image(loadedImage)
+        RepaintBoundary {
+            Container(modifier = modifier) {
+                image(loadedImage)
+            }
         }
     }
 }
