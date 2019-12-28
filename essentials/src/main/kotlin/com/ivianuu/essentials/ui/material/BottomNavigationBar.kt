@@ -128,8 +128,7 @@ fun <T> BottomNavigationBar(
 @Composable
 fun BottomNavigationBarItem(
     onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
-    text: String,
-    icon: Image
+    children: @Composable() () -> Unit
 ) {
     Ripple(bounded = false, radius = BottomNavigationBarItemRippleRadius) {
         Clickable(onClick = onSelected) {
@@ -139,16 +138,26 @@ fun BottomNavigationBarItem(
                     top = BottomNavigationBarItemPaddingTop,
                     right = BottomNavigationBarItemPaddingSide,
                     bottom = BottomNavigationBarItemPaddingBottom
-                )
-            ) {
-                Column(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    Icon(image = icon)
-                    Text(text = text, style = MaterialTheme.typography().caption)
-                }
-            }
+                ),
+                children = children
+            )
+        }
+    }
+}
+
+@Composable
+fun BottomNavigationBarItem(
+    onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
+    text: String,
+    icon: Image
+) {
+    BottomNavigationBarItem(onSelected = onSelected) {
+        Column(
+            mainAxisAlignment = MainAxisAlignment.Center,
+            crossAxisAlignment = CrossAxisAlignment.Center
+        ) {
+            Icon(image = icon)
+            Text(text = text, style = MaterialTheme.typography().caption)
         }
     }
 }
