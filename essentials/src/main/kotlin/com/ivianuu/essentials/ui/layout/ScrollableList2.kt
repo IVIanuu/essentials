@@ -40,15 +40,45 @@ import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.Async
+import com.ivianuu.essentials.ui.common.FullScreenLoading
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.util.Async
 
 @Composable
-fun ScrollableList(
-    items: List<ScrollableListItem>,
+fun <T> AsyncList2(
+    state: Async<List<T>>,
+    fail: @Composable() (Throwable) -> Unit = {},
+    loading: @Composable() () -> Unit = { FullScreenLoading() },
+    uninitialized: @Composable() () -> Unit = loading,
+    successEmpty: @Composable() () -> Unit = {},
+    successItem: @Composable() (Int, T) -> ScrollableListItem2
+) {
+    Async(
+        state = state,
+        fail = fail,
+        loading = loading,
+        uninitialized = uninitialized,
+        success = { items ->
+            if (items.isNotEmpty()) {
+                ScrollableList2(
+                    items = items
+                        .mapIndexed { index, item -> successItem(index, item) }
+                )
+            } else {
+                successEmpty()
+            }
+        }
+    )
+}
+
+@Composable
+fun ScrollableList2(
+    items: List<ScrollableListItem2>,
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     modifier: Modifier = Modifier.None,
@@ -56,7 +86,7 @@ fun ScrollableList(
 ) {
     val density = ambientDensity()
     // todo make this a param
-    val state = remember(position) { ScrollableListState(density, position) }
+    val state = remember(position) { ScrollableListState2(density, position) }
 
     Observe {
         remember(items) { state.setItems(items) }
@@ -75,7 +105,7 @@ fun ScrollableList(
                             state.updateVisibleItems()
                         }
                     }
-                    ScrollableListLayout(
+                    ScrollableListLayout2(
                         state = state,
                         modifier = modifier
                     )
@@ -86,13 +116,13 @@ fun ScrollableList(
 }
 
 @Composable
-private fun Item(item: ScrollableListItem) {
+private fun Item2(item: ScrollableListItem2) {
     d { "compose ${item.key}" }
     ParentData(item, item.children)
 }
 
 @Immutable
-data class ScrollableListItem(
+data class ScrollableListItem2(
     val key: Any,
     val size: Dp,
     val children: @Composable() () -> Unit
@@ -104,13 +134,13 @@ data class ScrollableListItem(
 }
 
 @Stable
-private class ScrollableListState(
+private class ScrollableListState2(
     val density: Density,
     val position: ScrollPosition
 ) {
 
-    val items = mutableListOf<ScrollableListItem>()
-    val visibleItems = modelListOf<ScrollableListItem>()
+    val items = mutableListOf<ScrollableListItem2>()
+    val visibleItems = modelListOf<ScrollableListItem2>()
 
     var viewportSize = (-1).px
         set(value) {
@@ -120,7 +150,7 @@ private class ScrollableListState(
 
     private var totalSize = Px.Zero
 
-    fun setItems(items: List<ScrollableListItem>) {
+    fun setItems(items: List<ScrollableListItem2>) {
         this.items.clear()
         this.items += items
 
@@ -161,15 +191,15 @@ private class ScrollableListState(
 }
 
 @Composable
-private fun ScrollableListLayout(
-    state: ScrollableListState,
+private fun ScrollableListLayout2(
+    state: ScrollableListState2,
     modifier: Modifier
 ) {
     Layout(children = {
         d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
         state.visibleItems.forEach { item ->
             key(item.key) {
-                Item(item)
+                Item2(item)
             }
         }
     }, modifier = modifier) { measureables, constraints ->
@@ -180,7 +210,7 @@ private fun ScrollableListLayout(
         )
 
         val placeables = measureables.map { measureable ->
-            measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem
+            measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem2
         }
 
         d { "lifecycle: measured ${placeables.map { it.second.key }}" }
