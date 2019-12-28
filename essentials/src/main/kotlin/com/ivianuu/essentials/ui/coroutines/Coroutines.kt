@@ -35,7 +35,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -170,6 +173,19 @@ fun <T> collect(
     val state = state { placeholder }
     launchOnCommit(flow) {
         flow.collect { item -> state.value = item }
+    }
+    return state.value
+}
+
+@Composable
+fun <T> collectAsync(flow: Flow<T>): Async<T> {
+    val state = state<Async<T>> { Uninitialized }
+    launchOnCommit(flow) {
+        flow
+            .map { Success(it) as Async<T> }
+            .onStart { emit(Loading()) }
+            .catch { emit(Fail(it)) }
+            .collect { item -> state.value = item }
     }
     return state.value
 }
