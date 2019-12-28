@@ -23,16 +23,17 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
@@ -90,11 +91,10 @@ val TextInputRoute = Route {
         },
         body = {
             if (items.isNotEmpty()) {
-                val scrollerPosition = remember(items) { ScrollerPosition() }
-                val lastScrollPosition =
-                    holder { scrollerPosition.value }
+                val scrollPosition = retain { ScrollPosition() }
+                val lastScrollPosition = holder { scrollPosition.value }
 
-                if (scrollerPosition.value != lastScrollPosition.value) {
+                if (scrollPosition.value != lastScrollPosition.value) {
                     keyboardManager.hideKeyboard()
                     if (state.searchVisible && state.inputValue.isEmpty()) {
                         state.searchVisible = false
@@ -102,7 +102,7 @@ val TextInputRoute = Route {
                 }
 
                 ScrollableList(
-                    // todo scrollerPosition = scrollerPosition,
+                    position = scrollPosition,
                     items = items
                 ) { _, item ->
                     ListItem(
