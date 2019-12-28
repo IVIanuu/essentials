@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Observe
+import androidx.compose.Stable
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.onDispose
@@ -32,7 +33,6 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject

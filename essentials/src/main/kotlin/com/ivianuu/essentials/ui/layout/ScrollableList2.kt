@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
 import androidx.compose.Observe
+import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Alignment
@@ -44,7 +45,6 @@ import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.util.Async
 

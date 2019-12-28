@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.core.Layout
@@ -26,19 +27,19 @@ import com.ivianuu.essentials.ui.common.framed
 
 @Composable
 fun <T> Swapper(
-    controller: SwapperState<T>,
+    state: SwapperState<T>,
     modifier: Modifier = Modifier.None,
     child: @Composable() (T) -> Unit
 ) {
     val children: @Composable() () -> Unit = {
-        controller.keepStateItems.forEach { item ->
+        state.keepStateItems.forEach { item ->
             key(item as Any) {
                 child(item)
             }
         }
 
-        key(controller.current as Any) {
-            child(controller.current)
+        key(state.current as Any) {
+            child(state.current)
         }
     }
 
@@ -58,6 +59,7 @@ fun <T> Swapper(
     }
 }
 
+@Stable
 class SwapperState<T>(
     initial: T,
     keepState: Boolean = false

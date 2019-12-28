@@ -24,6 +24,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.ambient
 import androidx.compose.onCommit
 import androidx.compose.remember

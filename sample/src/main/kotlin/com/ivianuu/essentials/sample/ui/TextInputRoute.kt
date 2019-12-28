@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.call
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.FloatingActionButton
@@ -101,16 +102,18 @@ val TextInputRoute = Route {
                     }
                 }
 
-                ScrollableList(
-                    position = scrollPosition,
-                    items = items
-                ) { _, item ->
-                    ListItem(
-                        title = { Text(item) },
-                        onClick = {
-                            d { "clicked $item" }
-                        }
-                    )
+                call(items) {
+                    ScrollableList(
+                        position = scrollPosition,
+                        items = items
+                    ) { _, item ->
+                        ListItem(
+                            title = { Text(item) },
+                            onClick = {
+                                d { "clicked $item" }
+                            }
+                        )
+                    }
                 }
             } else {
                 Center {

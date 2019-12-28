@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.core.Stable
 
 @Composable
 inline fun <T> holder(crossinline init: () -> T): Holder<T> = remember { Holder(init()) }

@@ -105,6 +105,6 @@ fun <T> TabContent(
     remember(keepState) { swapperController.keepState = keepState }
     remember(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
     Swapper(
-        controller = swapperController
+        state = swapperController
     ) { item(tabController.selectedIndex, tabController.selectedItem) }
 }

@@ -20,6 +20,7 @@ import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
@@ -32,7 +33,6 @@ import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.Stable
 import com.ivianuu.essentials.ui.core.retain
 
 @Stable

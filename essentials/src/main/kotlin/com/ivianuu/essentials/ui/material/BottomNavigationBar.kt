@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Stable
 import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
@@ -189,7 +190,7 @@ fun <T> BottomNavigationSwapper(
         swapperController.current = bottomNavigationController.selectedItem
     }
 
-    Swapper(controller = swapperController) {
+    Swapper(state = swapperController) {
         content(bottomNavigationController.selectedItem)
     }
 }
@@ -226,6 +227,7 @@ private val BottomNavigationBarItemPaddingSide = 12.dp
 private val BottomNavigationBarItemPaddingBottom = 12.dp
 private val BottomNavigationBarItemRippleRadius = 56.dp
 
+@Stable
 class BottomNavigationController<T>(
     items: List<T>,
     initial: T = items.first()

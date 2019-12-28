@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Observe
+import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
@@ -26,7 +27,6 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.tightMax
-import com.ivianuu.essentials.ui.core.Stable
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {
@@ -114,7 +114,6 @@ private fun OverlayLayout(
         // force children to fill the whole space
         val childConstraints = constraints.tightMax()
 
-        // get only visible routes
         val placeables = measureables
             .map { it.measure(childConstraints) to it.parentData as OverlayEntryParentData }
 
