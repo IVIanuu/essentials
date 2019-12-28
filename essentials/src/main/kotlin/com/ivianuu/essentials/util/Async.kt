@@ -33,7 +33,7 @@ class Loading<out T> : Async<T>(complete = false, shouldLoad = false), Incomplet
 }
 
 @Immutable
-data class Success<out T>(private val value: T) : Async<T>(complete = true, shouldLoad = false) {
+data class Success<out T>(val value: T) : Async<T>(complete = true, shouldLoad = false) {
     override operator fun invoke(): T = value
 }
 
