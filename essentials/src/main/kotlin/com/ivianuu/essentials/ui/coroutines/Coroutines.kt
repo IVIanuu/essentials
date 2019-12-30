@@ -37,9 +37,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 private val CoroutineScopeAmbient = Ambient.of<CoroutineScope>()
@@ -141,7 +143,12 @@ fun <T> load(
     block: suspend CoroutineScope.() -> T
 ): T {
     val state = state { placeholder }
-    launchOnCommit(key) { state.value = block() }
+    launchOnCommit(key) {
+        val result = block()
+        withContext(Dispatchers.Main) {
+            state.value = result
+        }
+    }
     return state.value
 }
 
@@ -152,11 +159,18 @@ fun <T> loadAsync(
 ): Async<T> {
     val state = state<Async<T>> { Uninitialized }
     launchOnCommit(key) {
-        state.value = Loading()
-        state.value = try {
-            Success(block())
+        state.value = withContext(Dispatchers.Main) {
+            Loading()
+        }
+        try {
+            val result = block()
+            withContext(Dispatchers.Main) {
+                state.value = Success(result)
+            }
         } catch (e: Exception) {
-            Fail(e)
+            withContext(Dispatchers.Main) {
+                state.value = Fail(e)
+            }
         }
     }
     return state.value
@@ -172,7 +186,9 @@ fun <T> collect(
 ): T {
     val state = state { placeholder }
     launchOnCommit(flow) {
-        flow.collect { item -> state.value = item }
+        flow
+            .flowOn(Dispatchers.Main)
+            .collect { item -> state.value = item }
     }
     return state.value
 }
@@ -185,6 +201,7 @@ fun <T> collectAsync(flow: Flow<T>): Async<T> {
             .map { Success(it) as Async<T> }
             .onStart { emit(Loading()) }
             .catch { emit(Fail(it)) }
+            .flowOn(Dispatchers.Main)
             .collect { item -> state.value = item }
     }
     return state.value
