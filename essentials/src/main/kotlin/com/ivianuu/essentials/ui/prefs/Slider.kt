@@ -22,7 +22,12 @@ import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Dp
+import androidx.ui.core.IntPx
+import androidx.ui.core.Px
 import androidx.ui.core.dp
+import androidx.ui.core.ipx
+import androidx.ui.core.px
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
@@ -42,6 +47,9 @@ import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @JvmName("DoubleSliderPreference")
 @Composable
@@ -248,6 +256,227 @@ fun SliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toLong() },
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("DpSliderPreference")
+@Composable
+fun SliderPreference(
+    @Pivotal box: Box<Dp>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedRange<Dp> = 0.dp..1.dp,
+    steps: Int? = null,
+    valueText: @Composable() ((Dp) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = ValueController(box),
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("DpSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Dp>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    valueRange: ClosedRange<Dp> = 0.dp..1.dp,
+    steps: Int? = null,
+    valueText: @Composable() ((Dp) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.value },
+        fromFloat = { it.dp },
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("PxSliderPreference")
+@Composable
+fun SliderPreference(
+    @Pivotal box: Box<Px>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedRange<Px> = 0.px..100.px,
+    steps: Int? = null,
+    valueText: @Composable() ((Px) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = ValueController(box),
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("PxSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Px>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    valueRange: ClosedRange<Px> = 0.px..100.px,
+    steps: Int? = null,
+    valueText: @Composable() ((Px) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.value },
+        fromFloat = { it.px },
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("IntPxSliderPreference")
+@Composable
+fun SliderPreference(
+    @Pivotal box: Box<IntPx>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
+    steps: Int? = null,
+    valueText: @Composable() ((IntPx) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = ValueController(box),
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("IntPxSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<IntPx>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
+    steps: Int? = null,
+    valueText: @Composable() ((IntPx) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.value.toFloat() },
+        fromFloat = { it.toInt().ipx },
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("DurationSliderPreference")
+@Composable
+fun SliderPreference(
+    @Pivotal box: Box<Duration>,
+    unit: DurationUnit,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedRange<Duration>,
+    steps: Int? = null,
+    valueText: @Composable() ((Duration) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = ValueController(box),
+        unit = unit,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("DurationSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Duration>,
+    unit: DurationUnit,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    valueRange: ClosedRange<Duration>,
+    steps: Int? = null,
+    valueText: @Composable() ((Duration) -> Unit)? = null
+) {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = {
+            it.toLongMilliseconds().toFloat()
+        },
+        fromFloat = { DurationUnit.MILLISECONDS.convert(it.toLong(), unit).toDuration(unit) },
         enabled = enabled,
         dependencies = dependencies,
         title = title,

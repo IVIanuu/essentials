@@ -20,6 +20,7 @@ import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.color
+import com.ivianuu.essentials.store.prefs.duration
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
@@ -39,6 +40,8 @@ import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.SliderPreference
 import com.ivianuu.essentials.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.prefs.TextInputPreference
+import kotlin.time.DurationUnit
+import kotlin.time.milliseconds
 
 val PrefsRoute = Route {
     Scaffold(
@@ -81,6 +84,16 @@ val PrefsRoute = Route {
                     title = "Slider",
                     steps = 10,
                     valueRange = 0..100,
+                    summary = "This is a slider preference"
+                )
+
+                SliderPreference(
+                    box = boxFactory.duration("slider_dur", 33.milliseconds, DurationUnit.MILLISECONDS),
+                    unit = DurationUnit.MILLISECONDS,
+                    dependencies = dependencies,
+                    title = "Slider duration",
+                    steps = 10,
+                    valueRange = 0.milliseconds..100.milliseconds,
                     summary = "This is a slider preference"
                 )
 

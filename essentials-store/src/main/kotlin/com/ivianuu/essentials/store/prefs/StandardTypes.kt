@@ -17,6 +17,9 @@
 package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.DiskBox
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 fun PrefBoxFactory.boolean(
     name: String,
@@ -133,4 +136,15 @@ private object StringMapSerializer : DiskBox.Serializer<Map<String, String>> {
         else value.entries
             .joinToString(ENTRY_DELIMITER) { "${it.key}$VALUE_DELIMITER${it.value}" }
     }
+}
+
+fun PrefBoxFactory.duration(
+    name: String,
+    defaultValue: Duration,
+    unit: DurationUnit
+) = box(name = name, defaultValue = defaultValue, serializer = DurationSerializer(unit))
+
+private class DurationSerializer(private val unit: DurationUnit) : DiskBox.Serializer<Duration> {
+    override fun deserialize(serialized: String) = serialized.toLong().toDuration(unit)
+    override fun serialize(value: Duration) = value.toLongMilliseconds().toString()
 }
