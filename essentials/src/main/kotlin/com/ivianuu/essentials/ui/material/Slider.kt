@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.material
 import androidx.animation.AnimationEndReason
 import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
-import androidx.annotation.IntRange
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
@@ -73,7 +72,7 @@ fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
 class SliderPosition(
     initial: Float = 0f,
     val valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    @IntRange(from = 0) val steps: Int = 0
+    val steps: Int = 0
 ) {
 
     internal val startValue: Float = valueRange.start
