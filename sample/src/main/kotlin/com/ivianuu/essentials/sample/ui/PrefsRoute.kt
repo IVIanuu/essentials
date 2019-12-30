@@ -39,8 +39,6 @@ import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.SliderPreference
 import com.ivianuu.essentials.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.prefs.TextInputPreference
-import com.ivianuu.essentials.ui.prefs.unitValueTextProvider
-import com.ivianuu.essentials.util.UnitValueTextProvider
 
 val PrefsRoute = Route {
     Scaffold(
@@ -83,8 +81,7 @@ val PrefsRoute = Route {
                     title = "Slider",
                     steps = 10,
                     valueRange = 0..100,
-                    summary = "This is a slider preference",
-                    valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp)
+                    summary = "This is a slider preference"
                 )
 
                 PreferenceSubheader(text = "Dialogs", dependencies = dependencies)

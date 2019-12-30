@@ -37,6 +37,8 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.WithModifier
+import com.ivianuu.essentials.ui.material.DefaultListItemStyle
+import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
@@ -285,8 +287,13 @@ fun <T : Comparable<T>> SliderPreference(
                 )
             }
 
+            val listItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle()
+
             Row(
-                modifier = LayoutGravity.BottomCenter,
+                modifier = LayoutGravity.BottomCenter + LayoutPadding(
+                    left = listItemStyle.contentPadding.left - 8.dp, // make the slider pretty
+                    right = listItemStyle.contentPadding.right
+                ),
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {
                 val position = remember(valueRange, steps) {
@@ -311,7 +318,7 @@ fun <T : Comparable<T>> SliderPreference(
 
                 Slider(
                     position = position,
-                    modifier = LayoutFlexible(1f) + LayoutPadding(left = 8.dp),
+                    modifier = LayoutFlexible(1f),
                     onValueChange = { newFloatValue ->
                         if (context.shouldBeEnabled &&
                             valueController.canSetValue(fromFloat(newFloatValue))
