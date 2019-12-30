@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.SliderPreference
 import com.ivianuu.essentials.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.prefs.TextInputPreference
-import kotlin.time.DurationUnit
+import kotlin.time.days
 import kotlin.time.milliseconds
 
 val PrefsRoute = Route {
@@ -88,12 +88,11 @@ val PrefsRoute = Route {
                 )
 
                 SliderPreference(
-                    box = boxFactory.duration("slider_dur", 33.milliseconds, DurationUnit.MILLISECONDS),
-                    unit = DurationUnit.MILLISECONDS,
+                    box = boxFactory.duration("slider_dur", 33.milliseconds),
                     dependencies = dependencies,
                     title = "Slider duration",
                     steps = 10,
-                    valueRange = 0.milliseconds..100.milliseconds,
+                    valueRange = 0.milliseconds..1.days,
                     summary = "This is a slider preference"
                 )
 

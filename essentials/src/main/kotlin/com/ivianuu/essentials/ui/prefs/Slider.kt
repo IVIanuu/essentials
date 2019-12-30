@@ -47,9 +47,8 @@ import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
+import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @JvmName("DoubleSliderPreference")
 @Composable
@@ -433,7 +432,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Duration>,
-    unit: DurationUnit,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -445,7 +443,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
-        unit = unit,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -461,7 +458,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Duration>,
-    unit: DurationUnit,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -473,10 +469,8 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
-        toFloat = {
-            it.toLongMilliseconds().toFloat()
-        },
-        fromFloat = { DurationUnit.MILLISECONDS.convert(it.toLong(), unit).toDuration(unit) },
+        toFloat = { it.toFloat() },
+        fromFloat = { it.toDuration() },
         enabled = enabled,
         dependencies = dependencies,
         title = title,
@@ -486,6 +480,21 @@ fun SliderPreference(
         steps = steps,
         valueText = valueText
     )
+}
+
+private fun Float.toDuration(): Duration {
+    return Duration::class.java.getDeclaredConstructor(Double::class.java)
+        .also { it.isAccessible = true }
+        .newInstance(this.toDouble())
+}
+
+private fun Duration.toFloat(): Float {
+    return javaClass.declaredFields
+        .first { it.type == Double::class.java }
+        .also { it.isAccessible = true }
+        .get(this)!!
+        .cast<Double>()
+        .toFloat()
 }
 
 @Composable
