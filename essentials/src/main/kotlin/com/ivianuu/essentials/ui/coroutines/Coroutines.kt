@@ -37,7 +37,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -187,8 +186,11 @@ fun <T> collect(
     val state = state { placeholder }
     launchOnCommit(flow) {
         flow
-            .flowOn(Dispatchers.Main)
-            .collect { item -> state.value = item }
+            .collect { item ->
+                withContext(Dispatchers.Main) {
+                    state.value = item
+                }
+            }
     }
     return state.value
 }
@@ -201,8 +203,11 @@ fun <T> collectAsync(flow: Flow<T>): Async<T> {
             .map { Success(it) as Async<T> }
             .onStart { emit(Loading()) }
             .catch { emit(Fail(it)) }
-            .flowOn(Dispatchers.Main)
-            .collect { item -> state.value = item }
+            .collect { item ->
+                withContext(Dispatchers.Main) {
+                    state.value = item
+                }
+            }
     }
     return state.value
 }
