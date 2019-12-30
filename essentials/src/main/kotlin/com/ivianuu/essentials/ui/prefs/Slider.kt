@@ -52,9 +52,7 @@ fun SliderPreference(
     image: Image? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
     steps: Int? = null,
-    valueText: @Composable() ((Double) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Double) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = ValueController(box),
@@ -80,9 +78,7 @@ fun SliderPreference(
     leading: @Composable() (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
     steps: Int? = null,
-    valueText: @Composable() ((Double) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Double) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = valueController,
@@ -110,9 +106,7 @@ fun SliderPreference(
     image: Image? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     steps: Int? = null,
-    valueText: @Composable() ((Float) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Float) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = ValueController(box),
@@ -138,9 +132,7 @@ fun SliderPreference(
     leading: @Composable() (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     steps: Int? = null,
-    valueText: @Composable() ((Float) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Float) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = valueController,
@@ -168,9 +160,7 @@ fun SliderPreference(
     image: Image? = null,
     valueRange: IntRange = 0..100,
     steps: Int? = null,
-    valueText: @Composable() ((Int) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Int) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = ValueController(box),
@@ -196,9 +186,7 @@ fun SliderPreference(
     leading: @Composable() (() -> Unit)? = null,
     valueRange: IntRange = 0..100,
     steps: Int? = null,
-    valueText: @Composable() ((Int) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Int) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = valueController,
@@ -226,9 +214,7 @@ fun SliderPreference(
     image: Image? = null,
     valueRange: LongRange = 0L..100L,
     steps: Int? = null,
-    valueText: @Composable() ((Long) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Long) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = ValueController(box),
@@ -254,9 +240,7 @@ fun SliderPreference(
     leading: @Composable() (() -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
     steps: Int? = null,
-    valueText: @Composable() ((Long) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((Long) -> Unit)? = null
 ) {
     SliderPreference(
         valueController = valueController,
@@ -285,9 +269,7 @@ fun <T : Comparable<T>> SliderPreference(
     leading: @Composable() (() -> Unit)? = null,
     valueRange: ClosedRange<T>,
     steps: Int? = null,
-    valueText: @Composable() ((T) -> Unit)? = {
-        SimpleSliderValueText(it)
-    }
+    valueText: @Composable() ((T) -> Unit)? = null
 ) {
     PreferenceWrapper(
         valueController = valueController,
