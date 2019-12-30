@@ -520,7 +520,7 @@ fun <T : Comparable<T>> SliderPreference(
 
             Row(
                 modifier = LayoutGravity.BottomCenter + LayoutPadding(
-                    left = listItemStyle.contentPadding.left - 8.dp, // make the slider pretty
+                    left = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
                     right = listItemStyle.contentPadding.right
                 ),
                 crossAxisAlignment = CrossAxisAlignment.Center
@@ -588,17 +588,17 @@ fun <T> SimpleSliderValueText(value: T) {
 }
 
 @Composable
-fun <T> unitValueTextProvider(
-    unit: UnitValueTextProvider.Unit
+fun <T> SimpleValueTextProvider(toString: (T) -> String = { it.toString() }): @Composable() (T) -> Unit {
+    return { SimpleSliderValueText(toString(it)) }
+}
+
+@Composable
+fun <T> UnitValueTextProvider(
+    unit: UnitValueTextProvider.Unit,
+    toString: (T) -> String = { it.toString() }
 ): @Composable() (T) -> Unit {
     val textProvider = UnitValueTextProvider(
         ambient(ContextAmbient), unit
     )
-    return {
-        Text(
-            text = textProvider(it.toString()),
-            style = MaterialTheme.typography().body2,
-            maxLines = 1
-        )
-    }
+    return { SimpleSliderValueText(textProvider(toString(it))) }
 }
