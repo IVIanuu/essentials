@@ -64,15 +64,14 @@ private class SharedFlow<T>(
         for (msg in channel) {
             when (msg) {
                 is Message.AddChannel -> {
-                    println("SharedFlows: $tag -> pre add channel ${msg.channel} ${channels.size}")
                     channels += msg.channel
-                    println("SharedFlows: $tag -> post add channel ${msg.channel} ${channels.size}")
+                    println("SharedFlows: $tag -> added channel ${msg.channel} ${channels.size}")
+                    cancelPendingReset()
                     startCollectingIfNeeded()
                 }
                 is Message.RemoveChannel -> {
-                    println("SharedFlows: $tag -> pre remove channel ${msg.channel} ${channels.size}")
                     channels -= msg.channel
-                    println("SharedFlows: $tag -> post remove channel ${msg.channel} ${channels.size}")
+                    println("SharedFlows: $tag -> removed channel ${msg.channel} ${channels.size}")
                     dispatchDelayedResetOrResetIfNeeded()
                 }
                 is Message.Dispatch.Value -> {
@@ -85,7 +84,6 @@ private class SharedFlow<T>(
                 }
                 is Message.Dispatch.UpstreamFinished -> {
                     println("SharedFlows: $tag -> upstream finished")
-                    channels.forEach { it.close() }
                     reset()
                 }
                 is Message.Reset -> {
@@ -172,10 +170,11 @@ private class SharedFlow<T>(
 
     private fun reset() {
         cancelPendingReset()
-        channels.clear()
         collecting = false
         collectionJob?.cancel()
         collectionJob = null
+        channels.forEach { it.close() }
+        channels.clear()
         cache = CircularArray(cacheSize)
     }
 
