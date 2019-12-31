@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -23,6 +24,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedSendChannelException
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
@@ -49,7 +51,7 @@ private class SharedFlow<T>(
     private val cacheSize: Int,
     private val timeout: Duration,
     private val tag: String?
-) : Flow<T> {
+) : AbstractFlow<T>() {
 
     private var cache = CircularArray<T>(cacheSize)
 
@@ -98,27 +100,31 @@ private class SharedFlow<T>(
         require(cacheSize >= 0) { "cacheSize parameter must be at least 0, but was $cacheSize" }
     }
 
-    override suspend fun collect(
+    override suspend fun collectSafely(
         collector: FlowCollector<T>
     ) {
-        val channel = Channel<Message.Dispatch.Value<T>>(Channel.UNLIMITED)
-        collector.emitAll(
-            channel.consumeAsFlow()
-                .onStart {
-                    println("SharedFlows: $tag -> child start $channel")
-                    actorChannel.send(Message.AddChannel(channel))
-                }
-                .transform {
-                    println("SharedFlows: $tag -> child value ${it.value} $channel")
-                    emit(it.value)
-                    it.delivered.complete(Unit)
-                }
-                .onCompletion {
-                    println("SharedFlows: $tag -> child complete $channel")
-                    actorChannel.send(Message.RemoveChannel(channel))
-                }
-                .replayIfNeeded()
-        )
+        try {
+            val channel = Channel<Message.Dispatch.Value<T>>(Channel.UNLIMITED)
+            collector.emitAll(
+                channel.consumeAsFlow()
+                    .onStart {
+                        println("SharedFlows: $tag -> child start $channel")
+                        actorChannel.send(Message.AddChannel(channel))
+                    }
+                    .transform {
+                        println("SharedFlows: $tag -> child value ${it.value} $channel")
+                        emit(it.value)
+                        it.delivered.complete(Unit)
+                    }
+                    .onCompletion {
+                        println("SharedFlows: $tag -> child complete $channel")
+                        actorChannel.send(Message.RemoveChannel(channel))
+                    }
+                    .replayIfNeeded()
+            )
+        } catch (e: CancellationException) {
+            // i guess its okay to do this?
+        }
     }
 
     private fun startCollectingIfNeeded() {

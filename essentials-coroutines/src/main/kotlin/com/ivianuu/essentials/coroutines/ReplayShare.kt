@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -53,8 +54,11 @@ private fun <T> Flow<T>.replayShareImpl(
         .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
 
     return flow {
-        if (lastValue !== Null) emit(lastValue as T)
-        emitAll(upstream)
+        try {
+            if (lastValue !== Null) emit(lastValue as T)
+            emitAll(upstream)
+        } catch (e: CancellationException) {
+        }
     }
 }
 
