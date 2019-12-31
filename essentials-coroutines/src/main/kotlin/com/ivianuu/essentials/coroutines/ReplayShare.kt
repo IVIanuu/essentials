@@ -27,20 +27,22 @@ import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
-    timeout: Duration = Duration.ZERO
-): Flow<T> =
-    replayShareImpl(scope = scope, defaultValue = Null, timeout = timeout)
+    timeout: Duration = Duration.ZERO,
+    tag: String? = null
+): Flow<T> = replayShareImpl(scope = scope, defaultValue = Null, timeout = timeout, tag = tag)
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
     defaultValue: T,
-    timeout: Duration = Duration.ZERO
-): Flow<T> = replayShareImpl(scope = scope, defaultValue = defaultValue, timeout = timeout)
+    timeout: Duration = Duration.ZERO,
+    tag: String? = null
+): Flow<T> = replayShareImpl(scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
 
 private fun <T> Flow<T>.replayShareImpl(
     scope: CoroutineScope,
     defaultValue: Any?,
-    timeout: Duration = Duration.ZERO
+    timeout: Duration = Duration.ZERO,
+    tag: String?
 ): Flow<T> {
     var lastValue: Any? = defaultValue
 
@@ -48,7 +50,7 @@ private fun <T> Flow<T>.replayShareImpl(
         .onEach { lastValue = it }
         .onCompletion { lastValue = defaultValue }
         .catch { lastValue = defaultValue }
-        .shareIn(scope = scope, cacheSize = 0, timeout = timeout)
+        .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
 
     return flow {
         if (lastValue !== Null) emit(lastValue as T)

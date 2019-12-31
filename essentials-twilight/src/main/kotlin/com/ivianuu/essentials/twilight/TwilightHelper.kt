@@ -24,7 +24,7 @@ import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.StateFlow
+import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -50,25 +49,21 @@ class TwilightHelper(
     prefs: TwilightPrefs
 ) : AppService {
 
-    private val _isDark = StateFlow(false)
-    val isDark: Flow<Boolean> get() = _isDark
-    val currentIsDark: Boolean get() = _isDark.value
-
-    init {
-        prefs.twilightMode.asFlow()
-            .flatMapLatest { mode ->
-                when (mode) {
-                    TwilightMode.System -> system()
-                    TwilightMode.Light -> flowOf(false)
-                    TwilightMode.Dark -> flowOf(true)
-                    TwilightMode.Battery -> battery()
-                    TwilightMode.Time -> time()
-                }
+    val isDark: Flow<Boolean> = prefs.twilightMode.asFlow()
+        .flatMapLatest { mode ->
+            when (mode) {
+                TwilightMode.System -> system()
+                TwilightMode.Light -> flowOf(false)
+                TwilightMode.Dark -> flowOf(true)
+                TwilightMode.Battery -> battery()
+                TwilightMode.Time -> time()
             }
-            .distinctUntilChanged()
-            .onEach { _isDark.value = it }
-            .launchIn(GlobalScope)
-    }
+        }
+        .distinctUntilChanged()
+        .onEach { currentIsDark = it }
+        .replayShareIn(scope = GlobalScope)
+    var currentIsDark = false
+        private set
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }

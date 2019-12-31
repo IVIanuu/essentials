@@ -16,57 +16,85 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedSendChannelException
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
-
-fun <T> Flow<T>.cache(cacheSize: Int): Flow<T> {
-    require(cacheSize > 0) { "cacheSize parameter must be greater than 0, but was $cacheSize" }
-
-    val cache = CircularArray<T>(cacheSize)
-
-    return onEach { value ->
-        // While flowing, also record all values in the cache.
-        cache.add(value)
-    }.onStart {
-        // Before emitting any values in sourceFlow,
-        // emit any cached values starting with the oldest.
-        cache.forEach { emit(it) }
-    }
-}
 
 fun <T> Flow<T>.shareIn(
     scope: CoroutineScope,
     cacheSize: Int = 0,
-    timeout: Duration = Duration.ZERO
-): Flow<T> = SharedFlow(this, scope, cacheSize, timeout)
+    timeout: Duration = Duration.ZERO,
+    tag: String? = null
+): Flow<T> = SharedFlow(this, scope, cacheSize, timeout, tag)
 
 private class SharedFlow<T>(
     private val sourceFlow: Flow<T>,
     private val scope: CoroutineScope,
     private val cacheSize: Int,
-    private val timeout: Duration
+    private val timeout: Duration,
+    private val tag: String?
 ) : Flow<T> {
 
-    private val lock = this
     private var cache = CircularArray<T>(cacheSize)
 
-    private var collectingJob: Job? = null
+    private var collecting = false
+    private var collectionJob: Job? = null
     private var resetJob: Job? = null
-    private var refCount = 0
-    private var channel = BroadcastChannel<T>(Channel.BUFFERED)
+    private val channels = mutableListOf<Channel<Message.Dispatch.Value<T>>>()
+
+    private val actorChannel = scope.actor<Message<T>>(
+        capacity = Channel.UNLIMITED
+    ) {
+        for (msg in channel) {
+            when (msg) {
+                is Message.AddChannel -> {
+                    println("SharedFlows: $tag -> pre add channel ${msg.channel} ${channels.size}")
+                    channels += msg.channel
+                    println("SharedFlows: $tag -> post add channel ${msg.channel} ${channels.size}")
+                    startCollectingIfNeeded()
+                }
+                is Message.RemoveChannel -> {
+                    println("SharedFlows: $tag -> pre remove channel ${msg.channel} ${channels.size}")
+                    channels -= msg.channel
+                    println("SharedFlows: $tag -> post remove channel ${msg.channel} ${channels.size}")
+                    dispatchDelayedResetOrResetIfNeeded()
+                }
+                is Message.Dispatch.Value -> {
+                    println("SharedFlows: $tag -> dispatch value -> ${msg.value}")
+                    channels.forEach { it.send(msg) }
+                }
+                is Message.Dispatch.Error -> {
+                    println("SharedFlows: $tag -> dispatch error -> ${msg.error}")
+                    channels.forEach { it.close(msg.error) }
+                }
+                is Message.Dispatch.UpstreamFinished -> {
+                    println("SharedFlows: $tag -> upstream finished")
+                    channels.forEach { it.close() }
+                    reset()
+                }
+                is Message.Reset -> {
+                    println("SharedFlows: $tag -> reset")
+                    reset()
+                }
+            }
+        }
+    }
 
     init {
         require(cacheSize >= 0) { "cacheSize parameter must be at least 0, but was $cacheSize" }
@@ -75,51 +103,65 @@ private class SharedFlow<T>(
     override suspend fun collect(
         collector: FlowCollector<T>
     ) {
+        val channel = Channel<Message.Dispatch.Value<T>>(Channel.UNLIMITED)
         collector.emitAll(
-            channel
-                .asFlow()
-                .onStart { onEnter() }
-                .onCompletion { onExit() }
+            channel.consumeAsFlow()
+                .onStart {
+                    println("SharedFlows: $tag -> child start $channel")
+                    actorChannel.send(Message.AddChannel(channel))
+                }
+                .transform {
+                    println("SharedFlows: $tag -> child value ${it.value} $channel")
+                    emit(it.value)
+                    it.delivered.complete(Unit)
+                }
+                .onCompletion {
+                    println("SharedFlows: $tag -> child complete $channel")
+                    actorChannel.send(Message.RemoveChannel(channel))
+                }
                 .replayIfNeeded()
         )
     }
 
-    private fun onEnter() {
-        synchronized(lock) {
-            refCount++
+    private fun startCollectingIfNeeded() {
+        if (collecting) return
+        collecting = true
 
-            cancelPendingReset()
+        scope.launch {
+            try {
+                collectionJob = scope.launch {
+                    try {
+                        sourceFlow
+                            .catch {
+                                actorChannel.send(Message.Dispatch.Error(it))
+                            }
+                            .cacheIfNeeded()
+                            .collect {
+                                val ack = CompletableDeferred<Unit>()
+                                actorChannel.send(Message.Dispatch.Value(it, ack))
+                                ack.await()
+                            }
+                    } catch (closed: ClosedSendChannelException) {
+                    }
+                }
 
-            if (collectingJob == null) {
-                collectingJob = scope.launch {
-                    sourceFlow
-                        .cacheIfNeeded()
-                        .collect { channel.send(it) }
+                collectionJob?.join()
+            } finally {
+                try {
+                    actorChannel.send(Message.Dispatch.UpstreamFinished())
+                } catch (closed: ClosedSendChannelException) {
                 }
             }
         }
     }
 
-    private fun onExit() {
-        synchronized(lock) {
-            refCount--
-            if (refCount == 0) {
-                dispatchDelayedResetOrReset()
-            }
-        }
-    }
-
-    private fun dispatchDelayedResetOrReset() {
-        if (timeout == Duration.ZERO) {
-            synchronized(lock) { reset() }
-            return
-        }
-        synchronized(lock) {
-            resetJob?.cancel()
-            resetJob = scope.launch {
-                delay(timeout.toLongMilliseconds())
-                synchronized(lock) { reset() }
-            }
+    private suspend fun dispatchDelayedResetOrResetIfNeeded() {
+        if (channels.isNotEmpty()) return
+        println("SharedFlows: $tag -> begin delayed reset $timeout")
+        resetJob?.cancel()
+        resetJob = scope.launch {
+            delay(timeout.toLongMilliseconds())
+            actorChannel.send(Message.Reset())
         }
     }
 
@@ -130,10 +172,11 @@ private class SharedFlow<T>(
 
     private fun reset() {
         cancelPendingReset()
-        collectingJob?.cancel()
-        collectingJob = null
+        channels.clear()
+        collecting = false
+        collectionJob?.cancel()
+        collectionJob = null
         cache = CircularArray(cacheSize)
-        channel = BroadcastChannel(Channel.BUFFERED)
     }
 
     private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheSize > 0) {
@@ -143,5 +186,19 @@ private class SharedFlow<T>(
     private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheSize > 0) {
         onEach { value -> cache.add(value) }
     } else this
+
+    private sealed class Message<T> {
+        class AddChannel<T>(val channel: Channel<Dispatch.Value<T>>) : Message<T>()
+        class RemoveChannel<T>(val channel: Channel<Dispatch.Value<T>>) : Message<T>()
+        sealed class Dispatch<T> : Message<T>() {
+            class Value<T>(
+                val value: T,
+                val delivered: CompletableDeferred<Unit>
+            ) : Dispatch<T>()
+            class Error<T>(val error: Throwable) : Dispatch<T>()
+            class UpstreamFinished<T> : Dispatch<T>()
+        }
+        class Reset<T> : Message<T>()
+    }
 
 }

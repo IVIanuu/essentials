@@ -25,7 +25,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -107,9 +106,7 @@ internal class DiskBoxImpl<T>(
     private val flow: Flow<T> = changeNotifier
         .map { get() }
         .onStart { emit(get()) }
-        .onStart { log { "$path -> start source flow" } }
-        .onCompletion { log { "$path -> end source flow" } }
-        .replayShareIn(coroutineScope)
+        .replayShareIn(coroutineScope, tag = if (logger != null) "DiskBox:$path" else null)
 
     init {
         log { "$path -> init" }
