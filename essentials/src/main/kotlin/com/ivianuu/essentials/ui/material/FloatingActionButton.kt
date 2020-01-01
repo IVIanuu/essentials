@@ -131,7 +131,7 @@ fun FloatingActionButton(
     ) {
         if (icon == null) {
             Padding(left = 20.dp, right = 20.dp) {
-                Text(text = text)
+                Text(text = text.toUpperCase())
             }
         } else {
             Padding(left = 12.dp, right = 20.dp) {
@@ -141,7 +141,7 @@ fun FloatingActionButton(
                 ) {
                     Icon(image = icon)
                     Spacer(LayoutWidth(12.dp))
-                    Text(text = text)
+                    Text(text = text.toUpperCase())
                 }
             }
         }

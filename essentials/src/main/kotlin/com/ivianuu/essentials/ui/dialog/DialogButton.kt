@@ -35,7 +35,7 @@ fun DialogButton(
     val navigator = navigator
     Opacity(opacity = if (onClick != null) 1f else 0.5f) {
         Button(
-            text = text.toUpperCase(), // todo find a better way for uppercase
+            text = text,
             onClick = onClick?.let {
                 {
                     onClick()

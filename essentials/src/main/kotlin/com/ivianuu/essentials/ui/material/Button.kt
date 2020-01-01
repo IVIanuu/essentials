@@ -45,6 +45,6 @@ fun Button(
     style: ButtonStyle = ambient(ButtonStyleAmbient) ?: ContainedButtonStyle()
 ) {
     androidx.ui.material.Button(
-        modifier = modifier, onClick = onClick, style = style, text = text
+        modifier = modifier, onClick = onClick, style = style, text = text.toUpperCase()
     )
 }
