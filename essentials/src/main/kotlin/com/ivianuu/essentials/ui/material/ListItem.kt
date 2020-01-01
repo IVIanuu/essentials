@@ -174,19 +174,29 @@ fun ListItem(
         }
     }
 
-    Ripple(
-        bounded = true,
-        enabled = onClick != null || onLongClick != null
-    ) {
+    val maybeWithClick = if (onClick == null) item else ({
+        Clickable(
+            onClick = if (enabled) onClick else null,
+            children = item
+        )
+    })
+
+    val maybeWithLongClick = if (onLongClick == null) maybeWithClick else ({
         LongPressGestureDetector(
-            onLongPress = { if (enabled) onLongClick?.invoke() }
-        ) {
-            Clickable(
-                onClick = if (enabled) onClick else null,
-                children = item
-            )
-        }
-    }
+            onLongPress = { if (enabled) onLongClick() },
+            children = maybeWithClick
+        )
+    })
+
+    val maybeWithRipple = if (onClick == null && onLongClick == null) maybeWithLongClick else ({
+        Ripple(
+            bounded = true,
+            enabled = onClick != null || onLongClick != null,
+            children = maybeWithLongClick
+        )
+    })
+
+    maybeWithRipple()
 }
 
 private val TitleOnlyMinHeight = 48.dp
