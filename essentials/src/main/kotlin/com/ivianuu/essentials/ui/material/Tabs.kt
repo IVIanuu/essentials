@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
@@ -42,9 +43,10 @@ fun <T> TabController(
 @Composable
 fun <T> ambientTabController(): TabController<T> = ambient(TabControllerAmbient) as TabController<T>
 
+@Stable
 class TabController<T>(
     var items: List<T>,
-    initialIndex: Int
+    initialIndex: Int = 0
 ) {
     var selectedIndex by framed(initialIndex)
     val selectedItem: T get() = items[selectedIndex]
