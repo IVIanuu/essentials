@@ -102,7 +102,7 @@ object Deps {
     }
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev377"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev388"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 

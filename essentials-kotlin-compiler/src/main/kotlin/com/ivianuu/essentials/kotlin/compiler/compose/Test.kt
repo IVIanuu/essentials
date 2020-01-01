@@ -883,28 +883,40 @@ private fun wrapComposableCalls(
                                                 )
                                             )
                                         } else {
+                                            val valueParams = node.args
+                                                .mapIndexed { index, arg ->
+                                                    resulting.valueParameters.first { param ->
+                                                        if (arg.name != null) {
+                                                            param.name.asString() == arg.name
+                                                        } else {
+                                                            resulting.valueParameters.indexOf(
+                                                                param
+                                                            ) == index
+                                                        }
+                                                    }
+                                                }
+
                                             val stableParams = node.args
                                                 .mapIndexed { index, arg ->
                                                     Triple(
                                                         arg,
                                                         index,
-                                                        resulting.valueParameters.first { param ->
-                                                            if (arg.name != null) {
-                                                                param.name.asString() == arg.name
-                                                            } else {
-                                                                resulting.valueParameters.indexOf(
-                                                                    param
-                                                                ) == index
-                                                            }
-                                                        }
+                                                        valueParams[index]
                                                     )
+                                                }
+                                                .filterNot {
+                                                    it.third.annotations
+                                                        .hasAnnotation(PivotalAnnotation)
                                                 }
                                                 .filter { it.third.type.isStable() }
 
                                             if (resulting.annotations.hasAnnotation(
                                                     UnstableAnnotation
                                                 ) ||
-                                                stableParams.size != node.args.size
+                                                stableParams.size != valueParams
+                                                    .filterNot {
+                                                        it.annotations.hasAnnotation(PivotalAnnotation)
+                                                    }.size
                                             ) {
                                                 stmts += Node.Stmt.Expr(
                                                     expr = Node.Expr.Const(
@@ -912,7 +924,7 @@ private fun wrapComposableCalls(
                                                         form = Node.Expr.Const.Form.BOOLEAN
                                                     )
                                                 )
-                                            } else {
+                                            } else if (stableParams.isNotEmpty()) {
                                                 stmts += Node.Stmt.Expr(
                                                     expr = stableParams.foldRight(null) { argTriple: Triple<Node.ValueArg, Int, ValueParameterDescriptor>, next: Node.Expr? ->
                                                         composerChangedExpr(
@@ -920,6 +932,13 @@ private fun wrapComposableCalls(
                                                             next = next
                                                         )
                                                     }!!
+                                                )
+                                            } else {
+                                                stmts += Node.Stmt.Expr(
+                                                    expr = Node.Expr.Const(
+                                                        value = "false",
+                                                        form = Node.Expr.Const.Form.BOOLEAN
+                                                    )
                                                 )
                                             }
                                         }
