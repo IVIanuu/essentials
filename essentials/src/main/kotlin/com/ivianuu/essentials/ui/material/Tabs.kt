@@ -37,11 +37,19 @@ fun <T> TabController(
 ) {
     val tabController = remember { TabController(items, initialIndex) }
     tabController.items = items
-    TabControllerAmbient.Provider(tabController, children)
+    ProvideTabController(tabController, children)
 }
 
 @Composable
 fun <T> ambientTabController(): TabController<T> = ambient(TabControllerAmbient) as TabController<T>
+
+@Composable
+fun <T> ProvideTabController(
+    tabController: TabController<T>,
+    children: @Composable() () -> Unit
+) {
+    TabControllerAmbient.Provider(tabController, children)
+}
 
 @Stable
 class TabController<T>(
