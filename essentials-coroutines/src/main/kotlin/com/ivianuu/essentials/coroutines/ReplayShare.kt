@@ -45,11 +45,28 @@ private fun <T> Flow<T>.replayShareImpl(
 ): Flow<T> {
     var lastValue: Any? = defaultValue
     return this
-        .onEach { lastValue = it }
-        .onCompletion { lastValue = defaultValue }
-        .catch { lastValue = defaultValue }
         .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
-        .onStart { if (lastValue !== Null) emit(lastValue as T) }
+        .onEach {
+            println("ReplayShare: $tag -> cache emission $it")
+            lastValue = it
+        }
+        .onCompletion {
+            println("ReplayShare: $tag -> source completed set to default $defaultValue")
+            lastValue = defaultValue
+        }
+        .catch {
+            lastValue = defaultValue
+            println("ReplayShare: $tag -> source error set to default $defaultValue")
+            throw it
+        }
+        .onStart {
+            if (lastValue !== Null) {
+                println("ReplayShare: $tag -> emit last value on start $lastValue")
+                emit(lastValue as T)
+            } else {
+                println("ReplayShare: $tag -> no last value skip")
+            }
+        }
 }
 
 internal object Null

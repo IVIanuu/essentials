@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -85,12 +87,14 @@ internal class DiskBoxImpl<T>(
         log { "$path -> fetched raw $serialized" }
 
         return@MutexValue try {
-            serializer.deserialize(serialized)
+            val deserialized = serializer.deserialize(serialized)
+            log { "$path -> deserialized to $deserialized" }
+            deserialized
         } catch (e: Exception) {
             throw RuntimeException("Couldn't deserialize '$serialized' for file $path", e)
         }
     }
-    private val writeLock = WriteLock()
+    private val writeLock = WriteLock(path)
 
     private val coroutineScope = CoroutineScope(Job())
 
@@ -295,22 +299,27 @@ private class MultiInstanceHelper(
     )
 }
 
-private class WriteLock {
+private class WriteLock(private val path: String) {
 
     private var currentLock: CompletableDeferred<Unit>? = null
+    private val mutex = Mutex()
 
     suspend fun awaitWrite() {
-        val lock = synchronized(this) { currentLock }
+        log { "$path -> await write start" }
+        val lock = mutex.withLock { currentLock }
         lock?.await()
+        log { "$path -> await write end" }
     }
 
     suspend fun beginWrite() {
+        log { "$path -> begin write" }
         awaitWrite()
-        synchronized(this) { currentLock = CompletableDeferred() }
+        mutex.withLock { currentLock = CompletableDeferred() }
     }
 
     suspend fun endWrite() {
-        val lock = synchronized(this) {
+        log { "$path -> end write" }
+        val lock = mutex.withLock {
             val tmp = currentLock
             currentLock = null
             tmp
@@ -323,12 +332,13 @@ private class WriteLock {
 private class MutexValue<T>(private val getter: suspend () -> T) {
 
     private var currentDeferred: Deferred<T>? = null
+    private val mutex = Mutex()
 
     suspend operator fun invoke(): T {
-        var deferred = synchronized(this) { currentDeferred }
+        var deferred = mutex.withLock { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            synchronized(this) { currentDeferred = deferred }
+            mutex.withLock { currentDeferred = deferred  }
             try {
                 val result = getter.invoke()
                 deferred.complete(result)
@@ -336,7 +346,7 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                synchronized(this) { currentDeferred = null }
+                mutex.withLock { currentDeferred = null }
             }
         }
 

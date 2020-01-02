@@ -131,23 +131,34 @@ private class SharedFlow<T>(
         if (collecting) return
         collecting = true
 
+        println("SharedFlows: $tag -> start collecting first")
+
         scope.launch {
+            println("SharedFlows: $tag -> start collecting second")
+
             try {
                 collectionJob = scope.launch {
+                    println("SharedFlows: $tag -> start collecting inner")
+
                     try {
                         sourceFlow
                             .catch {
+                                println("SharedFlows: $tag -> catch source error $it")
                                 actorChannel.send(Message.Dispatch.Error(it))
                             }
                             .cacheIfNeeded()
                             .collect {
                                 val ack = CompletableDeferred<Unit>()
+                                println("SharedFlows: $tag -> source emission $it")
                                 actorChannel.send(Message.Dispatch.Value(it, ack))
                                 ack.await()
+                                println("SharedFlows: $tag -> source emission acknowledged $it")
                             }
                     } catch (closed: ClosedSendChannelException) {
                     }
                 }
+
+                println("SharedFlows: $tag -> source completed")
 
                 collectionJob?.join()
             } finally {
@@ -170,6 +181,7 @@ private class SharedFlow<T>(
     }
 
     private fun cancelPendingReset() {
+        if (resetJob != null) println("SharedFlows: $tag -> cancel pending reset")
         resetJob?.cancel()
         resetJob = null
     }
