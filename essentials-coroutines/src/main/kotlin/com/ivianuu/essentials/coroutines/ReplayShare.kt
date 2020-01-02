@@ -45,9 +45,8 @@ private fun <T> Flow<T>.replayShareImpl(
 ): Flow<T> {
     var lastValue: Any? = defaultValue
     return this
-        .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
         .onEach {
-            println("ReplayShare: $tag -> cache emission $it")
+            println("ReplayShare: $tag -> source cache emission $it")
             lastValue = it
         }
         .onCompletion {
@@ -59,13 +58,23 @@ private fun <T> Flow<T>.replayShareImpl(
             println("ReplayShare: $tag -> source error set to default $defaultValue")
             throw it
         }
+        .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
         .onStart {
             if (lastValue !== Null) {
-                println("ReplayShare: $tag -> emit last value on start $lastValue")
+                println("ReplayShare: $tag -> shared emit last value on start $lastValue")
                 emit(lastValue as T)
             } else {
-                println("ReplayShare: $tag -> no last value skip")
+                println("ReplayShare: $tag -> shared no last value skip")
             }
+        }
+        .onStart {
+            println("ReplayShare: $tag -> shared on start")
+        }
+        .onEach {
+            println("ReplayShare: $tag -> shared on value $it")
+        }
+        .onCompletion {
+            println("ReplayShare: $tag -> shared on complete $it")
         }
 }
 

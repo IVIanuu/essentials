@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -67,21 +66,23 @@ private class SharedFlow<T>(
             when (msg) {
                 is Message.AddChannel -> {
                     channels += msg.channel
-                    println("SharedFlows: $tag -> added channel ${msg.channel} ${channels.size}")
+                    println("SharedFlows: $tag -> added channel ${msg.channel} new channels ${channels.size}")
                     cancelPendingReset()
                     startCollectingIfNeeded()
                 }
                 is Message.RemoveChannel -> {
                     channels -= msg.channel
-                    println("SharedFlows: $tag -> removed channel ${msg.channel} ${channels.size}")
+                    println("SharedFlows: $tag -> removed channel ${msg.channel} new channels $channels")
                     dispatchDelayedResetOrResetIfNeeded()
                 }
                 is Message.Dispatch.Value -> {
-                    println("SharedFlows: $tag -> dispatch value -> ${msg.value}")
+                    val channels = channels.toList()
+                    println("SharedFlows: $tag -> dispatch value -> ${msg.value} to $channels")
                     channels.forEach { it.send(msg) }
+                    println("SharedFlows: $tag -> dispatch finished -> ${msg.value} to $channels orig ${this@SharedFlow.channels}")
                 }
                 is Message.Dispatch.Error -> {
-                    println("SharedFlows: $tag -> dispatch error -> ${msg.error}")
+                    println("SharedFlows: $tag -> dispatch error -> ${msg.error} to $channels")
                     channels.forEach { it.close(msg.error) }
                 }
                 is Message.Dispatch.UpstreamFinished -> {
@@ -108,16 +109,15 @@ private class SharedFlow<T>(
             collector.emitAll(
                 channel.consumeAsFlow()
                     .onStart {
-                        println("SharedFlows: $tag -> child start $channel")
+                        println("SharedFlows: $tag -> child on start $channel")
                         actorChannel.send(Message.AddChannel(channel))
                     }
                     .transform {
-                        println("SharedFlows: $tag -> child value ${it.value} $channel")
+                        println("SharedFlows: $tag -> child on each ${it.value} $channel")
                         emit(it.value)
-                        it.delivered.complete(Unit)
                     }
                     .onCompletion {
-                        println("SharedFlows: $tag -> child complete $channel")
+                        println("SharedFlows: $tag -> child on complete $channel")
                         actorChannel.send(Message.RemoveChannel(channel))
                     }
                     .replayIfNeeded()
@@ -128,7 +128,10 @@ private class SharedFlow<T>(
     }
 
     private fun startCollectingIfNeeded() {
-        if (collecting) return
+        if (collecting) {
+            println("SharedFlows: $tag -> already connecting")
+            return
+        }
         collecting = true
 
         println("SharedFlows: $tag -> start collecting first")
@@ -148,20 +151,17 @@ private class SharedFlow<T>(
                             }
                             .cacheIfNeeded()
                             .collect {
-                                val ack = CompletableDeferred<Unit>()
                                 println("SharedFlows: $tag -> source emission $it")
-                                actorChannel.send(Message.Dispatch.Value(it, ack))
-                                ack.await()
-                                println("SharedFlows: $tag -> source emission acknowledged $it")
+                                actorChannel.send(Message.Dispatch.Value(it))
+                                println("SharedFlows: $tag -> source emission send $it")
                             }
                     } catch (closed: ClosedSendChannelException) {
                     }
                 }
 
-                println("SharedFlows: $tag -> source completed")
-
                 collectionJob?.join()
             } finally {
+                println("SharedFlows: $tag -> source completed")
                 try {
                     actorChannel.send(Message.Dispatch.UpstreamFinished())
                 } catch (closed: ClosedSendChannelException) {
@@ -208,10 +208,7 @@ private class SharedFlow<T>(
         class AddChannel<T>(val channel: Channel<Dispatch.Value<T>>) : Message<T>()
         class RemoveChannel<T>(val channel: Channel<Dispatch.Value<T>>) : Message<T>()
         sealed class Dispatch<T> : Message<T>() {
-            class Value<T>(
-                val value: T,
-                val delivered: CompletableDeferred<Unit>
-            ) : Dispatch<T>()
+            class Value<T>(val value: T) : Dispatch<T>()
             class Error<T>(val error: Throwable) : Dispatch<T>()
             class UpstreamFinished<T> : Dispatch<T>()
         }
