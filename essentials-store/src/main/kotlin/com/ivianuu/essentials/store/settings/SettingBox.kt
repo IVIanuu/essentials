@@ -25,6 +25,7 @@ import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -60,6 +61,8 @@ interface SettingBox<T> : Box<T> {
     }
 }
 
+private val MainHandler = Handler()
+
 class SettingBoxImpl<T>(
     override val type: SettingBox.Type,
     val name: String,
@@ -84,10 +87,12 @@ class SettingBoxImpl<T>(
     private val coroutineScope = CoroutineScope(Job())
 
     private val flow = callbackFlow<Unit> {
-        val observer = object : ContentObserver(Handler()) {
-            override fun onChange(selfChange: Boolean) {
-                super.onChange(selfChange)
-                offer(Unit)
+        val observer = withContext(Dispatchers.Main) {
+            object : ContentObserver(MainHandler) {
+                override fun onChange(selfChange: Boolean) {
+                    super.onChange(selfChange)
+                    offer(Unit)
+                }
             }
         }
         contentResolver.registerContentObserver(uri, false, observer)
