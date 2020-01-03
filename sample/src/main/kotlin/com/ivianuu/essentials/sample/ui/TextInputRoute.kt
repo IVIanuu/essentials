@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.onDispose
@@ -30,6 +31,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -92,28 +94,29 @@ val TextInputRoute = Route {
         },
         body = {
             if (items.isNotEmpty()) {
-                val scrollPosition = retain { ScrollPosition() }
-                val lastScrollPosition = holder { scrollPosition.value }
+                val scrollPosition = retain(items) { ScrollPosition() }
 
-                if (scrollPosition.value != lastScrollPosition.value) {
-                    keyboardManager.hideKeyboard()
-                    if (state.searchVisible && state.inputValue.isEmpty()) {
-                        state.searchVisible = false
+                Observe {
+                    val lastScrollPosition = holderFor(scrollPosition) { scrollPosition.value }
+
+                    if (lastScrollPosition.value < scrollPosition.value) {
+                        keyboardManager.hideKeyboard()
+                        if (state.searchVisible && state.inputValue.isEmpty()) {
+                            state.searchVisible = false
+                        }
                     }
                 }
 
-                call(items) {
-                    ScrollableList(
-                        position = scrollPosition,
-                        items = items
-                    ) { _, item ->
-                        ListItem(
-                            title = { Text(item) },
-                            onClick = {
-                                d { "clicked $item" }
-                            }
-                        )
-                    }
+                ScrollableList(
+                    position = scrollPosition,
+                    items = items
+                ) { _, item ->
+                    ListItem(
+                        title = { Text(item) },
+                        onClick = {
+                            d { "clicked $item" }
+                        }
+                    )
                 }
             } else {
                 Center {
@@ -122,10 +125,12 @@ val TextInputRoute = Route {
             }
         },
         fab = {
-            FloatingActionButton(
-                text = "Toggle search",
-                onClick = { state.searchVisible = !state.searchVisible }
-            )
+            if (!state.searchVisible) {
+                FloatingActionButton(
+                    text = "Search",
+                    onClick = { state.searchVisible = true }
+                )
+            }
         }
     )
 }
