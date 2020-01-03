@@ -40,6 +40,7 @@ internal class NonSdkInterfacesHelper(
                 "hidden_api_policy", SettingBox.Type.Global
             )
             hiddenApiPolicy.set(1)
+            hiddenApiPolicy.get()
         } else if (systemBuildInfo.sdk >= 28) {
             d { "disable non sdk on p" }
 
