@@ -16,11 +16,27 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.hidenavbar.NavBarConfig
+import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.launch
 
 class MainActivity : EsActivity() {
 
     override val startKey: Any? get() = CounterKey(1)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            val navBarController = get<NavBarController>()
+            navBarController.setNavBarConfig(
+                NavBarConfig(hidden = true)
+            )
+        }
+    }
 
 }

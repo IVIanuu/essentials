@@ -20,10 +20,10 @@ object Build {
     const val applicationId = "com.ivianuu.essentials.sample"
     const val buildToolsVersion = "28.0.3"
 
-    const val compileSdk = 28
+    const val compileSdk = 29
     const val minSdk = 23
-    const val targetSdk = 28
-    const val targetSdkSample = 27
+    const val targetSdk = 29
+    const val targetSdkSample = 29
     const val versionCode = 1
     const val versionName = "0.0.1"
 }
@@ -31,11 +31,11 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-151"
+    const val version = "${Build.versionName}-dev-408"
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.5.0-beta05"
+    const val androidGradlePlugin = "3.5.3"
 
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
