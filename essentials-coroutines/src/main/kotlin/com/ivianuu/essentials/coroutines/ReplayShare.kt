@@ -17,65 +17,82 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
     timeout: Duration = Duration.ZERO,
     tag: String? = null
-): Flow<T> = replayShareImpl(scope = scope, defaultValue = Null, timeout = timeout, tag = tag)
+): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = Null, timeout = timeout, tag = tag)
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
     defaultValue: T,
     timeout: Duration = Duration.ZERO,
     tag: String? = null
-): Flow<T> = replayShareImpl(scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
+): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
 
-private fun <T> Flow<T>.replayShareImpl(
+private class ReplayShareFlow<T>(
+    upstream: Flow<T>,
     scope: CoroutineScope,
     defaultValue: Any?,
     timeout: Duration = Duration.ZERO,
-    tag: String?
-): Flow<T> {
-    var lastValue: Any? = defaultValue
-    return this
-        .onEach {
-            println("ReplayShare: $tag -> source cache emission $it")
-            lastValue = it
+    private val tag: String?
+) : AbstractFlow<T>() {
+
+    private var lastValue: Any? = defaultValue
+    private val mutex = Mutex()
+
+    private val sharedFlow = upstream
+        .onEach { item ->
+            println("ReplayShare: $tag -> source cache emission $item")
+            mutex.withLock { lastValue = item }
         }
         .onCompletion {
             println("ReplayShare: $tag -> source completed set to default $defaultValue")
-            lastValue = defaultValue
+            mutex.withLock { lastValue = defaultValue }
         }
         .catch {
-            lastValue = defaultValue
+            mutex.withLock { lastValue = defaultValue }
             println("ReplayShare: $tag -> source error set to default $defaultValue")
             throw it
         }
         .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
-        .onStart {
-            if (lastValue !== Null) {
-                println("ReplayShare: $tag -> shared emit last value on start $lastValue")
-                emit(lastValue as T)
-            } else {
-                println("ReplayShare: $tag -> shared no last value skip")
-            }
-        }
-        .onStart {
-            println("ReplayShare: $tag -> shared on start")
-        }
-        .onEach {
-            println("ReplayShare: $tag -> shared on value $it")
-        }
-        .onCompletion {
-            println("ReplayShare: $tag -> shared on complete $it")
-        }
+
+    override suspend fun collectSafely(collector: FlowCollector<T>) {
+        collector.emitAll(
+            sharedFlow
+                .onStart {
+                    val lastValue = mutex.withLock { lastValue }
+                    if (lastValue !== Null) {
+                        println("ReplayShare: $tag -> shared emit last value on start $lastValue")
+                        emit(lastValue as T)
+                    } else {
+                        println("ReplayShare: $tag -> shared no last value skip")
+                    }
+                }
+                .onStart {
+                    println("ReplayShare: $tag -> shared on start")
+                }
+                .onEach {
+                    println("ReplayShare: $tag -> shared on value $it")
+                }
+                .onCompletion {
+                    println("ReplayShare: $tag -> shared on complete $it")
+                }
+        )
+    }
+
 }
 
 internal object Null
