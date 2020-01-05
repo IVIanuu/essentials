@@ -240,8 +240,8 @@ internal class DiskBoxImpl<T>(
     }
 
     override fun asFlow(): Flow<T> {
-        log { "$path -> as flow" }
         checkNotDisposed()
+        log { "$path -> as flow" }
         return flow
     }
 
