@@ -100,7 +100,7 @@ class SettingBoxImpl<T>(
     }
         .onStart { emit(Unit) }
         .map { get() }
-        .replayShareIn(coroutineScope)
+        .replayShareIn(scope = coroutineScope, tag = "SettingBox:$uri")
 
     override suspend fun set(value: T) {
         checkNotDisposed()

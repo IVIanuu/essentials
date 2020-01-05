@@ -61,7 +61,7 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
         .onEach { currentIsDark = it }
-        .replayShareIn(scope = GlobalScope)
+        .replayShareIn(scope = GlobalScope, tag = "twilight")
     var currentIsDark = false
         private set
 

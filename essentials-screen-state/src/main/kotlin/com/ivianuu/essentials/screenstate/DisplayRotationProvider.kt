@@ -65,7 +65,7 @@ class DisplayRotationProvider(
         }
         .map { currentDisplayRotation }
         .distinctUntilChanged()
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "display rotation")
 
     val currentDisplayRotation: DisplayRotation
         get() = when (windowManager.defaultDisplay.rotation) {

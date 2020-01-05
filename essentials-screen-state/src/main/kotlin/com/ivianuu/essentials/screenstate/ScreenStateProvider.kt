@@ -50,7 +50,7 @@ class ScreenStateProvider(
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getScreenState() }
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "screen state")
 
 
     suspend fun getScreenState() = withContext(dispatchers.default) {

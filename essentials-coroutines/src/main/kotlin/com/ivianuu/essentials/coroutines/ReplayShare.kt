@@ -17,16 +17,17 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
@@ -50,20 +51,19 @@ private class ReplayShareFlow<T>(
     private val tag: String?
 ) : AbstractFlow<T>() {
 
-    private var lastValue: Any? = defaultValue
-    private val mutex = Mutex()
+    private val channel = ConflatedBroadcastChannel(defaultValue)
 
     private val sharedFlow = upstream
         .onEach { item ->
             println("ReplayShare: $tag -> source cache emission $item")
-            mutex.withLock { lastValue = item }
+            channel.send(item)
         }
         .onCompletion {
             println("ReplayShare: $tag -> source completed set to default $defaultValue")
-            mutex.withLock { lastValue = defaultValue }
+            channel.send(defaultValue)
         }
         .catch {
-            mutex.withLock { lastValue = defaultValue }
+            channel.send(defaultValue)
             println("ReplayShare: $tag -> source error set to default $defaultValue")
             throw it
         }
@@ -73,7 +73,7 @@ private class ReplayShareFlow<T>(
         collector.emitAll(
             sharedFlow
                 .onStart {
-                    val lastValue = mutex.withLock { lastValue }
+                    val lastValue = channel.asFlow().first()
                     if (lastValue !== Null) {
                         println("ReplayShare: $tag -> shared emit last value on start $lastValue")
                         emit(lastValue as T)

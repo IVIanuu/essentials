@@ -60,7 +60,7 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds)
+        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "keyboard visibility")
 
     private fun getKeyboardHeight(): Int {
         return try {
