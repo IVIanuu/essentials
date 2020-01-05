@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -37,12 +36,13 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
+/*
 fun <T> Flow<T>.shareIn(
     scope: CoroutineScope,
     cacheSize: Int = 0,
     timeout: Duration = Duration.ZERO,
     tag: String? = null
-): Flow<T> = SharedFlow(this, scope, cacheSize, timeout, tag)
+): Flow<T> = SharedFlow(this, scope, cacheSize, timeout, tag)*/
 
 private class SharedFlow<T>(
     private val sourceFlow: Flow<T>,
@@ -104,27 +104,23 @@ private class SharedFlow<T>(
     override suspend fun collectSafely(
         collector: FlowCollector<T>
     ) {
-        try {
-            val channel = Channel<Message.Dispatch.Value<T>>(Channel.UNLIMITED)
-            collector.emitAll(
-                channel.consumeAsFlow()
-                    .onStart {
-                        println("SharedFlows: $tag -> child on start $channel")
-                        actorChannel.send(Message.AddChannel(channel))
-                    }
-                    .transform {
-                        println("SharedFlows: $tag -> child on each ${it.value} $channel")
-                        emit(it.value)
-                    }
-                    .onCompletion {
-                        println("SharedFlows: $tag -> child on complete $channel")
-                        actorChannel.send(Message.RemoveChannel(channel))
-                    }
-                    .replayIfNeeded()
-            )
-        } catch (e: CancellationException) {
-            // i guess its okay to do this?
-        }
+        val channel = Channel<Message.Dispatch.Value<T>>(Channel.UNLIMITED)
+        collector.emitAll(
+            channel.consumeAsFlow()
+                .onStart {
+                    println("SharedFlows: $tag -> child on start $channel")
+                    actorChannel.send(Message.AddChannel(channel))
+                }
+                .transform {
+                    println("SharedFlows: $tag -> child on each ${it.value} $channel")
+                    emit(it.value)
+                }
+                .onCompletion {
+                    println("SharedFlows: $tag -> child on complete $channel")
+                    actorChannel.send(Message.RemoveChannel(channel))
+                }
+                .replayIfNeeded()
+        )
     }
 
     private fun startCollectingIfNeeded() {
