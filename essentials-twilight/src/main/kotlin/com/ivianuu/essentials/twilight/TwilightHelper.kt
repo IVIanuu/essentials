@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
+import kotlin.time.seconds
 
 @ApplicationScope
 @Single
@@ -61,7 +62,7 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
         .onEach { currentIsDark = it }
-        .shareIn(scope = GlobalScope, cacheSize = 1, tag = "twilight")
+        .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "twilight")
     var currentIsDark = false
         private set
 

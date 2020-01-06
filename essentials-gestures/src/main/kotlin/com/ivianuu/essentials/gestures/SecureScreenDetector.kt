@@ -35,7 +35,7 @@ class SecureScreenDetector : AccessibilityComponent() {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
 
-    private val _isOnSecureScreen = StateFlow<Boolean>()
+    private val _isOnSecureScreen = StateFlow(false)
     val isOnSecureScreen: Flow<Boolean> get() = _isOnSecureScreen
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {

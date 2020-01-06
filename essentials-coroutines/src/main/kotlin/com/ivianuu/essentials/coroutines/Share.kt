@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -64,23 +65,26 @@ private class SharedFlow<T>(
     }
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
-        val channel = Channel<T>(Channel.UNLIMITED)
-        collector.emitAll(
-            channel.consumeAsFlow()
-                .onStart {
-                    println("SharedFlows: $tag -> child on start $channel")
-                    actorChannel.send(Message.AddChannel(channel))
-                }
-                .onEach { println("SharedFlows: $tag -> child on each $it $channel") }
-                .onCompletion {
-                    println("SharedFlows: $tag -> child on complete $channel")
-                    try {
-                        actorChannel.send(Message.RemoveChannel(channel))
-                    } catch (e: ClosedSendChannelException) {
+        try {
+            val channel = Channel<T>(Channel.UNLIMITED)
+            collector.emitAll(
+                channel.consumeAsFlow()
+                    .onStart {
+                        println("SharedFlows: $tag -> child on start $channel")
+                        actorChannel.send(Message.AddChannel(channel))
                     }
-                }
-                .replayIfNeeded()
-        )
+                    .onEach { println("SharedFlows: $tag -> child on each $it $channel") }
+                    .onCompletion {
+                        println("SharedFlows: $tag -> child on complete $channel")
+                        try {
+                            actorChannel.send(Message.RemoveChannel(channel))
+                        } catch (e: ClosedSendChannelException) {
+                        }
+                    }
+                    .replayIfNeeded()
+            )
+        } catch (e: CancellationException) {
+        }
     }
 
     private fun createActor() = scope.actor<Message<T>>(
@@ -175,11 +179,18 @@ private class SharedFlow<T>(
     }
 
     private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheSize > 0) {
-        onStart { cache.forEach { emit(it) } }
+        onStart {
+            println("SharedFlows: $tag -> replay values $cache")
+            cache.forEach { emit(it) }
+        }
+
     } else this
 
     private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheSize > 0) {
-        onEach { value -> cache.add(value) }
+        onEach { value ->
+            println("SharedFlows: $tag -> cache value $value")
+            cache.add(value)
+        }
     } else this
 
     private sealed class Message<T> {
