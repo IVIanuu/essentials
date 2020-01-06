@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.store.prefs
 
 import android.content.Context
-import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class SharedPreferencesImporter(
     private val boxFactory: PrefBoxFactory,
@@ -54,18 +54,4 @@ class SharedPreferencesImporter(
         prefsFile.delete()
     }
 
-    suspend fun importAndDeleteAsStringMapIfNeeded(name: String): Unit =
-        withContext(dispatcher) {
-            val prefsFile = File(context.applicationInfo.dataDir, "shared_prefs/$name.xml")
-            if (!prefsFile.exists()) return@withContext
-
-            val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
-
-            boxFactory.withoutCache {
-                val box = boxFactory.stringMap(name)
-                box.set(sharedPreferences.all as Map<String, String>)
-            }
-
-            prefsFile.delete()
-        }
 }

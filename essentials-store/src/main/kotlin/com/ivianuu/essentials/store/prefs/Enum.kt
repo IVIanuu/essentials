@@ -22,74 +22,48 @@ import kotlin.reflect.KClass
 inline fun <reified T : Enum<T>> PrefBoxFactory.enum(
     key: String,
     defaultValue: T
-) = enum(key, defaultValue, T::class)
+) = enum(key, T::class, defaultValue)
 
 fun <T : Enum<T>> PrefBoxFactory.enum(
     key: String,
-    defaultValue: T,
-    clazz: KClass<T>
-) = box(
+    type: KClass<T>,
+    defaultValue: T
+    ) = box(
     key, defaultValue,
-    EnumSerializer(clazz)
+    EnumSerializer(type)
 )
 
-private class EnumSerializer<T : Enum<T>>(private val enumClass: KClass<T>) :
+private class EnumSerializer<T : Enum<T>>(private val type: KClass<T>) :
     DiskBox.Serializer<T> {
     override fun deserialize(serialized: String): T =
-        java.lang.Enum.valueOf(enumClass.java, serialized)
+        java.lang.Enum.valueOf(type.java, serialized)
 
     override fun serialize(value: T): String = value.name
 }
 
-inline fun <reified T> PrefBoxFactory.enumString(
-    name: String,
-    defaultValue: T
-) where T : Enum<T>, T : BoxValueHolder<String> =
-    enumString(name, defaultValue, T::class)
-
-fun <T> PrefBoxFactory.enumString(
-    name: String,
-    defaultValue: T,
-    type: KClass<T>
-) where T : Enum<T>, T : BoxValueHolder<String> =
-    box(
-        name, defaultValue,
-        EnumStringPrefSerializer(
-            type,
-            defaultValue
-        )
-    )
-
-private class EnumStringPrefSerializer<T>(
-    private val type: KClass<T>,
-    private val defaultValue: T
-) : DiskBox.Serializer<T> where T : Enum<T>, T : BoxValueHolder<String> {
-    override fun serialize(value: T) = value.value
-    override fun deserialize(serialized: String) = type.valueFor(serialized, defaultValue)
-}
-
-inline fun <reified T> PrefBoxFactory.enumStringSet(
-    name: String,
+inline fun <reified T : Enum<T>> PrefBoxFactory.enumSet(
+    key: String,
     defaultValue: Set<T> = emptySet()
-) where T : Enum<T>, T : BoxValueHolder<String> =
-    enumStringSet(name, defaultValue, T::class)
+) = enumSet(key, T::class, defaultValue)
 
-fun <T> PrefBoxFactory.enumStringSet(
-    name: String,
-    defaultValue: Set<T> = emptySet(),
-    type: KClass<T>
-) where T : Enum<T>, T : BoxValueHolder<String> =
-    box(
-        name, defaultValue,
-        EnumStringSetPrefAdapter(type)
-    )
+fun <T : Enum<T>> PrefBoxFactory.enumSet(
+    key: String,
+    type: KClass<T>,
+    defaultValue: Set<T> = emptySet()
+) = box(
+    key, defaultValue,
+    EnumSetSerializer(type)
+)
 
-private class EnumStringSetPrefAdapter<T>(
-    private val type: KClass<T>
-) : DiskBox.Serializer<Set<T>> where T : Enum<T>, T : BoxValueHolder<String> {
-    override fun serialize(value: Set<T>) = value.joinToString(VALUE_DELIMITER) { it.value }
-    override fun deserialize(serialized: String) =
-        serialized.split(VALUE_DELIMITER).mapNotNull { type.valueForOrNull(it) }.toSet()
+private class EnumSetSerializer<T : Enum<T>>(private val type: KClass<T>) :
+    DiskBox.Serializer<Set<T>> {
+    override fun deserialize(serialized: String): Set<T> {
+        return if (serialized.isEmpty()) emptySet() else serialized.split(VALUE_DELIMITER)
+            .map { java.lang.Enum.valueOf(type.java, it) }
+            .toSet()
+    }
+
+    override fun serialize(value: Set<T>): String = value.joinToString(VALUE_DELIMITER) { it.name }
 
     private companion object {
         private const val VALUE_DELIMITER = "^\\"

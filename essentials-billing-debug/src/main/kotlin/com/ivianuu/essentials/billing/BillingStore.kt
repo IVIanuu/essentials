@@ -26,7 +26,7 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.store.map
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.stringList
+import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -39,13 +39,13 @@ class BillingStore(
     private val dispatchers: AppDispatchers
 ) {
 
-    private val products = boxFactory.stringList("billing_products")
+    private val products = boxFactory.stringSet("billing_products")
         .map(
             fromRaw = { productsJson -> productsJson.map { SkuDetails(it) } },
-            toRaw = { products -> products.map { it.originalJson } }
+            toRaw = { products -> products.map { it.originalJson }.toSet() }
         )
 
-    private val purchases = boxFactory.stringList("billing_purchases")
+    private val purchases = boxFactory.stringSet("billing_purchases")
         .map(
             fromRaw = { purchasesJson ->
                 purchasesJson.map { purchase ->
@@ -56,7 +56,7 @@ class BillingStore(
             toRaw = { purchases ->
                 purchases.map { purchase ->
                     purchase.originalJson + "=:=" + purchase.signature
-                }
+                }.toSet()
             }
         )
 

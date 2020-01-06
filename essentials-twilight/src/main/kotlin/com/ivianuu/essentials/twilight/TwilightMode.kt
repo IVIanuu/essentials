@@ -16,35 +16,27 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.store.prefs.BoxValueHolder
-
 enum class TwilightMode(
-    override val value: String,
     val titleRes: Int,
     val descRes: Int
-) : BoxValueHolder<String> {
+) {
     System(
-        value = "system",
         titleRes = R.string.es_twilight_mode_system,
         descRes = R.string.es_twilight_mode_system_desc
     ),
     Light(
-        value = "light",
         titleRes = R.string.es_twilight_mode_light,
         descRes = R.string.es_twilight_mode_light_desc
     ),
     Dark(
-        value = "dark",
         titleRes = R.string.es_twilight_mode_dark,
         descRes = R.string.es_twilight_mode_dark_desc
     ),
     Battery(
-        value = "battery",
         titleRes = R.string.es_twilight_mode_battery,
         descRes = R.string.es_twilight_mode_battery_desc
     ),
     Time(
-        value = "time",
         titleRes = R.string.es_twilight_mode_time,
         descRes = R.string.es_twilight_mode_time_desc
     )
