@@ -24,7 +24,7 @@ import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -61,7 +61,7 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
         .onEach { currentIsDark = it }
-        .replayShareIn(scope = GlobalScope, tag = "twilight")
+        .shareIn(scope = GlobalScope, cacheSize = 1, tag = "twilight")
     var currentIsDark = false
         private set
 

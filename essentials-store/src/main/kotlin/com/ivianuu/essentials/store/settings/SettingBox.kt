@@ -21,7 +21,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
-import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -100,7 +100,7 @@ class SettingBoxImpl<T>(
     }
         .onStart { emit(Unit) }
         .map { get() }
-        .replayShareIn(scope = coroutineScope, tag = "SettingBox:$uri")
+        .shareIn(scope = coroutineScope, cacheSize = 1, tag = "SettingBox:$uri")
 
     override suspend fun set(value: T) {
         checkNotDisposed()

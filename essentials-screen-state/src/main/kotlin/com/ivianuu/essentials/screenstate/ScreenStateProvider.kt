@@ -20,7 +20,7 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -50,7 +50,7 @@ class ScreenStateProvider(
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getScreenState() }
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "screen state")
+        .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "screen state")
 
 
     suspend fun getScreenState() = withContext(dispatchers.default) {

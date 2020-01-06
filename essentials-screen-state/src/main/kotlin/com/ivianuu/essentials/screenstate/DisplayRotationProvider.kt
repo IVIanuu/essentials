@@ -25,7 +25,7 @@ import android.view.Surface
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.merge
-import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -65,7 +65,7 @@ class DisplayRotationProvider(
         }
         .map { currentDisplayRotation }
         .distinctUntilChanged()
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "display rotation")
+        .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "display rotation")
 
     val currentDisplayRotation: DisplayRotation
         get() = when (windowManager.defaultDisplay.rotation) {

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.replayShareIn
+import com.ivianuu.essentials.coroutines.shareIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -110,7 +110,11 @@ internal class DiskBoxImpl<T>(
     private val flow: Flow<T> = changeNotifier
         .map { get() }
         .onStart { emit(get()) }
-        .replayShareIn(coroutineScope, tag = if (logger != null) "DiskBox:$path" else null)
+        .shareIn(
+            scope = coroutineScope,
+            cacheSize = 1,
+            tag = if (logger != null) "DiskBox:$path" else null
+        )
 
     init {
         log { "$path -> init" }

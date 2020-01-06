@@ -74,7 +74,10 @@ private class SharedFlow<T>(
                 .onEach { println("SharedFlows: $tag -> child on each $it $channel") }
                 .onCompletion {
                     println("SharedFlows: $tag -> child on complete $channel")
-                    actorChannel.send(Message.RemoveChannel(channel))
+                    try {
+                        actorChannel.send(Message.RemoveChannel(channel))
+                    } catch (e: ClosedSendChannelException) {
+                    }
                 }
                 .replayIfNeeded()
         )
