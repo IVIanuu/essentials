@@ -20,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -54,15 +55,7 @@ fun <T1, T2, T3> combine(
     )
 }
 
-fun <T> merge(vararg flows: Flow<T>): Flow<T> =
-    flowOf(*flows).flattenMerge(concurrency = flows.size)
-
-fun <T> merge(flows: Iterable<Flow<T>>): Flow<T> {
-    val flowsList = flows.toList()
-    return flowsList.asFlow().flattenMerge(concurrency = flowsList.size)
-}
-
-fun <T> merge(flows: Sequence<Flow<T>>): Flow<T> {
-    val flowsList = flows.toList()
-    return flowsList.asFlow().flattenMerge(concurrency = flowsList.size)
+fun <T> merge(flows: List<Flow<T>>): Flow<T> {
+    return if (flows.isEmpty()) emptyFlow()
+    else flows.asFlow().flattenMerge(concurrency = flows.size)
 }

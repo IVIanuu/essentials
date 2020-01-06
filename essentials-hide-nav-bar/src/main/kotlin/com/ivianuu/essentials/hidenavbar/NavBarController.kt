@@ -78,9 +78,6 @@ class NavBarController internal constructor(
             if (config.showWhileScreenOff) {
                 this += screenStateProvider.screenState.drop(1)
             }
-
-            /** [merge] requires at least so add a dummy here */
-            this += emptyFlow<Unit>()
         }
 
         // apply config
