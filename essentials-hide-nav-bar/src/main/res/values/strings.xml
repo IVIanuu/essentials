@@ -17,11 +17,11 @@
 <resources>
     <string name="es_pref_nav_bar_hidden">Hide navigation bar</string>
 
-    <string name="es_pref_nav_bar_rotation_mode">Rotation mode</string>
-    <string name="es_pref_nav_bar_rotation_mode_summary">Define on which side of the screen the nav bar is located in landscape mode</string>
-    <string name="es_nav_bar_rotation_mode_marshmallow">Marshmallow (Right side of the screen)</string>
-    <string name="es_nav_bar_rotation_mode_nougat">Nougat (Bottom of the device)</string>
-    <string name="es_nav_bar_rotation_mode_tablet">Tablet (Bottom of the screen)</string>
+    <string name="es_pref_nav_bar_rotation_mode">Navigation bar behavior</string>
+    <string name="es_pref_nav_bar_rotation_mode_summary">Select the location of the navigation bar in landscape mode</string>
+    <string name="es_nav_bar_rotation_mode_marshmallow">Right side of the screen (Android 6.0)</string>
+    <string name="es_nav_bar_rotation_mode_nougat">Bottom side of the device (Android 7.1+)</string>
+    <string name="es_nav_bar_rotation_mode_tablet">Bottom side of the screen (tablet)</string>
 
     <string name="es_pref_show_nav_bar_screen_off">Show while screen is off</string>
     <string name="es_pref_show_nav_bar_screen_off_summary">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>

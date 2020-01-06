@@ -58,36 +58,7 @@ private class SharedFlow<T>(
     private var resetJob: Job? = null
     private val channels = mutableListOf<SendChannel<T>>()
 
-    private var actorChannel = createActor()
-
-    init {
-        require(cacheSize >= 0) { "cacheSize parameter must be at least 0, but was $cacheSize" }
-    }
-
-    override suspend fun collectSafely(collector: FlowCollector<T>) {
-        try {
-            val channel = Channel<T>(Channel.UNLIMITED)
-            collector.emitAll(
-                channel.consumeAsFlow()
-                    .onStart {
-                        println("SharedFlows: $tag -> child on start $channel")
-                        actorChannel.send(Message.AddChannel(channel))
-                    }
-                    .onEach { println("SharedFlows: $tag -> child on each $it $channel") }
-                    .onCompletion {
-                        println("SharedFlows: $tag -> child on complete $channel")
-                        try {
-                            actorChannel.send(Message.RemoveChannel(channel))
-                        } catch (e: ClosedSendChannelException) {
-                        }
-                    }
-                    .replayIfNeeded()
-            )
-        } catch (e: CancellationException) {
-        }
-    }
-
-    private fun createActor() = scope.actor<Message<T>>(
+    private val actorChannel = scope.actor<Message<T>>(
         capacity = Channel.UNLIMITED
     ) {
         for (msg in channel) {
@@ -121,6 +92,33 @@ private class SharedFlow<T>(
                     reset()
                 }
             }
+        }
+    }
+
+    init {
+        require(cacheSize >= 0) { "cacheSize parameter must be at least 0, but was $cacheSize" }
+    }
+
+    override suspend fun collectSafely(collector: FlowCollector<T>) {
+        try {
+            val channel = Channel<T>(Channel.UNLIMITED)
+            collector.emitAll(
+                channel.consumeAsFlow()
+                    .onStart {
+                        println("SharedFlows: $tag -> child on start $channel")
+                        actorChannel.send(Message.AddChannel(channel))
+                    }
+                    .onEach { println("SharedFlows: $tag -> child on each $it $channel") }
+                    .onCompletion {
+                        println("SharedFlows: $tag -> child on complete $channel")
+                        try {
+                            actorChannel.send(Message.RemoveChannel(channel))
+                        } catch (e: ClosedSendChannelException) {
+                        }
+                    }
+                    .replayIfNeeded()
+            )
+        } catch (e: CancellationException) {
         }
     }
 
@@ -174,8 +172,6 @@ private class SharedFlow<T>(
         channels.forEach { it.close() }
         channels.clear()
         cache = CircularArray(cacheSize)
-        actorChannel.close()
-        actorChannel = createActor()
     }
 
     private fun Flow<T>.replayIfNeeded(): Flow<T> = if (cacheSize > 0) {
