@@ -33,7 +33,6 @@ import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
-import com.ivianuu.essentials.ui.core.retain
 
 @Stable
 class ScrollPosition(
@@ -126,7 +125,7 @@ class ScrollPosition(
 
 @Composable
 fun Scrollable(
-    position: ScrollPosition = retain { ScrollPosition() },
+    position: ScrollPosition,
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
     child: @Composable() () -> Unit

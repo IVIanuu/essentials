@@ -53,8 +53,10 @@ class DisplayRotationProvider(
         .flatMapLatest { screenState ->
             if (screenState.isOn) {
                 merge(
-                    rotationChanges(),
-                    configChanges()
+                    listOf(
+                        rotationChanges(),
+                        configChanges()
+                    )
                 )
                     .onStart { d { "sub for rotation" } }
                     .onCompletion { d { "dispose rotation" } }
