@@ -24,8 +24,6 @@ import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.asFail
-import com.ivianuu.essentials.util.asSuccess
 import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -84,8 +82,8 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     protected suspend fun <V> Flow<V>.execute(reducer: S.(Async<V>) -> S) {
         setState { reducer(Loading()) }
         return this
-            .map { it.asSuccess() }
-            .catch { it.asFail<V>() }
+            .map { Success(it) }
+            .catch { Fail<V>(it) }
             .flowOn(Dispatchers.Default)
             .collect { setState { reducer(it) } }
     }
@@ -94,8 +92,8 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         return scope.launch(Dispatchers.Default) {
             setState { reducer(Loading()) }
             this@executeIn
-                .map { it.asSuccess() }
-                .catch { it.asFail<V>() }
+                .map { Success(it) }
+                .catch { Fail<V>(it) }
                 .collect { setState { reducer(it) } }
         }
     }

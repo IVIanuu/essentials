@@ -24,10 +24,10 @@ sealed class Async<out T>(val complete: Boolean, val shouldLoad: Boolean) {
 }
 
 @Immutable
-object Uninitialized : Async<Nothing>(complete = false, shouldLoad = true), Incomplete
+object Uninitialized : Async<Nothing>(complete = false, shouldLoad = true)
 
 @Immutable
-class Loading<out T> : Async<T>(complete = false, shouldLoad = false), Incomplete {
+class Loading<out T> : Async<T>(complete = false, shouldLoad = false) {
     override fun equals(other: Any?) = other is Loading<*>
     override fun hashCode() = "Loading".hashCode()
 }
@@ -37,11 +37,13 @@ data class Success<out T>(val value: T) : Async<T>(complete = true, shouldLoad =
     override operator fun invoke(): T = value
 }
 
-fun <T> T.asSuccess(): Success<T> = Success(this)
-
 @Immutable
 data class Fail<out T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true)
 
-fun <T> Throwable.asFail(): Fail<T> = Fail(this)
+inline fun <T, R> Async<T>.map(transform: (T) -> R) =
+    if (this is Success) Success(transform(value)) else this as Async<R>
 
-interface Incomplete
+fun <T> Async<T>.valueOrThrow(): T {
+    if (this is Success) return value
+    else error("$this has no value")
+}
