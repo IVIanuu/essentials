@@ -45,3 +45,7 @@ suspend inline fun <T> Box<T>.getOrElse(
 suspend inline fun <T> Box<T>.getOrSet(
     block: () -> T
 ): T = getOrNull() ?: block().also { set(it) }
+
+suspend inline fun <T> Box<T>.update(reducer: T.() -> T) {
+    set(get().reducer())
+}
