@@ -30,6 +30,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -100,6 +101,7 @@ class SettingBoxImpl<T>(
     }
         .onStart { emit(Unit) }
         .map { get() }
+        .distinctUntilChanged()
         .shareIn(scope = coroutineScope, cacheSize = 1, tag = "SettingBox:$uri")
 
     override suspend fun set(value: T) {

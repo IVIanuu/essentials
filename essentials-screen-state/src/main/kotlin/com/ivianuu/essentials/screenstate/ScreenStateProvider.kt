@@ -25,6 +25,7 @@ import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -50,6 +51,7 @@ class ScreenStateProvider(
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getScreenState() }
+        .distinctUntilChanged()
         .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "screen state")
 
 

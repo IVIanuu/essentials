@@ -63,6 +63,7 @@ class TwilightHelper(
         .distinctUntilChanged()
         .onEach { currentIsDark = it }
         .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "twilight")
+
     var currentIsDark = false
         private set
 
