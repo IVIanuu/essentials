@@ -31,5 +31,6 @@ dependencies {
     api(project(":essentials-coroutines"))
     api(Deps.AndroidX.Ui.core)
     api(Deps.Coroutines.core)
+    api(Deps.kotlinSerialization)
     api(Deps.Kotlin.stdlib)
 }

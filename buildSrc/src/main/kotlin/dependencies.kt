@@ -125,6 +125,8 @@ object Deps {
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
+    const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0"
+
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
