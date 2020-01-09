@@ -24,9 +24,6 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.ivianuu.essentials.store.map
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -34,31 +31,13 @@ import kotlinx.coroutines.withContext
 
 @ApplicationScope
 @Single
-class BillingStore(
-    boxFactory: PrefBoxFactory,
-    private val dispatchers: AppDispatchers
+class BillingStore internal constructor(
+    private val dispatchers: AppDispatchers,
+    prefs: BillingPrefs
 ) {
 
-    private val products = boxFactory.stringSet("billing_products")
-        .map(
-            fromRaw = { productsJson -> productsJson.map { SkuDetails(it) } },
-            toRaw = { products -> products.map { it.originalJson }.toSet() }
-        )
-
-    private val purchases = boxFactory.stringSet("billing_purchases")
-        .map(
-            fromRaw = { purchasesJson ->
-                purchasesJson.map { purchase ->
-                    val params = purchase.split("=:=")
-                    Purchase(params[0], params[1])
-                }
-            },
-            toRaw = { purchases ->
-                purchases.map { purchase ->
-                    purchase.originalJson + "=:=" + purchase.signature
-                }.toSet()
-            }
-        )
+    private val products = prefs.products
+    private val purchases = prefs.purchases
 
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> = withContext(dispatchers.default) {
         products.get().filter { it.sku in params.skusList && it.type == params.skuType }

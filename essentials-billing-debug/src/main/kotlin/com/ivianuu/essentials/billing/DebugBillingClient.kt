@@ -75,12 +75,12 @@ class DebugBillingClient(
 
     override fun startConnection(listener: BillingClientStateListener) {
         if (isReady) {
-            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build())
+            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build())
             return
         }
 
         if (clientState == CLOSED) {
-            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.DEVELOPER_ERROR).build())
+            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build())
             return
         }
 
