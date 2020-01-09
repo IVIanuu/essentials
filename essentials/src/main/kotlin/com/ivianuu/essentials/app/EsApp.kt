@@ -19,7 +19,7 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.data.EsStoreModule
+import com.ivianuu.essentials.data.EsDataModule
 import com.ivianuu.essentials.ui.core.EsUiInitializersModule
 import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.essentials.util.containsFlag
@@ -68,7 +68,7 @@ abstract class EsApp : Application(), InjektTrait {
                 EsAppModule,
                 EsAppInitializersModule,
                 EsAppServicesModule,
-                EsStoreModule,
+                EsDataModule,
                 SystemServiceModule,
                 EsUiInitializersModule,
                 EsUtilModule

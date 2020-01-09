@@ -32,7 +32,7 @@ annotation class PrefsPath {
     companion object
 }
 
-val EsStoreModule = Module {
+val EsDataModule = Module {
     single {
         PrefBoxFactory(
             dispatcher = get<AppDispatchers>().io,
