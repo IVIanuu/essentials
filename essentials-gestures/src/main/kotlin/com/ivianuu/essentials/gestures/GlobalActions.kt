@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 
 /**
- * Simulates device events such as back or home
+ * Simulates device inputs such as back or home
  */
 @ApplicationScope
 @Single
