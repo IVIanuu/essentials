@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
@@ -28,7 +29,7 @@ import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 
-@Composable
+@Immutable
 data class CardStyle(
     val shape: Shape = RectangleShape,
     val color: Color,

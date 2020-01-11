@@ -19,11 +19,13 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.MutableState
+import androidx.compose.Stable
 import androidx.compose.ambient
 import androidx.compose.mutableStateOf
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
+@Stable
 class RetainedObjects {
     private val backing = mutableMapOf<Any, Any?>()
 

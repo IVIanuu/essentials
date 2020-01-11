@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 import androidx.compose.key
 import androidx.ui.core.Alignment
@@ -36,6 +37,7 @@ import com.ivianuu.essentials.ui.navigation.navigator
 // todo add selectable items
 
 object PopupMenu {
+    @Immutable
     data class Item(
         val onSelected: (() -> Unit)? = null,
         val content: @Composable() () -> Unit

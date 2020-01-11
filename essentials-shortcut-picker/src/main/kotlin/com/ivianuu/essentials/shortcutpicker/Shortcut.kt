@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.shortcutpicker
 
 import android.content.Intent
+import androidx.compose.Immutable
 import androidx.ui.graphics.Image
 
+@Immutable
 data class Shortcut(
     val intent: Intent,
     val name: String,
