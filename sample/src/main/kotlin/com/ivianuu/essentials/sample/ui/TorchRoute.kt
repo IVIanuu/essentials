@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
-import kotlinx.coroutines.Dispatchers
+import com.ivianuu.essentials.util.AppDispatchers
 import kotlinx.coroutines.launch
 
 val TorchRoute = Route {
@@ -46,10 +46,11 @@ val TorchRoute = Route {
                 )
                 Spacer(LayoutHeight(8.dp))
                 val coroutineScope = coroutineScope
+                val dispatchers = inject<AppDispatchers>()
                 Button(
                     text = "Toggle torch",
                     onClick = {
-                        coroutineScope.launch(Dispatchers.IO) {
+                        coroutineScope.launch(dispatchers.default) {
                             torchManager.toggleTorch()
                         }
                     }

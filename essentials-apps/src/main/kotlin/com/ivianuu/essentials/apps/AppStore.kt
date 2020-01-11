@@ -44,7 +44,7 @@ class AppStore(
     }
 
 
-    suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.io) {
+    suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.default) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
