@@ -19,14 +19,14 @@ package com.ivianuu.essentials.ui.common
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.onCommit
 import androidx.compose.remember
 import com.ivianuu.essentials.ui.core.ActivityAmbient
+import com.ivianuu.essentials.ui.core.current
 
 @Composable
 fun onBackPressed(
-    owner: OnBackPressedDispatcherOwner = ambient(ActivityAmbient),
+    owner: OnBackPressedDispatcherOwner = ActivityAmbient.current,
     enabled: Boolean = true,
     callback: () -> Unit
 ) {

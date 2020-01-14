@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -27,6 +25,8 @@ import androidx.ui.layout.LayoutMaxWidth
 import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Surface
 
@@ -35,11 +35,11 @@ data class DialogStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp)
 )
 
-val DialogStyleAmbient = Ambient.of { DialogStyle() }
+val DialogStyleAmbient = ambientOf { DialogStyle() }
 
 @Composable
 fun Dialog(
-    style: DialogStyle = ambient(DialogStyleAmbient),
+    style: DialogStyle = DialogStyleAmbient.current,
     child: @Composable() () -> Unit
 ) {
     WithModifier(

@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.navigation.route
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupStyle
 import com.ivianuu.essentials.ui.popup.PopupStyleAmbient
@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.resources.drawableResource
 fun DrawerButton(
     image: Image = drawableResource(R.drawable.es_ic_menu)
 ) {
-    val scaffold = scaffold
+    val scaffold = ScaffoldAmbient.current
     IconButton(
         image = image,
         onClick = { scaffold.isDrawerOpen = !scaffold.isDrawerOpen }
@@ -45,7 +45,7 @@ fun DrawerButton(
 fun BackButton(
     image: Image = drawableResource(R.drawable.es_ic_arrow_back)
 ) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     IconButton(
         image = image,
         onClick = { navigator.popTop() }
@@ -54,9 +54,9 @@ fun BackButton(
 
 @Composable
 fun NavigationButton() {
-    val scaffold = scaffold
-    val navigator = navigator
-    val route = route
+    val scaffold = ScaffoldAmbient.current
+    val navigator = NavigatorAmbient.current
+    val route = RouteAmbient.current
     val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
     when {
         scaffold.hasDrawer -> {
@@ -72,7 +72,7 @@ fun NavigationButton() {
 fun PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
     image: Image = drawableResource(R.drawable.es_ic_more_vert),
-    popupStyle: PopupStyle = ambient(PopupStyleAmbient),
+    popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<PopupMenu.Item>
 ) {
@@ -98,7 +98,7 @@ fun PopupMenuButton(
 fun <T> PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
     image: Image = drawableResource(R.drawable.es_ic_more_vert),
-    popupStyle: PopupStyle = ambient(PopupStyleAmbient),
+    popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
@@ -39,6 +38,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.WithModifier
@@ -525,7 +525,7 @@ fun <T : Comparable<T>> SliderPreference(
                 )
             }
 
-            val listItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle()
+            val listItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle()
 
             Row(
                 modifier = LayoutGravity.BottomCenter + LayoutPadding(
@@ -607,7 +607,7 @@ fun <T> UnitValueTextProvider(
     toString: (T) -> String = { it.toString() }
 ): @Composable() (T) -> Unit {
     val textProvider = UnitValueTextProvider(
-        ambient(ContextAmbient), unit
+        ContextAmbient.current, unit
     )
     return { SimpleSliderValueText(textProvider(toString(it))) }
 }

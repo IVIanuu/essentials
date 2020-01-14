@@ -22,10 +22,8 @@ import android.os.Build
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.state
@@ -45,7 +43,7 @@ import android.view.WindowInsets as AndroidWindowInsets
 
 @Composable
 fun WindowInsetsManager(children: @Composable() () -> Unit) {
-    val composeView = ambient(AndroidComposeViewAmbient)
+    val composeView = AndroidComposeViewAmbient.current
 
     val density = ambientDensity()
     val (windowInsets, setWindowInsets) = state { WindowInsets() }
@@ -221,7 +219,7 @@ private class ObservableWindowInsets(
 }
 
 @Composable
-fun ambientWindowInsets(): WindowInsets = ambient(WindowInsetsAmbient)
+fun ambientWindowInsets(): WindowInsets = WindowInsetsAmbient.current
 
 @Composable
 fun WindowInsetsProvider(
@@ -234,4 +232,6 @@ fun WindowInsetsProvider(
     )
 }
 
-private val WindowInsetsAmbient = Ambient.of<WindowInsets>()
+private val WindowInsetsAmbient = ambientOf<WindowInsets> {
+    error("No window insets provided")
+}

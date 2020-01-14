@@ -22,10 +22,11 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
@@ -43,7 +44,7 @@ internal fun SecureSettingsHeader(text: String) {
 
 @Composable
 internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val toaster = inject<Toaster>()
 

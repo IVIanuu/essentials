@@ -29,7 +29,8 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -37,8 +38,8 @@ import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 import kotlinx.coroutines.launch
 
 val NavBarRoute = Route {
@@ -52,7 +53,7 @@ val NavBarRoute = Route {
                 ) {
                     val navBarController = inject<NavBarController>()
 
-                    val coroutineScope = coroutineScope
+                    val coroutineScope = CoroutineScopeAmbient.current
                     fun updateNavBarState(navBarHidden: Boolean) {
                         coroutineScope.launch {
                             navBarController.setNavBarConfig(
@@ -88,7 +89,7 @@ val NavBarRoute = Route {
                         )
                     }
 
-                    val navigator = navigator
+                    val navigator = NavigatorAmbient.current
 
                     Button(
                         "Toggle nav bar",

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
@@ -31,6 +30,7 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.TextButtonStyle
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -56,7 +56,7 @@ fun Banner(
                 }
 
                 CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).high, children = content)
+                    ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
                 }
 
                 Spacer(LayoutWidth(16.dp))

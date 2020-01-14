@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.ui.injekt
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-val ComponentAmbient = Ambient.of<Component> { error("No component found") }
+val ComponentAmbient = ambientOf<Component> { error("No component found") }
 
 @Composable
 inline fun <reified T> inject(
@@ -39,7 +39,7 @@ fun <T> inject(
     name: Any? = null,
     parameters: ParametersDefinition? = null
 ): T {
-    val component = ambient(ComponentAmbient)
+    val component = ComponentAmbient.current
     return remember { component.get(type = type, name = name, parameters = parameters) }
 }
 
@@ -55,6 +55,6 @@ fun <T> injectOrNull(
     name: Any? = null,
     parameters: ParametersDefinition? = null
 ): T? {
-    val component = ambient(ComponentAmbient)
+    val component = ComponentAmbient.current
     return remember { component.getOrNull(type = type, name = name, parameters = parameters) }
 }

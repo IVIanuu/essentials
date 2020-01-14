@@ -19,8 +19,9 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.compose.key
 import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.material.RadioButton
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
 fun <T> SingleChoiceListDialog(
@@ -36,7 +37,7 @@ fun <T> SingleChoiceListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
 
     ScrollableDialog(
         icon = icon,

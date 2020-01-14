@@ -19,10 +19,8 @@ package com.ivianuu.essentials.ui.core
 import android.app.Activity
 import android.os.Build
 import android.view.View
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.ui.graphics.Color
@@ -97,7 +95,7 @@ fun ProvideSystemBarStyle(
     value: SystemBarStyle,
     children: @Composable() () -> Unit
 ) {
-    val systemBarManager = ambient(SystemBarManagerAmbient)
+    val systemBarManager = SystemBarManagerAmbient.current
     onPreCommit(value) {
         systemBarManager.registerStyle(value)
         onDispose { systemBarManager.unregisterStyle(value) }
@@ -110,16 +108,16 @@ fun ProvideSystemBarStyle(
 
 @Composable
 fun ambientSystemBarStyle(): SystemBarStyle =
-    ambient(SystemBarStyleAmbient)
+    SystemBarStyleAmbient.current
 
 @Composable
 fun SystemBarManager(children: @Composable() () -> Unit) {
-    val activity = ambient(ActivityAmbient)
+    val activity = ActivityAmbient.current
     val systemBarManager = remember { SystemBarManager(activity) }
     SystemBarManagerAmbient.Provider(value = systemBarManager, children = children)
 }
 
-private val SystemBarStyleAmbient = Ambient.of { SystemBarStyle() }
+private val SystemBarStyleAmbient = ambientOf { SystemBarStyle() }
 
 internal class SystemBarManager(private val activity: Activity) {
 
@@ -170,4 +168,4 @@ internal class SystemBarManager(private val activity: Activity) {
     }
 }
 
-internal val SystemBarManagerAmbient = Ambient.of<SystemBarManager>()
+internal val SystemBarManagerAmbient = ambientOf<SystemBarManager> { error("No system bar manager provided") }

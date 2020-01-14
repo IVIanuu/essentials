@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.PxPosition
@@ -106,7 +105,7 @@ private fun ToggleableSelectable(
     child: @Composable() () -> Unit
 ) {
     SelectionRegistrarAmbient.Provider(
-        value = if (selectable) ambient(SelectionRegistrarAmbient) else NoopSelectionRegistrar,
+        value = if (selectable) SelectionRegistrarAmbient.current else NoopSelectionRegistrar,
         children = child
     )
 }

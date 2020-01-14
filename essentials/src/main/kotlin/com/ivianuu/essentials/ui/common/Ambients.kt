@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
+import com.ivianuu.essentials.ui.core.current
 
 interface Updateable<T> {
     fun updateFrom(other: T)
@@ -44,7 +44,7 @@ fun <T : Mergeable<T>> Ambient<T>.MergeProvider(
     value: T,
     children: @Composable() () -> Unit
 ) {
-    val currentValue = ambient(this)
+    val currentValue = this.current
     val newValue = currentValue.merge(value)
     Provider(value = newValue, children = children)
 }

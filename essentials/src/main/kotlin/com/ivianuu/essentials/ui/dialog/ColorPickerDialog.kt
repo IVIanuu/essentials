@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
@@ -48,6 +47,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -64,7 +64,7 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor
 import com.ivianuu.essentials.util.toHexString
@@ -76,7 +76,7 @@ fun ColorPickerRoute(
     showAlphaSelector: Boolean = false,
     title: String? = null
 ) = DialogRoute {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     ColorPickerDialog(
         initialColor = initialColor,
         colorPalettes = colorPalettes,
@@ -257,7 +257,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             image = drawableResource(R.drawable.es_ic_arrow_back),
-            style = ambient(IconStyleAmbient).copy(size = Size(width = 36.dp, height = 36.dp))
+            style = IconStyleAmbient.current.copy(size = Size(width = 36.dp, height = 36.dp))
         )
     }
 }

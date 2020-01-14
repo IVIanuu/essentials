@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.layout.ScrollableList
@@ -38,11 +39,11 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.TopAppBarStyle
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 
 val ScaffoldRoute = Route {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     val controls = remember { ScaffoldControls() }
 
     Scaffold(

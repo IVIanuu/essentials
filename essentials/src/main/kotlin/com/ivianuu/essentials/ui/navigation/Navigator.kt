@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.onDispose
 import androidx.compose.remember
@@ -33,6 +31,9 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
@@ -68,7 +69,7 @@ fun Navigator(
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
 ) {
-    val coroutineScope = coroutineScope
+    val coroutineScope = CoroutineScopeAmbient.current
     val state = remember {
         NavigatorState(
             startRoute = startRoute,
@@ -85,7 +86,7 @@ fun Navigator(
 
 @Composable
 fun Navigator(state: NavigatorState) {
-    state.defaultRouteTransition = ambient(DefaultRouteTransitionAmbient)
+    state.defaultRouteTransition = DefaultRouteTransitionAmbient.current
     NavigatorAmbient.Provider(value = state) {
         Observe {
             val enabled = state.handleBack &&
@@ -462,8 +463,4 @@ class NavigatorState(
     }
 }
 
-private val NavigatorAmbient = Ambient.of<NavigatorState>()
-
-@Composable
-val navigator: NavigatorState
-    get() = ambient(NavigatorAmbient)
+val NavigatorAmbient = ambientOf<NavigatorState> { error("No navigator provided") }

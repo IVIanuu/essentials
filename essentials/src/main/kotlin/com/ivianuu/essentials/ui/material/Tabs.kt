@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.framed
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperState
 
@@ -41,7 +41,7 @@ fun <T> TabController(
 }
 
 @Composable
-fun <T> ambientTabController(): TabController<T> = ambient(TabControllerAmbient) as TabController<T>
+fun <T> ambientTabController(): TabController<T> = TabControllerAmbient.current as TabController<T>
 
 @Composable
 fun <T> ProvideTabController(
@@ -60,7 +60,7 @@ class TabController<T>(
     val selectedItem: T get() = items[selectedIndex]
 }
 
-private val TabControllerAmbient = Ambient.of<TabController<*>>()
+private val TabControllerAmbient = ambientOf<TabController<*>> { error("No tab controller provided") }
 
 @Composable
 fun <T> TabRow(
@@ -88,7 +88,7 @@ fun <T> TabRow(
     )
 }
 
-val TabIndexAmbient = Ambient.of<Int>()
+val TabIndexAmbient = ambientOf<Int> { error("No tab index provided") }
 
 @Composable
 fun Tab(
@@ -96,7 +96,7 @@ fun Tab(
     icon: Image? = null
 ) {
     val tabController = ambientTabController<Any?>()
-    val tabIndex = ambient(TabIndexAmbient)
+    val tabIndex = TabIndexAmbient.current
     Tab(
         text = text,
         icon = icon,

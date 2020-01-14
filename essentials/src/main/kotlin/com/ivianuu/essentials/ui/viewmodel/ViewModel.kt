@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.util.sourceLocation
@@ -54,7 +54,7 @@ fun <T : ViewModel> injectViewModel(
     name: Any? = null,
     parameters: ParametersDefinition? = null
 ): T {
-    val component = ambient(ComponentAmbient)
+    val component = ComponentAmbient.current
     return viewModel(
         key = key,
         factory = { component.get(type = type, name = name, parameters = parameters) }

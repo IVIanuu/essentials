@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
 import androidx.ui.core.Text
@@ -32,6 +30,8 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -80,13 +80,14 @@ fun ExtendedFloatingActionButtonStyle(
     elevation = elevation
 )
 
-val FloatingActionButtonStyleAmbient = Ambient.of<FloatingActionButtonStyle?>()
+val FloatingActionButtonStyleAmbient = ambientOf<FloatingActionButtonStyle?> { null }
 
 @Composable
 fun FloatingActionButton(
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = ambient(FloatingActionButtonStyleAmbient) ?: DefaultFloatingActionButtonStyle(),
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current
+        ?: DefaultFloatingActionButtonStyle(),
     children: @Composable() () -> Unit
 ) {
     androidx.ui.material.FloatingActionButton(
@@ -105,7 +106,7 @@ fun FloatingActionButton(
     icon: Image,
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = ambient(FloatingActionButtonStyleAmbient) ?: DefaultFloatingActionButtonStyle()
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: DefaultFloatingActionButtonStyle()
 ) {
     FloatingActionButton(
         modifier = modifier,
@@ -122,7 +123,7 @@ fun FloatingActionButton(
     modifier: Modifier = Modifier.None,
     icon: Image? = null,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = ambient(FloatingActionButtonStyleAmbient) ?: ExtendedFloatingActionButtonStyle()
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: ExtendedFloatingActionButtonStyle()
 ) {
     FloatingActionButton(
         modifier = modifier,

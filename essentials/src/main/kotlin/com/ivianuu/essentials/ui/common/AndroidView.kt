@@ -21,7 +21,6 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.widget.FrameLayout
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.ui.core.AlignmentLine
@@ -39,13 +38,14 @@ import androidx.ui.core.hasTightHeight
 import androidx.ui.core.hasTightWidth
 import androidx.ui.core.ipx
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 
 @Composable
 fun AndroidView(view: View) {
-    val context = ambient(ContextAmbient)
+    val context = ContextAmbient.current
     val androidViewHolder = remember { AndroidViewHolder(context) }
-    val composeView = ambient(AndroidComposeViewAmbient)
+    val composeView = AndroidComposeViewAmbient.current
     onPreCommit(androidViewHolder, composeView) {
         composeView.addView(androidViewHolder)
         onDispose { composeView.removeView(androidViewHolder) }

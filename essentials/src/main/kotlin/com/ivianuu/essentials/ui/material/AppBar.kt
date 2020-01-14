@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
@@ -37,13 +35,15 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.SpacingRow
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.navigation.route
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.isLight
 
 @Immutable
@@ -64,7 +64,7 @@ fun DefaultTopAppBarStyle(
     centerTitle = centerTitle
 )
 
-val TopAppBarStyleAmbient = Ambient.of<TopAppBarStyle?>()
+val TopAppBarStyleAmbient = ambientOf<TopAppBarStyle?> { null }
 
 @Composable
 fun TopAppBar(title: String) {
@@ -74,7 +74,7 @@ fun TopAppBar(title: String) {
 @Unstable
 @Composable
 fun TopAppBar(
-    style: TopAppBarStyle = ambient(TopAppBarStyleAmbient) ?: DefaultTopAppBarStyle(),
+    style: TopAppBarStyle = TopAppBarStyleAmbient.current ?: DefaultTopAppBarStyle(),
     title: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: (@Composable() () -> Unit)? = null,
@@ -226,9 +226,9 @@ private val DefaultAppBarElevation = 8.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
-    val scaffold = scaffold
-    val navigator = navigator
-    val route = route
+    val scaffold = ScaffoldAmbient.current
+    val navigator = NavigatorAmbient.current
+    val route = RouteAmbient.current
     val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
     return when {
         scaffold.hasDrawer -> {

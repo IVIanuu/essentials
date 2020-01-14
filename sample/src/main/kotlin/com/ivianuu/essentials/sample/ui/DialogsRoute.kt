@@ -27,6 +27,7 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
@@ -45,8 +46,8 @@ import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 val DialogsRoute = Route {
@@ -334,7 +335,7 @@ private fun DialogLauncherButton(
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
 ) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     Button(
         text = text,
         onClick = {

@@ -18,17 +18,18 @@ package com.ivianuu.essentials.activityresult
 
 import android.content.Intent
 import android.os.Bundle
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 
 fun ActivityResultRoute(
     intent: Intent,
     options: Bundle? = null
 ) = Route(opaque = true) {
     val activityResultController = inject<ActivityResultController>()
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     launchOnActive {
         val result = activityResultController.startForResult(intent, options)
         navigator.popTop(result = result)

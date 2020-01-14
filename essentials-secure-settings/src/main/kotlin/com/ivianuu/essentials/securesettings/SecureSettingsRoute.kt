@@ -19,7 +19,8 @@ package com.ivianuu.essentials.securesettings
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.common.navigateOnClick
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
@@ -49,7 +50,7 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
             onClick = navigateOnClick { SecureSettingsInstructionsRoute }
         )
 
-        val coroutineScope = coroutineScope
+        val coroutineScope = CoroutineScopeAmbient.current
         val secureSettingsHelper = inject<SecureSettingsHelper>()
         val toaster = inject<Toaster>()
         ListItem(

@@ -19,14 +19,15 @@ package com.ivianuu.essentials.ui.box
 import androidx.compose.Composable
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
 @Composable
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
-    val coroutineScope = coroutineScope
+    val coroutineScope = CoroutineScopeAmbient.current
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->
             coroutineScope.launch {

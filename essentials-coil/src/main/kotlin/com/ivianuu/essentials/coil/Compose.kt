@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.coil
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
 import coil.api.getAny
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.call
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.injekt.inject
 @Composable
 fun image(
     data: Any,
-    placeholder: Image? = ambient(PlaceholderAmbient),
+    placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject()
 ): Image? {
     return if (placeholder != null) {
@@ -62,13 +62,13 @@ fun image(
 }
 
 // todo make non null once we have something like ambientOrNull or ambientOrDefault
-val PlaceholderAmbient = Ambient.of<Image?>()
+val PlaceholderAmbient = ambientOf<Image?> { null }
 
 @Composable
 fun Image(
     data: Any,
     modifier: Modifier = Modifier.None,
-    placeholder: Image? = ambient(PlaceholderAmbient),
+    placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image?) -> Unit
 ) {

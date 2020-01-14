@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Observe
-import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
@@ -30,12 +29,11 @@ import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.call
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.FloatingActionButton
@@ -55,7 +53,7 @@ val TextInputRoute = Route {
         state.inputValue.isEmpty() || state.inputValue in it.toLowerCase().trim()
     }
 
-    val keyboardManager = ambient(KeyboardManagerAmbient)
+    val keyboardManager = KeyboardManagerAmbient.current
     onDispose { keyboardManager.hideKeyboard() }
 
     Scaffold(
