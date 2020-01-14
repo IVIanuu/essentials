@@ -42,6 +42,12 @@ buildscript {
 }
 
 allprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            useIR = true
+        }
+    }
+
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")

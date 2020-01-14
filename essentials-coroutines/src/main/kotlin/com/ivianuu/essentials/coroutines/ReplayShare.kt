@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
@@ -42,6 +41,16 @@ fun <T> Flow<T>.replayShareIn(
     tag: String? = null
 ): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
 
+// todo ir
+suspend fun <T> Mutex.withLockNoInline(owner: Any? = null, action: () -> T): T {
+    lock(owner)
+    try {
+        return action()
+    } finally {
+        unlock(owner)
+    }
+}
+
 private class ReplayShareFlow<T>(
     upstream: Flow<T>,
     scope: CoroutineScope,
@@ -56,13 +65,13 @@ private class ReplayShareFlow<T>(
     private val sharedFlow = upstream
         .onEach { item ->
             println("ReplayShare: $tag -> source cache emission $item")
-            mutex.withLock { lastValue = item }
+            mutex.withLockNoInline { lastValue = item }
         }
         .onCompletion {
             println("ReplayShare: $tag -> source completed with cause $it")
         }
         .catch {
-            mutex.withLock { lastValue = defaultValue }
+            mutex.withLockNoInline { lastValue = defaultValue }
             println("ReplayShare: $tag -> source error set to default $defaultValue")
             throw it
         }
@@ -72,7 +81,7 @@ private class ReplayShareFlow<T>(
         collector.emitAll(
             sharedFlow
                 .onStart {
-                    val lastValue = mutex.withLock { lastValue }
+                    val lastValue = mutex.withLockNoInline { lastValue }
                     if (lastValue !== Null) {
                         println("ReplayShare: $tag -> shared emit last value on start $lastValue")
                         emit(lastValue as T)
