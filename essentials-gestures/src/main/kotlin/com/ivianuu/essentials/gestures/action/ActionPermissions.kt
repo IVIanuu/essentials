@@ -10,6 +10,7 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Single
@@ -28,6 +29,11 @@ internal class ActionPermissions(resourceProvider: ResourceProvider) {
     val root = RootPermission(
         Metadata.Title with "Root",
         Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_adb)
+    )
+    val secureSettings = WriteSecureSettingsPermission(
+        Metadata.Title with "Write secure settings",
+        Metadata.Desc with "Required to change the navigation bar visibility",
+        Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_settings)
     )
 }
 

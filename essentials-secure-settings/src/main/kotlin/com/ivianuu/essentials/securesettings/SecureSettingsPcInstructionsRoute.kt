@@ -30,7 +30,7 @@ import com.ivianuu.essentials.util.Toaster
  * Asks the user for the secure settings permission
  */
 val SecureSettingsInstructionsRoute = Route {
-    popNavigatorOnceSecureSettingsGranted()
+    popNavigatorOnceSecureSettingsGranted(toast = false)
 
     ListScreen(title = stringResource(R.string.es_title_secure_settings_pc_instructions)) {
         SecureSettingsHeader(

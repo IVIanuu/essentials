@@ -27,12 +27,13 @@ import com.ivianuu.essentials.permission.packageusagestats.EsPackageUsageStatsPe
 import com.ivianuu.essentials.permission.root.EsRootPermissionModule
 import com.ivianuu.essentials.permission.runtime.EsRuntimePermissionModule
 import com.ivianuu.essentials.permission.systemoverlay.EsSystemOverlayPermissionModule
+import com.ivianuu.essentials.permission.writesecuresettings.EsWriteSecureSettingsPermissionModule
 import com.ivianuu.essentials.permission.writesettings.EsWriteSettingsPermissionModule
 import com.ivianuu.injekt.Module
 
 val EsPermissionModule = Module {
-    set<PermissionRequestHandler>(setName = PermissionRequestHandlers)
-    set<PermissionStateProvider>(setName = PermissionStateProviders)
+    set<PermissionRequestHandler>(setName = PermissionRequestHandlersSet)
+    set<PermissionStateProvider>(setName = PermissionStateProvidersSet)
 
     include(EsAccessibilityServicePermissionModule)
     include(EsDeviceAdminPermissionModule)
@@ -45,5 +46,6 @@ val EsPermissionModule = Module {
     include(EsRootPermissionModule)
     include(EsRuntimePermissionModule)
     include(EsSystemOverlayPermissionModule)
+    include(EsWriteSecureSettingsPermissionModule)
     include(EsWriteSettingsPermissionModule)
 }

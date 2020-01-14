@@ -45,11 +45,7 @@ class SampleUi : AppUi {
                 lightNavigationBar = MaterialTheme.colors().onSurface.isDark
             )
         ) {
-            DefaultRouteTransitionAmbient.Provider(
-                value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
-            ) {
-                InjectedNavigator(startRoute = HomeRoute)
-            }
+            InjectedNavigator(startRoute = HomeRoute)
         }
     }
 }
@@ -57,7 +53,11 @@ class SampleUi : AppUi {
 @Factory
 class SampleUiInitializer : UiInitializer {
     override fun apply(children: () -> Unit) {
-        TwilightTheme(children = children)
+        DefaultRouteTransitionAmbient.Provider(
+            value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+        ) {
+            TwilightTheme(children = children)
+        }
     }
 }
 

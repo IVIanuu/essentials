@@ -34,6 +34,7 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -82,6 +83,12 @@ val PermissionRoute = Route {
             Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
         )
 
+        val writeSecureSettings = WriteSecureSettingsPermission(
+            Metadata.Title with "Write secure settings",
+            Metadata.Desc with "This is a desc",
+            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+        )
+
         val writeSettings = WriteSettingsPermission(
             ambient(ContextAmbient),
             Metadata.Title with "Write settings",
@@ -102,6 +109,7 @@ val PermissionRoute = Route {
                             accessibility,
                             notificationListener,
                             systemOverlay,
+                            writeSecureSettings,
                             writeSettings
                         )
                         d { "granted $granted" }

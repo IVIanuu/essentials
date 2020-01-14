@@ -1,19 +1,27 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
+import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 
-private fun createInputMethodAction() = Action(
-    key = KEY_INPUT_METHOD,
-    title = string(R.string.action_input_method),
-    states = stateless(R.drawable.es_ic_keyboard_hide)
-)
-
-
-private fun showInputMethodPicker() {
-    inputMethodManager.showInputMethodPicker()
+internal val EsInputMethodActionModule = Module {
+    bindAction(
+        key = "input_method",
+        title = { getStringResource(R.string.es_action_input_method) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_keyboard_hide) },
+        executor = { get<InputMethodActionExecutor>() }
+    )
 }
-*/
+
+@Factory
+internal class InputMethodActionExecutor(
+    private val inputMethodManager: InputMethodManager
+) : ActionExecutor {
+    override suspend fun invoke() {
+        inputMethodManager.showInputMethodPicker()
+    }
+}

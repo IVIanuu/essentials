@@ -21,41 +21,41 @@ import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 
 @Name
-annotation class PermissionStateProviders {
+annotation class PermissionStateProvidersSet {
     companion object
 }
 
 inline fun <reified T : PermissionStateProvider> ModuleBuilder.bindPermissionStateProvider(
     name: Any? = null
 ) {
-    withBinding<T>(name) { bindPermissionStateProvider() }
+    withBinding<T>(name = name) { bindPermissionStateProvider() }
 }
 
 fun <T : PermissionStateProvider> BindingContext<T>.bindPermissionStateProvider(): BindingContext<T> {
-    intoSet<PermissionStateProvider>(setName = PermissionStateProviders)
+    intoSet<PermissionStateProvider>(setName = PermissionStateProvidersSet)
     return this
 }
 
 @Name
-annotation class PermissionRequestHandlers {
+annotation class PermissionRequestHandlersSet {
     companion object
 }
 
 inline fun <reified T : PermissionRequestHandler> ModuleBuilder.bindPermissionRequestHandler(
     name: Any? = null
 ) {
-    withBinding<T>(name) { bindPermissionRequestHandler() }
+    withBinding<T>(name = name) { bindPermissionRequestHandler() }
 }
 
 fun <T : PermissionRequestHandler> BindingContext<T>.bindPermissionRequestHandler(): BindingContext<T> {
-    intoSet<PermissionRequestHandler>(setName = PermissionRequestHandlers)
+    intoSet<PermissionRequestHandler>(setName = PermissionRequestHandlersSet)
     return this
 }
 
 inline fun <reified T : PermissionRequestUi> ModuleBuilder.bindPermissionRequestUi(
     name: Any? = null
 ) {
-    withBinding<T>(name) { bindPermissionRequestUi() }
+    withBinding<T>(name = name) { bindPermissionRequestUi() }
 }
 
 fun <T : PermissionRequestUi> BindingContext<T>.bindPermissionRequestUi(): BindingContext<T> {

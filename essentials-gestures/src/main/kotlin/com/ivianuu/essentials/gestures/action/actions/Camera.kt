@@ -1,21 +1,23 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
 import android.content.Intent
 import android.provider.MediaStore
-import com.ivianuu.pie.R
-import com.ivianuu.pie.action.Action
-import com.ivianuu.pie.data.Flag
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.parametersOf
 
-private fun createCameraAction() = Action(
-    key = KEY_CAMERA,
-    title = string(R.string.action_camera),
-    states = stateless(R.drawable.ic_photo_camera),
-    flags = setOf(Flag.UnlockScreen)
-)
-
-private fun openCamera() {
-    startActivity(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
-}*/
+internal val EsCameraActionModule = Module {
+    bindAction(
+        key = "camera",
+        title = { getStringResource(R.string.es_action_camera) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_photo_camera) },
+        unlockScreen = { true },
+        executor = {
+            get<IntentActionExecutor> {
+                parametersOf(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
+            }
+        }
+    )
+}

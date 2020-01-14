@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
  * Asks the user for the secure settings permission
  */
 fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
-    popNavigatorOnceSecureSettingsGranted()
+    popNavigatorOnceSecureSettingsGranted(toast = true)
 
     ListScreen(title = stringResource(R.string.es_title_secure_settings)) {
         SecureSettingsHeader(

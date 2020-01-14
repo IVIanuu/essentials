@@ -42,7 +42,7 @@ internal fun SecureSettingsHeader(text: String) {
 }
 
 @Composable
-internal fun popNavigatorOnceSecureSettingsGranted() {
+internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
     val navigator = navigator
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val toaster = inject<Toaster>()
@@ -52,7 +52,7 @@ internal fun popNavigatorOnceSecureSettingsGranted() {
     launchOnActive {
         while (true) {
             if (secureSettingsHelper.canWriteSecureSettings()) {
-                toaster.toast(R.string.es_secure_settings_permission_granted)
+                if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
                 navigator.popTop(result = true)
                 break
             }

@@ -29,15 +29,10 @@ import java.util.UUID
 @Single
 class PermissionManager(
     private val context: Context,
-    @PermissionRequestHandlers private val permissionRequestHandlers: Set<PermissionRequestHandler>,
-    @PermissionStateProviders private val permissionStateProviders: Set<PermissionStateProvider>
+    @PermissionStateProvidersSet private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()
-
-    init {
-        d { "init with handlers $permissionRequestHandlers providers $permissionStateProviders" }
-    }
 
     suspend fun hasPermissions(vararg permissions: Permission): Boolean =
         hasPermissions(permissions.toList())
@@ -75,10 +70,7 @@ class PermissionManager(
 
     internal fun getRequest(id: String): PermissionRequest? = requests[id]
 
-    internal fun stateProviderFor(permission: Permission): PermissionStateProvider =
+    private fun stateProviderFor(permission: Permission): PermissionStateProvider =
         permissionStateProviders.first { it.handles(permission) }
-
-    internal fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
-        permissionRequestHandlers.first { it.handles(permission) }
 
 }

@@ -4,7 +4,9 @@ import com.ivianuu.essentials.gestures.action.actions.EsAppActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsAssistantActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsBackActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsBluetoothActionModule
+import com.ivianuu.essentials.gestures.action.actions.EsCameraActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsHomeActionModule
+import com.ivianuu.essentials.gestures.action.actions.EsInputMethodActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsLastAppActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsLockScreenActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsNotificationsActionModule
@@ -29,7 +31,9 @@ val EsActionModule = Module {
     include(EsAssistantActionModule)
     include(EsBackActionModule)
     include(EsBluetoothActionModule)
+    include(EsCameraActionModule)
     include(EsHomeActionModule)
+    include(EsInputMethodActionModule)
     include(EsLastAppActionModule)
     include(EsLockScreenActionModule)
     include(EsNotificationsActionModule)

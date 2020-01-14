@@ -31,6 +31,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionActivity
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
+import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
@@ -63,13 +64,7 @@ class DialogPermissionRequestUi(
         manager: PermissionManager,
         request: PermissionRequest
     ) {
-        navigator.push(
-            DialogRoute(
-                dismissHandler = { ambient(ActivityAmbient).finish() }
-            ) {
-                PermissionDialog(request = request)
-            }
-        )
+        navigator.push(PermissionRoute(request))
     }
 }
 
@@ -77,8 +72,9 @@ internal val EsDialogPermissionUiModule = Module {
     bindPermissionRequestUi<DialogPermissionRequestUi>()
 }
 
-@Composable
-private fun PermissionDialog(request: PermissionRequest) {
+private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
+    dismissHandler = { ambient(ActivityAmbient).finish() }
+) {
     Recompose { recompose ->
         ScrollableDialog(
             title = { Text("Required Permissions") }, // todo customizable
@@ -121,7 +117,8 @@ private fun Permission(
 class PermissionDialogViewModel(
     private val dispatchers: AppDispatchers,
     private val manager: PermissionManager,
-    @Param private val request: PermissionRequest
+    @Param private val request: PermissionRequest,
+    private val requestHandlers: PermissionRequestHandlers
 ) : ViewModel() {
 
     private val _permissionsToProcess = modelListOf<Permission>()
@@ -135,7 +132,7 @@ class PermissionDialogViewModel(
         scope.coroutineScope.launch {
             d { "request $permission" }
             withContext(dispatchers.main) {
-                manager.requestHandlerFor(permission)
+                requestHandlers.requestHandlerFor(permission)
                     .request(activity, manager, permission)
             }
 
