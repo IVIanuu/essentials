@@ -1,51 +1,72 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.RecentAppsProvider
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.actionPermission
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.data.Flag
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
-val LastAppActionModule = Module {
+internal val EsLastAppActionModule = Module {
     bindAction(
         key = "last_app",
-        title = { stringResource(R.string.action_last_app) },
-        iconProvider = {},
-        executor = { get }
+        title = { getStringResource(R.string.es_action_last_app) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_repeat) },
+        permissions = { listOf(actionPermission { accessibility }) },
+        unlockScreen = { true },
+        executor = { get<LastAppActionExecutor>() }
     )
 }
 
 @Factory
-class LastAppActionExecutor(
-    accessibilityActionExecutorProvider: Provider<AccessibilityActionExecutor>
+internal class LastAppActionExecutor(
+    private val context: Context,
+    private val lazyRecentAppsExecutor: Lazy<AccessibilityActionExecutor>,
+    private val intentExecutorProvider: Provider<IntentActionExecutor>,
+    private val packageManager: PackageManager,
+    private val recentAppsProvider: RecentAppsProvider,
+    private val systemBuildInfo: SystemBuildInfo
 ) : ActionExecutor {
-    private val recentAppsActionExecutor = accessibilityActionExecutorProvider {
-        parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS)
+    override suspend fun invoke() {
+        if (systemBuildInfo.sdk >= 24) {
+            val executor = lazyRecentAppsExecutor {
+                parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS)
+            }
+            executor()
+            delay(250)
+            executor()
+        } else {
+            val recentApps = recentAppsProvider.recentsApps.first()
+                .filter { it != getHomePackage() }
+            d { "recent apps $recentApps" }
+            val lastApp = recentApps.getOrNull(1) ?: return
+            val intent = packageManager.getLaunchIntentForPackage(lastApp) ?: return
+            intentExecutorProvider { parametersOf(intent) }()
+        }
     }
 
-    override suspend fun invoke() {
-        recentAppsActionExecutor()
-        delay(250)
-        recentAppsActionExecutor()
+    private fun getHomePackage(): String {
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+        }
+
+        return context.packageManager.resolveActivity(
+            intent,
+            PackageManager.MATCH_DEFAULT_ONLY
+        )?.activityInfo?.packageName ?: ""
+
     }
 }
-
-private fun createLastAppAction() = Action(
-    key = KEY_LAST_APP,
-    title = string(R.string.action_last_app),
-    states = stateless(R.drawable.es_ic_repeat),
-    flags = setOf(
-        Flag.RequiresAccessibilityPermission,
-        Flag.RequiresSdk24,
-        Flag.UnlockScreen
-    )
-)*/

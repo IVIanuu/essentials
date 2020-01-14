@@ -1,30 +1,27 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
 import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.actionPermission
+import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.data.Flag
-import kotlin.collections.setOf
 
-val LockScreenActionModule = Module {
+@SuppressLint("InlinedApi")
+internal val EsLockScreenActionModule = Module {
     bindAction(
         key = "lock_screen",
-        title = { stringResource(R.string.action_split_screen) },
+        title = { getStringResource(R.string.es_action_split_screen) },
         iconProvider = { SingleActionIconProvider(R.drawable.es_ic_power_settings) },
-        flags = {
-            setOf(
-                if (get<SystemBuildInfo>().sdk >= 28) {
-                    Flag.RequiresAccessibilityPermission
-                } else {
-                    Flag.RequiresRoot
-                }
-            )
+        permissions = {
+            if (get<SystemBuildInfo>().sdk >= 28) {
+                listOf(actionPermission { accessibility })
+            } else {
+                emptyList()
+            }
         },
         executor = {
             if (get<SystemBuildInfo>().sdk >= 28) {
@@ -39,4 +36,3 @@ val LockScreenActionModule = Module {
         }
     )
 }
-*/

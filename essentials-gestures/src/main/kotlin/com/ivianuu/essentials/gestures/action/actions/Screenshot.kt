@@ -1,23 +1,23 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.parametersOf
+import android.annotation.SuppressLint
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 
-val ScreenshotActionModule = Module {
+@SuppressLint("InlinedApi")
+internal val EsScreenshotActionModule = Module {
     bindAction(
         key = "screenshot",
-        title = { stringResource(R.string.action_split_screen) },
-        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_power_settings) },
+        title = { getStringResource(R.string.es_action_screenshot) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_photo_album) },
         executor = {
-            val executor = if (get<SystemBuildInfo>().sdk >= 24) {
+            val executor = if (get<SystemBuildInfo>().sdk >= 28) {
                 get<AccessibilityActionExecutor> {
                     parametersOf(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
                 }
@@ -31,4 +31,3 @@ val ScreenshotActionModule = Module {
         }
     )
 }
-*/
