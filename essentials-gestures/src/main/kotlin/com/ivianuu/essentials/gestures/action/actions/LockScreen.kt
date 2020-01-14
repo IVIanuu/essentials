@@ -17,11 +17,10 @@ internal val EsLockScreenActionModule = Module {
         title = { getStringResource(R.string.es_action_split_screen) },
         iconProvider = { SingleActionIconProvider(R.drawable.es_ic_power_settings) },
         permissions = {
-            if (get<SystemBuildInfo>().sdk >= 28) {
-                listOf(actionPermission { accessibility })
-            } else {
-                emptyList()
-            }
+            listOf(actionPermission {
+                if (get<SystemBuildInfo>().sdk >= 28) accessibility
+                else root
+            })
         },
         executor = {
             if (get<SystemBuildInfo>().sdk >= 28) {

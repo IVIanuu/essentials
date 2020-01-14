@@ -8,6 +8,7 @@ import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.DefinitionContext
@@ -23,6 +24,10 @@ internal class ActionPermissions(resourceProvider: ResourceProvider) {
         Metadata.Title with "Accessibility",
         Metadata.Desc with "Required to click buttons",
         Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_accessibility)
+    )
+    val root = RootPermission(
+        Metadata.Title with "Root",
+        Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_adb)
     )
 }
 

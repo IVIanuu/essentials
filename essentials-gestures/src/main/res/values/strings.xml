@@ -33,6 +33,5 @@
     <string name="es_action_wifi">WiFi</string>
 
     <string name="es_activity_not_found">Failed to launch screen!</string>
-    <string name="es_no_root">Your device is not rooted!</string>
 
 </resources>

@@ -22,7 +22,7 @@ import com.ivianuu.essentials.billing.EsBillingModule
 import com.ivianuu.essentials.boot.EsBootModule
 import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
-import com.ivianuu.essentials.permission.EsPermissionsModule
+import com.ivianuu.essentials.permission.EsPermissionModule
 import com.ivianuu.essentials.sample.BootModule
 import com.ivianuu.essentials.sample.ui.UiModule
 import com.ivianuu.essentials.sample.work.WorkModule
@@ -37,7 +37,7 @@ class App : EsApp() {
         EsBootModule,
         EsCoilModule,
         EsGesturesModule,
-        EsPermissionsModule,
+        EsPermissionModule,
         EsTwilightModule,
         EsWorkModule,
 
