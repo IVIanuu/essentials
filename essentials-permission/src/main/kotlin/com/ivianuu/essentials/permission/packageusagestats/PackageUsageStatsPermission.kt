@@ -25,10 +25,12 @@ import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun PackageUsageStatsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
@@ -44,8 +46,12 @@ val Metadata.Companion.IsPackageUsageStatsPermission by lazy {
     Metadata.Key<Unit>("IsPackageUsageStatsPermission")
 }
 
+internal val EsPackageUsageStatsPermission = Module {
+    bindPermissionStateProvider<PackageUsageStatsPermissionStateProvider>()
+}
+
 @Factory
-class PackageUsageStatsPermissionStateProvider(
+internal class PackageUsageStatsPermissionStateProvider(
     private val appOps: AppOpsManager,
     private val context: Context
 ) : PermissionStateProvider {

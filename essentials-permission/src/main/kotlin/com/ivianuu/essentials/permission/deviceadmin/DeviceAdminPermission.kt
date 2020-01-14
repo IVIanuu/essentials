@@ -24,10 +24,12 @@ import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
@@ -53,8 +55,12 @@ val Metadata.Companion.DeviceAdminComponent by lazy {
     Metadata.Key<ComponentName>("DeviceAdminComponent")
 }
 
+internal val EsDeviceAdminPermissionModule = Module {
+    bindPermissionStateProvider<DeviceAdminPermissionStateProvider>()
+}
+
 @Factory
-class DeviceAdminPermissionStateProvider(
+internal class DeviceAdminPermissionStateProvider(
     private val devicePolicyManager: DevicePolicyManager
 ) : PermissionStateProvider {
 

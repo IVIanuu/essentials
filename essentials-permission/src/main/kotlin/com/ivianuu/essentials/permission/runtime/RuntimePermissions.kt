@@ -27,9 +27,12 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionRequestHandler
+import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -49,8 +52,13 @@ val Metadata.Companion.RuntimePermissionName by lazy {
     )
 }
 
+internal val EsRuntimePermissionModule = Module {
+    bindPermissionRequestHandler<RuntimePermissionRequestHandler>()
+    bindPermissionStateProvider<RuntimePermissionStateProvider>()
+}
+
 @Factory
-class RuntimePermissionStateProvider(
+internal class RuntimePermissionStateProvider(
     private val context: Context
 ) : PermissionStateProvider {
 
@@ -63,7 +71,7 @@ class RuntimePermissionStateProvider(
 }
 
 @Factory
-class RuntimePermissionRequestHandler : PermissionRequestHandler {
+internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Metadata.RuntimePermissionName in permission.metadata
 

@@ -24,10 +24,12 @@ import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun SystemOverlayPermission(
     context: Context,
@@ -47,8 +49,12 @@ val Metadata.Companion.IsSystemOverlayPermission by lazy {
     Metadata.Key<Unit>("IsSystemOverlayPermission")
 }
 
+internal val EsSystemOverlayPermissionModule = Module {
+    bindPermissionStateProvider<SystemOverlayPermissionStateProvider>()
+}
+
 @Factory
-class SystemOverlayPermissionStateProvider(
+internal class SystemOverlayPermissionStateProvider(
     private val context: Context
 ) : PermissionStateProvider {
 
