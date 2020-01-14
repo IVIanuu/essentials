@@ -154,7 +154,7 @@ class NavigatorState(
         setBackStackInternal(newBackStack, true, null)
         return@withContext routeState.awaitResult<T>()
             .also {
-                d { "on push result $it" }
+                d { "on push result for $route -> $it" }
             }
     }
 
@@ -207,7 +207,7 @@ class NavigatorState(
         route: RouteState,
         result: Any?
     ) = withContext(Dispatchers.Main) {
-        d { "pop route $route with result $result" }
+        d { "pop route ${route.route} with result $result" }
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
         route.setResult(result)
@@ -251,6 +251,8 @@ class NavigatorState(
         transition: RouteTransition?
     ) = withContext(Dispatchers.Main) {
         if (newBackStack == _backStack) return@withContext
+
+        d { "set back stack $newBackStack" }
 
         // do not allow pushing the same route twice
         newBackStack
@@ -338,7 +340,7 @@ class NavigatorState(
         isPush: Boolean,
         transition: RouteTransition?
     ) {
-        val exitFrom = from != null && (to == null || !to.route.opaque)
+        val exitFrom = from != null && (to == null || !from.route.opaque)
         if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
         to?.enter(from = from, isPush = isPush, transition = transition)
     }
