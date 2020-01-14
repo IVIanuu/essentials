@@ -116,7 +116,7 @@ val DialogsRoute = Route {
                     ) {
                         MaterialDialog(
                             title = { Text("With icon") },
-                            icon = { Icon(drawableResource(R.drawable.ic_settings)) },
+                            icon = { Icon(drawableResource(R.drawable.es_ic_settings)) },
                             positiveButton = {
                                 DialogCloseButton(
                                     "OK"

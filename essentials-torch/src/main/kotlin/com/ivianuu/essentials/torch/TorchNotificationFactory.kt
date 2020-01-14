@@ -25,19 +25,19 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.AbstractNotificationFactory
-import com.ivianuu.essentials.util.StringProvider
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
 
 @Factory
 internal class TorchNotificationFactory(
     context: Context,
-    private val stringProvider: StringProvider
+    private val resourceProvider: ResourceProvider
 ) : AbstractNotificationFactory(context) {
 
     @TargetApi(26)
     override fun createChannel() = NotificationChannel(
         NOTIFICATION_CHANNEL_ID,
-        stringProvider.getString(R.string.es_notif_channel_torch),
+        resourceProvider.getString(R.string.es_notif_channel_torch),
         NotificationManager.IMPORTANCE_LOW
     )
 
@@ -47,8 +47,8 @@ internal class TorchNotificationFactory(
         )
             .apply {
                 setAutoCancel(true)
-                setContentTitle(stringProvider.getString(R.string.es_notif_title_torch))
-                setContentText(stringProvider.getString(R.string.es_notif_text_torch))
+                setContentTitle(resourceProvider.getString(R.string.es_notif_title_torch))
+                setContentText(resourceProvider.getString(R.string.es_notif_text_torch))
                 setSmallIcon(R.drawable.es_ic_torch_on)
                 setContentIntent(
                     PendingIntent.getBroadcast(

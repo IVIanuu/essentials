@@ -22,30 +22,31 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
+import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
 
 @SuppressLint("BatteryLife")
 fun IgnoreBatteryOptimizationsPermission(
     context: Context,
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.IgnoreBatteryOptimizationsPermission to Unit,
-        MetadataKeys.Intent to Intent(
+        Metadata.IgnoreBatteryOptimizationsPermission with Unit,
+        Metadata.Intent with Intent(
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
             "package:${context.packageName}".toUri()
         ),
-        *pairs
+        *metadata
     )
 )
 
-val MetadataKeys.IgnoreBatteryOptimizationsPermission by lazy {
+val Metadata.Companion.IgnoreBatteryOptimizationsPermission by lazy {
     Metadata.Key<Unit>("IgnoreBatteryOptimizationsPermission")
 }
 
@@ -56,7 +57,7 @@ class IgnoreBatteryOptimizationsPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.IgnoreBatteryOptimizationsPermission)
+        Metadata.IgnoreBatteryOptimizationsPermission in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean =
         powerManager.isIgnoringBatteryOptimizations(context.packageName)

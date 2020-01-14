@@ -20,29 +20,30 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
+import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
-import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CompletableDeferred
+import java.util.concurrent.atomic.AtomicInteger
 
 fun RuntimePermission(
     name: String,
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.RuntimePermissionName to name,
-        *pairs
+        Metadata.RuntimePermissionName with name,
+        *metadata
     )
 )
 
-val MetadataKeys.RuntimePermissionName by lazy {
+val Metadata.Companion.RuntimePermissionName by lazy {
     Metadata.Key<String>(
         "RuntimePermissionName"
     )
@@ -54,17 +55,17 @@ class RuntimePermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.RuntimePermissionName)
+        Metadata.RuntimePermissionName in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        context.checkSelfPermission(permission.metadata[MetadataKeys.RuntimePermissionName]) ==
+        context.checkSelfPermission(permission.metadata[Metadata.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
 }
 
 @Factory
 class RuntimePermissionRequestHandler : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.RuntimePermissionName)
+        Metadata.RuntimePermissionName in permission.metadata
 
     override suspend fun request(
         activity: FragmentActivity,
@@ -80,7 +81,7 @@ class RuntimePermissionRequestHandler : PermissionRequestHandler {
             )
             .commitNow()
 
-        val granted = fragment.request(permission.metadata[MetadataKeys.RuntimePermissionName])
+        val granted = fragment.request(permission.metadata[Metadata.RuntimePermissionName])
         return PermissionResult(isOk = granted)
     }
 

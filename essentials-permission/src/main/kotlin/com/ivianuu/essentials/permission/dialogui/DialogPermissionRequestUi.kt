@@ -26,7 +26,7 @@ import androidx.ui.res.stringResource
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.MetadataKeys
+import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionActivity
 import com.ivianuu.essentials.permission.PermissionManager
@@ -104,9 +104,9 @@ private fun Permission(
     onClick: () -> Unit
 ) {
     ListItem(
-        title = permission.metadata[MetadataKeys.Title],
-        subtitle = permission.metadata.getOrNull(MetadataKeys.Desc),
-        image = permission.metadata.getOrNull(MetadataKeys.Icon),
+        title = permission.metadata[Metadata.Title],
+        subtitle = permission.metadata.getOrNull(Metadata.Desc),
+        image = permission.metadata.getOrNull(Metadata.Icon),
         onClick = onClick
     )
 }

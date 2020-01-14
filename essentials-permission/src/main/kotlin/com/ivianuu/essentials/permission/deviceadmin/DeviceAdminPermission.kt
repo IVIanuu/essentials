@@ -20,12 +20,13 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
+import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
 import kotlin.reflect.KClass
 
@@ -33,22 +34,22 @@ fun DeviceAdminPermission(
     context: Context,
     deviceAdminClass: KClass<*>,
     explanation: String,
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ): Permission {
     val component = ComponentName(context, deviceAdminClass.java)
     return Permission(
         metadata = metadataOf(
-            MetadataKeys.DeviceAdminComponent to component,
-            MetadataKeys.Intent to Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            Metadata.DeviceAdminComponent with component,
+            Metadata.Intent with Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
                 putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
                 putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, explanation)
             },
-            *pairs
+            *metadata
         )
     )
 }
 
-val MetadataKeys.DeviceAdminComponent by lazy {
+val Metadata.Companion.DeviceAdminComponent by lazy {
     Metadata.Key<ComponentName>("DeviceAdminComponent")
 }
 
@@ -58,8 +59,8 @@ class DeviceAdminPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.DeviceAdminComponent)
+        Metadata.DeviceAdminComponent in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        devicePolicyManager.isAdminActive(permission.metadata[MetadataKeys.DeviceAdminComponent])
+        devicePolicyManager.isAdminActive(permission.metadata[Metadata.DeviceAdminComponent])
 }

@@ -34,6 +34,10 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials"))
     api(project(":essentials-accessibility"))
+    api(project(":essentials-apps-ui"))
+    api(project(":essentials-hide-nav-bar"))
+    api(project(":essentials-mvrx"))
+    api(project(":essentials-permission"))
     api(project(":essentials-screen-state"))
     api(project(":essentials-torch"))
     api(project(":essentials-unlock"))

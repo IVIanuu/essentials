@@ -21,25 +21,26 @@ import android.content.Context
 import android.content.Intent
 import android.os.Process
 import android.provider.Settings
+import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
+import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
 
 fun PackageUsageStatsPermission(
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.IsPackageUsageStatsPermission to Unit,
-        MetadataKeys.Intent to Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
-        *pairs
+        Metadata.IsPackageUsageStatsPermission with Unit,
+        Metadata.Intent with Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
+        *metadata
     )
 )
 
-val MetadataKeys.IsPackageUsageStatsPermission by lazy {
+val Metadata.Companion.IsPackageUsageStatsPermission by lazy {
     Metadata.Key<Unit>("IsPackageUsageStatsPermission")
 }
 
@@ -50,7 +51,7 @@ class PackageUsageStatsPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.IsPackageUsageStatsPermission)
+        Metadata.IsPackageUsageStatsPermission in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean {
         val mode = appOps.checkOpNoThrow(

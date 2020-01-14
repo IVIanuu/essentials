@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.StringProvider
 import com.ivianuu.essentials.util.Toaster
 
 /**
@@ -77,12 +76,11 @@ val SecureSettingsInstructionsRoute = Route {
 
         val buildInfo = inject<BuildInfo>()
         val clipboardAccessor = inject<ClipboardAccessor>()
-        val stringProvider = inject<StringProvider>()
         val toaster = inject<Toaster>()
 
         ListItem(
             title = stringResource(R.string.es_pref_secure_settings_step_4),
-            subtitle = stringProvider.getString(
+            subtitle = stringResource(
                 R.string.es_pref_secure_settings_step_4_summary,
                 buildInfo.packageName
             ),

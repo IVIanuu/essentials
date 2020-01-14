@@ -86,15 +86,11 @@ class RecentAppsProvider : AccessibilityComponent() {
         recentApps.add(0, packageName)
 
         // make sure that were not getting bigger than the limit
-        val finalRecentApps = recentApps.chunked(LIMIT).first()
+        val finalRecentApps = recentApps.chunked(10).first()
 
         d { "recent apps changed $finalRecentApps" }
 
         // push
         _recentApps.setIfChanged(finalRecentApps)
-    }
-
-    companion object {
-        private const val LIMIT = 10
     }
 }

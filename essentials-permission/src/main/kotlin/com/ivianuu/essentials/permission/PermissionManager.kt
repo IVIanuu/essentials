@@ -20,10 +20,10 @@ import android.content.Context
 import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import java.util.UUID
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @ApplicationScope
 @Single
@@ -46,12 +46,16 @@ class PermissionManager(
         permissionRequestHandlers.first { it.handles(permission) }
 
     suspend fun hasPermissions(vararg permissions: Permission): Boolean =
+        hasPermissions(permissions.toList())
+
+    suspend fun hasPermissions(permissions: List<Permission>): Boolean =
         permissions.all { stateProviderFor(it).isGranted(it) }
 
-    suspend fun request(
-        vararg permissions: Permission
-    ): Boolean {
-        if (hasPermissions(*permissions)) return true
+    suspend fun request(vararg permissions: Permission): Boolean =
+        request(permissions.toList())
+
+    suspend fun request(permissions: List<Permission>): Boolean {
+        if (hasPermissions(permissions)) return true
 
         val id = UUID.randomUUID().toString()
         val finished = CompletableDeferred<Unit>()
@@ -71,7 +75,7 @@ class PermissionManager(
 
         finished.await()
 
-        return hasPermissions(*permissions)
+        return hasPermissions(permissions)
     }
 
     internal fun getRequest(id: String): PermissionRequest? = requests[id]

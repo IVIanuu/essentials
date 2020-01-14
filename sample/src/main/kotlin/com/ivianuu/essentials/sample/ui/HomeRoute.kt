@@ -187,6 +187,10 @@ enum class HomeItem(
         title = "About",
         route = { AboutRoute() }
     ),
+    Actions(
+        title = "Actions",
+        route = { ActionsRoute }
+    ),
     AppPicker(
         title = "App picker",
         route = {

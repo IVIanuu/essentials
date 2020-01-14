@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
-import com.ivianuu.essentials.util.StringProvider
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.inject
 
 /**
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.inject
 @TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
 
-    private val stringProvider: StringProvider by inject()
+    private val resourceProvider: ResourceProvider by inject()
 
     abstract fun createTile(state: T): Tile
 
@@ -45,12 +45,12 @@ abstract class StateTileService<T> : EsTileService() {
         qsTile.icon = tile.icon
         qsTile.label = when {
             tile.label != null -> tile.label
-            tile.labelRes != null -> stringProvider.getString(tile.labelRes)
+            tile.labelRes != null -> resourceProvider.getString(tile.labelRes)
             else -> null
         }
         qsTile.contentDescription = when {
             tile.description != null -> tile.description
-            tile.descriptionRes != null -> stringProvider.getString(tile.descriptionRes)
+            tile.descriptionRes != null -> resourceProvider.getString(tile.descriptionRes)
             else -> null
         }
         qsTile.updateTile()

@@ -16,33 +16,33 @@
 
 package com.ivianuu.essentials.permission.notificationlistener
 
-import android.accessibilityservice.AccessibilityService
 import android.app.ActivityManager
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
+import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
+import com.ivianuu.essentials.permission.with
 import com.ivianuu.injekt.Factory
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
     serviceClass: KClass<out NotificationListenerService>,
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.NotificationListenerClass to serviceClass,
-        MetadataKeys.Intent to Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
-        *pairs
+        Metadata.NotificationListenerClass with serviceClass,
+        Metadata.Intent with Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
+        *metadata
     )
 )
 
-val MetadataKeys.NotificationListenerClass by lazy {
-    Metadata.Key<KClass<out AccessibilityService>>(
+val Metadata.Companion.NotificationListenerClass by lazy {
+    Metadata.Key<KClass<out NotificationListenerService>>(
         "NotificationListenerClass"
     )
 }
@@ -53,9 +53,9 @@ class NotificationListenerPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.NotificationListenerClass)
+        Metadata.NotificationListenerClass in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean =
         activityManager.getRunningServices(Int.MAX_VALUE)
-            .any { it.service.className == permission.metadata[MetadataKeys.NotificationListenerClass].java.canonicalName }
+            .any { it.service.className == permission.metadata[Metadata.NotificationListenerClass].java.canonicalName }
 }

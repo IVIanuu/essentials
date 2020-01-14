@@ -29,23 +29,23 @@ import kotlinx.coroutines.launch
 class Toaster(
     private val context: Context,
     private val dispatchers: AppDispatchers,
-    private val stringProvider: StringProvider
+    private val resourceProvider: ResourceProvider
 ) {
 
     fun toast(msg: String) {
         showToast(msg, false)
     }
 
-    fun toast(msgRes: Int, vararg args: Any?) {
-        showToast(stringProvider.getString(msgRes, *args), false)
+    fun toast(msgId: Int, vararg args: Any?) {
+        showToast(resourceProvider.getString(msgId, *args), false)
     }
 
     fun toastLong(msg: String) {
         showToast(msg, true)
     }
 
-    fun toastLong(msgRes: Int, vararg args: Any?) {
-        showToast(stringProvider.getString(msgRes, *args), true)
+    fun toastLong(msgId: Int, vararg args: Any?) {
+        showToast(resourceProvider.getString(msgId, *args), true)
     }
 
     private fun showToast(msg: String, long: Boolean) = GlobalScope.launch(dispatchers.main) {

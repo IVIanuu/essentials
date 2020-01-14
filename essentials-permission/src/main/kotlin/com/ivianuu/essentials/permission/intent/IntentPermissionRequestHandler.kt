@@ -20,7 +20,6 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -32,7 +31,7 @@ import kotlinx.coroutines.delay
 class IntentPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.Intent)
+        Metadata.Intent in permission.metadata
 
     override suspend fun request(
         activity: FragmentActivity,
@@ -46,7 +45,7 @@ class IntentPermissionRequestHandler : PermissionRequestHandler {
             .add(fragment, RequestFragment.TAG)
             .commitNow()
 
-        val granted = fragment.request(permission.metadata[MetadataKeys.Intent], permission)
+        val granted = fragment.request(permission.metadata[Metadata.Intent], permission)
         return PermissionResult(isOk = granted)
     }
 
@@ -76,7 +75,7 @@ class IntentPermissionRequestHandler : PermissionRequestHandler {
     }
 }
 
-val MetadataKeys.Intent by lazy {
+val Metadata.Companion.Intent by lazy {
     Metadata.Key<Intent>(
         "Intent"
     )

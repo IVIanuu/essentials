@@ -58,7 +58,7 @@ private enum class BottomNavItem(
 ) {
     Home(
         "Home",
-        R.drawable.ic_home,
+        R.drawable.es_ic_home,
         Color.Yellow
     ),
     Mails(
@@ -68,17 +68,17 @@ private enum class BottomNavItem(
     ),
     Search(
         "Search",
-        R.drawable.ic_search,
+        R.drawable.es_ic_search,
         Color.Blue
     ),
     Schedule(
         "Schedule",
-        R.drawable.ic_view_agenda,
+        R.drawable.es_ic_view_agenda,
         Color.Cyan
     ),
     Settings(
         "Settings",
-        R.drawable.ic_settings,
+        R.drawable.es_ic_settings,
         Color.Green
     )
 }

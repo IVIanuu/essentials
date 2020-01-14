@@ -28,28 +28,36 @@ data class Metadata internal constructor(
 
     fun <T> getOrNull(key: Key<T>): T? = data[key] as? T
 
-    fun <T> contains(key: Key<T>): Boolean = data.containsKey(key)
+    operator fun <T> contains(key: Key<T>): Boolean = data.containsKey(key)
 
     operator fun plus(other: Metadata): Metadata = Metadata(data + other.data)
 
     class Key<T>(val name: String) : ReadOnlyProperty<Metadata, T> {
         override fun getValue(thisRef: Metadata, property: KProperty<*>): T = thisRef[this]
-
         override fun toString() = "Metadata.Key($name)"
     }
+
+    companion object
 }
 
 fun metadataOf(
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
+    vararg metadata: MetaDataKeyWithValue<*>
 ): Metadata {
     return Metadata(
-        data = pairs.associateBy { it.first }
-            .mapValues { it.value.second }
+        data = metadata
+            .associateBy { it.key }
+            .mapValues { it.value.value }
     )
 }
 
-object MetadataKeys
+data class MetaDataKeyWithValue<T>(
+    val key: Metadata.Key<T>,
+    val value: T
+)
 
-val MetadataKeys.Title by lazy { Metadata.Key<String>("Title") }
-val MetadataKeys.Desc by lazy { Metadata.Key<String>("Desc") }
-val MetadataKeys.Icon by lazy { Metadata.Key<Image>("Image") }
+infix fun <T> Metadata.Key<T>.with(value: T): MetaDataKeyWithValue<T> =
+    MetaDataKeyWithValue(this, value)
+
+val Metadata.Companion.Title by lazy { Metadata.Key<String>("Title") }
+val Metadata.Companion.Desc by lazy { Metadata.Key<String>("Desc") }
+val Metadata.Companion.Icon by lazy { Metadata.Key<Image>("Image") }
