@@ -11,11 +11,10 @@ import com.ivianuu.injekt.Param
 
 @Factory
 class IntentActionExecutor(
-    @Param intentProvider: () -> Intent,
+    @Param private val intent: Intent,
     private val context: Context,
     private val toaster: Toaster
 ) : ActionExecutor {
-    private val intent by lazy(intentProvider)
     override suspend fun invoke() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try {

@@ -6,9 +6,11 @@ import android.content.Intent
 import android.os.Build
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 internal val EsHomeActionModule = Module {
@@ -20,7 +22,12 @@ internal val EsHomeActionModule = Module {
             iconRes = R.drawable.es_ic_action_home
         )
     } else {
-
+        bindAction(
+            key = "home",
+            title = { getStringResource(R.string.es_action_home) },
+            iconProvider = { SingleActionIconProvider(R.drawable.es_ic_action_home) },
+            executor = { get<IntentHomeActionExecutor>() }
+        )
     }
 }
 

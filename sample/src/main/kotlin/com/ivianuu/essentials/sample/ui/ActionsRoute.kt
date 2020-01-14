@@ -21,7 +21,7 @@ val ActionsRoute = Route {
 
         Center {
             Button(
-                text = "Request",
+                text = "Pick action",
                 onClick = {
                     GlobalScope.launch {
                         val action = navigator.push<ActionPickerResult>(

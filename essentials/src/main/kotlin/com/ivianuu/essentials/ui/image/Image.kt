@@ -41,9 +41,11 @@ fun EmptyImage(
     )
 }
 
-fun Drawable.toImage() = toBitmap().toImage()
+fun Drawable.toImage(): Image = toBitmap().toImage()
 
-fun Bitmap.toImage() = BitmapImage(this)
+fun Bitmap.toImage(): Image = BitmapImage(this)
+
+fun Image.toBitmap(): Bitmap = nativeImage
 
 class BitmapImage internal constructor(val bitmap: Bitmap) : Image {
 

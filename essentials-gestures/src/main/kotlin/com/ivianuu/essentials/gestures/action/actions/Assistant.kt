@@ -1,27 +1,37 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-/**
 import android.annotation.SuppressLint
+import android.app.SearchManager
 import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.data.Flag
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 
-private fun createAssistantAction() = Action(
-    key = KEY_ASSISTANT,
-    title = string(R.string.action_assistant),
-    states = stateless(R.drawable.es_ic_google),
-    flags = setOf(Flag.UnlockScreen)
-)
+internal val EsAssistantActionModule = Module {
+    bindAction(
+        key = "assistant",
+        title = { getStringResource(R.string.es_action_assistant) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_google) },
+        unlockScreen = { true },
+        executor = { get<AssistantActionExecutor>() }
+    )
+}
 
-@SuppressLint("DiscouragedPrivateApi")
-private fun launchAssistant() {
-    try {
-        val launchAssist = searchManager.javaClass
-            .getDeclaredMethod("launchAssist", Bundle::class.java)
-        launchAssist.invoke(searchManager, Bundle())
-    } catch (e: Exception) {
-        e.printStackTrace()
+@Factory
+internal class AssistantActionExecutor(
+    private val searchManager: SearchManager
+) : ActionExecutor {
+    @SuppressLint("DiscouragedPrivateApi")
+    override suspend fun invoke() {
+        try {
+            val launchAssist = searchManager.javaClass
+                .getDeclaredMethod("launchAssist", Bundle::class.java)
+            launchAssist.invoke(searchManager, Bundle())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
-*/

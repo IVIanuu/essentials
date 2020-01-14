@@ -19,6 +19,7 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
@@ -36,13 +37,18 @@ internal val EsAppActionModule = Module {
 internal class AppActionExecutor(
     @Param private val packageName: String,
     private val packageManager: PackageManager,
-    private val intentActionExecutorProvider: Provider<IntentActionExecutor>
+    private val lazyDelegate: Lazy<IntentActionExecutor>,
+    private val toaster: Toaster
 ) : ActionExecutor {
     override suspend fun invoke() {
-        val intentActionExecutor = intentActionExecutorProvider {
-            parametersOf({ packageManager.getLaunchIntentForPackage(packageName) })
+        try {
+            lazyDelegate {
+                parametersOf({ packageManager.getLaunchIntentForPackage(packageName) })
+            }()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            toaster.toast(R.string.es_activity_not_found)
         }
-        intentActionExecutor()
     }
 }
 
@@ -79,7 +85,7 @@ internal class AppActionPickerDelegate(
         val app = navigator.push<AppInfo>(
             AppPickerRoute(appFilter = launchableAppFilter)
         ) ?: return null
-        return ActionPickerResult.Action("app=:=${app.packageName}")
+        return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }
 

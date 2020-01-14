@@ -32,16 +32,16 @@ class CoilActionIconProvider(
 }
 
 fun SingleActionIconProvider(
-    tint: Boolean = true,
-    icon: () -> Image
+    icon: Image,
+    tint: Boolean = true
 ): ActionIconProvider = object : ActionIconProvider {
     override val icon: Flow<ActionIcon>
-        get() = flowOf(ActionIcon(image = icon(), tint = tint))
+        get() = flowOf(ActionIcon(image = icon, tint = tint))
 }
 
 fun DefinitionContext.SingleActionIconProvider(id: Int): ActionIconProvider {
     val resourceProvider = get<ResourceProvider>()
-    return SingleActionIconProvider { resourceProvider.getDrawable(id) }
+    return SingleActionIconProvider(icon = resourceProvider.getDrawable(id))
 }
 
 fun DefinitionContext.getStringResource(id: Int) = get<ResourceProvider>().getString(id)

@@ -39,6 +39,7 @@ dependencies {
     api(project(":essentials-mvrx"))
     api(project(":essentials-permission"))
     api(project(":essentials-screen-state"))
+    api(project(":essentials-shortcut-picker"))
     api(project(":essentials-torch"))
     api(project(":essentials-unlock"))
 }
