@@ -39,12 +39,6 @@ class PermissionManager(
         d { "init with handlers $permissionRequestHandlers providers $permissionStateProviders" }
     }
 
-    internal fun stateProviderFor(permission: Permission): PermissionStateProvider =
-        permissionStateProviders.first { it.handles(permission) }
-
-    internal fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
-        permissionRequestHandlers.first { it.handles(permission) }
-
     suspend fun hasPermissions(vararg permissions: Permission): Boolean =
         hasPermissions(permissions.toList())
 
@@ -55,6 +49,7 @@ class PermissionManager(
         request(permissions.toList())
 
     suspend fun request(permissions: List<Permission>): Boolean {
+        d { "request permissions $permissions" }
         if (hasPermissions(permissions)) return true
 
         val id = UUID.randomUUID().toString()
@@ -79,4 +74,11 @@ class PermissionManager(
     }
 
     internal fun getRequest(id: String): PermissionRequest? = requests[id]
+
+    internal fun stateProviderFor(permission: Permission): PermissionStateProvider =
+        permissionStateProviders.first { it.handles(permission) }
+
+    internal fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
+        permissionRequestHandlers.first { it.handles(permission) }
+
 }

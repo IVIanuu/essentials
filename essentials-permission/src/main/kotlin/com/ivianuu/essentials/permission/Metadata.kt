@@ -34,7 +34,7 @@ data class Metadata internal constructor(
 
     class Key<T>(val name: String) : ReadOnlyProperty<Metadata, T> {
         override fun getValue(thisRef: Metadata, property: KProperty<*>): T = thisRef[this]
-        override fun toString() = "Metadata.Key($name)"
+        override fun toString() = name
     }
 
     companion object

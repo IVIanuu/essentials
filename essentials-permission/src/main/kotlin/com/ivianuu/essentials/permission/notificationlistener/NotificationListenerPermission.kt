@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.permission.notificationlistener
 
-import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
@@ -27,6 +27,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
 import kotlin.reflect.KClass
 
@@ -49,13 +50,24 @@ val Metadata.Companion.NotificationListenerClass by lazy {
 
 @Factory
 class NotificationListenerPermissionStateProvider(
-    private val activityManager: ActivityManager
+    private val buildInfo: BuildInfo,
+    private val context: Context
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Metadata.NotificationListenerClass in permission.metadata
 
-    override suspend fun isGranted(permission: Permission): Boolean =
-        activityManager.getRunningServices(Int.MAX_VALUE)
-            .any { it.service.className == permission.metadata[Metadata.NotificationListenerClass].java.canonicalName }
+    override suspend fun isGranted(permission: Permission): Boolean {
+        return Settings.Secure.getString(context.contentResolver,
+            "enabled_notification_listeners")
+            .split(":")
+            .map {
+                val tmp = it.split("/")
+                tmp[0] to tmp[1]
+            }
+            .any { (packageName, listenerName) ->
+                packageName == buildInfo.packageName &&
+                        listenerName == permission.metadata[Metadata.NotificationListenerClass].java.canonicalName
+            }
+    }
 }
