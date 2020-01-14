@@ -15,7 +15,9 @@ class ActionStore(
     private val dispatchers: AppDispatchers
 ) {
 
-    suspend fun getActions(): List<Action> = actions.map { it.value() }
+    suspend fun getActions(): List<Action> = withContext(dispatchers.default) {
+        actions.map { it.value() }
+    }
 
     suspend fun getAction(key: String): Action = withContext(dispatchers.default) {
         actions[key]?.invoke()

@@ -14,7 +14,7 @@ import com.ivianuu.injekt.parametersOf
 internal val EsLockScreenActionModule = Module {
     bindAction(
         key = "lock_screen",
-        title = { getStringResource(R.string.es_action_split_screen) },
+        title = { getStringResource(R.string.es_action_lock_screen) },
         iconProvider = { SingleActionIconProvider(R.drawable.es_ic_power_settings) },
         permissions = {
             listOf(actionPermission {

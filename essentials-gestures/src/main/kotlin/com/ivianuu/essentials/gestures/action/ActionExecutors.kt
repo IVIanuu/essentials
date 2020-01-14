@@ -34,7 +34,11 @@ class ActionExecutors(
         d { "fire $key" }
 
         // fire
-        action.executor()
+        try {
+            action.executor()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }
