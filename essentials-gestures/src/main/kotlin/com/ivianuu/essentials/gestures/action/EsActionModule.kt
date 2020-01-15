@@ -12,7 +12,7 @@ import com.ivianuu.essentials.gestures.action.actions.EsLockScreenActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsNotificationsActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsPowerDialogActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsQuickSettingsActionModule
-import com.ivianuu.essentials.gestures.action.actions.EsRecentsActionModule
+import com.ivianuu.essentials.gestures.action.actions.EsRecentsAppsActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsScreenshotActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsSearchActionModule
 import com.ivianuu.essentials.gestures.action.actions.EsShortcutActionModule
@@ -39,7 +39,7 @@ val EsActionModule = Module {
     include(EsNotificationsActionModule)
     include(EsPowerDialogActionModule)
     include(EsQuickSettingsActionModule)
-    include(EsRecentsActionModule)
+    include(EsRecentsAppsActionModule)
     include(EsScreenshotActionModule)
     include(EsSearchActionModule)
     include(EsShortcutActionModule)

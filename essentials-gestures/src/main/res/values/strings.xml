@@ -23,7 +23,7 @@
     <string name="es_action_notifications">Notifications</string>
     <string name="es_action_power_dialog">Power dialog</string>
     <string name="es_action_quick_settings">Quick settings</string>
-    <string name="es_action_recents">Recents</string>
+    <string name="es_action_recent_apps">Recent apps</string>
     <string name="es_action_screenshot">Screenshot</string>
     <string name="es_action_search">Search</string>
     <string name="es_action_shortcut">Shortcut</string>
