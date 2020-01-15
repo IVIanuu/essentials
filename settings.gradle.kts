@@ -23,6 +23,7 @@ include(
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",
+    ":essentials-backup",
     ":essentials-billing",
     ":essentials-billing-debug",
     ":essentials-billing-release",

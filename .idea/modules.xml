@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-backup/essentials-backup.iml" filepath="$PROJECT_DIR$/essentials-backup/essentials-backup.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-billing/essentials-billing.iml" filepath="$PROJECT_DIR$/essentials-billing/essentials-billing.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-billing-debug/essentials-billing-debug.iml" filepath="$PROJECT_DIR$/essentials-billing-debug/essentials-billing-debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-billing-release/essentials-billing-release.iml" filepath="$PROJECT_DIR$/essentials-billing-release/essentials-billing-release.iml" />
