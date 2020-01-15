@@ -20,7 +20,7 @@ fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransi
     generateOps = { transitionState, _ ->
         opsOf(
             ModifierRouteTransitionType.Modifier with LayoutPercentOffset(
-                percentY = (1f - transitionState[VerticalOffset])
+                percentY = transitionState[VerticalOffset]
             )
         )
     }
@@ -29,11 +29,11 @@ fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransi
 private fun verticalRouteTransitionDefinition(
     duration: Duration
 ) = transitionDefinition {
-    state(RouteTransition.State.Init) { set(VerticalOffset, 0f) }
-    state(RouteTransition.State.EnterFromPush) { set(VerticalOffset, 1f) }
-    state(RouteTransition.State.ExitFromPush) { set(VerticalOffset, 1f) }
-    state(RouteTransition.State.EnterFromPop) { set(VerticalOffset, 1f) }
-    state(RouteTransition.State.ExitFromPop) { set(VerticalOffset, 0f) }
+    state(RouteTransition.State.Init) { set(VerticalOffset, 1f) }
+    state(RouteTransition.State.EnterFromPush) { set(VerticalOffset, 0f) }
+    state(RouteTransition.State.ExitFromPush) { set(VerticalOffset, 0f) }
+    state(RouteTransition.State.EnterFromPop) { set(VerticalOffset, 0f) }
+    state(RouteTransition.State.ExitFromPop) { set(VerticalOffset, 1f) }
 
     transition {
         VerticalOffset using tween {
