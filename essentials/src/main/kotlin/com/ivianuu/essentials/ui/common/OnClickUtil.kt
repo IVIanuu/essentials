@@ -18,19 +18,19 @@ package com.ivianuu.essentials.ui.common
 
 import android.content.Intent
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.core.ActivityAmbient
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
     return remember {
         { navigator.push(route()) }
     }
@@ -38,7 +38,7 @@ fun navigateOnClick(route: () -> Route): () -> Unit {
 
 @Composable
 fun openUrlOnClick(url: () -> String): () -> Unit {
-    val activity = ambient(ActivityAmbient)
+    val activity = ActivityAmbient.current
     return {
         // todo
         val intent = Intent(Intent.ACTION_VIEW).apply { this.data = url().toUri() }
@@ -50,7 +50,7 @@ fun openUrlOnClick(url: () -> String): () -> Unit {
 fun launchOnClick(
     block: suspend CoroutineScope.() -> Unit
 ): () -> Unit {
-    val coroutineScope = coroutineScope
+    val coroutineScope = CoroutineScopeAmbient.current
     return remember {
         {
             coroutineScope.launch(block = block)

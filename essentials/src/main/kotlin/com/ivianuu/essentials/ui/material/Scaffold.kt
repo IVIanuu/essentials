@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
@@ -34,6 +32,7 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
+import com.ivianuu.essentials.ui.core.ambientOf
 
 @Composable
 fun Scaffold(
@@ -156,10 +155,7 @@ class ScaffoldState {
     enum class FabPosition { Center, End }
 }
 
-private val ScaffoldAmbient = Ambient.of<ScaffoldState>()
-@Composable
-val scaffold: ScaffoldState
-    get() = ambient(ScaffoldAmbient)
+val ScaffoldAmbient = ambientOf<ScaffoldState> { error("No scaffold provided") }
 
 @Composable
 private fun ScaffoldLayout(

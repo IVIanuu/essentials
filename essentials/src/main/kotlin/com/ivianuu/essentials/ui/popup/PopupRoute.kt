@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.popup
 
 import android.view.View
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ConfigurationAmbient
@@ -27,10 +26,11 @@ import androidx.ui.core.IntPxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 
 fun PopupRoute(
     alignment: Alignment = Alignment.BottomLeft,
@@ -77,9 +77,9 @@ fun PopupRoute(
     enterTransition = FadeRouteTransition(),
     exitTransition = FadeRouteTransition()
 ) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
 
-    val configuration = ambient(ConfigurationAmbient)
+    val configuration = ConfigurationAmbient.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
         navigator.popTop()

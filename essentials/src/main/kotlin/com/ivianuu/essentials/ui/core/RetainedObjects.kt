@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.mutableStateOf
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
@@ -93,7 +91,7 @@ fun <T> RetainedObjects.getOrSetIfChanged(
     return value.value
 }
 
-val RetainedObjectsAmbient = Ambient.of<RetainedObjects>()
+val RetainedObjectsAmbient = ambientOf<RetainedObjects> { error("No retained objects provided") }
 
 @Composable
 inline fun <T> retain(noinline init: () -> T): T =
@@ -107,7 +105,7 @@ fun <T> retain(
     key: Any,
     init: () -> T
 ): T {
-    val retainedObjects = ambient(RetainedObjectsAmbient)
+    val retainedObjects = RetainedObjectsAmbient.current
     return retainedObjects.getOrSet(key, init)
 }
 
@@ -127,7 +125,7 @@ fun <T> retainFor(
     vararg inputs: Any?,
     init: () -> T
 ): T {
-    val retainedObjects = ambient(RetainedObjectsAmbient)
+    val retainedObjects = RetainedObjectsAmbient.current
     return retainedObjects.getOrSetIfChanged(key, *inputs, defaultValue = init)
 }
 

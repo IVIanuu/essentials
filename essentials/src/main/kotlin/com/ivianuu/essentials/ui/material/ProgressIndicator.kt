@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class ProgressIndicatorStyle(val color: Color)
 
-val ProgressIndicatorStyleAmbient = Ambient.of<ProgressIndicatorStyle?>()
+val ProgressIndicatorStyleAmbient = ambientOf<ProgressIndicatorStyle?> { null }
 
 @Composable
 fun DefaultProgressIndicatorStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -35,7 +35,7 @@ fun DefaultProgressIndicatorStyle(color: Color = MaterialTheme.colors().secondar
 @Composable
 fun LinearProgressIndicator(
     progress: Float,
-    style: ProgressIndicatorStyle = ambient(ProgressIndicatorStyleAmbient) ?: DefaultProgressIndicatorStyle()
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.current ?: DefaultProgressIndicatorStyle()
 ) {
     androidx.ui.material.LinearProgressIndicator(
         progress = progress,
@@ -45,7 +45,7 @@ fun LinearProgressIndicator(
 
 @Composable
 fun LinearProgressIndicator(
-    style: ProgressIndicatorStyle = ambient(ProgressIndicatorStyleAmbient) ?: DefaultProgressIndicatorStyle()
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.current ?: DefaultProgressIndicatorStyle()
 ) {
     androidx.ui.material.LinearProgressIndicator(color = style.color)
 }
@@ -53,7 +53,7 @@ fun LinearProgressIndicator(
 @Composable
 fun CircularProgressIndicator(
     progress: Float,
-    style: ProgressIndicatorStyle = ambient(ProgressIndicatorStyleAmbient) ?: DefaultProgressIndicatorStyle()
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.current ?: DefaultProgressIndicatorStyle()
 ) {
     androidx.ui.material.CircularProgressIndicator(
         progress = progress,
@@ -63,7 +63,7 @@ fun CircularProgressIndicator(
 
 @Composable
 fun CircularProgressIndicator(
-    style: ProgressIndicatorStyle = ambient(ProgressIndicatorStyleAmbient) ?: DefaultProgressIndicatorStyle()
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.current ?: DefaultProgressIndicatorStyle()
 ) {
     androidx.ui.material.CircularProgressIndicator(color = style.color)
 }

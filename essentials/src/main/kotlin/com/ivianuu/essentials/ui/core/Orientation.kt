@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.ui.core
 
 import android.content.res.Configuration
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 
@@ -29,7 +27,7 @@ enum class Orientation {
 
 @Composable
 fun OrientationProvider(children: @Composable() () -> Unit) {
-    val configuration = ambient(ConfigurationAmbient)
+    val configuration = ConfigurationAmbient.current
     val orientation = remember(configuration.orientation) {
         when (configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> Orientation.Portrait
@@ -41,4 +39,4 @@ fun OrientationProvider(children: @Composable() () -> Unit) {
     OrientationAmbient.Provider(value = orientation, children = children)
 }
 
-val OrientationAmbient = Ambient.of<Orientation>()
+val OrientationAmbient = ambientOf<Orientation> { error("No orientation provided") }

@@ -21,10 +21,12 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -36,7 +38,7 @@ import kotlinx.coroutines.launch
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
         Center {
-            val torchManager = inject<com.ivianuu.essentials.torch.TorchManager>()
+            val torchManager = inject<TorchManager>()
             val torchState = collect(torchManager.torchState, false)
 
             Column(crossAxisAlignment = CrossAxisAlignment.Center) {
@@ -45,7 +47,7 @@ val TorchRoute = Route {
                     style = MaterialTheme.typography().h4
                 )
                 Spacer(LayoutHeight(8.dp))
-                val coroutineScope = coroutineScope
+                val coroutineScope = CoroutineScopeAmbient.current
                 val dispatchers = inject<AppDispatchers>()
                 Button(
                     text = "Toggle torch",

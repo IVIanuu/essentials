@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class SwitchStyle(val color: Color)
 
-val SwitchStyleAmbient = Ambient.of<SwitchStyle?>()
+val SwitchStyleAmbient = ambientOf<SwitchStyle?> { null }
 
 @Composable
 fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -36,7 +36,7 @@ fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =
 fun Switch(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
-    style: SwitchStyle = ambient(SwitchStyleAmbient) ?: DefaultSwitchStyle()
+    style: SwitchStyle = SwitchStyleAmbient.current ?: DefaultSwitchStyle()
 ) {
     androidx.ui.material.Switch(
         checked = checked,

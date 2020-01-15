@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.compose.key
 import androidx.ui.core.Alignment
 import androidx.ui.core.dp
@@ -30,9 +29,10 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 // todo add selectable items
 
@@ -56,11 +56,11 @@ object PopupMenu {
 @Composable
 fun PopupMenu(
     items: List<PopupMenu.Item>,
-    style: PopupStyle = ambient(PopupStyleAmbient)
+    style: PopupStyle = PopupStyleAmbient.current
 ) {
     Popup(style = style) {
         Column {
-            val navigator = navigator
+            val navigator = NavigatorAmbient.current
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
@@ -80,7 +80,7 @@ fun PopupMenu(
 fun <T> PopupMenu(
     items: List<T>,
     onSelected: (T) -> Unit,
-    style: PopupStyle = ambient(PopupStyleAmbient),
+    style: PopupStyle = PopupStyleAmbient.current,
     item: @Composable() (T) -> Unit
 ) {
     PopupMenu(

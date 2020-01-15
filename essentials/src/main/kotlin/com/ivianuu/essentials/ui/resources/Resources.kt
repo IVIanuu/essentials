@@ -17,16 +17,16 @@
 package com.ivianuu.essentials.ui.resources
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Image
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.image.BitmapImage
 
 @Composable
 fun drawableResource(resId: Int): Image {
-    val context = ambient(ContextAmbient)
+    val context = ContextAmbient.current
     return remember { BitmapImage(ContextCompat.getDrawable(context, resId)!!.toBitmap()) }
 }

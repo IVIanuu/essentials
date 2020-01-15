@@ -16,20 +16,20 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Modifier
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.ContainedButtonStyle
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
-val ButtonStyleAmbient = Ambient.of<ButtonStyle?>()
+val ButtonStyleAmbient = ambientOf<ButtonStyle?> { null }
 
 @Composable
 fun Button(
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: ButtonStyle = ambient(ButtonStyleAmbient) ?: ContainedButtonStyle(),
+    style: ButtonStyle = ButtonStyleAmbient.current ?: ContainedButtonStyle(),
     children: @Composable() () -> Unit
 ) {
     androidx.ui.material.Button(
@@ -42,7 +42,7 @@ fun Button(
     text: String,
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: ButtonStyle = ambient(ButtonStyleAmbient) ?: ContainedButtonStyle()
+    style: ButtonStyle = ButtonStyleAmbient.current ?: ContainedButtonStyle()
 ) {
     androidx.ui.material.Button(
         modifier = modifier, onClick = onClick, style = style, text = text.toUpperCase()

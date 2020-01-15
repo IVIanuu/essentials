@@ -25,7 +25,8 @@ import androidx.ui.core.PxPosition
 import androidx.ui.core.round
 import androidx.ui.layout.Wrap
 import com.ivianuu.essentials.ui.common.holder
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 // todo better name?
 @Composable
@@ -35,7 +36,7 @@ fun PopupTrigger(
     popup: @Composable() () -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
 ) {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
 
     Wrap {
         val coordinatesHolder =

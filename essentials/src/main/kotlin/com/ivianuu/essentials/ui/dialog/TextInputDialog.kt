@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Opacity
@@ -29,7 +28,8 @@ import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(
     initial: String = "",
@@ -38,7 +38,7 @@ fun TextInputRoute(
     title: String? = null,
     allowEmpty: Boolean = true
 ) = DialogRoute {
-    val navigator = navigator
+    val navigator = NavigatorAmbient.current
 
     val (currentValue, setCurrentValue) = state { initial }
 
@@ -101,7 +101,7 @@ fun TextInputDialog(
                 textStyle = MaterialTheme.typography().subtitle1
             )
 
-            val keyboardManager = ambient(KeyboardManagerAmbient)
+            val keyboardManager = KeyboardManagerAmbient.current
             onActive {
                 keyboardManager.showKeyboard(TextInputDialogInputId)
                 onDispose {

@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
@@ -35,6 +33,8 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -52,7 +52,7 @@ fun DefaultListItemStyle(
     contentPadding = contentPadding
 )
 
-val ListItemStyleAmbient = Ambient.of<ListItemStyle?>()
+val ListItemStyleAmbient = ambientOf<ListItemStyle?> { null }
 
 @Composable
 fun ListItem(
@@ -60,7 +60,7 @@ fun ListItem(
     subtitle: String? = null,
     image: Image? = null,
     enabled: Boolean = true,
-    style: ListItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle(),
+    style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
@@ -82,7 +82,7 @@ fun ListItem(
     leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null,
     enabled: Boolean = true,
-    style: ListItemStyle = ambient(ListItemStyleAmbient) ?: DefaultListItemStyle(),
+    style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
@@ -114,7 +114,7 @@ fun ListItem(
                             )
                         ) {
                             ProvideEmphasis(
-                                emphasis = ambient(EmphasisAmbient).high,
+                                emphasis = EmphasisAmbient.current.high,
                                 children = leading
                             )
                         }
@@ -139,12 +139,12 @@ fun ListItem(
                         Column {
                             if (title != null) {
                                 CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
-                                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).high, children = title)
+                                    ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = title)
                                 }
                             }
                             if (subtitle != null) {
                                 CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                                    ProvideEmphasis(emphasis = ambient(EmphasisAmbient).medium, children = subtitle)
+                                    ProvideEmphasis(emphasis = EmphasisAmbient.current.medium, children = subtitle)
                                 }
                             }
                         }
@@ -164,7 +164,7 @@ fun ListItem(
                             )
                         ) {
                             ProvideEmphasis(
-                                emphasis = ambient(EmphasisAmbient).high,
+                                emphasis = EmphasisAmbient.current.high,
                                 children = trailing
                             )
                         }

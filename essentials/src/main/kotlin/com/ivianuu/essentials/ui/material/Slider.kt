@@ -19,10 +19,8 @@ package com.ivianuu.essentials.ui.material
 import androidx.animation.AnimationEndReason
 import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.Alignment
@@ -56,6 +54,8 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
 import com.ivianuu.essentials.ui.common.withDensity
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -63,7 +63,7 @@ import kotlin.math.abs
 @Immutable
 data class SliderStyle(val color: Color)
 
-val SliderStyleAmbient = Ambient.of<SliderStyle?>()
+val SliderStyleAmbient = ambientOf<SliderStyle?> { null }
 
 @Composable
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -107,7 +107,7 @@ fun Slider(
     onValueChange: (Float) -> Unit = { position.value = it },
     modifier: Modifier = Modifier.None,
     onValueChangeEnd: () -> Unit = {},
-    style: SliderStyle = ambient(SliderStyleAmbient) ?: DefaultSliderStyle()
+    style: SliderStyle = SliderStyleAmbient.current ?: DefaultSliderStyle()
 ) {
     Container(modifier = modifier) {
         val maxPx = state { 0f }

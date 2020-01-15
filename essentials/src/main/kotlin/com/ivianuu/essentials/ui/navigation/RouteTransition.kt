@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.animation.Transition
@@ -29,6 +28,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.graphics.Canvas
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Immutable
@@ -107,7 +107,7 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     }
 }
 
-val DefaultRouteTransitionAmbient = Ambient.of { DefaultRouteTransition }
+val DefaultRouteTransitionAmbient = ambientOf { DefaultRouteTransition }
 
 val DefaultRouteTransition = RouteTransition(
     definition = { defaultTransitionDefinition },

@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Stable
-import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.RepaintBoundary
@@ -41,6 +39,8 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -56,7 +56,7 @@ data class BottomNavigationBarStyle(
     val normalItemColor: Color
 )
 
-val BottomNavigationBarStyleAmbient = Ambient.of<BottomNavigationBarStyle?>()
+val BottomNavigationBarStyleAmbient = ambientOf<BottomNavigationBarStyle?> { null }
 
 @Composable
 fun DefaultBottomNavigationBarStyle(
@@ -73,7 +73,8 @@ fun DefaultBottomNavigationBarStyle(
 @Composable
 fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
-    style: BottomNavigationBarStyle = ambient(BottomNavigationBarStyleAmbient) ?: DefaultBottomNavigationBarStyle(),
+    style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.current
+        ?: DefaultBottomNavigationBarStyle(),
     applySafeArea: Boolean = true,
     item: @Composable() (T) -> Unit
 ) {
@@ -207,16 +208,15 @@ fun <T> ProvideBottomNavigationController(
     BottomNavigationControllerAmbient.Provider(value = controller, children = children)
 }
 
-private val BottomNavigationControllerAmbient = Ambient.of<BottomNavigationController<*>>()
+private val BottomNavigationControllerAmbient = ambientOf<BottomNavigationController<*>> { error("No bottom navigation controller found") }
 
 @Composable
-fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = ambient(
-    BottomNavigationControllerAmbient) as BottomNavigationController<T>
+fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = BottomNavigationControllerAmbient.current as BottomNavigationController<T>
 
-private val BottomNavigationItemAmbient = Ambient.of<Any?>()
+private val BottomNavigationItemAmbient = ambientOf<Any?> { error("No bottom navigation item found") }
 
 @Composable
-fun <T> ambientBottomNavigationItem(): T = ambient(BottomNavigationItemAmbient) as T
+fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current as T
 
 private val BottomNavigationBarHeight = 56.dp
 private val BottomNavigationBarElevation = 8.dp

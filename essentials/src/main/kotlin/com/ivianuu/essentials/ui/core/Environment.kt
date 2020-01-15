@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.activity.ComponentActivity
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.CoroutineContextAmbient
@@ -43,8 +42,8 @@ fun Environment(
     retainedObjects: RetainedObjects,
     children: @Composable() () -> Unit
 ) {
-    val composeView = ambient(AndroidComposeViewAmbient)
-    val focusManager = ambient(FocusManagerAmbient)
+    val composeView = AndroidComposeViewAmbient.current
+    val focusManager = FocusManagerAmbient.current
     val coroutineScope = coroutineScope()
     MultiAmbientProvider(
         ActivityAmbient with activity,

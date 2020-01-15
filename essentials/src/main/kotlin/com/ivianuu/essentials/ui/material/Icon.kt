@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambient
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -28,6 +26,8 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class IconStyle(
@@ -35,7 +35,7 @@ data class IconStyle(
     val tint: Boolean = true
 )
 
-val IconStyleAmbient = Ambient.of { IconStyle() }
+val IconStyleAmbient = ambientOf { IconStyle() }
 
 @Composable
 fun AvatarIconStyle() = IconStyle(
@@ -46,7 +46,7 @@ fun AvatarIconStyle() = IconStyle(
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = ambient(IconStyleAmbient)
+    style: IconStyle = IconStyleAmbient.current
 ) {
     Container(
         width = style.size.width,

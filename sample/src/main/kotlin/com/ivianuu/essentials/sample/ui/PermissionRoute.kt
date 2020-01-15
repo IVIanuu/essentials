@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
-import androidx.compose.ambient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.layout.Center
 import com.github.ajalt.timberkt.d
@@ -37,7 +36,8 @@ import com.ivianuu.essentials.permission.with
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
@@ -77,7 +77,7 @@ val PermissionRoute = Route {
         )
 
         val systemOverlay = SystemOverlayPermission(
-            ambient(ContextAmbient),
+            ContextAmbient.current,
             Metadata.Title with "System overlay",
             Metadata.Desc with "This is a desc",
             Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
@@ -90,13 +90,13 @@ val PermissionRoute = Route {
         )
 
         val writeSettings = WriteSettingsPermission(
-            ambient(ContextAmbient),
+            ContextAmbient.current,
             Metadata.Title with "Write settings",
             Metadata.Desc with "This is a desc",
             Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
         )
 
-        val coroutineScope = coroutineScope
+        val coroutineScope = CoroutineScopeAmbient.current
 
         Center {
             Button(

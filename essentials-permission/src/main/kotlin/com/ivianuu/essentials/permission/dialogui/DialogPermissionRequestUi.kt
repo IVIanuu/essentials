@@ -19,7 +19,6 @@ package com.ivianuu.essentials.permission.dialogui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.Recompose
-import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
 import androidx.ui.res.stringResource
@@ -39,6 +38,7 @@ import com.ivianuu.essentials.permission.bindPermissionRequestUi
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
@@ -73,7 +73,7 @@ internal val EsDialogPermissionUiModule = Module {
 }
 
 private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
-    dismissHandler = { ambient(ActivityAmbient).finish() }
+    dismissHandler = { ActivityAmbient.current.finish() }
 ) {
     Recompose { recompose ->
         ScrollableDialog(
@@ -82,7 +82,7 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
                 val viewModel = injectViewModel<PermissionDialogViewModel> {
                     parametersOf(request)
                 }
-                val activity = ambient(ActivityAmbient) as PermissionActivity
+                val activity = ActivityAmbient.current as PermissionActivity
                 viewModel.permissionsToProcess.forEach { permission ->
                     Permission(
                         permission = permission,
@@ -91,7 +91,7 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
                 }
             },
             negativeButton = {
-                val activity = ambient(ActivityAmbient)
+                val activity = ActivityAmbient.current
                 DialogButton(text = stringResource(R.string.es_cancel), onClick = {
                     activity.finish()
                 })

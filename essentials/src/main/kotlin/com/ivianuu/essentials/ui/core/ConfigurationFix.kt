@@ -20,7 +20,6 @@ import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.state
@@ -31,7 +30,7 @@ import androidx.ui.core.ContextAmbient
 
 @Composable
 fun ConfigurationFix(children: @Composable() () -> Unit) {
-    val application = ambient(ContextAmbient).applicationContext as Application
+    val application = ContextAmbient.current.applicationContext as Application
 
     val configuration = state { application.resources.configuration }
     val callbacks = remember {
