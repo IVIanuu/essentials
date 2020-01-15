@@ -13,17 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
+    id("com.android.library")
     id("com.github.ben-manes.versions")
-    kotlin("jvm")
+    id("com.ivianuu.injekt")
+    id("com.ivianuu.essentials")
+    kotlin("android")
+    id("kotlin-android-extensions")
 }
 
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.AndroidX.Compose.runtime)
+    api(Deps.AndroidX.Ui.androidText)
+    api(Deps.AndroidX.Ui.androidView)
+    api(Deps.AndroidX.Ui.androidViewNonIr)
+    api(Deps.AndroidX.Ui.animation)
+    api(Deps.AndroidX.Ui.core)
+    api(Deps.AndroidX.Ui.foundation)
+    api(Deps.AndroidX.Ui.framework)
+    api(Deps.AndroidX.Ui.layout)
+    api(Deps.AndroidX.Ui.material)
+    api(Deps.AndroidX.Ui.platform)
+    api(Deps.AndroidX.Ui.text)
+    api(Deps.AndroidX.Ui.tooling)
+    api(Deps.AndroidX.Ui.vector)
 }

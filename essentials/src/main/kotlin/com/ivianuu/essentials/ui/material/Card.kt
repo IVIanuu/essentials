@@ -26,8 +26,8 @@ import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 @Immutable
 data class CardStyle(
@@ -38,7 +38,8 @@ data class CardStyle(
     val elevation: Dp = 1.dp
 )
 
-val CardStyleAmbient = ambientOf<CardStyle?> { null }
+val CardStyleAmbient =
+    ambientOf<CardStyle?> { null }
 
 @Composable
 fun DefaultCardStyle(

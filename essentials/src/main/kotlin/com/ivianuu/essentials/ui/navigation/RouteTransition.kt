@@ -28,7 +28,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.graphics.Canvas
-import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Immutable
@@ -107,7 +107,8 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     }
 }
 
-val DefaultRouteTransitionAmbient = ambientOf { DefaultRouteTransition }
+val DefaultRouteTransitionAmbient =
+    ambientOf { DefaultRouteTransition }
 
 val DefaultRouteTransition = RouteTransition(
     definition = { defaultTransitionDefinition },

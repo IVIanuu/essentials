@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.vector
+package com.ivianuu.essentials.composehelpers.vector
 
 import android.util.Log
 import androidx.ui.graphics.Path
-import com.ivianuu.essentials.ui.vector.PathNode.ArcTo
-import com.ivianuu.essentials.ui.vector.PathNode.Close
-import com.ivianuu.essentials.ui.vector.PathNode.CurveTo
-import com.ivianuu.essentials.ui.vector.PathNode.HorizontalTo
-import com.ivianuu.essentials.ui.vector.PathNode.LineTo
-import com.ivianuu.essentials.ui.vector.PathNode.MoveTo
-import com.ivianuu.essentials.ui.vector.PathNode.QuadTo
-import com.ivianuu.essentials.ui.vector.PathNode.ReflectiveCurveTo
-import com.ivianuu.essentials.ui.vector.PathNode.ReflectiveQuadTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeArcTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeCurveTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeHorizontalTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeLineTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeMoveTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeQuadTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeReflectiveCurveTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeReflectiveQuadTo
-import com.ivianuu.essentials.ui.vector.PathNode.RelativeVerticalTo
-import com.ivianuu.essentials.ui.vector.PathNode.VerticalTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.ArcTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.Close
+import com.ivianuu.essentials.composehelpers.vector.PathNode.CurveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.HorizontalTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.LineTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.MoveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.QuadTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.ReflectiveCurveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.ReflectiveQuadTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeArcTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeCurveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeHorizontalTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeLineTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeMoveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeQuadTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeReflectiveCurveTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeReflectiveQuadTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.RelativeVerticalTo
+import com.ivianuu.essentials.composehelpers.vector.PathNode.VerticalTo
 
 private const val LOGTAG = "PathParser"
 

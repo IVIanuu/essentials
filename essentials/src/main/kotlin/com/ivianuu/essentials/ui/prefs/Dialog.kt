@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 

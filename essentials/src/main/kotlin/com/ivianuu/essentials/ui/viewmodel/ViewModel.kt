@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.composehelpers.sourceLocation

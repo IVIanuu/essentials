@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.vector
+package com.ivianuu.essentials.composehelpers.vector
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment

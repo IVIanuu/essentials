@@ -23,9 +23,9 @@ import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
 import coil.api.getAny
-import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.core.call
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
@@ -62,7 +62,8 @@ fun image(
 }
 
 // todo make non null once we have something like ambientOrNull or ambientOrDefault
-val PlaceholderAmbient = ambientOf<Image?> { null }
+val PlaceholderAmbient =
+    ambientOf<Image?> { null }
 
 @Composable
 fun Image(

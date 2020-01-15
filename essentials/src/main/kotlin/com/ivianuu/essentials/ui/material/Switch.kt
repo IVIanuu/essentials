@@ -20,13 +20,14 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 @Immutable
 data class SwitchStyle(val color: Color)
 
-val SwitchStyleAmbient = ambientOf<SwitchStyle?> { null }
+val SwitchStyleAmbient =
+    ambientOf<SwitchStyle?> { null }
 
 @Composable
 fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =

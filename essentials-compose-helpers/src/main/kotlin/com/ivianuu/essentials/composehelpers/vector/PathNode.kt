@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.vector
+package com.ivianuu.essentials.composehelpers.vector
 
 /**
  * Class representing a singular path command in a vector.

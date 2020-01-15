@@ -27,6 +27,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag
@@ -117,7 +119,8 @@ fun SystemBarManager(children: @Composable() () -> Unit) {
     SystemBarManagerAmbient.Provider(value = systemBarManager, children = children)
 }
 
-private val SystemBarStyleAmbient = ambientOf { SystemBarStyle() }
+private val SystemBarStyleAmbient =
+    ambientOf { SystemBarStyle() }
 
 internal class SystemBarManager(private val activity: Activity) {
 
@@ -168,4 +171,5 @@ internal class SystemBarManager(private val activity: Activity) {
     }
 }
 
-internal val SystemBarManagerAmbient = ambientOf<SystemBarManager> { error("No system bar manager provided") }
+internal val SystemBarManagerAmbient =
+    ambientOf<SystemBarManager> { error("No system bar manager provided") }

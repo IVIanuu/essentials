@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient

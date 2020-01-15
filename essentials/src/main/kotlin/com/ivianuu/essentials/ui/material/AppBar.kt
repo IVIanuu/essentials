@@ -35,9 +35,9 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.composehelpers.Unstable
-import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -64,7 +64,8 @@ fun DefaultTopAppBarStyle(
     centerTitle = centerTitle
 )
 
-val TopAppBarStyleAmbient = ambientOf<TopAppBarStyle?> { null }
+val TopAppBarStyleAmbient =
+    ambientOf<TopAppBarStyle?> { null }
 
 @Composable
 fun TopAppBar(title: String) {

@@ -21,7 +21,7 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.core.ActivityAmbient
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route

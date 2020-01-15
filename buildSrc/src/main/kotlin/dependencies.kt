@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev440"
+    const val version = "${Build.versionName}-dev441"
 }
 
 object Deps {
@@ -40,6 +40,11 @@ object Deps {
         const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
+
+        object Compose {
+            private const val version = "0.0.1-dev15"
+            const val runtime = "androidx.compose:compose-runtime:$version"
+        }
 
         object Lifecycle {
             private const val version = "2.2.0-rc02"
@@ -100,9 +105,11 @@ object Deps {
         const val director = "com.ivianuu.director:director:$version"
         const val common = "com.ivianuu.director:director-common:$version"
     }
-
+    
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev388"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev441"
+    const val essentialsMaterialIcons =
+        "com.ivianuu.essentials:essentials-material-icons:0.0.1-dev440"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 

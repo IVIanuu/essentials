@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.core
+package com.ivianuu.essentials.composehelpers
 
 import androidx.compose.Ambient
 import androidx.compose.Composable

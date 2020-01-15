@@ -26,7 +26,7 @@ import androidx.ui.core.IntPxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.common.holder
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route

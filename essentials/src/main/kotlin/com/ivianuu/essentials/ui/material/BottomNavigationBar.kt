@@ -39,8 +39,8 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.composehelpers.Unstable
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -56,7 +56,8 @@ data class BottomNavigationBarStyle(
     val normalItemColor: Color
 )
 
-val BottomNavigationBarStyleAmbient = ambientOf<BottomNavigationBarStyle?> { null }
+val BottomNavigationBarStyleAmbient =
+    ambientOf<BottomNavigationBarStyle?> { null }
 
 @Composable
 fun DefaultBottomNavigationBarStyle(
@@ -208,12 +209,16 @@ fun <T> ProvideBottomNavigationController(
     BottomNavigationControllerAmbient.Provider(value = controller, children = children)
 }
 
-private val BottomNavigationControllerAmbient = ambientOf<BottomNavigationController<*>> { error("No bottom navigation controller found") }
+private val BottomNavigationControllerAmbient =
+    ambientOf<BottomNavigationController<*>> {
+        error("No bottom navigation controller found")
+    }
 
 @Composable
 fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = BottomNavigationControllerAmbient.current as BottomNavigationController<T>
 
-private val BottomNavigationItemAmbient = ambientOf<Any?> { error("No bottom navigation item found") }
+private val BottomNavigationItemAmbient =
+    ambientOf<Any?> { error("No bottom navigation item found") }
 
 @Composable
 fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current as T
