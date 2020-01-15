@@ -16,4 +16,4 @@
 
 package com.ivianuu.essentials.util
 
-fun <T> unsafeLazy(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)
+fun <T> unsafeLazy(init: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, init)
