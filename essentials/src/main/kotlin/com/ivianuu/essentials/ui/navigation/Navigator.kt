@@ -253,7 +253,7 @@ class NavigatorState(
     ) = withContext(Dispatchers.Main) {
         if (newBackStack == _backStack) return@withContext
 
-        d { "set back stack $newBackStack" }
+        d { "set back stack ${newBackStack.map { it.route }}" }
 
         // do not allow pushing the same route twice
         newBackStack
@@ -279,8 +279,7 @@ class NavigatorState(
             val newTopRoute = newVisibleRoutes.lastOrNull()
 
             // check if we should animate the top routes
-            val replacingTopRoutes = newTopRoute != null && (oldTopRoute == null ||
-                    oldTopRoute != newTopRoute)
+            val replacingTopRoutes = newTopRoute != null && oldTopRoute != newTopRoute
 
             // Remove all visible routes which shouldn't be visible anymore
             // from top to bottom
@@ -342,6 +341,7 @@ class NavigatorState(
         transition: RouteTransition?
     ) {
         val exitFrom = from != null && (!isPush || !to!!.route.opaque)
+        d { "perform change from ${from?.route} to ${to?.route} is push $isPush exit from $exitFrom" }
         if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
         to?.enter(from = from, isPush = isPush, transition = transition)
     }
@@ -370,6 +370,8 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
+                d { "$route -> compose content" }
+
                 RetainedObjectsAmbient.Provider(retainedObjects) {
                     ProvideCoroutineScope(coroutineScope()) {
                         AbsorbPointer(absorb = transitionRunning) {
@@ -393,16 +395,17 @@ class NavigatorState(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            if (completedState != RouteTransition.State.Init) {
-                transitionRunning = false
-            }
+            d { "$route -> on transition complete $completedState" }
+            transitionRunning = false
             lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
                 other = null
             }
 
-            if (completedState == RouteTransition.State.ExitFromPop) {
+            if (completedState == RouteTransition.State.ExitFromPush ||
+                completedState == RouteTransition.State.ExitFromPop) {
+                d { "$route -> remove overlay entry" }
                 overlayState.remove(overlayEntry)
             }
         }
@@ -428,9 +431,18 @@ class NavigatorState(
             isPush: Boolean,
             transition: RouteTransition?
         ) {
+            d { "$route -> enter from ${from?.route} is push $isPush" }
             overlayEntry.opaque = route.opaque || isPush
             transitionRunning = true
-            if (isPush) overlayState.add(overlayEntry)
+
+            val fromIndex = overlayState.entries.indexOf(from?.overlayEntry)
+            val toIndex = if (fromIndex != -1) {
+                if (isPush) fromIndex + 1 else fromIndex
+            } else overlayState.entries.size
+
+            d { "$route -> add overlay entry at index $toIndex" }
+            overlayState.add(toIndex, overlayEntry)
+
             lastTransitionState = transitionState
             transitionState = if (isPush) RouteTransition.State.EnterFromPush
             else RouteTransition.State.EnterFromPop
@@ -442,6 +454,8 @@ class NavigatorState(
             isPush: Boolean,
             transition: RouteTransition?
         ) {
+            d { "$route -> exit to ${to?.route} is push $isPush" }
+
             transitionRunning = true
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = to
@@ -452,13 +466,17 @@ class NavigatorState(
         }
 
         fun dispose() {
+            d { "$route -> dispose" }
             retainedObjects.dispose()
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T
 
         fun setResult(result: Any?) {
-            if (!this.result.isCompleted) this.result.complete(result)
+            if (!this.result.isCompleted) {
+                d { "$route -> set result $result" }
+                this.result.complete(result)
+            }
         }
     }
 }
