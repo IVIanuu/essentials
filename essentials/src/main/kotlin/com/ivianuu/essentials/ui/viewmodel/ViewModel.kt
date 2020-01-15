@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
-import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.essentials.composehelpers.sourceLocation
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf

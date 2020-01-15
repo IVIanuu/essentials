@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.compose.composer
-import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.essentials.composehelpers.sourceLocation
 
 @Composable
 inline fun <V1> call(

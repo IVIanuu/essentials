@@ -34,7 +34,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.composehelpers.Unstable
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.current

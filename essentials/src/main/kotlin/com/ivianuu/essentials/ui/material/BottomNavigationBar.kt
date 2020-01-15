@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.Unstable
+import com.ivianuu.essentials.composehelpers.Unstable
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain

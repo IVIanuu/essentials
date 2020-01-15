@@ -49,7 +49,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 enum class Step {
     ConvertExpressionComposableFunsToBlocks,
     MergeVarArgToSingleArg,
-    moveComposableTrailingLambdasIntoTheBody,
+    MoveComposableTrailingLambdasIntoTheBody,
     InsertRestartScopeIntoFunctions,
     WrapComposableLambdasInObserve,
     WrapComposableCalls
@@ -88,7 +88,7 @@ fun test(
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
         Step.MergeVarArgToSingleArg,
-        Step.moveComposableTrailingLambdasIntoTheBody,
+        Step.MoveComposableTrailingLambdasIntoTheBody,
         Step.WrapComposableLambdasInObserve,
         Step.InsertRestartScopeIntoFunctions,
         Step.WrapComposableCalls
@@ -261,8 +261,8 @@ private fun moveComposableTrailingLambdasIntoTheBody(
 ) {
     Visitor.visit(file) { node, parent ->
         if (node == null) return@visit
-        if (node.seenBy(Step.moveComposableTrailingLambdasIntoTheBody)) return@visit
-        node.markSeen(Step.moveComposableTrailingLambdasIntoTheBody)
+        if (node.seenBy(Step.MoveComposableTrailingLambdasIntoTheBody)) return@visit
+        node.markSeen(Step.MoveComposableTrailingLambdasIntoTheBody)
 
         if (node !is Node.Expr.Call) return@visit
         val lambda = node.lambda ?: return@visit
@@ -325,19 +325,15 @@ private fun helperExpr(expr: Node.Expr): Node.Expr {
         lhs = Node.Expr.BinaryOp(
             lhs = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
-                    lhs = Node.Expr.BinaryOp(
-                        lhs = Node.Expr.Name(name = "com"),
-                        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                        rhs = Node.Expr.Name(name = "ivianuu")
-                    ),
+                    lhs = Node.Expr.Name(name = "com"),
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                    rhs = Node.Expr.Name(name = "essentials")
+                    rhs = Node.Expr.Name(name = "ivianuu")
                 ),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                rhs = Node.Expr.Name(name = "ui")
+                rhs = Node.Expr.Name(name = "essentials")
             ),
             oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-            rhs = Node.Expr.Name(name = "core")
+            rhs = Node.Expr.Name(name = "composehelpers")
         ),
         oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
         rhs = expr

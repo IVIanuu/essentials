@@ -100,7 +100,7 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                 isInterface: Boolean
             ) {
                 if (opcode == Opcodes.INVOKESTATIC &&
-                    owner == "com/ivianuu/essentials/util/SourceLocationKt" &&
+                    owner == "com/ivianuu/essentials/composehelpers/SourceLocationKt" &&
                     name == "sourceLocation" &&
                     descriptor == "()Ljava/lang/Object;"
                 ) {

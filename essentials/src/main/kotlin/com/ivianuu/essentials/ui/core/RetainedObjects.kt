@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.Stable
 import androidx.compose.mutableStateOf
-import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.essentials.composehelpers.sourceLocation
 import java.io.Closeable
 
 @Stable

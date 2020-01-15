@@ -54,8 +54,10 @@ dependencies {
     api(Deps.Coroutines.android)
     api(Deps.Coroutines.core)
 
+    api(project(":essentials-compose-helpers"))
     api(project(":essentials-coroutines"))
     api(project(":essentials-store"))
+    //api(Deps.essentialsMaterialIcons)
 
     api(Deps.Injekt.injekt)
     api(Deps.Injekt.android)
