@@ -341,7 +341,7 @@ class NavigatorState(
         isPush: Boolean,
         transition: RouteTransition?
     ) {
-        val exitFrom = from != null && (isPush && !to!!.route.opaque || !from.route.opaque)
+        val exitFrom = from != null && (!isPush || !to!!.route.opaque)
         if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
         to?.enter(from = from, isPush = isPush, transition = transition)
     }
