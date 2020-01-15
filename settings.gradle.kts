@@ -37,7 +37,7 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hide-nav-bar",
     ":essentials-kotlin-compiler",
-    ":essentials-material-icons",
+    //":essentials-material-icons",
     ":essentials-mvrx",
     ":essentials-notification-listener",
     ":essentials-permission",
