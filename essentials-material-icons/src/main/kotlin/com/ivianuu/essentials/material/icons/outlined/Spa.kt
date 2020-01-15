@@ -1,0 +1,73 @@
+/*
+ * Copyright 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.material.icons.outlined
+
+import com.ivianuu.essentials.ui.vector.VectorAsset
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.material.icons.path
+
+val Icons.Outlined.Spa: VectorAsset by lazyMaterialIcon {
+    path {
+        moveTo(15.49f, 9.63f)
+        curveToRelative(-0.18f, -2.79f, -1.31f, -5.51f, -3.43f, -7.63f)
+        curveToRelative(-2.14f, 2.14f, -3.32f, 4.86f, -3.55f, 7.63f)
+        curveToRelative(1.28f, 0.68f, 2.46f, 1.56f, 3.49f, 2.63f)
+        curveToRelative(1.03f, -1.06f, 2.21f, -1.94f, 3.49f, -2.63f)
+        close()
+        moveTo(12.05f, 5.19f)
+        curveToRelative(0.63f, 1.03f, 1.07f, 2.18f, 1.3f, 3.38f)
+        curveToRelative(-0.47f, 0.3f, -0.91f, 0.63f, -1.34f, 0.98f)
+        curveToRelative(-0.42f, -0.34f, -0.87f, -0.67f, -1.33f, -0.97f)
+        curveToRelative(0.25f, -1.2f, 0.71f, -2.35f, 1.37f, -3.39f)
+        close()
+        moveTo(12.0f, 15.45f)
+        curveToRelative(-0.82f, -1.25f, -1.86f, -2.34f, -3.06f, -3.2f)
+        curveToRelative(-0.13f, -0.09f, -0.27f, -0.16f, -0.4f, -0.26f)
+        curveToRelative(0.13f, 0.09f, 0.27f, 0.17f, 0.39f, 0.25f)
+        curveTo(6.98f, 10.83f, 4.59f, 10.0f, 2.0f, 10.0f)
+        curveToRelative(0.0f, 5.32f, 3.36f, 9.82f, 8.03f, 11.49f)
+        curveToRelative(0.63f, 0.23f, 1.29f, 0.4f, 1.97f, 0.51f)
+        curveToRelative(0.68f, -0.12f, 1.33f, -0.29f, 1.97f, -0.51f)
+        curveTo(18.64f, 19.82f, 22.0f, 15.32f, 22.0f, 10.0f)
+        curveToRelative(-4.18f, 0.0f, -7.85f, 2.17f, -10.0f, 5.45f)
+        close()
+        moveTo(13.32f, 19.6f)
+        curveToRelative(-0.44f, 0.15f, -0.88f, 0.27f, -1.33f, 0.37f)
+        curveToRelative(-0.44f, -0.09f, -0.87f, -0.21f, -1.28f, -0.36f)
+        curveToRelative(-3.29f, -1.18f, -5.7f, -3.99f, -6.45f, -7.35f)
+        curveToRelative(1.1f, 0.26f, 2.15f, 0.71f, 3.12f, 1.33f)
+        lineToRelative(-0.02f, 0.01f)
+        curveToRelative(0.13f, 0.09f, 0.26f, 0.18f, 0.39f, 0.25f)
+        lineToRelative(0.07f, 0.04f)
+        curveToRelative(0.99f, 0.72f, 1.84f, 1.61f, 2.51f, 2.65f)
+        lineTo(12.0f, 19.1f)
+        lineToRelative(1.67f, -2.55f)
+        curveToRelative(0.69f, -1.05f, 1.55f, -1.95f, 2.53f, -2.66f)
+        lineToRelative(0.07f, -0.05f)
+        curveToRelative(0.09f, -0.05f, 0.18f, -0.11f, 0.27f, -0.17f)
+        lineToRelative(-0.01f, -0.02f)
+        curveToRelative(0.98f, -0.65f, 2.07f, -1.13f, 3.21f, -1.4f)
+        curveToRelative(-0.75f, 3.37f, -3.15f, 6.18f, -6.42f, 7.35f)
+        close()
+        moveTo(8.99f, 12.28f)
+        curveToRelative(-0.02f, -0.01f, -0.04f, -0.03f, -0.05f, -0.04f)
+        curveToRelative(0.0f, 0.0f, 0.01f, 0.0f, 0.01f, 0.01f)
+        curveToRelative(0.01f, 0.01f, 0.02f, 0.02f, 0.04f, 0.03f)
+        close()
+    }
+}
