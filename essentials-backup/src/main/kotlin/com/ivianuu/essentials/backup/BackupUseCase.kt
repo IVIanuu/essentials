@@ -27,7 +27,7 @@ class BackupUseCase(
     suspend fun backup() = withContext(dispatchers.io) {
         try {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
-            val backupFileName = "vng_${dateFormat.format(Date())}"
+            val backupFileName = "backup_${dateFormat.format(Date())}"
             val dataPath = activity.applicationInfo.dataDir
 
             val backupFile = File("$dataPath/files/backup/$backupFileName.zip")
@@ -67,6 +67,7 @@ class BackupUseCase(
                 activity.startActivity(Intent.createChooser(intent, "Share File"))
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             toaster.toast(R.string.es_backup_error)
         }
     }
