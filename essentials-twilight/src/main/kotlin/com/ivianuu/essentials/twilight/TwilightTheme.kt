@@ -40,7 +40,7 @@ fun TwilightTheme(
     val isDark = collect(helper.isDark, helper.currentIsDark)
 
     Transition(
-        definition = twilightTransitionDefinition,
+        definition = TwilightTransitionDefinition,
         toState = isDark
     ) { state ->
         val colors = lerp(lightColors, darkColors, state[Fraction])
@@ -53,13 +53,13 @@ fun TwilightTheme(
 }
 
 private val Fraction = FloatPropKey()
-private val twilightTransitionDefinition = transitionDefinition {
+private val TwilightTransitionDefinition = transitionDefinition {
     state(true) { set(Fraction, 1f) }
     state(false) { set(Fraction, 0f) }
 
     transition {
         Fraction using tween {
-            duration = 300
+            duration = 150
         }
     }
 }
