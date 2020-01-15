@@ -18,10 +18,8 @@ package com.ivianuu.essentials.data
 
 import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.SharedPreferencesImporter
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.android.ForApplication
@@ -33,26 +31,18 @@ annotation class PrefsPath {
 }
 
 val EsDataModule = Module {
+    single(name = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
+
     single {
         PrefBoxFactory(
             dispatcher = get<AppDispatchers>().io,
             prefsPath = get(name = PrefsPath)
         )
     }
-    single(name = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
 
     single {
         SettingsBoxFactory(
             context = get(name = ForApplication),
-            dispatcher = get<AppDispatchers>().io
-        )
-    }
-
-    factory {
-        SharedPreferencesImporter(
-            boxFactory = get(),
-            context = get(name = ForApplication),
-            packageName = get<BuildInfo>().packageName,
             dispatcher = get<AppDispatchers>().io
         )
     }
