@@ -41,16 +41,6 @@ fun <T> Flow<T>.replayShareIn(
     tag: String? = null
 ): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
 
-// todo ir
-suspend fun <T> Mutex.withLockNoInline(owner: Any? = null, action: () -> T): T {
-    lock(owner)
-    try {
-        return action()
-    } finally {
-        unlock(owner)
-    }
-}
-
 private class ReplayShareFlow<T>(
     upstream: Flow<T>,
     scope: CoroutineScope,

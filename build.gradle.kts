@@ -15,6 +15,10 @@
  */
 
 buildscript {
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
+    }
+
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
@@ -46,6 +50,10 @@ allprojects {
         kotlinOptions {
             useIR = true
         }
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
     }
 
     repositories {

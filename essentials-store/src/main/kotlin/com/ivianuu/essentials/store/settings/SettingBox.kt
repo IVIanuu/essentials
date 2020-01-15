@@ -21,6 +21,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
+import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -87,17 +87,17 @@ class SettingBoxImpl<T>(
 
     private val coroutineScope = CoroutineScope(Job())
 
-    private val flow = callbackFlow<Unit> {
+    private val flow = callbackFlowNoInline<Unit> {
         val observer = withContext(Dispatchers.Main) {
             object : ContentObserver(MainHandler) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
-                    offer(Unit)
+                    it.offer(Unit)
                 }
             }
         }
         contentResolver.registerContentObserver(uri, false, observer)
-        awaitClose { contentResolver.unregisterContentObserver(observer) }
+        it.awaitClose { contentResolver.unregisterContentObserver(observer) }
     }
         .onStart { emit(Unit) }
         .map { get() }

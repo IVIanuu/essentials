@@ -91,7 +91,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
         },
         body = {
             ScrollableList {
-                val showBanner = unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
+                val showBanner = unfoldBox(inject<PrefBoxFactory>().boolean("show_banner")) // todo ir by
                 if (showBanner.value) {
                     Banner(
                         leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },

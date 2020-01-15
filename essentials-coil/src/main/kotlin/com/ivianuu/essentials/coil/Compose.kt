@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.coil
 
+import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
-import coil.api.getAny
+import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.call
 import com.ivianuu.essentials.ui.core.current
@@ -51,13 +52,19 @@ fun image(
     imageLoader: ImageLoader = inject()
 ): Image = image(data = data, imageLoader = imageLoader) ?: placeholder
 
+// todo ir
+suspend fun ImageLoader.getAnyNoInline(
+    data: Any,
+    builder: GetRequestBuilder.() -> Unit = {}
+): Drawable = get(GetRequestBuilder(defaults).data(data).apply(builder).build())
+
 @Composable
 fun image(
     data: Any,
     imageLoader: ImageLoader = inject()
 ): Image? {
     return load(placeholder = null, key = data to imageLoader) {
-        imageLoader.getAny(data).toImage()
+        imageLoader.getAnyNoInline(data).toImage()
     }
 }
 

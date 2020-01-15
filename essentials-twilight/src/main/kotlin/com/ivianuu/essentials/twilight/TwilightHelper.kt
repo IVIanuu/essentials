@@ -24,13 +24,13 @@ import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -88,10 +88,10 @@ class TwilightHelper(
             hour < 6 || hour >= 22
         }
 
-    private fun configChanges() = callbackFlow<Unit> {
+    private fun configChanges() = callbackFlowNoInline<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
-                offer(Unit)
+                it.offer(Unit)
             }
 
             override fun onLowMemory() {
@@ -101,6 +101,6 @@ class TwilightHelper(
             }
         }
         app.registerComponentCallbacks(callbacks)
-        awaitClose { app.unregisterComponentCallbacks(callbacks) }
+        it.awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 }

@@ -34,6 +34,7 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Single
@@ -42,7 +43,6 @@ import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -187,12 +187,12 @@ class PurchaseManager(
     }
 
     fun isPurchased(sku: Sku): Flow<Boolean> {
-        val appMovedToForegroundFlow = callbackFlow {
+        val appMovedToForegroundFlow = callbackFlowNoInline<Unit> {
             val observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_START) offer(Unit)
+                if (event == Lifecycle.Event.ON_START) it.offer(Unit)
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
-            awaitClose { ProcessLifecycleOwner.get().lifecycle.removeObserver(observer) }
+            it.awaitClose { ProcessLifecycleOwner.get().lifecycle.removeObserver(observer) }
         }
 
         return merge(
