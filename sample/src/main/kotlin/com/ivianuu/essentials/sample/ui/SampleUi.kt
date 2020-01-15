@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.core.bindAppUi
 import com.ivianuu.essentials.ui.core.bindUiInitializer
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
-import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
+import com.ivianuu.essentials.ui.navigation.transition.VerticalFadeRouteTransition
 import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -54,7 +54,7 @@ class SampleUi : AppUi {
 class SampleUiInitializer : UiInitializer {
     override fun apply(children: () -> Unit) {
         DefaultRouteTransitionAmbient.Provider(
-            value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+            value = remember { VerticalFadeRouteTransition() }
         ) {
             TwilightTheme(children = children)
         }

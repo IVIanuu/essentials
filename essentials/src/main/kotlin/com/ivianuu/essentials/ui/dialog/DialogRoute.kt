@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.core.current
-import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
 fun DialogRoute(
     dismissible: Boolean = true,
