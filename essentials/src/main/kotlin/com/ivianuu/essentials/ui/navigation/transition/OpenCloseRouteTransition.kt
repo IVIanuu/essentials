@@ -61,13 +61,13 @@ private fun openCloseRouteTransitionDefinition(
     }
 
     transition {
-        Alpha using tween {
+        Alpha using tween<Float> { // todo ir
             duration = (50.milliseconds * speed.toDouble()).toLongMilliseconds().toInt()
             delay = (35.milliseconds * speed.toDouble()).toLongMilliseconds().toInt() // todo 66.millis for close
             easing = LinearEasing
         }
 
-        Scale using tween {
+        Scale using tween<Float> { // todo ir
             duration = (300.milliseconds * speed.toDouble()).toLongMilliseconds().toInt()
             easing = PathEasing(
                 path = Path().apply {

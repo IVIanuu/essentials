@@ -36,7 +36,7 @@ private fun horizontalRouteTransitionDefinition(
     state(RouteTransition.State.ExitFromPop) { set(HorizontalOffset, 1f) }
 
     transition {
-        HorizontalOffset using tween {
+        HorizontalOffset using tween<Float> { // todo ir
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }
