@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.vector
+package com.ivianuu.essentials.composehelpers.vector
 
 class PathBuilder {
 

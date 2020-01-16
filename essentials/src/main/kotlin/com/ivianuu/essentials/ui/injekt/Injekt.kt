@@ -18,14 +18,15 @@ package com.ivianuu.essentials.ui.injekt
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-val ComponentAmbient = ambientOf<Component> { error("No component found") }
+val ComponentAmbient =
+    ambientOf<Component> { error("No component found") }
 
 @Composable
 inline fun <reified T> inject(

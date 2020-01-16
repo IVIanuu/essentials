@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.composehelpers.vector
 
-fun sourceLocation(): Any = 0
+internal fun sourceLocation(): Any = 0

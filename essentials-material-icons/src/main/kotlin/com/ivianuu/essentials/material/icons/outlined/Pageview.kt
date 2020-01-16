@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.material.icons.outlined
 
-import com.ivianuu.essentials.ui.vector.VectorAsset
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.composehelpers.vector.VectorAsset
 import com.ivianuu.essentials.material.icons.path
+import com.ivianuu.essentials.material.icons.group
+import com.ivianuu.essentials.material.icons.Icons
+
+import com.ivianuu.essentials.material.icons.lazyMaterialIcon
 
 val Icons.Outlined.Pageview: VectorAsset by lazyMaterialIcon {
     path {

@@ -30,8 +30,8 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -80,7 +80,8 @@ fun ExtendedFloatingActionButtonStyle(
     elevation = elevation
 )
 
-val FloatingActionButtonStyleAmbient = ambientOf<FloatingActionButtonStyle?> { null }
+val FloatingActionButtonStyleAmbient =
+    ambientOf<FloatingActionButtonStyle?> { null }
 
 @Composable
 fun FloatingActionButton(

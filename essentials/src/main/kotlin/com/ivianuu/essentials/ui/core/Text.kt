@@ -30,6 +30,7 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
 import androidx.ui.text.style.TextOverflow
+import com.ivianuu.essentials.composehelpers.current
 
 // todo remove once supported by original
 

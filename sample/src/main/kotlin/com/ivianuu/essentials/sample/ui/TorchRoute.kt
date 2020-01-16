@@ -24,7 +24,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject

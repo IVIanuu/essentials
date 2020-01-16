@@ -35,6 +35,8 @@ import androidx.ui.core.ipx
 import androidx.ui.core.withDensity
 import androidx.ui.layout.EdgeInsets
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.UpdateProvider
 import com.ivianuu.essentials.ui.common.Updateable
 import com.ivianuu.essentials.ui.common.framed
@@ -232,6 +234,7 @@ fun WindowInsetsProvider(
     )
 }
 
-private val WindowInsetsAmbient = ambientOf<WindowInsets> {
-    error("No window insets provided")
-}
+private val WindowInsetsAmbient =
+    ambientOf<WindowInsets> {
+        error("No window insets provided")
+    }

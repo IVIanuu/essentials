@@ -54,8 +54,8 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
 import com.ivianuu.essentials.ui.common.withDensity
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -63,7 +63,8 @@ import kotlin.math.abs
 @Immutable
 data class SliderStyle(val color: Color)
 
-val SliderStyleAmbient = ambientOf<SliderStyle?> { null }
+val SliderStyleAmbient =
+    ambientOf<SliderStyle?> { null }
 
 @Composable
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =

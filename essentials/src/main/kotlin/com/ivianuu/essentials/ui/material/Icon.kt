@@ -26,8 +26,8 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 @Immutable
 data class IconStyle(
@@ -35,7 +35,8 @@ data class IconStyle(
     val tint: Boolean = true
 )
 
-val IconStyleAmbient = ambientOf { IconStyle() }
+val IconStyleAmbient =
+    ambientOf { IconStyle() }
 
 @Composable
 fun AvatarIconStyle() = IconStyle(

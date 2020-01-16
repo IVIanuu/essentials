@@ -26,7 +26,7 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.tightMax
-import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.composehelpers.ambientOf
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {
@@ -104,7 +104,8 @@ class OverlayEntry(
     var keepState by framed(keepState)
 }
 
-val OverlayAmbient = ambientOf<OverlayState> { error("No overlay provided") }
+val OverlayAmbient =
+    ambientOf<OverlayState> { error("No overlay provided") }
 
 @Composable
 private fun OverlayLayout(

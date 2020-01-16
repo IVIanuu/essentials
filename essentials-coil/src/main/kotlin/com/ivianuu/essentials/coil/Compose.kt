@@ -16,17 +16,16 @@
 
 package com.ivianuu.essentials.coil
 
-import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
-import coil.request.GetRequestBuilder
-import com.ivianuu.essentials.ui.core.ambientOf
+import coil.api.getAny
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.core.call
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
@@ -52,24 +51,19 @@ fun image(
     imageLoader: ImageLoader = inject()
 ): Image = image(data = data, imageLoader = imageLoader) ?: placeholder
 
-// todo ir
-suspend fun ImageLoader.getAnyNoInline(
-    data: Any,
-    builder: GetRequestBuilder.() -> Unit = {}
-): Drawable = get(GetRequestBuilder(defaults).data(data).apply(builder).build())
-
 @Composable
 fun image(
     data: Any,
     imageLoader: ImageLoader = inject()
 ): Image? {
     return load(placeholder = null, key = data to imageLoader) {
-        imageLoader.getAnyNoInline(data).toImage()
+        imageLoader.getAny(data).toImage()
     }
 }
 
 // todo make non null once we have something like ambientOrNull or ambientOrDefault
-val PlaceholderAmbient = ambientOf<Image?> { null }
+val PlaceholderAmbient =
+    ambientOf<Image?> { null }
 
 @Composable
 fun Image(

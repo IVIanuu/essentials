@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.vector
+package com.ivianuu.essentials.composehelpers.vector
 
 import androidx.compose.Composable
 import androidx.compose.compositionReference
@@ -11,15 +11,16 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxSize
 import androidx.ui.core.Px
 import androidx.ui.core.PxSize
+import androidx.ui.core.ambientDensity
+import androidx.ui.core.withDensity
 import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Brush
+import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.graphics.StrokeJoin
 import androidx.ui.graphics.withSave
-import com.ivianuu.essentials.ui.common.withDensity
-import com.ivianuu.essentials.util.sourceLocation
 import kotlin.math.ceil
 
 /**
@@ -57,8 +58,8 @@ fun DrawVector(
     name: String = "",
     children: @Composable() VectorScope.(viewportWidth: Float, viewportHeight: Float) -> Unit
 ) {
-    val widthPx = withDensity { defaultWidth.toPx() }
-    val heightPx = withDensity { defaultHeight.toPx() }
+    val widthPx = withDensity(ambientDensity()) { defaultWidth.toPx() }
+    val heightPx = withDensity(ambientDensity()) { defaultHeight.toPx() }
 
     val vpWidth = if (viewportWidth == unset) widthPx.value else viewportWidth
     val vpHeight = if (viewportHeight == unset) heightPx.value else viewportHeight

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.core
+package com.ivianuu.essentials.composehelpers
 
 // todo remove once we migrated to the original ir compiler
 @Target(AnnotationTarget.FUNCTION)

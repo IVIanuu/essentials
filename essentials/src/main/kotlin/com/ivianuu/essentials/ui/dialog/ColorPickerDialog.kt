@@ -47,7 +47,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment

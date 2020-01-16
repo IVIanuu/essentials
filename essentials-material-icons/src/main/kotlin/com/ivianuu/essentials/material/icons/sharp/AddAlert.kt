@@ -18,8 +18,9 @@ package com.ivianuu.essentials.material.icons.sharp
 
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.composehelpers.vector.VectorAsset
 import com.ivianuu.essentials.material.icons.path
-import com.ivianuu.essentials.ui.vector.VectorAsset
+import com.ivianuu.essentials.material.icons.group
 
 val Icons.Sharp.AddAlert: VectorAsset by lazyMaterialIcon {
     path {

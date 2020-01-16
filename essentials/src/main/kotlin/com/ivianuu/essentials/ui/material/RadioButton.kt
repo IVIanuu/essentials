@@ -20,13 +20,14 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 @Immutable
 data class RadioButtonStyle(val color: Color)
 
-val RadioButtonStyleAmbient = ambientOf<RadioButtonStyle?> { null }
+val RadioButtonStyleAmbient =
+    ambientOf<RadioButtonStyle?> { null }
 
 @Composable
 fun DefaultRadioButtonStyle(color: Color = MaterialTheme.colors().secondary) =

@@ -21,9 +21,10 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.SolidColor
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.graphics.StrokeJoin
-import com.ivianuu.essentials.ui.vector.PathBuilder
-import com.ivianuu.essentials.ui.vector.PathData
-import com.ivianuu.essentials.ui.vector.VectorAssetBuilder
+import com.ivianuu.essentials.composehelpers.vector.PathBuilder
+import com.ivianuu.essentials.composehelpers.vector.PathData
+import com.ivianuu.essentials.composehelpers.vector.VectorAsset
+import com.ivianuu.essentials.composehelpers.vector.VectorAssetBuilder
 
 /**
  * Entry point for using [Material Icons](https://material.io/resources/icons).

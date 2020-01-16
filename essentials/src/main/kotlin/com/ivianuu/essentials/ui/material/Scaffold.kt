@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
-import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.composehelpers.ambientOf
 
 @Composable
 fun Scaffold(
@@ -155,7 +155,8 @@ class ScaffoldState {
     enum class FabPosition { Center, End }
 }
 
-val ScaffoldAmbient = ambientOf<ScaffoldState> { error("No scaffold provided") }
+val ScaffoldAmbient =
+    ambientOf<ScaffoldState> { error("No scaffold provided") }
 
 @Composable
 private fun ScaffoldLayout(

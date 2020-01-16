@@ -20,6 +20,8 @@ import android.content.res.Configuration
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 enum class Orientation {
     Portrait, Landscape
@@ -39,4 +41,5 @@ fun OrientationProvider(children: @Composable() () -> Unit) {
     OrientationAmbient.Provider(value = orientation, children = children)
 }
 
-val OrientationAmbient = ambientOf<Orientation> { error("No orientation provided") }
+val OrientationAmbient =
+    ambientOf<Orientation> { error("No orientation provided") }

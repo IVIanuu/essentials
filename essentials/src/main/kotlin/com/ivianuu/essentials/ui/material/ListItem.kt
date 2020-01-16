@@ -33,8 +33,8 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -52,7 +52,8 @@ fun DefaultListItemStyle(
     contentPadding = contentPadding
 )
 
-val ListItemStyleAmbient = ambientOf<ListItemStyle?> { null }
+val ListItemStyleAmbient =
+    ambientOf<ListItemStyle?> { null }
 
 @Composable
 fun ListItem(

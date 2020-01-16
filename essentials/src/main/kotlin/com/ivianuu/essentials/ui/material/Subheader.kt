@@ -28,8 +28,8 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 
 @Immutable
 data class SubheaderStyle(
@@ -46,7 +46,8 @@ fun DefaultSubheaderStyle(
     textColor = textColor
 )
 
-val SubheaderStyleAmbient = ambientOf<SubheaderStyle?> { null }
+val SubheaderStyleAmbient =
+    ambientOf<SubheaderStyle?> { null }
 
 @Composable
 fun Subheader(

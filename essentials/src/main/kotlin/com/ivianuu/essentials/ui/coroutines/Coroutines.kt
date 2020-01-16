@@ -24,8 +24,8 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.CoroutineContextAmbient
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -44,7 +44,8 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 @Composable
-val CoroutineScopeAmbient = ambientOf<CoroutineScope> { error("No coroutineScope provided") }
+val CoroutineScopeAmbient =
+    ambientOf<CoroutineScope> { error("No coroutineScope provided") }
 
 @Composable
 fun ProvideCoroutineScope(

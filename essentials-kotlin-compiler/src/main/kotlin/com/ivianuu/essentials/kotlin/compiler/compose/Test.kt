@@ -49,7 +49,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 enum class Step {
     ConvertExpressionComposableFunsToBlocks,
     MergeVarArgToSingleArg,
-    moveComposableTrailingLambdasIntoTheBody,
+    MoveComposableTrailingLambdasIntoTheBody,
     InsertRestartScopeIntoFunctions,
     WrapComposableLambdasInObserve,
     WrapComposableCalls
@@ -65,15 +65,7 @@ fun Node.markSeen(step: Step) {
 
 fun Node.seenBy(step: Step): Boolean = step in getSeenBy()
 
-val ComposerExpr = Node.Expr.BinaryOp(
-    lhs = Node.Expr.BinaryOp(
-        lhs = Node.Expr.Name(name = "androidx"),
-        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-        rhs = Node.Expr.Name(name = "compose")
-    ),
-    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-    rhs = Node.Expr.Name(name = "composer")
-)
+val CompositionExpr = helperExpr(Node.Expr.Name(name = "composition"))
 
 fun test(
     trace: BindingTrace,
@@ -88,7 +80,7 @@ fun test(
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
         Step.MergeVarArgToSingleArg,
-        Step.moveComposableTrailingLambdasIntoTheBody,
+        Step.MoveComposableTrailingLambdasIntoTheBody,
         Step.WrapComposableLambdasInObserve,
         Step.InsertRestartScopeIntoFunctions,
         Step.WrapComposableCalls
@@ -261,8 +253,8 @@ private fun moveComposableTrailingLambdasIntoTheBody(
 ) {
     Visitor.visit(file) { node, parent ->
         if (node == null) return@visit
-        if (node.seenBy(Step.moveComposableTrailingLambdasIntoTheBody)) return@visit
-        node.markSeen(Step.moveComposableTrailingLambdasIntoTheBody)
+        if (node.seenBy(Step.MoveComposableTrailingLambdasIntoTheBody)) return@visit
+        node.markSeen(Step.MoveComposableTrailingLambdasIntoTheBody)
 
         if (node !is Node.Expr.Call) return@visit
         val lambda = node.lambda ?: return@visit
@@ -325,19 +317,15 @@ private fun helperExpr(expr: Node.Expr): Node.Expr {
         lhs = Node.Expr.BinaryOp(
             lhs = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
-                    lhs = Node.Expr.BinaryOp(
-                        lhs = Node.Expr.Name(name = "com"),
-                        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                        rhs = Node.Expr.Name(name = "ivianuu")
-                    ),
+                    lhs = Node.Expr.Name(name = "com"),
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                    rhs = Node.Expr.Name(name = "essentials")
+                    rhs = Node.Expr.Name(name = "ivianuu")
                 ),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                rhs = Node.Expr.Name(name = "ui")
+                rhs = Node.Expr.Name(name = "essentials")
             ),
             oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-            rhs = Node.Expr.Name(name = "core")
+            rhs = Node.Expr.Name(name = "composehelpers")
         ),
         oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
         rhs = expr
@@ -550,7 +538,7 @@ private fun insertRestartScope(
 
         val startRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = ComposerExpr,
+                lhs = CompositionExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "startRestartGroup"),
@@ -576,7 +564,7 @@ private fun insertRestartScope(
         val endRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
-                    lhs = ComposerExpr,
+                    lhs = CompositionExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "endRestartGroup"),
@@ -781,7 +769,7 @@ private fun wrapComposableCalls(
                 lhs = Node.Expr.Name(name = "key_$callKeyIndex"),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.ASSN),
                 rhs = Node.Expr.BinaryOp(
-                    lhs = ComposerExpr,
+                    lhs = CompositionExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "joinKey"),
@@ -829,8 +817,10 @@ private fun wrapComposableCalls(
         }
 
         fun composerExprStmt() = Node.Stmt.Expr(
-            expr = helperExpr(
-                Node.Expr.Call(
+            Node.Expr.BinaryOp(
+                lhs = CompositionExpr,
+                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+                rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "expr"),
                     typeArgs = emptyList(),
                     args = listOf(
@@ -857,7 +847,7 @@ private fun wrapComposableCalls(
 
         fun composerCallStmt() = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = ComposerExpr,
+                lhs = CompositionExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "call"),

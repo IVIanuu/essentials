@@ -22,8 +22,8 @@ import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.LayoutPadding
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Surface
 
@@ -32,7 +32,8 @@ data class PopupStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp)
 )
 
-val PopupStyleAmbient = ambientOf { PopupStyle() }
+val PopupStyleAmbient =
+    ambientOf { PopupStyle() }
 
 @Composable
 fun Popup(
