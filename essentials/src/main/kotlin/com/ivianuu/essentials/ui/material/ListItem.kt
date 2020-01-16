@@ -78,10 +78,10 @@ fun ListItem(
 
 @Composable
 fun ListItem(
-    title: (@Composable() () -> Unit)? = null,
-    subtitle: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    trailing: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    subtitle: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    trailing: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,

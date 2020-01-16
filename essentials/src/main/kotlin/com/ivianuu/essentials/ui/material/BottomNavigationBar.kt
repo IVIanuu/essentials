@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.Unstable
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.retain
@@ -70,7 +69,6 @@ fun DefaultBottomNavigationBarStyle(
     normalItemColor = normalItemColor
 )
 
-@Unstable
 @Composable
 fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),

@@ -29,12 +29,12 @@ fun ScrollableDialog(
     scrollDirection: Axis = Axis.Vertical,
     scrollingEnabled: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
+    icon: @Composable() (() -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
     listContent: @Composable() () -> Unit,
-    positiveButton: (@Composable() () -> Unit)? = null,
-    negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null
+    positiveButton: @Composable() (() -> Unit)? = null,
+    negativeButton: @Composable() (() -> Unit)? = null,
+    neutralButton: @Composable() (() -> Unit)? = null
 ) {
     MaterialDialog(
         icon = icon,

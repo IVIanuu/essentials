@@ -21,6 +21,7 @@ import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.graphics.StrokeJoin
 import androidx.ui.graphics.withSave
+import com.ivianuu.essentials.composehelpers.sourceLocation
 import kotlin.math.ceil
 
 /**

@@ -36,11 +36,11 @@ import com.ivianuu.essentials.composehelpers.ambientOf
 
 @Composable
 fun Scaffold(
-    drawerContent: (@Composable() () -> Unit)? = null,
-    topAppBar: (@Composable() () -> Unit)? = null,
-    body: (@Composable() () -> Unit)? = null,
-    bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null,
+    drawerContent: @Composable() (() -> Unit)? = null,
+    topAppBar: @Composable() (() -> Unit)? = null,
+    body: @Composable() (() -> Unit)? = null,
+    bottomBar: @Composable() (() -> Unit)? = null,
+    fab: @Composable() (() -> Unit)? = null,
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
     bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
     applySideSafeArea: Boolean = true
@@ -63,11 +63,11 @@ fun Scaffold(
 @Composable
 fun Scaffold(
     scaffoldState: ScaffoldState,
-    drawerContent: (@Composable() () -> Unit)? = null,
-    topAppBar: (@Composable() () -> Unit)? = null,
-    body: (@Composable() () -> Unit)? = null,
-    bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null
+    drawerContent: @Composable() (() -> Unit)? = null,
+    topAppBar: @Composable() (() -> Unit)? = null,
+    body: @Composable() (() -> Unit)? = null,
+    bottomBar: @Composable() (() -> Unit)? = null,
+    fab: @Composable() (() -> Unit)? = null
 ) {
     // update state
     scaffoldState.hasTopAppBar = topAppBar != null
@@ -161,10 +161,10 @@ val ScaffoldAmbient =
 @Composable
 private fun ScaffoldLayout(
     state: ScaffoldState,
-    topAppBar: (@Composable() () -> Unit)?,
-    body: (@Composable() () -> Unit)?,
-    bottomBar: (@Composable() () -> Unit)?,
-    fab: (@Composable() () -> Unit)?
+    topAppBar: @Composable() (() -> Unit)?,
+    body: @Composable() (() -> Unit)?,
+    bottomBar: @Composable() (() -> Unit)?,
+    fab: @Composable() (() -> Unit)?
 ) {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {

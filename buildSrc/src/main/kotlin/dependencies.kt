@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev441"
+    const val version = "${Build.versionName}-dev443"
 }
 
 object Deps {
@@ -107,7 +107,7 @@ object Deps {
     }
     
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev441"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev443"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
@@ -123,6 +123,7 @@ object Deps {
     object Kotlin {
         private const val version = "1.3.70-SNAPSHOT"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
+        const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"

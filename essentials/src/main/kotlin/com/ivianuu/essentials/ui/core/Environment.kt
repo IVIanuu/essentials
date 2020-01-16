@@ -63,10 +63,11 @@ fun Environment(
                             val uiInitializers = inject<Map<String, UiInitializer>>(name = UiInitializers)
                             uiInitializers.entries
                                 .map { (key, initializer) ->
-                                    { children: @Composable() () -> Unit ->
+                                    val function: @Composable() (@Composable() () -> Unit) -> Unit = { children ->
                                         d { "apply ui initializer $key" }
                                         initializer.apply(children)
                                     }
+                                    function
                                 }
                                 .fold(children) { current, initializer ->
                                     { initializer(current) }

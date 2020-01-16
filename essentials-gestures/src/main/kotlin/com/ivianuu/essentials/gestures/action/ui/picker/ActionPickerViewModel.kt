@@ -91,6 +91,7 @@ sealed class ActionPickerItem {
         override val title: String
             get() = action.title
 
+        @Composable
         override fun icon() {
             ActionIcon(action = action)
         }
@@ -106,6 +107,7 @@ sealed class ActionPickerItem {
         override val title: String
             get() = delegate.title
 
+        @Composable
         override fun icon() {
             Icon(image = delegate.icon)
         }
@@ -120,6 +122,8 @@ sealed class ActionPickerItem {
         override val title: String,
         val getResult: () -> ActionPickerResult?
     ) : ActionPickerItem() {
+
+        @Composable
         override fun icon() {
             Spacer(LayoutSize(24.dp, 24.dp))
         }

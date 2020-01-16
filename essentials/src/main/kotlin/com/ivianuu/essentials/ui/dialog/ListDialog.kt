@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.layout.Row
 
 @Composable
 fun SimpleDialogListItem(
-    leading: (@Composable() () -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
     title: @Composable() () -> Unit,
     onClick: (() -> Unit)? = null
 ) {

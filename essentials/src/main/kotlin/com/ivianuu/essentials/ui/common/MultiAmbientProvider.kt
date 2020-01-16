@@ -27,9 +27,10 @@ fun MultiAmbientProvider(
 ) {
     pairs
         .map { pair ->
-            { children: @Composable() () -> Unit ->
+            val composable: @Composable() (@Composable() () -> Unit) -> Unit = { children ->
                 pair.Provider(children)
             }
+            composable
         }
         .fold(children) { current, ambient ->
             { ambient(current) }

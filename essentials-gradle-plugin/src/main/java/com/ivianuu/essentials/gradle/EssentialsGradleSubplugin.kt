@@ -20,6 +20,7 @@ import com.google.auto.service.AutoService
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.AbstractCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinGradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
@@ -28,7 +29,7 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 @AutoService(KotlinGradleSubplugin::class)
 open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
 
-    override fun isApplicable(project: Project, task: AbstractCompile) =
+    override fun isApplicable(project: Project, task: AbstractCompile): Boolean =
         project.plugins.hasPlugin(EssentialsGradlePlugin::class.java)
 
     override fun apply(
@@ -37,31 +38,8 @@ open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
         javaCompile: AbstractCompile?,
         variantData: Any?,
         androidProjectHandler: Any?,
-        kotlinCompilation: KotlinCompilation<*>?
-    ): List<SubpluginOption> {
-        val sourceSetName = if (variantData != null) {
-            // Lol
-            variantData.javaClass.getMethod("getName").run {
-                isAccessible = true
-                invoke(variantData) as String
-            }
-        } else {
-            if (kotlinCompilation == null) error("In non-Android projects, Kotlin compilation should not be null")
-            kotlinCompilation.compilationName
-        }
-
-        val outputDir = File(project.buildDir, "generated/source/essentials/$sourceSetName/")
-        kotlinCompilation?.allKotlinSourceSets?.forEach { sourceSet ->
-            sourceSet.kotlin.srcDir(outputDir)
-            sourceSet.kotlin.exclude { it.file.startsWith(outputDir) }
-        }
-
-        return listOf(
-            SubpluginOption(
-                "outputDir", outputDir.absolutePath
-            )
-        )
-    }
+        kotlinCompilation: KotlinCompilation<KotlinCommonOptions>?
+    ): List<SubpluginOption> = emptyList()
 
     override fun getCompilerPluginId(): String = "com.ivianuu.essentials"
 

@@ -25,9 +25,7 @@ import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.composehelpers.Unstable
 
-@Unstable
 @Composable
 fun Surface(
     modifier: Modifier = Modifier.None,

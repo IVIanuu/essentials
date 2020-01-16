@@ -39,7 +39,7 @@ import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun Banner(
-    leading: (@Composable() () -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
     content: @Composable() () -> Unit,
     actions: @Composable() () -> Unit
 ) {

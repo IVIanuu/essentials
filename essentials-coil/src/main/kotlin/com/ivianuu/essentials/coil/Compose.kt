@@ -81,17 +81,15 @@ fun Image(
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image?) -> Unit
 ) {
-    call(data, modifier, placeholder, imageLoader, image) {
-        val loadedImage = image(
-            placeholder = placeholder,
-            data = data,
-            imageLoader = imageLoader
-        )
+    val loadedImage = image(
+        placeholder = placeholder,
+        data = data,
+        imageLoader = imageLoader
+    )
 
-        RepaintBoundary {
-            Container(modifier = modifier) {
-                image(loadedImage)
-            }
+    RepaintBoundary {
+        Container(modifier = modifier) {
+            image(loadedImage)
         }
     }
 }
@@ -105,17 +103,15 @@ fun Image(
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image) -> Unit
 ) {
-    call(data, modifier, placeholder, imageLoader, image) {
-        val loadedImage = image(
-            placeholder = placeholder,
-            data = data,
-            imageLoader = imageLoader
-        )
+    val loadedImage = image(
+        placeholder = placeholder,
+        data = data,
+        imageLoader = imageLoader
+    )
 
-        RepaintBoundary {
-            Container(modifier = modifier) {
-                image(loadedImage)
-            }
+    RepaintBoundary {
+        Container(modifier = modifier) {
+            image(loadedImage)
         }
     }
 }

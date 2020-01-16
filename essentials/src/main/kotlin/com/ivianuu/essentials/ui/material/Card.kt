@@ -33,7 +33,7 @@ import com.ivianuu.essentials.composehelpers.current
 data class CardStyle(
     val shape: Shape = RectangleShape,
     val color: Color,
-    val contentColor: Color = guessingContentColorFor(color),
+    val contentColor: Color,
     val border: Border? = null,
     val elevation: Dp = 1.dp
 )

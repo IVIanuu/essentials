@@ -80,9 +80,10 @@ fun opsOf(
 
 object OpacityRouteTransitionType : RouteTransition.Type {
     val Opacity = RouteTransition.Ops.Key<Float>()
+    @Composable
     override fun apply(
         ops: RouteTransition.Ops,
-        children: () -> Unit
+        children: @Composable() () -> Unit
     ) {
         Opacity(opacity = ops[Opacity].singleOrNull() ?: 1f, children = children)
     }
@@ -90,7 +91,8 @@ object OpacityRouteTransitionType : RouteTransition.Type {
 
 object CanvasRouteTransitionType : RouteTransition.Type {
     val Block = RouteTransition.Ops.Key<DrawReceiver.(Canvas, PxSize) -> Unit>()
-    override fun apply(ops: RouteTransition.Ops, children: () -> Unit) {
+    @Composable
+    override fun apply(ops: RouteTransition.Ops, children: @Composable() () -> Unit) {
         Draw(
             children = children,
             onPaint = { canvas, parentSize ->
@@ -102,7 +104,8 @@ object CanvasRouteTransitionType : RouteTransition.Type {
 
 object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()
-    override fun apply(ops: RouteTransition.Ops, children: () -> Unit) {
+    @Composable
+    override fun apply(ops: RouteTransition.Ops, children: @Composable() () -> Unit) {
         WithModifier(modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None, children = children)
     }
 }
@@ -156,9 +159,10 @@ private fun RouteTransitionTypes(
 ) {
     types
         .map { type ->
-            { typeChildren: @Composable() () -> Unit ->
+            val function: @Composable() (@Composable() () -> Unit) -> Unit = { typeChildren ->
                 type.apply(ops) { typeChildren() }
             }
+            function
         }
         .fold(children) { current, type ->
             { type(current) }

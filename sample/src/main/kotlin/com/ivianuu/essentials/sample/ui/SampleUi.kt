@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
@@ -35,6 +36,7 @@ import com.ivianuu.injekt.Module
 
 @Factory
 class SampleUi : AppUi {
+    @Composable
     override fun runApp() {
         ProvideSystemBarStyle(
             SystemBarStyle(
@@ -51,7 +53,8 @@ class SampleUi : AppUi {
 
 @Factory
 class SampleUiInitializer : UiInitializer {
-    override fun apply(children: () -> Unit) {
+    @Composable
+    override fun apply(children: @Composable() () -> Unit) {
         DefaultRouteTransitionAmbient.Provider(
             value = remember { VerticalFadeRouteTransition() }
         ) {

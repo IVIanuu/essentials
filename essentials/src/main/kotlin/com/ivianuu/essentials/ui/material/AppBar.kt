@@ -34,7 +34,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.Unstable
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.composehelpers.current
@@ -72,13 +71,12 @@ fun TopAppBar(title: String) {
     TopAppBar(title = { Text(title) })
 }
 
-@Unstable
 @Composable
 fun TopAppBar(
     style: TopAppBarStyle = TopAppBarStyleAmbient.current ?: DefaultTopAppBarStyle(),
-    title: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
-    actions: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = autoTopAppBarLeadingIcon(),
+    actions: @Composable() (() -> Unit)? = null,
     primary: Boolean = true
 ) {
     Surface(color = style.color, elevation = style.elevation) {
@@ -226,7 +224,7 @@ private val AppBarHeight = 56.dp
 private val DefaultAppBarElevation = 8.dp
 
 @Composable
-private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
+private fun autoTopAppBarLeadingIcon(): @Composable() (() -> Unit)? {
     val scaffold = ScaffoldAmbient.current
     val navigator = NavigatorAmbient.current
     val route = RouteAmbient.current

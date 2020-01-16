@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.composehelpers.vector
+package androidx.compose.plugins.kotlin
 
-internal fun sourceLocation(): Any = 0
+object ComposeFlags {
+    var FRAMED_COMPONENTS = false
+    var FRAMED_MODEL_CLASSES = true
+    var COMPOSER_PARAM = false
+}

@@ -18,7 +18,7 @@ plugins {
     id("com.android.library")
     id("com.github.ben-manes.versions")
     //id("com.ivianuu.injekt")
-    //id("com.ivianuu.essentials")
+    id("com.ivianuu.essentials")
     kotlin("android")
     id("kotlin-android-extensions")
 }

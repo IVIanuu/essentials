@@ -84,10 +84,10 @@ fun PreferenceLayout(
 
 @Composable
 fun PreferenceLayout(
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    trailing: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     ListItem(

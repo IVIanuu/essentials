@@ -163,6 +163,7 @@ private class VectorTree : Component() {
     var viewportWidth: Float = 0.0f
     var viewportHeight: Float = 0.0f
 
+    @Composable
     override fun compose() {
         with(context.composer) {
             startGroup(0) // TODO (njawad) what key should be used here?
@@ -173,7 +174,7 @@ private class VectorTree : Component() {
 }
 
 @PublishedApi
-internal val VectorGroupKey = Object()
+internal val VectorGroupKey = Any()
 
 internal class VectorApplyAdapter : ApplyAdapter<VNode> {
     override fun VNode.start(instance: VNode) {

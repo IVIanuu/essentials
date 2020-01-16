@@ -51,12 +51,12 @@ fun MaterialDialog(
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    content: (@Composable() () -> Unit)? = null,
-    positiveButton: (@Composable() () -> Unit)? = null,
-    negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null
+    icon: @Composable() (() -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    content: @Composable() (() -> Unit)? = null,
+    positiveButton: @Composable() (() -> Unit)? = null,
+    negativeButton: @Composable() (() -> Unit)? = null,
+    neutralButton: @Composable() (() -> Unit)? = null
 ) {
     Dialog {
         DialogBody(
@@ -85,16 +85,16 @@ private fun DialogBody(
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean,
     buttonLayout: AlertDialogButtonLayout,
-    icon: (@Composable() () -> Unit)?,
-    title: (@Composable() () -> Unit)?,
-    content: (@Composable() () -> Unit)?,
-    positiveButton: (@Composable() () -> Unit)?,
-    negativeButton: (@Composable() () -> Unit)?,
-    neutralButton: (@Composable() () -> Unit)?
+    icon: @Composable() (() -> Unit)?,
+    title: @Composable() (() -> Unit)?,
+    content: @Composable() (() -> Unit)?,
+    positiveButton: @Composable() (() -> Unit)?,
+    negativeButton: @Composable() (() -> Unit)?,
+    neutralButton: @Composable() (() -> Unit)?
 ) {
-    val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
+    val header: @Composable() (() -> Unit)? = if (icon != null || title != null) {
         {
-            val styledTitle = title?.let {
+            val styledTitle: @Composable() (() -> Unit)? = title?.let {
                 {
                     CurrentTextStyleProvider(
                         MaterialTheme.typography().h6
@@ -107,7 +107,7 @@ private fun DialogBody(
                 }
             }
 
-            val styledIcon = icon?.let {
+            val styledIcon: @Composable() (() -> Unit)? = icon?.let {
                 {
                     ProvideEmphasis(
                         emphasis = MaterialTheme.emphasisLevels().high,
@@ -135,7 +135,7 @@ private fun DialogBody(
         null
     }
 
-    val finalContent = if (content != null) {
+    val finalContent: @Composable() (() -> Unit)? = if (content != null) {
         {
             CurrentTextStyleProvider(MaterialTheme.typography().subtitle1) {
                 ProvideEmphasis(
@@ -148,7 +148,7 @@ private fun DialogBody(
         null
     }
 
-    val buttons = if (positiveButton != null || negativeButton != null || neutralButton != null) {
+    val buttons: @Composable() (() -> Unit)? = if (positiveButton != null || negativeButton != null || neutralButton != null) {
         {
             DialogButtons(
                 layout = buttonLayout,
@@ -176,9 +176,9 @@ private fun DialogContentLayout(
     showTopDivider: Boolean = false,
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean,
-    header: (@Composable() () -> Unit)?,
-    content: (@Composable() () -> Unit)?,
-    buttons: (@Composable() () -> Unit)?
+    header: @Composable() (() -> Unit)?,
+    content: @Composable() (() -> Unit)?,
+    buttons: @Composable() (() -> Unit)?
 ) {
     val children: @Composable() () -> Unit = {
         if (header != null) {
@@ -292,9 +292,9 @@ private fun DialogContentLayout(
 @Composable
 private fun DialogButtons(
     layout: AlertDialogButtonLayout,
-    positiveButton: (@Composable() () -> Unit)?,
-    negativeButton: (@Composable() () -> Unit)?,
-    neutralButton: (@Composable() () -> Unit)?
+    positiveButton: @Composable() (() -> Unit)?,
+    negativeButton: @Composable() (() -> Unit)?,
+    neutralButton: @Composable() (() -> Unit)?
 ) {
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {

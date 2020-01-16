@@ -31,11 +31,11 @@ fun <T> SingleChoiceListDialog(
     item: @Composable() (T) -> Unit,
     dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    positiveButton: (@Composable() () -> Unit)? = null,
-    negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null
+    icon: @Composable() (() -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    positiveButton: @Composable() (() -> Unit)? = null,
+    negativeButton: @Composable() (() -> Unit)? = null,
+    neutralButton: @Composable() (() -> Unit)? = null
 ) {
     val navigator = NavigatorAmbient.current
 

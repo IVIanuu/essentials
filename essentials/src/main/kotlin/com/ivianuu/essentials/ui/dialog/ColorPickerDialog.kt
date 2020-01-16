@@ -98,8 +98,8 @@ fun ColorPickerDialog(
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
     dismissOnSelection: Boolean = true,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null
+    icon: @Composable() (() -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null
 ) {
     val (currentColor, setCurrentColor) = state { initialColor }
     val (currentPage, setCurrentPage) = state { ColorPickerPage.Colors }
