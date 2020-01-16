@@ -24,5 +24,5 @@ import com.ivianuu.injekt.get
  * Basic app dependencies such as preferences or package manager
  */
 val EsAppModule = Module {
-    factory { get<Context>().packageManager }
+    factory { get<Context>().packageManager!! }
 }

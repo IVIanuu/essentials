@@ -112,7 +112,7 @@ object Deps {
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev87"
+        private const val version = "0.0.1-dev88"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"

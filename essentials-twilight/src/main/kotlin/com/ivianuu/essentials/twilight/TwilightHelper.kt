@@ -51,8 +51,9 @@ class TwilightHelper(
 ) : AppService {
 
     val isDark: Flow<Boolean> = prefs.twilightMode.asFlow()
+        .map { Pair(it, it) }
         .flatMapLatest { mode ->
-            when (mode) {
+            when (mode.first) {
                 TwilightMode.System -> system()
                 TwilightMode.Light -> flowOf(false)
                 TwilightMode.Dark -> flowOf(true)

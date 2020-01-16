@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
+import com.ivianuu.essentials.coroutines.combineNoInline
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.coroutines.collect
 import kotlinx.coroutines.flow.Flow
@@ -54,5 +55,5 @@ private fun List<Dependency<*>>?.asDependencyFlow(): Flow<Boolean> {
         }
             .toTypedArray()
 
-    return combine(*flows) { values -> values.all { it } }
+    return combineNoInline(*flows) { values -> values.all { it } }
 }
