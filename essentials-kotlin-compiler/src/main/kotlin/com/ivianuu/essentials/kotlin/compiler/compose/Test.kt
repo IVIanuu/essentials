@@ -65,15 +65,7 @@ fun Node.markSeen(step: Step) {
 
 fun Node.seenBy(step: Step): Boolean = step in getSeenBy()
 
-val ComposerExpr = Node.Expr.BinaryOp(
-    lhs = Node.Expr.BinaryOp(
-        lhs = Node.Expr.Name(name = "androidx"),
-        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-        rhs = Node.Expr.Name(name = "compose")
-    ),
-    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-    rhs = Node.Expr.Name(name = "composer")
-)
+val CompositionExpr = helperExpr(Node.Expr.Name(name = "composition"))
 
 fun test(
     trace: BindingTrace,
@@ -546,7 +538,7 @@ private fun insertRestartScope(
 
         val startRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = ComposerExpr,
+                lhs = CompositionExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "startRestartGroup"),
@@ -572,7 +564,7 @@ private fun insertRestartScope(
         val endRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
-                    lhs = ComposerExpr,
+                    lhs = CompositionExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "endRestartGroup"),
@@ -777,7 +769,7 @@ private fun wrapComposableCalls(
                 lhs = Node.Expr.Name(name = "key_$callKeyIndex"),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.ASSN),
                 rhs = Node.Expr.BinaryOp(
-                    lhs = ComposerExpr,
+                    lhs = CompositionExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "joinKey"),
@@ -825,8 +817,10 @@ private fun wrapComposableCalls(
         }
 
         fun composerExprStmt() = Node.Stmt.Expr(
-            expr = helperExpr(
-                Node.Expr.Call(
+            Node.Expr.BinaryOp(
+                lhs = CompositionExpr,
+                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+                rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "expr"),
                     typeArgs = emptyList(),
                     args = listOf(
@@ -853,7 +847,7 @@ private fun wrapComposableCalls(
 
         fun composerCallStmt() = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = ComposerExpr,
+                lhs = CompositionExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "call"),

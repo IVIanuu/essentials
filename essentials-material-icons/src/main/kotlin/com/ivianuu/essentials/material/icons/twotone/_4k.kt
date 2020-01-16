@@ -18,8 +18,8 @@ package com.ivianuu.essentials.material.icons.twotone
 
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.composehelpers.vector.VectorAsset
 import com.ivianuu.essentials.material.icons.path
-import com.ivianuu.essentials.ui.vector.VectorAsset
 
 val Icons.TwoTone._4k: VectorAsset by lazyMaterialIcon {
     path(fillAlpha = 0.3f) {

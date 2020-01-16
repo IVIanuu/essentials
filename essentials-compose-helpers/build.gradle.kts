@@ -31,6 +31,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    api(Deps.Kotlin.stdlib)
+
     api(Deps.AndroidX.Ui.androidText)
     api(Deps.AndroidX.Ui.androidView)
     api(Deps.AndroidX.Ui.androidViewNonIr)

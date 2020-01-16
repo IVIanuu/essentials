@@ -108,8 +108,6 @@ object Deps {
     
     const val essentialsGradlePlugin =
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev441"
-    const val essentialsMaterialIcons =
-        "com.ivianuu.essentials:essentials-material-icons:0.0.1-dev440"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
