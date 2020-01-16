@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.box
 
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.current
@@ -41,6 +42,7 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
     return wrapper
 }
 
+@Stable
 class BoxWrapper<T> internal constructor(
     value: T,
     private val setter: (T) -> Unit

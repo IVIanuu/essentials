@@ -23,8 +23,8 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
 val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(
