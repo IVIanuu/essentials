@@ -26,6 +26,7 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.coroutines.shareIn
+import com.ivianuu.essentials.ui.common.holderOf
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -51,9 +52,9 @@ class TwilightHelper(
 ) : AppService {
 
     val isDark: Flow<Boolean> = prefs.twilightMode.asFlow()
-        .map { Pair(it, it) }
+        .map { holderOf(it) } // todo ir
         .flatMapLatest { mode ->
-            when (mode.first) {
+            when (mode.value) {
                 TwilightMode.System -> system()
                 TwilightMode.Light -> flowOf(false)
                 TwilightMode.Dark -> flowOf(true)
