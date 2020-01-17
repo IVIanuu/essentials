@@ -252,6 +252,7 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
         location: LookupLocation
     ): Collection<FunctionDescriptor> {
         if (callResolver == null) return candidates
+
         val element = resolutionContext.call.callElement as KtExpression
         val project = element.project
 

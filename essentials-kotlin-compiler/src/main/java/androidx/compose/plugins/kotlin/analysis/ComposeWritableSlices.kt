@@ -2,7 +2,6 @@ package androidx.compose.plugins.kotlin.analysis
 
 import androidx.compose.plugins.kotlin.ComposableAnnotationChecker
 import androidx.compose.plugins.kotlin.ComposableEmitDescriptor
-import androidx.compose.plugins.kotlin.ComposableEmitMetadata
 import androidx.compose.plugins.kotlin.ComposableFunctionDescriptor
 import androidx.compose.plugins.kotlin.ComposablePropertyDescriptor
 import androidx.compose.plugins.kotlin.ComposerMetadata
@@ -14,10 +13,10 @@ import org.jetbrains.kotlin.ir.declarations.IrAttributeContainer
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.util.slicedMap.BasicWritableSlice
 import org.jetbrains.kotlin.util.slicedMap.RewritePolicy
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice
+import org.jetbrains.kotlin.types.KotlinType
 
 object ComposeWritableSlices {
     val COMPOSABLE_ANALYSIS: WritableSlice<KtElement, ComposableAnnotationChecker.Composability> =
@@ -48,12 +47,6 @@ object ComposeWritableSlices {
         BasicWritableSlice(RewritePolicy.DO_NOTHING)
     val COMPOSABLE_PROPERTY_DESCRIPTOR: WritableSlice<IrAttributeContainer,
             ComposablePropertyDescriptor> =
-        BasicWritableSlice(RewritePolicy.DO_NOTHING)
-    val COMPOSER_IR_METADATA: WritableSlice<IrAttributeContainer, ComposerMetadata> =
-        BasicWritableSlice(RewritePolicy.DO_NOTHING)
-    val COMPOSABLE_EMIT_METADATA: WritableSlice<IrAttributeContainer, ComposableEmitMetadata> =
-        BasicWritableSlice(RewritePolicy.DO_NOTHING)
-    val IS_COMPOSABLE_CALL: WritableSlice<IrAttributeContainer, Boolean> =
         BasicWritableSlice(RewritePolicy.DO_NOTHING)
 }
 

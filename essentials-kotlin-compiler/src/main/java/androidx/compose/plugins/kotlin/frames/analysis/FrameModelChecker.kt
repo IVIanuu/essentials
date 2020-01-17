@@ -1,8 +1,5 @@
 package androidx.compose.plugins.kotlin.frames.analysis
 
-import androidx.compose.plugins.kotlin.ComposeUtils
-import androidx.compose.plugins.kotlin.analysis.ComposeDefaultErrorMessages
-import androidx.compose.plugins.kotlin.analysis.ComposeErrors
 import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.useInstance
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -11,10 +8,13 @@ import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.diagnostics.reportFromPlugin
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.platform.TargetPlatform
-import org.jetbrains.kotlin.platform.jvm.isJvm
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
+import androidx.compose.plugins.kotlin.ComposeUtils
+import androidx.compose.plugins.kotlin.analysis.ComposeDefaultErrorMessages
+import androidx.compose.plugins.kotlin.analysis.ComposeErrors
+import org.jetbrains.kotlin.platform.TargetPlatform
+import org.jetbrains.kotlin.platform.jvm.isJvm
 import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny

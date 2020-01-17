@@ -29,37 +29,27 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.replace
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
-interface ComposableEmitMetadata {
-    val composerMetadata: ComposerMetadata
-    val emitCall: ResolvedCall<*>
-    val hasChildren: Boolean
-    val pivotals: List<String>
-    val ctorCall: ResolvedCall<*>
-    val ctorParams: List<String>
-    val validations: List<ValidatedAssignment>
-}
-
 class ComposableEmitDescriptor(
     val composer: ResolvedCall<*>,
-    override val composerMetadata: ComposerMetadata,
-    override val emitCall: ResolvedCall<*>,
-    override val hasChildren: Boolean,
-    override val pivotals: List<String>,
-    override val ctorCall: ResolvedCall<*>,
-    override val ctorParams: List<String>,
-    override val validations: List<ValidatedAssignment>,
+    val emitCall: ResolvedCall<*>,
+    val hasChildren: Boolean,
+    val pivotals: List<String>,
+    val ctorCall: ResolvedCall<*>,
+    val ctorParams: List<String>,
+    val validations: List<ValidatedAssignment>,
     containingDeclaration: DeclarationDescriptor,
     original: SimpleFunctionDescriptor?,
     annotations: Annotations,
     name: Name,
     kind: CallableMemberDescriptor.Kind,
     source: SourceElement
-) : ComposableEmitMetadata, SimpleFunctionDescriptorImpl(
+) : SimpleFunctionDescriptorImpl(
     containingDeclaration,
     original,
     annotations,
@@ -77,7 +67,6 @@ class ComposableEmitDescriptor(
             ctorParams: List<String>,
             validations: List<ValidatedAssignment>,
             composerCall: ResolvedCall<*>,
-            composerMetadata: ComposerMetadata,
             name: Name
         ): ComposableEmitDescriptor {
 
@@ -89,7 +78,6 @@ class ComposableEmitDescriptor(
 
             val descriptor = ComposableEmitDescriptor(
                 composerCall,
-                composerMetadata,
                 emitCall,
                 hasChildren,
                 pivotals,
