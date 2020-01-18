@@ -55,6 +55,7 @@ import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.scopes.ResolutionScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.PackageQualifier
 import org.jetbrains.kotlin.types.KotlinType
+import java.util.concurrent.Callable
 
 typealias Candidate = NewResolutionOldInference.MyCandidate
 
@@ -143,10 +144,9 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
         kind: NewResolutionOldInference.ResolutionKind,
         tracing: TracingStrategy
     ): Collection<Candidate> {
-        if (callResolver == null) return candidates
-
         val element = context.call.callElement as KtExpression
         val project = element.project
+        if (callResolver == null) throw IllegalArgumentException("Call resolver must be non-null")
 
         if (candidates.isEmpty()) return candidates
         val bindingContext = context.trace.bindingContext
@@ -251,10 +251,9 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
         name: Name,
         location: LookupLocation
     ): Collection<FunctionDescriptor> {
-        if (callResolver == null) return candidates
-
         val element = resolutionContext.call.callElement as KtExpression
         val project = element.project
+        if (callResolver == null) throw IllegalArgumentException("Call resolver must be non-null")
 
         if (candidates.isEmpty()) return candidates
         val bindingContext = resolutionContext.trace.bindingContext

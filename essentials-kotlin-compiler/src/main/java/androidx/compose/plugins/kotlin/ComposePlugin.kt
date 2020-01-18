@@ -41,8 +41,7 @@ class ComposeCommandLineProcessor : CommandLineProcessor {
         val PLUGIN_ID = "androidx.compose.plugins.kotlin"
     }
 
-    override val pluginId =
-        PLUGIN_ID
+    override val pluginId = PLUGIN_ID
     override val pluginOptions = emptyList<CliOption>()
 
     override fun processOption(

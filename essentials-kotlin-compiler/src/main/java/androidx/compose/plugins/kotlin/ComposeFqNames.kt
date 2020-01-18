@@ -34,9 +34,11 @@ import org.jetbrains.kotlin.types.typeUtil.replaceAnnotations
 
 object ComposeFqNames {
     val Composable = ComposeUtils.composeFqName("Composable")
+    val CurrentComposerIntrinsic = ComposeUtils.composeFqName("<get-currentComposerIntrinsic>")
     val Pivotal = ComposeUtils.composeFqName("Pivotal")
     val StableMarker = ComposeUtils.composeFqName("StableMarker")
     val HiddenAttribute = ComposeUtils.composeFqName("HiddenAttribute")
+    val Composer = ComposeUtils.composeFqName("Composer")
     val Package = FqName.fromSegments(listOf("androidx", "compose"))
     val Function0 = FqName.fromSegments(listOf("kotlin", "jvm", "functions", "Function0"))
     fun makeComposableAnnotation(module: ModuleDescriptor): AnnotationDescriptor =

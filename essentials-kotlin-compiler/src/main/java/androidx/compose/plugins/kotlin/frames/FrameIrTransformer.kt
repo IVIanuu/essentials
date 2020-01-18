@@ -109,12 +109,9 @@ import org.jetbrains.kotlin.psi2ir.generators.GeneratorContext
 import androidx.compose.plugins.kotlin.frames.analysis.FrameMetadata
 import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices
 import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
-import org.jetbrains.kotlin.ir.descriptors.WrappedTypeParameterDescriptor
 import org.jetbrains.kotlin.ir.expressions.IrFieldAccessExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.symbols.IrFieldSymbol
-import org.jetbrains.kotlin.ir.util.endOffset
-import org.jetbrains.kotlin.ir.util.startOffset
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -428,8 +425,7 @@ class FrameIrTransformer(val context: JvmBackendContext) :
 
                 +syntheticCall(
                     unitType!!,
-                    symbolTable.referenceSimpleFunction(createdDescriptor),
-                    createdDescriptor
+                    symbolTable.referenceSimpleFunction(createdDescriptor)
                 ).apply {
                     putValueArgument(0, thisValue())
                 }
@@ -480,8 +476,7 @@ class FrameIrTransformer(val context: JvmBackendContext) :
                                         toRecord(
                                             syntheticCall(
                                                 recordClass!!.defaultType,
-                                                readableSymbol,
-                                                readableDescriptor
+                                                readableSymbol
                                             ).also {
                                                 it.putValueArgument(
                                                     0,
@@ -524,8 +519,7 @@ class FrameIrTransformer(val context: JvmBackendContext) :
                                     irRecordField,
                                     toRecord(syntheticCall(
                                         recordClass!!.defaultType,
-                                        writableSymbol,
-                                        writableDescriptor
+                                        writableSymbol
                                     ).also {
                                         it.putValueArgument(
                                             0, recordGetter(setterThisSymbol, setterThisType)
@@ -765,16 +759,12 @@ class IrClassBuilder(
 
         assert(typeParameters.isEmpty())
         descriptor.typeParameters.mapTo(typeParameters) {
-            val descriptor = WrappedTypeParameterDescriptor(it.annotations, it.source)
-            val symbol = IrTypeParameterSymbolImpl(descriptor)
             IrTypeParameterImpl(
                 UNDEFINED_OFFSET, UNDEFINED_OFFSET,
                 IrDeclarationOrigin.DEFINED,
-                symbol
-            ).also {
-                descriptor.bind(it)
-                symbol.bind(it)
-                it.parent = this@createParameterDeclarations
+                IrTypeParameterSymbolImpl(it)
+            ).also { typeParameter ->
+                typeParameter.parent = this
             }
         }
     }
@@ -849,8 +839,7 @@ class IrClassBuilder(
 
     fun syntheticCall(
         kotlinType: IrType,
-        symbol: IrFunctionSymbol,
-        descriptor: FunctionDescriptor
+        symbol: IrFunctionSymbol
     ) =
         IrCallImpl(
             UNDEFINED_OFFSET,
@@ -986,6 +975,9 @@ class FrameRecordClassDescriptor(
     mySuperTypes: Collection<KotlinType>,
     bindingContext: BindingContext
 ) : ClassDescriptor {
+    override fun getDefaultFunctionTypeForSamInterface(): SimpleType? = null
+    override fun isDefinitelyNotSamInterface(): Boolean = true
+    override fun isFun(): Boolean = false
     override fun getKind() = ClassKind.CLASS
     override fun getModality() = Modality.FINAL
     override fun getName() = myName

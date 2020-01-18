@@ -163,7 +163,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
         if (descriptor is SimpleFunctionDescriptor &&
             // Lambdas that make are not lowered earlier should be ignored.
             // All composable lambdas are already lowered to a class with an invoke() method.
-            declaration.origin != IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA/* && declaration.origin != IrDeclarationOrigin.LOCAL_FUNCTION_NO_CLOSURE*/) { // todo
+            declaration.origin != IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA) {
             val composerResolvedCall =
                 bindingContext.get(ComposeWritableSlices.RESTART_COMPOSER, descriptor)
 
@@ -222,111 +222,109 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                             // If isUnitInvoke() returns true then dispatchReceiverParameter is not
                             // null.
                             irBuilder.irGet(declaration.dispatchReceiverParameter!!)
-                        } else { outerBuilder ->
-                            // Create self-invoke lambda
-                            val blockParameterDescriptor =
-                                updateScopeDescriptor.valueParameters.singleOrNull()
-                                    ?: error("expected a single block parameter for updateScope")
-                            val blockParameterType = blockParameterDescriptor.type
-                            val selfSymbol = declaration.symbol
+                    } else { outerBuilder ->
+                        // Create self-invoke lambda
+                        val blockParameterDescriptor =
+                            updateScopeDescriptor.valueParameters.singleOrNull()
+                                ?: error("expected a single block parameter for updateScope")
+                        val blockParameterType = blockParameterDescriptor.type
+                        val selfSymbol = declaration.symbol
 
-                            val lambdaDescriptor = AnonymousFunctionDescriptor(
-                                declaration.descriptor,
-                                Annotations.EMPTY,
-                                CallableMemberDescriptor.Kind.DECLARATION,
-                                SourceElement.NO_SOURCE,
-                                false
-                            ).apply {
-                                initialize(
-                                    null,
-                                    null,
-                                    emptyList(),
-                                    emptyList(),
-                                    blockParameterType,
-                                    Modality.FINAL,
-                                    Visibilities.LOCAL
-                                )
-                            }
+                        val lambdaDescriptor = AnonymousFunctionDescriptor(
+                            declaration.descriptor,
+                            Annotations.EMPTY,
+                            CallableMemberDescriptor.Kind.DECLARATION,
+                            SourceElement.NO_SOURCE,
+                            false
+                        ).apply {
+                            initialize(
+                                null,
+                                null,
+                                emptyList(),
+                                emptyList(),
+                                blockParameterType,
+                                Modality.FINAL,
+                                Visibilities.LOCAL
+                            )
+                        }
 
-                            val symbol = IrSimpleFunctionSymbolImpl(lambdaDescriptor)
-                            val fn = IrFunctionImpl(
-                                UNDEFINED_OFFSET, UNDEFINED_OFFSET,
-                                IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA,
-                                symbol,
-                                context.irBuiltIns.unitType
-                            ).also {
-                                symbol.bind(it)
-                                it.parent = declaration
-                                val localIrBuilder = context.createIrBuilder(it.symbol)
-                                it.body = localIrBuilder.irBlockBody {
-                                    // Call the function again with the same parameters
-                                    +irReturn(irCall(selfSymbol).apply {
-                                        descriptor.valueParameters.forEachIndexed {
-                                                index, valueParameter ->
-                                            val value = declaration.valueParameters[index].symbol
-                                            putValueArgument(
-                                                index, IrGetValueImpl(
-                                                    UNDEFINED_OFFSET,
-                                                    UNDEFINED_OFFSET,
-                                                    valueParameter.type.toIrType(),
-                                                    value
-                                                )
+                        val fn = IrFunctionImpl(
+                            UNDEFINED_OFFSET, UNDEFINED_OFFSET,
+                            IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA,
+                            IrSimpleFunctionSymbolImpl(lambdaDescriptor),
+                            context.irBuiltIns.unitType
+                        ).also {
+                            it.parent = declaration
+                            val localIrBuilder = context.createIrBuilder(it.symbol)
+                            it.body = localIrBuilder.irBlockBody {
+                                // Call the function again with the same parameters
+                                +irReturn(irCall(selfSymbol).apply {
+                                    descriptor.valueParameters.forEachIndexed {
+                                            index, valueParameter ->
+                                        val value = declaration.valueParameters[index].symbol
+                                        putValueArgument(
+                                            index, IrGetValueImpl(
+                                                UNDEFINED_OFFSET,
+                                                UNDEFINED_OFFSET,
+                                                valueParameter.type.toIrType(),
+                                                value
                                             )
-                                        }
-                                        descriptor.dispatchReceiverParameter?.let {
-                                                receiverDescriptor ->
-                                            // Ensure we get the correct type by trying to avoid
-                                            // going through a KotlinType if possible.
-                                            val receiverType = (receiverDescriptor as?
-                                                    WrappedReceiverParameterDescriptor)?.owner?.type
+                                        )
+                                    }
+                                    descriptor.dispatchReceiverParameter?.let {
+                                            receiverDescriptor ->
+                                        // Ensure we get the correct type by trying to avoid
+                                        // going through a KotlinType if possible.
+                                        val receiverType = (receiverDescriptor as?
+                                                WrappedReceiverParameterDescriptor)?.owner?.type
                                                 ?: receiverDescriptor.type.toIrType()
-                                            val receiver = irGet(
-                                                receiverType,
-                                                declaration.dispatchReceiverParameter?.symbol
-                                                    ?: error(
-                                                        "Expected dispatch receiver on declaration"
-                                                    )
-                                            )
+                                        val receiver = irGet(
+                                            receiverType,
+                                            declaration.dispatchReceiverParameter?.symbol
+                                                ?: error(
+                                                    "Expected dispatch receiver on declaration"
+                                                )
+                                        )
 
-                                            // Save the dispatch receiver into a temporary created in
-                                            // the outer scope because direct references to the
-                                            // receiver sometimes cause an invalid name, "$<this>", to
-                                            // be generated.
-                                            val tmp = outerBuilder.irTemporary(
-                                                value = receiver,
-                                                nameHint = "rcvr",
-                                                irType = receiverType
-                                            )
-                                            dispatchReceiver = irGet(tmp)
-                                        }
-                                        descriptor.extensionReceiverParameter?.let {
-                                                receiverDescriptor ->
-                                            extensionReceiver = irGet(
-                                                receiverDescriptor.type.toIrType(),
-                                                declaration.extensionReceiverParameter?.symbol
-                                                    ?: error(
-                                                        "Expected extension receiver on declaration"
-                                                    )
-                                            )
-                                        }
-                                        descriptor.typeParameters.forEachIndexed { index, descriptor ->
-                                            putTypeArgument(index, descriptor.defaultType.toIrType())
-                                        }
-                                    })
-                                }
-                            }
-                            irBuilder.irBlock(origin = IrStatementOrigin.LAMBDA) {
-                                +fn
-                                +IrFunctionReferenceImpl(
-                                    UNDEFINED_OFFSET,
-                                    UNDEFINED_OFFSET,
-                                    blockParameterType.toIrType(),
-                                    fn.symbol,
-                                    0,
-                                    IrStatementOrigin.LAMBDA
-                                )
+                                        // Save the dispatch receiver into a temporary created in
+                                        // the outer scope because direct references to the
+                                        // receiver sometimes cause an invalid name, "$<this>", to
+                                        // be generated.
+                                        val tmp = outerBuilder.irTemporary(
+                                            value = receiver,
+                                            nameHint = "rcvr",
+                                            irType = receiverType
+                                        )
+                                        dispatchReceiver = irGet(tmp)
+                                    }
+                                    descriptor.extensionReceiverParameter?.let {
+                                            receiverDescriptor ->
+                                        extensionReceiver = irGet(
+                                            receiverDescriptor.type.toIrType(),
+                                            declaration.extensionReceiverParameter?.symbol
+                                                ?: error(
+                                                    "Expected extension receiver on declaration"
+                                                )
+                                        )
+                                    }
+                                    descriptor.typeParameters.forEachIndexed { index, descriptor ->
+                                        putTypeArgument(index, descriptor.defaultType.toIrType())
+                                    }
+                                })
                             }
                         }
+                        irBuilder.irBlock(origin = IrStatementOrigin.LAMBDA) {
+                            +fn
+                            +IrFunctionReferenceImpl(
+                                UNDEFINED_OFFSET,
+                                UNDEFINED_OFFSET,
+                                blockParameterType.toIrType(),
+                                fn.symbol,
+                                0,
+                                IrStatementOrigin.LAMBDA
+                            )
+                        }
+                    }
 
                     val endRestartGroupCallBlock = irBuilder.irBlock(
                         UNDEFINED_OFFSET,
@@ -458,7 +456,6 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                     IrSimpleFunctionSymbolImpl(lambdaDescriptor),
                     context.irBuiltIns.unitType
                 ).also { fn ->
-                    fn.symbol.bind(fn)
                     fn.body = declaration.body.apply {
                         // Move the target for the returns to avoid introducing a non-local return.
                         // Update declaration parent that point to the old function to the new
@@ -565,9 +562,9 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
         val composability =
             ComposableAnnotationChecker()
                 .analyze(
-                    tmpTrace,
-                    declaration.descriptor
-                )
+                tmpTrace,
+                declaration.descriptor
+            )
         return when (composability) {
             ComposableAnnotationChecker.Composability.NOT_COMPOSABLE -> false
             ComposableAnnotationChecker.Composability.MARKED -> true

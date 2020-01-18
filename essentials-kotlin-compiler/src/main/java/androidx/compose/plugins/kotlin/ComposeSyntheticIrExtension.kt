@@ -16,15 +16,23 @@
 
 package androidx.compose.plugins.kotlin
 
+import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_EMIT_DESCRIPTOR
+import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_EMIT_METADATA
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_FUNCTION_DESCRIPTOR
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_PROPERTY_DESCRIPTOR
+import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSER_IR_METADATA
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
+import org.jetbrains.kotlin.ir.IrStatement
+import org.jetbrains.kotlin.ir.expressions.IrBlock
+import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.IrStatementOriginImpl
+import org.jetbrains.kotlin.ir.expressions.IrTypeOperator
+import org.jetbrains.kotlin.ir.expressions.IrTypeOperatorCall
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockImpl
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -84,6 +92,40 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
         statementGenerator: StatementGenerator,
         element: KtCallExpression
     ): IrExpression? {
+        if (ComposeFlags.COMPOSER_PARAM) {
+            // TODO(lmr): Ideally, we can get rid of this logic here by figuring out an
+            //  alternative method to getting the composer metadata for each composable
+            //  invocation from inside the IR transforms. For now, this unblocks us, but it would
+            //  be nice to get rid of this extension point.
+            val resolvedCall = statementGenerator.getResolvedCall(element) ?: return null
+
+            return when (val descriptor = resolvedCall.candidateDescriptor) {
+                is ComposableFunctionDescriptor -> statementGenerator
+                    .visitCallExpressionWithoutInterception(element)
+                    .also { expr ->
+                        statementGenerator.context.irTrace.record(
+                            COMPOSER_IR_METADATA,
+                            irCallFrom(expr),
+                            descriptor.composerMetadata
+                        )
+                    }
+                is ComposableEmitDescriptor -> statementGenerator
+                    .visitCallExpressionWithoutInterception(element)
+                    .also { expr ->
+                        statementGenerator.context.irTrace.record(
+                            COMPOSER_IR_METADATA,
+                            irCallFrom(expr),
+                            descriptor.composerMetadata
+                        )
+                        statementGenerator.context.irTrace.record(
+                            COMPOSABLE_EMIT_METADATA,
+                            irCallFrom(expr),
+                            descriptor
+                        )
+                    }
+                else -> null
+            }
+        }
         val resolvedCall = statementGenerator.getResolvedCall(element)
             ?: return ErrorExpressionGenerator(statementGenerator).generateErrorCall(element)
 
@@ -113,6 +155,31 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
         statementGenerator: StatementGenerator,
         element: KtSimpleNameExpression
     ): IrExpression? {
+        if (ComposeFlags.COMPOSER_PARAM) {
+            // TODO(lmr): Ideally, we can get rid of this logic here by figuring out an
+            //  alternative method to getting the composer metadata for each composable
+            //  invocation from inside the IR transforms. For now, this unblocks us, but it would
+            //  be nice to get rid of this extension point.
+            val resolvedCall = statementGenerator.getResolvedCall(element) ?: return null
+            val descriptor = resolvedCall.candidateDescriptor
+            return when (descriptor) {
+                is ComposablePropertyDescriptor ->
+                    CallGenerator(statementGenerator).generateValueReference(
+                        element.startOffsetSkippingComments,
+                        element.endOffset,
+                        descriptor,
+                        resolvedCall,
+                        null
+                    ).also { expr ->
+                        statementGenerator.context.irTrace.record(
+                            COMPOSER_IR_METADATA,
+                            irCallFrom(expr),
+                            descriptor.composerMetadata
+                        )
+                    }
+                else -> null
+            }
+        }
         val resolvedCall = statementGenerator.getResolvedCall(element)
             ?: return super.visitSimpleNameExpression(statementGenerator, element)
 
@@ -126,6 +193,23 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
         }
 
         return super.visitSimpleNameExpression(statementGenerator, element)
+    }
+
+    fun irCallFrom(expr: IrStatement): IrExpression {
+        return when (expr) {
+            is IrCall -> expr
+            is IrTypeOperatorCall -> when (expr.operator) {
+                IrTypeOperator.IMPLICIT_CAST -> irCallFrom(expr.argument)
+                IrTypeOperator.IMPLICIT_COERCION_TO_UNIT -> irCallFrom(expr.argument)
+                else -> error("Unhandled IrTypeOperatorCall: ${expr.operator}")
+            }
+            is IrBlock -> when (expr.origin) {
+                IrStatementOrigin.ARGUMENTS_REORDERING_FOR_CALL ->
+                    irCallFrom(expr.statements.last())
+                else -> error("Unhandled IrBlock origin: ${expr.origin}")
+            }
+            else -> error("Unhandled IrExpression: ${expr::class.java.simpleName}")
+        }
     }
 
     private fun StatementGenerator.visitEmitCall(
