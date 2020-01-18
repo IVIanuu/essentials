@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.ipx
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.ipx
 
 // todo improve api
 

@@ -20,19 +20,19 @@ import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.remember
 import androidx.ui.core.Constraints
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.dp
-import androidx.ui.core.looseMin
-import androidx.ui.layout.LayoutExpanded
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
-import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.looseMin
 
 @Composable
 fun Scaffold(
@@ -119,7 +119,7 @@ fun Scaffold(
         }
 
         SafeArea(
-            modifier = LayoutExpanded,
+            modifier = LayoutSize.Fill,
             left = scaffoldState.applySideSafeArea,
             top = false,
             right = scaffoldState.applySideSafeArea,

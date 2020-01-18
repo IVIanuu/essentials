@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
-import androidx.ui.core.dp
-import androidx.ui.core.max
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
+import androidx.ui.unit.Dp
+import androidx.ui.unit.dp
+import androidx.ui.unit.max
 import com.ivianuu.essentials.ui.core.WindowInsets
 import com.ivianuu.essentials.ui.core.WindowInsetsProvider
 import com.ivianuu.essentials.ui.core.ambientWindowInsets

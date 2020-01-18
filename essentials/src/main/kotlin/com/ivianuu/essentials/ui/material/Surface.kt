@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
-import androidx.ui.core.dp
-import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.Dp
+import androidx.ui.unit.dp
 
 @Composable
 fun Surface(

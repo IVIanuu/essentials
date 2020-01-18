@@ -19,23 +19,22 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
-import androidx.ui.core.dp
-import androidx.ui.core.ipx
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -305,7 +304,7 @@ private fun DialogButtons(
                 padding = EdgeInsets(all = 8.dp)
             ) {
                 Row(
-                    modifier = LayoutExpandedWidth,
+                    modifier = LayoutWidth.Fill,
                     mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {

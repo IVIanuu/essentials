@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.state
-import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment

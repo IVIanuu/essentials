@@ -42,7 +42,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
         object Compose {
-            private const val version = "0.0.1-dev15"
+            private const val version = "0.0.1-dev18"
             const val runtime = "androidx.compose:compose-runtime:$version"
         }
 
@@ -60,7 +60,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev15"
+            private const val version = "0.0.1-dev18"
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"

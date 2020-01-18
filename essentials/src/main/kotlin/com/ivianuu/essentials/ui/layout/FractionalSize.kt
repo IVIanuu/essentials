@@ -19,10 +19,10 @@ package com.ivianuu.essentials.ui.layout
 import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
-import androidx.ui.core.DensityScope
-import androidx.ui.core.IntPxPosition
-import androidx.ui.core.IntPxSize
 import androidx.ui.core.LayoutModifier
+import androidx.ui.unit.DensityScope
+import androidx.ui.unit.IntPxPosition
+import androidx.ui.unit.IntPxSize
 
 @Immutable
 data class LayoutFractionalSize(

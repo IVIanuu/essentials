@@ -23,8 +23,6 @@ import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.Size
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.border.Border
@@ -32,11 +30,9 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutAlign
-import androidx.ui.layout.LayoutExpanded
-import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
@@ -44,10 +40,12 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
+import androidx.ui.unit.Size
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -229,7 +227,7 @@ private fun ColorGridItem(
 ) {
     BaseColorGridItem(onClick = onClick) {
         Surface(
-            modifier = LayoutExpanded,
+            modifier = LayoutSize.Fill,
             color = color,
             shape = RoundedCornerShape(50),
             border = Border(
@@ -316,7 +314,7 @@ private fun ColorEditorHeader(
         Surface(color = color) {
             WithModifier(
                 modifier = LayoutHeight(72.dp) +
-                        LayoutExpandedWidth + LayoutPadding(all = 8.dp)
+                        LayoutWidth.Fill + LayoutPadding(all = 8.dp)
             ) {
                 Center {
                     Row(
@@ -381,7 +379,7 @@ private fun ColorComponentItem(
     value: Float,
     onChanged: (Float) -> Unit
 ) {
-    WithModifier(modifier = LayoutHeight(48.dp) + LayoutExpandedWidth) {
+    WithModifier(modifier = LayoutHeight(48.dp) + LayoutWidth.Fill) {
         Row(crossAxisAlignment = CrossAxisAlignment.Center) {
             Text(
                 text = component.title,
@@ -409,7 +407,7 @@ private fun ColorComponentItem(
 
             Text(
                 text = (255 * value).toInt().toString(),
-                modifier = LayoutMinWidth(56.dp) + LayoutInflexible,
+                modifier = LayoutWidth.Min(56.dp) + LayoutInflexible,
                 style = MaterialTheme.typography().subtitle1
             )
         }

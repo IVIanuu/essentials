@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -29,6 +28,7 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette

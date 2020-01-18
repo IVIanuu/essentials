@@ -22,7 +22,7 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.PxPosition
+import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.ui.common.framed
 
 @Composable

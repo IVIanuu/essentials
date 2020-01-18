@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.PxPosition
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.PxPosition
 
 @Composable
 fun WithModifier(

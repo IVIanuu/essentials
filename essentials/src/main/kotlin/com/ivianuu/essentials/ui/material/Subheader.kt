@@ -20,16 +20,16 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.dp
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
-import com.ivianuu.essentials.ui.core.Text
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.Text
 
 @Immutable
 data class SubheaderStyle(

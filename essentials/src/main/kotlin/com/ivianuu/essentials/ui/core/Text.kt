@@ -19,8 +19,6 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.Composable
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
-import androidx.ui.core.PxPosition
-import androidx.ui.core.TextSpanScope
 import androidx.ui.core.currentTextStyle
 import androidx.ui.core.selection.Selectable
 import androidx.ui.core.selection.Selection
@@ -30,31 +28,10 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
 import androidx.ui.text.style.TextOverflow
+import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.composehelpers.current
 
 // todo remove once supported by original
-
-@Composable
-fun Text(
-    modifier: Modifier = Modifier.None,
-    style: TextStyle = currentTextStyle(),
-    softWrap: Boolean = DefaultSoftWrap,
-    overflow: TextOverflow = DefaultOverflow,
-    maxLines: Int = DefaultMaxLines,
-    selectable: Boolean = false,
-    child: @Composable TextSpanScope.() -> Unit
-) {
-    ToggleableSelectable(selectable = selectable) {
-        androidx.ui.core.Text(
-            child = child,
-            modifier = modifier,
-            style = applyContentColor(style),
-            softWrap = softWrap,
-            overflow = overflow,
-            maxLines = maxLines
-        )
-    }
-}
 
 @Composable
 fun Text(

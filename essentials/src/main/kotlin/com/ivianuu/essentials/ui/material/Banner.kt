@@ -19,10 +19,8 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
@@ -30,6 +28,7 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.TextButtonStyle
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -43,7 +42,7 @@ fun Banner(
     content: @Composable() () -> Unit,
     actions: @Composable() () -> Unit
 ) {
-    WithModifier(modifier = LayoutExpandedWidth) {
+    WithModifier(modifier = LayoutWidth.Fill) {
         Column {
             Spacer(LayoutHeight(24.dp))
 
@@ -65,7 +64,7 @@ fun Banner(
             Spacer(LayoutHeight(20.dp))
 
             Container(
-                modifier = LayoutExpandedWidth,
+                modifier = LayoutWidth.Fill,
                 alignment = Alignment.CenterRight,
                 padding = EdgeInsets(left = 8.dp, right = 8.dp)
             ) {

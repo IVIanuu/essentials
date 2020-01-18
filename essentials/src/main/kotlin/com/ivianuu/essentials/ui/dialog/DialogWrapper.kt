@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.state
-import androidx.ui.core.PxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.layout.Center
+import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed

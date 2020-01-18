@@ -2,9 +2,9 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate

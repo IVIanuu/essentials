@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.layout.LayoutExpandedWidth
+import androidx.ui.layout.LayoutWidth
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.core.Axis
@@ -57,7 +57,7 @@ fun ScrollableList(
     when (direction) {
         Axis.Horizontal -> {
             Scroller(
-                modifier = modifier + LayoutExpandedWidth,
+                modifier = modifier + LayoutWidth.Fill,
                 position = position,
                 enabled = enabled
             ) {
@@ -68,7 +68,7 @@ fun ScrollableList(
         }
         Axis.Vertical -> {
             Scroller(
-                modifier = modifier + LayoutExpandedWidth,
+                modifier = modifier + LayoutWidth.Fill,
                 position = position,
                 enabled = enabled
             ) {

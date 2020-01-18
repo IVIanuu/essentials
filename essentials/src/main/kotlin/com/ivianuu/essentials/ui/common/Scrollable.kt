@@ -22,15 +22,15 @@ import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.ui.core.Direction
-import androidx.ui.core.Px
-import androidx.ui.core.PxPosition
-import androidx.ui.core.coerceIn
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.TouchSlopDragGestureDetector
-import androidx.ui.core.px
 import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
+import androidx.ui.unit.Px
+import androidx.ui.unit.PxPosition
+import androidx.ui.unit.coerceIn
+import androidx.ui.unit.px
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
 

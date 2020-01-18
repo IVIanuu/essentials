@@ -18,13 +18,12 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.ui.core.dp
-import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.LayoutMaxWidth
-import androidx.ui.layout.LayoutMinWidth
+import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.layout.WithModifier
@@ -49,7 +48,7 @@ fun Dialog(
             top = 32.dp,
             right = 32.dp,
             bottom = 32.dp
-        ) + LayoutMinWidth(280.dp) + LayoutMaxWidth(356.dp)
+        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp)
     ) {
         Surface(
             color = MaterialTheme.colors().surface,

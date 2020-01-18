@@ -22,12 +22,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.Composable
 import androidx.core.graphics.drawable.toBitmap
-import androidx.ui.core.Dp
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.ImageConfig
 import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
+import androidx.ui.unit.Dp
 import com.ivianuu.essentials.ui.common.withDensity
 
 @Composable

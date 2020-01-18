@@ -20,23 +20,23 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.dp
-import androidx.ui.core.looseMin
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutExpandedWidth
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.looseMin
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -93,7 +93,7 @@ fun TopAppBar(
             ) {
                 Container(
                     height = AppBarHeight,
-                    modifier = LayoutExpandedWidth,
+                    modifier = LayoutWidth.Fill,
                     padding = EdgeInsets(left = 16.dp, right = 16.dp)
                 ) {
                     TopAppBarLayout(

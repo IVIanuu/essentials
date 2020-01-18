@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.store.prefs
 
-import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
-import androidx.ui.core.Px
-import androidx.ui.core.dp
-import androidx.ui.core.ipx
-import androidx.ui.core.px
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorAccessor
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.Px
+import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
+import androidx.ui.unit.px
 import com.ivianuu.essentials.store.DiskBox
 
 fun PrefBoxFactory.color(
