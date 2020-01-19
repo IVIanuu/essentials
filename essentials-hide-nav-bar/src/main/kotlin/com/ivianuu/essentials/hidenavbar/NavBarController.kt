@@ -33,7 +33,6 @@ import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map

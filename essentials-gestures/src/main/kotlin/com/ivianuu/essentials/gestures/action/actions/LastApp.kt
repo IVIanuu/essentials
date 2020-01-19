@@ -67,6 +67,5 @@ internal class LastAppActionExecutor(
             intent,
             PackageManager.MATCH_DEFAULT_ONLY
         )?.activityInfo?.packageName ?: ""
-
     }
 }

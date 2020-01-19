@@ -344,7 +344,7 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
         var deferred = mutex.withLockNoInline { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            mutex.withLockNoInline { currentDeferred = deferred  }
+            mutex.withLockNoInline { currentDeferred = deferred }
             try {
                 val result = getter.invoke()
                 deferred.complete(result)

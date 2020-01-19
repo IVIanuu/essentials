@@ -96,7 +96,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 class ComposeObservePatcher(val context: IrPluginContext) :
     IrElementTransformerVoid(),
     FileLoweringPass {
-    
+
     private val typeTranslator = context.typeTranslator
     private fun KotlinType.toIrType(): IrType = typeTranslator.translateType(this)
 

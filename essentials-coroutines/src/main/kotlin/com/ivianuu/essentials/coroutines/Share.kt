@@ -179,7 +179,6 @@ private class SharedFlow<T>(
             println("SharedFlows: $tag -> replay values $cache")
             cache.forEach { emit(it) }
         }
-
     } else this
 
     private fun Flow<T>.cacheIfNeeded(): Flow<T> = if (cacheSize > 0) {
@@ -199,5 +198,4 @@ private class SharedFlow<T>(
         }
         class Reset<T> : Message<T>()
     }
-
 }

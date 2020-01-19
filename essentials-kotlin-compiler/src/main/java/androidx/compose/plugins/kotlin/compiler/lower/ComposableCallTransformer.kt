@@ -183,7 +183,7 @@ class ComposableCallTransformer(val context: IrPluginContext) :
             ]
             val descriptor = expression.symbol.descriptor
             val returnType = descriptor.returnType
-            return if(emitMetadata != null) {
+            return if (emitMetadata != null) {
                 DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
                     +irComposableEmit(expression.transformChildren(), meta, emitMetadata)
                 }

@@ -114,5 +114,4 @@ class DisplayRotationProvider(
         app.registerComponentCallbacks(callbacks)
         it.awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
-
 }

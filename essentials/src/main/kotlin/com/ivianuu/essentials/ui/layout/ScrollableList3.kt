@@ -142,7 +142,7 @@ private fun Item3(item: ScrollableListItem3) {
     }
 }
 
-//@Immutable
+// @Immutable
 data class ScrollableListItem3(
     val key: Any,
     val size: Dp,
@@ -208,13 +208,12 @@ private class ScrollableListState3(
         val visibleRange = position.value..(position.value + viewportSize)
         items.forEach {
             it.shouldDraw = it.leading in visibleRange || it.trailing in visibleRange
-            it.shouldCompose = it.shouldDraw//it.leading in composeRange || it.trailing in composeRange
+            it.shouldCompose = it.shouldDraw // it.leading in composeRange || it.trailing in composeRange
             it.shouldMeasure = it.shouldCompose
             d { "updated state ${it.key} leading ${it.leading} size ${it.size} traling ${it.trailing} " +
                     "compose: ${it.shouldCompose} draw ${it.shouldDraw} measure ${it.shouldMeasure} " +
                     "visible range $visibleRange compose range $composeRange" }
         }
-
     }
 }
 

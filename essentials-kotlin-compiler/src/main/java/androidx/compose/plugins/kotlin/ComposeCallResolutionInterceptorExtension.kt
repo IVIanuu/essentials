@@ -55,7 +55,6 @@ import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.scopes.ResolutionScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.PackageQualifier
 import org.jetbrains.kotlin.types.KotlinType
-import java.util.concurrent.Callable
 
 typealias Candidate = NewResolutionOldInference.MyCandidate
 

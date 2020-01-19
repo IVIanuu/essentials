@@ -23,9 +23,9 @@ import androidx.compose.remember
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperState
 

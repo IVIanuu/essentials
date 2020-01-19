@@ -44,7 +44,6 @@ internal class WriteSecureSettingsPermissionStateProvider(
 
     override suspend fun isGranted(permission: Permission): Boolean =
         secureSettingsHelper.canWriteSecureSettings()
-
 }
 
 @Factory

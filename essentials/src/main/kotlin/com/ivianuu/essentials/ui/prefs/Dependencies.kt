@@ -23,7 +23,6 @@ import com.ivianuu.essentials.coroutines.combineNoInline
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.coroutines.collect
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 

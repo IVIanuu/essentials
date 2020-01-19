@@ -31,5 +31,4 @@ abstract class ViewModel : Closeable {
     override fun close() {
         _scope.close()
     }
-
 }

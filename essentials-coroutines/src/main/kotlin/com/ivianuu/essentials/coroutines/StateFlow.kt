@@ -71,7 +71,6 @@ private class DataFlowImpl<T>(
         collector.emitAll(
             channel.asFlow()
                 .filter { it !== Null }
-                .map { it as T }        )
+                .map { it as T })
     }
-
 }

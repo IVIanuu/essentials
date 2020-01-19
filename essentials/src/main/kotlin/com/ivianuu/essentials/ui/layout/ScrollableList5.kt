@@ -249,11 +249,11 @@ private fun ScrollableListLayout5(
             }
 
             placeables.forEach { (placeable, item) ->
-                //d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
+                // d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
                 placeable.place(Px.Zero, item.leading - state.position.value)
             }
 
-            //d { "lifecycle: placed ${placeables.map { it.second.key }}" }
+            // d { "lifecycle: placed ${placeables.map { it.second.key }}" }
         }
     }
 }

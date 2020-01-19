@@ -1,6 +1,14 @@
 package androidx.compose.plugins.kotlin.frames.analysis
 
+import androidx.compose.plugins.kotlin.ComposeFlags
+import androidx.compose.plugins.kotlin.frames.FrameRecordClassDescriptor
+import androidx.compose.plugins.kotlin.frames.SyntheticFramePackageDescriptor
+import androidx.compose.plugins.kotlin.frames.abstractRecordClassName
+import androidx.compose.plugins.kotlin.frames.findTopLevel
+import androidx.compose.plugins.kotlin.frames.modelClassName
+import androidx.compose.plugins.kotlin.frames.recordClassName
 import org.jetbrains.kotlin.analyzer.AnalysisResult
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.container.ComponentProvider
 import org.jetbrains.kotlin.container.get
 import org.jetbrains.kotlin.context.ProjectContext
@@ -9,16 +17,8 @@ import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotated
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtFile
-import androidx.compose.plugins.kotlin.ComposeFlags
-import androidx.compose.plugins.kotlin.frames.FrameRecordClassDescriptor
-import androidx.compose.plugins.kotlin.frames.SyntheticFramePackageDescriptor
-import androidx.compose.plugins.kotlin.frames.abstractRecordClassName
-import androidx.compose.plugins.kotlin.frames.findTopLevel
-import androidx.compose.plugins.kotlin.frames.modelClassName
-import androidx.compose.plugins.kotlin.frames.recordClassName
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession

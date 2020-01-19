@@ -47,5 +47,4 @@ class PrefBoxFactory(
 
         return box as Box<T>
     }
-
 }

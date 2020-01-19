@@ -99,7 +99,6 @@ class SliderPosition(
             "steps should be >= 0"
         }
     }
-
 }
 
 @Composable

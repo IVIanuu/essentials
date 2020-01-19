@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.box
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.remember
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.collect
 import kotlinx.coroutines.launch

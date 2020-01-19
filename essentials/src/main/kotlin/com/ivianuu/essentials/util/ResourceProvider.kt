@@ -43,5 +43,4 @@ class ResourceProvider(
 
     fun getStringArray(id: Int): Array<String> =
         context.resources.getStringArray(id)
-
 }

@@ -85,5 +85,4 @@ class BillingStore internal constructor(
     suspend fun clearPurchases() = withContext(dispatchers.default) {
         purchases.delete()
     }
-
 }

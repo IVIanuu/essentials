@@ -55,7 +55,7 @@ class ActionPickerViewModel(
                         getResult = { ActionPickerResult.None }
                     )
                 }
-                
+
                 val actionsAndDelegates = ((actionPickerDelegates
                     .map {
                         ActionPickerItem.PickerDelegate(
@@ -137,7 +137,6 @@ sealed class ActionPickerItem {
     abstract fun icon()
 
     abstract /*suspend*/ fun getResult(): ActionPickerResult? // todo ir
-
 }
 
 @Immutable

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.gradle
 
 import com.google.auto.service.AutoService
-import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.AbstractCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions

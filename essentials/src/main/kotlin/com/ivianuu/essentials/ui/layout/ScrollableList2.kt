@@ -116,12 +116,12 @@ fun ScrollableList2(
 
 @Composable
 private fun Item2(item: ScrollableListItem2) {
-    //d { "compose ${item.key}" }
+    // d { "compose ${item.key}" }
     ParentData(item) {
         Draw(
             children = item.children,
             onPaint = { canvas, parentSize ->
-                //d { "draw item ${item.key} ${item.shouldDraw}" }
+                // d { "draw item ${item.key} ${item.shouldDraw}" }
                 if (item.isVisible) {
                     drawChildren()
                 } else {
@@ -134,7 +134,7 @@ private fun Item2(item: ScrollableListItem2) {
     }
 }
 
-//@Immutable
+// @Immutable
 data class ScrollableListItem2(
     val key: Any,
     val size: Dp,
@@ -193,7 +193,7 @@ private class ScrollableListState2(
         val start = (position.value /* - viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
         val end = (position.value + viewportSize /*+ viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
         val visibleRange = start..end
-        //d { "visible range $visibleRange" }
+        // d { "visible range $visibleRange" }
         items
             .forEach { item ->
                 item.isVisible = item.leading in visibleRange || item.trailing in visibleRange
@@ -207,7 +207,7 @@ private fun ScrollableListLayout2(
     modifier: Modifier
 ) {
     Layout(children = {
-        //d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
+        // d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
         state.items.forEach { item ->
             key(item.key) {
                 Item2(item)
@@ -224,7 +224,7 @@ private fun ScrollableListLayout2(
             measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem2
         }
 
-        //d { "lifecycle: measured ${placeables.map { it.second.key }}" }
+        // d { "lifecycle: measured ${placeables.map { it.second.key }}" }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             if (state.viewportSize != constraints.maxHeight.toPx()) {
@@ -232,11 +232,11 @@ private fun ScrollableListLayout2(
             }
 
             placeables.forEach { (placeable, item) ->
-                //d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
+                // d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
                 placeable.place(Px.Zero, item.leading - state.position.value)
             }
 
-            //d { "lifecycle: placed ${placeables.map { it.second.key }}" }
+            // d { "lifecycle: placed ${placeables.map { it.second.key }}" }
         }
     }
 }

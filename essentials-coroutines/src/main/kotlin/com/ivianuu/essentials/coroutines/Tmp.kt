@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
@@ -10,14 +8,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.selects.SelectBuilder
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.sync.Mutex
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 // todo ir
 suspend fun <T> Mutex.withLockNoInline(owner: Any? = null, action: () -> T): T {
@@ -102,7 +96,6 @@ private fun CoroutineScope.asFairChannel(flow: Flow<*>): ReceiveChannel<Any> {
     }
     return produce(block = func)
 }
-
 
 // todo ir
 private fun SelectBuilder<Unit>.onReceive(
