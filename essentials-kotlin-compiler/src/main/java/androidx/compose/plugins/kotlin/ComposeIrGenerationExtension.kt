@@ -22,9 +22,6 @@ import androidx.compose.plugins.kotlin.frames.FrameIrTransformer
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower
-import org.jetbrains.kotlin.backend.common.phaser.CompilerPhase
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
-import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 
 class ComposeIrGenerationExtension : IrGenerationExtension {
@@ -32,23 +29,5 @@ class ComposeIrGenerationExtension : IrGenerationExtension {
         ComposableCallTransformer(pluginContext).lower(moduleFragment)
         ComposeObservePatcher(pluginContext).lower(moduleFragment)
         FrameIrTransformer(pluginContext).lower(moduleFragment)
-    }
-}
-
-class ComposeIrLoweringExtension : IrLoweringExtension {
-    override fun interceptLoweringPhases(
-        phases: CompilerPhase<JvmBackendContext, IrModuleFragment, IrModuleFragment>
-    ): CompilerPhase<JvmBackendContext, IrModuleFragment, IrModuleFragment> {
-        /*if (ComposeFlags.COMPOSER_PARAM) {
-            return ComposerParameterPhase then
-                    ComposerIntrinsicPhase then
-                    ComposeCallPhase then
-                    phases
-        }
-        return FrameClassGenPhase then
-                ComposeCallPhase then
-                ComposeObservePhase then
-                phases*/
-        return phases
     }
 }

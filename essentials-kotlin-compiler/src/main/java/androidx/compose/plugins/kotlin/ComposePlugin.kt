@@ -20,7 +20,6 @@ import androidx.compose.plugins.kotlin.frames.analysis.FrameModelChecker
 import androidx.compose.plugins.kotlin.frames.analysis.FramePackageAnalysisHandlerExtension
 import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
-import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
@@ -93,9 +92,6 @@ class ComposeComponentRegistrar : ComponentRegistrar {
             )
             SyntheticIrExtension.registerExtension(project,
                 ComposeSyntheticIrExtension()
-            )
-            IrLoweringExtension.registerExtension(project,
-                ComposeIrLoweringExtension()
             )
             IrGenerationExtension.registerExtension(project,
                 ComposeIrGenerationExtension())
