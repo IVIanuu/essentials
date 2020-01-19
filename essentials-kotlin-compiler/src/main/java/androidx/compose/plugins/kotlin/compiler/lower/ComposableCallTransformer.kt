@@ -7,7 +7,6 @@ import androidx.compose.plugins.kotlin.ComposableEmitDescriptor
 import androidx.compose.plugins.kotlin.ComposableEmitMetadata
 import androidx.compose.plugins.kotlin.ComposableFunctionDescriptor
 import androidx.compose.plugins.kotlin.ComposeFlags
-import androidx.compose.plugins.kotlin.ComposeFqNames
 import androidx.compose.plugins.kotlin.ComposerMetadata
 import androidx.compose.plugins.kotlin.EmitChildrenValueParameterDescriptor
 import androidx.compose.plugins.kotlin.KtxNameConventions
@@ -23,15 +22,10 @@ import androidx.compose.plugins.kotlin.isMarkedStable
 import androidx.compose.plugins.kotlin.isSpecialType
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.deepCopyWithVariables
-import org.jetbrains.kotlin.backend.common.ir.copyTo
-import org.jetbrains.kotlin.backend.common.ir.createImplicitParameterDeclarationWithWrappedDescriptor
+import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
-import org.jetbrains.kotlin.backend.common.lower.createIrBuilder
 import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.backend.common.push
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
-import org.jetbrains.kotlin.backend.jvm.JvmLoweredDeclarationOrigin
-import org.jetbrains.kotlin.backend.jvm.ir.createJvmIrBuilder
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.extractParameterNameFromFunctionTypeArgument
 import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
@@ -47,7 +41,6 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.SimpleFunctionDescriptor
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
@@ -60,14 +53,9 @@ import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.IrBlockBodyBuilder
 import org.jetbrains.kotlin.ir.builders.IrBlockBuilder
 import org.jetbrains.kotlin.ir.builders.IrBuilderWithScope
-import org.jetbrains.kotlin.ir.builders.at
-import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
-import org.jetbrains.kotlin.ir.builders.declarations.addFunction
-import org.jetbrains.kotlin.ir.builders.declarations.buildClass
 import org.jetbrains.kotlin.ir.builders.irBlock
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irCall
-import org.jetbrains.kotlin.ir.builders.irDelegatingConstructorCall
 import org.jetbrains.kotlin.ir.builders.irFalse
 import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irInt
@@ -75,13 +63,9 @@ import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.builders.irReturnUnit
 import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.builders.irTrue
-import org.jetbrains.kotlin.ir.builders.setSourceRange
-import org.jetbrains.kotlin.ir.declarations.IrConstructor
-import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.declarations.IrValueParameter
 import org.jetbrains.kotlin.ir.declarations.getIrValueParameter
 import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
@@ -94,43 +78,23 @@ import org.jetbrains.kotlin.ir.expressions.IrConst
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
 import org.jetbrains.kotlin.ir.expressions.IrGetValue
-import org.jetbrains.kotlin.ir.expressions.IrReturn
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.IrTypeOperator
 import org.jetbrains.kotlin.ir.expressions.IrTypeOperatorCall
 import org.jetbrains.kotlin.ir.expressions.copyTypeArgumentsFrom
 import org.jetbrains.kotlin.ir.expressions.getValueArgument
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
 import org.jetbrains.kotlin.ir.expressions.putTypeArguments
 import org.jetbrains.kotlin.ir.expressions.putValueArgument
 import org.jetbrains.kotlin.ir.expressions.typeParametersCount
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
-import org.jetbrains.kotlin.ir.types.IrSimpleType
 import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.IrTypeProjection
-import org.jetbrains.kotlin.ir.types.getClass
 import org.jetbrains.kotlin.ir.types.isUnit
 import org.jetbrains.kotlin.ir.types.toKotlinType
-import org.jetbrains.kotlin.ir.types.typeWith
-import org.jetbrains.kotlin.ir.util.ConstantValueGenerator
-import org.jetbrains.kotlin.ir.util.TypeTranslator
-import org.jetbrains.kotlin.ir.util.constructors
-import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.endOffset
-import org.jetbrains.kotlin.ir.util.explicitParameters
-import org.jetbrains.kotlin.ir.util.findAnnotation
-import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
-import org.jetbrains.kotlin.ir.util.functions
-import org.jetbrains.kotlin.ir.util.getArgumentsWithIr
-import org.jetbrains.kotlin.ir.util.isSuspend
-import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.ir.util.referenceFunction
 import org.jetbrains.kotlin.ir.util.startOffset
-import org.jetbrains.kotlin.ir.util.statements
-import org.jetbrains.kotlin.ir.util.substitute
-import org.jetbrains.kotlin.ir.util.typeSubstitutionMap
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.Name
@@ -146,54 +110,33 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 
-class ComposableCallTransformer(val context: JvmBackendContext) :
+class ComposableCallTransformer(val context: IrPluginContext) :
     IrElementTransformerVoid(),
     FileLoweringPass {
 
-    private val typeTranslator =
-        TypeTranslator(
-            context.ir.symbols.externalSymbolTable,
-            context.state.languageVersionSettings,
-            context.builtIns
-        ).apply {
-            constantValueGenerator = ConstantValueGenerator(
-                context.state.module,
-                context.ir.symbols.externalSymbolTable
-            )
-            constantValueGenerator.typeTranslator = this
-        }
-
+    private val typeTranslator = context.typeTranslator
     private val builtIns = context.irBuiltIns
 
     private val orFunctionDescriptor = builtIns.builtIns.booleanType.memberScope
         .findFirstFunction("or") { it is FunctionDescriptor && it.isInfix }
 
-    private val jvmContext get() = context
-
-    private val symbolTable get() = context.ir.symbols.externalSymbolTable
+    private val symbolTable get() = context.symbolTable
 
     private fun KotlinType?.isStable(): Boolean {
-        if (this == null) return false
-
-        val trace = jvmContext.state.bindingTrace
-        val calculated = trace.get(ComposeWritableSlices.STABLE_TYPE, this)
-        return if (calculated == null) {
-            val isStable = !isError &&
-                    !isTypeParameter() &&
-                    !isSpecialType &&
-                    (
-                            KotlinBuiltIns.isPrimitiveType(this) ||
-                                    isFunctionType ||
-                                    isEnum ||
-                                    isMarkedStable() ||
-                                    (
-                                            isNullable() &&
-                                                    makeNotNullable().isStable()
-                                            )
-                            )
-            trace.record(ComposeWritableSlices.STABLE_TYPE, this, isStable)
-            isStable
-        } else calculated
+        return this != null &&
+                !isError &&
+                !isTypeParameter() &&
+                !isSpecialType &&
+                (
+                        KotlinBuiltIns.isPrimitiveType(this) ||
+                                isFunctionType ||
+                                isEnum ||
+                                isMarkedStable() ||
+                                (
+                                        isNullable() &&
+                                                makeNotNullable().isStable()
+                                        )
+                        )
     }
 
     private val KotlinType.isEnum
@@ -234,25 +177,24 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
 
     override fun visitCall(expression: IrCall): IrExpression {
         if (!ComposeFlags.COMPOSER_PARAM) return super.visitCall(expression)
-        val meta = context.state.irTrace[ComposeWritableSlices.COMPOSER_IR_METADATA, expression]
+        val meta = context.irTrace[ComposeWritableSlices.COMPOSER_IR_METADATA, expression]
         if (meta != null) {
-            val emitMetadata = context.state.irTrace[
+            val emitMetadata = context.irTrace[
                     ComposeWritableSlices.COMPOSABLE_EMIT_METADATA,
                     expression
             ]
             val descriptor = expression.symbol.descriptor
             val returnType = descriptor.returnType
             return if(emitMetadata != null) {
-                context.createIrBuilder(declarationStack.last().symbol).irBlock {
+                DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
                     +irComposableEmit(expression.transformChildren(), meta, emitMetadata)
                 }
             } else if ((returnType == null || returnType.isUnit()) && !descriptor.isInline) {
-                context.createIrBuilder(declarationStack.last().symbol).irBlock {
+                DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
                     +irComposableCall(expression.transformChildren(), meta)
                 }
             } else {
-                context
-                    .createIrBuilder(declarationStack.last().symbol)
+                DeclarationIrBuilder(context, declarationStack.last().symbol)
                     .irComposableExpr(expression.transformChildren(), meta)
             }
         } else {
@@ -267,7 +209,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
             return super.visitBlock(expression)
         }
 
-        val descriptor = context.state.irTrace[COMPOSABLE_FUNCTION_DESCRIPTOR, expression]
+        val descriptor = context.irTrace[COMPOSABLE_FUNCTION_DESCRIPTOR, expression]
 
         if (descriptor != null) {
             val (composerCall, emitOrCall) = deconstructComposeBlock(expression)
@@ -277,28 +219,27 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
 
             val returnType = descriptor.returnType
             return if ((returnType == null || returnType.isUnit()) && !descriptor.isInline) {
-                context.createIrBuilder(declarationStack.last().symbol).irBlock {
+                DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
                     +irComposableCall(transformedComposerCall, transformed, descriptor)
                 }
             } else {
-                context
-                    .createIrBuilder(declarationStack.last().symbol)
+                DeclarationIrBuilder(context, declarationStack.last().symbol)
                     .irComposableExpr(transformedComposerCall, transformed, descriptor)
             }
         }
 
-        val emitDescriptor = context.state.irTrace[COMPOSABLE_EMIT_DESCRIPTOR, expression]
+        val emitDescriptor = context.irTrace[COMPOSABLE_EMIT_DESCRIPTOR, expression]
 
         if (emitDescriptor != null) {
             val (composerCall, emitOrCall) = deconstructComposeBlock(expression)
             val transformedComposerCall = composerCall.transformChildren()
             val transformed = emitOrCall.transformChildren()
-            return context.createIrBuilder(declarationStack.last().symbol).irBlock {
+            return DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
                 +irComposableEmit(transformedComposerCall, transformed, emitDescriptor)
             }
         }
 
-        val property = context.state.irTrace[COMPOSABLE_PROPERTY_DESCRIPTOR, expression]
+        val property = context.irTrace[COMPOSABLE_PROPERTY_DESCRIPTOR, expression]
 
         if (property != null) {
             val (composerCall, emitOrCall) = deconstructComposeBlock(expression)
@@ -306,8 +247,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
             val transformedComposerCall = composerCall.transformChildren()
             val transformed = emitOrCall.transformChildren()
 
-            return context
-                .createIrBuilder(declarationStack.last().symbol)
+            return DeclarationIrBuilder(context, declarationStack.last().symbol)
                 .irComposableExpr(transformedComposerCall, transformed, property)
         }
 
@@ -516,9 +456,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
                     type = blockParameter.type.toIrType()
                 ) {
                     +irCall(
-                        callee = IrSimpleFunctionSymbolImpl(original.symbol.descriptor).also {
-                            it.bind(original.symbol.owner as IrSimpleFunction)
-                        },
+                        callee = symbolTable.referenceSimpleFunction(original.symbol.descriptor),
                         type = original.type
                     ).apply {
                         copyTypeArgumentsFrom(original)
@@ -613,8 +551,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
                     // turned on, then we end up using the temporaries that were already created,
                     // so we don't want to unwrap them
                     getParameterExpression(it, arg, unwrapTemp = !ComposeFlags.COMPOSER_PARAM)
-                else
-                    ({ arg })
+                else ({ arg })
                 it to expr
             }
 
@@ -659,9 +596,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
         }
 
         val newCall = if (shouldCreateNewCall) irCall(
-            callee = IrSimpleFunctionSymbolImpl(original.symbol.descriptor).also {
-                it.bind(original.symbol.owner as IrSimpleFunction)
-            },
+            callee = symbolTable.referenceSimpleFunction(original.symbol.descriptor),
             type = original.type
         ).apply {
             copyTypeArgumentsFrom(original)
@@ -1000,10 +935,9 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
         // in emit, the element is passed through an extension parameter
         // in call, the element is passed through a capture scope
         val validationCall =
-            if (memoizing) validation.validationCall
-            else validation.uncheckedValidationCall
-
-        if (validationCall == null) error("Expected validationCall to be non-null")
+            (if (memoizing) validation.validationCall
+            else validation.uncheckedValidationCall)
+                ?: error("Expected validationCall to be non-null")
 
         val validationCallDescriptor = validationCall.candidateDescriptor as FunctionDescriptor
 
@@ -1103,8 +1037,7 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
         ).also {
             it.parent = scope.getLocalDeclarationParent()
             it.createParameterDeclarations()
-            it.body = jvmContext
-                .createIrBuilder(symbol)
+            it.body = DeclarationIrBuilder(context, symbol)
                 .irBlockBody { body(it) }
         }
 
@@ -1166,6 +1099,8 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
      * [ComposeObservePatcher] access to the this parameter.
      */
     private fun IrBlockBuilder.covertLambdaIfNecessary(expression: IrExpression): IrExpression {
+        return expression
+        /*
         val functionExpression = expression as? IrFunctionExpression ?: return expression
 
         val function = functionExpression.function
@@ -1308,17 +1243,17 @@ class ComposableCallTransformer(val context: JvmBackendContext) :
             +irCall(constructor!!.symbol).apply {
                 if (valueArgumentsCount > 0) putValueArgument(0, boundReceiver!!.second)
             }
-        }
+        }*/
     }
 
     private fun IrCall.isComposable(): Boolean {
-        return context.state.irTrace[ComposeWritableSlices.IS_COMPOSABLE_CALL, this] ?: false
+        return context.irTrace[ComposeWritableSlices.IS_COMPOSABLE_CALL, this] ?: false
     }
 
     private fun isComposable(declaration: IrFunction): Boolean {
         val tmpTrace =
             DelegatingBindingTrace(
-                context.state.bindingContext, "tmp for composable analysis"
+                context.bindingContext, "tmp for composable analysis"
             )
         val composability =
             ComposableAnnotationChecker()

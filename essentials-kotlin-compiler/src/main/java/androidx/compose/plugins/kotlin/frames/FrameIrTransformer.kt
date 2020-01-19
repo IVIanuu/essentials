@@ -16,10 +16,13 @@
 
 package androidx.compose.plugins.kotlin.frames
 
+import androidx.compose.plugins.kotlin.frames.analysis.FrameMetadata
+import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices
+import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
-import org.jetbrains.kotlin.backend.common.lower.createIrBuilder
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
+import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -72,10 +75,12 @@ import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrTypeParameterImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrValueParameterImpl
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrFieldAccessExpression
 import org.jetbrains.kotlin.ir.expressions.IrGetField
 import org.jetbrains.kotlin.ir.expressions.IrSetField
 import org.jetbrains.kotlin.ir.expressions.IrTypeOperator
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrDelegatingConstructorCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetFieldImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
@@ -83,6 +88,7 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrSetFieldImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrTypeOperatorCallImpl
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrConstructorSymbol
+import org.jetbrains.kotlin.ir.symbols.IrFieldSymbol
 import org.jetbrains.kotlin.ir.symbols.IrFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrValueSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
@@ -92,13 +98,12 @@ import org.jetbrains.kotlin.ir.symbols.impl.IrFieldSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.util.ConstantValueGenerator
 import org.jetbrains.kotlin.ir.util.ReferenceSymbolTable
-import org.jetbrains.kotlin.ir.util.TypeTranslator
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.referenceFunction
 import org.jetbrains.kotlin.ir.util.withScope
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
+import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
@@ -106,13 +111,6 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi2ir.generators.GeneratorContext
-import androidx.compose.plugins.kotlin.frames.analysis.FrameMetadata
-import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices
-import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
-import org.jetbrains.kotlin.ir.expressions.IrFieldAccessExpression
-import org.jetbrains.kotlin.ir.expressions.impl.IrConstructorCallImpl
-import org.jetbrains.kotlin.ir.symbols.IrFieldSymbol
-import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
@@ -144,7 +142,7 @@ import org.jetbrains.kotlin.utils.Printer
  *   - Remove the moved fields from the class and rewrite any methods that refer to the removed
  *     methods to use the getters and setters instead.
  */
-class FrameIrTransformer(val context: JvmBackendContext) :
+class FrameIrTransformer(val context: IrPluginContext) :
     IrElementTransformerVoidWithContext(),
     FileLoweringPass {
 
@@ -161,8 +159,8 @@ class FrameIrTransformer(val context: JvmBackendContext) :
 
     override fun visitClassNew(declaration: IrClass): IrStatement {
         val className = declaration.descriptor.fqNameSafe
-        val bindingContext = context.state.bindingContext
-        val symbolTable = context.ir.symbols.externalSymbolTable
+        val bindingContext = context.bindingContext
+        val symbolTable = context.symbolTable
 
         val recordClassDescriptor =
             bindingContext.get(
@@ -172,11 +170,11 @@ class FrameIrTransformer(val context: JvmBackendContext) :
         // If there are no properties, skip the class
         if (!declaration.anyChild { it is IrProperty }) return super.visitClassNew(declaration)
 
-        val framesPackageDescriptor = context.state.module.getPackage(framesPackageName)
+        val framesPackageDescriptor = context.moduleDescriptor.getPackage(framesPackageName)
 
         val recordClassScope = recordClassDescriptor.unsubstitutedMemberScope
 
-        val recordTypeDescriptor = context.state.module.findClassAcrossModuleDependencies(
+        val recordTypeDescriptor = context.moduleDescriptor.findClassAcrossModuleDependencies(
             ClassId.topLevel(recordClassName)
         ) ?: error("Cannot find the Record class")
 
@@ -191,7 +189,7 @@ class FrameIrTransformer(val context: JvmBackendContext) :
         var recordClass: IrClass? = null
 
         val framedType =
-            context.state.module.findClassAcrossModuleDependencies(ClassId.topLevel(framedTypeName))
+            context.moduleDescriptor.findClassAcrossModuleDependencies(ClassId.topLevel(framedTypeName))
             ?: error("Cannot find the Framed interface")
 
         val classBuilder = IrClassBuilder(
@@ -446,7 +444,7 @@ class FrameIrTransformer(val context: JvmBackendContext) :
             val readableSymbol = symbolTable.referenceSimpleFunction(readableDescriptor)
             val writableSymbol = symbolTable.referenceSimpleFunction(writableDescriptor)
             metadata.getFramedProperties(
-                context.state.bindingContext
+                context.bindingContext
             ).forEach { propertyDescriptor ->
                 val irFramedProperty = declaration.declarations.find {
                     it.descriptor.name == propertyDescriptor.name
@@ -644,22 +642,11 @@ fun IrElement.anyChild(filter: (descriptor: IrElement) -> Boolean): Boolean {
 }
 
 class IrClassBuilder(
-    private val context: JvmBackendContext,
+    private val context: IrPluginContext,
     var irClass: IrClass,
     private val classDescriptor: ClassDescriptor
 ) {
-    private val typeTranslator =
-        TypeTranslator(
-            context.ir.symbols.externalSymbolTable,
-            context.state.languageVersionSettings, context.builtIns
-        ).apply {
-            constantValueGenerator =
-                ConstantValueGenerator(
-                    context.state.module,
-                    context.ir.symbols.externalSymbolTable
-                )
-            constantValueGenerator.typeTranslator = this
-        }
+    private val typeTranslator = context.typeTranslator
 
     operator fun IrDeclaration.unaryPlus() {
         parent = irClass
@@ -684,7 +671,7 @@ class IrClassBuilder(
             IrDeclarationOrigin.DELEGATE,
             initializerSymbol
         ).apply {
-            body = context.createIrBuilder(initializerSymbol).irBlockBody {
+            body = DeclarationIrBuilder(context, initializerSymbol).irBlockBody {
                 this@irBlockBody.block(this@apply)
             }
         }
@@ -733,7 +720,7 @@ class IrClassBuilder(
             constructorSymbol,
             irClass.defaultType
         ).apply {
-            body = context.createIrBuilder(constructorSymbol).irBlockBody {
+            body = DeclarationIrBuilder(context, constructorSymbol).irBlockBody {
                 createParameterDeclarations()
                 this@irBlockBody.block(this@apply)
             }
@@ -808,7 +795,7 @@ class IrClassBuilder(
             methodDescriptor,
             realReturnType ?: context.irBuiltIns.unitType
         ).apply {
-            body = context.createIrBuilder(symbol).irBlockBody {
+            body = DeclarationIrBuilder(context, symbol).irBlockBody {
                 createParameterDeclarations()
                 this@irBlockBody.block(this@apply)
             }

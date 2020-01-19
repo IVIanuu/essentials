@@ -16,53 +16,30 @@
 
 package androidx.compose.plugins.kotlin
 
-import org.jetbrains.kotlin.backend.common.phaser.CompilerPhase
-import org.jetbrains.kotlin.backend.common.phaser.then
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
-import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
 import androidx.compose.plugins.kotlin.compiler.lower.ComposableCallTransformer
 import androidx.compose.plugins.kotlin.compiler.lower.ComposeObservePatcher
-import androidx.compose.plugins.kotlin.compiler.lower.ComposerIntrinsicTransformer
-import androidx.compose.plugins.kotlin.compiler.lower.ComposerParamTransformer
 import androidx.compose.plugins.kotlin.frames.FrameIrTransformer
-import org.jetbrains.kotlin.backend.common.phaser.makeIrModulePhase
+import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
+import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.backend.common.lower
+import org.jetbrains.kotlin.backend.common.phaser.CompilerPhase
+import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
+import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 
-val ComposeObservePhase = makeIrModulePhase(
-    ::ComposeObservePatcher,
-    name = "ComposeObservePhase",
-    description = "Observe @Model"
-)
-
-val FrameClassGenPhase = makeIrModulePhase(
-    ::FrameIrTransformer,
-    name = "ComposeFrameTransformPhase",
-    description = "Transform @Model classes into framed classes"
-)
-
-val ComposeCallPhase = makeIrModulePhase(
-    ::ComposableCallTransformer,
-    name = "ComposeFcsPhase",
-    description = "Rewrite FCS descriptors to IR bytecode"
-)
-
-val ComposerParameterPhase = makeIrModulePhase(
-    ::ComposerParamTransformer,
-    name = "ComposerParameterPhase",
-    description = "Transform @Composable functions to have extra Composer parameter"
-)
-
-val ComposerIntrinsicPhase = makeIrModulePhase(
-    ::ComposerIntrinsicTransformer,
-    name = "ComposerIntrinsicPhase",
-    description = "Replace @Composable intrinsics with their correct values"
-)
+class ComposeIrGenerationExtension : IrGenerationExtension {
+    override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
+        ComposableCallTransformer(pluginContext).lower(moduleFragment)
+        ComposeObservePatcher(pluginContext).lower(moduleFragment)
+        FrameIrTransformer(pluginContext).lower(moduleFragment)
+    }
+}
 
 class ComposeIrLoweringExtension : IrLoweringExtension {
     override fun interceptLoweringPhases(
         phases: CompilerPhase<JvmBackendContext, IrModuleFragment, IrModuleFragment>
     ): CompilerPhase<JvmBackendContext, IrModuleFragment, IrModuleFragment> {
-        if (ComposeFlags.COMPOSER_PARAM) {
+        /*if (ComposeFlags.COMPOSER_PARAM) {
             return ComposerParameterPhase then
                     ComposerIntrinsicPhase then
                     ComposeCallPhase then
@@ -71,6 +48,7 @@ class ComposeIrLoweringExtension : IrLoweringExtension {
         return FrameClassGenPhase then
                 ComposeCallPhase then
                 ComposeObservePhase then
-                phases
+                phases*/
+        return phases
     }
 }

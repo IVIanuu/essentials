@@ -16,76 +16,74 @@
 
 package androidx.compose.plugins.kotlin.compiler.lower
 
-import org.jetbrains.kotlin.backend.common.FileLoweringPass
-import org.jetbrains.kotlin.backend.common.lower.createIrBuilder
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
-import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.descriptors.SourceElement
-import org.jetbrains.kotlin.descriptors.Visibilities
-import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.descriptors.impl.AnonymousFunctionDescriptor
-import org.jetbrains.kotlin.incremental.components.NoLookupLocation
-import org.jetbrains.kotlin.ir.IrStatement
-import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
-import org.jetbrains.kotlin.ir.builders.irBlockBody
-import org.jetbrains.kotlin.ir.builders.irCall
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrFile
-import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
-import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
-import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
-import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
-import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.util.ConstantValueGenerator
-import org.jetbrains.kotlin.ir.util.TypeTranslator
-import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
-import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
-import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
-import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import androidx.compose.plugins.kotlin.ComposableAnnotationChecker
 import androidx.compose.plugins.kotlin.ComposeFqNames
 import androidx.compose.plugins.kotlin.ComposeUtils.generateComposePackageName
 import androidx.compose.plugins.kotlin.KtxNameConventions
 import androidx.compose.plugins.kotlin.KtxNameConventions.UPDATE_SCOPE
-import org.jetbrains.kotlin.ir.expressions.IrExpression
-import org.jetbrains.kotlin.ir.expressions.IrReturn
-import org.jetbrains.kotlin.ir.expressions.impl.IrReturnImpl
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices
 import androidx.compose.plugins.kotlin.getKeyValue
 import androidx.compose.plugins.kotlin.isEmitInline
+import org.jetbrains.kotlin.backend.common.FileLoweringPass
+import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.backend.common.lower.irIfThen
 import org.jetbrains.kotlin.backend.common.lower.irNot
+import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.SimpleFunctionDescriptor
+import org.jetbrains.kotlin.descriptors.SourceElement
+import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.descriptors.impl.AnonymousFunctionDescriptor
+import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.ir.IrElement
+import org.jetbrains.kotlin.ir.IrStatement
+import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.IrBlockBuilder
 import org.jetbrains.kotlin.ir.builders.irBlock
+import org.jetbrains.kotlin.ir.builders.irBlockBody
+import org.jetbrains.kotlin.ir.builders.irCall
 import org.jetbrains.kotlin.ir.builders.irEqeqeq
 import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irNull
 import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.declarations.IrDeclaration
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
+import org.jetbrains.kotlin.ir.declarations.IrFile
+import org.jetbrains.kotlin.ir.declarations.IrFunction
+import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
 import org.jetbrains.kotlin.ir.descriptors.WrappedReceiverParameterDescriptor
 import org.jetbrains.kotlin.ir.expressions.IrBlockBody
 import org.jetbrains.kotlin.ir.expressions.IrBreak
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrContinue
+import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrReturn
+import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrBlockImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrReturnImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrTryImpl
+import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
+import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.classifierOrNull
 import org.jetbrains.kotlin.ir.types.getClass
 import org.jetbrains.kotlin.ir.types.isUnit
 import org.jetbrains.kotlin.ir.util.referenceFunction
+import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
+import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
+import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.resolve.DelegatingBindingTrace
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -95,23 +93,11 @@ import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
-class ComposeObservePatcher(val context: JvmBackendContext) :
+class ComposeObservePatcher(val context: IrPluginContext) :
     IrElementTransformerVoid(),
     FileLoweringPass {
-
-    private val typeTranslator =
-        TypeTranslator(
-            context.ir.symbols.externalSymbolTable,
-            context.state.languageVersionSettings,
-            context.builtIns
-        ).apply {
-            constantValueGenerator = ConstantValueGenerator(
-                context.state.module,
-                context.ir.symbols.externalSymbolTable
-            )
-            constantValueGenerator.typeTranslator = this
-        }
-
+    
+    private val typeTranslator = context.typeTranslator
     private fun KotlinType.toIrType(): IrType = typeTranslator.translateType(this)
 
     override fun lower(irFile: IrFile) {
@@ -143,12 +129,12 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
             (psi as? KtFunctionLiteral)?.let {
                 if (InlineUtil.isInlinedArgument(
                         it,
-                        context.state.bindingContext,
+                        context.bindingContext,
                         false
                     )
                 )
                     return declaration
-                if (it.isEmitInline(context.state.bindingContext)) {
+                if (it.isEmitInline(context.bindingContext)) {
                     return declaration
                 }
             }
@@ -159,7 +145,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
             return declaration
 
         // Check if the descriptor has restart scope calls resolved
-        val bindingContext = context.state.bindingContext
+        val bindingContext = context.bindingContext
         if (descriptor is SimpleFunctionDescriptor &&
             // Lambdas that make are not lowered earlier should be ignored.
             // All composable lambdas are already lowered to a class with an invoke() method.
@@ -182,8 +168,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                 val endRestartGroupDescriptor = getEndRestartGroup(composerDescriptor)
 
                 if (startRestartGroupDescriptor != null && endRestartGroupDescriptor != null) {
-                    val symbols = context.ir.symbols
-                    val symbolTable = symbols.externalSymbolTable
+                    val symbolTable = context.symbolTable
 
                     // Create call to get the composer
                     val unitType = context.irBuiltIns.unitType
@@ -207,7 +192,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                     // Create call to endRestartGroup
                     val endRestartGroup = irMethodCall(composer(), endRestartGroupDescriptor)
 
-                    val irBuilder = context.createIrBuilder(declaration.symbol)
+                    val irBuilder = DeclarationIrBuilder(context, declaration.symbol)
                     val updateScopeDescriptor =
                         endRestartGroupDescriptor.returnType?.memberScope?.getContributedFunctions(
                             UPDATE_SCOPE,
@@ -255,7 +240,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                             context.irBuiltIns.unitType
                         ).also {
                             it.parent = declaration
-                            val localIrBuilder = context.createIrBuilder(it.symbol)
+                            val localIrBuilder = DeclarationIrBuilder(context, it.symbol)
                             it.body = localIrBuilder.irBlockBody {
                                 // Call the function again with the same parameters
                                 +irReturn(irCall(selfSymbol).apply {
@@ -422,7 +407,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
                 NoLookupLocation.FROM_BACKEND
             ).single()
 
-        val symbolTable = context.ir.symbols.externalSymbolTable
+        val symbolTable = context.symbolTable
 
         val observeFunctionSymbol = symbolTable.referenceSimpleFunction(observeFunctionDescriptor)
 
@@ -446,7 +431,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
             )
         }
 
-        val irBuilder = context.createIrBuilder(declaration.symbol)
+        val irBuilder = DeclarationIrBuilder(context, declaration.symbol)
 
         return declaration.apply {
             body = irBuilder.irBlockBody {
@@ -512,7 +497,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
 
     fun irCall(descriptor: FunctionDescriptor): IrCall {
         val type = descriptor.returnType?.toIrType() ?: error("Expected a return type")
-        val symbol = context.ir.symbols.externalSymbolTable.referenceFunction(descriptor)
+        val symbol = context.symbolTable.referenceFunction(descriptor)
         return IrCallImpl(
             UNDEFINED_OFFSET,
             UNDEFINED_OFFSET,
@@ -557,7 +542,7 @@ class ComposeObservePatcher(val context: JvmBackendContext) :
     private fun isComposable(declaration: IrFunction): Boolean {
         val tmpTrace =
             DelegatingBindingTrace(
-                context.state.bindingContext, "tmp for composable analysis"
+                context.bindingContext, "tmp for composable analysis"
             )
         val composability =
             ComposableAnnotationChecker()

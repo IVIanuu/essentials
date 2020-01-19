@@ -149,14 +149,15 @@ fun Slider(
                 gestureEndAction(0f)
             }
         ) {
+            val dragValue = remember(position) {
+                object : ValueHolder<Float> {
+                    override val value: Float
+                        get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
+                } as ValueHolder<Float> // todo remove
+            }
             Draggable(
                 dragDirection = DragDirection.Horizontal,
-                dragValue = remember(position) {
-                    object : ValueHolder<Float> {
-                        override val value: Float
-                            get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
-                    } as ValueHolder<Float> // todo remove
-                },
+                dragValue = dragValue,
                 onDragStarted = { pressed.value = true },
                 onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
                 onDragStopped = { velocity ->

@@ -18,7 +18,7 @@ package androidx.compose.plugins.kotlin.compiler.lower
 
 import androidx.compose.plugins.kotlin.ComposeFqNames
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
+import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
-class ComposerIntrinsicTransformer(val context: JvmBackendContext) :
+class ComposerIntrinsicTransformer(val context: IrPluginContext) :
     IrElementTransformerVoid(),
     FileLoweringPass {
 
@@ -40,9 +40,7 @@ class ComposerIntrinsicTransformer(val context: JvmBackendContext) :
             // to this call is the composer itself. We just replace this expression with the
             // argument expression and we are good.
             assert(expression.valueArgumentsCount == 1)
-            val composerExpr = expression.getValueArgument(0)
-            if (composerExpr == null) error("Expected non-null composer argument")
-            return composerExpr
+            return expression.getValueArgument(0) ?: error("Expected non-null composer argument")
         }
         return super.visitCall(expression)
     }

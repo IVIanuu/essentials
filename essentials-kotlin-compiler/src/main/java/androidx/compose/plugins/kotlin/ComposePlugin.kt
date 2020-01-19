@@ -16,22 +16,23 @@
 
 package androidx.compose.plugins.kotlin
 
+import androidx.compose.plugins.kotlin.frames.analysis.FrameModelChecker
+import androidx.compose.plugins.kotlin.frames.analysis.FramePackageAnalysisHandlerExtension
+import com.google.auto.service.AutoService
+import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
+import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
+import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
+import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
 import org.jetbrains.kotlin.compiler.plugin.CliOption
 import org.jetbrains.kotlin.compiler.plugin.CliOptionProcessingException
 import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
-import org.jetbrains.kotlin.backend.jvm.extensions.IrLoweringExtension
-import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
-import org.jetbrains.kotlin.psi2ir.extensions.SyntheticIrExtension
-import androidx.compose.plugins.kotlin.frames.analysis.FrameModelChecker
-import androidx.compose.plugins.kotlin.frames.analysis.FramePackageAnalysisHandlerExtension
-import com.google.auto.service.AutoService
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.extensions.internal.CandidateInterceptor
 import org.jetbrains.kotlin.extensions.internal.TypeResolutionInterceptor
+import org.jetbrains.kotlin.psi2ir.extensions.SyntheticIrExtension
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 
 @AutoService(CommandLineProcessor::class)
@@ -96,6 +97,8 @@ class ComposeComponentRegistrar : ComponentRegistrar {
             IrLoweringExtension.registerExtension(project,
                 ComposeIrLoweringExtension()
             )
+            IrGenerationExtension.registerExtension(project,
+                ComposeIrGenerationExtension())
             CandidateInterceptor.registerExtension(
                 project,
                 ComposeCallResolutionInterceptorExtension()
