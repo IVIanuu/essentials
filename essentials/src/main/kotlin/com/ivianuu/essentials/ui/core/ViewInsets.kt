@@ -98,7 +98,7 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
 
             override fun onViewDetachedFromWindow(v: View?) {
             }
-        } as View.OnAttachStateChangeListener // todo type
+        }
     }
 
     onCommit(composeView) {

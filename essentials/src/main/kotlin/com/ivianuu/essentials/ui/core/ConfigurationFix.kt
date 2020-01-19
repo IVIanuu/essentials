@@ -46,7 +46,7 @@ fun ConfigurationFix(children: @Composable() () -> Unit) {
 
             override fun onTrimMemory(level: Int) {
             }
-        } as ComponentCallbacks2 // todo fix type
+        }
     }
 
     onActive {

@@ -149,11 +149,12 @@ fun Slider(
                 gestureEndAction(0f)
             }
         ) {
+            // todo ir
             val dragValue = remember(position) {
                 object : ValueHolder<Float> {
                     override val value: Float
                         get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
-                } as ValueHolder<Float> // todo remove
+                }
             }
             Draggable(
                 dragDirection = DragDirection.Horizontal,
@@ -285,7 +286,7 @@ private fun SliderFlingConfig(
 private val ThumbRadius = 6.dp
 private val TrackHeight = 4.dp
 private val SliderHeight = 48.dp
-private val SliderMinWidth = 144.dp // TODO: clarify min width
+private val SliderMinWidth = 144.dp
 private val DefaultSliderConstraints =
     DpConstraints(minWidth = SliderMinWidth, maxHeight = SliderHeight)
 private val InactiveTrackColorAlpha = 0.24f
