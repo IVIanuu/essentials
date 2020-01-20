@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
 import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.org.objectweb.asm.Label
@@ -44,9 +43,7 @@ private class SourceLocationClassBuilderFactory(
 
     override fun newClassBuilder(origin: JvmDeclarationOrigin): ClassBuilder {
         return SourceLocationClassBuilder(
-            delegateFactory.newClassBuilder(
-                origin
-            )
+            delegateFactory.newClassBuilder(origin)
         )
     }
 
@@ -65,8 +62,9 @@ private class SourceLocationClassBuilderFactory(
     }
 }
 
-private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder) :
-    DelegatingClassBuilder() {
+private class SourceLocationClassBuilder(
+    val delegateClassBuilder: ClassBuilder
+) : DelegatingClassBuilder() {
 
     override fun getDelegate(): ClassBuilder = delegateClassBuilder
 
@@ -80,11 +78,12 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
     ): MethodVisitor {
         val original = super.newMethod(origin, access, name, desc, signature, exceptions)
 
-        if (origin.descriptor == null) return original
         // do not replace with s inline functions
-        if (InlineUtil.isInline(origin.descriptor)) return original
+        if (origin.descriptor != null && InlineUtil.isInline(origin.descriptor)) return original
 
         var lineNumber = 0
+
+        val fqName = "$thisName:$name:$desc:$signature"
 
         return object : MethodVisitor(Opcodes.ASM5, original) {
             override fun visitLineNumber(line: Int, start: Label?) {
@@ -105,7 +104,7 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                     descriptor == "()Ljava/lang/Object;"
                 ) {
                     InstructionAdapter(this).apply {
-                        aconst("${origin.descriptor!!.fqNameSafe.asString()}:$lineNumber")
+                        aconst("$fqName:$lineNumber")
                     }
                 } else {
                     super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
@@ -114,34 +113,3 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
         }
     }
 }
-
-/**
-class SourceLocationIrGenerationExtension : IrGenerationExtension {
-override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-val sourceLocationCallReplacer = SourceLocationCallReplacer(pluginContext)
-moduleFragment.files.forEach { it.transformChildrenVoid(sourceLocationCallReplacer) }
-}
-}
-
-private class SourceLocationCallReplacer(private val context: IrPluginContext) : IrElementTransformerVoid() {
-
-private val functionsStack = mutableListOf<IrFunction>()
-
-override fun visitFunction(declaration: IrFunction): IrStatement {
-try {
-functionsStack.push(declaration)
-return super.visitFunction(declaration)
-} finally {
-functionsStack.pop()
-}
-}
-
-override fun visitCall(expression: IrCall): IrExpression {
-return if (expression.symbol.descriptor.fqNameSafe.asString() == "com.ivianuu.essentials.util.sourceLocation") {
-DeclarationIrBuilder(context, functionsStack.last().symbol).irBlock {
-+irInt(functionsStack.last().descriptor.fqNameSafe.hashCode() xor startOffset)
-}
-} else super.visitCall(expression)
-}
-
-}*/

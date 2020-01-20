@@ -1,3 +1,3 @@
 package com.ivianuu.essentials.util
 
-inline fun sourceLocation(): Int = 0
+fun sourceLocation(): Any = 0
