@@ -79,7 +79,7 @@ private class SourceLocationClassBuilder(
         val original = super.newMethod(origin, access, name, desc, signature, exceptions)
 
         // do not replace with s inline functions
-        if (origin.descriptor != null && InlineUtil.isInline(origin.descriptor)) return original
+        if (InlineUtil.isInline(origin.descriptor)) return original
 
         var lineNumber = 0
 
