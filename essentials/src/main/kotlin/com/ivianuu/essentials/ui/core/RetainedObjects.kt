@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.Stable
 import androidx.compose.mutableStateOf
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
@@ -107,7 +106,6 @@ fun <T> retain(
     key: Any,
     init: () -> T
 ): T {
-    d { "retain with key $key" }
     val retainedObjects = RetainedObjectsAmbient.current
     return retainedObjects.getOrSet(key, init)
 }

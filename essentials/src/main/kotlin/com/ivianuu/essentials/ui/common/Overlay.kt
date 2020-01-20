@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Observe
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
@@ -45,12 +44,11 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
                 }
                 .forEach { parentData ->
                     key(parentData.entry) {
-                        Observe {
-                            ParentData(data = parentData) {
-                                AbsorbPointer(absorb = !parentData.isVisible) {
-                                    parentData.entry.content()
-                                }
-                            }
+                        ParentData(data = parentData) {
+                            AbsorbPointer(
+                                absorb = !parentData.isVisible,
+                                children = parentData.entry.content
+                            )
                         }
                     }
                 }
