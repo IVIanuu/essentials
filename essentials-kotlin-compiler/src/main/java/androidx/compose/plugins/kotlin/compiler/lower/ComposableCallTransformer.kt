@@ -122,6 +122,7 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
                 !isSpecialType &&
                 (
                         KotlinBuiltIns.isPrimitiveType(this) ||
+                                KotlinBuiltIns.isString(this) ||
                                 isFunctionType ||
                                 isEnum ||
                                 isMarkedStable() ||
