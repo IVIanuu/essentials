@@ -19,7 +19,6 @@ package androidx.compose.plugins.kotlin.frames
 import androidx.compose.plugins.kotlin.frames.analysis.FrameMetadata
 import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices
 import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
-import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
@@ -142,9 +141,7 @@ import org.jetbrains.kotlin.utils.Printer
  *   - Remove the moved fields from the class and rewrite any methods that refer to the removed
  *     methods to use the getters and setters instead.
  */
-class FrameIrTransformer(val context: IrPluginContext) :
-    IrElementTransformerVoidWithContext(),
-    FileLoweringPass {
+class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoidWithContext() {
 
     private class FieldRewriteInformation(
         val getter: IrSimpleFunction?,
@@ -152,10 +149,6 @@ class FrameIrTransformer(val context: IrPluginContext) :
     )
 
     private val fieldRewrites = mutableMapOf<IrFieldSymbol, FieldRewriteInformation>()
-
-    override fun lower(irFile: IrFile) {
-        irFile.transformChildrenVoid(this)
-    }
 
     override fun visitClassNew(declaration: IrClass): IrStatement {
         val className = declaration.descriptor.fqNameSafe

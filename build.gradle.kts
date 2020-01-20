@@ -15,6 +15,7 @@
  */
 
 buildscript {
+    // todo remove
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
     }
@@ -46,12 +47,14 @@ buildscript {
 }
 
 allprojects {
+    // todo move
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             useIR = true
         }
     }
 
+    // todo remove
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
     }

@@ -21,13 +21,20 @@ import androidx.compose.plugins.kotlin.compiler.lower.ComposeObservePatcher
 import androidx.compose.plugins.kotlin.frames.FrameIrTransformer
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
-import org.jetbrains.kotlin.backend.common.lower
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
+import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 
 class ComposeIrGenerationExtension : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-        ComposableCallTransformer(pluginContext).lower(moduleFragment)
-        ComposeObservePatcher(pluginContext).lower(moduleFragment)
-        FrameIrTransformer(pluginContext).lower(moduleFragment)
+        val transformers = listOf(
+            ComposableCallTransformer(pluginContext),
+            ComposeObservePatcher(pluginContext),
+            FrameIrTransformer(pluginContext)
+        )
+        moduleFragment.files.forEach { file ->
+            transformers.forEach { transformer ->
+                file.transformChildrenVoid(transformer)
+            }
+        }
     }
 }

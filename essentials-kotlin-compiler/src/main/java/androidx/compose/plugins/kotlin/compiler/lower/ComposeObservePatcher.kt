@@ -24,7 +24,6 @@ import androidx.compose.plugins.kotlin.KtxNameConventions.UPDATE_SCOPE
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices
 import androidx.compose.plugins.kotlin.getKeyValue
 import androidx.compose.plugins.kotlin.isEmitInline
-import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.backend.common.lower.irIfThen
@@ -53,7 +52,6 @@ import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
 import org.jetbrains.kotlin.ir.descriptors.WrappedReceiverParameterDescriptor
@@ -93,16 +91,10 @@ import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
-class ComposeObservePatcher(val context: IrPluginContext) :
-    IrElementTransformerVoid(),
-    FileLoweringPass {
+class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformerVoid() {
 
     private val typeTranslator = context.typeTranslator
     private fun KotlinType.toIrType(): IrType = typeTranslator.translateType(this)
-
-    override fun lower(irFile: IrFile) {
-        irFile.transformChildrenVoid(this)
-    }
 
     private fun ResolvedCall<*>.isParameterless(): Boolean {
         return dispatchReceiver != null && extensionReceiver != null && valueArguments.isEmpty()
