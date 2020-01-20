@@ -101,10 +101,11 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
             ) {
                 if (opcode == Opcodes.INVOKESTATIC &&
                     owner == "com/ivianuu/essentials/util/SourceLocationKt" &&
-                    name == "sourceLocation"
+                    name == "sourceLocation" &&
+                    descriptor == "()Ljava/lang/Object;"
                 ) {
                     InstructionAdapter(this).apply {
-                        iconst(origin.descriptor!!.fqNameSafe.asString().hashCode() xor lineNumber)
+                        aconst("${origin.descriptor!!.fqNameSafe.asString()}:$lineNumber")
                     }
                 } else {
                     super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)

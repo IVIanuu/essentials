@@ -137,7 +137,7 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
         get() =
             (constructor.declarationDescriptor as? ClassDescriptor)?.kind == ClassKind.ENUM_CLASS
 
-    val declarationStack = mutableListOf<IrFunction>()
+    private val declarationStack = mutableListOf<IrFunction>()
 
     override fun visitFunction(declaration: IrFunction): IrStatement {
         try {
