@@ -38,14 +38,6 @@ import com.ivianuu.injekt.Name
  *
  * ´´´
  * val analyticsModule = module {
- *     appInitializer { AnalyticsAppInitializer() }
- * }
- * ´´´
- *
- * Or for existing bindings
- *
- * ´´´
- * val analyticsModule = module {
  *     bindAppInitializer<AnalyticsInitializer>()
  * }
  * ´´´
