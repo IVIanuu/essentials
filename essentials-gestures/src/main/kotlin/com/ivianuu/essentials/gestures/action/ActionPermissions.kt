@@ -11,6 +11,7 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.with
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Single
@@ -24,16 +25,16 @@ internal class ActionPermissions(resourceProvider: ResourceProvider) {
         ComponentAccessibilityService::class,
         Metadata.Title with "Accessibility",
         Metadata.Desc with "Required to click buttons",
-        Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_accessibility)
+        Metadata.Icon with { Icon(resourceProvider.getDrawable(R.drawable.es_ic_accessibility)) }
     )
     val root = RootPermission(
         Metadata.Title with "Root",
-        Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_adb)
+        Metadata.Icon with { Icon(resourceProvider.getDrawable(R.drawable.es_ic_adb)) }
     )
     val secureSettings = WriteSecureSettingsPermission(
         Metadata.Title with "Write secure settings",
         Metadata.Desc with "Required to change the navigation bar visibility",
-        Metadata.Icon with resourceProvider.getDrawable(R.drawable.es_ic_settings)
+        Metadata.Icon with { Icon(resourceProvider.getDrawable(R.drawable.es_ic_settings)) }
     )
 }
 

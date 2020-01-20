@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 import kotlinx.coroutines.launch
@@ -52,48 +53,48 @@ val PermissionRoute = Route {
             Manifest.permission.CAMERA,
             Metadata.Title with "Camera",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val phone = RuntimePermission(
             Manifest.permission.CALL_PHONE,
             Metadata.Title with "Call phone",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val accessibility = AccessibilityServicePermission(
             ComponentAccessibilityService::class,
             Metadata.Title with "Accessibility",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val notificationListener = NotificationListenerPermission(
             ComponentNotificationListenerService::class,
             Metadata.Title with "Notification listener",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val systemOverlay = SystemOverlayPermission(
             ContextAmbient.current,
             Metadata.Title with "System overlay",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val writeSecureSettings = WriteSecureSettingsPermission(
             Metadata.Title with "Write secure settings",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val writeSettings = WriteSettingsPermission(
             ContextAmbient.current,
             Metadata.Title with "Write settings",
             Metadata.Desc with "This is a desc",
-            Metadata.Icon with drawableResource(R.drawable.es_ic_menu)
+            Metadata.Icon with { Icon(drawableResource(R.drawable.es_ic_menu)) }
         )
 
         val coroutineScope = CoroutineScopeAmbient.current

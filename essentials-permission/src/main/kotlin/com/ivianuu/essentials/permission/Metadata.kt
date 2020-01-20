@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.ui.graphics.Image
+import androidx.compose.Composable
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -60,4 +60,4 @@ infix fun <T> Metadata.Key<T>.with(value: T): MetaDataKeyWithValue<T> =
 
 val Metadata.Companion.Title by lazy { Metadata.Key<String>("Title") }
 val Metadata.Companion.Desc by lazy { Metadata.Key<String>("Desc") }
-val Metadata.Companion.Icon by lazy { Metadata.Key<Image>("Image") }
+val Metadata.Companion.Icon by lazy { Metadata.Key<@Composable() () -> Unit>("Icon") }
