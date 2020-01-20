@@ -99,7 +99,6 @@ class DebugBillingClient(
     }
 
     override fun isFeatureSupported(feature: String?): BillingResult {
-        // TODO Update BillingStore to allow feature enable/disable
         return if (!isReady) {
             BillingResult.newBuilder().setResponseCode(BillingResponseCode.SERVICE_DISCONNECTED)
                 .build()

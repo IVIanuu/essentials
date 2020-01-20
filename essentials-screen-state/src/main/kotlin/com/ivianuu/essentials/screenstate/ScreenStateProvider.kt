@@ -54,7 +54,6 @@ class ScreenStateProvider(
         .distinctUntilChanged()
         .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "screen state")
 
-
     suspend fun getScreenState() = withContext(dispatchers.default) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
@@ -66,7 +65,6 @@ class ScreenStateProvider(
             ScreenState.Off
         }
     }
-
 }
 
 enum class ScreenState(val isOn: Boolean) {

@@ -23,22 +23,22 @@ import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
-import androidx.ui.core.Density
-import androidx.ui.core.Dp
 import androidx.ui.core.Draw
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
-import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
-import androidx.ui.core.max
-import androidx.ui.core.px
-import androidx.ui.core.toPx
-import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
+import androidx.ui.unit.Density
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.Px
+import androidx.ui.unit.max
+import androidx.ui.unit.px
+import androidx.ui.unit.toPx
+import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.Async
 import com.ivianuu.essentials.ui.common.FullScreenLoading
 import com.ivianuu.essentials.ui.common.ScrollPosition
@@ -116,12 +116,12 @@ fun ScrollableList2(
 
 @Composable
 private fun Item2(item: ScrollableListItem2) {
-    //d { "compose ${item.key}" }
+    // d { "compose ${item.key}" }
     ParentData(item) {
         Draw(
             children = item.children,
             onPaint = { canvas, parentSize ->
-                //d { "draw item ${item.key} ${item.shouldDraw}" }
+                // d { "draw item ${item.key} ${item.shouldDraw}" }
                 if (item.isVisible) {
                     drawChildren()
                 } else {
@@ -134,7 +134,7 @@ private fun Item2(item: ScrollableListItem2) {
     }
 }
 
-//@Immutable
+// @Immutable
 data class ScrollableListItem2(
     val key: Any,
     val size: Dp,
@@ -193,7 +193,7 @@ private class ScrollableListState2(
         val start = (position.value /* - viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
         val end = (position.value + viewportSize /*+ viewportSize * 0.1f*/).coerceIn(Px.Zero, totalSize)
         val visibleRange = start..end
-        //d { "visible range $visibleRange" }
+        // d { "visible range $visibleRange" }
         items
             .forEach { item ->
                 item.isVisible = item.leading in visibleRange || item.trailing in visibleRange
@@ -207,7 +207,7 @@ private fun ScrollableListLayout2(
     modifier: Modifier
 ) {
     Layout(children = {
-        //d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
+        // d { "lifecycle: composed ${state.visibleItems.map { it.key }}" }
         state.items.forEach { item ->
             key(item.key) {
                 Item2(item)
@@ -224,7 +224,7 @@ private fun ScrollableListLayout2(
             measureable.measure(childConstraints) to measureable.parentData as ScrollableListItem2
         }
 
-        //d { "lifecycle: measured ${placeables.map { it.second.key }}" }
+        // d { "lifecycle: measured ${placeables.map { it.second.key }}" }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             if (state.viewportSize != constraints.maxHeight.toPx()) {
@@ -232,11 +232,11 @@ private fun ScrollableListLayout2(
             }
 
             placeables.forEach { (placeable, item) ->
-                //d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
+                // d { "place ${item.key} h ${placeable.height} l layout ${item.leading - state.position.value} l list ${item.leading}" }
                 placeable.place(Px.Zero, item.leading - state.position.value)
             }
 
-            //d { "lifecycle: placed ${placeables.map { it.second.key }}" }
+            // d { "lifecycle: placed ${placeables.map { it.second.key }}" }
         }
     }
 }

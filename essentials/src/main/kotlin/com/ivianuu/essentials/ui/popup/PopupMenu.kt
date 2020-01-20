@@ -20,16 +20,16 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Alignment
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.core.Text
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -105,7 +105,7 @@ private fun PopupMenuItem(
             onClick = onSelected,
             children = {
                 Container(
-                    modifier = LayoutMinWidth(200.dp) + LayoutHeight(48.dp),
+                    modifier = LayoutWidth.Min(200.dp) + LayoutHeight(48.dp),
                     alignment = Alignment.CenterLeft
                 ) {
                     Wrap(Alignment.CenterLeft) {

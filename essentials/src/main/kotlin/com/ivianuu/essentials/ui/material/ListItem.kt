@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.dp
 import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Image
@@ -31,10 +30,11 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.common.asIconComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -78,10 +78,10 @@ fun ListItem(
 
 @Composable
 fun ListItem(
-    title: (@Composable() () -> Unit)? = null,
-    subtitle: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    trailing: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    subtitle: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    trailing: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,

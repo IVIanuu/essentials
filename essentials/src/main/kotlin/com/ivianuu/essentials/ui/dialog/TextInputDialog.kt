@@ -24,11 +24,11 @@ import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(
@@ -74,11 +74,11 @@ fun TextInputDialog(
     hint: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    positiveButton: (@Composable() () -> Unit)? = null,
-    negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null
+    icon: @Composable() (() -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    positiveButton: @Composable() (() -> Unit)? = null,
+    negativeButton: @Composable() (() -> Unit)? = null,
+    neutralButton: @Composable() (() -> Unit)? = null
 ) {
     MaterialDialog(
         buttonLayout = buttonLayout,

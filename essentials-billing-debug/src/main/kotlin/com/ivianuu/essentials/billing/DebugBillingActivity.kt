@@ -18,6 +18,7 @@ package com.ivianuu.essentials.billing
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Spacer
@@ -47,6 +48,7 @@ class DebugBillingActivity : EsActivity() {
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
 
+    @Composable
     override fun content() {
         get<PurchaseManager>() // just to properly initialize the DebugBillingClient
         val requestId = intent.getStringExtra(KEY_REQUEST_ID)

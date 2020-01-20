@@ -30,10 +30,10 @@ import androidx.compose.state
 import androidx.core.content.getSystemService
 import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.ambientDensity
-import androidx.ui.core.dp
-import androidx.ui.core.ipx
-import androidx.ui.core.withDensity
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
+import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
@@ -98,7 +98,7 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
 
             override fun onViewDetachedFromWindow(v: View?) {
             }
-        } as View.OnAttachStateChangeListener // todo type
+        }
     }
 
     onCommit(composeView) {

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Immutable
 import androidx.ui.core.Constraints
-import androidx.ui.core.DensityScope
 import androidx.ui.core.LayoutModifier
+import androidx.ui.unit.DensityScope
 
 @Immutable
 data class LayoutSquared(

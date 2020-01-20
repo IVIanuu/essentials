@@ -2,9 +2,9 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -21,6 +21,7 @@ import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * View model for the [ActionPickerController]
@@ -54,7 +55,7 @@ class ActionPickerViewModel(
                         getResult = { ActionPickerResult.None }
                     )
                 }
-                
+
                 val actionsAndDelegates = ((actionPickerDelegates
                     .map {
                         ActionPickerItem.PickerDelegate(
@@ -90,11 +91,12 @@ sealed class ActionPickerItem {
         override val title: String
             get() = action.title
 
+        @Composable
         override fun icon() {
             ActionIcon(action = action)
         }
 
-        override suspend fun getResult() = ActionPickerResult.Action(action.key)
+        override fun getResult() = ActionPickerResult.Action(action.key)
     }
 
     @Immutable
@@ -105,11 +107,14 @@ sealed class ActionPickerItem {
         override val title: String
             get() = delegate.title
 
+        @Composable
         override fun icon() {
             Icon(image = delegate.icon)
         }
 
-        override suspend fun getResult() = delegate.getResult(navigator)
+        override fun getResult() = runBlocking {
+            delegate.getResult(navigator)
+        }
     }
 
     @Immutable
@@ -117,11 +122,13 @@ sealed class ActionPickerItem {
         override val title: String,
         val getResult: () -> ActionPickerResult?
     ) : ActionPickerItem() {
+
+        @Composable
         override fun icon() {
             Spacer(LayoutSize(24.dp, 24.dp))
         }
 
-        override suspend fun getResult() = getResult.invoke()
+        override fun getResult() = getResult.invoke()
     }
 
     abstract val title: String
@@ -129,8 +136,7 @@ sealed class ActionPickerItem {
     @Composable
     abstract fun icon()
 
-    abstract suspend fun getResult(): ActionPickerResult?
-
+    abstract /*suspend*/ fun getResult(): ActionPickerResult? // todo ir
 }
 
 @Immutable

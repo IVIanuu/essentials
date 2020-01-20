@@ -41,7 +41,6 @@ internal class RootPermissionStateProvider(private val shell: Shell) : Permissio
         Metadata.IsRootPermission in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean = shell.isAvailable()
-
 }
 
 @Factory

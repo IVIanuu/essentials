@@ -59,5 +59,4 @@ class ScreenUnlocker(
     internal fun onUnlockScreenResult(requestId: String, success: Boolean) {
         requestsById.remove(requestId)?.complete(success)
     }
-
 }

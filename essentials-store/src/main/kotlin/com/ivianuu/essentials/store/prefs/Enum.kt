@@ -28,7 +28,7 @@ fun <T : Enum<T>> PrefBoxFactory.enum(
     key: String,
     type: KClass<T>,
     defaultValue: T
-    ) = box(
+) = box(
     key, defaultValue,
     EnumSerializer(type)
 )

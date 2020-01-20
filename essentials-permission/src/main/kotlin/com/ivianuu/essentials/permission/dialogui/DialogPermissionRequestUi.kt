@@ -23,6 +23,7 @@ import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
 import androidx.ui.res.stringResource
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
@@ -38,7 +39,6 @@ import com.ivianuu.essentials.permission.bindPermissionRequestUi
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog

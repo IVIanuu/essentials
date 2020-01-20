@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.ui.core.Dp
-import androidx.ui.core.px
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
+import androidx.ui.unit.Dp
+import androidx.ui.unit.px
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.injekt.Factory
 
@@ -43,5 +43,4 @@ class ResourceProvider(
 
     fun getStringArray(id: Int): Array<String> =
         context.resources.getStringArray(id)
-
 }

@@ -42,10 +42,10 @@ fun SimplePreference(
 @Composable
 fun SimplePreference(
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    trailing: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->

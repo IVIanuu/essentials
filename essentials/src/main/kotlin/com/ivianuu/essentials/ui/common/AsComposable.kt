@@ -21,13 +21,13 @@ import androidx.ui.graphics.Image
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Icon
 
-fun String?.asTextComposable(): (@Composable() () -> Unit)? = if (this == null) null else {
+fun String?.asTextComposable(): @Composable() (() -> Unit)? = if (this == null) null else {
     {
         Text(this)
     }
 }
 
-fun Image?.asIconComposable(): (@Composable() () -> Unit)? = if (this == null) null else {
+fun Image?.asIconComposable(): @Composable() (() -> Unit)? = if (this == null) null else {
     {
         Icon(this)
     }

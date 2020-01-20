@@ -2,7 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.ui.graphics.Image
 import coil.ImageLoader
-import coil.api.getAny
+import com.ivianuu.essentials.coil.getAnyNoInline
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
@@ -25,7 +25,7 @@ class CoilActionIconProvider(
     override val icon: Flow<ActionIcon>
         get() = flowOf {
             ActionIcon(
-                image = imageLoader.getAny(data).toImage(),
+                image = imageLoader.getAnyNoInline(data).toImage(),
                 tint = tint
             )
         }

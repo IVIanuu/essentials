@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.get
@@ -56,6 +57,7 @@ class PermissionActivity : EsActivity() {
         requestUi.performRequest(this@PermissionActivity, manager, finalRequest)
     }
 
+    @Composable
     override fun content() {
         Navigator(state = get())
     }

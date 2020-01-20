@@ -18,16 +18,16 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.state
-import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
@@ -56,7 +56,7 @@ val DialogsRoute = Route {
         body = {
             VerticalScroller {
                 Column(
-                    modifier = LayoutExpandedWidth + LayoutPadding(all = 8.dp),
+                    modifier = LayoutWidth.Fill + LayoutPadding(all = 8.dp),
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {

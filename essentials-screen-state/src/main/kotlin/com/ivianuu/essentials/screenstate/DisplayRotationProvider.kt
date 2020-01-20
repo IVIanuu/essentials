@@ -24,6 +24,7 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.ui.core.DisplayRotation
@@ -32,7 +33,6 @@ import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -78,31 +78,31 @@ class DisplayRotationProvider(
             else -> error("unexpected rotation")
         }
 
-    private fun rotationChanges() = callbackFlow {
-        var currentRotation = displayRotation
+    private fun rotationChanges() = callbackFlowNoInline<DisplayRotation> {
+        var currentRotation = currentDisplayRotation
 
         val listener = object : OrientationEventListener(
             app, SensorManager.SENSOR_DELAY_NORMAL
         ) {
             override fun onOrientationChanged(orientation: Int) {
-                val rotation = displayRotation
+                val rotation = currentDisplayRotation
                 if (rotation != currentRotation) {
-                    offer(rotation)
+                    it.offer(rotation)
                     currentRotation = rotation
                 }
             }
         }
 
-        offer(currentRotation)
+        it.offer(currentRotation)
         listener.enable()
 
-        awaitClose { listener.disable() }
+        it.awaitClose { listener.disable() }
     }
 
-    private fun configChanges() = callbackFlow<Unit> {
+    private fun configChanges() = callbackFlowNoInline<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
-                offer(Unit)
+                it.offer(Unit)
             }
 
             override fun onLowMemory() {
@@ -112,7 +112,6 @@ class DisplayRotationProvider(
             }
         }
         app.registerComponentCallbacks(callbacks)
-        awaitClose { app.unregisterComponentCallbacks(callbacks) }
+        it.awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
-
 }

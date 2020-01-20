@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.DensityScope
 import androidx.ui.core.ambientDensity
-import androidx.ui.core.withDensity
+import androidx.ui.unit.DensityScope
+import androidx.ui.unit.withDensity
 
 // todo remove once public in compose
 

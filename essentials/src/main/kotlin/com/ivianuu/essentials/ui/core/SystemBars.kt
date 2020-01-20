@@ -73,7 +73,7 @@ fun SurfaceSystemBarStyle(
     statusBarAlpha: Float = 0.7f,
     lightStatusBar: Boolean = MaterialTheme.colors().surface.isLight,
     navigationBarAlpha: Float = 0.7f,
-    lightNavigationBar: Boolean =  MaterialTheme.colors().surface.isLight
+    lightNavigationBar: Boolean = MaterialTheme.colors().surface.isLight
 ) = SystemBarStyle(
     statusBarColor = MaterialTheme.colors().surface.copy(alpha = statusBarAlpha),
     lightStatusBar = lightStatusBar,

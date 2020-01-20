@@ -23,25 +23,25 @@ import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
-import androidx.ui.core.Density
-import androidx.ui.core.Dp
 import androidx.ui.core.Draw
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.LayoutNode
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
-import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
-import androidx.ui.core.max
-import androidx.ui.core.px
-import androidx.ui.core.round
-import androidx.ui.core.toPx
 import androidx.ui.core.visitLayoutChildren
-import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
+import androidx.ui.unit.Density
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.Px
+import androidx.ui.unit.max
+import androidx.ui.unit.px
+import androidx.ui.unit.round
+import androidx.ui.unit.toPx
+import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.Async
 import com.ivianuu.essentials.ui.common.FullScreenLoading
@@ -142,7 +142,7 @@ private fun Item3(item: ScrollableListItem3) {
     }
 }
 
-//@Immutable
+// @Immutable
 data class ScrollableListItem3(
     val key: Any,
     val size: Dp,
@@ -208,13 +208,12 @@ private class ScrollableListState3(
         val visibleRange = position.value..(position.value + viewportSize)
         items.forEach {
             it.shouldDraw = it.leading in visibleRange || it.trailing in visibleRange
-            it.shouldCompose = it.shouldDraw//it.leading in composeRange || it.trailing in composeRange
+            it.shouldCompose = it.shouldDraw // it.leading in composeRange || it.trailing in composeRange
             it.shouldMeasure = it.shouldCompose
             d { "updated state ${it.key} leading ${it.leading} size ${it.size} traling ${it.trailing} " +
                     "compose: ${it.shouldCompose} draw ${it.shouldDraw} measure ${it.shouldMeasure} " +
                     "visible range $visibleRange compose range $composeRange" }
         }
-
     }
 }
 

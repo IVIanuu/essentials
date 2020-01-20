@@ -21,15 +21,15 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Draw
-import androidx.ui.core.PxSize
-import androidx.ui.core.dp
-import androidx.ui.engine.geometry.Offset
+import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.PxSize
+import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
@@ -91,21 +91,21 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
         },
         body = {
             ScrollableList {
-                var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
-                if (showBanner) {
+                val showBanner = unfoldBox(inject<PrefBoxFactory>().boolean("show_banner")) // todo ir by
+                if (showBanner.value) {
                     Banner(
                         leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
                         content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
                         actions = {
                             Button(
                                 text = "Dismiss",
-                                onClick = { showBanner = false }
+                                onClick = { showBanner.value = false }
                             )
 
                             Button(
                                 text = "Learn More",
                                 onClick = navigateOnClick {
-                                    showBanner = false
+                                    showBanner.value = false
                                     UrlRoute("https://google.com")
                                 }
                             )

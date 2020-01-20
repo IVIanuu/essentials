@@ -26,18 +26,14 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
-import androidx.ui.core.PxSize
-import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.core.px
-import androidx.ui.core.toRect
-import androidx.ui.engine.geometry.Offset
 import androidx.ui.foundation.ValueHolder
 import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.gestures.DragDirection
 import androidx.ui.foundation.gestures.Draggable
 import androidx.ui.foundation.shape.corner.CircleShape
+import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
@@ -48,14 +44,18 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutSize
-import androidx.ui.lerp
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
-import com.ivianuu.essentials.ui.common.withDensity
+import androidx.ui.unit.PxSize
+import androidx.ui.unit.dp
+import androidx.ui.unit.lerp
+import androidx.ui.unit.px
+import androidx.ui.unit.toRect
 import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.common.withDensity
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -99,7 +99,6 @@ class SliderPosition(
             "steps should be >= 0"
         }
     }
-
 }
 
 @Composable
@@ -149,14 +148,16 @@ fun Slider(
                 gestureEndAction(0f)
             }
         ) {
+            // todo ir
+            val dragValue = remember(position) {
+                object : ValueHolder<Float> {
+                    override val value: Float
+                        get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
+                }
+            }
             Draggable(
                 dragDirection = DragDirection.Horizontal,
-                dragValue = remember(position) {
-                    object : ValueHolder<Float> {
-                        override val value: Float
-                            get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
-                    } as ValueHolder<Float> // todo remove
-                },
+                dragValue = dragValue,
                 onDragStarted = { pressed.value = true },
                 onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
                 onDragStopped = { velocity ->
@@ -254,7 +255,7 @@ private fun DrawTrack(
 
 // Scale x1 from a1..b1 range to a2..b2 range
 private fun scale(a1: Float, b1: Float, x1: Float, a2: Float, b2: Float) =
-    lerp(a2, b2, calcFraction(a1, b1, x1))
+    lerp(a2.px, b2.px, calcFraction(a1, b1, x1)).value
 
 // Calculate the 0..1 fraction that `pos` value represents between `a` and `b`
 private fun calcFraction(a: Float, b: Float, pos: Float) =
@@ -284,7 +285,7 @@ private fun SliderFlingConfig(
 private val ThumbRadius = 6.dp
 private val TrackHeight = 4.dp
 private val SliderHeight = 48.dp
-private val SliderMinWidth = 144.dp // TODO: clarify min width
+private val SliderMinWidth = 144.dp
 private val DefaultSliderConstraints =
     DpConstraints(minWidth = SliderMinWidth, maxHeight = SliderHeight)
 private val InactiveTrackColorAlpha = 0.24f

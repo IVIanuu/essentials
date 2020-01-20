@@ -31,8 +31,8 @@ fun VectorImage(
     val vector = vectorResource(resId)
     WithDensity {
         Container(
-            width = vector.defaultWidth.toDp(),
-            height = vector.defaultHeight.toDp()
+            width = vector.defaultWidth,
+            height = vector.defaultHeight
         ) {
             DrawVector(vector, tint)
         }

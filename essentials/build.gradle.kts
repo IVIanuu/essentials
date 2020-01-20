@@ -56,7 +56,7 @@ dependencies {
 
     api(project(":essentials-compose-helpers"))
     api(project(":essentials-coroutines"))
-    api(project(":essentials-material-icons"))
+    //api(project(":essentials-material-icons"))
     api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)

@@ -19,9 +19,9 @@ package com.ivianuu.essentials.apps.ui
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
-import androidx.ui.core.dp
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon

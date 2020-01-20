@@ -34,13 +34,13 @@ interface ResolvableString {
 }
 
 class Args(private val values: Array<Any?>) {
-    
+
     val size: Int get() = values.size
-    
+
     operator fun <T> get(index: Int): T = values[index] as T
 
     fun <T> getOrNull(index: Int): T? = values.getOrNull(index) as? T
-    
+
     operator fun <T> component1(): T = get(0)
     operator fun <T> component2(): T = get(1)
     operator fun <T> component3(): T = get(2)

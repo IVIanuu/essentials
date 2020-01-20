@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject

@@ -72,5 +72,4 @@ class PermissionManager(
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =
         permissionStateProviders.first { it.handles(permission) }
-
 }

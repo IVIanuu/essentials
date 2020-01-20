@@ -31,12 +31,12 @@ val TwilightSettingsRoute = Route {
     val prefs = inject<TwilightPrefs>()
 
     ListScreen(title = stringResource(R.string.es_twilight_title)) {
-        var twilightMode by unfoldBox(prefs.twilightMode)
+        val twilightMode = unfoldBox(prefs.twilightMode) // todo ir by
         TwilightMode.values().toList().forEach { mode ->
             TwilightModeItem(
                 mode = mode,
-                isSelected = twilightMode == mode,
-                onClick = { twilightMode = mode }
+                isSelected = twilightMode.value == mode,
+                onClick = { twilightMode.value = mode }
             )
         }
     }

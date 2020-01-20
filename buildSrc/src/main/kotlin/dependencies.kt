@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev441"
+    const val version = "${Build.versionName}-dev443"
 }
 
 object Deps {
@@ -42,7 +42,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
         object Compose {
-            private const val version = "0.0.1-dev15"
+            private const val version = "0.0.1-dev18"
             const val runtime = "androidx.compose:compose-runtime:$version"
         }
 
@@ -60,7 +60,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev15"
+            private const val version = "0.0.1-dev18"
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"
@@ -107,12 +107,12 @@ object Deps {
     }
     
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev441"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev443"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev87"
+        private const val version = "0.0.1-dev91"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
@@ -121,8 +121,9 @@ object Deps {
     const val junit = "junit:junit:4.12"
 
     object Kotlin {
-        private const val version = "1.3.61"
+        private const val version = "1.4-SNAPSHOT"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
+        const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"

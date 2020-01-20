@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.ui.base
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.get
 
 class DefaultActivity : EsActivity() {
+    @Composable
     override fun content() {
         get<AppUi>().runApp()
     }

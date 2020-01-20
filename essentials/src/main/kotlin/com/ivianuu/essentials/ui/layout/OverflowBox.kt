@@ -18,12 +18,12 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
-import androidx.ui.core.Dp
-import androidx.ui.core.IntPxSize
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.dp
 import androidx.ui.layout.Constraints
 import androidx.ui.layout.DpConstraints
+import androidx.ui.unit.Dp
+import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.dp
 
 @Composable
 fun OverflowBox(

@@ -23,8 +23,6 @@ import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
-import androidx.ui.core.coerceIn
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
@@ -34,13 +32,14 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.unit.coerceIn
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.Unstable
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -70,7 +69,6 @@ fun DefaultBottomNavigationBarStyle(
     normalItemColor = normalItemColor
 )
 
-@Unstable
 @Composable
 fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),

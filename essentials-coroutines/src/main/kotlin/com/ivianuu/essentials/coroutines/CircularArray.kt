@@ -22,7 +22,6 @@ internal class CircularArray<T>(size: Int) : Iterable<T> {
     private var count: Int = 0
     private var tail: Int = -1
 
-
     fun add(item: T) {
         tail = (tail + 1) % array.size
         array[tail] = item
@@ -49,7 +48,6 @@ internal class CircularArray<T>(size: Int) : Iterable<T> {
 
         override fun hasNext(): Boolean = _index < count
         override fun next(): T = get(_index++)
-
     }
 
     override fun toString(): String = "CircularArray[array=${contentToString()}]"

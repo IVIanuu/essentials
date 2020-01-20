@@ -18,6 +18,7 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.shareIn
+import com.ivianuu.essentials.coroutines.withLockNoInline
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -312,7 +312,7 @@ private class WriteLock(private val path: String) {
 
     suspend fun awaitWrite() {
         log { "$path -> await write start" }
-        val lock = mutex.withLock { currentLock }
+        val lock = mutex.withLockNoInline { currentLock }
         lock?.await()
         log { "$path -> await write end" }
     }
@@ -320,12 +320,12 @@ private class WriteLock(private val path: String) {
     suspend fun beginWrite() {
         log { "$path -> begin write" }
         awaitWrite()
-        mutex.withLock { currentLock = CompletableDeferred() }
+        mutex.withLockNoInline { currentLock = CompletableDeferred() }
     }
 
     suspend fun endWrite() {
         log { "$path -> end write" }
-        val lock = mutex.withLock {
+        val lock = mutex.withLockNoInline {
             val tmp = currentLock
             currentLock = null
             tmp
@@ -341,10 +341,10 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
     private val mutex = Mutex()
 
     suspend operator fun invoke(): T {
-        var deferred = mutex.withLock { currentDeferred }
+        var deferred = mutex.withLockNoInline { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            mutex.withLock { currentDeferred = deferred  }
+            mutex.withLockNoInline { currentDeferred = deferred }
             try {
                 val result = getter.invoke()
                 deferred.complete(result)
@@ -352,7 +352,7 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                mutex.withLock { currentDeferred = null }
+                mutex.withLockNoInline { currentDeferred = null }
             }
         }
 

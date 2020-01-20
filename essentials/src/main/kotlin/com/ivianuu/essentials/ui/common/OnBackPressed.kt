@@ -21,8 +21,8 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
 import androidx.compose.onCommit
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 
 @Composable
 fun onBackPressed(
@@ -35,7 +35,7 @@ fun onBackPressed(
             override fun handleOnBackPressed() {
                 callback()
             }
-        } as OnBackPressedCallback // todo remove once fixed
+        }
     }
     onBackPressedCallback.isEnabled = enabled
 

@@ -39,4 +39,4 @@ private fun getHomePackage(): String {
         intent,
         PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""
-}*/
+} */

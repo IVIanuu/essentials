@@ -15,4 +15,3 @@ internal val EsSplitScreenActionModule = Module {
         )
     }
 }
-

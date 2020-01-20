@@ -18,15 +18,15 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
 import androidx.ui.core.Alignment
-import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.layout.ScrollableList

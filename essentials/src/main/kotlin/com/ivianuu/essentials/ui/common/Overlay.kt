@@ -22,11 +22,11 @@ import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.tightMax
+import androidx.ui.unit.IntPx
 import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {

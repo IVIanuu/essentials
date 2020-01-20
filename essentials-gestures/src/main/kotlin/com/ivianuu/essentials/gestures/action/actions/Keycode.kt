@@ -14,7 +14,6 @@ private fun createKeycodeAction() = Action(
     flags = setOf(Flag.RequiresRoot)
 )
 
-
 private suspend fun doKeycode(key: String) {
     val keycode = key.split("=:=")[1]
     runRootCommand("input keyevent $keycode")

@@ -20,27 +20,27 @@ import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.remember
 import androidx.ui.core.Constraints
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.dp
-import androidx.ui.core.looseMin
-import androidx.ui.layout.LayoutExpanded
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.dp
+import com.ivianuu.essentials.composehelpers.ambientOf
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
-import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.looseMin
 
 @Composable
 fun Scaffold(
-    drawerContent: (@Composable() () -> Unit)? = null,
-    topAppBar: (@Composable() () -> Unit)? = null,
-    body: (@Composable() () -> Unit)? = null,
-    bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null,
+    drawerContent: @Composable() (() -> Unit)? = null,
+    topAppBar: @Composable() (() -> Unit)? = null,
+    body: @Composable() (() -> Unit)? = null,
+    bottomBar: @Composable() (() -> Unit)? = null,
+    fab: @Composable() (() -> Unit)? = null,
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
     bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
     applySideSafeArea: Boolean = true
@@ -63,11 +63,11 @@ fun Scaffold(
 @Composable
 fun Scaffold(
     scaffoldState: ScaffoldState,
-    drawerContent: (@Composable() () -> Unit)? = null,
-    topAppBar: (@Composable() () -> Unit)? = null,
-    body: (@Composable() () -> Unit)? = null,
-    bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null
+    drawerContent: @Composable() (() -> Unit)? = null,
+    topAppBar: @Composable() (() -> Unit)? = null,
+    body: @Composable() (() -> Unit)? = null,
+    bottomBar: @Composable() (() -> Unit)? = null,
+    fab: @Composable() (() -> Unit)? = null
 ) {
     // update state
     scaffoldState.hasTopAppBar = topAppBar != null
@@ -119,7 +119,7 @@ fun Scaffold(
         }
 
         SafeArea(
-            modifier = LayoutExpanded,
+            modifier = LayoutSize.Fill,
             left = scaffoldState.applySideSafeArea,
             top = false,
             right = scaffoldState.applySideSafeArea,
@@ -161,10 +161,10 @@ val ScaffoldAmbient =
 @Composable
 private fun ScaffoldLayout(
     state: ScaffoldState,
-    topAppBar: (@Composable() () -> Unit)?,
-    body: (@Composable() () -> Unit)?,
-    bottomBar: (@Composable() () -> Unit)?,
-    fab: (@Composable() () -> Unit)?
+    topAppBar: @Composable() (() -> Unit)?,
+    body: @Composable() (() -> Unit)?,
+    bottomBar: @Composable() (() -> Unit)?,
+    fab: @Composable() (() -> Unit)?
 ) {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
