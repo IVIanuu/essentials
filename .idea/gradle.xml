@@ -27,7 +27,6 @@
             <option value="$PROJECT_DIR$/essentials-broadcast" />
             <option value="$PROJECT_DIR$/essentials-coil" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
-            <option value="$PROJECT_DIR$/essentials-compose-helpers" />
             <option value="$PROJECT_DIR$/essentials-coroutines" />
             <option value="$PROJECT_DIR$/essentials-foreground" />
             <option value="$PROJECT_DIR$/essentials-gestures" />

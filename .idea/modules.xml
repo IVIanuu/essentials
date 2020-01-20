@@ -20,7 +20,6 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-broadcast/essentials-broadcast.iml" filepath="$PROJECT_DIR$/essentials-broadcast/essentials-broadcast.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-coil/essentials-coil.iml" filepath="$PROJECT_DIR$/essentials-coil/essentials-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-compose-helpers/essentials-compose-helpers.iml" filepath="$PROJECT_DIR$/essentials-compose-helpers/essentials-compose-helpers.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-coroutines/essentials-coroutines.iml" filepath="$PROJECT_DIR$/essentials-coroutines/essentials-coroutines.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-about/essentials-essentials-about.iml" filepath="$PROJECT_DIR$/essentials-about/essentials-essentials-about.iml" />

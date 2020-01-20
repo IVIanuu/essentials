@@ -20,9 +20,8 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.Stable
 import androidx.compose.mutableStateOf
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
-import com.ivianuu.essentials.composehelpers.sourceLocation
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
 @Stable
@@ -108,6 +107,7 @@ fun <T> retain(
     key: Any,
     init: () -> T
 ): T {
+    d { "retain with key $key" }
     val retainedObjects = RetainedObjectsAmbient.current
     return retainedObjects.getOrSet(key, init)
 }

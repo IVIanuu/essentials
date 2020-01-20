@@ -34,12 +34,12 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.coerceIn
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment

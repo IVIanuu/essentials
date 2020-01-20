@@ -29,7 +29,6 @@ import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
 import androidx.ui.text.style.TextOverflow
 import androidx.ui.unit.PxPosition
-import com.ivianuu.essentials.composehelpers.current
 
 // todo remove once supported by original
 

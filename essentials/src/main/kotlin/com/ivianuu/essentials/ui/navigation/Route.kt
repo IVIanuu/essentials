@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.ambientOf
 
 @Immutable
 class Route(

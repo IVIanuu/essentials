@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Image
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.image.BitmapImage
 
 @Composable

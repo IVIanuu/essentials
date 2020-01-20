@@ -100,12 +100,11 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                 isInterface: Boolean
             ) {
                 if (opcode == Opcodes.INVOKESTATIC &&
-                    owner == "com/ivianuu/essentials/composehelpers/SourceLocationKt" &&
-                    name == "sourceLocation" &&
-                    descriptor == "()Ljava/lang/Object;"
+                    owner == "com/ivianuu/essentials/util/SourceLocationKt" &&
+                    name == "sourceLocation"
                 ) {
                     InstructionAdapter(this).apply {
-                        aconst("${origin.descriptor!!.fqNameSafe.asString()}:$lineNumber")
+                        iconst(origin.descriptor!!.fqNameSafe.asString().hashCode() xor lineNumber)
                     }
                 } else {
                     super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
@@ -114,3 +113,34 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
         }
     }
 }
+
+/**
+class SourceLocationIrGenerationExtension : IrGenerationExtension {
+override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
+val sourceLocationCallReplacer = SourceLocationCallReplacer(pluginContext)
+moduleFragment.files.forEach { it.transformChildrenVoid(sourceLocationCallReplacer) }
+}
+}
+
+private class SourceLocationCallReplacer(private val context: IrPluginContext) : IrElementTransformerVoid() {
+
+private val functionsStack = mutableListOf<IrFunction>()
+
+override fun visitFunction(declaration: IrFunction): IrStatement {
+try {
+functionsStack.push(declaration)
+return super.visitFunction(declaration)
+} finally {
+functionsStack.pop()
+}
+}
+
+override fun visitCall(expression: IrCall): IrExpression {
+return if (expression.symbol.descriptor.fqNameSafe.asString() == "com.ivianuu.essentials.util.sourceLocation") {
+DeclarationIrBuilder(context, functionsStack.last().symbol).irBlock {
++irInt(functionsStack.last().descriptor.fqNameSafe.hashCode() xor startOffset)
+}
+} else super.visitCall(expression)
+}
+
+}*/

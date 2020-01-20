@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem

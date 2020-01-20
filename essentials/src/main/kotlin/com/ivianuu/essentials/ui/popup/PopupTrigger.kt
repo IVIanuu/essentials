@@ -24,8 +24,8 @@ import androidx.ui.layout.Wrap
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.PxPosition
 import androidx.ui.unit.round
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 // todo better name?

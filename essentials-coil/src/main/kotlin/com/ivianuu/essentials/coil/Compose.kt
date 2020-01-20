@@ -24,8 +24,8 @@ import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject

@@ -24,12 +24,12 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column

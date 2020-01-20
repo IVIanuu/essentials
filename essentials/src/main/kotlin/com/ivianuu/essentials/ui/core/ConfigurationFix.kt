@@ -25,7 +25,6 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.ContextAmbient
-import com.ivianuu.essentials.composehelpers.current
 
 // todo remove once ConfigurationAmbient triggers recomposition
 

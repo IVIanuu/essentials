@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.composehelpers.ambientOf
 
 val ActivityAmbient =
     ambientOf<ComponentActivity> { error("No activity provided") }

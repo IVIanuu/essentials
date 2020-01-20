@@ -27,8 +27,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag

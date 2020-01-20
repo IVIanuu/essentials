@@ -27,9 +27,9 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class SubheaderStyle(

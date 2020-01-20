@@ -21,8 +21,8 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.WithModifier

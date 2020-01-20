@@ -31,7 +31,6 @@ include(
     ":essentials-broadcast",
     ":essentials-coil",
     ":essentials-compiler",
-    ":essentials-compose-helpers",
     ":essentials-coroutines",
     ":essentials-foreground",
     ":essentials-gestures",

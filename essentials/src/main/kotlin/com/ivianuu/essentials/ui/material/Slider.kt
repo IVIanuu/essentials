@@ -53,9 +53,9 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.lerp
 import androidx.ui.unit.px
 import androidx.ui.unit.toRect
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.withDensity
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 import kotlin.math.abs
 
 // todo remove once fixed in compose

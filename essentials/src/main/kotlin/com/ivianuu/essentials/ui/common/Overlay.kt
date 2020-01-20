@@ -25,7 +25,7 @@ import androidx.compose.remember
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.unit.IntPx
-import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable

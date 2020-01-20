@@ -22,8 +22,8 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.selection.ToggleableState
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class CheckboxStyle(val color: Color)

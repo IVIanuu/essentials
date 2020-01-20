@@ -21,8 +21,6 @@ import androidx.compose.Composable
 import androidx.compose.onDispose
 import androidx.ui.core.AndroidComposeView
 import androidx.ui.core.input.FocusManager
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 
 class KeyboardManager(
     private val focusManager: FocusManager,

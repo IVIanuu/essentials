@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.FloatingActionButton

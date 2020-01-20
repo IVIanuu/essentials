@@ -28,7 +28,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Canvas
 import androidx.ui.unit.PxSize
-import com.ivianuu.essentials.composehelpers.ambientOf
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Immutable

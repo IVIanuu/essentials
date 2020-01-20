@@ -20,8 +20,8 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.ContainedButtonStyle
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.ambientOf
+import com.ivianuu.essentials.ui.core.current
 
 val ButtonStyleAmbient =
     ambientOf<ButtonStyle?> { null }

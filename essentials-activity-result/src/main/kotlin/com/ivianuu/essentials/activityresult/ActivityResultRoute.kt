@@ -18,7 +18,7 @@ package com.ivianuu.essentials.activityresult
 
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient

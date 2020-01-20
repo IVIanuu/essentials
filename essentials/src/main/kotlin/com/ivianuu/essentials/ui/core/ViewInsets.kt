@@ -35,8 +35,6 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.UpdateProvider
 import com.ivianuu.essentials.ui.common.Updateable
 import com.ivianuu.essentials.ui.common.framed

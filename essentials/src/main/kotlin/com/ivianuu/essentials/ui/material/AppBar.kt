@@ -30,12 +30,12 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.composehelpers.ambientOf
-import com.ivianuu.essentials.composehelpers.current
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
+import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.looseMin
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment

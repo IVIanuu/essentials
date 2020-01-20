@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.remember
-import com.ivianuu.essentials.composehelpers.current
+import com.ivianuu.essentials.ui.core.current
 
 interface Updateable<T> {
     fun updateFrom(other: T)
