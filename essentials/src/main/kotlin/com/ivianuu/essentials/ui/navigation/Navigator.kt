@@ -53,11 +53,13 @@ fun InjectedNavigator(
 ) {
     val state = inject<NavigatorState>()
 
-    state.handleBack = handleBack
-    state.popsLastRoute = popsLastRoute
+    Observe {
+        state.handleBack = handleBack
+        state.popsLastRoute = popsLastRoute
 
-    if (!state.hasRoot) {
-        state.setRoot(startRoute)
+        if (!state.hasRoot) {
+            state.setRoot(startRoute)
+        }
     }
 
     Navigator(state = state)
@@ -78,8 +80,10 @@ fun Navigator(
         )
     }
 
-    state.handleBack = handleBack
-    state.popsLastRoute = popsLastRoute
+    Observe {
+        state.handleBack = handleBack
+        state.popsLastRoute = popsLastRoute
+    }
 
     Navigator(state = state)
 }
@@ -132,7 +136,7 @@ class NavigatorState(
     internal var defaultRouteTransition = DefaultRouteTransition
 
     init {
-        if (!hasRoot && startRoute != null) {
+        if (startRoute != null && !hasRoot) {
             setRoot(startRoute)
         }
     }

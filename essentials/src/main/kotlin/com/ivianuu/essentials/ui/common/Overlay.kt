@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
@@ -58,14 +59,14 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
 }
 
 @Stable
-class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
+class OverlayState(initialEntries: List<OverlayEntry>? = null) {
 
     private val _entries = modelListOf<OverlayEntry>()
     val entries: List<OverlayEntry>
         get() = _entries
 
     init {
-        if (_entries.isEmpty()) {
+        if (initialEntries != null && _entries.isEmpty()) {
             _entries += initialEntries
         }
     }
@@ -132,6 +133,7 @@ private fun OverlayLayout(
     }
 }
 
+@Immutable
 private data class OverlayEntryParentData(
     val isVisible: Boolean,
     val entry: OverlayEntry

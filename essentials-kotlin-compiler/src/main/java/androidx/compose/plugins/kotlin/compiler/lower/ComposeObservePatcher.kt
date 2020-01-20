@@ -17,7 +17,6 @@
 package androidx.compose.plugins.kotlin.compiler.lower
 
 import androidx.compose.plugins.kotlin.ComposableAnnotationChecker
-import androidx.compose.plugins.kotlin.ComposeFqNames
 import androidx.compose.plugins.kotlin.ComposeUtils.generateComposePackageName
 import androidx.compose.plugins.kotlin.KtxNameConventions
 import androidx.compose.plugins.kotlin.KtxNameConventions.UPDATE_SCOPE
@@ -71,9 +70,6 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrReturnImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrTryImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.types.classifierOrNull
-import org.jetbrains.kotlin.ir.types.getClass
-import org.jetbrains.kotlin.ir.types.isUnit
 import org.jetbrains.kotlin.ir.util.referenceFunction
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
@@ -84,7 +80,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.resolve.DelegatingBindingTrace
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
@@ -101,7 +96,6 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
     }
 
     override fun visitFunction(declaration: IrFunction): IrStatement {
-
         super.visitFunction(declaration)
 
         // Only insert observe scopes in non-empty composable function
@@ -138,16 +132,13 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
 
         // Check if the descriptor has restart scope calls resolved
         val bindingContext = context.bindingContext
-        if (descriptor is SimpleFunctionDescriptor &&
-            // Lambdas that make are not lowered earlier should be ignored.
-            // All composable lambdas are already lowered to a class with an invoke() method.
-            declaration.origin != IrDeclarationOrigin.LOCAL_FUNCTION_FOR_LAMBDA) {
+        if (descriptor is SimpleFunctionDescriptor) {
             val composerResolvedCall =
                 bindingContext.get(ComposeWritableSlices.RESTART_COMPOSER, descriptor)
 
             val oldBody = declaration.body
-            if (
-                composerResolvedCall != null &&
+
+            if (composerResolvedCall != null &&
                 oldBody != null &&
                 // if getting the composer requires a parameter (like `<this>`), this code will
                 // currently fail. We should fix this similar to how ComposeCallTransformer solves
@@ -192,14 +183,7 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
                         )?.singleOrNull()
                             ?: error("updateScope not found in result type of endRestartGroup")
                     val updateScopeArgument:
-                                (outerBuilder: IrBlockBuilder) -> IrExpression =
-                        if (declaration.isZeroParameterUnitLambda()) { _ ->
-                            // If we are in an invoke function for a callable class with no
-                            // parameters then the `this` parameter can be used for the endRestartGroup.
-                            // If isUnitInvoke() returns true then dispatchReceiverParameter is not
-                            // null.
-                            irBuilder.irGet(declaration.dispatchReceiverParameter!!)
-                    } else { outerBuilder ->
+                                (outerBuilder: IrBlockBuilder) -> IrExpression = { outerBuilder ->
                         // Create self-invoke lambda
                         val blockParameterDescriptor =
                             updateScopeDescriptor.valueParameters.singleOrNull()
@@ -254,7 +238,7 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
                                         // going through a KotlinType if possible.
                                         val receiverType = (receiverDescriptor as?
                                                 WrappedReceiverParameterDescriptor)?.owner?.type
-                                                ?: receiverDescriptor.type.toIrType()
+                                            ?: receiverDescriptor.type.toIrType()
                                         val receiver = irGet(
                                             receiverType,
                                             declaration.dispatchReceiverParameter?.symbol
@@ -311,7 +295,7 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
                         val updateScopeSymbol =
                             symbolTable.referenceSimpleFunction(updateScopeDescriptor)
                         +irIfThen(irNot(irEqeqeq(irGet(result.type, result.symbol), irNull())),
-                            irCall(updateScopeSymbol).apply {
+                            irCall(callee = updateScopeSymbol, type = context.irBuiltIns.unitType).apply {
                                 dispatchReceiver = irGet(result.type, result.symbol)
                                 putValueArgument(
                                     0,
@@ -381,6 +365,7 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
                             return declaration
                         }
                         else -> {
+                            error("are you sure?")
                             // Composable function do not use IrExpressionBody as they are converted
                             // by the call lowering to IrBlockBody to introduce the call temporaries.
                         }
@@ -563,15 +548,6 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
         )
     }
 
-    private fun IrFunction.isZeroParameterUnitLambda(): Boolean {
-        return !name.isSpecial && name.identifier == "invoke" && valueParameters.isEmpty() &&
-                returnType.isUnit() &&
-                dispatchReceiverParameter?.let {
-                    it.type.getClass()?.superTypes?.any {
-                        it.classifierOrNull?.descriptor?.fqNameSafe == ComposeFqNames.Function0
-                    }
-                } ?: false
-    }
 }
 
 private fun findPotentialEarly(block: IrBlockBody): IrExpression? {
