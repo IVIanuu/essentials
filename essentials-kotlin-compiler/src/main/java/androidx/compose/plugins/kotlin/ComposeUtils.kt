@@ -16,13 +16,18 @@
 
 package androidx.compose.plugins.kotlin
 
+import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtFunctionLiteral
-import org.jetbrains.kotlin.psi.KtLambdaArgument
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.psi.Call
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtTypeArgumentList
+import org.jetbrains.kotlin.psi.KtTypeProjection
+import org.jetbrains.kotlin.psi.KtValueArgumentList
+import org.jetbrains.kotlin.psi.LambdaArgument
+import org.jetbrains.kotlin.psi.ValueArgument
+import org.jetbrains.kotlin.resolve.scopes.receivers.Receiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 
 object ComposeUtils {
 
@@ -30,17 +35,26 @@ object ComposeUtils {
 
     fun composeFqName(cname: String) = FqName("${generateComposePackageName()}.$cname")
 
-    fun setterMethodFromPropertyName(name: String): String {
-        return "set${name[0].toUpperCase()}${name.slice(1 until name.length)}"
-    }
-
 }
 
-fun KtFunction.isEmitInline(bindingContext: BindingContext): Boolean {
-    if (this !is KtFunctionLiteral) return false
-    if (parent?.parent !is KtLambdaArgument) return false
-    val call = parent?.parent?.parent as? KtCallExpression
-    val resolvedCall = call?.getResolvedCall(bindingContext)
-    return resolvedCall != null &&
-            resolvedCall.candidateDescriptor is ComposableEmitDescriptor
+fun makeCall(
+    callElement: KtElement,
+    calleeExpression: KtExpression? = null,
+    valueArguments: List<ValueArgument> = emptyList(),
+    receiver: Receiver? = null,
+    dispatchReceiver: ReceiverValue? = null
+): Call {
+    return object : Call {
+        override fun getDispatchReceiver(): ReceiverValue? = dispatchReceiver
+        override fun getValueArgumentList(): KtValueArgumentList? = null
+        override fun getTypeArgumentList(): KtTypeArgumentList? = null
+        override fun getExplicitReceiver(): Receiver? = receiver
+        override fun getCalleeExpression(): KtExpression? = calleeExpression
+        override fun getValueArguments(): List<ValueArgument> = valueArguments
+        override fun getCallElement(): KtElement = callElement
+        override fun getFunctionLiteralArguments(): List<LambdaArgument> = emptyList()
+        override fun getTypeArguments(): List<KtTypeProjection> = emptyList()
+        override fun getCallType(): Call.CallType = Call.CallType.DEFAULT
+        override fun getCallOperationNode(): ASTNode? = null
+    }
 }

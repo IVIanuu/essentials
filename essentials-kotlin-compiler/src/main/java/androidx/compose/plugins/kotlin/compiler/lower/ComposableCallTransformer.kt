@@ -1,17 +1,10 @@
 package androidx.compose.plugins.kotlin.compiler.lower
 
-import androidx.compose.plugins.kotlin.COMPOSABLE_EMIT_OR_CALL
+import androidx.compose.plugins.kotlin.COMPOSABLE_CALL
 import androidx.compose.plugins.kotlin.ComposableCallableDescriptor
-import androidx.compose.plugins.kotlin.ComposableEmitDescriptor
-import androidx.compose.plugins.kotlin.ComposableEmitMetadata
 import androidx.compose.plugins.kotlin.ComposableFunctionDescriptor
 import androidx.compose.plugins.kotlin.ComposerMetadata
-import androidx.compose.plugins.kotlin.EmitChildrenValueParameterDescriptor
 import androidx.compose.plugins.kotlin.KtxNameConventions
-import androidx.compose.plugins.kotlin.ValidatedAssignment
-import androidx.compose.plugins.kotlin.ValidationType
-import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices
-import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_EMIT_DESCRIPTOR
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_FUNCTION_DESCRIPTOR
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_PROPERTY_DESCRIPTOR
 import androidx.compose.plugins.kotlin.hasPivotalAnnotation
@@ -29,14 +22,12 @@ import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
@@ -56,12 +47,10 @@ import org.jetbrains.kotlin.ir.builders.irFalse
 import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irInt
 import org.jetbrains.kotlin.ir.builders.irReturn
-import org.jetbrains.kotlin.ir.builders.irReturnUnit
 import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.builders.irTrue
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.getIrValueParameter
 import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrTypeParameterImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrValueParameterImpl
@@ -70,7 +59,6 @@ import org.jetbrains.kotlin.ir.expressions.IrBlock
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrConst
 import org.jetbrains.kotlin.ir.expressions.IrExpression
-import org.jetbrains.kotlin.ir.expressions.IrFunctionExpression
 import org.jetbrains.kotlin.ir.expressions.IrGetValue
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.IrTypeOperator
@@ -78,7 +66,6 @@ import org.jetbrains.kotlin.ir.expressions.IrTypeOperatorCall
 import org.jetbrains.kotlin.ir.expressions.copyTypeArgumentsFrom
 import org.jetbrains.kotlin.ir.expressions.getValueArgument
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
-import org.jetbrains.kotlin.ir.expressions.putTypeArguments
 import org.jetbrains.kotlin.ir.expressions.putValueArgument
 import org.jetbrains.kotlin.ir.expressions.typeParametersCount
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
@@ -93,7 +80,6 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi2ir.findFirstFunction
 import org.jetbrains.kotlin.resolve.DescriptorFactory
-import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isError
@@ -163,7 +149,7 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
     }
 
     override fun visitBlock(expression: IrBlock): IrExpression {
-        if (expression.origin != COMPOSABLE_EMIT_OR_CALL) {
+        if (expression.origin != COMPOSABLE_CALL) {
             return super.visitBlock(expression)
         }
 
@@ -183,17 +169,6 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
             } else {
                 DeclarationIrBuilder(context, declarationStack.last().symbol)
                     .irComposableExpr(transformedComposerCall, transformed, descriptor)
-            }
-        }
-
-        val emitDescriptor = context.irTrace[COMPOSABLE_EMIT_DESCRIPTOR, expression]
-
-        if (emitDescriptor != null) {
-            val (composerCall, emitOrCall) = deconstructComposeBlock(expression)
-            val transformedComposerCall = composerCall.transformChildren()
-            val transformed = emitOrCall.transformChildren()
-            return DeclarationIrBuilder(context, declarationStack.last().symbol).irBlock {
-                +irComposableEmit(transformedComposerCall, transformed, emitDescriptor)
             }
         }
 
@@ -451,13 +426,6 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
         // way to do this. Additionally, we are creating temporary vars for variables which is
         // causing larger stack space than needed in our generated code.
 
-        // for composableExpr, we only need to create temporaries if there are any pivotals
-        val hasPivotals = original
-            .symbol
-            .descriptor
-            .valueParameters
-            .any { it.hasPivotalAnnotation() }
-
         val irGetArguments = original
             .symbol
             .descriptor
@@ -542,12 +510,6 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
         }
     }
 
-    private fun isChildrenParameter(desc: ValueParameterDescriptor, expr: IrExpression): Boolean {
-        return expr is IrFunctionExpression &&
-                expr.origin == IrStatementOrigin.LAMBDA &&
-                desc is EmitChildrenValueParameterDescriptor
-    }
-
     private fun IrBlockBuilder.getParameterExpression(
         desc: ValueParameterDescriptor,
         expr: IrExpression?
@@ -557,196 +519,14 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
         if (expr.isReorderTemporaryVariable()) {
             return getParameterExpression(desc, expr.unwrapReorderTemporaryVariable())
         }
-        return when {
-            expr is IrConst<*> ->
-                ({ expr.copy() })
-            isChildrenParameter(desc, expr) ->
-                ({ expr })
+        return when (expr) {
+            is IrConst<*> -> ({ expr.copy() })
             else -> {
                 val temp = irTemporary(
                     expr,
                     irType = expr.type
                 )
                 ({ irGet(temp) })
-            }
-        }
-    }
-
-    private fun IrBlockBuilder.irComposableEmit(
-        composerCall: IrCall,
-        original: IrCall,
-        descriptor: ComposableEmitDescriptor
-    ): IrExpression {
-        val composerTemp = irTemporary(composerCall)
-        return irComposableEmitBase(
-            original,
-            { irGet(composerTemp) },
-            descriptor.composerMetadata,
-            descriptor
-        )
-    }
-
-    private fun IrBlockBuilder.irComposableEmitBase(
-        original: IrCall,
-        getComposer: () -> IrExpression,
-        meta: ComposerMetadata,
-        emitMetadata: ComposableEmitMetadata
-    ): IrExpression {
-        /*
-
-        TextView(text="foo")
-
-        // transforms into
-
-        val attr_text = "foo"
-        composer.emit(
-            key = 123,
-            ctor = { context -> TextView(context) },
-            update = { set(attr_text) { text -> this.text = text } }
-        )
-         */
-        val parametersByName = original
-            .symbol
-            .descriptor
-            .valueParameters
-            .mapNotNull { desc ->
-                original.getValueArgument(desc)?.let { desc to it }
-            }
-            .map { (desc, expr) ->
-                desc.name.asString() to getParameterExpression(desc, expr)
-            }
-            .toMap()
-
-        val emitCall = emitMetadata.emitCall
-        val emitFunctionDescriptor = emitCall.candidateDescriptor
-
-        val emitParameters = emitFunctionDescriptor.valueParameters
-            .map { it.name to it }
-            .toMap()
-
-        fun getEmitParameter(name: Name) = emitParameters[name]
-            ?: error("Expected $name parameter to exist")
-
-        val emitFunctionSymbol = symbolTable.referenceFunction(emitFunctionDescriptor)
-
-        val joinKeyDescriptor = meta
-            .type
-            .memberScope
-            .findFirstFunction(KtxNameConventions.JOINKEY.identifier) {
-                it.valueParameters.size == 2
-            }
-
-        fun irGetParameter(name: String): IrExpression = parametersByName[name]?.invoke()
-            ?: error("No parameter found with name $name")
-
-        return irCall(
-            callee = emitFunctionSymbol,
-            type = builtIns.unitType
-        ).apply {
-            dispatchReceiver = getComposer()
-            // TODO(lmr): extensionReceiver.
-            // We would want to do this to enable "emit" and "call" implementations that are
-            // extensions on the composer
-
-            putTypeArguments(emitCall.typeArguments) { it.toIrType() }
-
-            putValueArgument(
-                getEmitParameter(KtxNameConventions.EMIT_KEY_PARAMETER),
-                irGroupKey(
-                    original = original,
-                    getComposer = getComposer,
-                    joinKey = joinKeyDescriptor,
-                    pivotals = emitMetadata.pivotals.map { irGetParameter(it) }
-                )
-            )
-
-            val ctorParam = getEmitParameter(KtxNameConventions.EMIT_CTOR_PARAMETER)
-
-            val ctorLambdaDescriptor = createFunctionDescriptor(ctorParam.type)
-
-            putValueArgument(
-                ctorParam,
-                irLambdaExpression(
-                    original.startOffset,
-                    original.endOffset,
-                    descriptor = ctorLambdaDescriptor,
-                    type = ctorParam.type.toIrType()
-                ) { fn ->
-
-                    val ctorCall = emitMetadata.ctorCall
-
-                    val ctorCallSymbol = symbolTable.referenceConstructor(
-                        ctorCall.candidateDescriptor as ClassConstructorDescriptor
-                    )
-
-                    +irReturn(irCall(ctorCallSymbol).apply {
-                        putTypeArguments(ctorCall.typeArguments) { it.toIrType() }
-                        ctorLambdaDescriptor.valueParameters.zip(
-                            ctorCall
-                                .candidateDescriptor!!
-                                .valueParameters
-                        ) { a, b ->
-                            putValueArgument(
-                                b,
-                                irGet(fn.getIrValueParameter(a))
-                            )
-                        }
-                        emitMetadata.ctorParams.forEach { name ->
-                            val param = ctorCall
-                                .candidateDescriptor
-                                .valueParameters
-                                .firstOrNull { it.name.identifier == name }
-                            if (param != null) {
-                                putValueArgument(
-                                    param,
-                                    irGetParameter(name)
-                                )
-                            }
-                        }
-                    })
-                }
-            )
-
-            val updateParam = getEmitParameter(
-                KtxNameConventions
-                    .EMIT_UPDATER_PARAMETER
-            )
-
-            val updateLambdaDescriptor = createFunctionDescriptor(updateParam.type)
-
-            putValueArgument(
-                updateParam,
-                irLambdaExpression(
-                    original.startOffset,
-                    original.endOffset,
-                    descriptor = updateLambdaDescriptor,
-                    type = updateParam.type.toIrType()
-                ) { fn ->
-                    emitMetadata.validations.forEach {
-                        // set(attr_text) { text -> this.text = text }
-                        val arg = irGetParameter(it.name)
-                        +irValidatedAssignment(
-                            arg.startOffset,
-                            arg.endOffset,
-                            memoizing = true,
-                            validation = it,
-                            receiver = irGet(fn.extensionReceiverParameter!!),
-                            attributeValue = arg
-                        )
-                    }
-                    +irReturnUnit()
-                }
-            )
-
-            if (emitMetadata.hasChildren) {
-                val bodyParam = getEmitParameter(KtxNameConventions.EMIT_CHILDREN_PARAMETER)
-
-                val childrenExpr = irGetParameter("\$CHILDREN")
-
-                putValueArgument(
-                    bodyParam,
-                    childrenExpr
-                )
             }
         }
     }
@@ -803,102 +583,6 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
         ).apply {
             dispatchReceiver = left
             putValueArgument(0, right)
-        }
-    }
-
-    private fun IrBuilderWithScope.irValidatedAssignment(
-        startOffset: Int,
-        endOffset: Int,
-        memoizing: Boolean,
-        validation: ValidatedAssignment,
-        receiver: IrExpression,
-        attributeValue: IrExpression
-    ): IrExpression {
-        // for emit, fnDescriptor is Validator.(Value) -> Unit    or Validator.(Value, Element.(Value) -> Unit) -> Unit
-        // for call, fnDescriptor is Validator.(Value) -> Boolean or Validator.(Value, (Value) -> Unit) -> Boolean
-
-        // in emit, the element is passed through an extension parameter
-        // in call, the element is passed through a capture scope
-        val validationCall =
-            (if (memoizing) validation.validationCall
-            else validation.uncheckedValidationCall)
-                ?: error("Expected validationCall to be non-null")
-
-        val validationCallDescriptor = validationCall.candidateDescriptor as FunctionDescriptor
-
-        return irCall(
-            callee = symbolTable.referenceFunction(validationCallDescriptor),
-            type = validationCallDescriptor.returnType?.toIrType()!!
-        ).apply {
-
-            dispatchReceiver = receiver
-            // TODO(lmr): extensionReceiver.
-            // This might be something we want to be able to do in the cases where we want to
-            // build extension `changed(...)`  or `set(..) { ... }` methods
-
-            putTypeArguments(validationCall.typeArguments) { it.toIrType() }
-
-            putValueArgument(0, attributeValue)
-            val assignment = validation.assignment
-            if (assignment != null && validation.validationType != ValidationType.CHANGED) {
-                val assignmentLambdaDescriptor = validation.assignmentLambda
-                    ?: error("Expected assignmentLambda to be non-null")
-
-                val assignmentSymbol = when (val assignmentDescriptor = assignment.candidateDescriptor.original) {
-                    is PropertyDescriptor -> symbolTable.referenceFunction(
-                        assignmentDescriptor.setter!!
-                    )
-                    else -> symbolTable.referenceFunction(assignmentDescriptor)
-                }
-                val assignmentValueParameterDescriptor = assignmentLambdaDescriptor
-                    .valueParameters[0]
-
-                putValueArgument(
-                    1,
-                    irLambdaExpression(
-                        startOffset,
-                        endOffset,
-                        assignmentLambdaDescriptor,
-                        validationCallDescriptor.valueParameters[1].type.toIrType()
-                    ) { fn ->
-                        +irReturn(
-                            irCall(
-                                callee = assignmentSymbol,
-                                type = builtIns.unitType
-                            ).apply {
-                                putTypeArguments(assignment.typeArguments) { it.toIrType() }
-                                when (assignment.explicitReceiverKind) {
-                                    ExplicitReceiverKind.DISPATCH_RECEIVER -> {
-                                        dispatchReceiver = irGet(fn.extensionReceiverParameter!!)
-                                    }
-                                    ExplicitReceiverKind.EXTENSION_RECEIVER -> {
-                                        extensionReceiver = irGet(fn.extensionReceiverParameter!!)
-                                    }
-                                    ExplicitReceiverKind.BOTH_RECEIVERS -> {
-                                        // NOTE(lmr): This should not be possible. This would have
-                                        // to be an extension method on the ComposerUpdater class
-                                        // itself for the emittable type.
-                                        error(
-                                            "Extension instance methods are not allowed for " +
-                                                    "assignments"
-                                        )
-                                    }
-                                    ExplicitReceiverKind.NO_EXPLICIT_RECEIVER -> {
-                                        // NOTE(lmr): This is not possible
-                                        error("Static methods are invalid for assignments")
-                                    }
-                                }
-                                putValueArgument(
-                                    0,
-                                    irGet(
-                                        fn.getIrValueParameter(assignmentValueParameterDescriptor)
-                                    )
-                                )
-                            }
-                        )
-                    }
-                )
-            }
         }
     }
 
@@ -975,10 +659,6 @@ class ComposableCallTransformer(val context: IrPluginContext) : IrElementTransfo
     }
 
     private fun KotlinType.toIrType(): IrType = typeTranslator.translateType(this)
-
-    private fun IrCall.isComposable(): Boolean {
-        return context.irTrace[ComposeWritableSlices.IS_COMPOSABLE_CALL, this] ?: false
-    }
 
     private fun IrBuilderWithScope.createFunctionDescriptor(
         type: KotlinType,

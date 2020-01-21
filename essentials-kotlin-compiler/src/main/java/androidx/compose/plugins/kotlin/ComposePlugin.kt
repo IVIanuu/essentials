@@ -55,10 +55,6 @@ class ComposeComponentRegistrar : ComponentRegistrar {
             )
             StorageComponentContainerContributor.registerExtension(
                 project,
-                UnionAnnotationCheckerProvider()
-            )
-            StorageComponentContainerContributor.registerExtension(
-                project,
                 TryCatchComposableChecker()
             )
             ComposeDiagnosticSuppressor.registerExtension(

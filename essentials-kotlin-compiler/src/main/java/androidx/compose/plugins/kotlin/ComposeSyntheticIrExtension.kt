@@ -16,7 +16,6 @@
 
 package androidx.compose.plugins.kotlin
 
-import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_EMIT_DESCRIPTOR
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_FUNCTION_DESCRIPTOR
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.COMPOSABLE_PROPERTY_DESCRIPTOR
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -107,9 +106,6 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
             }
             return statementGenerator.visitComposableCall(descriptor, element)
         }
-        if (descriptor is ComposableEmitDescriptor) {
-            return statementGenerator.visitEmitCall(descriptor, element)
-        }
 
         return null
     }
@@ -148,37 +144,6 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
         }
     }
 
-    private fun StatementGenerator.visitEmitCall(
-        descriptor: ComposableEmitDescriptor,
-        expression: KtCallExpression
-    ): IrExpression? {
-        // NOTE(lmr):
-        // we insert a block here with two calls:
-        //  1. a call to get the composer
-        //  2. the original call that would have been generated to the synthetic emit descriptor
-        //
-        // We need to do this here because this is the only place we can properly generate a
-        // resolved call in full generality, which we need to do for the composer. We then intercept
-        // this block in the lowering phase and generate the final code we want.
-        return IrBlockImpl(
-            expression.startOffset,
-            expression.endOffset,
-            descriptor.returnType?.toIrType() ?: context.irBuiltIns.unitType,
-            COMPOSABLE_EMIT_OR_CALL,
-            listOf(
-                CallGenerator(this).generateCall(
-                    expression.startOffsetSkippingComments,
-                    expression.endOffset,
-                    pregenerateCall(descriptor.composer),
-                    COMPOSABLE_EMIT_OR_CALL
-                ),
-                visitCallExpressionWithoutInterception(expression)
-            )
-        ).also {
-            context.irTrace.record(COMPOSABLE_EMIT_DESCRIPTOR, it, descriptor)
-        }
-    }
-
     private fun StatementGenerator.visitComposableCall(
         descriptor: ComposableFunctionDescriptor,
         expression: KtCallExpression
@@ -195,13 +160,13 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
             expression.startOffset,
             expression.endOffset,
             descriptor.returnType?.toIrType() ?: context.irBuiltIns.unitType,
-            COMPOSABLE_EMIT_OR_CALL,
+            COMPOSABLE_CALL,
             listOf(
                 CallGenerator(this).generateCall(
                     expression.startOffsetSkippingComments,
                     expression.endOffset,
                     pregenerateCall(descriptor.composerCall),
-                    COMPOSABLE_EMIT_OR_CALL
+                    COMPOSABLE_CALL
                 ),
                 visitCallExpressionWithoutInterception(expression)
             )
@@ -227,13 +192,13 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
             expression.startOffset,
             expression.endOffset,
             descriptor.returnType?.toIrType() ?: context.irBuiltIns.unitType,
-            COMPOSABLE_EMIT_OR_CALL,
+            COMPOSABLE_CALL,
             listOf(
                 CallGenerator(this).generateCall(
                     expression.startOffsetSkippingComments,
                     expression.endOffset,
                     pregenerateCall(descriptor.composerCall),
-                    COMPOSABLE_EMIT_OR_CALL
+                    COMPOSABLE_CALL
                 ),
                 CallGenerator(this).generateValueReference(
                     expression.startOffsetSkippingComments,
@@ -252,5 +217,5 @@ class ComposeSyntheticIrExtension : SyntheticIrExtension {
 internal fun getKeyValue(descriptor: DeclarationDescriptor, startOffset: Int): Int =
     descriptor.fqNameSafe.toString().hashCode() xor startOffset
 
-internal val COMPOSABLE_EMIT_OR_CALL =
+internal val COMPOSABLE_CALL =
     object : IrStatementOriginImpl("Composable Emit Or Call") {}

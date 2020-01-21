@@ -22,7 +22,6 @@ import androidx.compose.plugins.kotlin.KtxNameConventions
 import androidx.compose.plugins.kotlin.KtxNameConventions.UPDATE_SCOPE
 import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices
 import androidx.compose.plugins.kotlin.getKeyValue
-import androidx.compose.plugins.kotlin.isEmitInline
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
 import org.jetbrains.kotlin.backend.common.lower.irIfThen
@@ -118,11 +117,7 @@ class ComposeObservePatcher(val context: IrPluginContext) : IrElementTransformer
                         context.bindingContext,
                         false
                     )
-                )
-                    return declaration
-                if (it.isEmitInline(context.bindingContext)) {
-                    return declaration
-                }
+                ) return declaration
             }
         }
 

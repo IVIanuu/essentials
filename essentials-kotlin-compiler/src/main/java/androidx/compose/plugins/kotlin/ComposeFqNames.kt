@@ -36,7 +36,6 @@ object ComposeFqNames {
     val Composable = ComposeUtils.composeFqName("Composable")
     val Pivotal = ComposeUtils.composeFqName("Pivotal")
     val StableMarker = ComposeUtils.composeFqName("StableMarker")
-    val HiddenAttribute = ComposeUtils.composeFqName("HiddenAttribute")
     val Package = FqName.fromSegments(listOf("androidx", "compose"))
     fun makeComposableAnnotation(module: ModuleDescriptor): AnnotationDescriptor =
         object : AnnotationDescriptor {
@@ -66,8 +65,6 @@ fun Annotated.hasComposableAnnotation(): Boolean =
     annotations.findAnnotation(ComposeFqNames.Composable) != null
 fun Annotated.hasPivotalAnnotation(): Boolean =
     annotations.findAnnotation(ComposeFqNames.Pivotal) != null
-fun Annotated.hasHiddenAttributeAnnotation(): Boolean =
-    annotations.findAnnotation(ComposeFqNames.HiddenAttribute) != null
 
 internal val KotlinType.isSpecialType: Boolean get() =
     this === NO_EXPECTED_TYPE || this === UNIT_EXPECTED_TYPE

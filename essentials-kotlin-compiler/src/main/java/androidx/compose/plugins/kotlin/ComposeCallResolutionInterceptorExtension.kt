@@ -171,9 +171,6 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
                 candidateDescriptor is ComposableFunctionDescriptor -> {
                     alreadyInterceptedCandidates.add(candidate)
                 }
-                candidateDescriptor is ComposableEmitDescriptor -> {
-                    alreadyInterceptedCandidates.add(candidate)
-                }
                 resolvedCall is VariableAsFunctionResolvedCall &&
                 resolvedCall.variableCall
                     .candidateDescriptor
@@ -265,8 +262,7 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
         if (shouldIgnore) return candidates
 
         val composables = mutableListOf<FunctionDescriptor>()
-        val nonComposablesNonConstructors = mutableListOf<FunctionDescriptor>()
-        val constructors = mutableListOf<ConstructorDescriptor>()
+        val nonComposables = mutableListOf<FunctionDescriptor>()
 
         var needToLookupComposer = false
 
@@ -276,11 +272,7 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
                     needToLookupComposer = true
                     composables.add(candidate)
                 }
-                candidate is ConstructorDescriptor -> {
-                    needToLookupComposer = true
-                    constructors.add(candidate)
-                }
-                else -> nonComposablesNonConstructors.add(candidate)
+                else -> nonComposables.add(candidate)
             }
         }
 
@@ -292,7 +284,7 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
             ?: return candidates
 
         val (composerCall, composer) = callResolver.findComposerCallAndDescriptor(resolutionContext)
-            ?: return nonComposablesNonConstructors + constructors
+            ?: return nonComposables
 
         val psiFactory = KtPsiFactory(project, markGenerated = false)
 
@@ -315,57 +307,17 @@ open class ComposeCallResolutionInterceptorExtension : CallResolutionInterceptor
         val isValidComposer = composerMetadata.callDescriptors.isNotEmpty()
 
         if (!isValidComposer) {
-            return nonComposablesNonConstructors + constructors
+            return nonComposables
         }
 
         // Once we know we have a valid composer record the composer on the function descriptor
         // for the restart transform
         recordComposerRestartInfo(resolutionContext.trace, composableDescriptor, composerCall)
 
-        // If there are no constructors, then all of the candidates are either composables or
-        // non-composable functions, and we follow normal resolution rules.
-        if (constructors.isEmpty()) {
-            // we wrap the composable descriptors into a ComposableFunctionDescriptor so we know
-            // to intercept it in the backend.
-            return nonComposablesNonConstructors + composables.map {
-                ComposableFunctionDescriptor(it, composerCall, composerMetadata)
-            }
-        }
-
-        val emittables = constructors.filter {
-            composerMetadata.isEmittable(it.returnType) && !it.returnType.isAbstract()
-        }
-        val hasEmittableCandidate = emittables.isNotEmpty()
-
-        // if none of the constructors are emittables, then all of the candidates are valid
-        if (!hasEmittableCandidate) {
-            return nonComposablesNonConstructors + constructors + composables.map {
-                ComposableFunctionDescriptor(it, composerCall, composerMetadata)
-            }
-        }
-
-        // since some of the constructors are emittables, we fall back to resolving using the
-        // emit resolver.
-        val emitResolver = ComposeEmitResolver(
-            callResolver,
-            project,
-            composerMetadata
-        )
-
-        val emitCandidates = emitResolver.resolveCandidates(
-            call,
-            emittables,
-            composerCall,
-            name,
-            resolutionContext
-        )
-
-        return nonComposablesNonConstructors +
+        return nonComposables +
                 composables.map {
                     ComposableFunctionDescriptor(it, composerCall, composerMetadata)
-                } +
-                constructors.filter { !composerMetadata.isEmittable(it.returnType) } +
-                emitCandidates
+                }
     }
 
     private fun CallResolver.findComposerCallAndDescriptor(

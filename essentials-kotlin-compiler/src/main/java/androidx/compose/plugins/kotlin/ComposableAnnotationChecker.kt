@@ -53,8 +53,6 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtFunctionLiteral
-import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -81,7 +79,6 @@ import org.jetbrains.kotlin.types.lowerIfFlexible
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 import org.jetbrains.kotlin.types.upperIfFlexible
 import org.jetbrains.kotlin.util.OperatorNameConventions
-import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
     AdditionalTypeChecker, AdditionalAnnotationChecker, StorageComponentContainerContributor {
@@ -163,9 +160,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
                 is AnonymousFunctionDescriptor -> {
                     if (unwrappedDescriptor.hasComposableAnnotation()) composability =
                         Composability.MARKED
-                    if (psi is KtFunctionLiteral && psi.isEmitInline(trace.bindingContext)) {
-                        composability = Composability.MARKED
-                    }
                 }
                 is PropertyGetterDescriptor ->
                     if (unwrappedDescriptor.correspondingProperty.hasComposableAnnotation())
@@ -247,7 +241,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
                 reportElement: KtExpression
             ) {
                 when (resolvedCall?.candidateDescriptor) {
-                    is ComposableEmitDescriptor,
                     is ComposablePropertyDescriptor,
                     is ComposableFunctionDescriptor -> {
                         localFcs = true
@@ -357,15 +350,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
         }
 
         if (element is KtLambdaExpression || element is KtFunction) {
-            val associatedCall = parent?.parent as? KtCallExpression
-
-            if (associatedCall != null && parent is KtLambdaArgument) {
-                val resolvedCall = associatedCall.getResolvedCall(trace.bindingContext)
-                if (resolvedCall?.candidateDescriptor is ComposableEmitDescriptor) {
-                    composability += Composability.MARKED
-                }
-            }
-
             composability = analyzeFunctionContents(trace, element, composability)
         }
 
@@ -447,19 +431,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
                         true
                     )
                 if (isInlineable) return
-
-                if (expression.parent is KtLambdaArgument) {
-                    val callDescriptor = expression
-                        .parent
-                        ?.parent
-                        ?.cast<KtCallExpression>()
-                        ?.getResolvedCall(c.trace.bindingContext)
-                        ?.candidateDescriptor
-
-                    if (callDescriptor is ComposableEmitDescriptor) {
-                        return
-                    }
-                }
 
                 val reportOn =
                     if (expression.parent is KtAnnotatedExpression)
