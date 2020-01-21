@@ -43,7 +43,6 @@ import org.jetbrains.kotlin.diagnostics.reportFromPlugin
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.load.java.descriptors.JavaMethodDescriptor
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.platform.jvm.isJvm
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
@@ -58,7 +57,6 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
@@ -140,15 +138,13 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
         }
         val psi = unwrappedDescriptor.findPsi() as? KtElement
         psi?.let { trace.bindingContext.get(COMPOSABLE_ANALYSIS, it)?.let { return it } }
-        if (unwrappedDescriptor.name == Name.identifier("compose") &&
-            unwrappedDescriptor.containingDeclaration is ClassDescriptor &&
-            ComposeUtils.isComposeComponent(unwrappedDescriptor.containingDeclaration)
-        ) return Composability.MARKED
+
         var composability = Composability.NOT_COMPOSABLE
         if (trace.bindingContext.get(
                 INFERRED_COMPOSABLE_DESCRIPTOR,
                 unwrappedDescriptor
-            ) ?: false) {
+            ) == true
+        ) {
             composability = Composability.MARKED
         } else {
             when (unwrappedDescriptor) {
@@ -313,25 +309,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
         var composability =
             Composability.NOT_COMPOSABLE
 
-        if (element is KtClass) {
-            val descriptor = trace.bindingContext.get(BindingContext.CLASS, element)
-                ?: error("Element class context not found")
-            val annotationEntry = element.annotationEntries.singleOrNull {
-                trace.bindingContext.get(BindingContext.ANNOTATION, it)?.isComposableAnnotation
-                    ?: false
-            }
-            if (annotationEntry != null && !ComposeUtils.isComposeComponent(descriptor)) {
-                trace.report(
-                    Errors.WRONG_ANNOTATION_TARGET.on(
-                        annotationEntry,
-                        "class which does not extend androidx.compose.Component"
-                    )
-                )
-            }
-            if (ComposeUtils.isComposeComponent(descriptor)) {
-                composability += Composability.MARKED
-            }
-        }
         if (element is KtParameter) {
             val composableAnnotation = element
                 .typeReference
@@ -425,15 +402,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
                             BindingContext.ANNOTATION,
                             it
                         )?.isComposableAnnotation ?: false
-                    }
-                    if (composableAnnotationEntry != null &&
-                        !ComposeUtils.isComposeComponent(classDescriptor)) {
-                        trace.report(
-                            Errors.WRONG_ANNOTATION_TARGET.on(
-                                composableAnnotationEntry,
-                                "class which does not extend androidx.compose.Component"
-                            )
-                        )
                     }
                 }
             }
@@ -549,18 +517,6 @@ open class ComposableAnnotationChecker : CallChecker, DeclarationChecker,
         actualTargets: List<KotlinTarget>,
         trace: BindingTrace
     ) {
-        val entry = entries.singleOrNull {
-            trace.bindingContext.get(BindingContext.ANNOTATION, it)?.isComposableAnnotation ?: false
-        }
-        if ((entry?.parent as? KtAnnotatedExpression)?.baseExpression is
-                    KtObjectLiteralExpression) {
-            trace.report(
-                Errors.WRONG_ANNOTATION_TARGET.on(
-                    entry,
-                    "class which does not extend androidx.compose.Component"
-                )
-            )
-        }
     }
 
     operator fun Composability.plus(rhs: Composability): Composability =

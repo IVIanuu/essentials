@@ -22,10 +22,6 @@ import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
-import org.jetbrains.kotlin.compiler.plugin.CliOption
-import org.jetbrains.kotlin.compiler.plugin.CliOptionProcessingException
-import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
@@ -33,23 +29,6 @@ import org.jetbrains.kotlin.extensions.internal.CandidateInterceptor
 import org.jetbrains.kotlin.extensions.internal.TypeResolutionInterceptor
 import org.jetbrains.kotlin.psi2ir.extensions.SyntheticIrExtension
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
-
-@AutoService(CommandLineProcessor::class)
-class ComposeCommandLineProcessor : CommandLineProcessor {
-
-    companion object {
-        val PLUGIN_ID = "androidx.compose.plugins.kotlin"
-    }
-
-    override val pluginId = PLUGIN_ID
-    override val pluginOptions = emptyList<CliOption>()
-
-    override fun processOption(
-        option: AbstractCliOption,
-        value: String,
-        configuration: CompilerConfiguration
-    ) = throw CliOptionProcessingException("Unknown option: ${option.optionName}")
-}
 
 @AutoService(ComponentRegistrar::class)
 class ComposeComponentRegistrar : ComponentRegistrar {

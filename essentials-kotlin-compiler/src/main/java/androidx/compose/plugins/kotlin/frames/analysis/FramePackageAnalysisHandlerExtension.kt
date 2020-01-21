@@ -1,6 +1,5 @@
 package androidx.compose.plugins.kotlin.frames.analysis
 
-import androidx.compose.plugins.kotlin.ComposeFlags
 import androidx.compose.plugins.kotlin.frames.FrameRecordClassDescriptor
 import androidx.compose.plugins.kotlin.frames.SyntheticFramePackageDescriptor
 import androidx.compose.plugins.kotlin.frames.abstractRecordClassName
@@ -29,7 +28,6 @@ private fun doAnalysis(
     files: Collection<KtFile>,
     resolveSession: ResolveSession
 ) {
-    if (!ComposeFlags.FRAMED_MODEL_CLASSES) return
     for (file in files) {
         analyseDeclarations(module, bindingTrace, file.declarations, resolveSession)
     }
