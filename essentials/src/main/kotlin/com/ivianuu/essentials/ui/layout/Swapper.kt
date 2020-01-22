@@ -44,17 +44,9 @@ fun <T> Swapper(
     }
 
     Layout(children = children, modifier = modifier) { measureables, constraints ->
-        val placeables = measureables.map {
-            it.measure(constraints)
-        }
+        val placeable = measureables.last().measure(constraints)
         layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEachIndexed { index, placeable ->
-                if (index == placeables.lastIndex) {
-                    placeable.place(PxPosition.Origin)
-                } else {
-                    placeable.place(constraints.maxWidth, constraints.maxHeight)
-                }
-            }
+            placeable.place(PxPosition.Origin)
         }
     }
 }
