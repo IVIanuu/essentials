@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.irBlock
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irCall
-import org.jetbrains.kotlin.ir.builders.irString
 import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
@@ -48,8 +47,6 @@ import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
-import org.jetbrains.kotlin.psi2ir.findFirstFunction
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.types.KotlinType
@@ -166,7 +163,7 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                     }
                     fn.parent = declaration
                 }
-                +irCall(
+                /*+irCall(
                     callee = symbolTable.referenceSimpleFunction(
                         this@ComposeObservePatcher.context.moduleDescriptor
                             .getPackage(FqName("kotlin.io"))
@@ -182,7 +179,7 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                         0,
                         irString("invoke observe ${descriptor.fqNameSafe}")
                     )
-                }
+                }*/
                 +irCall(
                     observeFunctionSymbol,
                     observeFunctionDescriptor,
