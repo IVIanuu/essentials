@@ -41,9 +41,6 @@ class ScrollPosition(
     maxValue: Px = Px.Infinity
 ) {
 
-    private val holder =
-        AnimatedValueHolder(initial.value)
-
     val value: Px
         get() = holder.value.px
 
@@ -52,6 +49,11 @@ class ScrollPosition(
 
     private var _maxValue: Px by framed(maxValue)
     val maxValue: Px get() = _maxValue
+
+    private val holder =
+        AnimatedValueHolder(initial.value).apply {
+            setBounds(minValue.value, maxValue.value)
+        }
 
     val isAnimating: Boolean
         get() = holder.animatedFloat.isRunning
@@ -92,7 +94,9 @@ class ScrollPosition(
     }
 
     fun scrollTo(value: Px) {
-        holder.animatedFloat.snapTo(value.value)
+        if (this.value != value) {
+            holder.animatedFloat.snapTo(value.value)
+        }
     }
 
     fun scrollBy(value: Px) {
@@ -110,7 +114,7 @@ class ScrollPosition(
         )
     }
 
-    fun updateBounds(minValue: Px, maxValue: Px) {
+    fun updateBounds(minValue: Px = _minValue, maxValue: Px = _maxValue) {
         check(minValue <= maxValue) {
             "Min value $minValue cannot be greater than max value $maxValue"
         }
