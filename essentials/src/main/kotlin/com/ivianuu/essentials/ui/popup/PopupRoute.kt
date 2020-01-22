@@ -36,7 +36,7 @@ fun PopupRoute(
     alignment: Alignment = Alignment.BottomLeft,
     view: View,
     onCancel: (() -> Unit)? = null,
-    popup: @Composable() () -> Unit
+    popup: @Composable () -> Unit
 ): Route {
     val width = view.width.ipx
     val height = view.width.ipx
@@ -71,7 +71,7 @@ fun PopupRoute(
 fun PopupRoute(
     position: IntPxPosition,
     onCancel: (() -> Unit)? = null,
-    popup: @Composable() () -> Unit
+    popup: @Composable () -> Unit
 ) = Route(
     opaque = true,
     enterTransition = FadeRouteTransition(),
@@ -107,7 +107,7 @@ fun PopupRoute(
 @Composable
 private fun PopupLayout(
     position: IntPxPosition,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     NonNullSingleChildLayout(child = child) { measureable, constraints ->
         val childConstraints = constraints.copy(

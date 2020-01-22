@@ -93,7 +93,7 @@ fun TransparentSystemBarStyle(
 @Composable
 fun ProvideSystemBarStyle(
     value: SystemBarStyle,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val systemBarManager = SystemBarManagerAmbient.current
     onPreCommit(value) {
@@ -111,7 +111,7 @@ fun ambientSystemBarStyle(): SystemBarStyle =
     SystemBarStyleAmbient.current
 
 @Composable
-fun SystemBarManager(children: @Composable() () -> Unit) {
+fun SystemBarManager(children: @Composable () -> Unit) {
     val activity = ActivityAmbient.current
     val systemBarManager = remember { SystemBarManager(activity) }
     SystemBarManagerAmbient.Provider(value = systemBarManager, children = children)

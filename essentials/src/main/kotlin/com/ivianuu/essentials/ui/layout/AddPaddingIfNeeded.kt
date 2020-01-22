@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.core.looseMin
 fun AddPaddingIfNeededLayout(
     padding: EdgeInsets,
     modifier: Modifier = Modifier.None,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
         if (measureable == null) return@SingleChildLayout layout(IntPx.Zero, IntPx.Zero) {}

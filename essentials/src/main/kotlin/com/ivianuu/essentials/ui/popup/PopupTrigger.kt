@@ -33,8 +33,8 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 fun PopupTrigger(
     alignment: Alignment = Alignment.BottomLeft,
     onCancel: (() -> Unit)? = null,
-    popup: @Composable() () -> Unit,
-    child: @Composable() (showPopup: () -> Unit) -> Unit
+    popup: @Composable () -> Unit,
+    child: @Composable (showPopup: () -> Unit) -> Unit
 ) {
     val navigator = NavigatorAmbient.current
 

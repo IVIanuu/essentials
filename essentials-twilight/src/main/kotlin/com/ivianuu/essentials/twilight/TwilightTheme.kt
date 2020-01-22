@@ -34,7 +34,7 @@ fun TwilightTheme(
     lightColors: ColorPalette = lightColorPalette(),
     darkColors: ColorPalette = darkColorPalette(),
     typography: Typography = Typography(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
     val isDark = collect(helper.isDark, helper.currentIsDark)

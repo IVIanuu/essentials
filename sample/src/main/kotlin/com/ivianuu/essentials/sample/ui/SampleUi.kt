@@ -54,7 +54,7 @@ class SampleUi : AppUi {
 @Factory
 class SampleUiInitializer : UiInitializer {
     @Composable
-    override fun apply(children: @Composable() () -> Unit) {
+    override fun apply(children: @Composable () -> Unit) {
         DefaultRouteTransitionAmbient.Provider(
             value = remember { VerticalFadeRouteTransition() }
         ) {

@@ -29,7 +29,7 @@ import androidx.ui.core.ContextAmbient
 // todo remove once ConfigurationAmbient triggers recomposition
 
 @Composable
-fun ConfigurationFix(children: @Composable() () -> Unit) {
+fun ConfigurationFix(children: @Composable () -> Unit) {
     val application = ContextAmbient.current.applicationContext as Application
 
     val configuration = state { application.resources.configuration }

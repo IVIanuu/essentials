@@ -27,7 +27,7 @@ fun EsTheme(
     colors: ColorPalette = ColorPalette(),
     typography: Typography = Typography(),
     systemBarStyle: SystemBarStyle = ColorOverlaySystemBarStyle(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     MaterialTheme(
         colors = colors,

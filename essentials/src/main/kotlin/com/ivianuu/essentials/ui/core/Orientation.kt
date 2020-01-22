@@ -26,7 +26,7 @@ enum class Orientation {
 }
 
 @Composable
-fun OrientationProvider(children: @Composable() () -> Unit) {
+fun OrientationProvider(children: @Composable () -> Unit) {
     val configuration = ConfigurationAmbient.current
     val orientation = remember(configuration.orientation) {
         when (configuration.orientation) {

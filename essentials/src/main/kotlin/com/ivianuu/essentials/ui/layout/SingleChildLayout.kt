@@ -25,7 +25,7 @@ import androidx.ui.core.Modifier
 
 @Composable
 fun SingleChildLayout(
-    child: @Composable() () -> Unit,
+    child: @Composable () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
 ) {
@@ -37,7 +37,7 @@ fun SingleChildLayout(
 
 @Composable
 fun NonNullSingleChildLayout(
-    child: @Composable() () -> Unit,
+    child: @Composable () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable, Constraints) -> MeasureScope.LayoutResult
 ) {

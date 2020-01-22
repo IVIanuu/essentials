@@ -34,7 +34,7 @@ fun Surface(
     contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
     elevation: Dp = 0.dp,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     androidx.ui.material.surface.Surface(
         modifier = modifier,

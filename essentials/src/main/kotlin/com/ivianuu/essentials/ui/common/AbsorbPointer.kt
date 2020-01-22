@@ -25,7 +25,7 @@ import androidx.ui.core.consumeDownChange
 @Composable
 fun AbsorbPointer(
     absorb: Boolean = true,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val consumedIds = remember { mutableSetOf<Int>() }
     PointerInputWrapper(

@@ -72,7 +72,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     }
 
     @Composable
-    protected open fun WrapContentWithEnvironment(content: @Composable() () -> Unit) {
+    protected open fun WrapContentWithEnvironment(content: @Composable () -> Unit) {
         Environment(
             activity = this,
             component = component,

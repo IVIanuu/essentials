@@ -27,11 +27,11 @@ import com.ivianuu.essentials.util.Uninitialized
 @Composable
 fun <T> AsyncList(
     state: Async<List<T>>,
-    fail: @Composable() (Throwable) -> Unit = {},
-    loading: @Composable() () -> Unit = { FullScreenLoading() },
-    uninitialized: @Composable() () -> Unit = loading,
-    successEmpty: @Composable() () -> Unit = {},
-    successItem: @Composable() (Int, T) -> Unit
+    fail: @Composable (Throwable) -> Unit = {},
+    loading: @Composable () -> Unit = { FullScreenLoading() },
+    uninitialized: @Composable () -> Unit = loading,
+    successEmpty: @Composable () -> Unit = {},
+    successItem: @Composable (Int, T) -> Unit
 ) {
     Async(
         state = state,
@@ -51,10 +51,10 @@ fun <T> AsyncList(
 @Composable
 fun <T> Async(
     state: Async<T>,
-    fail: @Composable() (Throwable) -> Unit = {},
-    loading: @Composable() () -> Unit = { FullScreenLoading() },
-    uninitialized: @Composable() () -> Unit = loading,
-    success: @Composable() (T) -> Unit
+    fail: @Composable (Throwable) -> Unit = {},
+    loading: @Composable () -> Unit = { FullScreenLoading() },
+    uninitialized: @Composable () -> Unit = loading,
+    success: @Composable (T) -> Unit
 ) {
     when (state) {
         Uninitialized -> uninitialized()

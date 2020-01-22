@@ -26,11 +26,11 @@ fun <T> DialogPreference(
     valueController: ValueController<T>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
-    summary: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
-    leading: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
-    trailing: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
-    dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
+    title: @Composable ((PreferenceContext<T>) -> Unit)? = null,
+    summary: @Composable ((PreferenceContext<T>) -> Unit)? = null,
+    leading: @Composable ((PreferenceContext<T>) -> Unit)? = null,
+    trailing: @Composable ((PreferenceContext<T>) -> Unit)? = null,
+    dialog: @Composable (PreferenceContext<T>, () -> Unit) -> Unit
 ) {
     val navigator = NavigatorAmbient.current
     PreferenceWrapper(

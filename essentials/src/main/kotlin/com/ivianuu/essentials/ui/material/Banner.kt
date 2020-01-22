@@ -38,9 +38,9 @@ import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun Banner(
-    leading: @Composable() (() -> Unit)? = null,
-    content: @Composable() () -> Unit,
-    actions: @Composable() () -> Unit
+    leading: @Composable (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+    actions: @Composable () -> Unit
 ) {
     WithModifier(modifier = LayoutWidth.Fill) {
         Column {

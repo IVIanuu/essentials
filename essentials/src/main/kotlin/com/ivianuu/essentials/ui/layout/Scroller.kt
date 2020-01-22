@@ -40,7 +40,7 @@ fun Scroller(
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     Scrollable(
         position = position,
@@ -61,7 +61,7 @@ private fun ScrollerLayout(
     position: ScrollPosition,
     modifier: Modifier,
     direction: Axis,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     SingleChildLayout(child = {
         Clip(RectangleShape) {

@@ -29,7 +29,7 @@ import androidx.ui.unit.ipx
 fun SpacingRow(
     spacing: Dp,
     modifier: Modifier = Modifier.None,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Layout(children = children, modifier = modifier) { measureables, constraints ->
         var childConstraints = constraints.copy(maxWidth = constraints.maxWidth)

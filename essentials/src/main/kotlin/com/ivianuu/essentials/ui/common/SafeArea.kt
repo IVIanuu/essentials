@@ -37,7 +37,7 @@ fun SafeArea(
     right: Boolean = true,
     bottom: Boolean = true,
     minimum: EdgeInsets? = null,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val windowInsets = ambientWindowInsets()
 

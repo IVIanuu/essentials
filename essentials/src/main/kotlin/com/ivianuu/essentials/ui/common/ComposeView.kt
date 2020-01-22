@@ -8,7 +8,7 @@ import androidx.ui.core.setContent
 
 fun ComposeView(
     context: Context,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ): View = FrameLayout(context).also { container ->
     container.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View?) {

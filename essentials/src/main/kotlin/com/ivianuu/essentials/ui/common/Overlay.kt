@@ -97,7 +97,7 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
 class OverlayEntry(
     opaque: Boolean = false,
     keepState: Boolean = false,
-    val content: @Composable() () -> Unit
+    val content: @Composable () -> Unit
 ) {
     var opaque by framed(opaque)
     var keepState by framed(keepState)
@@ -108,7 +108,7 @@ val OverlayAmbient =
 
 @Composable
 private fun OverlayLayout(
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Layout(children = children) { measureables, constraints ->
         // force children to fill the whole space

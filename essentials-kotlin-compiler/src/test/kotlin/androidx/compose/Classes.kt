@@ -33,7 +33,7 @@ class ViewComposition {
         key: Any,
         /*crossinline*/
         invalid: ViewValidator.() -> Boolean,
-        block: @Composable() () -> Unit
+        block: @Composable () -> Unit
     ) {
     }
 

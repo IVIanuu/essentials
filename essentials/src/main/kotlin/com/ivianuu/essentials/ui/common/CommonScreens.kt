@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 @Composable
 fun SimpleScreen(
     title: String,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     Scaffold(
         topAppBar = { TopAppBar(title = title) },
@@ -35,7 +35,7 @@ fun SimpleScreen(
 @Composable
 fun ListScreen(
     title: String,
-    listContent: @Composable() () -> Unit
+    listContent: @Composable () -> Unit
 ) {
     Scaffold(
         topAppBar = { TopAppBar(title = title) },

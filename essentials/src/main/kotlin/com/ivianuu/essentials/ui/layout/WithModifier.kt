@@ -25,7 +25,7 @@ import androidx.ui.unit.PxPosition
 @Composable
 fun WithModifier(
     modifier: Modifier,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Layout(children = children, modifier = modifier) { measureables, constraints ->
         val placeables = measureables.map { it.measure(constraints) }

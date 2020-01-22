@@ -78,16 +78,16 @@ fun ListItem(
 
 @Composable
 fun ListItem(
-    title: @Composable() (() -> Unit)? = null,
-    subtitle: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    trailing: @Composable() (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
-    val item: @Composable() () -> Unit = {
+    val item: @Composable () -> Unit = {
         val minHeight = if (subtitle != null) {
             if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
         } else {

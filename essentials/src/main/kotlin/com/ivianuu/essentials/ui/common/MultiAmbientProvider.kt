@@ -23,11 +23,11 @@ import androidx.compose.Immutable
 @Composable
 fun MultiAmbientProvider(
     vararg pairs: AmbientWithValue<*>,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     pairs
         .map { pair ->
-            val composable: @Composable() (@Composable() () -> Unit) -> Unit = { children ->
+            val composable: @Composable (@Composable () -> Unit) -> Unit = { children ->
                 pair.Provider(children)
             }
             composable
@@ -47,7 +47,7 @@ data class AmbientWithValue<T>(
 ) {
     @Composable
     fun Provider(
-        children: @Composable() () -> Unit
+        children: @Composable () -> Unit
     ) {
         ambient.Provider(value = value, children = children)
     }

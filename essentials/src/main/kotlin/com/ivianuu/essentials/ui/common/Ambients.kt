@@ -28,7 +28,7 @@ interface Updateable<T> {
 @Composable
 fun <T : Updateable<T>> Ambient<T>.UpdateProvider(
     value: T,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val finalValue = remember { value }
     finalValue.updateFrom(value)
@@ -42,7 +42,7 @@ interface Mergeable<T> {
 @Composable
 fun <T : Mergeable<T>> Ambient<T>.MergeProvider(
     value: T,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val currentValue = this.current
     val newValue = currentValue.merge(value)

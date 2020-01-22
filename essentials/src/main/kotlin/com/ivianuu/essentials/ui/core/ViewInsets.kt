@@ -42,7 +42,7 @@ import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
 
 @Composable
-fun WindowInsetsManager(children: @Composable() () -> Unit) {
+fun WindowInsetsManager(children: @Composable () -> Unit) {
     val composeView = AndroidComposeViewAmbient.current
 
     val density = ambientDensity()
@@ -224,7 +224,7 @@ fun ambientWindowInsets(): WindowInsets = WindowInsetsAmbient.current
 @Composable
 fun WindowInsetsProvider(
     value: WindowInsets,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     WindowInsetsAmbient.UpdateProvider(
         value = value,

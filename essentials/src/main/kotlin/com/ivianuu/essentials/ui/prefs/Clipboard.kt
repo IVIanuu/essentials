@@ -47,9 +47,9 @@ fun ClipboardPreference(
 fun ClipboardPreference(
     clipboardText: () -> String,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() (() -> Unit)? = null,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
     trailing: @Composable() (() -> Unit)? = null
 ) {
     val clipboardManager = inject<ClipboardManager>()

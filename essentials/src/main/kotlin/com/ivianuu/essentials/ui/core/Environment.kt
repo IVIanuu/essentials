@@ -40,7 +40,7 @@ fun Environment(
     activity: ComponentActivity,
     component: Component,
     retainedObjects: RetainedObjects,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val composeView = AndroidComposeViewAmbient.current
     val focusManager = FocusManagerAmbient.current
@@ -62,7 +62,7 @@ fun Environment(
                             val uiInitializers = inject<Map<String, UiInitializer>>(name = UiInitializers)
                             uiInitializers.entries
                                 .map { (key, initializer) ->
-                                    val function: @Composable() (@Composable() () -> Unit) -> Unit = { children ->
+                                    val function: @Composable (@Composable () -> Unit) -> Unit = { children ->
                                         d { "apply ui initializer $key" }
                                         initializer.apply(children)
                                     }
@@ -81,7 +81,7 @@ fun Environment(
 
 interface UiInitializer {
     @Composable
-    fun apply(children: @Composable() () -> Unit)
+    fun apply(children: @Composable () -> Unit)
 }
 
 @Name

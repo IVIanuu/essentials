@@ -38,7 +38,7 @@ val PopupStyleAmbient =
 @Composable
 fun Popup(
     style: PopupStyle = PopupStyleAmbient.current,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Surface(
         elevation = 8.dp,

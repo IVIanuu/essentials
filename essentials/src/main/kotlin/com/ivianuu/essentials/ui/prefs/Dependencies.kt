@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun Dependencies(
     dependencies: List<Dependency<*>>,
-    child: @Composable() (Boolean) -> Unit
+    child: @Composable (Boolean) -> Unit
 ) {
     val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
         dependencies.asDependencyFlow()

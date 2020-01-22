@@ -31,7 +31,7 @@ fun Button(
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
     style: ButtonStyle = ButtonStyleAmbient.current ?: ContainedButtonStyle(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     androidx.ui.material.Button(
         modifier = modifier, onClick = onClick, style = style, children = children

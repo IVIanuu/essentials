@@ -333,7 +333,7 @@ val DialogsRoute = Route {
 private fun DialogLauncherButton(
     text: String,
     dismissible: Boolean = true,
-    dialog: @Composable() () -> Unit
+    dialog: @Composable () -> Unit
 ) {
     val navigator = NavigatorAmbient.current
     Button(

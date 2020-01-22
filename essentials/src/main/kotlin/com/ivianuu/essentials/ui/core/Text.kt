@@ -79,7 +79,7 @@ fun Text(
 @Composable
 private fun ToggleableSelectable(
     selectable: Boolean,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     SelectionRegistrarAmbient.Provider(
         value = if (selectable) SelectionRegistrarAmbient.current else NoopSelectionRegistrar,

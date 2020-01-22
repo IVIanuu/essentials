@@ -510,7 +510,7 @@ private fun FlexLayout(
     mainAxisAlignment: MainAxisAlignment,
     crossAxisSize: LayoutSize,
     crossAxisAlignment: CrossAxisAlignment,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     fun Placeable.mainAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) width else height

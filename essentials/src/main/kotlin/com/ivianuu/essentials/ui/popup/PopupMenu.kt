@@ -40,7 +40,7 @@ object PopupMenu {
     @Immutable
     data class Item(
         val onSelected: (() -> Unit)? = null,
-        val content: @Composable() () -> Unit
+        val content: @Composable () -> Unit
     ) {
         constructor(
             text: String,
@@ -81,7 +81,7 @@ fun <T> PopupMenu(
     items: List<T>,
     onSelected: (T) -> Unit,
     style: PopupStyle = PopupStyleAmbient.current,
-    item: @Composable() (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     PopupMenu(
         style = style,
@@ -98,7 +98,7 @@ fun <T> PopupMenu(
 @Composable
 private fun PopupMenuItem(
     onSelected: (() -> Unit)? = null,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {
         Clickable(

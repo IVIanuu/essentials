@@ -77,7 +77,7 @@ fun Image(
     modifier: Modifier = Modifier.None,
     placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject(),
-    image: @Composable() (Image?) -> Unit
+    image: @Composable (Image?) -> Unit
 ) {
     val loadedImage = image(
         placeholder = placeholder,
@@ -99,7 +99,7 @@ fun Image(
     modifier: Modifier = Modifier.None,
     placeholder: Image,
     imageLoader: ImageLoader = inject(),
-    image: @Composable() (Image) -> Unit
+    image: @Composable (Image) -> Unit
 ) {
     val loadedImage = image(
         placeholder = placeholder,

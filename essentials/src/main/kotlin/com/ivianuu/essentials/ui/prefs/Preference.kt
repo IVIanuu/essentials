@@ -52,7 +52,7 @@ fun <T> PreferenceWrapper(
     valueController: ValueController<T>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    preference: @Composable() (PreferenceContext<T>) -> Unit
+    preference: @Composable (PreferenceContext<T>) -> Unit
 ) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
         val context = remember { PreferenceContext<T>() }
@@ -84,10 +84,10 @@ fun PreferenceLayout(
 
 @Composable
 fun PreferenceLayout(
-    title: @Composable() (() -> Unit)? = null,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    trailing: @Composable() (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     ListItem(
