@@ -32,48 +32,48 @@ import org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE
 import org.jetbrains.kotlin.types.TypeUtils.UNIT_EXPECTED_TYPE
 import org.jetbrains.kotlin.types.typeUtil.replaceAnnotations
 
-object ComposeFqNames {
-    val Composable = ComposeUtils.composeFqName("Composable")
-    val Pivotal = ComposeUtils.composeFqName("Pivotal")
-    val StableMarker = ComposeUtils.composeFqName("StableMarker")
-    val Package = FqName.fromSegments(listOf("androidx", "compose"))
-    fun makeComposableAnnotation(module: ModuleDescriptor): AnnotationDescriptor =
-        object : AnnotationDescriptor {
-            override val type: KotlinType
-                get() = module.findClassAcrossModuleDependencies(
-                    ClassId.topLevel(Composable)
-                )!!.defaultType
-            override val allValueArguments: Map<Name, ConstantValue<*>> get() = emptyMap()
-            override val source: SourceElement get() = SourceElement.NO_SOURCE
-            override fun toString() = "[@Composable]"
-        }
-}
+val ComposableAnnotation = FqName("androidx.compose.Composable")
+val PivotalAnnotation = FqName("androidx.compose.Pivotal")
+val StableMarkerAnnotation = FqName("androidx.compose.StableMarker")
+
+fun makeComposableAnnotation(module: ModuleDescriptor): AnnotationDescriptor =
+    object : AnnotationDescriptor {
+        override val type: KotlinType
+            get() = module.findClassAcrossModuleDependencies(
+                ClassId.topLevel(ComposableAnnotation)
+            )!!.defaultType
+        override val allValueArguments: Map<Name, ConstantValue<*>> get() = emptyMap()
+        override val source: SourceElement get() = SourceElement.NO_SOURCE
+        override fun toString() = "[@Composable]"
+    }
 
 fun KotlinType.makeComposable(module: ModuleDescriptor): KotlinType {
     if (hasComposableAnnotation()) return this
-    val annotation = ComposeFqNames.makeComposableAnnotation(module)
+    val annotation = makeComposableAnnotation(module)
     return replaceAnnotations(Annotations.create(annotations + annotation))
 }
 
 fun KotlinType.hasComposableAnnotation(): Boolean =
-    !isSpecialType && annotations.findAnnotation(ComposeFqNames.Composable) != null
+    !isSpecialType && annotations.findAnnotation(ComposableAnnotation) != null
+
 fun KotlinType.isMarkedStable(): Boolean =
     !isSpecialType && (
                     annotations.hasStableMarker() ||
                     (constructor.declarationDescriptor?.annotations?.hasStableMarker() ?: false))
+
 fun Annotated.hasComposableAnnotation(): Boolean =
-    annotations.findAnnotation(ComposeFqNames.Composable) != null
+    annotations.findAnnotation(ComposableAnnotation) != null
 fun Annotated.hasPivotalAnnotation(): Boolean =
-    annotations.findAnnotation(ComposeFqNames.Pivotal) != null
+    annotations.findAnnotation(PivotalAnnotation) != null
 
 internal val KotlinType.isSpecialType: Boolean get() =
     this === NO_EXPECTED_TYPE || this === UNIT_EXPECTED_TYPE
 
-val AnnotationDescriptor.isComposableAnnotation: Boolean get() = fqName == ComposeFqNames.Composable
+val AnnotationDescriptor.isComposableAnnotation: Boolean get() = fqName == ComposableAnnotation
 
 fun Annotations.hasStableMarker(): Boolean = any(AnnotationDescriptor::isStableMarker)
 
 fun AnnotationDescriptor.isStableMarker(): Boolean {
     val classDescriptor = annotationClass ?: return false
-    return classDescriptor.annotations.hasAnnotation(ComposeFqNames.StableMarker)
+    return classDescriptor.annotations.hasAnnotation(StableMarkerAnnotation)
 }

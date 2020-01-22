@@ -71,7 +71,7 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
 
     fun add(entry: OverlayEntry) {
         check(entry !in _entries)
-        _entries.add(entry)
+        _entries += entry
     }
 
     fun add(index: Int, entry: OverlayEntry) {
@@ -80,7 +80,7 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
     }
 
     fun remove(entry: OverlayEntry) {
-        _entries.remove(entry)
+        _entries -= entry
     }
 
     fun move(from: Int, to: Int) {

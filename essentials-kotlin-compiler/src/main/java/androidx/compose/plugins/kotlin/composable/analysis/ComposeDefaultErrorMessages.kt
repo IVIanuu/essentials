@@ -1,5 +1,6 @@
-package androidx.compose.plugins.kotlin.analysis
+package androidx.compose.plugins.kotlin.composable.analysis
 
+import androidx.compose.plugins.kotlin.ComposeErrors
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
 import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticFactoryToRendererMap
 import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticParameterRenderer
@@ -11,7 +12,7 @@ object ComposeDefaultErrorMessages : DefaultErrorMessages.Extension {
     private val MAP = DiagnosticFactoryToRendererMap("Compose")
     override fun getMap() = MAP
 
-    val OUR_STRING_RENDERER = object : DiagnosticParameterRenderer<String> {
+    private val OUR_STRING_RENDERER = object : DiagnosticParameterRenderer<String> {
         override fun render(obj: String, renderingContext: RenderingContext): String {
             return obj
         }

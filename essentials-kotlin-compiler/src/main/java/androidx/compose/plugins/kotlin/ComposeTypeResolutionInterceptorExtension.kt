@@ -16,7 +16,7 @@
 
 package androidx.compose.plugins.kotlin
 
-import androidx.compose.plugins.kotlin.analysis.ComposeWritableSlices.INFERRED_COMPOSABLE_DESCRIPTOR
+import androidx.compose.plugins.kotlin.composable.ComposableAnnotationChecker
 import org.jetbrains.kotlin.descriptors.impl.AnonymousFunctionDescriptor
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import org.jetbrains.kotlin.extensions.internal.TypeResolutionInterceptorExtension
@@ -26,6 +26,16 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingContext
+
+class ComposableAnonymousFunctionDescriptor(
+    wrapped: AnonymousFunctionDescriptor
+) : AnonymousFunctionDescriptor(
+    wrapped.containingDeclaration,
+    wrapped.annotations,
+    wrapped.kind,
+    wrapped.source,
+    wrapped.isSuspend
+)
 
 /**
  * If a lambda is marked as `@Composable`, then the inferred type should become `@Composable`
@@ -39,12 +49,10 @@ open class ComposeTypeResolutionInterceptorExtension : TypeResolutionInterceptor
         context: ExpressionTypingContext,
         descriptor: AnonymousFunctionDescriptor
     ): AnonymousFunctionDescriptor {
-        if (context.expectedType.hasComposableAnnotation()) {
-            // If the expected type has an @Composable annotation then the literal function
-            // expression should infer a an @Composable annotation
-            context.trace.record(INFERRED_COMPOSABLE_DESCRIPTOR, descriptor, true)
-        }
-        return descriptor
+        return if (descriptor !is ComposableAnonymousFunctionDescriptor &&
+            context.expectedType.hasComposableAnnotation())
+            ComposableAnonymousFunctionDescriptor(descriptor)
+        else descriptor
     }
 
     override fun interceptType(

@@ -1,4 +1,4 @@
-package androidx.compose.plugins.kotlin.frames.analysis
+package androidx.compose.plugins.kotlin.model.analysis
 
 import org.jetbrains.kotlin.builtins.DefaultBuiltIns
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
@@ -23,63 +23,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.hasBackingField
 import org.jetbrains.kotlin.types.KotlinType
 
-/**
- * Helpers for creating the new properties, fields and properties of the framed class and the framed
- * record
- *
- * - Framed properties are all public properties of the class.
- * - A framed record has
- *   - a corresponding property for each of the framed class' public properties
- *   - a `create` method that creates a new instance of the record
- *   - an `assign` method that copies values from the value into the record
- * - All framed properties redirect to the current readable or writable record for the class
- *   corresponding to the current open frame.
- *
- *   For example, given the declaration:
- *
- *   @Model
- *   class MyModel {
- *     var some: String = "Default some"
- *     var data: String = "Default data"
- *
- *   }
- *
- *   The class is transformed into something like:
- *
- *   class MyModel: Framed {
- *     var some: String
- *       get() = (_readable(next) as MyModel_Record).some
- *       set(value) { (_writable(next) as MyModel_Record).some = value }
- *     var data: String
- *       get() = ((_readable(next) as MyModel_Record).data
- *       set(value) { (_writable(next, this) as MyModel_Record).data = value }
- *
- *     private var _firstFrameRecord: MyModelRecord? = null
- *
- *     override var firstFrameRecord: Record get() = _firstFrameRecord
- *     override fun prependFrameRecord(value: Record) {
- *       value.next = _firstFrameRecord
- *       _firstFrameRecord = value
- *     }
- *
- *     init {
- *       next = MyModel_Record()
- *       (next as MyModel_Record).some = "Default some"
- *       (next as MyModel_Record).data = "Default data"
- *     }
- *   }
- *
- *   class MyModel_Record : AbstractRecord {
- *     @JvmField var some: String
- *     @JvmField var data: String
- *
- *     override fun create(): Record = MyModel_Record()
- *     override fun assign(value: Record) {
- *       some = (value as MyModel_Record).some
- *       data = (value as MyModel_Record).data
- *     }
- *   }
- */
 class FrameMetadata(private val framedClassDescriptor: ClassDescriptor) {
     private val builtIns = DefaultBuiltIns.Instance
 
@@ -223,17 +166,17 @@ private fun syntheticMethod(
     ).apply {
         val parameterDescriptors = parameters.map {
             ValueParameterDescriptorImpl(
-                this,
-                null,
-                0,
-                Annotations.EMPTY,
-                it.name,
-                it.type,
-                false,
-                false,
-                false,
-                null,
-                SourceElement.NO_SOURCE
+                containingDeclaration = this,
+                original = null,
+                index = 0,
+                annotations = Annotations.EMPTY,
+                name = it.name,
+                outType = it.type,
+                declaresDefaultValue = false,
+                isCrossinline = false,
+                isNoinline = false,
+                varargElementType = null,
+                source = SourceElement.NO_SOURCE
             )
         }
 

@@ -1,11 +1,11 @@
-package androidx.compose.plugins.kotlin.frames.analysis
+package androidx.compose.plugins.kotlin.model.analysis
 
-import androidx.compose.plugins.kotlin.frames.FrameRecordClassDescriptor
-import androidx.compose.plugins.kotlin.frames.SyntheticFramePackageDescriptor
-import androidx.compose.plugins.kotlin.frames.abstractRecordClassName
-import androidx.compose.plugins.kotlin.frames.findTopLevel
-import androidx.compose.plugins.kotlin.frames.modelClassName
-import androidx.compose.plugins.kotlin.frames.recordClassName
+import androidx.compose.plugins.kotlin.model.FrameRecordClassDescriptor
+import androidx.compose.plugins.kotlin.model.SyntheticFramePackageDescriptor
+import androidx.compose.plugins.kotlin.model.abstractRecordClassName
+import androidx.compose.plugins.kotlin.model.findTopLevel
+import androidx.compose.plugins.kotlin.model.modelClassName
+import androidx.compose.plugins.kotlin.model.recordClassName
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.container.ComponentProvider

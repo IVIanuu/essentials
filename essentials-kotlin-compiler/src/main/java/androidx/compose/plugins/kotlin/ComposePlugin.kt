@@ -16,8 +16,9 @@
 
 package androidx.compose.plugins.kotlin
 
-import androidx.compose.plugins.kotlin.frames.analysis.FrameModelChecker
-import androidx.compose.plugins.kotlin.frames.analysis.FramePackageAnalysisHandlerExtension
+import androidx.compose.plugins.kotlin.composable.ComposableAnnotationChecker
+import androidx.compose.plugins.kotlin.model.analysis.FrameModelChecker
+import androidx.compose.plugins.kotlin.model.analysis.FramePackageAnalysisHandlerExtension
 import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
@@ -25,9 +26,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
-import org.jetbrains.kotlin.extensions.internal.CandidateInterceptor
 import org.jetbrains.kotlin.extensions.internal.TypeResolutionInterceptor
-import org.jetbrains.kotlin.psi2ir.extensions.SyntheticIrExtension
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 
 @AutoService(ComponentRegistrar::class)
@@ -53,27 +52,12 @@ class ComposeComponentRegistrar : ComponentRegistrar {
                 project,
                 ComposableAnnotationChecker()
             )
-            StorageComponentContainerContributor.registerExtension(
-                project,
-                TryCatchComposableChecker()
-            )
-            ComposeDiagnosticSuppressor.registerExtension(
-                project,
-                ComposeDiagnosticSuppressor()
-            )
             TypeResolutionInterceptor.registerExtension(
                 project,
                 ComposeTypeResolutionInterceptorExtension()
             )
-            SyntheticIrExtension.registerExtension(project,
-                ComposeSyntheticIrExtension()
-            )
             IrGenerationExtension.registerExtension(project,
                 ComposeIrGenerationExtension())
-            CandidateInterceptor.registerExtension(
-                project,
-                ComposeCallResolutionInterceptorExtension()
-            )
             StorageComponentContainerContributor.registerExtension(project,
                 FrameModelChecker()
             )

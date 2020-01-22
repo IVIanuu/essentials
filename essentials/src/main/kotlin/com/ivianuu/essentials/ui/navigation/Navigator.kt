@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.call
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
@@ -385,16 +384,13 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes,
-                                children = {
-                                    call(route) { // todo compose compiler
-                                        RouteAmbient.Provider(
-                                            value = route,
-                                            children = route.content
-                                        )
-                                    }
-                                }
-                            )
+                                types = routeTransitionTypes
+                            ) {
+                                RouteAmbient.Provider(
+                                    value = route,
+                                    children = route.content
+                                )
+                            }
                         }
                     }
                 }

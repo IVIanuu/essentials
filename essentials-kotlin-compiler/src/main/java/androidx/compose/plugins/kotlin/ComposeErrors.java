@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.compose.plugins.kotlin.analysis;
-
-import static org.jetbrains.kotlin.diagnostics.Severity.ERROR;
-import static org.jetbrains.kotlin.diagnostics.Severity.WARNING;
+package androidx.compose.plugins.kotlin;
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0;
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory2;
 import org.jetbrains.kotlin.diagnostics.Errors;
 import org.jetbrains.kotlin.psi.KtElement;
@@ -28,6 +24,8 @@ import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.types.KotlinType;
 
 import java.util.Collection;
+
+import static org.jetbrains.kotlin.diagnostics.Severity.ERROR;
 
 /**
  * Error messages

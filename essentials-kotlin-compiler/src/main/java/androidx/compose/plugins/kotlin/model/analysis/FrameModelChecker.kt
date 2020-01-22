@@ -1,8 +1,7 @@
-package androidx.compose.plugins.kotlin.frames.analysis
+package androidx.compose.plugins.kotlin.model.analysis
 
-import androidx.compose.plugins.kotlin.ComposeUtils
-import androidx.compose.plugins.kotlin.analysis.ComposeDefaultErrorMessages
-import androidx.compose.plugins.kotlin.analysis.ComposeErrors
+import androidx.compose.plugins.kotlin.ComposeErrors
+import androidx.compose.plugins.kotlin.composable.analysis.ComposeDefaultErrorMessages
 import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.useInstance
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -11,6 +10,7 @@ import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.diagnostics.reportFromPlugin
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.platform.jvm.isJvm
 import org.jetbrains.kotlin.psi.KtClass
@@ -57,5 +57,5 @@ open class FrameModelChecker : DeclarationChecker, StorageComponentContainerCont
     }
 }
 
-private val MODEL_FQNAME = ComposeUtils.composeFqName("Model")
+private val MODEL_FQNAME = FqName("androidx.compose.Model")
 val DeclarationDescriptor.isModelClass: Boolean get() = annotations.hasAnnotation(MODEL_FQNAME)

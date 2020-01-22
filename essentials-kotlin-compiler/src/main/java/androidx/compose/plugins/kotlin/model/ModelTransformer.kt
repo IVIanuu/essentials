@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package androidx.compose.plugins.kotlin.frames
+package androidx.compose.plugins.kotlin.model
 
-import androidx.compose.plugins.kotlin.frames.analysis.FrameMetadata
-import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices
-import androidx.compose.plugins.kotlin.frames.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
+import androidx.compose.plugins.kotlin.model.analysis.FrameMetadata
+import androidx.compose.plugins.kotlin.model.analysis.FrameWritableSlices
+import androidx.compose.plugins.kotlin.model.analysis.FrameWritableSlices.FRAMED_DESCRIPTOR
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
@@ -62,7 +62,6 @@ import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationParent
 import org.jetbrains.kotlin.ir.declarations.IrField
-import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.IrProperty
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
@@ -93,23 +92,17 @@ import org.jetbrains.kotlin.ir.symbols.IrValueSymbol
 import org.jetbrains.kotlin.ir.symbols.impl.IrAnonymousInitializerSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrClassSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrConstructorSymbolImpl
-import org.jetbrains.kotlin.ir.symbols.impl.IrFieldSymbolImpl
-import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrTypeParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
-import org.jetbrains.kotlin.ir.util.ReferenceSymbolTable
 import org.jetbrains.kotlin.ir.util.defaultType
 import org.jetbrains.kotlin.ir.util.referenceFunction
-import org.jetbrains.kotlin.ir.util.withScope
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
-import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.psi2ir.generators.GeneratorContext
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
@@ -122,26 +115,13 @@ import org.jetbrains.kotlin.types.ClassTypeConstructorImpl
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.KotlinTypeFactory
 import org.jetbrains.kotlin.types.SimpleType
-import org.jetbrains.kotlin.types.TypeConstructor
 import org.jetbrains.kotlin.types.TypeProjection
 import org.jetbrains.kotlin.types.TypeSubstitution
 import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.utils.Printer
 
-/**
- * The frame transformer extension transforms a "framed" classes properties into the form expected
- * by the frames runtime.
- *
- * The transformation is:
- *   - Move the backing fields for public properties from the class itself to a value record.
- *   - Change the property initializers to initialize the value record.
- *   - Change the public property getters and setters to get the current frame record and set or get
- *     the value from that record.
- *   - Remove the moved fields from the class and rewrite any methods that refer to the removed
- *     methods to use the getters and setters instead.
- */
-class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoidWithContext() {
+class ModelTransformer(val context: IrPluginContext) : IrElementTransformerVoidWithContext() {
 
     private class FieldRewriteInformation(
         val getter: IrSimpleFunction?,
@@ -219,8 +199,7 @@ class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoi
 
                     // Fields are left uninitialized as they will be set either by the framed object's constructor or by a call to assign()
                     +syntheticConstructorDelegatingCall(
-                        superConstructor,
-                        superConstructor.descriptor
+                        superConstructor
                     )
                 }
 
@@ -247,8 +226,7 @@ class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoi
                     +irReturn(
                         syntheticConstructorCall(
                             recordClassDescriptor.defaultType.toIrType(),
-                            recordCtorSymbol!!,
-                            recordConstructorDescriptor
+                            recordCtorSymbol!!
                         )
                     )
                 }
@@ -375,9 +353,7 @@ class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoi
                 +syntheticSetField(
                     fieldReference, thisValue(), syntheticConstructorCall(
                         recordClassDescriptor.defaultType.toIrType(),
-                        recordCtorSymbol!!,
-                        // Non-null was already validated when the record class was constructed
-                        recordClassDescriptor.unsubstitutedPrimaryConstructor!!
+                        recordCtorSymbol!!
                     )
                 )
 
@@ -570,54 +546,6 @@ class FrameIrTransformer(val context: IrPluginContext) : IrElementTransformerVoi
     }
 }
 
-fun augmentInterfaceList(
-    original: ClassDescriptor,
-    addedInterface: ClassDescriptor
-): ClassDescriptor =
-    object : ClassDescriptor by original {
-        override fun getTypeConstructor(): TypeConstructor =
-            object : TypeConstructor by original.typeConstructor {
-                override fun getSupertypes(): Collection<KotlinType> =
-                    original.typeConstructor.supertypes + addedInterface.defaultType
-            }
-    }
-
-fun augmentClassWithInterface(irClass: IrClass, interfaceDescriptor: ClassDescriptor): IrClass =
-    object : IrClass by irClass {
-        val newDescriptor by lazy {
-            augmentInterfaceList(
-                irClass.descriptor,
-                interfaceDescriptor
-            )
-        }
-
-        override val descriptor: ClassDescriptor get() = newDescriptor
-
-        override fun <R, D> accept(visitor: IrElementVisitor<R, D>, data: D): R {
-            val result = irClass.accept(visitor, data)
-            @Suppress("UNCHECKED_CAST")
-            return if (result === irClass) this as R else result
-        }
-
-        override fun <D> transform(transformer: IrElementTransformer<D>, data: D): IrStatement {
-            val result = irClass.transform(transformer, data)
-            if (result == irClass) return this
-            return result
-        }
-    }
-
-// TODO(chuckj): This is copied from ComposeSyntheticExtension. Consider moving it to a location that can be shared.
-fun IrElement.find(filter: (descriptor: IrElement) -> Boolean): Collection<IrElement> {
-    val elements = mutableListOf<IrElement>()
-    accept(object : IrElementVisitorVoid {
-        override fun visitElement(element: IrElement) {
-            if (filter(element)) elements.add(element)
-            element.acceptChildren(this, null)
-        }
-    }, null)
-    return elements
-}
-
 fun IrElement.anyChild(filter: (descriptor: IrElement) -> Boolean): Boolean {
     var result = false
     accept(object : IrElementVisitorVoid {
@@ -699,11 +627,6 @@ class IrClassBuilder(
     }
 
     fun constructor(
-        descriptor: ClassConstructorDescriptor,
-        block: IrBlockBodyBuilder.(IrConstructor) -> Unit
-    ) = constructor(symbol(descriptor), block)
-
-    fun constructor(
         constructorSymbol: IrConstructorSymbol,
         block: IrBlockBodyBuilder.(IrConstructor) -> Unit
     ): IrConstructor {
@@ -762,8 +685,6 @@ class IrClassBuilder(
             field.type
         )
 
-    fun symbol(member: PropertyDescriptor) = IrFieldSymbolImpl(member)
-    fun symbol(method: FunctionDescriptor) = IrSimpleFunctionSymbolImpl(method)
     fun symbol(constructor: ClassConstructorDescriptor) = IrConstructorSymbolImpl(constructor)
 
     fun field(member: PropertyDescriptor) = IrFieldImpl(
@@ -831,8 +752,7 @@ class IrClassBuilder(
 
     fun syntheticConstructorCall(
         kotlinType: IrType,
-        symbol: IrConstructorSymbol,
-        descriptor: ClassConstructorDescriptor
+        symbol: IrConstructorSymbol
     ) =
         IrConstructorCallImpl(
             UNDEFINED_OFFSET,
@@ -859,8 +779,7 @@ class IrClassBuilder(
 }
 
 fun IrBlockBodyBuilder.syntheticConstructorDelegatingCall(
-    symbol: IrConstructorSymbol,
-    descriptor: ClassConstructorDescriptor
+    symbol: IrConstructorSymbol
 ) = IrDelegatingConstructorCallImpl(
         UNDEFINED_OFFSET,
         UNDEFINED_OFFSET,
@@ -868,36 +787,6 @@ fun IrBlockBodyBuilder.syntheticConstructorDelegatingCall(
         symbol,
         typeArgumentsCount = 0
     )
-
-inline fun <T : IrDeclaration> T.buildWithScope(
-    context: GeneratorContext,
-    crossinline builder: (T) -> Unit
-): T =
-    also { irDeclaration ->
-        context.symbolTable.withScope(irDeclaration.descriptor) {
-            builder(irDeclaration)
-        }
-    }
-
-inline fun <T, D : DeclarationDescriptor> ReferenceSymbolTable.withScope(
-    owner: D,
-    block: ReferenceSymbolTable.(D) -> T
-): T {
-    enterScope(owner)
-    val result = block(owner)
-    leaveScope(owner)
-    return result
-}
-
-val IrClass.containingFile: IrFile?
-    get() {
-        var node: IrDeclarationParent? = parent
-        while (node != null) {
-            if (node is IrFile) return node
-            node = (node as? IrDeclaration)?.parent
-        }
-        return null
-    }
 
 class SyntheticFramePackageDescriptor(
     module: ModuleDescriptor,

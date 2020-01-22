@@ -24,6 +24,8 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.ui.common.MultiAmbientProvider
+import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.util.Async
@@ -52,11 +54,11 @@ fun ProvideCoroutineScope(
     coroutineScope: CoroutineScope,
     children: @Composable() () -> Unit
 ) {
-    CoroutineContextAmbient.Provider(value = coroutineScope.coroutineContext) {
-        CoroutineScopeAmbient.Provider(value = coroutineScope) {
-            children()
-        }
-    }
+    MultiAmbientProvider(
+        CoroutineContextAmbient with coroutineScope.coroutineContext,
+        CoroutineScopeAmbient with coroutineScope,
+        children = children
+    )
 }
 
 @Composable

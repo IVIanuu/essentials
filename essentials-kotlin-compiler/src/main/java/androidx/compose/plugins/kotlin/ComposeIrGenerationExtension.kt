@@ -16,9 +16,9 @@
 
 package androidx.compose.plugins.kotlin
 
-import androidx.compose.plugins.kotlin.compiler.lower.ComposableCallTransformer
-import androidx.compose.plugins.kotlin.compiler.lower.ComposeObservePatcher
-import androidx.compose.plugins.kotlin.frames.FrameIrTransformer
+import androidx.compose.plugins.kotlin.composable.ComposableCallTransformer
+import androidx.compose.plugins.kotlin.composable.ComposeObservePatcher
+import androidx.compose.plugins.kotlin.model.ModelTransformer
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
@@ -26,10 +26,11 @@ import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 
 class ComposeIrGenerationExtension : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
+        val observePatcher = ComposeObservePatcher(pluginContext)
         val transformers = listOf(
             ComposableCallTransformer(pluginContext),
-            ComposeObservePatcher(pluginContext),
-            FrameIrTransformer(pluginContext)
+            observePatcher,
+            ModelTransformer(pluginContext)
         )
         moduleFragment.files.forEach { file ->
             transformers.forEach { transformer ->

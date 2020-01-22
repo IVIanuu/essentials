@@ -1,6 +1,6 @@
-package androidx.compose.plugins.kotlin.frames.analysis
+package androidx.compose.plugins.kotlin.model.analysis
 
-import androidx.compose.plugins.kotlin.frames.FrameRecordClassDescriptor
+import androidx.compose.plugins.kotlin.model.FrameRecordClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.util.slicedMap.BasicWritableSlice
