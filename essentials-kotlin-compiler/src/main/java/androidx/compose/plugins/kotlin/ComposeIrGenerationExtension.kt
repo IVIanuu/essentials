@@ -26,10 +26,9 @@ import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 
 class ComposeIrGenerationExtension : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
-        val observePatcher = ComposeObservePatcher(pluginContext)
         val transformers = listOf(
             ComposableCallTransformer(pluginContext),
-            observePatcher,
+            ComposeObservePatcher(pluginContext),
             ModelTransformer(pluginContext)
         )
         moduleFragment.files.forEach { file ->

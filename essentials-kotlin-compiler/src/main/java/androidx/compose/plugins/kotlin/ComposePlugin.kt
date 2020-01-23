@@ -57,7 +57,8 @@ class ComposeComponentRegistrar : ComponentRegistrar {
                 ComposeTypeResolutionInterceptorExtension()
             )
             IrGenerationExtension.registerExtension(project,
-                ComposeIrGenerationExtension())
+                ComposeIrGenerationExtension()
+            )
             StorageComponentContainerContributor.registerExtension(project,
                 FrameModelChecker()
             )

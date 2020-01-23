@@ -30,19 +30,14 @@ import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.irBlock
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irCall
-import org.jetbrains.kotlin.ir.declarations.IrDeclaration
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.impl.IrFunctionImpl
-import org.jetbrains.kotlin.ir.expressions.IrExpression
-import org.jetbrains.kotlin.ir.expressions.IrReturn
 import org.jetbrains.kotlin.ir.expressions.IrStatementOrigin
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionReferenceImpl
-import org.jetbrains.kotlin.ir.expressions.impl.IrReturnImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
-import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -59,6 +54,7 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
 
     override fun visitFunction(declaration: IrFunction): IrStatement {
         super.visitFunction(declaration)
+
         val descriptor = declaration.descriptor
 
         if (!descriptor.isComposableFunction()) return declaration
@@ -132,7 +128,7 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                         // Move the target for the returns to avoid introducing a non-local return.
                         // Update declaration parent that point to the old function to the new
                         // function.
-                        val oldFunction = declaration
+                        /*val oldFunction = declaration
                         this?.transformChildrenVoid(object : IrElementTransformerVoid() {
                             override fun visitReturn(expression: IrReturn): IrExpression {
                                 val newExpression = if (
@@ -159,27 +155,10 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                                 }
                                 return super.visitDeclaration(declaration)
                             }
-                        })
+                        })*/
                     }
                     fn.parent = declaration
                 }
-                /*+irCall(
-                    callee = symbolTable.referenceSimpleFunction(
-                        this@ComposeObservePatcher.context.moduleDescriptor
-                            .getPackage(FqName("kotlin.io"))
-                            .memberScope
-                            .findFirstFunction("println") {
-                                it.valueParameters.size == 1 &&
-                                        it.valueParameters.single().type == context.builtIns.nullableAnyType
-                            }
-                    ),
-                    type = context.irBuiltIns.unitType
-                ).apply {
-                    putValueArgument(
-                        0,
-                        irString("invoke observe ${descriptor.fqNameSafe}")
-                    )
-                }*/
                 +irCall(
                     observeFunctionSymbol,
                     observeFunctionDescriptor,
