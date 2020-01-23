@@ -41,7 +41,8 @@ fun Surface(
         shape = shape,
         color = color,
         contentColor = contentColor,
-        border = border,
+        borderWidth = border?.width ?: 0.dp,
+        borderBrush = border?.brush,
         elevation = elevation,
         children = children
     )

@@ -7,6 +7,7 @@ import androidx.compose.CompositionReference
 import androidx.compose.composer
 import androidx.compose.compositionReference
 import androidx.compose.remember
+import androidx.ui.core.ComponentNode
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutNode
@@ -63,13 +64,26 @@ private class ComposableLayoutState {
             measurables: List<Measurable>,
             constraints: Constraints
         ): MeasureScope.LayoutResult {
-            val root = nodeRef.value!!
             return measureBlock(
                 measureScope,
                 constraints,
-                { root.layoutChildren },
+                {
+                    val list = mutableListOf<LayoutNode>()
+                    addLayoutChildren(nodeRef.value!!, list)
+                    list
+                },
                 { recompose() }
             )
+        }
+    }
+
+    private fun addLayoutChildren(node: ComponentNode, list: MutableList<LayoutNode>) {
+        node.visitChildren { child ->
+            if (child is LayoutNode) {
+                list += child
+            } else {
+                addLayoutChildren(child, list)
+            }
         }
     }
 

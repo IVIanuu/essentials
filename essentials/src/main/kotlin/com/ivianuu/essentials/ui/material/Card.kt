@@ -67,7 +67,8 @@ fun Card(
         shape = style.shape,
         color = style.color,
         contentColor = style.contentColor,
-        border = style.border,
+        borderWidth = style.border?.width ?: 0.dp,
+        borderBrush = style.border?.brush,
         elevation = style.elevation,
         children = children
     )
