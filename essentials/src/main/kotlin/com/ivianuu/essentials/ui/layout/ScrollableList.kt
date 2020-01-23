@@ -31,7 +31,7 @@ fun <T> ScrollableList(
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
-    item: @Composable() (Int, T) -> Unit
+    item: @Composable (Int, T) -> Unit
 ) {
     ScrollableList(
         modifier = modifier,
@@ -52,7 +52,7 @@ fun ScrollableList(
     position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
     applyBottomSafeArea: Boolean = true,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     when (direction) {
         Axis.Horizontal -> {
