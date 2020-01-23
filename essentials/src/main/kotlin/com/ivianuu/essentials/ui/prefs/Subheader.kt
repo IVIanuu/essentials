@@ -36,7 +36,7 @@ fun PreferenceSubheader(
 @Composable
 fun PreferenceSubheader(
     dependencies: List<Dependency<*>>? = null,
-    text: @Composable() () -> Unit
+    text: @Composable () -> Unit
 ) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {

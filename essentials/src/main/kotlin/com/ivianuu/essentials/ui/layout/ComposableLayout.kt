@@ -26,7 +26,7 @@ typealias ComposableMeasureBlock = MeasureScope.(
 @Composable
 fun ComposableLayout(
     modifier: Modifier = Modifier.None,
-    children: @Composable() () -> Unit,
+    children: @Composable () -> Unit,
     measureBlock: ComposableMeasureBlock
 ) {
     val state = remember { ComposableLayoutState() }
@@ -53,7 +53,7 @@ private class ComposableLayoutState {
 
     lateinit var compositionRef: CompositionReference
     lateinit var context: Context
-    lateinit var children: @Composable() () -> Unit
+    lateinit var children: @Composable () -> Unit
     lateinit var measureBlock: ComposableMeasureBlock
 
     val measureBlocks = object : LayoutNode.NoIntristicsMeasureBlocks(

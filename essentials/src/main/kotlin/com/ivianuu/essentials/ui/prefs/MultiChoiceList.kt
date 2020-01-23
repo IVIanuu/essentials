@@ -59,10 +59,10 @@ fun <T> MultiChoiceListPreference(
     valueController: ValueController<Set<T>>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() (() -> Unit)? = null,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    dialogTitle: @Composable() (() -> Unit)? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceListPreference.Item<T>>
 ) {
     DialogPreference(

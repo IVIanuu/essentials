@@ -75,7 +75,7 @@ fun <T> BottomNavigationBar(
     style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.current
         ?: DefaultBottomNavigationBarStyle(),
     applySafeArea: Boolean = true,
-    item: @Composable() (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     Surface(color = style.color, elevation = BottomNavigationBarElevation) {
         SafeArea(
@@ -129,7 +129,7 @@ fun <T> BottomNavigationBar(
 @Composable
 fun BottomNavigationBarItem(
     onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Ripple(bounded = false, radius = BottomNavigationBarItemRippleRadius) {
         Clickable(onClick = onSelected) {
@@ -174,7 +174,7 @@ private fun <T> defaultOnSelected(): () -> Unit {
 fun <T> BottomNavigationSwapper(
     bottomNavigationController: BottomNavigationController<T> = ambientBottomNavigationController(),
     keepState: Boolean = false,
-    content: @Composable() (T) -> Unit
+    content: @Composable (T) -> Unit
 ) {
     val swapperController = retain {
         SwapperState(
@@ -199,7 +199,7 @@ fun <T> BottomNavigationSwapper(
 fun <T> ProvideBottomNavigationController(
     items: List<T>,
     initial: T = items.first(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val controller = retain {
         BottomNavigationController(items = items, initial = initial)

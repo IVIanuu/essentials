@@ -28,14 +28,14 @@ fun <T> SingleChoiceListDialog(
     items: List<T>,
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
-    item: @Composable() (T) -> Unit,
+    item: @Composable (T) -> Unit,
     dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: @Composable() (() -> Unit)? = null,
-    title: @Composable() (() -> Unit)? = null,
-    positiveButton: @Composable() (() -> Unit)? = null,
-    negativeButton: @Composable() (() -> Unit)? = null,
-    neutralButton: @Composable() (() -> Unit)? = null
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    positiveButton: @Composable (() -> Unit)? = null,
+    negativeButton: @Composable (() -> Unit)? = null,
+    neutralButton: @Composable (() -> Unit)? = null
 ) {
     val navigator = NavigatorAmbient.current
 
@@ -69,7 +69,7 @@ fun <T> SingleChoiceListDialog(
 private fun SingleChoiceDialogListItem(
     selected: Boolean,
     onSelect: (() -> Unit)? = null,
-    title: @Composable() () -> Unit
+    title: @Composable () -> Unit
 ) {
     SimpleDialogListItem(
         leading = {

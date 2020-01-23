@@ -40,7 +40,7 @@ val DialogStyleAmbient =
 @Composable
 fun Dialog(
     style: DialogStyle = DialogStyleAmbient.current,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     WithModifier(
         modifier = LayoutPadding(

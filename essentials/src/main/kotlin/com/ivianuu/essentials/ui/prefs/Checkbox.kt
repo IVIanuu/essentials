@@ -49,9 +49,9 @@ fun CheckboxPreference(
     valueController: ValueController<Boolean>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() (() -> Unit)? = null,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null
 ) {
     PreferenceWrapper(
         valueController = valueController,

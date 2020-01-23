@@ -50,7 +50,7 @@ fun ClipboardPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable() (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null
 ) {
     val clipboardManager = inject<ClipboardManager>()
     val toaster = inject<Toaster>()

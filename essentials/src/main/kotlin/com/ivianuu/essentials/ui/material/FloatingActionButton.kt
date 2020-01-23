@@ -89,7 +89,7 @@ fun FloatingActionButton(
     onClick: (() -> Unit)? = null,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current
         ?: DefaultFloatingActionButtonStyle(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     androidx.ui.material.FloatingActionButton(
         modifier = modifier,

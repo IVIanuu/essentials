@@ -102,7 +102,7 @@ fun <T> PopupMenuButton(
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,
-    item: @Composable() (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     PopupTrigger(
         alignment = alignment,

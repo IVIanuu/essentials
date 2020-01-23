@@ -96,8 +96,8 @@ fun ColorPickerDialog(
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
     dismissOnSelection: Boolean = true,
-    icon: @Composable() (() -> Unit)? = null,
-    title: @Composable() (() -> Unit)? = null
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null
 ) {
     val (currentColor, setCurrentColor) = state { initialColor }
     val (currentPage, setCurrentPage) = state { ColorPickerPage.Colors }
@@ -263,7 +263,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
 @Composable
 private fun BaseColorGridItem(
     onClick: () -> Unit,
-    child: @Composable() () -> Unit
+    child: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
@@ -416,7 +416,7 @@ private fun ColorComponentItem(
 
 private enum class ColorComponent(
     val title: String,
-    val color: @Composable() () -> Color
+    val color: @Composable () -> Color
 ) {
     Alpha(
         title = "A",

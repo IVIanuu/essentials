@@ -71,7 +71,7 @@ fun IconButton(
 @Composable
 fun IconButton(
     onClick: (() -> Unit)? = null,
-    icon: @Composable() () -> Unit
+    icon: @Composable () -> Unit
 ) {
     Ripple(
         bounded = false,

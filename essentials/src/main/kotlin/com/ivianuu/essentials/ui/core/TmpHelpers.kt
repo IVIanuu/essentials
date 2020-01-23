@@ -9,7 +9,7 @@ import androidx.compose.currentComposerNonNull
 inline fun tmpComposerCall(
     key: Any,
     invalid: ViewValidator.() -> Boolean,
-    block: @Composable() () -> Unit
+    block: @Composable () -> Unit
 ) {
     with(currentComposerNonNull) {
         startGroup(key)
@@ -26,7 +26,7 @@ inline fun tmpComposerCall(
 
 inline fun <T> tmpComposerExpr(
     key: Any,
-    block: @Composable() () -> T
+    block: @Composable () -> T
 ): T {
     with(currentComposerNonNull) {
         startExpr(key)

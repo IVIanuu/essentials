@@ -44,7 +44,7 @@ fun guessingContentColorFor(color: Color): Color {
 @Composable
 fun RippleColorProvider(
     color: Color,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val theme = remember(color) {
         RippleTheme(

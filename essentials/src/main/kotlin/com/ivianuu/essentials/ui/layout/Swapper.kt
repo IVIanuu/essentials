@@ -29,9 +29,9 @@ import com.ivianuu.essentials.ui.common.framed
 fun <T> Swapper(
     state: SwapperState<T>,
     modifier: Modifier = Modifier.None,
-    child: @Composable() (T) -> Unit
+    child: @Composable (T) -> Unit
 ) {
-    val children: @Composable() () -> Unit = {
+    val children: @Composable () -> Unit = {
         state.keepStateItems.forEach { item ->
             key(item as Any) {
                 child(item)

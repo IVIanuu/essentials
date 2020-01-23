@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.layout.SwapperState
 fun <T> TabController(
     items: List<T>,
     initialIndex: Int = 0,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     val tabController = remember { TabController(items, initialIndex) }
     tabController.items = items
@@ -46,7 +46,7 @@ fun <T> ambientTabController(): TabController<T> = TabControllerAmbient.current 
 @Composable
 fun <T> ProvideTabController(
     tabController: TabController<T>,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     TabControllerAmbient.Provider(tabController, children)
 }
@@ -67,12 +67,12 @@ private val TabControllerAmbient =
 fun <T> TabRow(
     tabController: TabController<T> = ambientTabController(),
     scrollable: Boolean = false,
-    indicatorContainer: @Composable() (tabPositions: List<TabRow.TabPosition>) -> Unit = { tabPositions ->
+    indicatorContainer: @Composable (tabPositions: List<TabRow.TabPosition>) -> Unit = { tabPositions ->
         TabRow.IndicatorContainer(tabPositions, tabController.selectedIndex) {
             TabRow.Indicator()
         }
     },
-    tab: @Composable() (Int, T) -> Unit
+    tab: @Composable (Int, T) -> Unit
 ) {
     TabRow(
         items = tabController.items,
@@ -111,7 +111,7 @@ fun Tab(
 fun <T> TabContent(
     tabController: TabController<T> = ambientTabController(),
     keepState: Boolean = false,
-    item: @Composable() (Int, T) -> Unit
+    item: @Composable (Int, T) -> Unit
 ) {
     val swapperController = remember { SwapperState(tabController.selectedItem) }
     remember(keepState) { swapperController.keepState = keepState }

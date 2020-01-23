@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Immutable
 class RouteTransition(
-    val definition: @Composable() () -> TransitionDefinition<State>,
+    val definition: @Composable () -> TransitionDefinition<State>,
     val generateOps: (TransitionState, State) -> Ops
 ) {
     @Immutable
@@ -41,7 +41,7 @@ class RouteTransition(
         @Composable
         fun apply(
             ops: Ops,
-            children: @Composable() () -> Unit
+            children: @Composable () -> Unit
         )
     }
 
@@ -83,7 +83,7 @@ object OpacityRouteTransitionType : RouteTransition.Type {
     @Composable
     override fun apply(
         ops: RouteTransition.Ops,
-        children: @Composable() () -> Unit
+        children: @Composable () -> Unit
     ) {
         Opacity(opacity = ops[Opacity].singleOrNull() ?: 1f, children = children)
     }
@@ -92,7 +92,7 @@ object OpacityRouteTransitionType : RouteTransition.Type {
 object CanvasRouteTransitionType : RouteTransition.Type {
     val Block = RouteTransition.Ops.Key<DrawReceiver.(Canvas, PxSize) -> Unit>()
     @Composable
-    override fun apply(ops: RouteTransition.Ops, children: @Composable() () -> Unit) {
+    override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
         Draw(
             children = children,
             onPaint = { canvas, parentSize ->
@@ -105,7 +105,7 @@ object CanvasRouteTransitionType : RouteTransition.Type {
 object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()
     @Composable
-    override fun apply(ops: RouteTransition.Ops, children: @Composable() () -> Unit) {
+    override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
         WithModifier(modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None, children = children)
     }
 }
@@ -133,7 +133,7 @@ internal fun RouteTransitionWrapper(
     lastState: RouteTransition.State,
     onTransitionComplete: (RouteTransition.State) -> Unit,
     types: List<RouteTransition.Type>,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     Transition(
         definition = transition.definition(),
@@ -155,11 +155,11 @@ internal fun RouteTransitionWrapper(
 private fun RouteTransitionTypes(
     ops: RouteTransition.Ops,
     types: List<RouteTransition.Type>,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     types
         .map { type ->
-            val function: @Composable() (@Composable() () -> Unit) -> Unit = { typeChildren ->
+            val function: @Composable (@Composable () -> Unit) -> Unit = { typeChildren ->
                 type.apply(ops) { typeChildren() }
             }
             function

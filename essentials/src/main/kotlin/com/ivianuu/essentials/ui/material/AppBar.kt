@@ -74,9 +74,9 @@ fun TopAppBar(title: String) {
 @Composable
 fun TopAppBar(
     style: TopAppBarStyle = TopAppBarStyleAmbient.current ?: DefaultTopAppBarStyle(),
-    title: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = autoTopAppBarLeadingIcon(),
-    actions: @Composable() (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
+    actions: @Composable (() -> Unit)? = null,
     primary: Boolean = true
 ) {
     Surface(color = style.color, elevation = style.elevation) {
@@ -136,9 +136,9 @@ fun TopAppBar(
 @Composable
 private fun TopAppBarLayout(
     centerTitle: Boolean,
-    leading: @Composable() (() -> Unit)?,
-    title: @Composable() (() -> Unit)?,
-    actions: @Composable() (() -> Unit)?
+    leading: @Composable (() -> Unit)?,
+    title: @Composable (() -> Unit)?,
+    actions: @Composable (() -> Unit)?
 ) {
     Layout(children = {
         if (leading != null) {
@@ -224,7 +224,7 @@ private val AppBarHeight = 56.dp
 private val DefaultAppBarElevation = 8.dp
 
 @Composable
-private fun autoTopAppBarLeadingIcon(): @Composable() (() -> Unit)? {
+private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     val scaffold = ScaffoldAmbient.current
     val navigator = NavigatorAmbient.current
     val route = RouteAmbient.current

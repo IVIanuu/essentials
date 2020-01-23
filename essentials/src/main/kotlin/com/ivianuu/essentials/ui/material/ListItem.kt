@@ -175,21 +175,21 @@ fun ListItem(
         }
     }
 
-    val maybeWithClick: @Composable() () -> Unit = if (onClick == null) item else ({
+    val maybeWithClick: @Composable () -> Unit = if (onClick == null) item else ({
         Clickable(
             onClick = if (enabled) onClick else null,
             children = item
         )
     })
 
-    val maybeWithLongClick: @Composable() () -> Unit = if (onLongClick == null) maybeWithClick else ({
+    val maybeWithLongClick: @Composable () -> Unit = if (onLongClick == null) maybeWithClick else ({
         LongPressGestureDetector(
             onLongPress = { if (enabled) onLongClick() },
             children = maybeWithClick
         )
     })
 
-    val maybeWithRipple: @Composable() () -> Unit = if (onClick == null && onLongClick == null) maybeWithLongClick else ({
+    val maybeWithRipple: @Composable () -> Unit = if (onClick == null && onLongClick == null) maybeWithLongClick else ({
         Ripple(
             bounded = true,
             enabled = onClick != null || onLongClick != null,

@@ -26,14 +26,14 @@ class Route(
     val keepState: Boolean = false,
     val enterTransition: RouteTransition? = null,
     val exitTransition: RouteTransition? = null,
-    val content: @Composable() () -> Unit
+    val content: @Composable () -> Unit
 ) {
 
     constructor(
         opaque: Boolean = false,
         keepState: Boolean = false,
         transition: RouteTransition? = null,
-        content: @Composable() () -> Unit
+        content: @Composable () -> Unit
     ) : this(
         opaque = opaque,
         keepState = keepState,
@@ -47,7 +47,7 @@ class Route(
         keepState: Boolean = this.keepState,
         enterTransition: RouteTransition? = this.enterTransition,
         exitTransition: RouteTransition? = this.exitTransition,
-        content: @Composable() () -> Unit = this.content
+        content: @Composable () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
         keepState = keepState,

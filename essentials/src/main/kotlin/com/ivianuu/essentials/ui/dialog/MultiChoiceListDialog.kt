@@ -26,13 +26,13 @@ fun <T> MultiChoiceListDialog(
     items: List<T>,
     selectedItems: List<T>,
     onSelectionsChanged: ((List<T>) -> Unit)? = null,
-    item: @Composable() (T) -> Unit,
+    item: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: @Composable() (() -> Unit)? = null,
-    title: @Composable() (() -> Unit)? = null,
-    positiveButton: @Composable() (() -> Unit)? = null,
-    negativeButton: @Composable() (() -> Unit)? = null,
-    neutralButton: @Composable() (() -> Unit)? = null
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    positiveButton: @Composable (() -> Unit)? = null,
+    negativeButton: @Composable (() -> Unit)? = null,
+    neutralButton: @Composable (() -> Unit)? = null
 ) {
     ScrollableDialog(
         icon = icon,
@@ -70,7 +70,7 @@ fun <T> MultiChoiceListDialog(
 private fun MultiChoiceDialogListItem(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)? = null,
-    title: @Composable() () -> Unit
+    title: @Composable () -> Unit
 ) {
     SimpleDialogListItem(
         leading = {

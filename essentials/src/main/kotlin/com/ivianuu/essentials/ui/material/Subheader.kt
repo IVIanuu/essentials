@@ -60,7 +60,7 @@ fun Subheader(
 @Composable
 fun Subheader(
     style: SubheaderStyle = SubheaderStyleAmbient.current ?: DefaultSubheaderStyle(),
-    text: @Composable() () -> Unit
+    text: @Composable () -> Unit
 ) {
     Container(
         height = 48.dp,

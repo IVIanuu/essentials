@@ -182,7 +182,7 @@ private fun HomeDivider() {
 
 enum class HomeItem(
     val title: String,
-    val route: @Composable() () -> Route
+    val route: @Composable () -> Route
 ) {
     About(
         title = "About",

@@ -52,7 +52,7 @@ val CoroutineScopeAmbient =
 @Composable
 fun ProvideCoroutineScope(
     coroutineScope: CoroutineScope,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     MultiAmbientProvider(
         CoroutineContextAmbient with coroutineScope.coroutineContext,
