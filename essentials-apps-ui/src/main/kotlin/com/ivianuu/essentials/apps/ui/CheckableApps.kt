@@ -34,13 +34,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.AvatarIconStyle
-import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.PopupMenuButton
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -93,19 +87,21 @@ fun CheckableAppsScreen(
             )
         },
         body = {
-            AsyncList(
-                state = viewModel.state.apps,
-                successItem = { _, app ->
-                    key(app.info.packageName) {
-                        CheckableApp(
-                            app = app,
-                            onClick = remember(app) {
-                                { viewModel.appClicked(app) }
-                            }
-                        )
+            Surface {
+                AsyncList(
+                    state = viewModel.state.apps,
+                    successItem = { _, app ->
+                        key(app.info.packageName) {
+                            CheckableApp(
+                                app = app,
+                                onClick = remember(app) {
+                                    { viewModel.appClicked(app) }
+                                }
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     )
 }
