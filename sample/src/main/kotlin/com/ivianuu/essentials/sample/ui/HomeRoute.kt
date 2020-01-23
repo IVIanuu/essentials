@@ -45,15 +45,9 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.Banner
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.IconButton
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.PopupMenuButton
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
@@ -91,7 +85,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
             )
         },
         body = {
-            ScrollableList {
+            Column {
                 val showBanner = unfoldBox(inject<PrefBoxFactory>().boolean("show_banner")) // todo ir by
                 if (showBanner.value) {
                     Banner(
@@ -115,11 +109,16 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 }
 
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
-                items.forEachIndexed { index, item ->
-                    val route = item.route()
-                    HomeItem(item = item, onClick = navigateOnClick { route })
-                    if (index != items.lastIndex) {
-                        HomeDivider()
+
+                ScrollableList(
+                    items = items
+                ) { index, item ->
+                    Column {
+                        val route = item.route()
+                        HomeItem(item = item, onClick = navigateOnClick { route })
+                        if (index != items.lastIndex) {
+                            HomeDivider()
+                        }
                     }
                 }
             }

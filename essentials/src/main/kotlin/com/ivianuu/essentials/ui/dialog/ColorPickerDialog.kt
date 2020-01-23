@@ -43,14 +43,7 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.LayoutSquared
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.OverflowBox
-import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.layout.WithModifier
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.resources.drawableResource
@@ -163,7 +156,7 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        ScrollableList(modifier = LayoutPadding(all = 4.dp)) {
+        Scroller(modifier = LayoutPadding(all = 4.dp)) {
             Table(
                 columns = 4,
                 alignment = { Alignment.Center }

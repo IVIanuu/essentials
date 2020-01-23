@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.Scroller
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 
@@ -39,6 +40,12 @@ fun ListScreen(
 ) {
     Scaffold(
         topAppBar = { TopAppBar(title = title) },
-        body = { ScrollableList(children = listContent) }
+        body = {
+            Scroller {
+                Column {
+                    listContent()
+                }
+            }
+        }
     )
 }

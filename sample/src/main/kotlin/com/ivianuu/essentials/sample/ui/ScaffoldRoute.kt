@@ -29,16 +29,9 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.material.FloatingActionButton
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.ScaffoldState
-import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.material.TopAppBarStyle
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.Scroller
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -100,88 +93,90 @@ val ScaffoldRoute = Route {
         }) else null,
         bodyLayoutMode = controls.bodyLayoutMode,
         body = {
-            ScrollableList {
-                Subheader("Top bar")
-                ListItem(
-                    title = { Text("Show top bar") },
-                    trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
-                        }
-                    },
-                    onClick = { controls.showTopAppBar = !controls.showTopAppBar }
-                )
-                ListItem(
-                    title = { Text("Center title") },
-                    trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.centerTitle, onCheckedChange = {})
-                        }
-                    },
-                    onClick = { controls.centerTitle = !controls.centerTitle }
-                )
-
-                Subheader("Body")
-                ListItem(
-                    title = { Text("Body layout mode") },
-                    onClick = {
-                        navigator.push(
-                            DialogRoute {
-                                SingleChoiceListDialog(
-                                    items = ScaffoldState.BodyLayoutMode.values().toList(),
-                                    selectedItem = controls.bodyLayoutMode,
-                                    onSelect = { controls.bodyLayoutMode = it },
-                                    item = {
-                                        Text(
-                                            it.name
-                                        )
-                                    }
-                                )
+            Scroller {
+                Column {
+                    Subheader("Top bar")
+                    ListItem(
+                        title = { Text("Show top bar") },
+                        trailing = {
+                            AbsorbPointer {
+                                Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
                             }
-                        )
-                    }
-                )
-
-                Subheader("Bottom bar")
-                ListItem(
-                    title = { Text("Show bottom bar") },
-                    trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
-                        }
-                    },
-                    onClick = { controls.showBottomBar = !controls.showBottomBar }
-                )
-
-                Subheader("Fab")
-                ListItem(
-                    title = { Text("Show fab") },
-                    trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showFab, onCheckedChange = {})
-                        }
-                    },
-                    onClick = { controls.showFab = !controls.showFab }
-                )
-                ListItem(
-                    title = { Text("Fab location") },
-                    onClick = {
-                        navigator.push(
-                            DialogRoute {
-                                SingleChoiceListDialog(
-                                    items = ScaffoldState.FabPosition.values().toList(),
-                                    selectedItem = controls.fabPosition,
-                                    onSelect = { controls.fabPosition = it },
-                                    item = {
-                                        Text(
-                                            it.name
-                                        )
-                                    }
-                                )
+                        },
+                        onClick = { controls.showTopAppBar = !controls.showTopAppBar }
+                    )
+                    ListItem(
+                        title = { Text("Center title") },
+                        trailing = {
+                            AbsorbPointer {
+                                Checkbox(checked = controls.centerTitle, onCheckedChange = {})
                             }
-                        )
-                    }
-                )
+                        },
+                        onClick = { controls.centerTitle = !controls.centerTitle }
+                    )
+
+                    Subheader("Body")
+                    ListItem(
+                        title = { Text("Body layout mode") },
+                        onClick = {
+                            navigator.push(
+                                DialogRoute {
+                                    SingleChoiceListDialog(
+                                        items = ScaffoldState.BodyLayoutMode.values().toList(),
+                                        selectedItem = controls.bodyLayoutMode,
+                                        onSelect = { controls.bodyLayoutMode = it },
+                                        item = {
+                                            Text(
+                                                it.name
+                                            )
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
+
+                    Subheader("Bottom bar")
+                    ListItem(
+                        title = { Text("Show bottom bar") },
+                        trailing = {
+                            AbsorbPointer {
+                                Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
+                            }
+                        },
+                        onClick = { controls.showBottomBar = !controls.showBottomBar }
+                    )
+
+                    Subheader("Fab")
+                    ListItem(
+                        title = { Text("Show fab") },
+                        trailing = {
+                            AbsorbPointer {
+                                Checkbox(checked = controls.showFab, onCheckedChange = {})
+                            }
+                        },
+                        onClick = { controls.showFab = !controls.showFab }
+                    )
+                    ListItem(
+                        title = { Text("Fab location") },
+                        onClick = {
+                            navigator.push(
+                                DialogRoute {
+                                    SingleChoiceListDialog(
+                                        items = ScaffoldState.FabPosition.values().toList(),
+                                        selectedItem = controls.fabPosition,
+                                        onSelect = { controls.fabPosition = it },
+                                        item = {
+                                            Text(
+                                                it.name
+                                            )
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
             }
         }
     )
