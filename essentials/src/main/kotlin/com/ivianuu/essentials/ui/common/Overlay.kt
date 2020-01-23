@@ -110,11 +110,11 @@ val OverlayAmbient =
 private fun OverlayLayout(
     children: @Composable () -> Unit
 ) {
-    Layout(children = children) { measureables, constraints ->
+    Layout(children = children) { measurables, constraints ->
         // force children to fill the whole space
         val childConstraints = constraints.tightMax()
 
-        val placeables = measureables
+        val placeables = measurables
             .map { it.measure(childConstraints) to it.parentData as OverlayEntryParentData }
 
         val width = constraints.maxWidth

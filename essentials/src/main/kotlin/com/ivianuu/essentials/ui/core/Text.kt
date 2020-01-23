@@ -103,7 +103,9 @@ private object NoopSelectionRegistrar : SelectionRegistrar {
             startPosition: PxPosition,
             endPosition: PxPosition,
             containerLayoutCoordinates: LayoutCoordinates,
-            longPress: Boolean
+            longPress: Boolean,
+            previousSelection: Selection?,
+            isStartHandle: Boolean
         ): Selection? = null
     }
 }

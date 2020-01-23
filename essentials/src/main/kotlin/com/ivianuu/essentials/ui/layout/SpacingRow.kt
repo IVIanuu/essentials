@@ -31,9 +31,9 @@ fun SpacingRow(
     modifier: Modifier = Modifier.None,
     children: @Composable () -> Unit
 ) {
-    Layout(children = children, modifier = modifier) { measureables, constraints ->
+    Layout(children = children, modifier = modifier) { measurables, constraints ->
         var childConstraints = constraints.copy(maxWidth = constraints.maxWidth)
-        val placeables = measureables.map { measureable ->
+        val placeables = measurables.map { measureable ->
             val placeable = measureable.measure(childConstraints)
             childConstraints = childConstraints.copy(
                 maxWidth = childConstraints.maxWidth - placeable.width - spacing.toIntPx()

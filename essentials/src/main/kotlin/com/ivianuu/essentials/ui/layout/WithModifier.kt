@@ -27,8 +27,8 @@ fun WithModifier(
     modifier: Modifier,
     children: @Composable () -> Unit
 ) {
-    Layout(children = children, modifier = modifier) { measureables, constraints ->
-        val placeables = measureables.map { it.measure(constraints) }
+    Layout(children = children, modifier = modifier) { measurables, constraints ->
+        val placeables = measurables.map { it.measure(constraints) }
         val width = placeables.maxBy { it.width.value }?.width ?: IntPx.Zero
         val height = placeables.maxBy { it.height.value }?.height ?: IntPx.Zero
         layout(width = width, height = height) {

@@ -234,22 +234,22 @@ private fun DialogContentLayout(
         }
     }
 
-    Layout(children = children) { measureables, constraints ->
+    Layout(children = children) { measurables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = IntPx.Zero
         )
 
         val headerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentSlot.Header }
+            measurables.firstOrNull { it.parentData == DialogContentSlot.Header }
         val topDividerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentSlot.TopDivider }
+            measurables.firstOrNull { it.parentData == DialogContentSlot.TopDivider }
         val contentMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentSlot.Content }
+            measurables.firstOrNull { it.parentData == DialogContentSlot.Content }
         val bottomDividerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentSlot.BottomDivider }
+            measurables.firstOrNull { it.parentData == DialogContentSlot.BottomDivider }
         val buttonsMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentSlot.Buttons }
+            measurables.firstOrNull { it.parentData == DialogContentSlot.Buttons }
 
         fun measureFixed(measureable: Measurable?): Placeable? {
             return if (measureable != null) {

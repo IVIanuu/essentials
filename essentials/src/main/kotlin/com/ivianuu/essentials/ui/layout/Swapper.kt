@@ -43,8 +43,8 @@ fun <T> Swapper(
         }
     }
 
-    Layout(children = children, modifier = modifier) { measureables, constraints ->
-        val placeable = measureables.last().measure(constraints)
+    Layout(children = children, modifier = modifier) { measurables, constraints ->
+        val placeable = measurables.last().measure(constraints)
         layout(constraints.maxWidth, constraints.maxHeight) {
             placeable.place(PxPosition.Origin)
         }

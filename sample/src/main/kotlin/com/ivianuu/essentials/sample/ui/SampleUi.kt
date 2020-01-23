@@ -46,7 +46,7 @@ class SampleUi : AppUi {
                 lightNavigationBar = MaterialTheme.colors().onSurface.isDark
             )
         ) {
-            InjectedNavigator(startRoute = HomeRoute)
+            InjectedNavigator(startRoute = TestRoute)
         }
     }
 }

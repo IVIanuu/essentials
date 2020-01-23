@@ -158,10 +158,10 @@ private fun TopAppBarLayout(
                 actions()
             }
         }
-    }) { measureables, constraints ->
-        val leadingMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
-        val titleMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Title }
-        val actionsMeasureable = measureables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
+    }) { measurables, constraints ->
+        val leadingMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
+        val titleMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Title }
+        val actionsMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
 
         var childConstraints = constraints.looseMin()
 

@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.core.current
 
 typealias ComposableMeasureBlock = MeasureScope.(
     constraints: Constraints,
-    getMeasureables: () -> List<Measurable>,
+    getMeasurables: () -> List<Measurable>,
     recompose: () -> Unit
 ) -> MeasureScope.LayoutResult
 

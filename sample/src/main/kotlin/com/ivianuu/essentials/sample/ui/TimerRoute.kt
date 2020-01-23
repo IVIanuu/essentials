@@ -43,7 +43,7 @@ val TimerRoute = Route {
     )
 }
 
-private fun timerFlow() = flow {
+fun timerFlow() = flow {
     var i = 0
     while (true) {
         ++i

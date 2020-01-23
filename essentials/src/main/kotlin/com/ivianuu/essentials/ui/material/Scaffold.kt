@@ -194,20 +194,20 @@ private fun ScaffoldLayout(
 
     val fabPadding = withDensity { 16.dp.toIntPx() }
 
-    Layout(children = children) { measureables, incomingConstraints ->
+    Layout(children = children) { measurables, incomingConstraints ->
         val width = incomingConstraints.maxWidth
         val height = incomingConstraints.maxHeight
 
-        val topAppBarMeasureable = measureables.firstOrNull {
+        val topAppBarMeasureable = measurables.firstOrNull {
             it.parentData == ScaffoldLayoutSlot.TopAppBar
         }
-        val bodyMeasureable = measureables.firstOrNull {
+        val bodyMeasureable = measurables.firstOrNull {
             it.parentData == ScaffoldLayoutSlot.Body
         }
-        val bottomBarMeasureable = measureables.firstOrNull {
+        val bottomBarMeasureable = measurables.firstOrNull {
             it.parentData == ScaffoldLayoutSlot.BottomBar
         }
-        val fabMeasureable = measureables.firstOrNull {
+        val fabMeasureable = measurables.firstOrNull {
             it.parentData == ScaffoldLayoutSlot.Fab
         }
 
