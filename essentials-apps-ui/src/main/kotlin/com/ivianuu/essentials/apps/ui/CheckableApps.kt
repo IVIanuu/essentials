@@ -87,21 +87,19 @@ fun CheckableAppsScreen(
             )
         },
         body = {
-            Surface {
-                AsyncList(
-                    state = viewModel.state.apps,
-                    successItem = { _, app ->
-                        key(app.info.packageName) {
-                            CheckableApp(
-                                app = app,
-                                onClick = remember(app) {
-                                    { viewModel.appClicked(app) }
-                                }
-                            )
-                        }
+            AsyncList(
+                state = viewModel.state.apps,
+                successItem = { _, app ->
+                    key(app.info.packageName) {
+                        CheckableApp(
+                            app = app,
+                            onClick = remember(app) {
+                                { viewModel.appClicked(app) }
+                            }
+                        )
                     }
-                )
-            }
+                }
+            )
         }
     )
 }
