@@ -29,12 +29,6 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 val BottomNavigationRoute = Route {
-    try {
-        error("lol")
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-
     ProvideBottomNavigationController(
         items = BottomNavItem.values().toList()
     ) {
