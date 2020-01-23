@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.foundation.shape.border.Border
+import androidx.ui.graphics.Brush
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
@@ -32,7 +32,8 @@ fun Surface(
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors().surface,
     contentColor: Color = guessingContentColorFor(color),
-    border: Border? = null,
+    borderWidth: Dp = 0.dp,
+    borderBrush: Brush? = null,
     elevation: Dp = 0.dp,
     children: @Composable () -> Unit
 ) {
@@ -41,8 +42,8 @@ fun Surface(
         shape = shape,
         color = color,
         contentColor = contentColor,
-        borderWidth = border?.width ?: 0.dp,
-        borderBrush = border?.brush,
+        borderWidth = borderWidth,
+        borderBrush = borderBrush,
         elevation = elevation,
         children = children
     )

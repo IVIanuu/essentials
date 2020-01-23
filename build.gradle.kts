@@ -23,6 +23,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
+        maven("file://home/ivianuu/other-projects/androidx/out/ui/build/support_repo")
         google()
         jcenter()
         mavenCentral()
@@ -62,6 +63,7 @@ allprojects {
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
+        maven("file://home/ivianuu/other-projects/androidx/out/ui/build/support_repo")
         google()
         jcenter()
         mavenCentral()

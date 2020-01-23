@@ -16,18 +16,14 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.compose.key
-import androidx.compose.remember
-import androidx.compose.state
-import androidx.compose.stateFor
+import androidx.compose.*
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
-import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.Center
 import androidx.ui.layout.LayoutAlign
 import androidx.ui.layout.LayoutHeight
@@ -55,13 +51,7 @@ import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.WithModifier
-import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.IconStyle
-import com.ivianuu.essentials.ui.material.IconStyleAmbient
-import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.SliderPosition
-import com.ivianuu.essentials.ui.material.SliderStyle
-import com.ivianuu.essentials.ui.material.Surface
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor
@@ -230,10 +220,8 @@ private fun ColorGridItem(
             modifier = LayoutSize.Fill,
             color = color,
             shape = RoundedCornerShape(50),
-            border = Border(
-                color = MaterialTheme.colors().onSurface,
-                width = 1.dp
-            ),
+            borderBrush = SolidColor(MaterialTheme.colors().onSurface),
+            borderWidth = 1.dp,
             elevation = 0.dp
         ) {
             if (isSelected) {

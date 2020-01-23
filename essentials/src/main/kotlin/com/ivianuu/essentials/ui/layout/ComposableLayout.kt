@@ -7,14 +7,7 @@ import androidx.compose.CompositionReference
 import androidx.compose.composer
 import androidx.compose.compositionReference
 import androidx.compose.remember
-import androidx.ui.core.ComponentNode
-import androidx.ui.core.Constraints
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.LayoutNode
-import androidx.ui.core.Measurable
-import androidx.ui.core.MeasureScope
-import androidx.ui.core.Modifier
-import androidx.ui.core.Ref
+import androidx.ui.core.*
 import com.ivianuu.essentials.ui.core.current
 
 typealias ComposableMeasureBlock = MeasureScope.(
@@ -45,7 +38,10 @@ fun ComposableLayout(
         }
     )
 
-    state.recompose()
+    val layoutNode = state.nodeRef.value!!
+    if (!layoutNode.needsRemeasure && layoutNode.owner != null) {
+        state.recompose()
+    }
 }
 
 private class ComposableLayoutState {

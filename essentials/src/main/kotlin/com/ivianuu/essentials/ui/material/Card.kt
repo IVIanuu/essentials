@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.foundation.shape.border.Border
+import androidx.ui.graphics.Brush
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
@@ -34,7 +34,8 @@ data class CardStyle(
     val shape: Shape = RectangleShape,
     val color: Color,
     val contentColor: Color,
-    val border: Border? = null,
+    val borderWidth: Dp = 0.dp,
+    val borderBrush: Brush? = null,
     val elevation: Dp = 1.dp
 )
 
@@ -46,13 +47,15 @@ fun DefaultCardStyle(
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors().surface,
     contentColor: Color = guessingContentColorFor(color),
-    border: Border? = null,
+    borderWidth: Dp = 0.dp,
+    borderBrush: Brush? = null,
     elevation: Dp = 1.dp
 ) = CardStyle(
     shape = shape,
     color = color,
     contentColor = contentColor,
-    border = border,
+    borderBrush = borderBrush,
+    borderWidth = borderWidth,
     elevation = elevation
 )
 
@@ -67,8 +70,8 @@ fun Card(
         shape = style.shape,
         color = style.color,
         contentColor = style.contentColor,
-        borderWidth = style.border?.width ?: 0.dp,
-        borderBrush = style.border?.brush,
+        borderWidth = style.borderWidth,
+        borderBrush = style.borderBrush,
         elevation = style.elevation,
         children = children
     )
