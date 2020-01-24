@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.compose.onCommit
-import androidx.compose.remember
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
@@ -93,9 +92,7 @@ fun CheckableAppsScreen(
                     key(app.info.packageName) {
                         CheckableApp(
                             app = app,
-                            onClick = remember(app) {
-                                { viewModel.appClicked(app) }
-                            }
+                            onClick = { viewModel.appClicked(app) }
                         )
                     }
                 }
