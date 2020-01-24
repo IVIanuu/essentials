@@ -21,6 +21,7 @@ import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Stable
 import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.compose.state
@@ -70,6 +71,7 @@ val SliderStyleAmbient =
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
     SliderStyle(color = color)
 
+@Stable
 class SliderPosition(
     initial: Float = 0f,
     val valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
@@ -148,7 +150,6 @@ fun Slider(
                 gestureEndAction(0f)
             }
         ) {
-            // todo ir
             Draggable(
                 dragDirection = DragDirection.Horizontal,
                 dragValue = remember(position) {
