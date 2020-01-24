@@ -55,6 +55,11 @@ class Route(
         exitTransition = exitTransition,
         content = content
     )
+
+    @Composable
+    internal fun compose() {
+        content()
+    }
 }
 
 val RouteAmbient =

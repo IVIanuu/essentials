@@ -387,9 +387,10 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes,
-                                children = route.content
-                            )
+                                types = routeTransitionTypes
+                            ) {
+                                route.compose()
+                            }
                         }
                     }
                 }
