@@ -82,23 +82,27 @@ fun Scaffold(
 
     ScaffoldAmbient.Provider(value = scaffoldState) {
         var layout: @Composable () -> Unit = {
-            Surface {
-                ScaffoldLayout(
-                    state = scaffoldState,
-                    topAppBar = topAppBar,
-                    body = body,
-                    bottomBar = bottomBar,
-                    fab = fab?.let {
-                        {
-                            if (bottomBar != null) {
-                                fab()
-                            } else {
-                                SafeArea(children = fab)
-                            }
+            ScaffoldLayout(
+                state = scaffoldState,
+                topAppBar = topAppBar,
+                body = body?.let {
+                    @Composable {
+                        Surface {
+                            body()
                         }
                     }
-                )
-            }
+                },
+                bottomBar = bottomBar,
+                fab = fab?.let {
+                    {
+                        if (bottomBar != null) {
+                            fab()
+                        } else {
+                            SafeArea(children = fab)
+                        }
+                    }
+                }
+            )
         }
 
         if (drawerContent != null) {
