@@ -21,8 +21,11 @@ import android.os.Build
 import android.view.View
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
+import androidx.compose.ambientOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
@@ -100,8 +103,8 @@ fun ProvideSystemBarStyle(
         systemBarManager.registerStyle(value)
         onDispose { systemBarManager.unregisterStyle(value) }
     }
-    SystemBarStyleAmbient.Provider(
-        value = value,
+    Providers(
+        SystemBarStyleAmbient provides value,
         children = children
     )
 }
@@ -114,7 +117,7 @@ fun ambientSystemBarStyle(): SystemBarStyle =
 fun SystemBarManager(children: @Composable () -> Unit) {
     val activity = ActivityAmbient.current
     val systemBarManager = remember { SystemBarManager(activity) }
-    SystemBarManagerAmbient.Provider(value = systemBarManager, children = children)
+    Providers(SystemBarManagerAmbient provides systemBarManager, children = children)
 }
 
 private val SystemBarStyleAmbient =
@@ -170,4 +173,4 @@ internal class SystemBarManager(private val activity: Activity) {
 }
 
 internal val SystemBarManagerAmbient =
-    ambientOf<SystemBarManager> { error("No system bar manager provided") }
+    staticAmbientOf<SystemBarManager> { error("No system bar manager provided") }

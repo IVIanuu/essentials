@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.core
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.Composable
 import androidx.compose.onDispose
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.AndroidComposeView
 import androidx.ui.core.input.FocusManager
 
@@ -37,7 +38,7 @@ class KeyboardManager(
 }
 
 val KeyboardManagerAmbient =
-    ambientOf<KeyboardManager> { error("No keyboard manager found") }
+    staticAmbientOf<KeyboardManager> { error("No keyboard manager found") }
 
 @Composable
 fun hideKeyboardOnDispose() {

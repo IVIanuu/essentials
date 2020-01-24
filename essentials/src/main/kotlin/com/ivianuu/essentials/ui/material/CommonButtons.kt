@@ -21,7 +21,6 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.popup.PopupMenu

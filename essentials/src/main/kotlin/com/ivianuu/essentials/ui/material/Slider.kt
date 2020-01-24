@@ -21,6 +21,7 @@ import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.Alignment
@@ -55,8 +56,6 @@ import androidx.ui.unit.lerp
 import androidx.ui.unit.px
 import androidx.ui.unit.toRect
 import androidx.ui.unit.withDensity
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 import kotlin.math.abs
 
 // todo remove once fixed in compose

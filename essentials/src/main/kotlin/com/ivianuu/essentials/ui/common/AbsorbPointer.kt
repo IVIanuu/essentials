@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.PointerEventPass
 import androidx.ui.core.PointerId
+import androidx.ui.core.PointerInputWrapper
 import androidx.ui.core.changedToDown
 import androidx.ui.core.consumeDownChange
 
@@ -55,6 +56,7 @@ fun AbsorbPointer(
                 }
             }
         },
+        cancelHandler = { consumedIds.clear() },
         children = children
     )
 }

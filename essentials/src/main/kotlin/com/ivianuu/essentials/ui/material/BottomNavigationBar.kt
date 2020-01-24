@@ -18,9 +18,12 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
 import androidx.compose.Stable
+import androidx.compose.ambientOf
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.ambientDensity
@@ -39,9 +42,8 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.core.retainFor
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -112,7 +114,7 @@ fun <T> BottomNavigationBar(
                                         ProvideContentColor(
                                             color = if (_item == controller.selectedItem) style.selectedItemColor else style.normalItemColor
                                         ) {
-                                            BottomNavigationItemAmbient.Provider(_item) {
+                                            Providers(BottomNavigationItemAmbient provides _item) {
                                                 item(_item)
                                             }
                                         }
@@ -202,14 +204,23 @@ fun <T> ProvideBottomNavigationController(
     initial: T = items.first(),
     children: @Composable () -> Unit
 ) {
-    val controller = retain {
+    val controller = retainFor(items, initial) {
         BottomNavigationController(items = items, initial = initial)
     }
-    BottomNavigationControllerAmbient.Provider(value = controller, children = children)
+
+    Providers(BottomNavigationControllerAmbient provides controller, children = children)
+}
+
+@Composable
+fun <T> ProvideBottomNavigationController(
+    controller: BottomNavigationController<T>,
+    children: @Composable () -> Unit
+) {
+    Providers(BottomNavigationControllerAmbient provides controller, children = children)
 }
 
 private val BottomNavigationControllerAmbient =
-    ambientOf<BottomNavigationController<*>> {
+    staticAmbientOf<BottomNavigationController<*>> {
         error("No bottom navigation controller found")
     }
 
@@ -217,7 +228,7 @@ private val BottomNavigationControllerAmbient =
 fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = BottomNavigationControllerAmbient.current as BottomNavigationController<T>
 
 private val BottomNavigationItemAmbient =
-    ambientOf<Any?> { error("No bottom navigation item found") }
+    staticAmbientOf<Any?> { error("No bottom navigation item found") }
 
 @Composable
 fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current as T

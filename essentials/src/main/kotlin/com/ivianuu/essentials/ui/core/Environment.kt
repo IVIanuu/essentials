@@ -18,13 +18,12 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.activity.ComponentActivity
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.remember
 import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.MultiAmbientProvider
-import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
@@ -45,14 +44,14 @@ fun Environment(
     val composeView = AndroidComposeViewAmbient.current
     val focusManager = FocusManagerAmbient.current
     val coroutineScope = coroutineScope()
-    MultiAmbientProvider(
-        ActivityAmbient with activity,
-        ComponentAmbient with component,
-        CoroutineContextAmbient with coroutineScope.coroutineContext,
-        KeyboardManagerAmbient with remember {
+    Providers(
+        ActivityAmbient provides activity,
+        ComponentAmbient provides component,
+        CoroutineContextAmbient provides coroutineScope.coroutineContext,
+        KeyboardManagerAmbient provides remember {
             KeyboardManager(focusManager, composeView, component.get())
         },
-        RetainedObjectsAmbient with retainedObjects
+        RetainedObjectsAmbient provides retainedObjects
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
             WindowInsetsManager {

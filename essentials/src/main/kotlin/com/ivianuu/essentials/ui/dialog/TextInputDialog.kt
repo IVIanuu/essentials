@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(

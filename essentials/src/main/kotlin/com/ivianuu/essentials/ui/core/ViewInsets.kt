@@ -23,7 +23,9 @@ import android.view.Surface
 import android.view.View
 import android.view.WindowManager
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.Stable
+import androidx.compose.ambientOf
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.state
@@ -35,8 +37,6 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.UpdateProvider
-import com.ivianuu.essentials.ui.common.Updateable
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
@@ -149,7 +149,7 @@ private fun calculateZeroSides(
 
 // todo add padding field
 @Stable
-interface WindowInsets : Updateable<WindowInsets> {
+interface WindowInsets {
     val viewPadding: EdgeInsets
     val viewInsets: EdgeInsets
 
@@ -190,7 +190,7 @@ private class ObservableWindowInsets(
             viewPadding = viewPadding, viewInsets = viewInsets
         )
 
-    override fun updateFrom(other: WindowInsets) {
+    internal fun updateFrom(other: WindowInsets) {
         viewPadding = other.viewPadding
         viewInsets = other.viewInsets
     }
@@ -226,8 +226,9 @@ fun WindowInsetsProvider(
     value: WindowInsets,
     children: @Composable () -> Unit
 ) {
-    WindowInsetsAmbient.UpdateProvider(
-        value = value,
+    Providers(
+        WindowInsetsAmbient provides remember { ObservableWindowInsets(value) }
+            .also { it.updateFrom(value) },
         children = children
     )
 }

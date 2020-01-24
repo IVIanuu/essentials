@@ -17,17 +17,15 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.onActive
 import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.CoroutineContextAmbient
-import com.ivianuu.essentials.ui.common.MultiAmbientProvider
-import com.ivianuu.essentials.ui.common.with
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -47,16 +45,16 @@ import kotlin.coroutines.CoroutineContext
 
 @Composable
 val CoroutineScopeAmbient =
-    ambientOf<CoroutineScope> { error("No coroutineScope provided") }
+    staticAmbientOf<CoroutineScope> { error("No coroutineScope provided") }
 
 @Composable
 fun ProvideCoroutineScope(
     coroutineScope: CoroutineScope,
     children: @Composable () -> Unit
 ) {
-    MultiAmbientProvider(
-        CoroutineContextAmbient with coroutineScope.coroutineContext,
-        CoroutineScopeAmbient with coroutineScope,
+    Providers(
+        CoroutineContextAmbient provides coroutineScope.coroutineContext,
+        CoroutineScopeAmbient provides coroutineScope,
         children = children
     )
 }

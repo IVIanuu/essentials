@@ -36,7 +36,6 @@ import com.ivianuu.essentials.permission.with
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.ambientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Brush
@@ -26,8 +27,6 @@ import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class CardStyle(

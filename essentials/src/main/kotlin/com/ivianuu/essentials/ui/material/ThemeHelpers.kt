@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
@@ -53,5 +54,5 @@ fun RippleColorProvider(
             opacity = { color.alpha }
         )
     }
-    CurrentRippleTheme.Provider(value = theme, children = children)
+    Providers(CurrentRippleTheme provides theme, children = children)
 }

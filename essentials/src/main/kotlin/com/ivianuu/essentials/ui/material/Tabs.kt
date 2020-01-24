@@ -17,39 +17,18 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
+import com.ivianuu.essentials.ui.core.retainFor
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperState
-
-@Composable
-fun <T> TabController(
-    items: List<T>,
-    initialIndex: Int = 0,
-    children: @Composable () -> Unit
-) {
-    val tabController = remember { TabController(items, initialIndex) }
-    tabController.items = items
-    ProvideTabController(tabController, children)
-}
-
-@Composable
-fun <T> ambientTabController(): TabController<T> = TabControllerAmbient.current as TabController<T>
-
-@Composable
-fun <T> ProvideTabController(
-    tabController: TabController<T>,
-    children: @Composable () -> Unit
-) {
-    TabControllerAmbient.Provider(tabController, children)
-}
 
 @Stable
 class TabController<T>(
@@ -61,7 +40,31 @@ class TabController<T>(
 }
 
 private val TabControllerAmbient =
-    ambientOf<TabController<*>> { error("No tab controller provided") }
+    staticAmbientOf<TabController<*>> { error("No tab controller provided") }
+
+@Composable
+fun <T> ambientTabController(): TabController<T> = TabControllerAmbient.current as TabController<T>
+
+@Composable
+fun <T> ProvideTabController(
+    items: List<T>,
+    initialIndex: Int = 0,
+    children: @Composable () -> Unit
+) {
+    val controller = retainFor(items, initialIndex) {
+        TabController(items = items, initialIndex = initialIndex)
+    }
+
+    Providers(TabControllerAmbient provides controller, children = children)
+}
+
+@Composable
+fun <T> ProvideTabController(
+    controller: TabController<T>,
+    children: @Composable () -> Unit
+) {
+    Providers(TabControllerAmbient provides controller, children = children)
+}
 
 @Composable
 fun <T> TabRow(
@@ -81,7 +84,7 @@ fun <T> TabRow(
         indicatorContainer = indicatorContainer,
         tab = { index, item ->
             key(item as Any) {
-                TabIndexAmbient.Provider(index) {
+                Providers(TabIndexAmbient provides index) {
                     tab(index, item)
                 }
             }
@@ -90,7 +93,7 @@ fun <T> TabRow(
 }
 
 val TabIndexAmbient =
-    ambientOf<Int> { error("No tab index provided") }
+    staticAmbientOf<Int> { error("No tab index provided") }
 
 @Composable
 fun Tab(

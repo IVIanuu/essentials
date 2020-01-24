@@ -18,6 +18,8 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
+import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
@@ -33,9 +35,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.looseMin
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -100,7 +100,7 @@ fun TopAppBar(
                         centerTitle = style.centerTitle,
                         leading = leading?.let {
                             {
-                                IconStyleAmbient.Provider(IconStyle()) {
+                                Providers(IconStyleAmbient provides IconStyle()) {
                                     leading()
                                 }
                             }
@@ -120,7 +120,7 @@ fun TopAppBar(
                         actions = actions?.let {
                             {
                                 SpacingRow(spacing = 8.dp) {
-                                    IconStyleAmbient.Provider(IconStyle()) {
+                                    Providers(IconStyleAmbient provides IconStyle()) {
                                         actions()
                                     }
                                 }

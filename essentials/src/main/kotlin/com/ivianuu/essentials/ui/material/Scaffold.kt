@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
@@ -32,7 +34,6 @@ import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.looseMin
 
 @Composable
@@ -81,7 +82,7 @@ fun Scaffold(
         onBackPressed { scaffoldState.isDrawerOpen = false }
     }
 
-    ScaffoldAmbient.Provider(value = scaffoldState) {
+    Providers(ScaffoldAmbient provides scaffoldState) {
         var layout: @Composable () -> Unit = {
             ScaffoldLayout(
                 state = scaffoldState,
@@ -161,7 +162,7 @@ class ScaffoldState {
 }
 
 val ScaffoldAmbient =
-    ambientOf<ScaffoldState> { error("No scaffold provided") }
+    staticAmbientOf<ScaffoldState> { error("No scaffold provided") }
 
 @Composable
 private fun ScaffoldLayout(

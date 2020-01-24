@@ -1,9 +1,7 @@
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ViewValidator
-import androidx.compose.ambient
 import androidx.compose.currentComposerNonNull
 
 inline fun tmpComposerCall(
@@ -40,9 +38,3 @@ inline fun tmpComposerJoinKey(
     left: Any?,
     right: Any?
 ): Any = currentComposerNonNull.joinKey(left, right)
-
-@Composable
-val <T> Ambient<T>.current: T
-    get() = ambient(this)
-
-fun <T> ambientOf(defaultFactory: () -> T): Ambient<T> = Ambient.of(defaultFactory)

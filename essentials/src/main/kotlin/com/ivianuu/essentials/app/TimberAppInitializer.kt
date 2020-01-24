@@ -18,7 +18,6 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
-import timber.log.Timber
 
 /**
  * Initializes timber in debug builds
@@ -27,7 +26,7 @@ import timber.log.Timber
 internal class TimberAppInitializer(buildInfo: BuildInfo) : AppInitializer {
     init {
         if (buildInfo.isDebug) {
-            Timber.plant(Timber.DebugTree())
+            //Timber.plant(Timber.DebugTree())
         }
     }
 }

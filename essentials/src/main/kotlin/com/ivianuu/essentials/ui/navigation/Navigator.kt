@@ -18,10 +18,12 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Observe
+import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.onDispose
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
@@ -31,8 +33,6 @@ import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
@@ -91,7 +91,7 @@ fun Navigator(
 @Composable
 fun Navigator(state: NavigatorState) {
     state.defaultRouteTransition = DefaultRouteTransitionAmbient.current
-    NavigatorAmbient.Provider(value = state) {
+    Providers(NavigatorAmbient provides state) {
         Observe {
             val enabled = state.handleBack &&
                     state.backStack.isNotEmpty() &&
@@ -376,7 +376,10 @@ class NavigatorState(
             content = {
                 d { "$route -> compose content" }
 
-                RetainedObjectsAmbient.Provider(retainedObjects) {
+                Providers(
+                    RetainedObjectsAmbient provides retainedObjects,
+                    RouteAmbient provides route
+                ) {
                     ProvideCoroutineScope(coroutineScope()) {
                         AbsorbPointer(absorb = transitionRunning) {
                             RouteTransitionWrapper(
@@ -384,13 +387,9 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes
-                            ) {
-                                RouteAmbient.Provider(
-                                    value = route,
-                                    children = route.content
-                                )
-                            }
+                                types = routeTransitionTypes,
+                                children = route.content
+                            )
                         }
                     }
                 }
@@ -485,4 +484,4 @@ class NavigatorState(
 }
 
 val NavigatorAmbient =
-    ambientOf<NavigatorState> { error("No navigator provided") }
+    staticAmbientOf<NavigatorState> { error("No navigator provided") }

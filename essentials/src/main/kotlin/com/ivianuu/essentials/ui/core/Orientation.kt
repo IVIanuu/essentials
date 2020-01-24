@@ -18,6 +18,8 @@ package com.ivianuu.essentials.ui.core
 
 import android.content.res.Configuration
 import androidx.compose.Composable
+import androidx.compose.Providers
+import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 
@@ -36,7 +38,7 @@ fun OrientationProvider(children: @Composable () -> Unit) {
         }
     }
 
-    OrientationAmbient.Provider(value = orientation, children = children)
+    Providers(OrientationAmbient provides orientation, children = children)
 }
 
 val OrientationAmbient =

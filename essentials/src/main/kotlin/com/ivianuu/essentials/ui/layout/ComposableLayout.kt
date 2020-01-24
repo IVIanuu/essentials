@@ -1,12 +1,9 @@
 package com.ivianuu.essentials.ui.layout
 
 import android.content.Context
-import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Compose
-import androidx.compose.Composer
 import androidx.compose.CompositionReference
-import androidx.compose.RecomposerAccessor
 import androidx.compose.composer
 import androidx.compose.compositionReference
 import androidx.compose.onDispose
@@ -19,7 +16,6 @@ import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
 import androidx.ui.core.Ref
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.core.current
 
 typealias ComposableMeasureBlock = MeasureScope.(
     constraints: Constraints,
@@ -36,25 +32,7 @@ fun ComposableLayout(
     val state = remember { ComposableLayoutState() }
     state.children = children
     state.context = ContextAmbient.current
-    val originalCompositionReference = compositionReference()
-    state.compositionRef = remember(originalCompositionReference) {
-        object : CompositionReference {
-            lateinit var composer: Composer<*>
-            override fun <T> getAmbient(key: Ambient<T>): T = originalCompositionReference.getAmbient(key)
-
-            override fun invalidate() {
-                RecomposerAccessor.scheduleRecompose(composer)
-            }
-
-            override fun <T> invalidateConsumers(key: Ambient<T>) {
-                originalCompositionReference.invalidateConsumers(key)
-            }
-
-            override fun <N> registerComposer(composer: Composer<N>) {
-                this.composer = composer
-            }
-        }
-    }
+    state.compositionRef = compositionReference()
     state.measureBlock = measureBlock
 
     onDispose { state.dispose() }
@@ -80,7 +58,7 @@ private class ComposableLayoutState {
     lateinit var children: @Composable () -> Unit
     lateinit var measureBlock: ComposableMeasureBlock
 
-    val measureBlocks = object : LayoutNode.NoIntristicsMeasureBlocks(
+    val measureBlocks = object : LayoutNode.NoIntrinsicsMeasureBlocks(
         error = "Intrinsic measurements are not supported by ComposableLayout"
     ) {
         override fun measure(

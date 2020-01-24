@@ -20,6 +20,7 @@ import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.state
@@ -53,8 +54,8 @@ fun ConfigurationFix(children: @Composable () -> Unit) {
         onDispose { application.unregisterComponentCallbacks(callbacks) }
     }
 
-    ConfigurationAmbient.Provider(
-        value = configuration.value,
+    Providers(
+        ConfigurationAmbient provides configuration.value,
         children = children
     )
 }

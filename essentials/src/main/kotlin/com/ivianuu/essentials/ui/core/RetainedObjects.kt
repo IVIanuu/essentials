@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.Stable
 import androidx.compose.mutableStateOf
+import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.util.sourceLocation
 import java.io.Closeable
 
@@ -92,7 +93,7 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 }
 
 val RetainedObjectsAmbient =
-    ambientOf<RetainedObjects> { error("No retained objects provided") }
+    staticAmbientOf<RetainedObjects> { error("No retained objects provided") }
 
 @Composable
 inline fun <T> retain(noinline init: () -> T): T =

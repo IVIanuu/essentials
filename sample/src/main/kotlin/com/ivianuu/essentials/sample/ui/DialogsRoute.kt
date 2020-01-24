@@ -27,7 +27,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.DialogButton

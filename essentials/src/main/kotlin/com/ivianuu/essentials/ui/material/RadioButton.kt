@@ -18,10 +18,9 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.ambientOf
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class RadioButtonStyle(val color: Color)

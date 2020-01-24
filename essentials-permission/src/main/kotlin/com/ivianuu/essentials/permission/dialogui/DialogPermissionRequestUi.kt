@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog

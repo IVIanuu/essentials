@@ -26,7 +26,6 @@ import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route

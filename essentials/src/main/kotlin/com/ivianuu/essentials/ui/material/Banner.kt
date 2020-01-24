@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.layout.Container
@@ -29,7 +30,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -50,7 +50,7 @@ fun Banner(
                 Spacer(LayoutWidth(16.dp))
 
                 if (leading != null) {
-                    IconStyleAmbient.Provider(value = AvatarIconStyle(), children = leading)
+                    Providers(IconStyleAmbient provides AvatarIconStyle(), children = leading)
                     Spacer(LayoutWidth(16.dp))
                 }
 
@@ -68,7 +68,7 @@ fun Banner(
                 alignment = Alignment.CenterRight,
                 padding = EdgeInsets(left = 8.dp, right = 8.dp)
             ) {
-                ButtonStyleAmbient.Provider(TextButtonStyle()) {
+                Providers(ButtonStyleAmbient provides TextButtonStyle()) {
                     SpacingRow(spacing = 8.dp, children = actions)
                 }
             }

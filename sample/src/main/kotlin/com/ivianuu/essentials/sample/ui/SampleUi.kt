@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
@@ -55,8 +56,8 @@ class SampleUi : AppUi {
 class SampleUiInitializer : UiInitializer {
     @Composable
     override fun apply(children: @Composable () -> Unit) {
-        DefaultRouteTransitionAmbient.Provider(
-            value = remember { VerticalFadeRouteTransition() }
+        Providers(
+            DefaultRouteTransitionAmbient provides remember { VerticalFadeRouteTransition() }
         ) {
             TwilightTheme(children = children)
         }

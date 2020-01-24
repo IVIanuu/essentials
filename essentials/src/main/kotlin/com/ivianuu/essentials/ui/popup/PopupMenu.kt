@@ -29,7 +29,6 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient

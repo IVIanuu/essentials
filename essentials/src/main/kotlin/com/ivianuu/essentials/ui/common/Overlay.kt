@@ -18,19 +18,20 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
 import androidx.compose.Stable
+import androidx.compose.ambientOf
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.unit.IntPx
-import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {
-    OverlayAmbient.Provider(value = state) {
+    Providers(OverlayAmbient provides state) {
         OverlayLayout {
             val visibleEntries = state.entries.filterVisible()
 

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.ambientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.ProvideContentColor
@@ -28,8 +29,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientOf
-import com.ivianuu.essentials.ui.core.current
 
 @Immutable
 data class SubheaderStyle(

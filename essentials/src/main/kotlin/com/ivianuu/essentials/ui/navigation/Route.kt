@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import com.ivianuu.essentials.ui.core.ambientOf
+import androidx.compose.staticAmbientOf
 
 @Immutable
 class Route(
@@ -58,4 +58,4 @@ class Route(
 }
 
 val RouteAmbient =
-    ambientOf<Route> { error("No route provided") }
+    staticAmbientOf<Route> { error("No route provided") }
