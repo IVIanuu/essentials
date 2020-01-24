@@ -47,6 +47,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-material-icons/essentials-essentials-material-icons.iml" filepath="$PROJECT_DIR$/essentials-material-icons/essentials-essentials-material-icons.iml" group="essentials/essentials-material-icons" />
       <module fileurl="file://$PROJECT_DIR$/essentials-mvrx/essentials-essentials-mvrx.iml" filepath="$PROJECT_DIR$/essentials-mvrx/essentials-essentials-mvrx.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-notification-listener/essentials-essentials-notification-listener.iml" filepath="$PROJECT_DIR$/essentials-notification-listener/essentials-essentials-notification-listener.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-permission/essentials-essentials-permission.iml" filepath="$PROJECT_DIR$/essentials-permission/essentials-essentials-permission.iml" />
