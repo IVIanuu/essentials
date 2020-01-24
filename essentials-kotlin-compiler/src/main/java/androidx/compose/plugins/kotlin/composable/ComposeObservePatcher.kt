@@ -82,7 +82,12 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
         if (descriptor.returnType.let { it == null || !it.isUnit() })
             return declaration
 
-        // Otherwise, fallback to wrapping the code block in a call to Observe()
+        return wrapFunctionInObserve(declaration)
+    }
+
+    private fun wrapFunctionInObserve(declaration: IrFunction): IrFunction {
+        val descriptor = declaration.descriptor
+
         val module = descriptor.module
         val observeFunctionDescriptor = module
             .getPackage(FqName("androidx.compose"))
@@ -200,5 +205,4 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
             }
         }
     }
-
 }
