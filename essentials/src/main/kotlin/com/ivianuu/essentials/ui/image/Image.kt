@@ -22,19 +22,20 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.Composable
 import androidx.core.graphics.drawable.toBitmap
+import androidx.ui.core.ambientDensity
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.ImageConfig
 import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
 import androidx.ui.unit.Dp
-import com.ivianuu.essentials.ui.common.withDensity
+import androidx.ui.unit.withDensity
 
 @Composable
 fun EmptyImage(
     width: Dp,
     height: Dp
-): Image = withDensity {
+): Image = withDensity(ambientDensity()) {
     Image(
         width = width.toIntPx().value,
         height = height.toIntPx().value

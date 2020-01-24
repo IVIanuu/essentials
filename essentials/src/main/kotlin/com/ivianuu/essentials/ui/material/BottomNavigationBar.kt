@@ -23,6 +23,7 @@ import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
+import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
@@ -33,9 +34,9 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.coerceIn
 import androidx.ui.unit.dp
+import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.common.withDensity
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.ambientOf
@@ -93,7 +94,7 @@ fun <T> BottomNavigationBar(
                             crossAxisAlignment = CrossAxisAlignment.Center
                         ) {
                             val itemWidth = (thisConstraints.maxWidth / controller.items.size)
-                            val itemConstraints = withDensity {
+                            val itemConstraints = withDensity(ambientDensity()) {
                                 DpConstraints(
                                     minWidth = BottomNavigationBarItemMinWidth,
                                     maxWidth = itemWidth.toDp().coerceIn(

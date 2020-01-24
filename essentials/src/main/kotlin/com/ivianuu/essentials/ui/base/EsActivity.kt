@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.Composition
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.core.Environment
@@ -50,6 +51,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     private val retainedObjects =
         RetainedObjects()
 
+    private lateinit var composition: Composition
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,7 +60,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
             setContentView(layoutRes)
         }
 
-        findViewById<ViewGroup>(containerId).setContent {
+        composition = findViewById<ViewGroup>(containerId).setContent {
             WrapContentWithEnvironment {
                 content()
             }
@@ -65,9 +68,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     }
 
     override fun onDestroy() {
-        // todo use disposeComposition once fixed
         retainedObjects.dispose()
-        findViewById<ViewGroup>(containerId).setContent { }
+        composition.dispose()
         super.onDestroy()
     }
 

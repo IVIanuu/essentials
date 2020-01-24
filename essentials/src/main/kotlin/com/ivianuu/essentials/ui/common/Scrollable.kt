@@ -104,7 +104,7 @@ class ScrollPosition(
     }
 
     fun correctBy(value: Px) {
-        scrollBy(value) // todo check this
+        scrollBy(value)
     }
 
     fun flingBy(velocity: Px) {
@@ -147,7 +147,6 @@ fun Scrollable(
                     val newValue =
                         (oldValue + distance).coerceIn(position.minValue, position.maxValue)
 
-                    // todo clean
                     val scrollDirection = when (direction) {
                         Axis.Horizontal -> {
                             if (dragDistance.x <= Px.Zero) ScrollDirection.Forward else ScrollDirection.Reverse

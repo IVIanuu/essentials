@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
 fun DialogRoute(
     dismissible: Boolean = true,
-    dismissHandler: @Composable () -> /*// todo use Unit */ Any? = { NavigatorAmbient.current.popTop() },
+    dismissHandler: @Composable () -> Unit = { NavigatorAmbient.current.popTop() },
     dialog: @Composable () -> Unit
 ) = Route(
     opaque = true,

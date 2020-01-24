@@ -59,23 +59,19 @@ data class FetcherBinding<T : Any>(
 )
 
 inline fun <reified F : Fetcher<T>, reified T : Any> ModuleBuilder.fetcher(
-    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<F>
-): BindingContext<F> = factory(name = name, definition = definition).bindFetcher(type)
+): BindingContext<F> = factory(name = name, definition = definition).bindFetcher()
 
-inline fun <reified F : Fetcher<T>, reified T : Any> ModuleBuilder.bindFetcher(
-    type: KClass<T>,
-    name: Any? = null
-) {
-    withBinding<F>(name) { bindFetcher(type) }
+inline fun <reified F : Fetcher<T>, reified T : Any> ModuleBuilder.bindFetcher(name: Any? = null) {
+    withBinding<F>(name) { bindFetcher() }
 }
 
-inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetcher(type: KClass<T>): BindingContext<F> {
+inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetcher(): BindingContext<F> {
     moduleBuilder.factory {
         FetcherBinding(
             fetcher = get<F>(),
-            type = type
+            type = T::class
         )
     }.also { bbc ->
         moduleBuilder.set<FetcherBinding<*>>(
@@ -99,21 +95,17 @@ data class MapperBinding<T : Any>(
 )
 
 inline fun <reified M : Mapper<T, *>, reified T : Any> ModuleBuilder.mapper(
-    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
-): BindingContext<M> = factory(name = name, definition = definition).bindMapper(type)
+): BindingContext<M> = factory(name = name, definition = definition).bindMapper()
 
-inline fun <reified M : Mapper<T, *>, reified T : Any> ModuleBuilder.bindMapper(
-    type: KClass<T>,
-    name: Any? = null
-) {
-    withBinding<M>(name) { bindMapper(type) }
+inline fun <reified M : Mapper<T, *>, reified T : Any> ModuleBuilder.bindMapper(name: Any? = null) {
+    withBinding<M>(name) { bindMapper() }
 }
 
-inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMapper(type: KClass<T>): BindingContext<M> {
+inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMapper(): BindingContext<M> {
     moduleBuilder.factory {
-        MapperBinding(mapper = get<M>(), type = type)
+        MapperBinding(mapper = get<M>(), type = T::class)
     }.also { bbc ->
         moduleBuilder.set<MapperBinding<*>>(
             Mappers
@@ -136,25 +128,22 @@ data class MeasuredMapperBinding<T : Any>(
 )
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ModuleBuilder.measuredMapper(
-    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
-): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper(type)
+): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper()
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ModuleBuilder.bindMeasuredMapper(
-    type: KClass<T>,
     name: Any? = null
 ) {
-    withBinding<M>(name = name) { bindMeasuredMapper(type) }
+    withBinding<M>(name = name) { bindMeasuredMapper() }
 }
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>.bindMeasuredMapper(
-    type: KClass<T>
 ): BindingContext<M> {
     moduleBuilder.factory {
         MeasuredMapperBinding(
             mapper = get<M>(),
-            type = type
+            type = T::class
         )
     }.also { bbc ->
         moduleBuilder.set<MeasuredMapperBinding<*>>(

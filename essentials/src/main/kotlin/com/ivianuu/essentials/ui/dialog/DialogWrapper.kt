@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.common.onBackPressed
 @Composable
 fun DialogWrapper(
     dismissible: Boolean = true,
-    dismissHandler: @Composable () -> /*// todo use Unit */ Any?,
+    dismissHandler: @Composable () -> Unit,
     dialog: @Composable () -> Unit
 ) {
     if (!dismissible) {

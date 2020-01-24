@@ -26,6 +26,7 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
+import androidx.ui.core.ambientDensity
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ValueHolder
 import androidx.ui.foundation.animation.AnimatedValueHolder
@@ -53,7 +54,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.lerp
 import androidx.ui.unit.px
 import androidx.ui.unit.toRect
-import com.ivianuu.essentials.ui.common.withDensity
+import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.current
 import kotlin.math.abs
@@ -176,7 +177,7 @@ private fun SliderImpl(
     width: Float,
     pressed: Boolean
 ) {
-    val widthDp = withDensity { width.px.toDp() }
+    val widthDp = withDensity(ambientDensity()) { width.px.toDp() }
     Semantics(container = true, properties = { accessibilityValue = "${position.value}" }) {
         Container(
             expanded = true,
@@ -187,9 +188,7 @@ private fun SliderImpl(
             val fraction = with(position) { calcFraction(startValue, endValue, value) }
             val offset = (widthDp - thumbSize) * fraction
             DrawTrack(color, position)
-            Container(
-                modifier = LayoutPadding(left = offset)
-            ) {
+            Container(modifier = LayoutPadding(left = offset)) {
                 Ripple(bounded = false) {
                     Surface(
                         shape = CircleShape,

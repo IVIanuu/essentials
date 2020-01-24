@@ -69,7 +69,6 @@ fun loadImage(
     }
 }
 
-// todo make non null once we have something like ambientOrNull or ambientOrDefault
 val PlaceholderAmbient =
     ambientOf<Image?> { null }
 

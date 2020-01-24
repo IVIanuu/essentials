@@ -37,7 +37,6 @@ fun MultiAmbientProvider(
         }.invoke()
 }
 
-// todo is this a good name?
 infix fun <T> Ambient<T>.with(value: T): AmbientWithValue<T> = AmbientWithValue(this, value)
 
 @Immutable
