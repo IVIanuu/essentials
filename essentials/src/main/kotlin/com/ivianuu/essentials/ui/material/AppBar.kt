@@ -46,25 +46,31 @@ import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.isLight
 
 @Immutable
-data class TopAppBarStyle(
+data class AppBarStyle(
     val color: Color,
-    val elevation: Dp = DefaultAppBarElevation,
-    val centerTitle: Boolean = false
+    val contentColor: Color,
+    val elevation: Dp,
+    val centerTitle: Boolean
 )
 
 @Composable
-fun DefaultTopAppBarStyle(
-    color: Color = MaterialTheme.colors().primary,
+fun PrimaryAppBarStyle(
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false
-) = TopAppBarStyle(
-    color = color,
-    elevation = elevation,
-    centerTitle = centerTitle
-)
+) = with(MaterialTheme.colors()) {
+    AppBarStyle(color = primary, contentColor = onPrimary, elevation = elevation, centerTitle = centerTitle)
+}
 
-val TopAppBarStyleAmbient =
-    ambientOf<TopAppBarStyle?> { null }
+@Composable
+fun SurfaceAppBarStyle(
+    elevation: Dp = DefaultAppBarElevation,
+    centerTitle: Boolean = false
+) = with(MaterialTheme.colors()) {
+    AppBarStyle(color = surface, contentColor = onSurface, elevation = elevation, centerTitle = centerTitle)
+}
+
+val AppBarStyleAmbient =
+    ambientOf<AppBarStyle?> { null }
 
 @Composable
 fun TopAppBar(title: String) {
@@ -73,7 +79,7 @@ fun TopAppBar(title: String) {
 
 @Composable
 fun TopAppBar(
-    style: TopAppBarStyle = TopAppBarStyleAmbient.current ?: DefaultTopAppBarStyle(),
+    style: AppBarStyle = AppBarStyleAmbient.current ?: PrimaryAppBarStyle(),
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
