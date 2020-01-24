@@ -26,8 +26,6 @@ import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
-// todo move
-
 /**
  * Base service
  */
