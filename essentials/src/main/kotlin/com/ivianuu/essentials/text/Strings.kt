@@ -10,6 +10,9 @@ import kotlin.reflect.KProperty
  *
  * ´´´
  * val Strings.AppName by lazyString { "Hello World App" }
+ * val Strings.Greeting by lazyResolvableString { (userName: String) ->
+ *     "Hello $userName"
+ * }
  * ´´´
  *
  */
@@ -17,7 +20,9 @@ object Strings
 
 fun lazyString(init: () -> String) = unsafeLazy(init)
 
-fun resolveableString(block: (Args) -> String): ResolvableString {
+fun lazyResolvableString(block: (Args) -> String) = unsafeLazy { ResolveableString(block) }
+
+fun ResolveableString(block: (Args) -> String): ResolvableString {
     return object : ResolvableString {
         override fun invoke(args: Args): String = block(args)
     }
@@ -33,7 +38,7 @@ interface ResolvableString {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String = invoke()
 }
 
-class Args(private val values: Array<Any?>) {
+class Args(private val values: Array<out Any?>) {
 
     val size: Int get() = values.size
 
@@ -65,7 +70,7 @@ fun argsOf(): Args =
     emptyArgs()
 
 fun argsOf(vararg values: Any?): Args =
-    Args(values as Array<Any?>)
+    Args(values)
 
 fun argsOf(values: List<Any?>): Args =
     Args(values.toTypedArray())
