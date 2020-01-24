@@ -29,27 +29,29 @@ import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.AvatarIconStyle
+import com.ivianuu.essentials.ui.material.Icon
 
 @Composable
-fun image(
+fun loadImage(
     data: Any,
     placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject()
 ): Image? {
     return if (placeholder != null) {
-        image(data = data, placeholder = placeholder, imageLoader = imageLoader)
+        loadImage(data = data, placeholder = placeholder, imageLoader = imageLoader)
     } else {
-        image(data = data, imageLoader = imageLoader)
+        loadImage(data = data, imageLoader = imageLoader)
     }
 }
 
 @JvmName("imageNonNullPlaceholder")
 @Composable
-fun image(
+fun loadImage(
     data: Any,
     placeholder: Image,
     imageLoader: ImageLoader = inject()
-): Image = image(data = data, imageLoader = imageLoader) ?: placeholder
+): Image = loadImage(data = data, imageLoader = imageLoader) ?: placeholder
 
 // todo ir
 suspend fun ImageLoader.getAnyNoInline(
@@ -58,7 +60,7 @@ suspend fun ImageLoader.getAnyNoInline(
 ): Drawable = get(GetRequestBuilder(defaults).data(data).apply(builder).build())
 
 @Composable
-fun image(
+fun loadImage(
     data: Any,
     imageLoader: ImageLoader = inject()
 ): Image? {
@@ -77,9 +79,11 @@ fun Image(
     modifier: Modifier = Modifier.None,
     placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject(),
-    image: @Composable (Image?) -> Unit
+    image: @Composable (Image?) -> Unit = {
+        if (it != null) Icon(image = it, style = AvatarIconStyle())
+    }
 ) {
-    val loadedImage = image(
+    val loadedImage = loadImage(
         placeholder = placeholder,
         data = data,
         imageLoader = imageLoader
@@ -99,9 +103,10 @@ fun Image(
     modifier: Modifier = Modifier.None,
     placeholder: Image,
     imageLoader: ImageLoader = inject(),
-    image: @Composable (Image) -> Unit
-) {
-    val loadedImage = image(
+    image: @Composable (Image) -> Unit = {
+        Icon(image = it, style = AvatarIconStyle())
+    }) {
+    val loadedImage = loadImage(
         placeholder = placeholder,
         data = data,
         imageLoader = imageLoader

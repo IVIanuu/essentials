@@ -1,7 +1,16 @@
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.*
-import androidx.ui.core.*
+import androidx.compose.Composable
+import androidx.compose.Immutable
+import androidx.compose.Stable
+import androidx.compose.key
+import androidx.compose.remember
+import androidx.ui.core.Constraints
+import androidx.ui.core.LayoutNode
+import androidx.ui.core.MeasureScope
+import androidx.ui.core.Modifier
+import androidx.ui.core.ParentData
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
 import androidx.ui.unit.max
@@ -123,8 +132,10 @@ private class ScrollableListItem(
 
     @Composable
     fun compose() {
-        d { "invoke item $index" }
-        ParentData(data = this, children = composable)
+        RepaintBoundary {
+            d { "invoke item $index" }
+            ParentData(data = this, children = composable)
+        }
     }
 
     override fun toString(): String {
@@ -251,11 +262,11 @@ private fun ScrollableListLayout(
                     }
             }
         }
-        
-        val scrollPosition = state.position.value
-        val remainingSpace = viewportMainAxisSize
 
-        val targetEndScrollPosition = scrollPosition + remainingSpace
+        val cacheSize = viewportMainAxisSize / 2
+
+        val scrollPosition = state.position.value
+        val targetEndScrollPosition = scrollPosition + viewportMainAxisSize + cacheSize
         
         var leadingGarbage = 0
         var trailingGarbage = 0

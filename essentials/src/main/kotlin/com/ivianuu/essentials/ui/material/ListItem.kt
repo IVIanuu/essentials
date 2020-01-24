@@ -21,7 +21,6 @@ import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.gesture.LongPressGestureDetector
-import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
@@ -33,6 +32,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout

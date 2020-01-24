@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Image
@@ -26,6 +25,7 @@ import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.ambientOf
 import com.ivianuu.essentials.ui.core.current
 

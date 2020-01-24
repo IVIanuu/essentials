@@ -16,10 +16,13 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.*
+import androidx.compose.Composable
+import androidx.compose.key
+import androidx.compose.remember
+import androidx.compose.state
+import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -39,12 +42,26 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
-import com.ivianuu.essentials.ui.layout.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.LayoutSquared
+import com.ivianuu.essentials.ui.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.layout.OverflowBox
+import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.layout.Scroller
+import com.ivianuu.essentials.ui.layout.WithModifier
+import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.IconStyle
+import com.ivianuu.essentials.ui.material.IconStyleAmbient
+import com.ivianuu.essentials.ui.material.Slider
+import com.ivianuu.essentials.ui.material.SliderPosition
+import com.ivianuu.essentials.ui.material.SliderStyle
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.toColor

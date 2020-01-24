@@ -1,8 +1,23 @@
 package com.ivianuu.essentials.ui.layout
 
 import android.content.Context
-import androidx.compose.*
-import androidx.ui.core.*
+import androidx.compose.Ambient
+import androidx.compose.Composable
+import androidx.compose.Compose
+import androidx.compose.Composer
+import androidx.compose.CompositionReference
+import androidx.compose.RecomposerAccessor
+import androidx.compose.composer
+import androidx.compose.compositionReference
+import androidx.compose.onDispose
+import androidx.compose.remember
+import androidx.ui.core.Constraints
+import androidx.ui.core.ContextAmbient
+import androidx.ui.core.LayoutNode
+import androidx.ui.core.Measurable
+import androidx.ui.core.MeasureScope
+import androidx.ui.core.Modifier
+import androidx.ui.core.Ref
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.current
 
@@ -76,23 +91,9 @@ private class ComposableLayoutState {
             return measureBlock(
                 measureScope,
                 constraints,
-                {
-                    val list = mutableListOf<LayoutNode>()
-                    addLayoutChildren(nodeRef.value!!, list)
-                    list
-                },
+                { nodeRef.value!!.layoutChildren },
                 { recompose() }
             )
-        }
-    }
-
-    private fun addLayoutChildren(node: ComponentNode, list: MutableList<LayoutNode>) {
-        node.visitChildren { child ->
-            if (child is LayoutNode) {
-                list += child
-            } else {
-                addLayoutChildren(child, list)
-            }
         }
     }
 

@@ -47,7 +47,14 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.material.Banner
+import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.IconButton
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.PopupMenuButton
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute

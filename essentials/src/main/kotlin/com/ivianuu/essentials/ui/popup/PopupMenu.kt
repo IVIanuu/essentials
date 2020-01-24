@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Alignment
-import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
@@ -28,6 +27,7 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.current
 import com.ivianuu.essentials.ui.layout.Column

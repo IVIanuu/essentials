@@ -33,9 +33,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -118,9 +116,7 @@ private fun CheckableApp(
             Image(
                 data = AppIcon(app.info.packageName),
                 modifier = LayoutSize(width = 40.dp, height = 40.dp)
-            ) {
-                if (it != null) Icon(image = it, style = AvatarIconStyle())
-            }
+            )
         },
         trailing = {
             Checkbox(
