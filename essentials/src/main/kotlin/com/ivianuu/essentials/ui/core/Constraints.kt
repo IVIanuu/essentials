@@ -6,6 +6,8 @@ import androidx.ui.core.hasBoundedWidth
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.ipx
 
+// todo remove
+
 fun Constraints.withTight(width: IntPx? = null, height: IntPx? = null) = Constraints(
     minWidth = width ?: this.minWidth,
     maxWidth = width ?: this.maxWidth,
