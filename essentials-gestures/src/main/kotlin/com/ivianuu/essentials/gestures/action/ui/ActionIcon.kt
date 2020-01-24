@@ -8,6 +8,6 @@ import com.ivianuu.essentials.ui.material.IconStyleAmbient
 
 @Composable
 fun ActionIcon(action: Action) {
-    val icon = collect(action.iconProvider.icon) ?: return
-    Icon(image = icon.image, style = IconStyleAmbient.current.copy(tint = icon.tint))
+    val icon = collect(action.iconProvider.icon) // todo ir ?: return
+    if (icon != null) Icon(image = icon.image, style = IconStyleAmbient.current.copy(tint = icon.tint))
 }
