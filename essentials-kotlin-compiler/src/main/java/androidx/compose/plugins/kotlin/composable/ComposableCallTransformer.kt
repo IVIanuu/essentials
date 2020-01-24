@@ -476,6 +476,7 @@ class ComposableCallTransformer(private val context: IrPluginContext) : IrElemen
                 type = type,
                 symbol = symbol,
                 typeArgumentsCount = descriptor.typeParametersCount,
+                valueArgumentsCount = descriptor.valueParameters.size,
                 origin = IrStatementOrigin.LAMBDA
             )
         }

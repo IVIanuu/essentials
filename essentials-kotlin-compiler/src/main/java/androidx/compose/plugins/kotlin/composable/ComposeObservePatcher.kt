@@ -186,12 +186,13 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                         irBlock(origin = IrStatementOrigin.LAMBDA) {
                             +fn
                             +IrFunctionReferenceImpl(
-                                UNDEFINED_OFFSET,
-                                UNDEFINED_OFFSET,
-                                type.toIrType(),
-                                fn.symbol,
-                                0,
-                                IrStatementOrigin.LAMBDA
+                                startOffset = UNDEFINED_OFFSET,
+                                endOffset = UNDEFINED_OFFSET,
+                                type = type.toIrType(),
+                                symbol = fn.symbol,
+                                typeArgumentsCount = 0,
+                                valueArgumentsCount = 1,
+                                origin = IrStatementOrigin.LAMBDA
                             )
                         }
                     )
