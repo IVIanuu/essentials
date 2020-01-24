@@ -47,7 +47,7 @@ val ChipsRoute = Route {
         body = {
             WithModifier(modifier = LayoutPadding(all = 8.dp)) {
                 FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
-                    Names.shuffled().forEach { name ->
+                    remember { Names.shuffled() }.forEach { name ->
                         Chip(name = name)
                     }
                 }
