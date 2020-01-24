@@ -1,13 +1,9 @@
 package com.ivianuu.essentials.ui.layout
 
 import android.content.Context
-import androidx.compose.Composable
-import androidx.compose.Compose
-import androidx.compose.CompositionReference
-import androidx.compose.composer
-import androidx.compose.compositionReference
-import androidx.compose.remember
+import androidx.compose.*
 import androidx.ui.core.*
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.current
 
 typealias ComposableMeasureBlock = MeasureScope.(
@@ -25,8 +21,28 @@ fun ComposableLayout(
     val state = remember { ComposableLayoutState() }
     state.children = children
     state.context = ContextAmbient.current
-    state.compositionRef = compositionReference()
+    val originalCompositionReference = compositionReference()
+    state.compositionRef = remember(originalCompositionReference) {
+        object : CompositionReference {
+            lateinit var composer: Composer<*>
+            override fun <T> getAmbient(key: Ambient<T>): T = originalCompositionReference.getAmbient(key)
+
+            override fun invalidate() {
+                RecomposerAccessor.scheduleRecompose(composer)
+            }
+
+            override fun <T> invalidateConsumers(key: Ambient<T>) {
+                originalCompositionReference.invalidateConsumers(key)
+            }
+
+            override fun <N> registerComposer(composer: Composer<N>) {
+                this.composer = composer
+            }
+        }
+    }
     state.measureBlock = measureBlock
+
+    onDispose { state.dispose() }
 
     composer.emit<LayoutNode>(
         key = 0,
@@ -38,10 +54,7 @@ fun ComposableLayout(
         }
     )
 
-    val layoutNode = state.nodeRef.value!!
-    if (!layoutNode.needsRemeasure && layoutNode.owner != null) {
-        state.recompose()
-    }
+    state.recompose()
 }
 
 private class ComposableLayoutState {
@@ -84,6 +97,12 @@ private class ComposableLayoutState {
     }
 
     fun recompose() {
+        d { "recompose" }
         Compose.subcomposeInto(nodeRef.value!!, context, compositionRef, children)
+    }
+
+    fun dispose() {
+        d { "dispose" }
+        Compose.disposeComposition(nodeRef.value!!, context, compositionRef)
     }
 }
