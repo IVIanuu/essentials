@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.layout
 
 import android.content.Context
 import androidx.compose.Composable
+import androidx.compose.ComposableLayoutCompositionReference
 import androidx.compose.Compose
 import androidx.compose.CompositionReference
 import androidx.compose.composer
@@ -32,7 +33,10 @@ fun ComposableLayout(
     val state = remember { ComposableLayoutState() }
     state.children = children
     state.context = ContextAmbient.current
-    state.compositionRef = compositionReference()
+    val originalCompositionReference = compositionReference()
+    state.compositionRef = remember(originalCompositionReference) {
+        ComposableLayoutCompositionReference(originalCompositionReference)
+    }
     state.measureBlock = measureBlock
 
     onDispose { state.dispose() }
