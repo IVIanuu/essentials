@@ -10,6 +10,7 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
+import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
@@ -73,10 +74,12 @@ fun ScrollableList(
         direction = direction,
         enabled = enabled
     ) {
-        ScrollableListLayout(
-            modifier = modifier,
-            state = state
-        )
+        RepaintBoundary {
+            ScrollableListLayout(
+                modifier = modifier,
+                state = state
+            )
+        }
     }
 }
 
@@ -84,10 +87,7 @@ fun ScrollableList(
 private class ScrollableListState {
     lateinit var position: ScrollPosition
 
-    val items = mutableListOf<ScrollableListItem>()
-
-    var composableFactory: (Int) -> @Composable (() -> Unit)? = { null }
-    var recompose: () -> Unit = {}
+    var composableFactory: (Int) -> @Composable (() -> Unit)? by framed({ null })
 
     fun update(composableFactory: (Int) -> @Composable (() -> Unit)?) {
         this.composableFactory = composableFactory
@@ -99,9 +99,9 @@ private class ScrollableListState {
                 items.remove(item)
             }
         }
-
-        recompose()
     }
+
+    val items = mutableListOf<ScrollableListItem>()
 
     fun createItem(index: Int): ScrollableListItem? {
         val composable = composableFactory(index)
@@ -114,14 +114,16 @@ private class ScrollableListState {
 @Immutable
 private class ScrollableListItem(
     val index: Int,
-    var composable: @Composable () -> Unit
+    composable: @Composable () -> Unit
 ) {
+
+    var composable by framed(composable)
 
     var layoutOffset = Px.Zero
 
     @Composable
     fun compose() {
-        d { "invoke item at $index" }
+        d { "invoke item $index" }
         ParentData(data = this, children = composable)
     }
 
@@ -147,14 +149,7 @@ private fun ScrollableListLayout(
                 .sortedBy { it.index }
                 .forEach { item ->
                     key(item.index) {
-                        d { "invoke keyed item ${item.index}" }
-                        RepaintBoundary {
-                            ParentData(data = item, children = remember(version) {
-                                @Composable {
-                                    item.composable()
-                                }
-                            })
-                        }
+                        item.compose()
                     }
                 }
         },
@@ -163,8 +158,6 @@ private fun ScrollableListLayout(
         version.value++
 
         d { "begin measure ${version.value} scroll pos ${state.position.value} all items ${state.items.map { it.index }} constraints $constraints" }
-
-        state.recompose = recompose
 
         // todo direction
         val viewportMainAxisSize = constraints.maxHeight
