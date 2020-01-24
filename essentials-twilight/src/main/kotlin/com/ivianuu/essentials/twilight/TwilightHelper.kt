@@ -24,14 +24,13 @@ import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.essentials.coroutines.shareIn
-import com.ivianuu.essentials.ui.common.holderOf
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -52,9 +51,8 @@ class TwilightHelper(
 ) : AppService {
 
     val isDark: Flow<Boolean> = prefs.twilightMode.asFlow()
-        .map { holderOf(it) } // todo ir
         .flatMapLatest { mode ->
-            when (mode.value) {
+            when (mode) {
                 TwilightMode.System -> system()
                 TwilightMode.Light -> flowOf(false)
                 TwilightMode.Dark -> flowOf(true)
@@ -90,10 +88,10 @@ class TwilightHelper(
             hour < 6 || hour >= 22
         }
 
-    private fun configChanges() = callbackFlowNoInline<Unit> {
+    private fun configChanges() = callbackFlow<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
-                it.offer(Unit)
+                offer(Unit)
             }
 
             override fun onLowMemory() {
@@ -103,6 +101,6 @@ class TwilightHelper(
             }
         }
         app.registerComponentCallbacks(callbacks)
-        it.awaitClose { app.unregisterComponentCallbacks(callbacks) }
+        awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 }

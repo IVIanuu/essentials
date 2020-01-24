@@ -38,28 +38,25 @@ class BroadcastFactory(private val context: Context) {
         }
     )
 
-    fun create(intentFilter: IntentFilter): Flow<Intent> = broadcastFlow(context, intentFilter)
-}
-
-// todo ir move to class
-private fun broadcastFlow(context: Context, intentFilter: IntentFilter) = callbackFlowNoInline<Intent> {
-    // todo ir anonymous
-    val broadcastReceiver = ChannelBroadcastReceiver(it.channel)
-    try {
-        context.registerReceiver(broadcastReceiver, intentFilter)
-    } catch (e: Exception) {
-    }
-
-    it.awaitClose {
+    fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlowNoInline<Intent> {
+        // todo ir anonymous
+        val broadcastReceiver = ChannelBroadcastReceiver(it.channel)
         try {
-            context.unregisterReceiver(broadcastReceiver)
+            context.registerReceiver(broadcastReceiver, intentFilter)
         } catch (e: Exception) {
         }
-    }
-}
 
-private class ChannelBroadcastReceiver(private val channel: SendChannel<Intent>) : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        channel.offer(intent)
+        it.awaitClose {
+            try {
+                context.unregisterReceiver(broadcastReceiver)
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    private class ChannelBroadcastReceiver(private val channel: SendChannel<Intent>) : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            channel.offer(intent)
+        }
     }
 }

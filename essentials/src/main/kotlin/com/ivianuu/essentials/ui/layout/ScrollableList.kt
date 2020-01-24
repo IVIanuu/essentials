@@ -132,10 +132,8 @@ private class ScrollableListItem(
 
     @Composable
     fun compose() {
-        RepaintBoundary {
-            d { "invoke item $index" }
-            ParentData(data = this, children = composable)
-        }
+        d { "invoke item $index" }
+        ParentData(data = this, children = composable)
     }
 
     override fun toString(): String {

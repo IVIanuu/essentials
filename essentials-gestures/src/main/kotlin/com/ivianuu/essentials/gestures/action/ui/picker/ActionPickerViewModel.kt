@@ -21,7 +21,6 @@ import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * View model for the [ActionPickerController]
@@ -96,7 +95,7 @@ sealed class ActionPickerItem {
             ActionIcon(action = action)
         }
 
-        override fun getResult() = ActionPickerResult.Action(action.key)
+        override suspend fun getResult() = ActionPickerResult.Action(action.key)
     }
 
     @Immutable
@@ -112,9 +111,7 @@ sealed class ActionPickerItem {
             Icon(image = delegate.icon)
         }
 
-        override fun getResult() = runBlocking {
-            delegate.getResult(navigator)
-        }
+        override suspend fun getResult() = delegate.getResult(navigator)
     }
 
     @Immutable
@@ -128,7 +125,7 @@ sealed class ActionPickerItem {
             Spacer(LayoutSize(24.dp, 24.dp))
         }
 
-        override fun getResult() = getResult.invoke()
+        override suspend fun getResult() = getResult.invoke()
     }
 
     abstract val title: String
@@ -136,7 +133,7 @@ sealed class ActionPickerItem {
     @Composable
     abstract fun icon()
 
-    abstract /*suspend*/ fun getResult(): ActionPickerResult? // todo ir
+    abstract suspend fun getResult(): ActionPickerResult? // todo ir
 }
 
 @Immutable

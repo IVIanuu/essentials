@@ -93,21 +93,21 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
         },
         body = {
             Column {
-                val showBanner = unfoldBox(inject<PrefBoxFactory>().boolean("show_banner")) // todo ir by
-                if (showBanner.value) {
+                var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
+                if (showBanner) {
                     Banner(
                         leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
                         content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
                         actions = {
                             Button(
                                 text = "Dismiss",
-                                onClick = { showBanner.value = false }
+                                onClick = { showBanner = false }
                             )
 
                             Button(
                                 text = "Learn More",
                                 onClick = navigateOnClick {
-                                    showBanner.value = false
+                                    showBanner = false
                                     UrlRoute("https://google.com")
                                 }
                             )
