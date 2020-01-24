@@ -18,7 +18,7 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
@@ -30,7 +30,7 @@ fun AboutRoute(
     hasDebugPackageName: Boolean = true,
     privacyPolicyUrl: String? = null
 ) = Route {
-    ListScreen(title = stringResource(R.string.about_title)) {
+    ScrollableScreen(title = stringResource(R.string.about_title)) {
         AboutSection(
             hasDebugPackageName = hasDebugPackageName,
             showHeader = false,

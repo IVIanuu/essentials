@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
@@ -32,7 +32,7 @@ import com.ivianuu.essentials.util.Toaster
 val SecureSettingsInstructionsRoute = Route {
     popNavigatorOnceSecureSettingsGranted(toast = false)
 
-    ListScreen(title = stringResource(R.string.es_title_secure_settings_pc_instructions)) {
+    ScrollableScreen(title = stringResource(R.string.es_title_secure_settings_pc_instructions)) {
         SecureSettingsHeader(
             text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
         )

@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.box.unfoldBox
-import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 val TwilightSettingsRoute = Route {
     val prefs = inject<TwilightPrefs>()
 
-    ListScreen(title = stringResource(R.string.es_twilight_title)) {
+    ScrollableScreen(title = stringResource(R.string.es_twilight_title)) {
         var twilightMode by unfoldBox(prefs.twilightMode)
         TwilightMode.values().toList().forEach { mode ->
             TwilightModeItem(

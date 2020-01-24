@@ -34,16 +34,16 @@ fun SimpleScreen(
 }
 
 @Composable
-fun ListScreen(
+fun ScrollableScreen(
     title: String,
-    listContent: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Scaffold(
         topAppBar = { TopAppBar(title = title) },
         body = {
             Scroller {
                 Column {
-                    listContent()
+                    content()
                 }
             }
         }

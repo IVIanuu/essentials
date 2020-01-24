@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
     popNavigatorOnceSecureSettingsGranted(toast = true)
 
-    ListScreen(title = stringResource(R.string.es_title_secure_settings)) {
+    ScrollableScreen(title = stringResource(R.string.es_title_secure_settings)) {
         SecureSettingsHeader(
             stringResource(
                 if (showHideNavBarHint) {
