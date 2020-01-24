@@ -49,8 +49,20 @@ import com.ivianuu.essentials.util.isLight
 data class AppBarStyle(
     val color: Color,
     val contentColor: Color,
-    val elevation: Dp,
-    val centerTitle: Boolean
+    val elevation: Dp = DefaultAppBarElevation,
+    val centerTitle: Boolean = false
+)
+
+@Composable
+fun AppBarStyle(
+    color: Color,
+    elevation: Dp = DefaultAppBarElevation,
+    centerTitle: Boolean = false
+) = AppBarStyle(
+    color = color,
+    contentColor = guessingContentColorFor(color),
+    elevation = elevation,
+    centerTitle = centerTitle
 )
 
 @Composable
