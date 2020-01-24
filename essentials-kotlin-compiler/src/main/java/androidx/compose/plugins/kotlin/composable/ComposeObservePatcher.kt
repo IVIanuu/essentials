@@ -159,6 +159,23 @@ class ComposeObservePatcher(private val context: IrPluginContext) : IrElementTra
                     }
                     fn.parent = declaration
                 }
+                /*+irCall(
+                    callee = symbolTable.referenceSimpleFunction(
+                        this@ComposeObservePatcher.context.moduleDescriptor
+                            .getPackage(FqName("kotlin.io"))
+                            .memberScope
+                            .findFirstFunction("println") {
+                                it.valueParameters.size == 1 &&
+                                        it.valueParameters.single().type == context.builtIns.nullableAnyType
+                            }
+                    ),
+                    type = context.irBuiltIns.unitType
+                ).apply {
+                    putValueArgument(
+                        0,
+                        irString("invoke observe ${descriptor.fqNameSafe}")
+                    )
+                }*/
                 +irCall(
                     observeFunctionSymbol,
                     observeFunctionDescriptor,
