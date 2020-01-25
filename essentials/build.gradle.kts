@@ -55,6 +55,7 @@ dependencies {
     api(Deps.Coroutines.core)
 
     api(project(":essentials-coroutines"))
+    api(Deps.essentialsMaterialIcons)
     api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)
