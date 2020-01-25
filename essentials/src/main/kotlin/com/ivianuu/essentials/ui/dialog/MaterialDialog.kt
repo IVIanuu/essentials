@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.WithModifier
 
 // todo remove hardcoded values
 // todo add more styleable attributes such as corner radius
@@ -182,7 +181,7 @@ private fun DialogContentLayout(
     val children: @Composable () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
-                WithModifier(
+                Container(
                     modifier = LayoutPadding(
                         left = 24.dp,
                         top = 24.dp,
@@ -202,7 +201,7 @@ private fun DialogContentLayout(
             }
 
             ParentData(DialogContentSlot.Content) {
-                WithModifier(
+                Container(
                     modifier = LayoutPadding(
                         top = if (header == null) 24.dp else 0.dp,
                         left = if (applyContentPadding) 24.dp else 0.dp,
@@ -223,7 +222,7 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
-                    WithModifier(
+                    Container(
                         modifier = LayoutPadding(top = 28.dp),
                         children = buttons
                     )
@@ -309,7 +308,7 @@ private fun DialogButtons(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     if (neutralButton != null) {
-                        WithModifier(
+                        Container(
                             modifier = LayoutInflexible,
                             children = neutralButton
                         )
@@ -318,14 +317,14 @@ private fun DialogButtons(
                     Spacer(LayoutFlexible(1f))
 
                     if (negativeButton != null) {
-                        WithModifier(
+                        Container(
                             modifier = LayoutInflexible,
                             children = negativeButton
                         )
                     }
 
                     if (positiveButton != null) {
-                        WithModifier(
+                        Container(
                             modifier = LayoutInflexible,
                             children = positiveButton
                         )

@@ -18,20 +18,20 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
 import androidx.ui.foundation.contentColor
+import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
 @Composable
 internal fun SecureSettingsHeader(text: String) {
-    WithModifier(modifier = LayoutPadding(all = 16.dp)) {
+    Container(modifier = LayoutPadding(all = 16.dp)) {
         val textColor = contentColor().copy(alpha = 0.6f)
 
         Text(

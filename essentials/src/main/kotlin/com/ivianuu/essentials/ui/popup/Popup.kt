@@ -21,9 +21,9 @@ import androidx.compose.Immutable
 import androidx.compose.ambientOf
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
+import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
@@ -43,7 +43,7 @@ fun Popup(
         elevation = 8.dp,
         shape = style.shape
     ) {
-        WithModifier(
+        Container(
             modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
             children = children
         )

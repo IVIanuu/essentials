@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.RippleColorProvider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
@@ -45,7 +44,7 @@ val ChipsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar("Chips") },
         body = {
-            WithModifier(modifier = LayoutPadding(all = 8.dp)) {
+            Container(modifier = LayoutPadding(all = 8.dp)) {
                 FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
                     remember { Names.shuffled() }.forEach { name ->
                         Chip(name = name)

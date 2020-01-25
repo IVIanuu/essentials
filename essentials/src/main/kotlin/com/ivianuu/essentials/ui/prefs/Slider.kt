@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
@@ -516,7 +515,7 @@ fun <T : Comparable<T>> SliderPreference(
         dependencies = dependencies
     ) { context ->
         Stack {
-            WithModifier(modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp)) {
+            Container(modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp)) {
                 PreferenceLayout(
                     title = title,
                     summary = summary,

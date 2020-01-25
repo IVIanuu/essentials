@@ -21,11 +21,11 @@ import androidx.compose.Immutable
 import androidx.compose.ambientOf
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
+import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
@@ -41,7 +41,7 @@ fun Dialog(
     style: DialogStyle = DialogStyleAmbient.current,
     child: @Composable () -> Unit
 ) {
-    WithModifier(
+    Container(
         modifier = LayoutPadding(
             left = 32.dp,
             top = 32.dp,

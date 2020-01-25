@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.SpacingRow
-import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Composable
 fun Banner(
@@ -42,7 +41,7 @@ fun Banner(
     content: @Composable () -> Unit,
     actions: @Composable () -> Unit
 ) {
-    WithModifier(modifier = LayoutWidth.Fill) {
+    Container(modifier = LayoutWidth.Fill) {
         Column {
             Spacer(LayoutHeight(24.dp))
 

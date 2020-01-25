@@ -28,8 +28,8 @@ import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Modifier
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Canvas
+import androidx.ui.layout.Container
 import androidx.ui.unit.PxSize
-import com.ivianuu.essentials.ui.layout.WithModifier
 
 @Immutable
 class RouteTransition(
@@ -106,7 +106,7 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()
     @Composable
     override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
-        WithModifier(modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None, children = children)
+        Container(modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None, children = children)
     }
 }
 

@@ -28,6 +28,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.Center
+import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutAlign
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
@@ -53,7 +54,6 @@ import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Scroller
-import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.IconStyle
 import com.ivianuu.essentials.ui.material.IconStyleAmbient
@@ -132,7 +132,7 @@ fun ColorPickerDialog(
             }
         },
         content = {
-            WithModifier(
+            Container(
                 modifier = LayoutHeight(300.dp) +
                         LayoutPadding(left = 24.dp, right = 24.dp)
             ) {
@@ -264,7 +264,7 @@ private fun BaseColorGridItem(
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
-            WithModifier(
+            Container(
                 modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
                         LayoutPadding(all = 4.dp) +
                         LayoutAlign.Center,
@@ -309,7 +309,7 @@ private fun ColorEditorHeader(
 ) {
     CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
         Surface(color = color) {
-            WithModifier(
+            Container(
                 modifier = LayoutHeight(72.dp) +
                         LayoutWidth.Fill + LayoutPadding(all = 8.dp)
             ) {
@@ -376,7 +376,7 @@ private fun ColorComponentItem(
     value: Float,
     onChanged: (Float) -> Unit
 ) {
-    WithModifier(modifier = LayoutHeight(48.dp) + LayoutWidth.Fill) {
+    Container(modifier = LayoutHeight(48.dp) + LayoutWidth.Fill) {
         Row(crossAxisAlignment = CrossAxisAlignment.Center) {
             Text(
                 text = component.title,
