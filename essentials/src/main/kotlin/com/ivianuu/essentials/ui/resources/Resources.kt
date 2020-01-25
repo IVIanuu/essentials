@@ -24,6 +24,8 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.ui.image.BitmapImage
 
+// todo remove
+
 @Composable
 fun drawableResource(resId: Int): Image {
     val context = ContextAmbient.current
