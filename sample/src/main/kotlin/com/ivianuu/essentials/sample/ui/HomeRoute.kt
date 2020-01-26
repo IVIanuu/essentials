@@ -26,7 +26,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
@@ -59,7 +58,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
 val HomeRoute = Route(transition = DefaultRouteTransition) {
-    d { "home route" }
     Scaffold(
         topAppBar = {
             TopAppBar(
@@ -92,7 +90,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                                 )
                             )
                         },
-                        content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
+                        content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
                         actions = {
                             Button(
                                 text = "Dismiss",
@@ -166,7 +164,7 @@ private fun HomeItem(
 @Composable
 private fun HomeDivider() {
     Divider(
-        color = (MaterialTheme.colors().onSurface.copy(alpha = 0.12f)),
+        color = MaterialTheme.colors().onSurface.copy(alpha = 0.12f),
         indent = 72.dp
     )
 }
