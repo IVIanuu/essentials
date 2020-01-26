@@ -34,15 +34,16 @@ import com.ivianuu.essentials.ui.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.prefs.ClipboardPreference
 import com.ivianuu.essentials.ui.prefs.ColorPreference
 import com.ivianuu.essentials.ui.prefs.Dependency
+import com.ivianuu.essentials.ui.prefs.DurationSliderPreference
+import com.ivianuu.essentials.ui.prefs.IntSliderPreference
 import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
 import com.ivianuu.essentials.ui.prefs.RadioButtonPreference
 import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
-import com.ivianuu.essentials.ui.prefs.SliderPreference
 import com.ivianuu.essentials.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.prefs.TextInputPreference
-import kotlin.time.days
-import kotlin.time.milliseconds
+import kotlin.time.hours
+import kotlin.time.minutes
 
 val PrefsRoute = Route {
     Scaffold(
@@ -80,7 +81,7 @@ val PrefsRoute = Route {
                         summary = "This is a radio button preference"
                     )
 
-                    SliderPreference(
+                    IntSliderPreference(
                         box = boxFactory.int("slider"),
                         dependencies = dependencies,
                         title = "Slider",
@@ -89,12 +90,12 @@ val PrefsRoute = Route {
                         summary = "This is a slider preference"
                     )
 
-                    SliderPreference(
-                        box = boxFactory.duration("slider_dur", 33.milliseconds),
+                    DurationSliderPreference(
+                        box = boxFactory.duration("slider_dur", 33.minutes),
                         dependencies = dependencies,
                         title = "Slider duration",
                         steps = 10,
-                        valueRange = 0.milliseconds..1.days,
+                        valueRange = 1.minutes..1.hours,
                         summary = "This is a slider preference"
                     )
 

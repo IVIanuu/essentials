@@ -33,6 +33,7 @@ import androidx.ui.unit.Px
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.px
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
@@ -48,9 +49,8 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
 
-@JvmName("DoubleSliderPreference")
 @Composable
-fun SliderPreference(
+fun DoubleSliderPreference(
     @Pivotal box: Box<Double>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -61,7 +61,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Double) -> Unit)? = null
 ) {
-    SliderPreference(
+    DoubleSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -74,9 +74,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("DoubleSliderPreference")
 @Composable
-fun SliderPreference(
+fun DoubleSliderPreference(
     valueController: ValueController<Double>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -87,7 +86,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Double) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDouble() },
@@ -102,9 +101,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("FloatSliderPreference")
 @Composable
-fun SliderPreference(
+fun FloatSliderPreference(
     @Pivotal box: Box<Float>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -115,7 +113,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Float) -> Unit)? = null
 ) {
-    SliderPreference(
+    FloatSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -128,9 +126,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("FloatSliderPreference")
 @Composable
-fun SliderPreference(
+fun FloatSliderPreference(
     valueController: ValueController<Float>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -141,7 +138,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Float) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it },
         fromFloat = { it },
@@ -156,9 +153,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("IntSliderPreference")
 @Composable
-fun SliderPreference(
+fun IntSliderPreference(
     @Pivotal box: Box<Int>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -169,7 +165,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Int) -> Unit)? = null
 ) {
-    SliderPreference(
+    IntSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -182,9 +178,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("IntSliderPreference")
 @Composable
-fun SliderPreference(
+fun IntSliderPreference(
     valueController: ValueController<Int>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -195,7 +190,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Int) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toInt() },
@@ -210,9 +205,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("LongSliderPreference")
 @Composable
-fun SliderPreference(
+fun LongSliderPreference(
     @Pivotal box: Box<Long>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -223,7 +217,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Long) -> Unit)? = null
 ) {
-    SliderPreference(
+    LongSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -236,9 +230,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("LongSliderPreference")
 @Composable
-fun SliderPreference(
+fun LongSliderPreference(
     valueController: ValueController<Long>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -249,7 +242,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Long) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toLong() },
@@ -264,9 +257,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("DpSliderPreference")
 @Composable
-fun SliderPreference(
+fun DpSliderPreference(
     @Pivotal box: Box<Dp>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -277,7 +269,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Dp) -> Unit)? = null
 ) {
-    SliderPreference(
+    DpSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -290,9 +282,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("DpSliderPreference")
 @Composable
-fun SliderPreference(
+fun DpSliderPreference(
     valueController: ValueController<Dp>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -303,7 +294,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Dp) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.value },
         fromFloat = { it.dp },
@@ -318,9 +309,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("PxSliderPreference")
 @Composable
-fun SliderPreference(
+fun PxSliderPreference(
     @Pivotal box: Box<Px>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -331,7 +321,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Px) -> Unit)? = null
 ) {
-    SliderPreference(
+    PxSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -344,9 +334,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("PxSliderPreference")
 @Composable
-fun SliderPreference(
+fun PxSliderPreference(
     valueController: ValueController<Px>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -357,7 +346,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Px) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.value },
         fromFloat = { it.px },
@@ -372,9 +361,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("IntPxSliderPreference")
 @Composable
-fun SliderPreference(
+fun IntPxSliderPreference(
     @Pivotal box: Box<IntPx>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -385,7 +373,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((IntPx) -> Unit)? = null
 ) {
-    SliderPreference(
+    IntPxSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -398,9 +386,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("IntPxSliderPreference")
 @Composable
-fun SliderPreference(
+fun IntPxSliderPreference(
     valueController: ValueController<IntPx>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -411,7 +398,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((IntPx) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
         toFloat = { it.value.toFloat() },
         fromFloat = { it.toInt().ipx },
@@ -426,9 +413,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("DurationSliderPreference")
 @Composable
-fun SliderPreference(
+fun DurationSliderPreference(
     @Pivotal box: Box<Duration>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -439,7 +425,7 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Duration) -> Unit)? = null
 ) {
-    SliderPreference(
+    DurationSliderPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
@@ -452,9 +438,8 @@ fun SliderPreference(
     )
 }
 
-@JvmName("DurationSliderPreference")
 @Composable
-fun SliderPreference(
+fun DurationSliderPreference(
     valueController: ValueController<Duration>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -465,10 +450,16 @@ fun SliderPreference(
     steps: Int? = null,
     valueText: @Composable ((Duration) -> Unit)? = null
 ) {
-    SliderPreference(
+    BaseSliderPreference(
         valueController = valueController,
-        toFloat = { it.toFloat() },
-        fromFloat = { it.toDuration() },
+        toFloat = {
+            it.toFloat()
+                .apply { d { "duration to float $it = $this" } }
+        },
+        fromFloat = {
+            it.toDuration()
+                .apply { d { "float to duration $this = $it" } }
+        },
         enabled = enabled,
         dependencies = dependencies,
         title = title,
@@ -496,7 +487,7 @@ private fun Duration.toFloat(): Float {
 }
 
 @Composable
-fun <T : Comparable<T>> SliderPreference(
+fun <T : Comparable<T>> BaseSliderPreference(
     valueController: ValueController<T>,
     toFloat: (T) -> Float,
     fromFloat: (Float) -> T,

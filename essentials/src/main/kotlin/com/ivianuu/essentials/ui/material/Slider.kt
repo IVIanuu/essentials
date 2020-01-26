@@ -28,6 +28,7 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
+import androidx.ui.core.WithConstraints
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ValueHolder
@@ -45,8 +46,8 @@ import androidx.ui.graphics.PointMode
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
@@ -112,60 +113,63 @@ fun Slider(
     style: SliderStyle = SliderStyleAmbient.current ?: DefaultSliderStyle()
 ) {
     Container(modifier = modifier) {
-        val maxPx = state { 0f }
-        Draw { _, parentSize ->
-            if (parentSize.width.value != maxPx.value) {
-                maxPx.value = parentSize.width.value
-            }
-        }
-        val minPx = 0f
+        WithConstraints { constraints ->
+            val maxPx = constraints.maxWidth.value.toFloat()
+            val minPx = 0f
 
-        fun Float.toSliderPosition(): Float =
-            scale(minPx, maxPx.value, this, position.startValue, position.endValue)
+            fun Float.toSliderPosition(): Float =
+                scale(minPx, maxPx, this, position.startValue, position.endValue)
 
-        val flingConfig =
-            if (position.tickValues.isNotEmpty()) {
-                SliderFlingConfig(position, position.tickValues) { endValue ->
-                    onValueChange(endValue)
+            val flingConfig =
+                if (position.tickValues.isNotEmpty()) {
+                    SliderFlingConfig(position, position.tickValues) { endValue ->
+                        onValueChange(endValue)
+                        onValueChangeEnd()
+                    }
+                } else {
+                    null
+                }
+            val gestureEndAction = { velocity: Float ->
+                if (flingConfig != null) {
+                    position.holder.fling(flingConfig, velocity)
+                } else {
                     onValueChangeEnd()
                 }
-            } else {
-                null
             }
-        val gestureEndAction = { velocity: Float ->
-            if (flingConfig != null) {
-                position.holder.fling(flingConfig, velocity)
-            } else {
-                onValueChangeEnd()
-            }
-        }
-        val pressed = state { false }
-        PressGestureDetector(
-            onPress = { pos ->
-                onValueChange(pos.x.value.toSliderPosition())
-                pressed.value = true
-            },
-            onRelease = {
-                pressed.value = false
-                gestureEndAction(0f)
-            }
-        ) {
-            Draggable(
-                dragDirection = DragDirection.Horizontal,
-                dragValue = remember(position) {
-                    object : ValueHolder<Float> {
-                        override val value: Float
-                            get() = scale(position.startValue, position.endValue, position.value, minPx, maxPx.value)
-                    }
+            val pressed = state { false }
+            PressGestureDetector(
+                onPress = { pos ->
+                    onValueChange(pos.x.value.toSliderPosition())
+                    pressed.value = true
                 },
-                onDragStarted = { pressed.value = true },
-                onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
-                onDragStopped = { velocity ->
+                onRelease = {
                     pressed.value = false
-                    gestureEndAction(velocity)
-                },
-                children = { SliderImpl(position, style.color, maxPx.value, pressed.value) }
-            )
+                    gestureEndAction(0f)
+                }
+            ) {
+                Draggable(
+                    dragDirection = DragDirection.Horizontal,
+                    dragValue = remember(position) {
+                        object : ValueHolder<Float> {
+                            override val value: Float
+                                get() = scale(
+                                    position.startValue,
+                                    position.endValue,
+                                    position.value,
+                                    minPx,
+                                    maxPx
+                                )
+                        }
+                    },
+                    onDragStarted = { pressed.value = true },
+                    onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
+                    onDragStopped = { velocity ->
+                        pressed.value = false
+                        gestureEndAction(velocity)
+                    },
+                    children = { SliderImpl(position, style.color, maxPx, pressed.value) }
+                )
+            }
         }
     }
 }
@@ -188,7 +192,7 @@ private fun SliderImpl(
             val fraction = with(position) { calcFraction(startValue, endValue, value) }
             val offset = (widthDp - thumbSize) * fraction
             DrawTrack(color, position)
-            Container(modifier = LayoutPadding(left = offset)) {
+            Padding(left = offset) {
                 Ripple(bounded = false) {
                     Surface(
                         shape = CircleShape,
