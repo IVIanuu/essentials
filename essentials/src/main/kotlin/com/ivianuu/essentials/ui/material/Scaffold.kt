@@ -71,11 +71,11 @@ fun Scaffold(
     fab: @Composable (() -> Unit)? = null
 ) {
     // update state
-    scaffoldState.hasTopAppBar = topAppBar != null
-    scaffoldState.hasDrawer = drawerContent != null
-    scaffoldState.hasBody = body != null
-    scaffoldState.hasBottomBar = bottomBar != null
-    scaffoldState.hasFab = fab != null
+    remember(topAppBar) { scaffoldState.hasTopAppBar = topAppBar != null }
+    remember(drawerContent) { scaffoldState.hasDrawer = drawerContent != null }
+    remember(body) { scaffoldState.hasBody = body != null }
+    remember(bottomBar) { scaffoldState.hasBottomBar = bottomBar != null }
+    remember(fab) { scaffoldState.hasFab = fab != null }
 
     if (scaffoldState.isDrawerOpen) {
         onBackPressed { scaffoldState.isDrawerOpen = false }
@@ -173,25 +173,25 @@ private fun ScaffoldLayout(
 ) {
     val children: @Composable () -> Unit = {
         if (topAppBar != null) {
-            ParentData(ScaffoldLayoutSlot.TopAppBar) {
+            ParentData(ScaffoldSlot.TopAppBar) {
                 topAppBar()
             }
         }
 
         if (body != null) {
-            ParentData(ScaffoldLayoutSlot.Body) {
+            ParentData(ScaffoldSlot.Body) {
                 body()
             }
         }
 
         if (bottomBar != null) {
-            ParentData(ScaffoldLayoutSlot.BottomBar) {
+            ParentData(ScaffoldSlot.BottomBar) {
                 bottomBar()
             }
         }
 
         if (fab != null) {
-            ParentData(ScaffoldLayoutSlot.Fab) {
+            ParentData(ScaffoldSlot.Fab) {
                 fab()
             }
         }
@@ -204,16 +204,16 @@ private fun ScaffoldLayout(
         val height = incomingConstraints.maxHeight
 
         val topAppBarMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldLayoutSlot.TopAppBar
+            it.parentData == ScaffoldSlot.TopAppBar
         }
         val bodyMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldLayoutSlot.Body
+            it.parentData == ScaffoldSlot.Body
         }
         val bottomBarMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldLayoutSlot.BottomBar
+            it.parentData == ScaffoldSlot.BottomBar
         }
         val fabMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldLayoutSlot.Fab
+            it.parentData == ScaffoldSlot.Fab
         }
 
         var barConstraints = incomingConstraints.copy(
@@ -301,4 +301,4 @@ private fun ScaffoldLayout(
     }
 }
 
-private enum class ScaffoldLayoutSlot { TopAppBar, Body, BottomBar, Fab }
+private enum class ScaffoldSlot { TopAppBar, Body, BottomBar, Fab }
