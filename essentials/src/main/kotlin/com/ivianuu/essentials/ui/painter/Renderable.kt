@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.painter
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
 import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.contentColor
@@ -21,6 +22,7 @@ import androidx.ui.graphics.vector.VectorGroup
 import androidx.ui.graphics.vector.VectorPath
 import androidx.ui.graphics.vector.VectorScope
 import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
@@ -41,11 +43,13 @@ fun DrawRenderable(renderable: Renderable) {
 @Stable
 class ColorRenderable(
     private val color: Color,
-    private val shape: Shape = RectangleShape
+    private val shape: Shape = RectangleShape,
+    private val size: Size? = null
 ) : Renderable {
     @Composable
     override fun content() {
         Surface(
+            modifier = size?.let { LayoutSize(it.width, it.height) } ?: Modifier.None,
             color = color,
             shape = shape
         ) {

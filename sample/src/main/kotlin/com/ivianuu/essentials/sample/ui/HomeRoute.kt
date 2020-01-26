@@ -20,16 +20,11 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.core.Draw
-import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Canvas
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.Paint
-import androidx.ui.layout.Container
+import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
-import androidx.ui.unit.PxSize
+import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
@@ -57,6 +52,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
+import com.ivianuu.essentials.ui.painter.ColorRenderable
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.util.Toaster
@@ -147,7 +143,13 @@ private fun HomeItem(
                     .first()
                     .front
             }
-            ColorAvatar(color)
+            DrawRenderable(
+                ColorRenderable(
+                    color = color,
+                    shape = CircleShape,
+                    size = Size(40.dp, 40.dp)
+                )
+            )
         },
         trailing = {
             PopupMenuButton(
@@ -159,22 +161,6 @@ private fun HomeItem(
         },
         onClick = onClick
     )
-}
-
-@Composable
-private fun ColorAvatar(color: Color) {
-    Container(width = 40.dp, height = 40.dp) {
-        val paint = remember {
-            Paint().apply { this.color = color }
-        }
-        Draw { canvas: Canvas, parentSize: PxSize ->
-            canvas.drawCircle(
-                Offset(parentSize.width.value / 2, parentSize.height.value / 2),
-                parentSize.width.value / 2,
-                paint
-            )
-        }
-    }
 }
 
 @Composable
