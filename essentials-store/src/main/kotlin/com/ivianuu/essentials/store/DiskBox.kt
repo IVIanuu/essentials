@@ -85,7 +85,7 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file at $path", e)
         }
 
-        log { "$path -> fetched raw $serialized" }
+        log { "$path -> fetched serialized '$serialized'" }
 
         return@MutexValue try {
             val deserialized = serializer.deserialize(serialized)
@@ -129,7 +129,7 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun set(value: T) {
         checkNotDisposed()
-        log { "$path -> set $value" }
+        log { "$path -> set '$value'" }
         maybeWithDispatcher {
             measured("set") {
                 try {
@@ -152,6 +152,8 @@ internal class DiskBoxImpl<T>(
                         )
                     }
 
+                    log { "$path -> write serialized '$serialized'" }
+
                     val tmpFile = File.createTempFile(
                         "new", "tmp", file.parentFile
                     )
@@ -163,7 +165,7 @@ internal class DiskBoxImpl<T>(
                             throw IOException("Couldn't move tmp file to file $path")
                         }
                     } catch (e: Exception) {
-                        throw IOException("Couldn't write to file $path $serialized", e)
+                        throw IOException("Couldn't write to file $path '$serialized'", e)
                     } finally {
                         tmpFile.delete()
                     }
@@ -186,18 +188,18 @@ internal class DiskBoxImpl<T>(
                 writeLock.awaitWrite()
                 val cached = cachedValue.get()
                 if (cached != this) {
-                    log { "$path -> return cached $cached" }
+                    log { "$path -> return cached '$cached'" }
                     return@measured cached as T
                 }
 
                 return@measured if (isSet()) {
                     valueFetcher().also {
                         cachedValue.set(it)
-                        log { "$path -> return fetched $it" }
+                        log { "$path -> return fetched '$it'" }
                     }
                 } else {
                     defaultValue.also {
-                        log { "$path -> return default value $it" }
+                        log { "$path -> return default value '$it'" }
                     }
                 }
             }
@@ -224,7 +226,7 @@ internal class DiskBoxImpl<T>(
             measured("delete") {
                 if (file.exists()) {
                     if (!file.delete()) {
-                        throw IOException("Couldn't delete file $path")
+                        throw IOException("Couldn't delete file '$path'")
                     }
                 }
 
