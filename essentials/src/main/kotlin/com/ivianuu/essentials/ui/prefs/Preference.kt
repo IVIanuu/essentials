@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Model
 import androidx.compose.remember
 import androidx.ui.core.Opacity
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
-import com.ivianuu.essentials.ui.common.framed
+import com.ivianuu.essentials.ui.core.Ignore
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.painter.Renderable
 
@@ -120,15 +121,17 @@ fun <T> ValueController(
     override fun canSetValue(value: T): Boolean = canSetValue.invoke(value)
 }
 
+@Model
 class PreferenceContext<T> {
 
+    @Ignore
     internal lateinit var valueController: ValueController<T>
 
     val currentValue: T get() = valueController.currentValue
 
-    var dependenciesOk by framed(false)
+    var dependenciesOk = false
         internal set
-    var enabled by framed(false)
+    var enabled = false
         internal set
     val shouldBeEnabled: Boolean get() = enabled && dependenciesOk
 

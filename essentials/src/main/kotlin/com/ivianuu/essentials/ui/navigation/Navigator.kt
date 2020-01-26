@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
+import androidx.compose.Model
 import androidx.compose.Observe
 import androidx.compose.Providers
-import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.onDispose
 import androidx.compose.remember
@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
@@ -110,18 +109,16 @@ fun Navigator(state: NavigatorState) {
 }
 
 // todo remove main thread requirement
-@Stable
+@Model
 class NavigatorState(
     private val coroutineScope: CoroutineScope,
     internal val overlayState: OverlayState = OverlayState(),
     startRoute: Route? = null,
-    handleBack: Boolean = true,
-    popsLastRoute: Boolean = false
+    var handleBack: Boolean = true,
+    var popsLastRoute: Boolean = false
 ) {
 
-    var handleBack by framed(handleBack)
-    var popsLastRoute by framed(popsLastRoute)
-    internal var runningTransitions by framed(0)
+    internal var runningTransitions = 0
 
     private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
@@ -129,9 +126,8 @@ class NavigatorState(
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
-    var routeTransitionTypes: List<RouteTransition.Type> by framed(
+    var routeTransitionTypes =
         listOf(OpacityRouteTransitionType, CanvasRouteTransitionType, ModifierRouteTransitionType)
-    )
 
     internal var defaultRouteTransition = DefaultRouteTransition
 
@@ -365,6 +361,7 @@ class NavigatorState(
         return visibleRoutes
     }
 
+    @Model
     private inner class RouteState(val route: Route) {
 
         private val retainedObjects = RetainedObjects()
@@ -400,6 +397,7 @@ class NavigatorState(
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
             d { "$route -> on transition complete $completedState" }
             transitionRunning = false
+            runningTransitions--
             lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
@@ -413,17 +411,17 @@ class NavigatorState(
             }
         }
 
-        private var transition by framed(route.enterTransition)
-        private var transitionState by framed(RouteTransition.State.Init)
-        private var lastTransitionState by framed(RouteTransition.State.Init)
+        private var transition: RouteTransition? = null // todo direct assign
+        private var transitionState = RouteTransition.State.Init
+        private var lastTransitionState = RouteTransition.State.Init
 
         private var other: RouteState? = null
 
-        private var transitionRunning by framed(false, onSet = { currentValue, newValue ->
-            if (currentValue == newValue) return@framed false
-            if (newValue) runningTransitions++ else runningTransitions--
-            return@framed true
-        })
+        private var transitionRunning = false
+
+        init {
+            transition = route.enterTransition // todo direct assign
+        }
 
         private fun onOtherTransitionComplete() {
             overlayEntry.opaque = route.opaque
@@ -437,6 +435,7 @@ class NavigatorState(
             d { "$route -> enter from ${from?.route} is push $isPush" }
             overlayEntry.opaque = route.opaque || isPush
             transitionRunning = true
+            runningTransitions++
 
             val fromIndex = overlayState.entries.indexOf(from?.overlayEntry)
             val toIndex = if (fromIndex != -1) {
@@ -460,6 +459,7 @@ class NavigatorState(
             d { "$route -> exit to ${to?.route} is push $isPush" }
 
             transitionRunning = true
+            runningTransitions++
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = to
             lastTransitionState = transitionState

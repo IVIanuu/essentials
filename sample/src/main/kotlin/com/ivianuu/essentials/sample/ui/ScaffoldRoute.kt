@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.Model
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.layout.Container
@@ -24,7 +25,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -174,9 +174,7 @@ val ScaffoldRoute = Route {
                                         selectedItem = controls.fabPosition,
                                         onSelect = { controls.fabPosition = it },
                                         item = {
-                                            Text(
-                                                it.name
-                                            )
+                                            Text(it.name)
                                         }
                                     )
                                 }
@@ -189,11 +187,12 @@ val ScaffoldRoute = Route {
     )
 }
 
-private class ScaffoldControls {
-    var showTopAppBar by framed(true)
-    var centerTitle by framed(false)
-    var bodyLayoutMode by framed(ScaffoldState.BodyLayoutMode.Wrap)
-    var showBottomBar by framed(false)
-    var showFab by framed(false)
-    var fabPosition by framed(ScaffoldState.FabPosition.End)
-}
+@Model
+private class ScaffoldControls(
+    var showTopAppBar: Boolean = true,
+    var centerTitle: Boolean = false,
+    var bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
+    var showBottomBar: Boolean = false,
+    var showFab: Boolean = false,
+    var fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End
+)

@@ -38,3 +38,6 @@ inline fun tmpComposerJoinKey(
     left: Any?,
     right: Any?
 ): Any = currentComposerNonNull.joinKey(left, right)
+
+@Target(AnnotationTarget.PROPERTY)
+annotation class Ignore

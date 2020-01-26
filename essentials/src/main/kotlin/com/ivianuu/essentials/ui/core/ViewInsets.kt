@@ -25,7 +25,9 @@ import android.view.WindowManager
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
+import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
+import androidx.compose.mutableStateOf
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.state
@@ -37,7 +39,6 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
 
@@ -175,15 +176,15 @@ private class ObservableWindowInsets(
     viewInsets: EdgeInsets
 ) : WindowInsets {
 
+    override var viewPadding by mutableStateOf(viewPadding, StructurallyEqual)
+    override var viewInsets by mutableStateOf(viewInsets, StructurallyEqual)
+
     constructor(
         other: WindowInsets
     ) : this(
         viewPadding = other.viewPadding,
         viewInsets = other.viewInsets
     )
-
-    override var viewPadding by framed(viewPadding)
-    override var viewInsets by framed(viewInsets)
 
     override fun copy(viewPadding: EdgeInsets, viewInsets: EdgeInsets): WindowInsets =
         ObservableWindowInsets(
@@ -193,24 +194,6 @@ private class ObservableWindowInsets(
     internal fun updateFrom(other: WindowInsets) {
         viewPadding = other.viewPadding
         viewInsets = other.viewInsets
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as ObservableWindowInsets
-
-        if (viewPadding != other.viewPadding) return false
-        if (viewInsets != other.viewInsets) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = viewPadding.hashCode()
-        result = 31 * result + viewInsets.hashCode()
-        return result
     }
 
     override fun toString(): String {

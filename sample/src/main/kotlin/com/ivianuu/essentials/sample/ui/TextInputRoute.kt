@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.Model
 import androidx.compose.Observe
 import androidx.compose.onActive
 import androidx.compose.onDispose
@@ -27,7 +28,6 @@ import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.ScrollPosition
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
@@ -132,9 +132,10 @@ val TextInputRoute = Route {
     )
 }
 
-private class TextInputState {
-    var searchVisible by framed(false)
-    var inputValue by framed("")
-}
+@Model
+private class TextInputState(
+    var searchVisible: Boolean = false,
+    var inputValue: String = ""
+)
 
 private val AllItems = (0..100).map { "Item: $it" }

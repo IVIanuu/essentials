@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.Stable
+import androidx.compose.Model
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Constraints
@@ -19,9 +18,9 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.ivianuu.essentials.ui.common.ScrollPosition
 import com.ivianuu.essentials.ui.common.Scrollable
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.Axis
+import com.ivianuu.essentials.ui.core.Ignore
 import com.ivianuu.essentials.ui.core.retain
 
 @Composable
@@ -92,11 +91,13 @@ fun ScrollableList(
     }
 }
 
-@Stable
+@Model
 private class ScrollableListState {
+
+    @Ignore
     lateinit var position: ScrollPosition
 
-    var composableFactory: (Int) -> @Composable (() -> Unit)? by framed({ null })
+    var composableFactory: (Int) -> @Composable (() -> Unit)? = { null }
 
     fun update(composableFactory: (Int) -> @Composable (() -> Unit)?) {
         this.composableFactory = composableFactory
@@ -120,14 +121,13 @@ private class ScrollableListState {
     }
 }
 
-@Immutable
+@Model
 private class ScrollableListItem(
     val index: Int,
-    composable: @Composable () -> Unit
+    var composable: @Composable () -> Unit
 ) {
 
-    var composable by framed(composable)
-
+    @Ignore
     var layoutOffset = Px.Zero
 
     @Composable
@@ -136,9 +136,7 @@ private class ScrollableListItem(
         ParentData(data = this, children = composable)
     }
 
-    override fun toString(): String {
-        return "ScrollableListItem(index=$index)"
-    }
+    override fun toString(): String = "ScrollableListItem(index=$index)"
 }
 
 @Composable

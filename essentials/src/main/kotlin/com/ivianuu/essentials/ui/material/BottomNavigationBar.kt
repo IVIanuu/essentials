@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Model
 import androidx.compose.Providers
-import androidx.compose.Stable
 import androidx.compose.ambientOf
 import androidx.compose.key
 import androidx.compose.remember
@@ -38,7 +38,6 @@ import androidx.ui.unit.coerceIn
 import androidx.ui.unit.dp
 import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
@@ -243,11 +242,10 @@ private val BottomNavigationBarItemPaddingSide = 12.dp
 private val BottomNavigationBarItemPaddingBottom = 12.dp
 private val BottomNavigationBarItemRippleRadius = 56.dp
 
-@Stable
+@Model
 class BottomNavigationController<T>(
-    items: List<T>,
+    var items: List<T>,
     initial: T = items.first()
 ) {
-    var items by framed(items)
-    var selectedItem by framed(initial)
+    var selectedItem = initial
 }

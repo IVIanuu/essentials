@@ -17,13 +17,12 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
-import androidx.compose.Stable
+import androidx.compose.Model
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.unit.PxPosition
-import com.ivianuu.essentials.ui.common.framed
 
 @Composable
 fun <T> Swapper(
@@ -51,13 +50,13 @@ fun <T> Swapper(
     }
 }
 
-@Stable
+@Model
 class SwapperState<T>(
     initial: T,
     keepState: Boolean = false
 ) {
 
-    private var _keepState by framed(keepState)
+    private var _keepState = keepState
     var keepState: Boolean
         get() = _keepState
         set(value) {
@@ -65,7 +64,7 @@ class SwapperState<T>(
             _keepState = value
         }
 
-    private var _current by framed(initial)
+    private var _current = initial
     var current: T
         get() = _current
         set(value) {

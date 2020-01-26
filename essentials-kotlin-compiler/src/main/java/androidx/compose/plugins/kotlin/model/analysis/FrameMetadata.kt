@@ -1,5 +1,6 @@
 package androidx.compose.plugins.kotlin.model.analysis
 
+import androidx.compose.plugins.kotlin.model.ignoreClassName
 import org.jetbrains.kotlin.builtins.DefaultBuiltIns
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -31,9 +32,10 @@ class FrameMetadata(private val framedClassDescriptor: ClassDescriptor) {
      */
     fun getFramedProperties(bindingContext: BindingContext) =
         framedClassDescriptor.unsubstitutedMemberScope.getContributedDescriptors().mapNotNull {
-            if (it is PropertyDescriptor &&
+            if (it is PropertyDescriptor && 
                 it.kind == CallableMemberDescriptor.Kind.DECLARATION &&
-                it.isVar && it.hasBackingField(bindingContext)
+                it.isVar && it.hasBackingField(bindingContext) &&
+                !it.annotations.hasAnnotation(ignoreClassName)
             ) it else null
         }
 

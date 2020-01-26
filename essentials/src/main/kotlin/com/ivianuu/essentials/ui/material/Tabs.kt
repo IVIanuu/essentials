@@ -17,25 +17,24 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Model
 import androidx.compose.Providers
-import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.core.retainFor
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperState
 
-@Stable
+@Model
 class TabController<T>(
     var items: List<T>,
     initialIndex: Int = 0
 ) {
-    var selectedIndex by framed(initialIndex)
+    var selectedIndex = initialIndex
     val selectedItem: T get() = items[selectedIndex]
 }
 

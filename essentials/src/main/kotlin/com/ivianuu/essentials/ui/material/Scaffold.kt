@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.Model
 import androidx.compose.Providers
-import androidx.compose.Stable
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
@@ -32,7 +32,6 @@ import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
 import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.looseMin
 
@@ -135,7 +134,7 @@ fun Scaffold(
     }
 }
 
-@Stable
+@Model
 class ScaffoldState {
 
     var hasTopAppBar = false
@@ -149,12 +148,12 @@ class ScaffoldState {
     var hasFab = false
         internal set
 
-    var isDrawerOpen by framed(false)
-    var isDrawerGesturesEnabled by framed(true)
+    var isDrawerOpen = false
+    var isDrawerGesturesEnabled = false
 
-    var fabPosition by framed(FabPosition.End)
-    var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
-    var applySideSafeArea by framed(true)
+    var fabPosition = FabPosition.End
+    var bodyLayoutMode = BodyLayoutMode.Wrap
+    var applySideSafeArea = true
 
     enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 

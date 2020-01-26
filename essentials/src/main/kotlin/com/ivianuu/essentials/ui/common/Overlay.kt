@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Model
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.ambientOf
@@ -94,15 +95,12 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
     }
 }
 
-@Stable
+@Model
 class OverlayEntry(
-    opaque: Boolean = false,
-    keepState: Boolean = false,
+    var opaque: Boolean = false,
+    var keepState: Boolean = false,
     val content: @Composable () -> Unit
-) {
-    var opaque by framed(opaque)
-    var keepState by framed(keepState)
-}
+)
 
 val OverlayAmbient =
     ambientOf<OverlayState> { error("No overlay provided") }

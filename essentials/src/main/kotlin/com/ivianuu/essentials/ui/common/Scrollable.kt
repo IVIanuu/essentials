@@ -20,7 +20,7 @@ import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
-import androidx.compose.Stable
+import androidx.compose.Model
 import androidx.ui.core.Direction
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
@@ -34,7 +34,7 @@ import androidx.ui.unit.px
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
 
-@Stable
+@Model
 class ScrollPosition(
     initial: Px = Px.Zero,
     minValue: Px = Px.Zero,
@@ -44,10 +44,10 @@ class ScrollPosition(
     val value: Px
         get() = holder.value.px
 
-    private var _minValue: Px by framed(minValue)
+    private var _minValue = minValue
     val minValue: Px get() = _minValue
 
-    private var _maxValue: Px by framed(maxValue)
+    private var _maxValue = maxValue
     val maxValue: Px get() = _maxValue
 
     private val holder =
@@ -58,18 +58,16 @@ class ScrollPosition(
     val isAnimating: Boolean
         get() = holder.animatedFloat.isRunning
 
-    var flingConfigFactory: (Px) -> FlingConfig by framed(
-        initial = {
-            FlingConfig(
-                decayAnimation = ExponentialDecay(
-                    frictionMultiplier = ScrollerDefaultFriction,
-                    absVelocityThreshold = ScrollerVelocityThreshold
-                )
+    var flingConfigFactory: (Px) -> FlingConfig = {
+        FlingConfig(
+            decayAnimation = ExponentialDecay(
+                frictionMultiplier = ScrollerDefaultFriction,
+                absVelocityThreshold = ScrollerVelocityThreshold
             )
-        }
-    )
+        )
+    }
 
-    var direction by framed(ScrollDirection.Idle)
+    var direction = ScrollDirection.Idle
 
     fun smoothScrollTo(
         value: Px,
