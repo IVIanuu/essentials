@@ -12,7 +12,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.bindPermissionRequestHandler
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Module
 
 fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
-        Metadata.IsRootPermission with Unit,
+        Metadata.IsRootPermission withValue Unit,
         *metadata
     )
 )

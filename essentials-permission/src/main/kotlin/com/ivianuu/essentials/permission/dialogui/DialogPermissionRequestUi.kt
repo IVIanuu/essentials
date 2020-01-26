@@ -106,9 +106,9 @@ private fun Permission(
     onClick: () -> Unit
 ) {
     ListItem(
-        title = permission.metadata[Metadata.Title].asTextComposable(),
-        subtitle = permission.metadata.getOrNull(Metadata.Desc).asTextComposable(),
-        leading = permission.metadata.getOrNull(Metadata.Icon),
+        title = permission.metadata[Metadata.Title],
+        subtitle = permission.metadata.getOrNull(Metadata.Desc),
+        image = permission.metadata.getOrNull(Metadata.Icon),
         onClick = onClick
     )
 }

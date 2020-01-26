@@ -13,6 +13,8 @@ import com.ivianuu.essentials.util.unsafeLazy
  * ´´´
  *
  */
-object Colors
+object Colors {
+    object Essentials
+}
 
 fun lazyColor(init: () -> Color) = unsafeLazy(init)

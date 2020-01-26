@@ -23,11 +23,12 @@ import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun <T> SingleChoiceListPreference(
@@ -36,7 +37,7 @@ fun <T> SingleChoiceListPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     dialogTitle: String? = title,
     items: List<SingleChoiceListPreference.Item<T>>
 ) {
@@ -46,7 +47,7 @@ fun <T> SingleChoiceListPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         dialogTitle = dialogTitle.asTextComposable(),
         items = items
     )

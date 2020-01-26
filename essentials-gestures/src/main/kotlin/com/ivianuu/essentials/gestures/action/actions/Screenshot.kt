@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.PhotoAlbum
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
@@ -16,7 +18,7 @@ internal val EsScreenshotActionModule = Module {
     bindAction(
         key = "screenshot",
         title = { getStringResource(R.string.es_action_screenshot) },
-        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_photo_album) },
+        iconProvider = { SingleActionIconProvider(Icons.Default.PhotoAlbum) },
         permissions = {
             listOf(actionPermission {
                 if (get<SystemBuildInfo>().sdk >= 28) accessibility

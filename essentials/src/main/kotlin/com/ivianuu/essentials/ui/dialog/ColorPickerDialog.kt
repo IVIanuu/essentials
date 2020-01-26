@@ -43,6 +43,9 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.ArrowBack
+import com.ivianuu.essentials.material.icons.filled.Check
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -54,15 +57,13 @@ import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Scroller
-import com.ivianuu.essentials.ui.material.Icon
-import com.ivianuu.essentials.ui.material.IconStyle
-import com.ivianuu.essentials.ui.material.IconStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.toColor
 import com.ivianuu.essentials.util.toHexString
 
@@ -235,9 +236,9 @@ private fun ColorGridItem(
         ) {
             if (isSelected) {
                 Center {
-                    Icon(
-                        image = drawableResource(R.drawable.ic_check),
-                        style = IconStyle(
+                    DrawRenderable(
+                        renderable = VectorRenderable(
+                            image = Icons.Default.Check,
                             size = Size(width = 36.dp, height = 36.dp)
                         )
                     )
@@ -250,9 +251,11 @@ private fun ColorGridItem(
 @Composable
 private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
-        Icon(
-            image = drawableResource(R.drawable.es_ic_arrow_back),
-            style = IconStyleAmbient.current.copy(size = Size(width = 36.dp, height = 36.dp))
+        DrawRenderable(
+            renderable = VectorRenderable(
+                image = Icons.Default.ArrowBack,
+                size = Size(width = 36.dp, height = 36.dp)
+            )
         )
     }
 }
@@ -376,38 +379,39 @@ private fun ColorComponentItem(
     value: Float,
     onChanged: (Float) -> Unit
 ) {
-    Container(modifier = LayoutHeight(48.dp) + LayoutWidth.Fill) {
-        Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-            Text(
-                text = component.title,
-                modifier = LayoutInflexible,
-                style = MaterialTheme.typography().subtitle1
-            )
+    Row(
+        modifier = LayoutHeight(48.dp) + LayoutWidth.Fill,
+        crossAxisAlignment = CrossAxisAlignment.Center
+    ) {
+        Text(
+            text = component.title,
+            modifier = LayoutInflexible,
+            style = MaterialTheme.typography().subtitle1
+        )
 
-            Spacer(LayoutWidth(8.dp))
+        Spacer(LayoutWidth(8.dp))
 
-            val position = remember {
-                SliderPosition(initial = value)
-            }
-
-            Slider(
-                position = position,
-                modifier = LayoutFlexible(flex = 1f),
-                onValueChange = {
-                    position.value = it
-                    onChanged(it)
-                },
-                style = SliderStyle(color = component.color())
-            )
-
-            Spacer(LayoutWidth(8.dp))
-
-            Text(
-                text = (255 * value).toInt().toString(),
-                modifier = LayoutWidth.Min(56.dp) + LayoutInflexible,
-                style = MaterialTheme.typography().subtitle1
-            )
+        val position = remember {
+            SliderPosition(initial = value)
         }
+
+        Slider(
+            position = position,
+            modifier = LayoutFlexible(flex = 1f),
+            onValueChange = {
+                position.value = it
+                onChanged(it)
+            },
+            style = SliderStyle(color = component.color())
+        )
+
+        Spacer(LayoutWidth(8.dp))
+
+        Text(
+            text = (255 * value).toInt().toString(),
+            modifier = LayoutWidth.Min(56.dp) + LayoutInflexible,
+            style = MaterialTheme.typography().subtitle1
+        )
     }
 }
 

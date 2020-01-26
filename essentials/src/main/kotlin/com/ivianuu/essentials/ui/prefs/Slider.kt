@@ -35,7 +35,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.px
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
+import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
@@ -56,7 +57,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
     steps: Int? = null,
     valueText: @Composable ((Double) -> Unit)? = null
@@ -67,7 +68,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -110,7 +111,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     steps: Int? = null,
     valueText: @Composable ((Float) -> Unit)? = null
@@ -121,7 +122,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -164,7 +165,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: IntRange = 0..100,
     steps: Int? = null,
     valueText: @Composable ((Int) -> Unit)? = null
@@ -175,7 +176,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -218,7 +219,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: LongRange = 0L..100L,
     steps: Int? = null,
     valueText: @Composable ((Long) -> Unit)? = null
@@ -229,7 +230,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -272,7 +273,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
     steps: Int? = null,
     valueText: @Composable ((Dp) -> Unit)? = null
@@ -283,7 +284,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -326,7 +327,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedRange<Px> = 0.px..100.px,
     steps: Int? = null,
     valueText: @Composable ((Px) -> Unit)? = null
@@ -337,7 +338,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -380,7 +381,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
     steps: Int? = null,
     valueText: @Composable ((IntPx) -> Unit)? = null
@@ -391,7 +392,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText
@@ -434,7 +435,7 @@ fun SliderPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     valueRange: ClosedRange<Duration>,
     steps: Int? = null,
     valueText: @Composable ((Duration) -> Unit)? = null
@@ -445,7 +446,7 @@ fun SliderPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         valueRange = valueRange,
         steps = steps,
         valueText = valueText

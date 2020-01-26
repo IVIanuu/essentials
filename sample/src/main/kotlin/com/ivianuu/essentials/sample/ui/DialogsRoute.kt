@@ -25,6 +25,9 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.gestures.action.actions.Settings
+import com.ivianuu.essentials.icon.Essentials
+import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
@@ -41,13 +44,13 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 
 val DialogsRoute = Route {
     Scaffold(
@@ -116,7 +119,11 @@ val DialogsRoute = Route {
                     ) {
                         MaterialDialog(
                             title = { Text("With icon") },
-                            icon = { Icon(drawableResource(R.drawable.es_ic_settings)) },
+                            icon = {
+                                DrawRenderable(
+                                    VectorRenderable(Icons.Essentials.Settings)
+                                )
+                            },
                             positiveButton = {
                                 DialogCloseButton(
                                     "OK"

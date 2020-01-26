@@ -20,20 +20,34 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
+import androidx.ui.core.ambientDensity
+import androidx.ui.foundation.ColoredRect
+import androidx.ui.foundation.contentColor
 import androidx.ui.geometry.Offset
+import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
+import androidx.ui.graphics.ScaleFit
+import androidx.ui.graphics.vector.DrawVector
+import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.Container
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import androidx.ui.res.imageResource
 import androidx.ui.unit.PxSize
 import androidx.ui.unit.dp
+import androidx.ui.unit.px
+import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Link
+import com.ivianuu.essentials.material.icons.filled.ScreenLockPortrait
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
@@ -49,16 +63,17 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -70,13 +85,6 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 title = { Text("Home") },
                 actions = {
                     val toaster = inject<Toaster>()
-
-                    IconButton(
-                        image = drawableResource(R.drawable.es_ic_link),
-                        onClick = {
-                            d { "Clicked" }
-                        }
-                    )
 
                     PopupMenuButton(
                         items = listOf(
@@ -96,7 +104,13 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
                 if (showBanner) {
                     Banner(
-                        leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
+                        leading = {
+                            DrawRenderable(
+                                ImageRenderable(
+                                    imageResource(R.mipmap.ic_launcher)
+                                )
+                            )
+                        },
                         content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
                         actions = {
                             Button(

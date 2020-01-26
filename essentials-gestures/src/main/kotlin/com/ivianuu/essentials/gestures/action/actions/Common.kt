@@ -1,13 +1,15 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.ui.graphics.Image
+import androidx.ui.graphics.vector.VectorAsset
 import coil.ImageLoader
 import com.ivianuu.essentials.coil.getAnyNoInline
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.painter.ImageRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Factory
@@ -19,30 +21,22 @@ import kotlinx.coroutines.flow.flowOf
 @Factory
 class CoilActionIconProvider(
     @Param private val data: Any,
-    @Param private val tint: Boolean = false,
     private val imageLoader: ImageLoader
 ) : ActionIconProvider {
-    override val icon: Flow<ActionIcon>
-        get() = flowOf {
-            ActionIcon(
-                image = imageLoader.getAnyNoInline(data).toImage(),
-                tint = tint
-            )
-        }
+    override val icon: Flow<Renderable>
+        get() = flowOf { ImageRenderable(imageLoader.getAnyNoInline(data).toImage()) }
 }
 
 fun SingleActionIconProvider(
-    icon: Image,
-    tint: Boolean = true
+    icon: Renderable
 ): ActionIconProvider = object : ActionIconProvider {
-    override val icon: Flow<ActionIcon>
-        get() = flowOf(ActionIcon(image = icon, tint = tint))
+    override val icon: Flow<Renderable>
+        get() = flowOf(icon)
 }
 
-fun DefinitionContext.SingleActionIconProvider(id: Int): ActionIconProvider {
-    val resourceProvider = get<ResourceProvider>()
-    return SingleActionIconProvider(icon = resourceProvider.getDrawable(id))
-}
+fun SingleActionIconProvider(
+    icon: VectorAsset
+): ActionIconProvider = SingleActionIconProvider(VectorRenderable(icon))
 
 fun DefinitionContext.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 

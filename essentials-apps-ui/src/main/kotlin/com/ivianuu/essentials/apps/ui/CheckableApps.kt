@@ -26,6 +26,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.coil.CoilRenderable
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
@@ -38,6 +39,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.painter.AvatarSize
+import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -113,9 +116,11 @@ private fun CheckableApp(
     ListItem(
         title = { Text(app.info.appName) },
         leading = {
-            Image(
-                data = AppIcon(app.info.packageName),
-                modifier = LayoutSize(width = 40.dp, height = 40.dp)
+            DrawRenderable(
+                CoilRenderable(
+                    data = AppIcon(packageName = app.info.packageName),
+                    size = AvatarSize
+                )
             )
         },
         trailing = {

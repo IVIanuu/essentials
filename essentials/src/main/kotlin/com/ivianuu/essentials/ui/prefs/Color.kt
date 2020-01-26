@@ -25,11 +25,12 @@ import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Surface
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun ColorPreference(
@@ -38,7 +39,7 @@ fun ColorPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     dialogTitle: String? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     showAlphaSelector: Boolean = true,
@@ -50,7 +51,7 @@ fun ColorPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         dialogTitle = dialogTitle.asTextComposable(),
         colorPalettes = colorPalettes,
         showAlphaSelector = showAlphaSelector,

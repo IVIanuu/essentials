@@ -116,13 +116,7 @@ fun TopAppBar(
                 ) {
                     TopAppBarLayout(
                         centerTitle = style.centerTitle,
-                        leading = leading?.let {
-                            {
-                                Providers(IconStyleAmbient provides IconStyle()) {
-                                    leading()
-                                }
-                            }
-                        },
+                        leading = leading,
                         title = title?.let {
                             {
                                 Column(
@@ -138,9 +132,7 @@ fun TopAppBar(
                         actions = actions?.let {
                             {
                                 SpacingRow(spacing = 8.dp) {
-                                    Providers(IconStyleAmbient provides IconStyle()) {
-                                        actions()
-                                    }
+                                    actions()
                                 }
                             }
                         }

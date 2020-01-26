@@ -23,7 +23,6 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.Text
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Padding
@@ -34,6 +33,8 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Immutable
 data class FloatingActionButtonStyle(
@@ -103,7 +104,7 @@ fun FloatingActionButton(
 
 @Composable
 fun FloatingActionButton(
-    icon: Image,
+    icon: Renderable,
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: DefaultFloatingActionButtonStyle()
@@ -113,7 +114,7 @@ fun FloatingActionButton(
         onClick = onClick,
         style = style
     ) {
-        Icon(image = icon)
+        DrawRenderable(renderable = icon)
     }
 }
 
@@ -121,7 +122,7 @@ fun FloatingActionButton(
 fun FloatingActionButton(
     text: String,
     modifier: Modifier = Modifier.None,
-    icon: Image? = null,
+    icon: Renderable? = null,
     onClick: (() -> Unit)? = null,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: ExtendedFloatingActionButtonStyle()
 ) {
@@ -140,7 +141,7 @@ fun FloatingActionButton(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    Icon(image = icon)
+                    DrawRenderable(renderable = icon)
                     Spacer(LayoutWidth(12.dp))
                     Text(text = text.toUpperCase())
                 }

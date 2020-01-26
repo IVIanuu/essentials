@@ -11,7 +11,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionRequestHandler
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorState
@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Module
 
 fun WriteSecureSettingsPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
-        Metadata.IsWriteSecureSettingsPermission with Unit,
+        Metadata.IsWriteSecureSettingsPermission withValue Unit,
         *metadata
     )
 )

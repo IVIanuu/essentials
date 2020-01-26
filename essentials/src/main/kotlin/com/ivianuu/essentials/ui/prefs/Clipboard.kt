@@ -21,9 +21,10 @@ import android.content.ClipboardManager
 import androidx.compose.Composable
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.util.Toaster
 
 @Composable
@@ -32,14 +33,14 @@ fun ClipboardPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null
+    image: Renderable? = null
 ) {
     ClipboardPreference(
         clipboardText = clipboardText,
         dependencies = dependencies,
         title = title?.asTextComposable(),
         summary = summary?.asTextComposable(),
-        leading = image?.asIconComposable()
+        leading = image?.asRenderableComposable()
     )
 }
 

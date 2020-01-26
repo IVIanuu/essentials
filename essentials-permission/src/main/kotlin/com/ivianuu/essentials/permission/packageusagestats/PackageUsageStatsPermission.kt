@@ -28,7 +28,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 
@@ -36,8 +36,8 @@ fun PackageUsageStatsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        Metadata.IsPackageUsageStatsPermission with Unit,
-        Metadata.Intent with Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
+        Metadata.IsPackageUsageStatsPermission withValue Unit,
+        Metadata.Intent withValue Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
         *metadata
     )
 )

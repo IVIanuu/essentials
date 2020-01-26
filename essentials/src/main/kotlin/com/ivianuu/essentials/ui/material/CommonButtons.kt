@@ -20,19 +20,23 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
+import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.ArrowBack
+import com.ivianuu.essentials.material.icons.filled.Menu
+import com.ivianuu.essentials.material.icons.filled.MoreVert
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupStyle
 import com.ivianuu.essentials.ui.popup.PopupStyleAmbient
 import com.ivianuu.essentials.ui.popup.PopupTrigger
-import com.ivianuu.essentials.ui.resources.drawableResource
 
 @Composable
-fun DrawerButton(
-    image: Image = drawableResource(R.drawable.es_ic_menu)
-) {
+fun DrawerButton(image: Renderable = VectorRenderable(Icons.Default.Menu)) {
     val scaffold = ScaffoldAmbient.current
     IconButton(
         image = image,
@@ -41,9 +45,7 @@ fun DrawerButton(
 }
 
 @Composable
-fun BackButton(
-    image: Image = drawableResource(R.drawable.es_ic_arrow_back)
-) {
+fun BackButton(image: Renderable = VectorRenderable(Icons.Default.ArrowBack)) {
     val navigator = NavigatorAmbient.current
     IconButton(
         image = image,
@@ -70,7 +72,7 @@ fun NavigationButton() {
 @Composable
 fun PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
-    image: Image = drawableResource(R.drawable.es_ic_more_vert),
+    image: Renderable = VectorRenderable(Icons.Default.MoreVert),
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<PopupMenu.Item>
@@ -96,7 +98,7 @@ fun PopupMenuButton(
 @Composable
 fun <T> PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
-    image: Image = drawableResource(R.drawable.es_ic_more_vert),
+    image: Renderable = VectorRenderable(Icons.Default.MoreVert),
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<T>,

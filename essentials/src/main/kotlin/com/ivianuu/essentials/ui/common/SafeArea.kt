@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
@@ -52,7 +53,8 @@ fun SafeArea(
     }
 
     Container(
-        modifier = LayoutPadding(
+        modifier = modifier,
+        padding = EdgeInsets(
             left = safeAreaValue(
                 left,
                 windowInsets.viewInsets.left,
@@ -77,7 +79,8 @@ fun SafeArea(
                 windowInsets.viewPadding.bottom,
                 minimum?.bottom
             )
-        ) + modifier
+        ),
+        alignment = Alignment.TopLeft
     ) {
         WindowInsetsProvider(
             value = WindowInsets(

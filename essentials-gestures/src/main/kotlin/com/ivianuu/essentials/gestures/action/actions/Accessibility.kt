@@ -1,9 +1,11 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.GlobalActions
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Param
@@ -14,12 +16,12 @@ fun ModuleBuilder.bindAccessibilityAction(
     key: String,
     accessibilityAction: Int,
     titleRes: Int,
-    iconRes: Int
+    icon: VectorAsset
 ) {
     bindAction(
         key = key,
         title = { getStringResource(titleRes) },
-        iconProvider = { SingleActionIconProvider(iconRes) },
+        iconProvider = { SingleActionIconProvider(icon) },
         permissions = { listOf(actionPermission { accessibility }) },
         executor = {
             get<AccessibilityActionExecutor> { parametersOf(accessibilityAction) }

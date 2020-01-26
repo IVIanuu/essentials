@@ -21,39 +21,36 @@ import androidx.compose.Immutable
 import androidx.compose.ambientOf
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.material.Surface
 
+// todo rename to dialog frame
+
 @Immutable
 data class DialogStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp)
 )
 
-val DialogStyleAmbient =
-    ambientOf { DialogStyle() }
+val DialogStyleAmbient = ambientOf { DialogStyle() }
 
 @Composable
 fun Dialog(
     style: DialogStyle = DialogStyleAmbient.current,
-    child: @Composable () -> Unit
+    children: @Composable () -> Unit
 ) {
-    Container(
+    Surface(
         modifier = LayoutPadding(
             left = 32.dp,
             top = 32.dp,
             right = 32.dp,
             bottom = 32.dp
-        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp)
-    ) {
-        Surface(
-            color = MaterialTheme.colors().surface,
-            elevation = 24.dp,
-            shape = style.shape,
-            children = child
-        )
-    }
+        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp),
+        color = MaterialTheme.colors().surface,
+        elevation = 24.dp,
+        shape = style.shape,
+        children = children
+    )
 }

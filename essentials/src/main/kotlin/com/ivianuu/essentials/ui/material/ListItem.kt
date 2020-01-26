@@ -31,13 +31,14 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Immutable
 data class ListItemStyle(
@@ -58,7 +59,7 @@ val ListItemStyleAmbient =
 fun ListItem(
     title: String? = null,
     subtitle: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     enabled: Boolean = true,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
@@ -67,7 +68,7 @@ fun ListItem(
     ListItem(
         title = title.asTextComposable(),
         subtitle = subtitle.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         enabled = enabled,
         style = style,
         onClick = onClick,

@@ -21,9 +21,10 @@ import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.material.Checkbox
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun CheckboxPreference(
@@ -32,7 +33,7 @@ fun CheckboxPreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null
+    image: Renderable? = null
 ) {
     CheckboxPreference(
         valueController = ValueController(box),
@@ -40,7 +41,7 @@ fun CheckboxPreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable()
+        leading = image.asRenderableComposable()
     )
 }
 

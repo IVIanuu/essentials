@@ -27,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 
@@ -36,8 +36,8 @@ fun WriteSettingsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        Metadata.IsWriteSettingsPermission with Unit,
-        Metadata.Intent with Intent(
+        Metadata.IsWriteSettingsPermission withValue Unit,
+        Metadata.Intent withValue Intent(
             Settings.ACTION_MANAGE_WRITE_SETTINGS,
             "package:${context.packageName}".toUri()
         ),

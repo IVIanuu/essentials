@@ -18,39 +18,72 @@ package com.ivianuu.essentials.coil
 
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
+import androidx.compose.Stable
 import androidx.compose.ambientOf
 import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
+import androidx.ui.core.ambientDensity
+import androidx.ui.foundation.DrawImage
+import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
+import androidx.ui.unit.Size
+import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
+import androidx.ui.unit.withDensity
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.AvatarIconStyle
-import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.ImageRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
+
+@Stable
+class CoilRenderable(
+    private val data: Any,
+    private val tintColor: Color? = null,
+    private val size: Size? = null
+) : Renderable {
+    @Composable
+    override fun content() {
+        val image = loadImage(data = data, size = size)
+        val density = ambientDensity()
+        Container(
+            width = size?.width ?: withDensity(density) { image?.width?.ipx?.toDp() } ?: 0.dp,
+            height = size?.height ?: withDensity(density) { image?.height?.ipx?.toDp() } ?: 0.dp
+        ) {
+            if (image != null) {
+                RepaintBoundary {
+                    DrawImage(image = image, tint = tintColor)
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun loadImage(
     data: Any,
     placeholder: Image? = PlaceholderAmbient.current,
+    size: Size? = null,
     imageLoader: ImageLoader = inject()
 ): Image? {
     return if (placeholder != null) {
-        loadImage(data = data, placeholder = placeholder, imageLoader = imageLoader)
+        loadImage(data = data, placeholder = placeholder, size = size, imageLoader = imageLoader)
     } else {
-        loadImage(data = data, imageLoader = imageLoader)
+        loadImage(data = data, imageLoader = imageLoader, size = size)
     }
 }
 
-@JvmName("imageNonNullPlaceholder")
 @Composable
 fun loadImage(
     data: Any,
     placeholder: Image,
+    size: Size? = null,
     imageLoader: ImageLoader = inject()
-): Image = loadImage(data = data, imageLoader = imageLoader) ?: placeholder
+): Image = loadImage(data = data, size = size, imageLoader = imageLoader) ?: placeholder
 
 // todo ir
 suspend fun ImageLoader.getAnyNoInline(
@@ -61,10 +94,21 @@ suspend fun ImageLoader.getAnyNoInline(
 @Composable
 fun loadImage(
     data: Any,
+    size: Size? = null,
     imageLoader: ImageLoader = inject()
 ): Image? {
-    return load(placeholder = null, key = data to imageLoader) {
-        imageLoader.getAnyNoInline(data).toImage()
+    val density = ambientDensity()
+    return load(placeholder = null, key = listOf(data, size, imageLoader)) {
+        imageLoader.getAnyNoInline(data) {
+            if (size != null) {
+                withDensity(density) {
+                    size(
+                        width = size.width.toIntPx().value,
+                        height = size.height.toIntPx().value
+                    )
+                }
+            }
+        }.toImage()
     }
 }
 
@@ -78,7 +122,7 @@ fun Image(
     placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image?) -> Unit = {
-        if (it != null) Icon(image = it, style = AvatarIconStyle())
+        if (it != null) DrawRenderable(ImageRenderable(it))
     }
 ) {
     val loadedImage = loadImage(
@@ -102,7 +146,7 @@ fun Image(
     placeholder: Image,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image) -> Unit = {
-        Icon(image = it, style = AvatarIconStyle())
+        DrawRenderable(ImageRenderable(it))
     }) {
     val loadedImage = loadImage(
         placeholder = placeholder,

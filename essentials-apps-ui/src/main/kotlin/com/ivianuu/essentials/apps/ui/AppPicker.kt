@@ -25,18 +25,18 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.coil.CoilRenderable
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.AvatarIconStyle
-import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.painter.AvatarSize
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -78,15 +78,11 @@ private fun AppInfo(
     onClick: () -> Unit
 ) {
     ListItem(
-        title = { Text(app.appName) },
-        leading = {
-            Image(
-                data = AppIcon(app.packageName),
-                modifier = LayoutSize(width = 40.dp, height = 40.dp)
-            ) {
-                if (it != null) Icon(image = it, style = AvatarIconStyle())
-            }
-        },
+        title = app.appName,
+        image = CoilRenderable(
+            data = AppIcon(packageName = app.packageName),
+            size = AvatarSize
+        ),
         onClick = onClick
     )
 }
@@ -95,7 +91,6 @@ private fun AppInfo(
 internal class AppPickerViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore,
-    dispatchers: AppDispatchers,
     private val navigator: NavigatorState
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 

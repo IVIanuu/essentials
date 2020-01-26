@@ -35,13 +35,13 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 
-// todo remove hardcoded values
-// todo add more styleable attributes such as corner radius
+// todo rename to dialog
 
 @Composable
 fun MaterialDialog(
@@ -182,7 +182,8 @@ private fun DialogContentLayout(
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
                 Container(
-                    modifier = LayoutPadding(
+                    alignment = Alignment.CenterLeft,
+                    padding = EdgeInsets(
                         left = 24.dp,
                         top = 24.dp,
                         right = 24.dp,
@@ -202,12 +203,13 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Content) {
                 Container(
-                    modifier = LayoutPadding(
+                    padding = EdgeInsets(
                         top = if (header == null) 24.dp else 0.dp,
                         left = if (applyContentPadding) 24.dp else 0.dp,
                         right = if (applyContentPadding) 24.dp else 0.dp,
                         bottom = if (buttons == null) 24.dp else 0.dp
                     ),
+                    alignment = Alignment.TopLeft,
                     children = content
                 )
             }
@@ -223,7 +225,7 @@ private fun DialogContentLayout(
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
                     Container(
-                        modifier = LayoutPadding(top = 28.dp),
+                        padding = EdgeInsets(top = 28.dp),
                         children = buttons
                     )
                 } else {

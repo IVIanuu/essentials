@@ -30,7 +30,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionRequestHandler
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CompletableDeferred
@@ -41,7 +41,7 @@ fun RuntimePermission(
     vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        Metadata.RuntimePermissionName with name,
+        Metadata.RuntimePermissionName withValue name,
         *metadata
     )
 )

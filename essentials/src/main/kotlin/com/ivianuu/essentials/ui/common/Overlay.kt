@@ -24,9 +24,14 @@ import androidx.compose.ambientOf
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
+import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.unit.IntPx
+import androidx.ui.unit.IntPxPosition
+import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable
@@ -116,17 +121,15 @@ private fun OverlayLayout(
         val childConstraints = constraints.tightMax()
 
         val placeables = measurables
-            .map { it.measure(childConstraints) to it.parentData as OverlayEntryParentData }
+            .filter { (it.parentData as OverlayEntryParentData).isVisible }
+            .map { it.measure(childConstraints) }
 
         val width = constraints.maxWidth
         val height = constraints.maxHeight
 
         layout(width, height) {
-            placeables.forEach { (placeable, parentData) ->
-                placeable.place(
-                    x = if (parentData.isVisible) IntPx.Zero else width,
-                    y = if (parentData.isVisible) IntPx.Zero else height
-                )
+            placeables.forEach { placeable ->
+                placeable.place(IntPxPosition.Origin)
             }
         }
     }

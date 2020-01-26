@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.graphics.Image
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
 
 fun String?.asTextComposable(): @Composable (() -> Unit)? = if (this == null) null else {
     {
@@ -27,8 +27,8 @@ fun String?.asTextComposable(): @Composable (() -> Unit)? = if (this == null) nu
     }
 }
 
-fun Image?.asIconComposable(): @Composable (() -> Unit)? = if (this == null) null else {
+fun Renderable?.asRenderableComposable(): @Composable (() -> Unit)? = if (this == null) null else {
     {
-        Icon(this)
+        DrawRenderable(this)
     }
 }

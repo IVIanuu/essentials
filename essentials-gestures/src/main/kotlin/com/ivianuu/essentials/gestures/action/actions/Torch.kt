@@ -1,11 +1,21 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.icon.Essentials
+import com.ivianuu.essentials.icon.EssentialsIcons
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.FlashOff
+import com.ivianuu.essentials.material.icons.filled.FlashOn
+import com.ivianuu.essentials.material.icons.group
+import com.ivianuu.essentials.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.material.icons.path
 import com.ivianuu.essentials.torch.TorchManager
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -34,14 +44,13 @@ internal class TorchActionExecutor(
 
 @Factory
 internal class TorchActionIconProvider(
-    private val resourceProvider: ResourceProvider,
     private val torchManager: TorchManager
 ) : ActionIconProvider {
-    override val icon: Flow<ActionIcon>
+    override val icon: Flow<Renderable>
         get() = torchManager.torchState
             .map {
-                if (it) R.drawable.es_ic_torch_on else R.drawable.es_ic_torch_off
+                if (it) Icons.Default.FlashOn
+                else Icons.Default.FlashOff
             }
-            .map { resourceProvider.getDrawable(it) }
-            .map { ActionIcon(it) }
+            .map { VectorRenderable(it) }
 }

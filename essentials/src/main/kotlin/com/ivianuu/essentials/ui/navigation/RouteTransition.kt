@@ -23,6 +23,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
+import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Modifier
@@ -106,7 +107,11 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()
     @Composable
     override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
-        Container(modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None, children = children)
+        Container(
+            modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None,
+            alignment = Alignment.TopLeft,
+            children = children
+        )
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.ui.graphics.Image
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.ModuleBuilder
 import kotlinx.coroutines.flow.Flow
@@ -19,14 +20,8 @@ data class Action(
     val executor: ActionExecutor
 )
 
-@Immutable
-data class ActionIcon(
-    val image: Image,
-    val tint: Boolean = true
-)
-
 interface ActionIconProvider {
-    val icon: Flow<ActionIcon>
+    val icon: Flow<Renderable>
 }
 
 interface ActionExecutor {
@@ -72,7 +67,7 @@ inline fun <reified T : ActionFactory> ModuleBuilder.bindActionFactory() {
 
 interface ActionPickerDelegate {
     val title: String
-    val icon: Image
+    val icon: Renderable
     suspend fun getResult(navigator: NavigatorState): ActionPickerResult?
 }
 

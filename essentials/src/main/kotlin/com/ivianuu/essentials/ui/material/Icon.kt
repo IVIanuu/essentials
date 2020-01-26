@@ -17,53 +17,19 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.ambientOf
-import androidx.ui.foundation.DrawImage
-import androidx.ui.foundation.contentColor
-import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.unit.Size
-import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Clickable
-
-@Immutable
-data class IconStyle(
-    val size: Size = Size(24.dp, 24.dp),
-    val tint: Boolean = true
-)
-
-val IconStyleAmbient =
-    ambientOf { IconStyle() }
-
-@Composable
-fun AvatarIconStyle() = IconStyle(
-    size = Size(40.dp, 40.dp),
-    tint = false
-)
-
-@Composable
-fun Icon(
-    image: Image,
-    style: IconStyle = IconStyleAmbient.current
-) {
-    Container(
-        width = style.size.width,
-        height = style.size.height
-    ) {
-        val color = if (style.tint) contentColor() else null
-        DrawImage(image = image, tint = color)
-    }
-}
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun IconButton(
-    image: Image,
+    image: Renderable,
     onClick: (() -> Unit)? = null
 ) {
     IconButton(onClick = onClick) {
-        Icon(image = image)
+        DrawRenderable(renderable = image)
     }
 }
 

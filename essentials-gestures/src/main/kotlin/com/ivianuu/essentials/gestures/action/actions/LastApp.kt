@@ -10,6 +10,8 @@ import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Repeat
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
@@ -24,7 +26,7 @@ internal val EsLastAppActionModule = Module {
     bindAction(
         key = "last_app",
         title = { getStringResource(R.string.es_action_last_app) },
-        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_repeat) },
+        iconProvider = { SingleActionIconProvider(Icons.Default.Repeat) },
         permissions = { listOf(actionPermission { accessibility }) },
         unlockScreen = { true },
         executor = { get<LastAppActionExecutor>() }

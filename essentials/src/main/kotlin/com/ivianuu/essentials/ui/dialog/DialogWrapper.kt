@@ -18,8 +18,11 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.state
+import androidx.ui.core.Alignment
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.layout.Center
+import androidx.ui.layout.Container
+import androidx.ui.layout.Stack
 import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
@@ -44,15 +47,17 @@ fun DialogWrapper(
         }
     }
 
-    PressGestureDetector(
-        onPress = if (dismissible) {
-            { _: PxPosition -> dismissed.value = true }
-        } else null
-    ) {
-        DialogScrim()
-        SafeArea {
-            Center {
-                PressGestureDetector(children = dialog)
+    Stack {
+        PressGestureDetector(
+            onPress = if (dismissible) {
+                { _: PxPosition -> dismissed.value = true }
+            } else null
+        ) {
+            DialogScrim()
+            SafeArea {
+                Center {
+                    PressGestureDetector(children = dialog)
+                }
             }
         }
     }

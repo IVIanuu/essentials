@@ -11,13 +11,16 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Apps
 import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
@@ -78,8 +81,8 @@ internal class AppActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_app)
-    override val icon: Image
-        get() = resourceProvider.getDrawable(R.drawable.es_ic_apps)
+    override val icon: Renderable
+        get() = VectorRenderable(Icons.Default.Apps)
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val app = navigator.push<AppInfo>(
@@ -94,7 +97,7 @@ internal class AppActionIconProvider(
     private val lazyDelegate: Lazy<CoilActionIconProvider>,
     @Param private val packageName: String
 ) : ActionIconProvider {
-    override val icon: Flow<ActionIcon>
+    override val icon: Flow<Renderable>
         get() = lazyDelegate { parametersOf(AppIcon(packageName)) }.icon
 }
 

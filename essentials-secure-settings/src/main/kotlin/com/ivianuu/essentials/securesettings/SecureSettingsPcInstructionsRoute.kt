@@ -17,12 +17,14 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Link
 import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 
@@ -53,13 +55,13 @@ val SecureSettingsInstructionsRoute = Route {
         )
 
         ListItem(
-            image = drawableResource(R.drawable.es_ic_link),
+            image = VectorRenderable(Icons.Default.Link),
             title = stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary),
             onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
         )
 
         ListItem(
-            image = drawableResource(R.drawable.es_ic_link),
+            image = VectorRenderable(Icons.Default.Link),
             title = stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary),
             onClick = openUrlOnClick {
                 "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
@@ -67,7 +69,7 @@ val SecureSettingsInstructionsRoute = Route {
         )
 
         ListItem(
-            image = drawableResource(R.drawable.es_ic_link),
+            image = VectorRenderable(Icons.Default.Link),
             title = stringResource(R.string.es_pref_secure_settings_link_xda_summary),
             onClick = openUrlOnClick {
                 "https://www.xda-developers.com/install-adb-windows-macos-linux/"

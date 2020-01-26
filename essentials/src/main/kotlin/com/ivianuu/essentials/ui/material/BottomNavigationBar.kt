@@ -29,7 +29,6 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -50,6 +49,8 @@ import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperState
+import com.ivianuu.essentials.ui.painter.DrawRenderable
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Immutable
 data class BottomNavigationBarStyle(
@@ -153,14 +154,14 @@ fun BottomNavigationBarItem(
 fun BottomNavigationBarItem(
     onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
     text: String,
-    icon: Image
+    icon: Renderable
 ) {
     BottomNavigationBarItem(onSelected = onSelected) {
         Column(
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
-            Icon(image = icon)
+            DrawRenderable(renderable = icon)
             Text(text = text, style = MaterialTheme.typography().caption)
         }
     }

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
@@ -44,8 +45,14 @@ val ChipsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar("Chips") },
         body = {
-            Container(modifier = LayoutPadding(all = 8.dp)) {
-                FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
+            Container(
+                modifier = LayoutPadding(all = 8.dp),
+                alignment = Alignment.TopLeft
+            ) {
+                FlowRow(
+                    mainAxisSpacing = 8.dp,
+                    crossAxisSpacing = 8.dp
+                ) {
                     remember { Names.shuffled() }.forEach { name ->
                         Chip(name = name)
                     }

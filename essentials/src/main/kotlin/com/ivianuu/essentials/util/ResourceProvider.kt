@@ -6,9 +6,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
+import androidx.ui.graphics.imageFromResource
+import androidx.ui.res.vectorResource
+import androidx.ui.text.font.Font
+import androidx.ui.text.font.font
 import androidx.ui.unit.Dp
 import androidx.ui.unit.px
-import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.injekt.Factory
 
 @Factory
@@ -17,7 +20,9 @@ class ResourceProvider(
     private val densityProvider: DensityProvider
 ) {
 
-    fun getBitmap(id: Int): Image = BitmapFactory.decodeResource(context.resources, id).toImage()
+    fun getBitmap(id: Int): Image {
+        return imageFromResource(context.resources, id)
+    }
 
     fun getBoolean(id: Int): Boolean = context.resources.getBoolean(id)
 
@@ -27,11 +32,11 @@ class ResourceProvider(
         context.resources.getDimension(id).px.toDp()
     }
 
-    fun getDrawable(id: Int): Image = ContextCompat.getDrawable(context, id)!!.toImage()
+    fun getDrawable(id: Int): Image = getBitmap(id) // todo
 
     fun getFloat(id: Int): Float = ResourcesCompat.getFloat(context.resources, id)
 
-    // todo fun Context.getFont(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
+    fun getFont(id: Int): Font = font(id)
 
     fun getInt(id: Int): Int = context.resources.getInteger(id)
 

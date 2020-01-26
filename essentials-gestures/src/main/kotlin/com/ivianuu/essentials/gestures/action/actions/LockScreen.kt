@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.SettingsPower
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
@@ -15,7 +17,7 @@ internal val EsLockScreenActionModule = Module {
     bindAction(
         key = "lock_screen",
         title = { getStringResource(R.string.es_action_lock_screen) },
-        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_power_settings) },
+        iconProvider = { SingleActionIconProvider(Icons.Default.SettingsPower) },
         permissions = {
             listOf(actionPermission {
                 if (get<SystemBuildInfo>().sdk >= 28) accessibility

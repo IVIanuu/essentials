@@ -4,9 +4,13 @@ import android.net.wifi.WifiManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Wifi
+import com.ivianuu.essentials.material.icons.filled.WifiOff
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -35,10 +39,9 @@ internal class WifiActionExecutor(private val wifiManager: WifiManager) :
 @Factory
 internal class WifiActionIconProvider(
     broadcastFactory: BroadcastFactory,
-    private val resourceProvider: ResourceProvider,
     private val wifiManager: WifiManager
 ) : ActionIconProvider {
-    override val icon: Flow<ActionIcon> = broadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)
+    override val icon: Flow<Renderable> = broadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)
         .map {
             val state =
                 it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
@@ -46,11 +49,8 @@ internal class WifiActionIconProvider(
         }
         .onStart { emit(wifiManager.isWifiEnabled) }
         .map { wifiEnabled ->
-            ActionIcon(
-                image = resourceProvider.getDrawable(
-                    if (wifiEnabled) R.drawable.es_ic_network_wifi
-                    else R.drawable.es_ic_signal_wifi_off
-                )
-            )
+            if (wifiEnabled) Icons.Default.Wifi
+            else Icons.Default.WifiOff
         }
+        .map { VectorRenderable(it) }
 }

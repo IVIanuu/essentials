@@ -22,10 +22,11 @@ import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.unfoldBox
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun <T> ValueController(
@@ -71,13 +72,13 @@ fun <T> PreferenceWrapper(
 fun PreferenceLayout(
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     onClick: (() -> Unit)? = null
 ) {
     PreferenceLayout(
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         onClick = onClick
     )
 }

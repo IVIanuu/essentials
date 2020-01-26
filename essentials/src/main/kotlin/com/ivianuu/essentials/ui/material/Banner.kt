@@ -49,7 +49,7 @@ fun Banner(
                 Spacer(LayoutWidth(16.dp))
 
                 if (leading != null) {
-                    Providers(IconStyleAmbient provides AvatarIconStyle(), children = leading)
+                    leading()
                     Spacer(LayoutWidth(16.dp))
                 }
 

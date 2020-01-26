@@ -27,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -38,8 +38,8 @@ fun NotificationListenerPermission(
     vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        Metadata.NotificationListenerClass with serviceClass,
-        Metadata.Intent with Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
+        Metadata.NotificationListenerClass withValue serviceClass,
+        Metadata.Intent withValue Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
         *metadata
     )
 )

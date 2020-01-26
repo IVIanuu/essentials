@@ -29,7 +29,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.permission.with
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 
@@ -39,8 +39,8 @@ fun IgnoreBatteryOptimizationsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
 ) = Permission(
     metadata = metadataOf(
-        Metadata.IgnoreBatteryOptimizationsPermission with Unit,
-        Metadata.Intent with Intent(
+        Metadata.IgnoreBatteryOptimizationsPermission withValue Unit,
+        Metadata.Intent withValue Intent(
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
             "package:${context.packageName}".toUri()
         ),

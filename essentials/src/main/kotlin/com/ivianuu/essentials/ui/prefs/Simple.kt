@@ -19,22 +19,23 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
-import com.ivianuu.essentials.ui.common.asIconComposable
+import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun SimplePreference(
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
-    image: Image? = null,
+    image: Renderable? = null,
     onClick: (() -> Unit)? = null
 ) {
     SimplePreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
-        leading = image.asIconComposable(),
+        leading = image.asRenderableComposable(),
         onClick = onClick
     )
 }

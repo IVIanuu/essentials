@@ -18,6 +18,14 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.vector.VectorAsset
+import com.ivianuu.essentials.gestures.action.actions.Settings
+import com.ivianuu.essentials.icon.Essentials
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Email
+import com.ivianuu.essentials.material.icons.filled.Home
+import com.ivianuu.essentials.material.icons.filled.Search
+import com.ivianuu.essentials.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
@@ -26,7 +34,7 @@ import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 
 val BottomNavigationRoute = Route {
     ProvideBottomNavigationController(
@@ -42,7 +50,7 @@ val BottomNavigationRoute = Route {
             bottomBar = {
                 BottomNavigationBar<BottomNavItem> { item ->
                     BottomNavigationBarItem(
-                        icon = drawableResource(item.iconRes),
+                        icon = VectorRenderable(item.icon),
                         text = item.title
                     )
                 }
@@ -53,32 +61,32 @@ val BottomNavigationRoute = Route {
 
 private enum class BottomNavItem(
     val title: String,
-    val iconRes: Int,
+    val icon: VectorAsset,
     val color: Color
 ) {
     Home(
-        "Home",
-        R.drawable.es_ic_home,
-        Color.Yellow
+        title = "Home",
+        icon = Icons.Default.Home,
+        color = Color.Yellow
     ),
     Mails(
-        "Mails",
-        R.drawable.ic_email,
-        Color.Red
+        title = "Mails",
+        icon = Icons.Default.Email,
+        color = Color.Red
     ),
     Search(
-        "Search",
-        R.drawable.es_ic_search,
-        Color.Blue
+        title = "Search",
+        icon = Icons.Default.Search,
+        color = Color.Blue
     ),
     Schedule(
-        "Schedule",
-        R.drawable.es_ic_view_agenda,
-        Color.Cyan
+        title = "Schedule",
+        icon = Icons.Default.ViewAgenda,
+        color = Color.Cyan
     ),
     Settings(
-        "Settings",
-        R.drawable.es_ic_settings,
-        Color.Green
+        title = "Settings",
+        icon = Icons.Essentials.Settings,
+        color = Color.Green
     )
 }

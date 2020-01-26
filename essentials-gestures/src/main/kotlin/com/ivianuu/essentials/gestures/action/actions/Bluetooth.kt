@@ -4,10 +4,13 @@ import android.bluetooth.BluetoothAdapter
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.Bluetooth
+import com.ivianuu.essentials.material.icons.filled.BluetoothDisabled
+import com.ivianuu.essentials.ui.painter.Renderable
+import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
@@ -41,15 +44,16 @@ internal class BluetoothActionExecutor : ActionExecutor {
 
 @Factory
 internal class BluetoothActionIconProvider(
-    private val broadcastFactory: BroadcastFactory,
-    private val resourceProvider: ResourceProvider
+    private val broadcastFactory: BroadcastFactory
 ) : ActionIconProvider {
-    override val icon: Flow<ActionIcon>
+    override val icon: Flow<Renderable>
         get() = broadcastFactory.create(BluetoothAdapter.ACTION_STATE_CHANGED)
             .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
             .onStart { emit(BluetoothAdapter.getDefaultAdapter()?.state ?: BluetoothAdapter.STATE_OFF) }
             .map { it == BluetoothAdapter.STATE_ON || it == BluetoothAdapter.STATE_TURNING_ON }
-            .map { if (it) R.drawable.es_ic_bluetooth else R.drawable.es_ic_bluetooth_disabled }
-            .map { resourceProvider.getDrawable(it) }
-            .map { ActionIcon(it) }
+            .map {
+                if (it) Icons.Default.Bluetooth
+                else Icons.Default.BluetoothDisabled
+            }
+            .map { VectorRenderable(it) }
 }

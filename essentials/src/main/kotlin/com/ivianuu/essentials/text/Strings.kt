@@ -16,7 +16,9 @@ import kotlin.reflect.KProperty
  * ´´´
  *
  */
-object Strings
+object Strings {
+    object Essentials
+}
 
 fun lazyString(init: () -> String) = unsafeLazy(init)
 
