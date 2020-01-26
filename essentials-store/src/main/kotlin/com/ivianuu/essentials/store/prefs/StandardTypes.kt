@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.store.prefs
 
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
+import com.ivianuu.essentials.store.map
 import kotlin.time.Duration
 
 fun PrefBoxFactory.boolean(
@@ -99,20 +101,23 @@ private object StringSetSerializer : DiskBox.Serializer<Set<String>> {
 fun PrefBoxFactory.duration(
     name: String,
     defaultValue: Duration
-) = box(name = name, defaultValue = defaultValue, serializer = DurationSerializer)
+): Box<Duration> {
+    return double(name = name, defaultValue = defaultValue.toDouble())
+        .map(
+            fromRaw = { it.toDuration() },
+            toRaw = { it.toDouble() }
+        )
+}
 
-private object DurationSerializer : DiskBox.Serializer<Duration> {
-    override fun deserialize(serialized: String): Duration {
-        return Duration::class.java.getDeclaredConstructor(Double::class.java)
-            .also { it.isAccessible = true }
-            .newInstance(serialized.toDouble())
-    }
+private fun Double.toDuration(): Duration {
+    return Duration::class.java.getDeclaredConstructor(Double::class.java)
+        .also { it.isAccessible = true }
+        .newInstance(this)
+}
 
-    override fun serialize(value: Duration): String {
-        return value.javaClass.declaredFields
-            .first { it.type == Double::class.java }
-            .also { it.isAccessible = true }
-            .get(value)!!
-            .toString()
-    }
+private fun Duration.toDouble(): Double {
+    return javaClass.declaredFields
+        .first { it.type == Double::class.java }
+        .also { it.isAccessible = true }
+        .get(this)!! as Double
 }
