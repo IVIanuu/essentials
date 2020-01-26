@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import androidx.ui.graphics.Image
 import androidx.ui.graphics.vector.VectorAsset
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.R
@@ -18,7 +17,6 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Create
 import com.ivianuu.essentials.material.icons.lazyMaterialIcon
 import com.ivianuu.essentials.material.icons.path
 import com.ivianuu.essentials.shortcutpicker.Shortcut

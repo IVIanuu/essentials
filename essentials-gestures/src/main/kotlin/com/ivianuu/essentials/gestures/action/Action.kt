@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.Immutable
-import androidx.ui.graphics.Image
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState

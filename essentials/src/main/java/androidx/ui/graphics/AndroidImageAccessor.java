@@ -1,7 +1,6 @@
 package androidx.ui.graphics;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
 public class AndroidImageAccessor {
 

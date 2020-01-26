@@ -11,7 +11,6 @@ import com.ivianuu.essentials.material.icons.filled.Wifi
 import com.ivianuu.essentials.material.icons.filled.WifiOff
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable
-import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get

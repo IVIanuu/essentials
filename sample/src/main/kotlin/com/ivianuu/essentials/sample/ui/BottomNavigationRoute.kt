@@ -26,7 +26,6 @@ import com.ivianuu.essentials.material.icons.filled.Email
 import com.ivianuu.essentials.material.icons.filled.Home
 import com.ivianuu.essentials.material.icons.filled.Search
 import com.ivianuu.essentials.material.icons.filled.ViewAgenda
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper

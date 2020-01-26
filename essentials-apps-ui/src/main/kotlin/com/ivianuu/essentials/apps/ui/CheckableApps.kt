@@ -20,14 +20,11 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.compose.onCommit
-import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
-import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilRenderable
-import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel

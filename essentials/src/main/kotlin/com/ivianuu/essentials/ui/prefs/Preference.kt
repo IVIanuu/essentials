@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Opacity
-import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.asRenderableComposable

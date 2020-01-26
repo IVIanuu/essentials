@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
-import androidx.ui.graphics.Image
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon

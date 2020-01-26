@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.torch
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
@@ -26,7 +25,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
-import androidx.ui.graphics.Color
 import com.ivianuu.essentials.foreground.AbstractNotificationFactory
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.FlashOn

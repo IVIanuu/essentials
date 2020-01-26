@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.stateFor
-import androidx.ui.graphics.Image
 import androidx.ui.input.KeyboardType
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R

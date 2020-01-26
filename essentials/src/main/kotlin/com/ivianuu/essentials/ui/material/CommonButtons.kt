@@ -19,9 +19,6 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Alignment
-import androidx.ui.graphics.Image
-import androidx.ui.graphics.vector.VectorAsset
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.ArrowBack
 import com.ivianuu.essentials.material.icons.filled.Menu

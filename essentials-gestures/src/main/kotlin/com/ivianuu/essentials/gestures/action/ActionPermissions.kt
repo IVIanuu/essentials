@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.Accessibility
 import com.ivianuu.essentials.material.icons.filled.Adb

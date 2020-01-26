@@ -21,7 +21,6 @@ import androidx.compose.Pivotal
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
-import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.LayoutGravity

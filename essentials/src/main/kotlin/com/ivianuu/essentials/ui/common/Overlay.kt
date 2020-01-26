@@ -24,14 +24,9 @@ import androidx.compose.ambientOf
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
-import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.layout.Container
-import androidx.ui.layout.LayoutSize
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxPosition
-import androidx.ui.unit.PxPosition
 import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable

@@ -5,7 +5,6 @@ import com.ivianuu.essentials.gestures.GlobalActions
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Param

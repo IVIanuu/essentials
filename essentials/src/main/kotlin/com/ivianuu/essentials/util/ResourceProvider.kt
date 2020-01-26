@@ -1,13 +1,10 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.imageFromResource
-import androidx.ui.res.vectorResource
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.font
 import androidx.ui.unit.Dp

@@ -22,7 +22,6 @@ import androidx.compose.ambientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.gesture.LongPressGestureDetector
-import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets

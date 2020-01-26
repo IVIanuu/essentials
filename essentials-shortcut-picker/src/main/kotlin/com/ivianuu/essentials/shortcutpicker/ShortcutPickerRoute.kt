@@ -31,13 +31,11 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.painter.AvatarSize
-import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
 import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme

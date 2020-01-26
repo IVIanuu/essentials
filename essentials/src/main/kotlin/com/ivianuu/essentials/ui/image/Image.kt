@@ -3,16 +3,8 @@ package com.ivianuu.essentials.ui.image
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.Icon
-import android.view.View
-import android.widget.FrameLayout
 import androidx.compose.Composable
-import androidx.compose.Compose
-import androidx.compose.compositionReference
-import androidx.compose.onPreCommit
-import androidx.compose.remember
 import androidx.core.graphics.drawable.toBitmap
-import androidx.ui.core.Draw
 import androidx.ui.graphics.AndroidImageAccessor
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
@@ -27,16 +19,11 @@ import androidx.ui.graphics.vector.VectorPath
 import androidx.ui.graphics.vector.VectorScope
 import androidx.ui.graphics.vector.composeVector
 import androidx.ui.graphics.vector.disposeVector
-import androidx.ui.graphics.withSave
 import androidx.ui.unit.Density
-import androidx.ui.unit.IntPx
-import androidx.ui.unit.IntPxSize
-import androidx.ui.unit.Px
 import androidx.ui.unit.PxSize
 import androidx.ui.unit.px
 import androidx.ui.unit.round
 import androidx.ui.unit.withDensity
-import com.github.ajalt.timberkt.d
 
 fun Drawable.toImage(): Image = toBitmap().toImage()
 

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.compose.Composable
 import com.ivianuu.essentials.ui.painter.Renderable
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

@@ -21,7 +21,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp

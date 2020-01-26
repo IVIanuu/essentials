@@ -26,7 +26,6 @@ import androidx.ui.core.Placeable
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.Divider
@@ -35,7 +34,6 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment

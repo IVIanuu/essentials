@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Providers
 import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.ui.core.CurrentTextStyleProvider

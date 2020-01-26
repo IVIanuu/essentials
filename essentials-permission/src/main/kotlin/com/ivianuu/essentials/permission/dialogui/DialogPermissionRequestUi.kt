@@ -36,7 +36,6 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.bindPermissionRequestUi
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
