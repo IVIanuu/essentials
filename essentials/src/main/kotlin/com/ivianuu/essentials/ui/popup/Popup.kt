@@ -23,12 +23,14 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
 data class PopupStyle(
-    val shape: Shape = RoundedCornerShape(size = 4.dp)
+    val shape: Shape = RoundedCornerShape(size = 4.dp),
+    val elevation: Dp = 8.dp
 )
 
 val PopupStyleAmbient =
@@ -40,7 +42,7 @@ fun Popup(
     children: @Composable () -> Unit
 ) {
     Surface(
-        elevation = 8.dp,
+        elevation = style.elevation,
         shape = style.shape
     ) {
         Container(

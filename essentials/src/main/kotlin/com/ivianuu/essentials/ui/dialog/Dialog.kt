@@ -24,6 +24,7 @@ import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.material.Surface
 
@@ -31,7 +32,8 @@ import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
 data class DialogStyle(
-    val shape: Shape = RoundedCornerShape(size = 4.dp)
+    val shape: Shape = RoundedCornerShape(size = 4.dp),
+    val elevation: Dp = 24.dp
 )
 
 val DialogStyleAmbient = ambientOf { DialogStyle() }
@@ -49,7 +51,7 @@ fun Dialog(
             bottom = 32.dp
         ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp),
         color = MaterialTheme.colors().surface,
-        elevation = 24.dp,
+        elevation = style.elevation,
         shape = style.shape,
         children = children
     )
