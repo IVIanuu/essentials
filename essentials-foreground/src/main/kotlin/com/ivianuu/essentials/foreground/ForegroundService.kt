@@ -25,6 +25,7 @@ import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 class ForegroundService : EsService() {
 
@@ -54,7 +55,7 @@ class ForegroundService : EsService() {
         d { "stop" }
     }
 
-    private fun update() {
+    private suspend fun update() {
         val newComponents = foregroundManager.components
 
         d { "update components $newComponents" }
@@ -72,7 +73,9 @@ class ForegroundService : EsService() {
         if (newComponents.isEmpty()) return
 
         newComponents.forEachIndexed { index, component ->
-            val notification = component.notificationFactory.buildNotification()
+            val notification = withContext(dispatchers.main) {
+                component.notificationFactory.buildNotification()
+            }
             if (index == 0) {
                 startForeground(component.id, notification)
             } else {

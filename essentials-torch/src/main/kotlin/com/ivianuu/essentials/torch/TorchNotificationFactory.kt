@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.torch
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
@@ -23,9 +24,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
+import androidx.ui.graphics.Color
 import com.ivianuu.essentials.foreground.AbstractNotificationFactory
+import com.ivianuu.essentials.material.icons.Icons
+import com.ivianuu.essentials.material.icons.filled.FlashOn
+import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.Factory
 
 @Factory
@@ -49,7 +56,6 @@ internal class TorchNotificationFactory(
                 setAutoCancel(true)
                 setContentTitle(resourceProvider.getString(R.string.es_notif_title_torch))
                 setContentText(resourceProvider.getString(R.string.es_notif_text_torch))
-                setSmallIcon(R.drawable.es_ic_torch_on)
                 setContentIntent(
                     PendingIntent.getBroadcast(
                         context,
@@ -60,6 +66,9 @@ internal class TorchNotificationFactory(
                 )
             }
             .build()
+            .apply {
+                setSmallIcon(Icon.createWithBitmap(Icons.Default.FlashOn.toBitmap(context)))
+            }
 
     private companion object {
         private const val NOTIFICATION_CHANNEL_ID = "torch"
