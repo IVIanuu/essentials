@@ -14,7 +14,7 @@ public final class ComposableLayoutCompositionReference implements CompositionRe
 
     @NotNull
     @Override
-    public BuildableMap<Ambient<Object>, ValueHolder<Object>> getAmbientScope() {
+    public BuildableMap<Ambient<Object>, State<Object>> getAmbientScope() {
         return delegate.getAmbientScope();
     }
 
