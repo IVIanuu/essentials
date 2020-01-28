@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev445"
+    const val version = "${Build.versionName}-dev447"
 }
 
 object Deps {
@@ -107,7 +107,7 @@ object Deps {
     }
     
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev445"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev447"
     const val essentialsMaterialIcons =
         "com.ivianuu.essentials:essentials-material-icons:0.0.1-dev445"
 
