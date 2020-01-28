@@ -80,11 +80,12 @@ fun ScrollableList(
     itemFactory: (Int) -> @Composable (() -> Unit)?
 ) {
     val state = remember { ScrollableListState() }
-    state.position = position
     state.composableFactory = itemFactory
     state.context = ContextAmbient.current
     state.compositionRef = compositionReference()
     state.forceRecompose = true
+    state.position = position
+    state.direction = direction
 
     Scrollable(
         position = state.position,
@@ -121,6 +122,8 @@ private class ScrollableListState {
     lateinit var compositionRef: CompositionReference
     lateinit var context: Context
     lateinit var position: ScrollPosition
+
+    lateinit var direction: Axis
 
     val rootNode get() = rootNodeRef.value!!
 
@@ -191,12 +194,22 @@ private class ScrollableListState {
 
             d { "begin measure $version scroll pos $scrollPosition constraints $constraints" }
 
-            // todo direction
-            val viewportMainAxisSize = constraints.maxHeight
-            val viewportCrossAxisSize = constraints.maxWidth
+            val viewportMainAxisSize: IntPx
+            val viewportCrossAxisSize: IntPx
+            val childConstraints: Constraints
 
-            // todo direction
-            val childConstraints = Constraints.fixedWidth(viewportCrossAxisSize)
+            when (direction) {
+                Axis.Horizontal -> {
+                    viewportMainAxisSize = constraints.maxWidth
+                    viewportCrossAxisSize = constraints.maxHeight
+                    childConstraints = Constraints.fixedHeight(viewportCrossAxisSize)
+                }
+                Axis.Vertical -> {
+                    viewportMainAxisSize = constraints.maxHeight
+                    viewportCrossAxisSize = constraints.maxWidth
+                    childConstraints = Constraints.fixedWidth(viewportCrossAxisSize)
+                }
+            }
 
             val cacheSize = viewportMainAxisSize / 2
 
@@ -212,8 +225,8 @@ private class ScrollableListState {
                     // There are no children.
                     return doLayout(
                         measureScope,
-                        viewportCrossAxisSize,
                         viewportMainAxisSize,
+                        viewportCrossAxisSize,
                         scrollPosition
                     )
                 }
@@ -238,15 +251,14 @@ private class ScrollableListState {
                         trailingChildWithLayout = earliestUsefulChild
                         break
                     } else {
-                        // todo ignore model reads
                         rootNode.ignoreModelReads {
                             position.correctBy(-scrollPosition)
                         }
                         d { "end measure $version ran out of children with correction $scrollPosition" }
                         return doLayout(
                             measureScope,
-                            viewportCrossAxisSize,
                             viewportMainAxisSize,
+                            viewportCrossAxisSize,
                             scrollPosition
                         )
                     }
@@ -304,8 +316,8 @@ private class ScrollableListState {
                     d { "end measure $version todo" }
                     return doLayout(
                         measureScope,
-                        viewportCrossAxisSize,
                         viewportMainAxisSize,
+                        viewportCrossAxisSize,
                         scrollPosition
                     )
                 }
@@ -343,8 +355,8 @@ private class ScrollableListState {
 
             return doLayout(
                 measureScope,
-                viewportCrossAxisSize,
                 viewportMainAxisSize,
+                viewportCrossAxisSize,
                 scrollPosition
             )
         }
@@ -373,25 +385,32 @@ private class ScrollableListState {
 
         childNode.measureBlocks =
             MeasuringIntrinsicsMeasureBlocks { measurables, constraints ->
+                val childConstraints = Constraints(
+                    minWidth = constraints.minWidth,
+                    maxWidth = constraints.maxWidth
+                )
                 val placeables = measurables.map { measurable ->
-                    measurable.measure(
-                        Constraints(
-                            minWidth = constraints.minWidth,
-                            maxWidth = constraints.maxWidth
-                        )
-                    )
+                    measurable.measure(childConstraints)
                 }
-                val columnWidth = (placeables.maxBy { it.width.value }?.width ?: 0.ipx)
+                val width = (placeables.maxBy { it.width.value }?.width ?: 0.ipx)
                     .coerceAtLeast(constraints.minWidth)
-                val columnHeight = placeables.sumBy { it.height.value }.ipx.coerceIn(
+                val height = placeables.sumBy { it.height.value }.ipx.coerceIn(
                     constraints.minHeight,
                     constraints.maxHeight
                 )
-                layout(columnWidth, columnHeight) {
-                    var top = 0.ipx
+                layout(width, height) {
+                    var offset = 0.ipx
                     placeables.forEach { placeable ->
-                        placeable.place(0.ipx, top)
-                        top += placeable.height
+                        when (direction) {
+                            Axis.Horizontal -> {
+                                placeable.place(offset, IntPx.Zero)
+                                offset += placeable.width
+                            }
+                            Axis.Vertical -> {
+                                placeable.place(IntPx.Zero, offset)
+                                offset += placeable.height
+                            }
+                        }
                     }
                 }
             }
@@ -450,20 +469,40 @@ private class ScrollableListState {
 
     private fun doLayout(
         measureScope: MeasureScope,
-        width: IntPx,
-        height: IntPx,
+        viewportMainAxisSize: IntPx,
+        viewportCrossAxisSize: IntPx,
         position: Px
     ): MeasureScope.LayoutResult {
-        // todo direction
+        val width: IntPx
+        val height: IntPx
+        when (direction) {
+            Axis.Horizontal -> {
+                width = viewportMainAxisSize
+                height = viewportCrossAxisSize
+            }
+            Axis.Vertical -> {
+                width = viewportCrossAxisSize
+                height = viewportMainAxisSize
+            }
+        }
         return measureScope.layout(width = width, height = height) {
             d { "place items ${rootNode.layoutChildren.map { it.state.index }}" }
             rootNode.layoutChildren
                 .forEach { child ->
-                    // todo direction
-                    child.place(
-                        x = IntPx.Zero,
-                        y = (child.state.layoutOffset - position).round()
-                    )
+                    when (direction) {
+                        Axis.Horizontal -> {
+                            child.place(
+                                x = (child.state.layoutOffset - position).round(),
+                                y = IntPx.Zero
+                            )
+                        }
+                        Axis.Vertical -> {
+                            child.place(
+                                x = IntPx.Zero,
+                                y = (child.state.layoutOffset - position).round()
+                            )
+                        }
+                    }
                 }
         }
     }
