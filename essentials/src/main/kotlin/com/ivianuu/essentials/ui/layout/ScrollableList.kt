@@ -533,5 +533,3 @@ private class ScrollableListState {
         }
     }
 }
-
-
