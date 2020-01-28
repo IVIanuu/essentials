@@ -45,8 +45,8 @@ fun PopupTrigger(
         val showPopup = {
             val coordinates = coordinatesHolder.value!!
 
-            val width = coordinates.size.width.round()
-            val height = coordinates.size.height.round()
+            val width = coordinates.size.width
+            val height = coordinates.size.height
             val globalPosition = coordinates.localToRoot(PxPosition.Origin)
             val left = globalPosition.x.round()
             val top = globalPosition.y.round()
