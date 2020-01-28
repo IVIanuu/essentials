@@ -113,12 +113,10 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 ScrollableList(
                     items = items
                 ) { index, item ->
-                    Column {
-                        val route = item.route()
-                        HomeItem(item = item, onClick = navigateOnClick { route })
-                        if (index != items.lastIndex) {
-                            HomeDivider()
-                        }
+                    val route = item.route()
+                    HomeItem(item = item, onClick = navigateOnClick { route })
+                    if (index != items.lastIndex) {
+                        HomeDivider()
                     }
                 }
             }
