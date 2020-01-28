@@ -22,6 +22,9 @@ import androidx.compose.ambientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.gesture.LongPressGestureDetector
+import androidx.ui.foundation.background
+import androidx.ui.foundation.contentColor
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -29,6 +32,7 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.RippleThemeAmbient
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
@@ -60,6 +64,7 @@ fun ListItem(
     subtitle: String? = null,
     image: Renderable? = null,
     enabled: Boolean = true,
+    selected: Boolean = false,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
@@ -69,6 +74,7 @@ fun ListItem(
         subtitle = subtitle.asTextComposable(),
         leading = image.asRenderableComposable(),
         enabled = enabled,
+        selected = selected,
         style = style,
         onClick = onClick,
         onLongClick = onLongClick
@@ -82,6 +88,7 @@ fun ListItem(
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
+    selected: Boolean = false,
     style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
@@ -94,6 +101,11 @@ fun ListItem(
         }
 
         Container(
+            modifier = background(
+                if (selected) contentColor().copy(
+                    alpha = RippleThemeAmbient.current.opacity()
+                ) else Color.Transparent
+            ),
             constraints = DpConstraints(minHeight = minHeight),
             padding = EdgeInsets(
                 left = style.contentPadding.left,
