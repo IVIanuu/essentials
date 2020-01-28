@@ -5,7 +5,7 @@ import androidx.animation.LinearEasing
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import androidx.ui.graphics.Path
-import com.ivianuu.essentials.ui.core.PathEasing
+import com.ivianuu.essentials.ui.common.PathEasing
 import com.ivianuu.essentials.ui.navigation.CanvasRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.OpacityRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
