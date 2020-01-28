@@ -99,8 +99,9 @@ fun <T> PopupMenuButton(
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
+    selectedItem: T,
     onSelected: (T) -> Unit,
-    item: @Composable (T) -> Unit
+    item: @Composable (T, Boolean) -> Unit
 ) {
     PopupTrigger(
         alignment = alignment,
@@ -108,6 +109,7 @@ fun <T> PopupMenuButton(
         popup = {
             PopupMenu(
                 items = items,
+                selectedItem = selectedItem,
                 onSelected = onSelected,
                 item = item,
                 style = popupStyle

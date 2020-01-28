@@ -32,8 +32,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
-// todo add selectable items
-
 object PopupMenu {
     @Immutable
     data class Item(
@@ -41,12 +39,10 @@ object PopupMenu {
         val content: @Composable () -> Unit
     ) {
         constructor(
-            text: String,
+            title: String,
             onSelected: (() -> Unit)? = null
         ) : this(onSelected = onSelected, content = {
-            Text(
-                text
-            )
+            Text(title)
         })
     }
 }
@@ -62,11 +58,11 @@ fun PopupMenu(
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
-                        content = item.content,
                         onSelected = {
                             navigator.popTop()
                             item.onSelected?.invoke()
-                        }
+                        },
+                        children = item.content
                     )
                 }
             }
@@ -77,26 +73,34 @@ fun PopupMenu(
 @Composable
 fun <T> PopupMenu(
     items: List<T>,
+    selectedItem: T,
     onSelected: (T) -> Unit,
     style: PopupStyle = PopupStyleAmbient.current,
-    item: @Composable (T) -> Unit
+    item: @Composable (T, Boolean) -> Unit
 ) {
-    PopupMenu(
-        style = style,
-        items = items.map { value ->
-            PopupMenu.Item(
-                onSelected = { onSelected(value) },
-                content = { item(value) }
-            )
+    Popup(style = style) {
+        Column {
+            val navigator = NavigatorAmbient.current
+            items.forEach { item ->
+                key(item) {
+                    PopupMenuItem(
+                        onSelected = {
+                            navigator.popTop()
+                            onSelected(item)
+                        }
+                    ) {
+                        item(item, item == selectedItem)
+                    }
+                }
+            }
         }
-    )
+    }
 }
 
-// todo public
 @Composable
 private fun PopupMenuItem(
-    onSelected: (() -> Unit)? = null,
-    content: @Composable () -> Unit
+    onSelected: (() -> Unit)?,
+    children: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {
         Clickable(
@@ -109,7 +113,7 @@ private fun PopupMenuItem(
                     Wrap(Alignment.CenterLeft) {
                         Container(
                             modifier = LayoutPadding(left = 16.dp, right = 16.dp),
-                            children = content
+                            children = children
                         )
                     }
                 }

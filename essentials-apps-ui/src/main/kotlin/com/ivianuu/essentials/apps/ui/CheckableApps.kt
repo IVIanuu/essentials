@@ -77,11 +77,11 @@ fun CheckableAppsScreen(
                     PopupMenuButton(
                         items = listOf(
                             PopupMenu.Item(
-                                text = stringResource(R.string.es_select_all),
+                                title = stringResource(R.string.es_select_all),
                                 onSelected = { viewModel.selectAllClicked() }
                             ),
                             PopupMenu.Item(
-                                text = stringResource(R.string.es_deselect_all),
+                                title = stringResource(R.string.es_deselect_all),
                                 onSelected = { viewModel.deselectAllClicked() }
                             )
                         )
