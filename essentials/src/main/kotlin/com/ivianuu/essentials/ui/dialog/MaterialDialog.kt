@@ -23,20 +23,20 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
-import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
-import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
+import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.material.Divider
 
 // todo rename to dialog
 
@@ -194,7 +194,7 @@ private fun DialogContentLayout(
         if (content != null) {
             if (header != null && showTopDivider) {
                 ParentData(DialogContentSlot.TopDivider) {
-                    DialogDivider()
+                    Divider(Axis.Horizontal)
                 }
             }
 
@@ -215,7 +215,7 @@ private fun DialogContentLayout(
         if (buttons != null) {
             if (content != null && showBottomDivider) {
                 ParentData(DialogContentSlot.BottomDivider) {
-                    DialogDivider()
+                    Divider(Axis.Horizontal)
                 }
             }
 
@@ -347,11 +347,6 @@ private fun DialogButtons(
             }
         }
     }
-}
-
-@Composable
-private fun DialogDivider() {
-    Divider(color = contentColor().copy(alpha = 0.12f))
 }
 
 private enum class DialogContentSlot {

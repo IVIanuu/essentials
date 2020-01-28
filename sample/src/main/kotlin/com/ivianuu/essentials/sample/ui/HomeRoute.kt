@@ -21,8 +21,7 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.material.Divider
-import androidx.ui.material.MaterialTheme
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.res.imageResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
@@ -36,6 +35,7 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.Divider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -54,6 +55,7 @@ import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.painter.ColorRenderable
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.ImageRenderable
+import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -70,10 +72,12 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                             "Option 1",
                             "Option 2",
                             "Option 3"
-                        ),
-                        item = { Text(it) },
-                        onCancel = { toaster.toast("Cancelled") },
-                        onSelected = { toaster.toast("Selected $it") }
+                        ).map {
+                            PopupMenu.Item(
+                                title = it,
+                                onSelected = { toaster.toast("Selected $it") }
+                            )
+                        }
                     )
                 }
             )
@@ -116,7 +120,10 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
                     if (index != items.lastIndex) {
-                        HomeDivider()
+                        Divider(
+                            axis = Axis.Horizontal,
+                            modifier = LayoutPadding(left = 72.dp)
+                        )
                     }
                 }
             }
@@ -149,21 +156,11 @@ private fun HomeItem(
         },
         trailing = {
             PopupMenuButton(
-                items = listOf(1, 2, 3),
-                onSelected = {}
-            ) {
-                Text("Text: $it")
-            }
+                items = listOf(1, 2, 3)
+                    .map { PopupMenu.Item(it.toString()) }
+            )
         },
         onClick = onClick
-    )
-}
-
-@Composable
-private fun HomeDivider() {
-    Divider(
-        color = MaterialTheme.colors().onSurface.copy(alpha = 0.12f),
-        indent = 72.dp
     )
 }
 
