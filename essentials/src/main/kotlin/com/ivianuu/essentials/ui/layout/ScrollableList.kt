@@ -88,18 +88,13 @@ fun ScrollableList(
     state.position = position
     state.direction = direction
 
+    onDispose { state.dispose() }
+
     Scrollable(
         position = state.position,
         direction = direction,
         enabled = enabled
     ) {
-        onDispose { state.dispose() }
-
-        Observe {
-            position.value
-            state.onScroll()
-        }
-
         Clip(shape = RectangleShape) {
             composer.emit<LayoutNode>(
                 key = 0,
@@ -110,6 +105,11 @@ fun ScrollableList(
                     node.measureBlocks = state.measureBlocks
                 }
             )
+        }
+
+        Observe {
+            position.value // force recompose on reads
+            state.onScroll()
         }
     }
 
@@ -418,9 +418,7 @@ private class ScrollableListState {
 
         rootNode.emitInsertAt(0, childNode)
 
-        val childState = ChildState(childNode, index).apply {
-            this.composable = composable
-        }
+        val childState = ChildState(childNode, index, composable)
 
         childStates[childNode] = childState
 
@@ -510,9 +508,10 @@ private class ScrollableListState {
 
     private inner class ChildState(
         val node: LayoutNode,
-        val index: Int
+        val index: Int,
+        var composable: @Composable () -> Unit
     ) {
-        var composable: @Composable () -> Unit = {}
+
         var layoutOffset = 0.px
 
         private val composition = Compose.subcomposeInto(node, context, compositionRef) {
