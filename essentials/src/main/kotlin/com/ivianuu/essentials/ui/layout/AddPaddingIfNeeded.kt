@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.layout
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.unit.IntPx
+import androidx.ui.unit.ipx
 import androidx.ui.unit.max
 import androidx.ui.unit.min
 import com.ivianuu.essentials.ui.core.looseMin
@@ -33,7 +33,7 @@ fun AddPaddingIfNeededLayout(
     child: @Composable () -> Unit
 ) {
     SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
-        if (measureable == null) return@SingleChildLayout layout(IntPx.Zero, IntPx.Zero) {}
+        if (measureable == null) return@SingleChildLayout layout(0.ipx, 0.ipx) {}
 
         val placeable = measureable.measure(constraints.looseMin())
         val width = max(

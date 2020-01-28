@@ -529,10 +529,10 @@ private fun FlexLayout(
         val constraints = OrientationIndependentConstraints(outerConstraints, orientation)
 
         var totalFlex = 0f
-        var inflexibleSpace = IntPx.Zero
-        var crossAxisSpace = IntPx.Zero
-        var beforeCrossAxisAlignmentLine = IntPx.Zero
-        var afterCrossAxisAlignmentLine = IntPx.Zero
+        var inflexibleSpace = 0.ipx
+        var crossAxisSpace = 0.ipx
+        var beforeCrossAxisAlignmentLine = 0.ipx
+        var afterCrossAxisAlignmentLine = 0.ipx
 
         val placeables = arrayOfNulls<Placeable>(measurables.size)
         // First measure children with zero flex.
@@ -554,7 +554,7 @@ private fun FlexLayout(
                         ) {
                             it.stretchCrossAxis()
                         } else {
-                            it.copy(crossAxisMin = IntPx.Zero)
+                            it.copy(crossAxisMin = 0.ipx)
                         }
                     }.toBoxConstraints(orientation)
                 )
@@ -589,14 +589,14 @@ private fun FlexLayout(
             constraints.mainAxisMin
         }
 
-        var flexibleSpace = IntPx.Zero
+        var flexibleSpace = 0.ipx
 
         for (i in 0 until measurables.size) {
             val child = measurables[i]
             val flex = child.flex
             if (flex > 0f) {
                 val childMainAxisSize = max(
-                    IntPx.Zero,
+                    0.ipx,
                     (targetSpace - inflexibleSpace) * child.flex / totalFlex
                 )
                 val placeable = child.measure(
@@ -604,7 +604,7 @@ private fun FlexLayout(
                         if (child.fit == FlexFit.Tight && childMainAxisSize.isFinite()) {
                             childMainAxisSize
                         } else {
-                            IntPx.Zero
+                            0.ipx
                         },
                         childMainAxisSize,
                         if (child.crossAxisAlignment == CrossAxisAlignment.Stretch ||
@@ -612,7 +612,7 @@ private fun FlexLayout(
                         ) {
                             constraints.crossAxisMax
                         } else {
-                            IntPx.Zero
+                            0.ipx
                         },
                         constraints.crossAxisMax
                     ).toBoxConstraints(orientation)
@@ -661,8 +661,8 @@ private fun FlexLayout(
                 val childCrossAlignment =
                     measurables[index].crossAxisAlignment ?: crossAxisAlignment
                 val crossAxis = when (childCrossAlignment) {
-                    CrossAxisAlignment.Start -> IntPx.Zero
-                    CrossAxisAlignment.Stretch -> IntPx.Zero
+                    CrossAxisAlignment.Start -> 0.ipx
+                    CrossAxisAlignment.Stretch -> 0.ipx
                     CrossAxisAlignment.End -> {
                         crossAxisLayoutSize - placeable.crossAxisSize()
                     }
@@ -685,7 +685,7 @@ private fun FlexLayout(
                         if (alignmentLinePosition != null) {
                             beforeCrossAxisAlignmentLine - alignmentLinePosition
                         } else {
-                            IntPx.Zero
+                            0.ipx
                         }
                     }
                 }
@@ -865,9 +865,9 @@ private fun intrinsicCrossAxisSize(
     }
 
     val flexSection = if (totalFlex == 0f) {
-        IntPx.Zero
+        0.ipx
     } else {
-        max(mainAxisAvailable - inflexibleSpace, IntPx.Zero) / totalFlex
+        max(mainAxisAvailable - inflexibleSpace, 0.ipx) / totalFlex
     }
 
     children.forEach { child ->

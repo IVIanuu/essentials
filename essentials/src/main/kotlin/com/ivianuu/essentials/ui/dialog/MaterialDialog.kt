@@ -31,7 +31,6 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.layout.Column
@@ -236,7 +235,7 @@ private fun DialogContentLayout(
     Layout(children = children) { measurables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
-            minHeight = IntPx.Zero
+            minHeight = 0.ipx
         )
 
         val headerMeasureable =
@@ -278,9 +277,9 @@ private fun DialogContentLayout(
         val height = placeables.map { it.height }.sumBy { it.value }.ipx
 
         layout(width = constraints.maxWidth, height = height) {
-            var offsetY = IntPx.Zero
+            var offsetY = 0.ipx
             placeables.forEach { placeable ->
-                placeable.place(IntPx.Zero, offsetY)
+                placeable.place(0.ipx, offsetY)
                 offsetY += placeable.height
             }
         }

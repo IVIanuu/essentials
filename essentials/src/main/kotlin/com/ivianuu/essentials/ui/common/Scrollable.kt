@@ -36,8 +36,8 @@ import com.ivianuu.essentials.ui.core.Axis
 
 @Model
 class ScrollPosition(
-    initial: Px = Px.Zero,
-    minValue: Px = Px.Zero,
+    initial: Px = 0.px,
+    minValue: Px = 0.px,
     maxValue: Px = Px.Infinity
 ) {
 
@@ -147,10 +147,10 @@ fun Scrollable(
 
                     val scrollDirection = when (direction) {
                         Axis.Horizontal -> {
-                            if (dragDistance.x <= Px.Zero) ScrollDirection.Forward else ScrollDirection.Reverse
+                            if (dragDistance.x <= 0.px) ScrollDirection.Forward else ScrollDirection.Reverse
                         }
                         Axis.Vertical -> {
-                            if (dragDistance.y <= Px.Zero) ScrollDirection.Forward else ScrollDirection.Reverse
+                            if (dragDistance.y <= 0.px) ScrollDirection.Forward else ScrollDirection.Reverse
                         }
                     }
 
@@ -161,10 +161,10 @@ fun Scrollable(
                     return when (direction) {
                         Axis.Horizontal -> PxPosition(
                             x = consumed,
-                            y = Px.Zero
+                            y = 0.px
                         )
                         Axis.Vertical -> PxPosition(
-                            x = Px.Zero,
+                            x = 0.px,
                             y = consumed
                         )
                     }

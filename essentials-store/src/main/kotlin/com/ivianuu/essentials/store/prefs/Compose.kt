@@ -38,7 +38,7 @@ private object ColorSerializer : DiskBox.Serializer<Color> {
 
 fun PrefBoxFactory.px(
     name: String,
-    defaultValue: Px = Px.Zero
+    defaultValue: Px = 0.px
 ) = box(name = name, defaultValue = defaultValue, serializer = PxSerializer)
 
 private object PxSerializer : DiskBox.Serializer<Px> {
@@ -58,7 +58,7 @@ private object DpSerializer : DiskBox.Serializer<Dp> {
 
 fun PrefBoxFactory.ipx(
     name: String,
-    defaultValue: IntPx = IntPx.Zero
+    defaultValue: IntPx = 0.ipx
 ) = box(name = name, defaultValue = defaultValue, serializer = IntPxSerializer)
 
 private object IntPxSerializer : DiskBox.Serializer<IntPx> {

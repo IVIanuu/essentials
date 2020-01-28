@@ -30,6 +30,7 @@ import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
 import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
@@ -219,7 +220,7 @@ private fun ScaffoldLayout(
         var barConstraints = incomingConstraints.copy(
             minWidth = width,
             maxWidth = width,
-            minHeight = IntPx.Zero
+            minHeight = 0.ipx
         )
 
         val topAppBarPlaceable = topAppBarMeasureable
@@ -228,7 +229,7 @@ private fun ScaffoldLayout(
                 barConstraints =
                     barConstraints.copy(maxHeight = barConstraints.maxHeight - placeable.height)
             }
-        val topAppBarTop = if (topAppBarPlaceable != null) IntPx.Zero else null
+        val topAppBarTop = if (topAppBarPlaceable != null) 0.ipx else null
         val topAppBarBottom =
             if (topAppBarPlaceable != null) topAppBarTop!! + topAppBarPlaceable.height else null
 
@@ -254,11 +255,11 @@ private fun ScaffoldLayout(
                     bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
                 ScaffoldState.BodyLayoutMode.ExtendBottom -> {
-                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
+                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
                     bodyBottom = bottomBarBottom!!
                 }
                 ScaffoldState.BodyLayoutMode.Wrap -> {
-                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
+                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
                     bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
             }
@@ -293,10 +294,10 @@ private fun ScaffoldLayout(
         } else null
 
         layout(width, height) {
-            bodyPlaceable?.place(IntPx.Zero, bodyTop!!)
+            bodyPlaceable?.place(0.ipx, bodyTop!!)
             fabPlaceable?.place(fabLeft!!, fabTop!!)
-            bottomBarPlaceable?.place(IntPx.Zero, bottomBarTop!!)
-            topAppBarPlaceable?.place(IntPx.Zero, topAppBarTop!!)
+            bottomBarPlaceable?.place(0.ipx, bottomBarTop!!)
+            topAppBarPlaceable?.place(0.ipx, topAppBarTop!!)
         }
     }
 }

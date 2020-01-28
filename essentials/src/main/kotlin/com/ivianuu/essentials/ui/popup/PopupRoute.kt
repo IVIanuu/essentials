@@ -22,7 +22,6 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
@@ -110,8 +109,8 @@ private fun PopupLayout(
 ) {
     NonNullSingleChildLayout(child = child) { measureable, constraints ->
         val childConstraints = constraints.copy(
-            minWidth = IntPx.Zero,
-            minHeight = IntPx.Zero
+            minWidth = 0.ipx,
+            minHeight = 0.ipx
         )
 
         val placeable = measureable.measure(childConstraints)

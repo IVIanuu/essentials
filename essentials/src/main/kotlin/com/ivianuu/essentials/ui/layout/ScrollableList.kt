@@ -24,6 +24,7 @@ import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
 import androidx.ui.unit.ipx
 import androidx.ui.unit.max
+import androidx.ui.unit.px
 import androidx.ui.unit.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.ScrollPosition
@@ -243,9 +244,9 @@ private class ScrollableListState {
 
                 if (earliestUsefulChild == null) {
                     val firstChild = firstChild!!
-                    firstChild.state.layoutOffset = Px.Zero
+                    firstChild.state.layoutOffset = 0.px
 
-                    if (scrollPosition == Px.Zero) {
+                    if (scrollPosition == 0.px) {
                         earliestUsefulChild = firstChild
                         leadingChildWithLayout = earliestUsefulChild
                         trailingChildWithLayout = earliestUsefulChild
@@ -343,7 +344,7 @@ private class ScrollableListState {
             rootNode.ignoreModelReads {
                 val estimatedMaxScrollPosition = if (reachedEnd) max(
                     endScrollPosition - viewportMainAxisSize,
-                    Px.Zero
+                    0.px
                 ) else Px.Infinity
                 if (estimatedMaxScrollPosition != position.maxValue) {
                     d { "update max scroll position $estimatedMaxScrollPosition" }
@@ -403,11 +404,11 @@ private class ScrollableListState {
                     placeables.forEach { placeable ->
                         when (direction) {
                             Axis.Horizontal -> {
-                                placeable.place(offset, IntPx.Zero)
+                                placeable.place(offset, 0.ipx)
                                 offset += placeable.width
                             }
                             Axis.Vertical -> {
-                                placeable.place(IntPx.Zero, offset)
+                                placeable.place(0.ipx, offset)
                                 offset += placeable.height
                             }
                         }
@@ -493,12 +494,12 @@ private class ScrollableListState {
                         Axis.Horizontal -> {
                             child.place(
                                 x = (child.state.layoutOffset - position).round(),
-                                y = IntPx.Zero
+                                y = 0.ipx
                             )
                         }
                         Axis.Vertical -> {
                             child.place(
-                                x = IntPx.Zero,
+                                x = 0.ipx,
                                 y = (child.state.layoutOffset - position).round()
                             )
                         }
@@ -512,7 +513,7 @@ private class ScrollableListState {
         val index: Int
     ) {
         var composable: @Composable () -> Unit = {}
-        var layoutOffset = Px.Zero
+        var layoutOffset = 0.px
 
         private val composition = Compose.subcomposeInto(node, context, compositionRef) {
             OnlyOnce(composable)

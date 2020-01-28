@@ -29,8 +29,8 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
@@ -198,7 +198,7 @@ private fun TopAppBarLayout(
 
         layout(width, height) {
             leadingPlaceable?.place(
-                x = IntPx.Zero,
+                x = 0.ipx,
                 y = height / 2 - leadingPlaceable.height / 2
             )
 
@@ -208,7 +208,7 @@ private fun TopAppBarLayout(
                 } else if (leadingPlaceable != null) {
                     56.dp.toIntPx()
                 } else {
-                    IntPx.Zero
+                    0.ipx
                 }
 
                 titlePlaceable.place(

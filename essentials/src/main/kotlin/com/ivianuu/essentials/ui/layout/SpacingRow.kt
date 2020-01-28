@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.unit.Dp
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.ipx
 
 // todo improve api
@@ -41,11 +40,11 @@ fun SpacingRow(
             placeable
         }
 
-        val height = placeables.maxBy { it.height.value }?.height ?: IntPx.Zero
+        val height = placeables.maxBy { it.height.value }?.height ?: 0.ipx
         val width = placeables.sumBy { it.width.value }.ipx + (spacing.toIntPx() * (placeables.size - 1))
 
         layout(width = width, height = height) {
-            var offsetX = IntPx.Zero
+            var offsetX = 0.ipx
             placeables.forEach { placeable ->
                 val y = height / 2 - placeable.height / 2
                 placeable.place(offsetX, y)

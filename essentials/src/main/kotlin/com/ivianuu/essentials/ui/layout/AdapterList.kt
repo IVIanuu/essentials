@@ -79,7 +79,7 @@ private class ListState<T>(
         // Consume as much of the drag as possible via adjusting the scroll offset
         scrollToBeConsumed = consumeScrollViaOffset(scrollToBeConsumed)
 
-        return PxPosition(Px.Zero, dragDistance.y - scrollToBeConsumed)
+        return PxPosition(0.px, dragDistance.y - scrollToBeConsumed)
 
         // This may either:
         //  - scroll an item entirely offscreen, thus requiring changing the first item
@@ -98,14 +98,14 @@ private class ListState<T>(
      * @return The amount of scroll remaining unconsumed
      */
     private fun consumeScrollViaOffset(delta: Px): Px {
-        if (delta < Px.Zero) {
+        if (delta < 0.px) {
             // Scrolling forward, content moves up
             // Consume via space at end
             // Remember: delta is *negative*
             if (lastItemRemainingSpace >= -delta) {
                 // We can consume it all
                 updateScrollOffsets(delta)
-                return Px.Zero
+                return 0.px
             } else {
                 // All offset consumed, return the remaining offset to the caller
                 // delta is negative, prevRemainingSpace/lastItemRemainingSpace are positive
@@ -119,7 +119,7 @@ private class ListState<T>(
             if (firstItemScrollOffset >= delta) {
                 // We can consume it all
                 updateScrollOffsets(delta)
-                return Px.Zero
+                return 0.px
             } else {
                 // All offset consumed, return the remaining offset to the caller
                 val prevRemainingSpace = firstItemScrollOffset
@@ -134,7 +134,7 @@ private class ListState<T>(
      * Assumes the caller has checked bounds.
      */
     private fun updateScrollOffsets(delta: Px) {
-        if (delta == Px.Zero) {
+        if (delta == 0.px) {
             return
         }
         // Scrolling forward is negative delta and consumes space, so add the negative
@@ -186,7 +186,7 @@ private class ListState<T>(
             lastItemRemainingSpace = if (heightUsed > height) {
                 (heightUsed - height).toPx()
             } else {
-                Px.Zero
+                0.px
             }
 
             // Remove remaining LayoutNodes
@@ -198,7 +198,7 @@ private class ListState<T>(
             return measureScope.layout(width = width, height = height) {
                 var currentY = -firstItemScrollOffset.round()
                 layoutChildren.forEach {
-                    it.place(x = IntPx.Zero, y = currentY)
+                    it.place(x = 0.ipx, y = currentY)
                     currentY += it.height
                 }
             }
