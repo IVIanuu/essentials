@@ -1,7 +1,9 @@
-package com.ivianuu.essentials.ui.core
+package com.ivianuu.essentials.ui.common
 
 import androidx.animation.Easing
 import androidx.ui.graphics.Path
+
+// todo remove
 
 class PathEasing(path: Path) : Easing {
 
