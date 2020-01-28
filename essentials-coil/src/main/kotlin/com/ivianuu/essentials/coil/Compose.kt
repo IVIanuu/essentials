@@ -21,7 +21,6 @@ import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.ambientOf
 import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
@@ -117,45 +116,61 @@ val PlaceholderAmbient =
 @Composable
 fun Image(
     data: Any,
-    modifier: Modifier = Modifier.None,
+    size: Size? = null,
     placeholder: Image? = PlaceholderAmbient.current,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image?) -> Unit = {
         if (it != null) DrawRenderable(ImageRenderable(it))
     }
 ) {
-    val loadedImage = loadImage(
-        placeholder = placeholder,
-        data = data,
-        imageLoader = imageLoader
-    )
-
     RepaintBoundary {
-        Container(modifier = modifier) {
-            image(loadedImage)
+        val loadedImage = loadImage(
+            placeholder = placeholder,
+            data = data,
+            size = size,
+            imageLoader = imageLoader
+        )
+
+        val density = DensityAmbient.current
+        Container(
+            width = size?.width ?: with(density) { loadedImage?.width?.ipx?.toDp() } ?: 0.dp,
+            height = size?.height ?: with(density) { loadedImage?.height?.ipx?.toDp() } ?: 0.dp
+        ) {
+            if (loadedImage != null) {
+                RepaintBoundary {
+                    image(loadedImage)
+                }
+            }
         }
     }
 }
 
-@JvmName("ImageNonNullPlaceholder")
 @Composable
 fun Image(
     data: Any,
-    modifier: Modifier = Modifier.None,
+    size: Size? = null,
     placeholder: Image,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image) -> Unit = {
         DrawRenderable(ImageRenderable(it))
-    }) {
-    val loadedImage = loadImage(
-        placeholder = placeholder,
-        data = data,
-        imageLoader = imageLoader
-    )
-
+    }
+) {
     RepaintBoundary {
-        Container(modifier = modifier) {
-            image(loadedImage)
+        val loadedImage = loadImage(
+            placeholder = placeholder,
+            data = data,
+            size = size,
+            imageLoader = imageLoader
+        )
+
+        val density = DensityAmbient.current
+        Container(
+            width = size?.width ?: with(density) { loadedImage.width.ipx.toDp() } ?: 0.dp,
+            height = size?.height ?: with(density) { loadedImage.height.ipx.toDp() } ?: 0.dp
+        ) {
+            RepaintBoundary {
+                image(loadedImage)
+            }
         }
     }
 }
