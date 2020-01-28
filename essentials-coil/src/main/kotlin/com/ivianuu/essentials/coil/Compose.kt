@@ -20,9 +20,9 @@ import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.ambientOf
+import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
@@ -30,7 +30,6 @@ import androidx.ui.layout.Container
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import androidx.ui.unit.withDensity
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.coroutines.load
@@ -49,10 +48,10 @@ class CoilRenderable(
     @Composable
     override fun content() {
         val image = loadImage(data = data, size = size)
-        val density = ambientDensity()
+        val density = DensityAmbient.current
         Container(
-            width = size?.width ?: withDensity(density) { image?.width?.ipx?.toDp() } ?: 0.dp,
-            height = size?.height ?: withDensity(density) { image?.height?.ipx?.toDp() } ?: 0.dp
+            width = size?.width ?: with(density) { image?.width?.ipx?.toDp() } ?: 0.dp,
+            height = size?.height ?: with(density) { image?.height?.ipx?.toDp() } ?: 0.dp
         ) {
             if (image != null) {
                 RepaintBoundary {
@@ -97,11 +96,11 @@ fun loadImage(
     size: Size? = null,
     imageLoader: ImageLoader = inject()
 ): Image? {
-    val density = ambientDensity()
+    val density = DensityAmbient.current
     return load(placeholder = null, key = listOf(data, size, imageLoader)) {
         imageLoader.getAnyNoInline(data) {
             if (size != null) {
-                withDensity(density) {
+                with(density) {
                     size(
                         width = size.width.toIntPx().value,
                         height = size.height.toIntPx().value

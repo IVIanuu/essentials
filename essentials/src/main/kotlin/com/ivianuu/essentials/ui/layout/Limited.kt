@@ -21,7 +21,7 @@ import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutModifier
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
-import androidx.ui.unit.DensityScope
+import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 
 @Immutable
@@ -29,7 +29,7 @@ data class LayoutLimited(
     val maxWidth: Dp = Dp.Infinity,
     val maxHeight: Dp = Dp.Infinity
 ) : LayoutModifier {
-    override fun DensityScope.modifyConstraints(constraints: Constraints): Constraints {
+    override fun Density.modifyConstraints(constraints: Constraints): Constraints {
         return if (constraints.hasBoundedWidth && constraints.hasBoundedHeight) constraints
         else constraints.copy(
             maxWidth = if (constraints.hasBoundedWidth) constraints.maxWidth else maxWidth.toIntPx(),

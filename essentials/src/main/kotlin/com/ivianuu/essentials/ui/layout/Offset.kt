@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Immutable
 import androidx.ui.core.LayoutModifier
-import androidx.ui.unit.DensityScope
+import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.IntPxSize
@@ -29,7 +29,7 @@ data class LayoutOffset(
     val offsetX: Dp = 0.dp,
     val offsetY: Dp = 0.dp
 ) : LayoutModifier {
-    override fun DensityScope.modifyPosition(
+    override fun Density.modifyPosition(
         childSize: IntPxSize,
         containerSize: IntPxSize
     ): IntPxPosition {
@@ -42,7 +42,7 @@ data class LayoutPercentOffset(
     val percentX: Float = 0f,
     val percentY: Float = 0f
 ) : LayoutModifier {
-    override fun DensityScope.modifyPosition(
+    override fun Density.modifyPosition(
         childSize: IntPxSize,
         containerSize: IntPxSize
     ): IntPxPosition {

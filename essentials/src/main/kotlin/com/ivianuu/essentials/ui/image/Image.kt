@@ -23,7 +23,6 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.PxSize
 import androidx.ui.unit.px
 import androidx.ui.unit.round
-import androidx.ui.unit.withDensity
 
 fun Drawable.toImage(): Image = toBitmap().toImage()
 
@@ -36,7 +35,7 @@ fun VectorAsset.toBitmap(
     color: Color = Color.White
 ): Bitmap {
     val density = Density(context)
-    val vector = withDensity(density) {
+    val vector = with(density) {
         VectorComponent(
             name,
             defaultWidth.toPx().value,

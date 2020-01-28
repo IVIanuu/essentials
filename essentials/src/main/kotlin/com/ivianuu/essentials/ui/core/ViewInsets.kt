@@ -33,11 +33,10 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.core.content.getSystemService
 import androidx.ui.core.AndroidComposeViewAmbient
-import androidx.ui.core.ambientDensity
+import androidx.ui.core.DensityAmbient
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import androidx.ui.unit.withDensity
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
@@ -46,7 +45,7 @@ import android.view.WindowInsets as AndroidWindowInsets
 fun WindowInsetsManager(children: @Composable () -> Unit) {
     val composeView = AndroidComposeViewAmbient.current
 
-    val density = ambientDensity()
+    val density = DensityAmbient.current
     val (windowInsets, setWindowInsets) = state { WindowInsets() }
 
     val insetsListener = remember {
@@ -59,7 +58,7 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
             val zeroSides = if (navigationBarHidden) calculateZeroSides(composeView.context)
             else ZeroSides.None
 
-            withDensity(density) {
+            with(density) {
                 val viewPadding = EdgeInsets(
                     left = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
                     top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),

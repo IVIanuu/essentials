@@ -20,7 +20,7 @@ import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutModifier
-import androidx.ui.unit.DensityScope
+import androidx.ui.unit.Density
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.IntPxSize
 
@@ -30,7 +30,7 @@ data class LayoutFractionalSize(
     val heightFactor: Float? = null,
     val alignment: Alignment = Alignment.Center
 ) : LayoutModifier {
-    override fun DensityScope.modifyConstraints(constraints: Constraints): Constraints {
+    override fun Density.modifyConstraints(constraints: Constraints): Constraints {
         var (minWidth, maxWidth, minHeight, maxHeight) = constraints
 
         if (widthFactor != null) {
@@ -48,7 +48,7 @@ data class LayoutFractionalSize(
         return Constraints(minWidth, maxWidth, minHeight, maxHeight)
     }
 
-    override fun DensityScope.modifyPosition(
+    override fun Density.modifyPosition(
         childSize: IntPxSize,
         containerSize: IntPxSize
     ): IntPxPosition {

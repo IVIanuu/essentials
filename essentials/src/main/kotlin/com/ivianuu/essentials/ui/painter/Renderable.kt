@@ -3,8 +3,8 @@ package com.ivianuu.essentials.ui.painter
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.ui.core.Alignment
+import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.RectangleShape
@@ -26,7 +26,6 @@ import androidx.ui.layout.LayoutSize
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.material.Surface
 
 @Stable
@@ -67,7 +66,7 @@ class ImageRenderable(
 ) : Renderable {
     @Composable
     override fun content() {
-        val finalSize = size ?: withDensity(ambientDensity()) {
+        val finalSize = size ?: with(DensityAmbient.current) {
             Size(
                 width = image.width.ipx.toDp(),
                 height = image.height.ipx.toDp()

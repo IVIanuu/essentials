@@ -22,16 +22,15 @@ import androidx.compose.Providers
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
+import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.ambientDensity
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import androidx.ui.unit.withDensity
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.looseMin
@@ -198,7 +197,7 @@ private fun ScaffoldLayout(
         }
     }
 
-    val fabPadding = withDensity(ambientDensity()) { 16.dp.toIntPx() }
+    val fabPadding = with(DensityAmbient.current) { 16.dp.toIntPx() }
 
     Layout(children = children) { measurables, incomingConstraints ->
         val width = incomingConstraints.maxWidth
