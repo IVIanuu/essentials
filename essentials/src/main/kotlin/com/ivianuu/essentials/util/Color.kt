@@ -39,6 +39,14 @@ fun Color.darken(): Color = shifted(0.9f)
 
 fun Color.lighten(): Color = shifted(1.1f)
 
+fun Color.blend(blendColor: Color): Color {
+    return Color(
+        red = blendColor.red * blendColor.alpha + red * (1 - blendColor.alpha),
+        green = blendColor.green * blendColor.alpha + green * (1 - blendColor.alpha),
+        blue = blendColor.blue * blendColor.alpha + blue * (1 - blendColor.alpha)
+    )
+}
+
 fun Color.inverted(): Color = Color(
     alpha = alpha,
     red = 255 - red,
