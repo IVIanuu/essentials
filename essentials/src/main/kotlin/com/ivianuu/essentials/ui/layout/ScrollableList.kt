@@ -14,7 +14,6 @@ import androidx.ui.core.Clip
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutNode
-import androidx.ui.core.LayoutNodeAccessor
 import androidx.ui.core.Measurable
 import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
@@ -273,10 +272,7 @@ private class ScrollableListState {
             }
 
             if (leadingChildWithLayout == null) {
-                earliestUsefulChild!!.doMeasure(
-                    childConstraints,
-                    "leading child with layout was null"
-                )
+                earliestUsefulChild!!.measure(childConstraints)
                 leadingChildWithLayout = earliestUsefulChild
                 trailingChildWithLayout = earliestUsefulChild
             }
@@ -294,14 +290,14 @@ private class ScrollableListState {
                     if (child == null || child!!.state.index != index) {
                         // We are missing a child. Insert it (and lay it out) if possible.
                         child = addChild(trailingChildWithLayout!!.state.index + 1)
-                        child?.doMeasure(childConstraints, "advance new child $src")
+                        child?.measure(childConstraints)
                         if (child == null) {
                             // We have run out of children.
                             return false
                         }
                     } else {
                         // Lay out the child.
-                        child!!.doMeasure(childConstraints, "advance not null $src")
+                        child!!.measure(childConstraints)
                     }
                     trailingChildWithLayout = child
                 }
@@ -360,15 +356,6 @@ private class ScrollableListState {
                 viewportCrossAxisSize,
                 scrollPosition
             )
-        }
-    }
-
-    private fun LayoutNode.doMeasure(constraints: Constraints, src: String) {
-        if (LayoutNodeAccessor.getMeasureIteration(this) !=
-            LayoutNodeAccessor.getMeasureIteration(rootNode)
-        ) {
-            d { "measure child ${state.index} from $src" }
-            measure(constraints)
         }
     }
 
@@ -462,7 +449,7 @@ private class ScrollableListState {
         d { "try insert and layout leading child at $index" }
         val child = getOrAddChild(index) ?: return null
         d { "insert and layout leading child $index" }
-        child.doMeasure(constraints, "insert and layout leading")
+        child.measure(constraints)
         return child
     }
 
