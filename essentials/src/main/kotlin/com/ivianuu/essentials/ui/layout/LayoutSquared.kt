@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.layout
 import androidx.compose.Immutable
 import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutModifier
+import androidx.ui.core.enforce
 import androidx.ui.unit.Density
 
 @Immutable
@@ -34,7 +35,7 @@ data class LayoutSquared(
         return constraints.copy(
             maxWidth = size,
             maxHeight = size
-        )
+        ).enforce(constraints)
     }
 
     enum class Fit {

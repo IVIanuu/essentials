@@ -17,38 +17,46 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Immutable
+import androidx.ui.core.Alignment
+import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutModifier
 import androidx.ui.unit.Density
-import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.IntPxSize
-import androidx.ui.unit.dp
 
 @Immutable
-data class LayoutOffset(
-    val offsetX: Dp = 0.dp,
-    val offsetY: Dp = 0.dp
+data class LayoutSizeFraction(
+    private val widthFactor: Float? = null,
+    private val heightFactor: Float? = null,
+    private val alignment: Alignment = Alignment.Center
 ) : LayoutModifier {
-    override fun Density.modifyPosition(
-        childSize: IntPxSize,
-        containerSize: IntPxSize
-    ): IntPxPosition {
-        return IntPxPosition(offsetX.toIntPx(), offsetY.toIntPx())
+    override fun Density.modifyConstraints(constraints: Constraints): Constraints {
+        var (minWidth, maxWidth, minHeight, maxHeight) = constraints
+
+        if (widthFactor != null) {
+            val width = maxWidth * widthFactor
+            minWidth = width
+            maxWidth = width
+        }
+
+        if (heightFactor != null) {
+            val height = maxHeight * heightFactor
+            minHeight = height
+            maxHeight = height
+        }
+
+        return Constraints(minWidth, maxWidth, minHeight, maxHeight)
     }
-}
 
-@Immutable
-data class LayoutPercentOffset(
-    val percentX: Float = 0f,
-    val percentY: Float = 0f
-) : LayoutModifier {
     override fun Density.modifyPosition(
         childSize: IntPxSize,
         containerSize: IntPxSize
     ): IntPxPosition {
-        return IntPxPosition(
-            childSize.width * percentX,
-            childSize.height * percentY
+        return alignment.align(
+            IntPxSize(
+                containerSize.width - childSize.width,
+                containerSize.height - childSize.height
+            )
         )
     }
 }
