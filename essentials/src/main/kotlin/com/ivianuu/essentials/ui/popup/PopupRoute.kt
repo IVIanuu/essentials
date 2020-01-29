@@ -20,7 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.unit.IntPxPosition
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.IntPxBounds
+import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
@@ -28,8 +30,9 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
+
 fun PopupRoute(
-    position: IntPxPosition,
+    position: IntPxBounds,
     onCancel: (() -> Unit)? = null,
     popup: @Composable () -> Unit
 ) = Route(
@@ -66,7 +69,7 @@ fun PopupRoute(
 
 @Composable
 private fun PopupLayout(
-    position: IntPxPosition,
+    position: IntPxBounds,
     child: @Composable () -> Unit
 ) {
     NonNullSingleChildLayout(child = child) { measureable, constraints ->
@@ -77,17 +80,20 @@ private fun PopupLayout(
 
         val placeable = measureable.measure(childConstraints)
 
-        val x = if (position.x < constraints.maxWidth / 2) {
-            position.x
+        var y = position.top
+        var x: IntPx
+
+        // Find the ideal horizontal position.
+        if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
+            x = position.left
+        } else if (position.left < position.right) {
+            x = position.right - placeable.width
         } else {
-            position.x - placeable.width
+            x = position.right - placeable.width // todo based on ltr/rtl
         }
 
-        val y = if (position.y < constraints.maxHeight / 2) {
-            position.y
-        } else {
-            position.y - placeable.height
-        }
+        x = x.coerceIn(8.dp.toIntPx(), constraints.maxWidth - placeable.width - 8.dp.toIntPx())
+        y = y.coerceIn(8.dp.toIntPx(), constraints.maxHeight - placeable.height - 8.dp.toIntPx())
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             placeable.place(x = x, y = y)

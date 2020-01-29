@@ -25,8 +25,8 @@ import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun IconButton(
-    image: Renderable,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    image: Renderable
 ) {
     IconButton(onClick = onClick) {
         DrawRenderable(renderable = image)

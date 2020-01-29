@@ -1,42 +1,54 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
+import androidx.ui.core.LayoutCoordinates
+import androidx.ui.core.OnPositioned
+import androidx.ui.core.boundsInRoot
+import androidx.ui.layout.Wrap
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.MoreVert
+import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.core.round
 import com.ivianuu.essentials.ui.material.IconButton
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable
 
 @Composable
 fun PopupMenuButton(
-    alignment: Alignment = Alignment.TopLeft,
     image: Renderable = VectorRenderable(Icons.Default.MoreVert),
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<PopupMenu.Item>
 ) {
-    PopupTrigger(
-        alignment = alignment,
-        onCancel = onCancel,
-        popup = {
-            PopupMenu(
-                items = items,
-                style = popupStyle
-            )
-        },
-        child = { showPopup ->
-            IconButton(
-                image = image,
-                onClick = showPopup
-            )
-        }
-    )
+    val navigator = NavigatorAmbient.current
+
+    Wrap {
+        val coordinatesHolder =
+            holder<LayoutCoordinates?> { null }
+        OnPositioned { coordinatesHolder.value = it }
+
+        IconButton(
+            onClick = {
+                navigator.push(
+                    PopupRoute(
+                        position = coordinatesHolder.value!!.boundsInRoot.round(),
+                        onCancel = onCancel
+                    ) {
+                        PopupMenu(
+                            items = items,
+                            style = popupStyle
+                        )
+                    }
+                )
+            },
+            image = image
+        )
+    }
 }
 
 @Composable
 fun <T> PopupMenuButton(
-    alignment: Alignment = Alignment.TopLeft,
     image: Renderable = VectorRenderable(Icons.Default.MoreVert),
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
@@ -45,23 +57,31 @@ fun <T> PopupMenuButton(
     selectedItem: T? = null,
     item: @Composable (T, Boolean) -> Unit
 ) {
-    PopupTrigger(
-        alignment = alignment,
-        onCancel = onCancel,
-        popup = {
-            PopupMenu(
-                items = items,
-                selectedItem = selectedItem,
-                onSelected = onSelected,
-                item = item,
-                style = popupStyle
-            )
-        },
-        child = { showPopup ->
-            IconButton(
-                image = image,
-                onClick = showPopup
-            )
-        }
-    )
+    val navigator = NavigatorAmbient.current
+
+    Wrap {
+        val coordinatesHolder =
+            holder<LayoutCoordinates?> { null }
+        OnPositioned { coordinatesHolder.value = it }
+
+        IconButton(
+            onClick = {
+                navigator.push(
+                    PopupRoute(
+                        position = coordinatesHolder.value!!.boundsInRoot.round(),
+                        onCancel = onCancel
+                    ) {
+                        PopupMenu(
+                            items = items,
+                            selectedItem = selectedItem,
+                            onSelected = onSelected,
+                            item = item,
+                            style = popupStyle
+                        )
+                    }
+                )
+            },
+            image = image
+        )
+    }
 }
