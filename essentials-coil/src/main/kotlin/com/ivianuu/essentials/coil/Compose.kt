@@ -19,7 +19,7 @@ package com.ivianuu.essentials.coil
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.compose.Stable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.foundation.DrawImage
@@ -111,7 +111,7 @@ fun loadImage(
 }
 
 val PlaceholderAmbient =
-    ambientOf<Image?> { null }
+    staticAmbientOf<Image?> { null }
 
 @Composable
 fun Image(

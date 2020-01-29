@@ -81,10 +81,10 @@ fun ScrollableList(
     itemFactory: (Int) -> @Composable (() -> Unit)?
 ) {
     val state = remember { ScrollableListState() }
-    state.composableFactory = itemFactory
     state.context = ContextAmbient.current
     state.compositionRef = compositionReference()
     state.forceRecompose = true
+    state.composableFactory = itemFactory
     state.position = position
     state.direction = direction
 
@@ -183,15 +183,15 @@ private class ScrollableListState {
 
             if (forceRecompose) {
                 rootNode.ignoreModelReads { recomposeAllChildren() }
-                // if there were models created and read inside this subcomposition
-                // and we are going to modify these models within the same frame,
-                // the composables which read this model will not be recomposed.
-                // to make this possible we should switch to the next frame.
                 FrameManager.nextFrame()
             }
 
+            val cacheSize = with(measureScope) { 250.ipx/*.toIntPx()*/ }
+
             lateinit var scrollPosition: Px
             rootNode.ignoreModelReads { scrollPosition = position.value }
+
+            val targetStartScrollPosition = max(scrollPosition - cacheSize, 0.px)
 
             d { "begin measure $version scroll pos $scrollPosition constraints $constraints" }
 
@@ -211,8 +211,6 @@ private class ScrollableListState {
                     childConstraints = Constraints.fixedWidth(viewportCrossAxisSize)
                 }
             }
-
-            val cacheSize = viewportMainAxisSize / 2
 
             val targetEndScrollPosition = scrollPosition + viewportMainAxisSize + cacheSize
 
@@ -239,14 +237,14 @@ private class ScrollableListState {
             var earliestUsefulChild = rootNode.layoutChildren.minBy { it.state.index }
             var earliestScrollPosition = earliestUsefulChild!!.state.layoutOffset
 
-            while (earliestScrollPosition > scrollPosition) {
+            while (earliestScrollPosition > targetStartScrollPosition) {
                 earliestUsefulChild = insertAndLayoutLeadingChild(childConstraints)
 
                 if (earliestUsefulChild == null) {
                     val firstChild = firstChild!!
                     firstChild.state.layoutOffset = 0.px
 
-                    if (scrollPosition == 0.px) {
+                    if (targetStartScrollPosition == 0.px) {
                         earliestUsefulChild = firstChild
                         leadingChildWithLayout = earliestUsefulChild
                         trailingChildWithLayout = earliestUsefulChild
@@ -307,7 +305,7 @@ private class ScrollableListState {
                 return true
             }
 
-            while (endScrollPosition < scrollPosition) {
+            while (endScrollPosition < targetStartScrollPosition) {
                 leadingGarbage += 1
                 if (!advance("first child that ends")) {
                     collectGarbage(leadingGarbage - 1, 0)
@@ -473,7 +471,7 @@ private class ScrollableListState {
             }
         }
         return measureScope.layout(width = width, height = height) {
-            d { "place items ${rootNode.layoutChildren.map { it.state.index }}" }
+            d { "place items ${rootNode.layoutChildren.map { it.state.index }.sorted()}" }
             rootNode.layoutChildren
                 .forEach { child ->
                     when (direction) {

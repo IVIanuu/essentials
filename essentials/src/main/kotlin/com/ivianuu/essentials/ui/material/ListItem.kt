@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.gesture.LongPressGestureDetector
@@ -56,7 +56,7 @@ fun DefaultListItemStyle(
 )
 
 val ListItemStyleAmbient =
-    ambientOf<ListItemStyle?> { null }
+    staticAmbientOf<ListItemStyle?> { null }
 
 @Composable
 fun ListItem(

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 
@@ -26,7 +26,7 @@ import androidx.ui.material.MaterialTheme
 data class ProgressIndicatorStyle(val color: Color)
 
 val ProgressIndicatorStyleAmbient =
-    ambientOf<ProgressIndicatorStyle?> { null }
+    staticAmbientOf<ProgressIndicatorStyle?> { null }
 
 @Composable
 fun DefaultProgressIndicatorStyle(color: Color = MaterialTheme.colors().secondary) =

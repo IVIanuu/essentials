@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.ProvideContentColor
@@ -46,7 +45,7 @@ fun DefaultSubheaderStyle(
 )
 
 val SubheaderStyleAmbient =
-    ambientOf<SubheaderStyle?> { null }
+    staticAmbientOf<SubheaderStyle?> { null }
 
 @Composable
 fun Subheader(

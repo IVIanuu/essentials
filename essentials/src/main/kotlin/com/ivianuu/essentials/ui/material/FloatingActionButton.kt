@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.core.Text
 import androidx.ui.foundation.shape.corner.CircleShape
@@ -81,7 +81,7 @@ fun ExtendedFloatingActionButtonStyle(
 )
 
 val FloatingActionButtonStyleAmbient =
-    ambientOf<FloatingActionButtonStyle?> { null }
+    staticAmbientOf<FloatingActionButtonStyle?> { null }
 
 @Composable
 fun FloatingActionButton(

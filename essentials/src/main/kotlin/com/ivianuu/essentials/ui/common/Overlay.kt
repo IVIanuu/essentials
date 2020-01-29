@@ -21,7 +21,6 @@ import androidx.compose.Immutable
 import androidx.compose.Model
 import androidx.compose.Providers
 import androidx.compose.Stable
-import androidx.compose.ambientOf
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
@@ -103,7 +102,7 @@ class OverlayEntry(
 )
 
 val OverlayAmbient =
-    ambientOf<OverlayState> { error("No overlay provided") }
+    staticAmbientOf<OverlayState> { error("No overlay provided") }
 
 @Composable
 private fun OverlayLayout(

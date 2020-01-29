@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
@@ -81,7 +81,7 @@ fun SurfaceAppBarStyle(
 }
 
 val AppBarStyleAmbient =
-    ambientOf<AppBarStyle?> { null }
+    staticAmbientOf<AppBarStyle?> { null }
 
 @Composable
 fun TopAppBar(title: String) {

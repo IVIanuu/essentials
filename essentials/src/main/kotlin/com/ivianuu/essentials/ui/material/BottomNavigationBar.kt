@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Model
 import androidx.compose.Providers
-import androidx.compose.ambientOf
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
@@ -58,7 +57,7 @@ data class BottomNavigationBarStyle(
 )
 
 val BottomNavigationBarStyleAmbient =
-    ambientOf<BottomNavigationBarStyle?> { null }
+    staticAmbientOf<BottomNavigationBarStyle?> { null }
 
 @Composable
 fun DefaultBottomNavigationBarStyle(

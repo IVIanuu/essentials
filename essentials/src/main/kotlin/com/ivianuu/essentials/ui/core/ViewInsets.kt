@@ -26,7 +26,6 @@ import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.StructurallyEqual
-import androidx.compose.ambientOf
 import androidx.compose.mutableStateOf
 import androidx.compose.onCommit
 import androidx.compose.remember
@@ -216,6 +215,6 @@ fun WindowInsetsProvider(
 }
 
 private val WindowInsetsAmbient =
-    ambientOf<WindowInsets> {
+    staticAmbientOf<WindowInsets> {
         error("No window insets provided")
     }

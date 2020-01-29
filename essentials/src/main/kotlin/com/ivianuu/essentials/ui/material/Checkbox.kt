@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.selection.ToggleableState
 import androidx.ui.graphics.Color
@@ -28,7 +28,7 @@ import androidx.ui.material.MaterialTheme
 data class CheckboxStyle(val color: Color)
 
 val CheckboxStyleAmbient =
-    ambientOf<CheckboxStyle?> { null }
+    staticAmbientOf<CheckboxStyle?> { null }
 
 @Composable
 fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors().secondary) =

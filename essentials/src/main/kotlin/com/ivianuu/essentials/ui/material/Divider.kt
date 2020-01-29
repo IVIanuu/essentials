@@ -2,8 +2,8 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
 import androidx.compose.remember
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.foundation.contentColor
@@ -22,7 +22,7 @@ data class DividerStyle(
 )
 
 val DividerStyleAmbient =
-    ambientOf<DividerStyle?> { null }
+    staticAmbientOf<DividerStyle?> { null }
 
 @Composable
 fun DefaultDividerStyle(

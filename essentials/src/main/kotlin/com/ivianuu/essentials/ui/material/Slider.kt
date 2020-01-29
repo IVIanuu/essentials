@@ -22,9 +22,9 @@ import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Stable
-import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.compose.state
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Draw
@@ -65,7 +65,7 @@ import kotlin.math.abs
 data class SliderStyle(val color: Color)
 
 val SliderStyleAmbient =
-    ambientOf<SliderStyle?> { null }
+    staticAmbientOf<SliderStyle?> { null }
 
 @Composable
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =

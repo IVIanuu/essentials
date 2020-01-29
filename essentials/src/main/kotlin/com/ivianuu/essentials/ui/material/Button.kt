@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.ContainedButtonStyle
 
 val ButtonStyleAmbient =
-    ambientOf<ButtonStyle?> { null }
+    staticAmbientOf<ButtonStyle?> { null }
 
 @Composable
 fun Button(

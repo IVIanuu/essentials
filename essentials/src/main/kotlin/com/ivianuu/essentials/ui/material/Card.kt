@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Brush
@@ -39,7 +39,7 @@ data class CardStyle(
 )
 
 val CardStyleAmbient =
-    ambientOf<CardStyle?> { null }
+    staticAmbientOf<CardStyle?> { null }
 
 @Composable
 fun DefaultCardStyle(
