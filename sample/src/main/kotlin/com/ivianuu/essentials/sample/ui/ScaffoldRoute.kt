@@ -16,8 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.animation.FastOutSlowInEasing
+import androidx.animation.FloatPropKey
+import androidx.animation.transitionDefinition
+import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.remember
+import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
@@ -41,6 +46,47 @@ import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.transform.TransformScale
+import kotlin.time.milliseconds
+
+@Composable
+fun FabAnimation(
+    visible: Boolean,
+    fab: @Composable () -> Unit
+) {
+    Transition(
+        definition = fabTransitionDefinition,
+        toState = visible
+    ) { state ->
+        Container(
+            modifier = TransformScale(
+                scaleX = state[FabScale],
+                scaleY = state[FabScale],
+                pivotX = 0.5f,
+                pivotY = 0.5f
+            ),
+            children = fab
+        )
+    }
+}
+
+private val FabScale = FloatPropKey()
+
+private val fabTransitionDefinition = transitionDefinition {
+    state(true) {
+        set(FabScale, 1f)
+    }
+    state(false) {
+        set(FabScale, 0f)
+    }
+
+    transition {
+        FabScale using tween<Float> {
+            duration = 120.milliseconds.toLongMilliseconds().toInt()
+            easing = FastOutSlowInEasing
+        }
+    }
+}
 
 val ScaffoldRoute = Route {
     val navigator = NavigatorAmbient.current
@@ -65,9 +111,13 @@ val ScaffoldRoute = Route {
             )
         }) else null,
         fabPosition = controls.fabPosition,
-        fab = if (controls.showFab) ({
-            FloatingActionButton("Click me", onClick = {})
-        }) else null,
+        fab = {
+            FabAnimation(
+                visible = controls.showFab
+            ) {
+                FloatingActionButton("Click me", onClick = {})
+            }
+        },
         bottomBar = if (controls.showBottomBar) ({
             val alpha = remember(controls.bodyLayoutMode) {
                 if (controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBottom
