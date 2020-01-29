@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import android.view.View
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.core.Alignment
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.unit.IntPxPosition
@@ -29,42 +27,6 @@ import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
-
-fun PopupRoute(
-    alignment: Alignment = Alignment.BottomLeft,
-    view: View,
-    onCancel: (() -> Unit)? = null,
-    popup: @Composable () -> Unit
-): Route {
-    val width = view.width.ipx
-    val height = view.width.ipx
-    val location = intArrayOf(0, 0)
-    view.getLocationInWindow(location)
-    val left = location[0].ipx
-    val top = location[1].ipx
-    val right = left + width
-    val bottom = top + height
-    val centerX = left + width / 2
-    val centerY = top + height / 2
-
-    val position = when (alignment) {
-        Alignment.TopLeft -> IntPxPosition(left, top)
-        Alignment.TopCenter -> IntPxPosition(centerX, top)
-        Alignment.TopRight -> IntPxPosition(right, top)
-        Alignment.CenterLeft -> IntPxPosition(left, centerY)
-        Alignment.Center -> IntPxPosition(centerX, centerY)
-        Alignment.CenterRight -> IntPxPosition(right, centerY)
-        Alignment.BottomLeft -> IntPxPosition(left, bottom)
-        Alignment.BottomCenter -> IntPxPosition(centerX, bottom)
-        Alignment.BottomRight -> IntPxPosition(right, bottom)
-    }
-
-    return PopupRoute(
-        position = position,
-        onCancel = onCancel,
-        popup = popup
-    )
-}
 
 fun PopupRoute(
     position: IntPxPosition,
