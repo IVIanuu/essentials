@@ -16,6 +16,7 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutNode
 import androidx.ui.core.Measurable
 import androidx.ui.core.MeasureScope
+import androidx.ui.core.MeasuringIntrinsicsMeasureBlocks
 import androidx.ui.core.Modifier
 import androidx.ui.core.Ref
 import androidx.ui.foundation.shape.RectangleShape
