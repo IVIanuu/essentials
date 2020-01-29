@@ -87,7 +87,7 @@ fun Scaffold(
                 state = scaffoldState,
                 topAppBar = topAppBar,
                 body = body?.let {
-                    @Composable {
+                    {
                         Surface {
                             body()
                         }
