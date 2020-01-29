@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Divider
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
@@ -56,6 +55,7 @@ import com.ivianuu.essentials.ui.painter.ColorRenderable
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
