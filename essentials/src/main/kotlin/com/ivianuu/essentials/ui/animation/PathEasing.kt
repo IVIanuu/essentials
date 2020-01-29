@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.animation
 
 import androidx.animation.Easing
 import androidx.ui.graphics.Path
