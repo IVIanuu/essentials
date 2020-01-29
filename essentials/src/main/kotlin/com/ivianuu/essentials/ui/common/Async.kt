@@ -25,7 +25,7 @@ import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 
 @Composable
-fun <T> AsyncList(
+fun <T> RenderAsyncList(
     state: Async<List<T>>,
     fail: @Composable (Throwable) -> Unit = {},
     loading: @Composable () -> Unit = { FullScreenLoading() },
@@ -33,7 +33,7 @@ fun <T> AsyncList(
     successEmpty: @Composable () -> Unit = {},
     successItem: @Composable (Int, T) -> Unit
 ) {
-    Async(
+    RenderAsync(
         state = state,
         fail = fail,
         loading = loading,
@@ -49,7 +49,7 @@ fun <T> AsyncList(
 }
 
 @Composable
-fun <T> Async(
+fun <T> RenderAsync(
     state: Async<T>,
     fail: @Composable (Throwable) -> Unit = {},
     loading: @Composable () -> Unit = { FullScreenLoading() },

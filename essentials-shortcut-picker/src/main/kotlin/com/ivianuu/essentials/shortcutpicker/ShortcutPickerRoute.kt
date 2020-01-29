@@ -29,7 +29,7 @@ import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.material.ListItem
@@ -48,7 +48,7 @@ fun ShortcutPickerRoute(
 ) = Route {
     val viewModel = injectMvRxViewModel<ShortcutPickerViewModel>()
     SimpleScreen(title = title ?: stringResource(R.string.es_title_shortcut_picker)) {
-        AsyncList(state = viewModel.state.shortcuts) { _, info ->
+        RenderAsyncList(state = viewModel.state.shortcuts) { _, info ->
             ShortcutInfo(info = info, onClick = { viewModel.infoClicked(info) })
         }
     }

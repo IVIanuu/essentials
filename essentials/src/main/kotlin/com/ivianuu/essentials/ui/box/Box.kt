@@ -37,7 +37,7 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
 
         return@remember BoxWrapper(value = box.defaultValue, setter = setter)
     }
-    wrapper._internalValue = collect(box.asFlow(), box.defaultValue)
+    wrapper.internalValue = collect(box.asFlow(), box.defaultValue)
     return wrapper
 }
 
@@ -47,10 +47,10 @@ class BoxWrapper<T> internal constructor(
     private val setter: (T) -> Unit
 ) {
 
-    internal var _internalValue = value
+    internal var internalValue = value
 
     var value: T
-        get() = _internalValue
+        get() = internalValue
         set(value) {
             setter(value)
         }

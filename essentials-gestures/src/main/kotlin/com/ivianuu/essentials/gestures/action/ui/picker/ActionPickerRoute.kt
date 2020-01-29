@@ -5,7 +5,7 @@ import androidx.compose.key
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -21,7 +21,7 @@ fun ActionPickerRoute(
             parametersOf(showDefaultOption, showNoneOption)
         }
 
-        AsyncList(
+        RenderAsyncList(
             state = viewModel.state.items,
             successItem = { index, item ->
                 key(index) {

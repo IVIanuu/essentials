@@ -29,7 +29,7 @@ import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.ListItem
@@ -90,7 +90,7 @@ fun CheckableAppsScreen(
             )
         },
         body = {
-            AsyncList(
+            RenderAsyncList(
                 state = viewModel.state.apps,
                 successItem = { _, app ->
                     key(app.info.packageName) {

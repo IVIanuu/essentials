@@ -18,9 +18,6 @@ package com.ivianuu.essentials.ui.core
 
 import android.content.res.Configuration
 import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.ambientOf
-import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 
 enum class Orientation {
@@ -28,18 +25,9 @@ enum class Orientation {
 }
 
 @Composable
-fun OrientationProvider(children: @Composable () -> Unit) {
-    val configuration = ConfigurationAmbient.current
-    val orientation = remember(configuration.orientation) {
-        when (configuration.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> Orientation.Portrait
-            Configuration.ORIENTATION_LANDSCAPE -> Orientation.Landscape
-            else -> error("Unexpected orientation ${configuration.orientation}")
-        }
+fun ambientOrientation(): Orientation =
+    when (val orientation = ConfigurationAmbient.current.orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> Orientation.Portrait
+        Configuration.ORIENTATION_LANDSCAPE -> Orientation.Landscape
+        else -> error("Unexpected orientation $orientation")
     }
-
-    Providers(OrientationAmbient provides orientation, children = children)
-}
-
-val OrientationAmbient =
-    ambientOf<Orientation> { error("No orientation provided") }

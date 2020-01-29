@@ -48,8 +48,8 @@ import com.ivianuu.essentials.util.isLight
 data class AppBarStyle(
     val color: Color,
     val contentColor: Color,
-    val elevation: Dp = DefaultAppBarElevation,
-    val centerTitle: Boolean = false
+    val elevation: Dp,
+    val centerTitle: Boolean
 )
 
 @Composable
@@ -74,7 +74,7 @@ fun PrimaryAppBarStyle(
 
 @Composable
 fun SurfaceAppBarStyle(
-    elevation: Dp = DefaultAppBarElevation,
+    elevation: Dp = 0.dp,
     centerTitle: Boolean = false
 ) = with(MaterialTheme.colors()) {
     AppBarStyle(color = surface, contentColor = onSurface, elevation = elevation, centerTitle = centerTitle)

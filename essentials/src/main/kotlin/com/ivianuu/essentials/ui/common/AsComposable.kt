@@ -21,6 +21,8 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.Renderable
 
+// todo remove
+
 fun String?.asTextComposable(): @Composable (() -> Unit)? = if (this == null) null else {
     {
         Text(this)

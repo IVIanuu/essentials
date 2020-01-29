@@ -26,7 +26,7 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilRenderable
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -52,7 +52,7 @@ fun AppPickerRoute(
                     parametersOf(appFilter)
                 }
 
-            AsyncList(
+            RenderAsyncList(
                 state = viewModel.state.apps,
                 successItem = { _, app ->
                     key(app.packageName) {

@@ -28,7 +28,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.ui.common.Async
+import com.ivianuu.essentials.ui.common.RenderAsync
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.loadAsync
 import com.ivianuu.essentials.ui.dialog.DialogButton
@@ -58,7 +58,7 @@ class DebugBillingActivity : EsActivity() {
         }
         this.requestId = requestId
 
-        Async(
+        RenderAsync(
             state = loadAsync(requestId) { client.getSkuDetailsForRequest(requestId) },
             success = {
                 if (it == null) {
