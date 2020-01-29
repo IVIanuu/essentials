@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.navigation.transition
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.layout.LayoutPercentOffset
+import com.ivianuu.essentials.ui.layout.LayoutOffset
 import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.OpacityRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
@@ -21,8 +21,8 @@ fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTr
     generateOps = { transitionState, _ ->
         opsOf(
             OpacityRouteTransitionType.Opacity with transitionState[Alpha],
-            ModifierRouteTransitionType.Modifier with LayoutPercentOffset(
-                percentY = transitionState[VerticalOffset]
+            ModifierRouteTransitionType.Modifier with LayoutOffset.Fraction(
+                fractionY = transitionState[VerticalOffset]
             )
         )
     }

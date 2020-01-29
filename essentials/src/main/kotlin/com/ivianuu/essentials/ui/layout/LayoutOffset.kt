@@ -22,14 +22,15 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPxPosition
 import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.dp
 
 @Immutable
 object LayoutOffset {
 
     @Immutable
     data class Absolute(
-        val offsetX: Dp,
-        val offsetY: Dp
+        val offsetX: Dp = 0.dp,
+        val offsetY: Dp = 0.dp
     ) : LayoutModifier {
         override fun Density.modifyPosition(
             childSize: IntPxSize,
@@ -41,8 +42,8 @@ object LayoutOffset {
 
     @Immutable
     data class Fraction(
-        val fractionX: Float,
-        val fractionY: Float
+        val fractionX: Float = 0f,
+        val fractionY: Float = 0f
     ) : LayoutModifier {
         override fun Density.modifyPosition(
             childSize: IntPxSize,
