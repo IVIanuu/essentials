@@ -2,8 +2,10 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Ambient
 import androidx.compose.AmbientAccessor
+import androidx.compose.Composable
 import androidx.compose.compositionReference
 
+@Composable
 val <T : Any> Ambient<T>.currentOrNull: T?
     get() {
         val ref = compositionReference()
@@ -12,9 +14,11 @@ val <T : Any> Ambient<T>.currentOrNull: T?
             ?: AmbientAccessor.getDefaultValue(this) as? T
     }
 
+@Composable
 val <T : Any> Ambient<T>.currentOrThrow: T
     get() =
         currentOrNull ?: error("No value provided for $this")
 
-inline fun <T : Any> Ambient<T>.currentOrElse(defaultValue: () -> T): T =
+@Composable
+inline fun <T : Any> Ambient<T>.currentOrElse(defaultValue: @Composable () -> T): T =
     currentOrNull ?: defaultValue()
