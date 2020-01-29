@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
-
 fun PopupRoute(
     position: IntPxBounds,
     onCancel: (() -> Unit)? = null,
