@@ -41,8 +41,8 @@ fun <T> PopupMenuButton(
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
-    selectedItem: T,
     onSelected: (T) -> Unit,
+    selectedItem: T? = null,
     item: @Composable (T, Boolean) -> Unit
 ) {
     PopupTrigger(
