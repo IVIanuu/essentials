@@ -51,26 +51,28 @@ fun Environment(
         KeyboardManagerAmbient provides remember {
             KeyboardManager(focusManager, composeView, component.get())
         },
-        RetainedObjectsAmbient provides retainedObjects
+        RetainedObjectsAmbient provides retainedObjects,
+        HapticFeedbackAmbient provides remember { AndroidHapticFeedback(composeView) },
+        SystemSoundAmbient provides remember { AndroidSystemSound(composeView) }
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
             WindowInsetsManager {
                 SystemBarManager {
                     ConfigurationFix {
-                        OrientationProvider {
-                            val uiInitializers = inject<Map<String, UiInitializer>>(name = UiInitializers)
-                            uiInitializers.entries
-                                .map { (key, initializer) ->
-                                    val function: @Composable (@Composable () -> Unit) -> Unit = { children ->
+                        val uiInitializers =
+                            inject<Map<String, UiInitializer>>(name = UiInitializers)
+                        uiInitializers.entries
+                            .map { (key, initializer) ->
+                                val function: @Composable (@Composable () -> Unit) -> Unit =
+                                    { children ->
                                         d { "apply ui initializer $key" }
                                         initializer.apply(children)
                                     }
-                                    function
-                                }
-                                .fold(children) { current, initializer ->
-                                    { initializer(current) }
-                                }.invoke()
-                        }
+                                function
+                            }
+                            .fold(children) { current, initializer ->
+                                { initializer(current) }
+                            }.invoke()
                     }
                 }
             }
