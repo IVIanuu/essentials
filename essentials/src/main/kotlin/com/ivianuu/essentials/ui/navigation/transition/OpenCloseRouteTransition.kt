@@ -6,11 +6,12 @@ import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import androidx.ui.graphics.Path
 import com.ivianuu.essentials.ui.animation.PathEasing
-import com.ivianuu.essentials.ui.navigation.CanvasRouteTransitionType
+import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.OpacityRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
 import com.ivianuu.essentials.ui.navigation.opsOf
 import com.ivianuu.essentials.ui.navigation.with
+import com.ivianuu.essentials.ui.transform.TransformScale
 import kotlin.time.milliseconds
 
 fun OpenCloseRouteTransition(speed: Float = 1f) = RouteTransition(
@@ -22,16 +23,10 @@ fun OpenCloseRouteTransition(speed: Float = 1f) = RouteTransition(
     generateOps = { transitionState, _ ->
         opsOf(
             OpacityRouteTransitionType.Opacity with transitionState[Alpha],
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.scale(sx = transitionState[Scale], sy = transitionState[Scale])
-                canvas.translate(
-                    dx = parentSize.width.value / 2 * (1f - transitionState[Scale]),
-                    dy = parentSize.height.value / 2 * (1f - transitionState[Scale])
-                )
-                drawChildren()
-                canvas.restore()
-            }
+            ModifierRouteTransitionType.Modifier with TransformScale(
+                scaleX = transitionState[Scale], scaleY = transitionState[Scale],
+                pivotX = 0.5f, pivotY = 0.5f
+            )
         )
     }
 )

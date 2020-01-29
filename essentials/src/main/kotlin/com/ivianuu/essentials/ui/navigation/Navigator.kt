@@ -127,7 +127,7 @@ class NavigatorState(
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
     var routeTransitionTypes =
-        listOf(OpacityRouteTransitionType, CanvasRouteTransitionType, ModifierRouteTransitionType)
+        listOf(OpacityRouteTransitionType, ModifierRouteTransitionType)
 
     internal var defaultRouteTransition = DefaultRouteTransition
 

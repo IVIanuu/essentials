@@ -24,13 +24,9 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
-import androidx.ui.core.Draw
-import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Modifier
 import androidx.ui.core.Opacity
-import androidx.ui.graphics.Canvas
 import androidx.ui.layout.Container
-import androidx.ui.unit.PxSize
 
 @Immutable
 class RouteTransition(
@@ -87,19 +83,6 @@ object OpacityRouteTransitionType : RouteTransition.Type {
         children: @Composable () -> Unit
     ) {
         Opacity(opacity = ops[Opacity].singleOrNull() ?: 1f, children = children)
-    }
-}
-
-object CanvasRouteTransitionType : RouteTransition.Type {
-    val Block = RouteTransition.Ops.Key<DrawReceiver.(Canvas, PxSize) -> Unit>()
-    @Composable
-    override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
-        Draw(
-            children = children,
-            onPaint = { canvas, parentSize ->
-                ops[Block].forEach { it(canvas, parentSize) }
-            }
-        )
     }
 }
 
