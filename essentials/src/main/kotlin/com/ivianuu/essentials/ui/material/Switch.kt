@@ -21,12 +21,12 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class SwitchStyle(val color: Color)
 
-val SwitchStyleAmbient =
-    staticAmbientOf<SwitchStyle?> { null }
+val SwitchStyleAmbient = staticAmbientOf<SwitchStyle>()
 
 @Composable
 fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -36,7 +36,7 @@ fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =
 fun Switch(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
-    style: SwitchStyle = SwitchStyleAmbient.current ?: DefaultSwitchStyle()
+    style: SwitchStyle = SwitchStyleAmbient.currentOrElse { DefaultSwitchStyle() },
 ) {
     androidx.ui.material.Switch(
         checked = checked,

@@ -23,12 +23,12 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.selection.ToggleableState
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class CheckboxStyle(val color: Color)
 
-val CheckboxStyleAmbient =
-    staticAmbientOf<CheckboxStyle?> { null }
+val CheckboxStyleAmbient = staticAmbientOf<CheckboxStyle>()
 
 @Composable
 fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -39,7 +39,7 @@ fun Checkbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier.None,
-    style: CheckboxStyle = CheckboxStyleAmbient.current ?: DefaultCheckboxStyle()
+    style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() },
 ) {
     androidx.ui.material.TriStateCheckbox(
         value = ToggleableState(checked),

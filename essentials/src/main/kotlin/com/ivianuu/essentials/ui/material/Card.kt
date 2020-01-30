@@ -27,6 +27,7 @@ import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class CardStyle(
@@ -38,8 +39,7 @@ data class CardStyle(
     val elevation: Dp = 1.dp
 )
 
-val CardStyleAmbient =
-    staticAmbientOf<CardStyle?> { null }
+val CardStyleAmbient = staticAmbientOf<CardStyle>()
 
 @Composable
 fun DefaultCardStyle(
@@ -61,8 +61,8 @@ fun DefaultCardStyle(
 @Composable
 fun Card(
     modifier: Modifier = Modifier.None,
-    style: CardStyle = CardStyleAmbient.current ?: DefaultCardStyle(),
-    children: @Composable () -> Unit
+    style: CardStyle = CardStyleAmbient.currentOrElse { DefaultCardStyle() },
+    children: @Composable () -> Unit,
 ) {
     androidx.ui.material.surface.Card(
         modifier = modifier,

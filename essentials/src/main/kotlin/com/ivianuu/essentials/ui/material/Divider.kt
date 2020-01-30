@@ -14,6 +14,7 @@ import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class DividerStyle(
@@ -21,8 +22,7 @@ data class DividerStyle(
     val size: Dp
 )
 
-val DividerStyleAmbient =
-    staticAmbientOf<DividerStyle?> { null }
+val DividerStyleAmbient = staticAmbientOf<DividerStyle>()
 
 @Composable
 fun DefaultDividerStyle(
@@ -34,7 +34,7 @@ fun DefaultDividerStyle(
 fun Divider(
     axis: Axis,
     modifier: Modifier = Modifier.None,
-    style: DividerStyle = DividerStyleAmbient.current ?: DefaultDividerStyle()
+    style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() },
 ) {
     val sizeModifiers = remember(axis, style.size) {
         when (axis) {

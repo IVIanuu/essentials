@@ -57,6 +57,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.lerp
 import androidx.ui.unit.px
 import androidx.ui.unit.toRect
+import com.ivianuu.essentials.ui.core.currentOrElse
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -64,8 +65,7 @@ import kotlin.math.abs
 @Immutable
 data class SliderStyle(val color: Color)
 
-val SliderStyleAmbient =
-    staticAmbientOf<SliderStyle?> { null }
+val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
 
 @Composable
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
@@ -109,7 +109,7 @@ fun Slider(
     onValueChange: (Float) -> Unit = { position.value = it },
     modifier: Modifier = Modifier.None,
     onValueChangeEnd: () -> Unit = {},
-    style: SliderStyle = SliderStyleAmbient.current ?: DefaultSliderStyle()
+    style: SliderStyle = SliderStyleAmbient.currentOrElse { DefaultSliderStyle() },
 ) {
     Container(modifier = modifier) {
         WithConstraints { constraints ->

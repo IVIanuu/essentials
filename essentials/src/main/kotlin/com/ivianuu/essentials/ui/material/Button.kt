@@ -21,16 +21,16 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.ContainedButtonStyle
+import com.ivianuu.essentials.ui.core.currentOrElse
 
-val ButtonStyleAmbient =
-    staticAmbientOf<ButtonStyle?> { null }
+val ButtonStyleAmbient = staticAmbientOf<ButtonStyle>()
 
 @Composable
 fun Button(
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: ButtonStyle = ButtonStyleAmbient.current ?: ContainedButtonStyle(),
-    children: @Composable () -> Unit
+    style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
+    children: @Composable () -> Unit,
 ) {
     androidx.ui.material.Button(
         modifier = modifier, onClick = onClick, style = style, children = children
@@ -42,7 +42,7 @@ fun Button(
     text: String,
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: ButtonStyle = ButtonStyleAmbient.current ?: ContainedButtonStyle()
+    style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
 ) {
     androidx.ui.material.Button(
         modifier = modifier, onClick = onClick, style = style, text = text.toUpperCase()

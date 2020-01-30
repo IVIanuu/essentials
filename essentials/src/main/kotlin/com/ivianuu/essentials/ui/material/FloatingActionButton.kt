@@ -30,6 +30,7 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -80,16 +81,14 @@ fun ExtendedFloatingActionButtonStyle(
     elevation = elevation
 )
 
-val FloatingActionButtonStyleAmbient =
-    staticAmbientOf<FloatingActionButtonStyle?> { null }
+val FloatingActionButtonStyleAmbient = staticAmbientOf<FloatingActionButtonStyle>()
 
 @Composable
 fun FloatingActionButton(
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current
-        ?: DefaultFloatingActionButtonStyle(),
-    children: @Composable () -> Unit
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { DefaultFloatingActionButtonStyle() },
+    children: @Composable () -> Unit,
 ) {
     androidx.ui.material.FloatingActionButton(
         modifier = modifier,

@@ -29,6 +29,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class SubheaderStyle(
@@ -45,21 +46,20 @@ fun DefaultSubheaderStyle(
     textColor = textColor
 )
 
-val SubheaderStyleAmbient =
-    staticAmbientOf<SubheaderStyle?> { null }
+val SubheaderStyleAmbient = staticAmbientOf<SubheaderStyle>()
 
 @Composable
 fun Subheader(
     text: String,
-    style: SubheaderStyle = SubheaderStyleAmbient.current ?: DefaultSubheaderStyle()
+    style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
 ) {
     Subheader(style = style) { Text(text) }
 }
 
 @Composable
 fun Subheader(
-    style: SubheaderStyle = SubheaderStyleAmbient.current ?: DefaultSubheaderStyle(),
-    text: @Composable () -> Unit
+    style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
+    text: @Composable () -> Unit,
 ) {
     Container(
         height = 48.dp,

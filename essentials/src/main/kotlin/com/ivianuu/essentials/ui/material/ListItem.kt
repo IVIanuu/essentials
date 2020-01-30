@@ -37,6 +37,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Clickable
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -55,8 +56,7 @@ fun DefaultListItemStyle(
     contentPadding = contentPadding
 )
 
-val ListItemStyleAmbient =
-    staticAmbientOf<ListItemStyle?> { null }
+val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
 
 @Composable
 fun ListItem(
@@ -65,9 +65,9 @@ fun ListItem(
     image: Renderable? = null,
     enabled: Boolean = true,
     selected: Boolean = false,
-    style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
+    style: ListItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() },
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
 ) {
     ListItem(
         title = title.asTextComposable(),

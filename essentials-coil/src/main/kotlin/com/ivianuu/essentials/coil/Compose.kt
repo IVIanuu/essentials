@@ -31,6 +31,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
@@ -64,9 +65,9 @@ class CoilRenderable(
 @Composable
 fun loadImage(
     data: Any,
-    placeholder: Image? = PlaceholderAmbient.current,
+    placeholder: Image? = PlaceholderAmbient.currentOrNull,
     size: Size? = null,
-    imageLoader: ImageLoader = inject()
+    imageLoader: ImageLoader = inject(),
 ): Image? {
     return if (placeholder != null) {
         loadImage(data = data, placeholder = placeholder, size = size, imageLoader = imageLoader)
@@ -110,18 +111,17 @@ fun loadImage(
     }
 }
 
-val PlaceholderAmbient =
-    staticAmbientOf<Image?> { null }
+val PlaceholderAmbient = staticAmbientOf<Image>()
 
 @Composable
 fun Image(
     data: Any,
     size: Size? = null,
-    placeholder: Image? = PlaceholderAmbient.current,
+    placeholder: Image? = PlaceholderAmbient.currentOrNull,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image?) -> Unit = {
         if (it != null) DrawRenderable(ImageRenderable(it))
-    }
+    },
 ) {
     RepaintBoundary {
         val loadedImage = loadImage(

@@ -38,6 +38,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.core.retainFor
 import com.ivianuu.essentials.ui.layout.Column
@@ -56,8 +57,7 @@ data class BottomNavigationBarStyle(
     val normalItemColor: Color
 )
 
-val BottomNavigationBarStyleAmbient =
-    staticAmbientOf<BottomNavigationBarStyle?> { null }
+val BottomNavigationBarStyleAmbient = staticAmbientOf<BottomNavigationBarStyle>()
 
 @Composable
 fun DefaultBottomNavigationBarStyle(
@@ -73,10 +73,9 @@ fun DefaultBottomNavigationBarStyle(
 @Composable
 fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
-    style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.current
-        ?: DefaultBottomNavigationBarStyle(),
+    style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.currentOrElse { DefaultBottomNavigationBarStyle() },
     applySafeArea: Boolean = true,
-    item: @Composable (T) -> Unit
+    item: @Composable (T) -> Unit,
 ) {
     Surface(color = style.color, elevation = BottomNavigationBarElevation) {
         SafeArea(
