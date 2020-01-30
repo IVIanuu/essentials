@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev447"
+    const val version = "${Build.versionName}-dev448"
 }
 
 object Deps {
@@ -41,8 +41,10 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
+        private const val composeVersion = "0.0.1-dev32"
+
         object Compose {
-            private const val version = "0.0.1-SNAPSHOT"
+            private const val version = composeVersion
             const val runtime = "androidx.compose:compose-runtime:$version"
         }
 
@@ -60,7 +62,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-SNAPSHOT"
+            private const val version = composeVersion
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"

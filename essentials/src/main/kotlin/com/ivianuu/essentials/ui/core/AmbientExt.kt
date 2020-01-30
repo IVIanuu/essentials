@@ -15,9 +15,14 @@ val <T : Any> Ambient<T>.currentOrNull: T?
     }
 
 @Composable
+val Ambient<*>.hasCurrentValue: Boolean get() {
+    val ref = compositionReference()
+    return this in ref.getAmbientScope()
+}
+
+@Composable
 val <T : Any> Ambient<T>.currentOrThrow: T
-    get() =
-        currentOrNull ?: error("No value provided for $this")
+    get() = currentOrNull ?: error("No value provided for $this")
 
 @Composable
 inline fun <T : Any> Ambient<T>.currentOrElse(defaultValue: @Composable () -> T): T =
