@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.util
 
 import androidx.compose.Immutable
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.*
 
 @Immutable
 sealed class Async<out T>(val complete: Boolean, val shouldLoad: Boolean) {
@@ -39,6 +41,35 @@ data class Success<out T>(val value: T) : Async<T>(complete = true, shouldLoad =
 
 @Immutable
 data class Fail<out T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true)
+
+fun <T> Flow<T>.executeAsync(): Flow<Async<T>> {
+    return this
+        .map { Success(it) as Async<T> }
+        .onStart { emit(Loading()) }
+        .catch { Fail<T>(it) }
+}
+
+fun <T> Deferred<T>.executeAsync(): Flow<Async<T>> {
+    return flow {
+        emit(Loading<T>())
+        try {
+            emit(Success(await()))
+        } catch (e: Throwable) {
+            emit(Fail<T>(e))
+        }
+    }
+}
+
+fun <T> executeAsync(block: suspend () -> T): Flow<Async<T>> {
+    return flow {
+        emit(Loading<T>())
+        try {
+            emit(Success(block()))
+        } catch (e: Throwable) {
+            emit(Fail<T>(e))
+        }
+    }
+}
 
 inline fun <T, R> Async<T>.map(transform: (T) -> R) =
     if (this is Success) Success(transform(value)) else this as Async<R>
