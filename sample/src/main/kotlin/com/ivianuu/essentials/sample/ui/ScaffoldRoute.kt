@@ -106,14 +106,15 @@ val ScaffoldRoute = Route {
                 title = { Text("Scaffold") },
                 style = AppBarStyle(
                     color = color,
-                    elevation = if (alpha == 1f) 8.dp else 0.dp
-                )
+                    elevation = if (alpha == 1f) 8.dp else 0.dp,
+                    centerTitle = controls.centerTitle,
+                ),
             )
         }) else null,
         fabPosition = controls.fabPosition,
         fab = {
             FabAnimation(
-                visible = controls.showFab
+                visible = controls.showFab,
             ) {
                 FloatingActionButton("Click me", onClick = {})
             }
@@ -132,17 +133,17 @@ val ScaffoldRoute = Route {
                     top = false,
                     left = false,
                     right = false,
-                    bottom = true
+                    bottom = true,
                 ) {
                     Container(
                         height = 56.dp,
                         expanded = true,
                         alignment = Alignment.CenterLeft,
-                        padding = EdgeInsets(16.dp)
+                        padding = EdgeInsets(16.dp),
                     ) {
                         Text(
                             text = "Bottom bar",
-                            style = MaterialTheme.typography().h6
+                            style = MaterialTheme.typography().h6,
                         )
                     }
                 }
@@ -160,7 +161,7 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showTopAppBar = !controls.showTopAppBar }
+                        onClick = { controls.showTopAppBar = !controls.showTopAppBar },
                     )
                     ListItem(
                         title = { Text("Center title") },
@@ -169,7 +170,7 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.centerTitle, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.centerTitle = !controls.centerTitle }
+                        onClick = { controls.centerTitle = !controls.centerTitle },
                     )
 
                     Subheader("Body")
@@ -184,13 +185,13 @@ val ScaffoldRoute = Route {
                                         onSelect = { controls.bodyLayoutMode = it },
                                         item = {
                                             Text(
-                                                it.name
+                                                it.name,
                                             )
-                                        }
+                                        },
                                     )
-                                }
+                                },
                             )
-                        }
+                        },
                     )
 
                     Subheader("Bottom bar")
@@ -201,7 +202,7 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showBottomBar = !controls.showBottomBar }
+                        onClick = { controls.showBottomBar = !controls.showBottomBar },
                     )
 
                     Subheader("Fab")
@@ -212,7 +213,7 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showFab, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showFab = !controls.showFab }
+                        onClick = { controls.showFab = !controls.showFab },
                     )
                     ListItem(
                         title = { Text("Fab location") },
@@ -225,15 +226,15 @@ val ScaffoldRoute = Route {
                                         onSelect = { controls.fabPosition = it },
                                         item = {
                                             Text(it.name)
-                                        }
+                                        },
                                     )
-                                }
+                                },
                             )
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     )
 }
 
