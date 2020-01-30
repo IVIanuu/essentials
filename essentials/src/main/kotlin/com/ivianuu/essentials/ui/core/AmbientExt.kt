@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Ambient
-import androidx.compose.AmbientAccessor
 import androidx.compose.Composable
 import androidx.compose.compositionReference
 
@@ -11,7 +10,6 @@ val <T : Any> Ambient<T>.currentOrNull: T?
         val ref = compositionReference()
         val ambients = ref.getAmbientScope()
         return ambients[this as Ambient<Any?>]?.value as? T
-            ?: AmbientAccessor.getDefaultValue(this) as? T
     }
 
 @Composable
