@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.core.looseMin
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -96,11 +96,14 @@ fun TopAppBar(
     actions: @Composable (() -> Unit)? = null,
     primary: Boolean = true
 ) {
-    Surface(color = style.color, elevation = style.elevation) {
-        ProvideSystemBarStyle(
-            value = ambientSystemBarStyle().let {
-                if (primary) it.copy(lightStatusBar = style.color.isLight) else it
-            }
+    ProvideSystemBarStyle(
+        value = ambientSystemBarStyle().let {
+            if (primary) it.copy(lightStatusBar = style.color.isLight) else it
+        },
+    ) {
+        Surface(
+            color = style.color,
+            elevation = style.elevation,
         ) {
             SafeArea(
                 top = primary,
@@ -234,15 +237,15 @@ private val DefaultAppBarElevation = 8.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val scaffold = ScaffoldAmbient.current
-    val navigator = NavigatorAmbient.current
-    val route = RouteAmbient.current
-    val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
+    val scaffold = ScaffoldAmbient.currentOrNull
+    val navigator = NavigatorAmbient.currentOrNull
+    val route = RouteAmbient.currentOrNull
+    val canGoBack = navigator?.backStack?.indexOf(route)?.let { it > 0 }
     return when {
-        scaffold.hasDrawer -> {
+        scaffold?.hasDrawer ?: false -> {
             { DrawerButton() }
         }
-        canGoBack -> {
+        canGoBack ?: false -> {
             { BackButton() }
         }
         else -> null
