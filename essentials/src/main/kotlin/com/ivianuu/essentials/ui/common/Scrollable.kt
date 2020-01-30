@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationEndReason
-import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.ui.core.Direction
@@ -34,15 +33,26 @@ import androidx.ui.unit.px
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
 
+@Composable
+fun ScrollPosition(
+    initial: Px = 0.px,
+    minValue: Px = 0.px,
+    maxValue: Px = Px.Infinity
+) = ScrollPosition(
+    initial, minValue, maxValue, FlingConfig().let { { _ -> it } }
+)
+
 @Model
 class ScrollPosition(
     initial: Px = 0.px,
     minValue: Px = 0.px,
-    maxValue: Px = Px.Infinity
+    maxValue: Px = Px.Infinity,
+    var flingConfigFactory: (Px) -> FlingConfig
 ) {
 
     val value: Px
         get() = holder.value.px
+            .coerceIn(_minValue, _maxValue) // todo remove once fixed
 
     private var _minValue = minValue
     val minValue: Px get() = _minValue
@@ -58,16 +68,8 @@ class ScrollPosition(
     val isAnimating: Boolean
         get() = holder.animatedFloat.isRunning
 
-    var flingConfigFactory: (Px) -> FlingConfig = {
-        FlingConfig(
-            decayAnimation = ExponentialDecay(
-                frictionMultiplier = ScrollerDefaultFriction,
-                absVelocityThreshold = ScrollerVelocityThreshold
-            )
-        )
-    }
-
     var direction = ScrollDirection.Idle
+        internal set
 
     fun smoothScrollTo(
         value: Px,
@@ -93,6 +95,7 @@ class ScrollPosition(
 
     fun scrollTo(value: Px) {
         if (this.value != value) {
+            d { "scroll to $value" }
             holder.animatedFloat.snapTo(value.value)
         }
     }
@@ -106,6 +109,7 @@ class ScrollPosition(
     }
 
     fun flingBy(velocity: Px) {
+        d { "fling by $velocity" }
         holder.fling(
             flingConfigFactory(velocity),
             velocity.value
@@ -191,9 +195,6 @@ fun Scrollable(
         )
     }
 }
-
-private const val ScrollerDefaultFriction = 0.35f
-private const val ScrollerVelocityThreshold = 1000f
 
 enum class ScrollDirection {
     Idle,
