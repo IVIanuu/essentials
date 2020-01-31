@@ -94,16 +94,16 @@ fun TopAppBar(
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
-    primary: Boolean = true,
+    primary: Boolean = true
 ) {
     ProvideSystemBarStyle(
         value = ambientSystemBarStyle().let {
             if (primary) it.copy(lightStatusBar = style.color.isLight) else it
-        },
+        }
     ) {
         Surface(
             color = style.color,
-            elevation = style.elevation,
+            elevation = style.elevation
         ) {
             SafeArea(
                 top = primary,
