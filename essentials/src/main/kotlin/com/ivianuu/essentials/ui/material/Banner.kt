@@ -28,7 +28,6 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
-import androidx.ui.material.TextButtonStyle
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment

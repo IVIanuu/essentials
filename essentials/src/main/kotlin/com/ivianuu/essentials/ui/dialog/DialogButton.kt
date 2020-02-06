@@ -18,10 +18,10 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
-import androidx.ui.material.ButtonStyle
-import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.ButtonStyle
 import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
+import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
