@@ -22,7 +22,6 @@ import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Spacer
-import androidx.ui.material.ContainedButtonStyle
 import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.injekt.get

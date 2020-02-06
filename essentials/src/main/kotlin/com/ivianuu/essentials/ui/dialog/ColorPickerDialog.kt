@@ -37,7 +37,6 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
 import androidx.ui.unit.Size
@@ -61,6 +60,7 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
+import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable
