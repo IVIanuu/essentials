@@ -22,11 +22,8 @@ import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.launch
 
-/**
- * View model for the [ActionPickerController]
- */
 @Factory
-class ActionPickerViewModel(
+internal class ActionPickerViewModel(
     @Param private val showDefaultOption: Boolean,
     @Param private val showNoneOption: Boolean,
     private val actionStore: ActionStore,

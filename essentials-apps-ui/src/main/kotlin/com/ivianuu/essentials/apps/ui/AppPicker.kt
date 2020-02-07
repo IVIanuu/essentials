@@ -83,7 +83,7 @@ private fun AppInfo(
 }
 
 @Factory
-internal class AppPickerViewModel(
+private class AppPickerViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore,
     private val navigator: NavigatorState

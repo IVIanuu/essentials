@@ -131,7 +131,7 @@ private fun CheckableApp(
 }
 
 @Factory
-internal class CheckableAppsViewModel(
+private class CheckableAppsViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {

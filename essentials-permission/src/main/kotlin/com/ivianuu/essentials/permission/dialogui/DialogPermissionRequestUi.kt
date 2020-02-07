@@ -113,7 +113,7 @@ private fun Permission(
 }
 
 @Factory
-class PermissionDialogViewModel(
+private class PermissionDialogViewModel(
     private val dispatchers: AppDispatchers,
     private val manager: PermissionManager,
     @Param private val request: PermissionRequest,

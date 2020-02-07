@@ -67,7 +67,7 @@ private fun ShortcutInfo(
 }
 
 @Factory
-internal class ShortcutPickerViewModel(
+private class ShortcutPickerViewModel(
     private val navigator: NavigatorState,
     private val packageManager: PackageManager
 ) : MvRxViewModel<ShortcutPickerState>(
