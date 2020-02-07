@@ -26,6 +26,7 @@ import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.unit.IntPx
@@ -83,27 +84,43 @@ fun Scaffold(
 
     Providers(ScaffoldAmbient provides scaffoldState) {
         var layout: @Composable () -> Unit = {
-            ScaffoldLayout(
-                state = scaffoldState,
-                topAppBar = topAppBar,
-                body = body?.let {
-                    {
-                        Surface {
-                            body()
+            Surface {
+                ScaffoldLayout(
+                    state = scaffoldState,
+                    topAppBar = topAppBar?.let {
+                        {
+                            Stack {
+                                topAppBar()
+                            }
+                        }
+                    },
+                    body = body?.let {
+                        {
+                            Stack {
+                                body()
+                            }
+                        }
+                    },
+                    bottomBar = bottomBar?.let {
+                        {
+                            Stack {
+                                bottomBar()
+                            }
+                        }
+                    },
+                    fab = fab?.let {
+                        {
+                            Stack {
+                                if (bottomBar != null) {
+                                    fab()
+                                } else {
+                                    SafeArea(children = fab)
+                                }
+                            }
                         }
                     }
-                },
-                bottomBar = bottomBar,
-                fab = fab?.let {
-                    {
-                        if (bottomBar != null) {
-                            fab()
-                        } else {
-                            SafeArea(children = fab)
-                        }
-                    }
-                }
-            )
+                )
+            }
         }
 
         if (drawerContent != null) {
