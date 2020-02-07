@@ -27,22 +27,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
     val path: String
-
-    suspend fun fetch(): T
 
     interface Serializer<T> {
         fun deserialize(serialized: String): T
@@ -67,7 +63,7 @@ internal class DiskBoxImpl<T>(
     override val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
-    private val dispatcher: CoroutineDispatcher? = null
+    private val dispatcher: CoroutineDispatcher?
 ) : DiskBox<T> {
 
     private val _isDisposed = AtomicBoolean(false)
@@ -100,13 +96,6 @@ internal class DiskBoxImpl<T>(
     private val coroutineScope = CoroutineScope(Job())
 
     private val file by lazy { File(path) }
-
-    private val multiInstanceHelper =
-        MultiInstanceHelper(coroutineScope, path) {
-            log { "$path -> multi instance change force refetch" }
-            cachedValue.set(this) // force refetching the value
-            changeNotifier.offer(Unit)
-        }
 
     private val flow: Flow<T> = changeNotifier
         .map { get() }
@@ -172,7 +161,6 @@ internal class DiskBoxImpl<T>(
 
                     cachedValue.set(value)
                     changeNotifier.offer(Unit)
-                    multiInstanceHelper.notifyWrite()
                 } finally {
                     writeLock.endWrite()
                 }
@@ -202,19 +190,6 @@ internal class DiskBoxImpl<T>(
                         log { "$path -> return default value '$it'" }
                     }
                 }
-            }
-        }
-    }
-
-    override suspend fun fetch(): T {
-        checkNotDisposed()
-        log { "$path -> fetch" }
-        return maybeWithDispatcher {
-            measured("fetch") {
-                cachedValue.set(this)
-                val result = get()
-                changeNotifier.offer(Unit)
-                return@measured result
             }
         }
     }
@@ -272,39 +247,6 @@ internal class DiskBoxImpl<T>(
         log { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
-}
-
-private class MultiInstanceHelper(
-    coroutineScope: CoroutineScope,
-    private val path: String,
-    private val onChange: () -> Unit
-) {
-
-    private val id = UUID.randomUUID().toString()
-
-    init {
-        coroutineScope.launch {
-            changeNotifier
-                .onEach { change ->
-                    if (change.path == path && change.id != id) {
-                        onChange()
-                    }
-                }
-        }
-    }
-
-    fun notifyWrite() {
-        changeNotifier.offer(Change(id = id, path = path))
-    }
-
-    private companion object {
-        private val changeNotifier = EventFlow<Change>()
-    }
-
-    private class Change(
-        val id: String,
-        val path: String
-    )
 }
 
 private class WriteLock(private val path: String) {
