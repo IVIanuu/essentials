@@ -51,9 +51,7 @@ fun Environment(
         KeyboardManagerAmbient provides remember {
             KeyboardManager(focusManager, composeView, component.get())
         },
-        RetainedObjectsAmbient provides retainedObjects,
-        HapticFeedbackAmbient provides remember { AndroidHapticFeedback(composeView) },
-        SystemSoundAmbient provides remember { AndroidSystemSound(composeView) }
+        RetainedObjectsAmbient provides retainedObjects
     ) {
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
             WindowInsetsManager {

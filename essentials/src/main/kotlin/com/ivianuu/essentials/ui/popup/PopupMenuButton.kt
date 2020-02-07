@@ -5,10 +5,11 @@ import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.boundsInRoot
 import androidx.ui.layout.Wrap
+import androidx.ui.unit.IntPxBounds
+import androidx.ui.unit.round
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.MoreVert
 import com.ivianuu.essentials.ui.common.holder
-import com.ivianuu.essentials.ui.core.round
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.painter.Renderable
@@ -32,7 +33,14 @@ fun PopupMenuButton(
             onClick = {
                 navigator.push(
                     PopupRoute(
-                        position = coordinatesHolder.value!!.boundsInRoot.round(),
+                        position = coordinatesHolder.value!!.boundsInRoot.let {
+                            IntPxBounds(
+                                left = it.left.round(),
+                                top = it.top.round(),
+                                right = it.right.round(),
+                                bottom = it.bottom.round()
+                            )
+                        },
                         onCancel = onCancel
                     ) {
                         PopupMenu(
@@ -68,7 +76,14 @@ fun <T> PopupMenuButton(
             onClick = {
                 navigator.push(
                     PopupRoute(
-                        position = coordinatesHolder.value!!.boundsInRoot.round(),
+                        position = coordinatesHolder.value!!.boundsInRoot.let {
+                            IntPxBounds(
+                                left = it.left.round(),
+                                top = it.top.round(),
+                                right = it.right.round(),
+                                bottom = it.bottom.round()
+                            )
+                        },
                         onCancel = onCancel
                     ) {
                         PopupMenu(

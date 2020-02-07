@@ -53,7 +53,6 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Scroller
 import com.ivianuu.essentials.ui.material.Slider
@@ -326,31 +325,29 @@ private fun ColorEditorHeader(
                         }
                         hideKeyboardOnDispose()
                         Text("#")
-                        OverflowBox {
-                            TextField(
-                                value = hexInput,
-                                onValueChange = { newValue ->
-                                    if ((showAlphaSelector && newValue.length > 8) ||
-                                        (!showAlphaSelector && newValue.length > 6)
-                                    ) return@TextField
+                        TextField(
+                            value = hexInput,
+                            onValueChange = { newValue ->
+                                if ((showAlphaSelector && newValue.length > 8) ||
+                                    (!showAlphaSelector && newValue.length > 6)
+                                ) return@TextField
 
-                                    setHexInput(newValue)
+                                setHexInput(newValue)
 
-                                    if ((showAlphaSelector && newValue.length < 8) ||
-                                        (!showAlphaSelector && newValue.length < 6)
-                                    ) return@TextField
+                                if ((showAlphaSelector && newValue.length < 8) ||
+                                    (!showAlphaSelector && newValue.length < 6)
+                                ) return@TextField
 
-                                    val newColor = try {
-                                        newValue.toColor()
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                        null
-                                    }
-
-                                    if (newColor != null) onColorChanged(newColor)
+                                val newColor = try {
+                                    newValue.toColor()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    null
                                 }
-                            )
-                        }
+
+                                if (newColor != null) onColorChanged(newColor)
+                            }
+                        )
                     }
                 }
             }
