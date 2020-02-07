@@ -20,7 +20,7 @@
 
     <application>
         <activity
-            android:name=".ui.base.DefaultActivity"
+            android:name=".ui.common.DefaultActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
