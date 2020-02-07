@@ -30,6 +30,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -54,6 +55,7 @@ class InjektWorkerFactory(
  * Contains the [InjektWorkerFactory]
  */
 val EsWorkModule = Module {
+    factory { WorkManager.getInstance(get()) }
     map<String, ListenableWorker>(mapName = WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
     bindAppInitializer<WorkerAppInitializer>()
