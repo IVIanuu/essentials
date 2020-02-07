@@ -294,7 +294,7 @@ class NavigatorState(
                     performChange(
                         from = route,
                         to = null,
-                        isPush = isPush,
+                        isPush = false,
                         transition = localTransition
                     )
                 }
