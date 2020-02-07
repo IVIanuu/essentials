@@ -27,6 +27,7 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
+import androidx.ui.layout.Stack
 import androidx.ui.unit.IntPxPosition
 import com.ivianuu.essentials.ui.core.tightMax
 
@@ -47,10 +48,11 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
                 .forEach { parentData ->
                     key(parentData.entry) {
                         ParentData(data = parentData) {
-                            AbsorbPointer(
-                                absorb = !parentData.isVisible,
-                                children = parentData.entry.content
-                            )
+                            AbsorbPointer(absorb = !parentData.isVisible) {
+                                Stack {
+                                    parentData.entry.content()
+                                }
+                            }
                         }
                     }
                 }

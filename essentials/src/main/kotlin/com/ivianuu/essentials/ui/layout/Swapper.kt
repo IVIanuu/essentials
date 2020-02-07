@@ -20,10 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
-import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.layout.Container
+import androidx.ui.layout.Stack
 import androidx.ui.unit.PxPosition
 
 @Composable
@@ -35,14 +34,12 @@ fun <T> Swapper(
     val children: @Composable () -> Unit = {
         state.keepStateItems.forEach { item ->
             key(item as Any) {
-                child(item)
+                SwapperSlot { child(state.current) }
             }
         }
 
         key(state.current as Any) {
-            Container(alignment = Alignment.TopLeft) {
-                child(state.current)
-            }
+            SwapperSlot { child(state.current) }
         }
     }
 
@@ -51,6 +48,13 @@ fun <T> Swapper(
         layout(constraints.maxWidth, constraints.maxHeight) {
             placeable.place(PxPosition.Origin)
         }
+    }
+}
+
+@Composable
+private fun SwapperSlot(children: @Composable () -> Unit) {
+    Stack {
+        children()
     }
 }
 
