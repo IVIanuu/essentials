@@ -20,8 +20,10 @@ import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
+import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
+import androidx.ui.layout.Container
 import androidx.ui.unit.PxPosition
 
 @Composable
@@ -38,7 +40,9 @@ fun <T> Swapper(
         }
 
         key(state.current as Any) {
-            child(state.current)
+            Container(alignment = Alignment.TopLeft) {
+                child(state.current)
+            }
         }
     }
 
