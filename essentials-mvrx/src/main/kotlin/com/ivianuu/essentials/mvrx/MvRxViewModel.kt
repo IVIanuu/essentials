@@ -23,6 +23,7 @@ import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
@@ -54,16 +55,18 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     protected open val coroutineDispatcher = AppComponent.get()
         .get<AppCoroutineDispatchers>().default
 
+    init {
+        if (AppComponent.get().get<BuildInfo>().isDebug) {
+            subscribe { d { "new state -> $it" } }
+        }
+    }
+
     protected suspend fun setState(reducer: suspend S.() -> S) {
         withContext(coroutineDispatcher) {
             val currentState = _state.value
             val newState = reducer(currentState)
             _state.setIfChanged(newState)
         }
-    }
-
-    fun logStateChanges() {
-        subscribe { d { "new state -> $it" } }
     }
 
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
