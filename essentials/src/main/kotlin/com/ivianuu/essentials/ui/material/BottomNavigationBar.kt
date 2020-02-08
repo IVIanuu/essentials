@@ -75,8 +75,8 @@ fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.currentOrElse { DefaultBottomNavigationBarStyle() },
     applySafeArea: Boolean = true,
-    item: @Composable (T) -> Unit,
-) {
+    itemCallback: @Composable (T) -> Unit,
+    ) {
     Surface(color = style.color, elevation = BottomNavigationBarElevation) {
         SafeArea(
             left = false,
@@ -112,7 +112,7 @@ fun <T> BottomNavigationBar(
                                             color = if (_item == controller.selectedItem) style.selectedItemColor else style.normalItemColor
                                         ) {
                                             Providers(BottomNavigationItemAmbient provides _item) {
-                                                item(_item)
+                                                itemCallback(_item)
                                             }
                                         }
                                     }
@@ -174,7 +174,7 @@ private fun <T> defaultOnSelected(): () -> Unit {
 fun <T> BottomNavigationSwapper(
     bottomNavigationController: BottomNavigationController<T> = ambientBottomNavigationController(),
     keepState: Boolean = false,
-    content: @Composable (T) -> Unit
+    contentCallback: @Composable (T) -> Unit
 ) {
     val swapperController = retain {
         SwapperState(
@@ -191,7 +191,7 @@ fun <T> BottomNavigationSwapper(
     }
 
     Swapper(state = swapperController) {
-        content(bottomNavigationController.selectedItem)
+        contentCallback(bottomNavigationController.selectedItem)
     }
 }
 

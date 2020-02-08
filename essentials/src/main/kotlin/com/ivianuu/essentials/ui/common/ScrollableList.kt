@@ -37,7 +37,7 @@ fun <T> ScrollableList(
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
-    item: @Composable (Int, T) -> Unit
+    itemCallback: @Composable (Int, T) -> Unit
 ) {
     ScrollableList(
         itemCount = items.size,
@@ -45,7 +45,7 @@ fun <T> ScrollableList(
         direction = direction,
         position = position,
         enabled = enabled,
-        item = { item(it, items[it]) }
+        itemCallback = { itemCallback(it, items[it]) }
     )
 }
 
@@ -56,15 +56,15 @@ fun ScrollableList(
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
-    item: @Composable (Int) -> Unit
+    itemCallback: @Composable (Int) -> Unit
 ) {
     ScrollableList(
         modifier = modifier,
         direction = direction,
         position = position,
         enabled = enabled,
-        itemFactory = { index ->
-            if (index in 0 until itemCount) (@Composable { item(index) })
+        itemCallbackFactory = { index ->
+            if (index in 0 until itemCount) (@Composable { itemCallback(index) })
             else null
         }
     )
@@ -76,13 +76,13 @@ fun ScrollableList(
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = retain { ScrollPosition() },
     enabled: Boolean = true,
-    itemFactory: (Int) -> @Composable (() -> Unit)?
+    itemCallbackFactory: (Int) -> @Composable (() -> Unit)?
 ) {
     val state = remember { ScrollableListState() }
     state.context = ContextAmbient.current
     state.compositionRef = compositionReference()
     state.forceRecompose = true
-    state.composableFactory = itemFactory
+    state.composableFactory = itemCallbackFactory
     state.position = position
     state.direction = direction
 

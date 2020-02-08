@@ -27,7 +27,7 @@ fun <T> SingleChoiceListDialog(
     items: List<T>,
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
-    item: @Composable (T) -> Unit,
+    itemCallback: @Composable (T) -> Unit,
     dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
@@ -46,7 +46,7 @@ fun <T> SingleChoiceListDialog(
             items.forEachIndexed { index, item ->
                 key(index) {
                     SingleChoiceDialogListItem(
-                        title = { item(item) },
+                        title = { itemCallback(item) },
                         selected = item == selectedItem,
                         onSelect = onSelect?.let {
                             {

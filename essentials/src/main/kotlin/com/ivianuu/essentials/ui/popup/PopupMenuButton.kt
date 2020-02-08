@@ -62,8 +62,7 @@ fun <T> PopupMenuButton(
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,
-    selectedItem: T? = null,
-    item: @Composable (T, Boolean) -> Unit
+    itemCallback: @Composable (T, Boolean) -> Unit
 ) {
     val navigator = NavigatorAmbient.current
 
@@ -90,7 +89,7 @@ fun <T> PopupMenuButton(
                             items = items,
                             selectedItem = selectedItem,
                             onSelected = onSelected,
-                            item = item,
+                            item = itemCallback,
                             style = popupStyle
                         )
                     }

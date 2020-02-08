@@ -29,17 +29,17 @@ import androidx.ui.unit.PxPosition
 fun <T> Swapper(
     state: SwapperState<T>,
     modifier: Modifier = Modifier.None,
-    child: @Composable (T) -> Unit
+    itemCallback: @Composable (T) -> Unit
 ) {
     val children: @Composable () -> Unit = {
         state.keepStateItems.forEach { item ->
             key(item as Any) {
-                SwapperSlot { child(state.current) }
+                SwapperSlot { itemCallback(state.current) }
             }
         }
 
         key(state.current as Any) {
-            SwapperSlot { child(state.current) }
+            SwapperSlot { itemCallback(state.current) }
         }
     }
 

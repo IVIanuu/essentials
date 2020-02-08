@@ -76,7 +76,7 @@ fun <T> PopupMenu(
     onSelected: (T) -> Unit,
     selectedItem: T? = null,
     style: PopupStyle = PopupStyleAmbient.current,
-    item: @Composable (T, Boolean) -> Unit
+    itemCallback: @Composable (T, Boolean) -> Unit
 ) {
     Popup(style = style) {
         Column {
@@ -89,7 +89,7 @@ fun <T> PopupMenu(
                             onSelected(item)
                         }
                     ) {
-                        item(item, item == selectedItem)
+                        itemCallback(item, item == selectedItem)
                     }
                 }
             }

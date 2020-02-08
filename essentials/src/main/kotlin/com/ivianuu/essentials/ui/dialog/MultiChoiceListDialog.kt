@@ -26,7 +26,7 @@ fun <T> MultiChoiceListDialog(
     items: List<T>,
     selectedItems: List<T>,
     onSelectionsChanged: ((List<T>) -> Unit)? = null,
-    item: @Composable (T) -> Unit,
+    itemCallback: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
@@ -42,7 +42,7 @@ fun <T> MultiChoiceListDialog(
             items.forEachIndexed { index, item ->
                 key(index) {
                     MultiChoiceDialogListItem(
-                        title = { item(item) },
+                        title = { itemCallback(item) },
                         checked = item in selectedItems,
                         onCheckedChange = onSelectionsChanged?.let {
                             {
