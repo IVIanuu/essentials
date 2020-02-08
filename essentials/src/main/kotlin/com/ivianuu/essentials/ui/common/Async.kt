@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -25,6 +26,7 @@ import com.ivianuu.essentials.util.Uninitialized
 
 @Composable
 fun <T> RenderAsyncList(
+    position: ScrollPosition = retain { ScrollPosition() },
     state: Async<List<T>>,
     fail: @Composable (Throwable) -> Unit = {},
     loading: @Composable () -> Unit = { FullScreenLoading() },
@@ -40,6 +42,7 @@ fun <T> RenderAsyncList(
         success = { items ->
             if (items.isNotEmpty()) {
                 ScrollableList(
+                    position = position,
                     items = items,
                     itemCallback = successItemCallback
                 )
