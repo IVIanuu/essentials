@@ -30,7 +30,7 @@ fun <T> RenderAsyncList(
     loading: @Composable () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItem: @Composable (Int, T) -> Unit
+    successItemCallback: @Composable (Int, T) -> Unit
 ) {
     RenderAsync(
         state = state,
@@ -41,7 +41,7 @@ fun <T> RenderAsyncList(
             if (items.isNotEmpty()) {
                 ScrollableList(
                     items = items,
-                    item = successItem
+                    itemCallback = successItemCallback
                 )
             } else {
                 successEmpty()

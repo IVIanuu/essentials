@@ -82,7 +82,7 @@ fun <T> MultiChoiceListPreference(
                 items = items,
                 selectedItems = selectedItems,
                 onSelectionsChanged = setSelectedItems,
-                item = { Text(it.title) },
+                itemCallback = { Text(it.title) },
                 title = dialogTitle,
                 positiveButton = {
                     DialogButton(

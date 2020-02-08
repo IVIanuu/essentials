@@ -75,8 +75,8 @@ fun <T> BottomNavigationBar(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     style: BottomNavigationBarStyle = BottomNavigationBarStyleAmbient.currentOrElse { DefaultBottomNavigationBarStyle() },
     applySafeArea: Boolean = true,
-    itemCallback: @Composable (T) -> Unit,
-    ) {
+    itemCallback: @Composable (T) -> Unit
+) {
     Surface(color = style.color, elevation = BottomNavigationBarElevation) {
         SafeArea(
             left = false,

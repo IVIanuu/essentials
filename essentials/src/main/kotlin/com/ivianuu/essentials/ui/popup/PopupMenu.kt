@@ -73,8 +73,8 @@ fun PopupMenu(
 @Composable
 fun <T> PopupMenu(
     items: List<T>,
-    onSelected: (T) -> Unit,
     selectedItem: T? = null,
+    onSelected: (T) -> Unit,
     style: PopupStyle = PopupStyleAmbient.current,
     itemCallback: @Composable (T, Boolean) -> Unit
 ) {
