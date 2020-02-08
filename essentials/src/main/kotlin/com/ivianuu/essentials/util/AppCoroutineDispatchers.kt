@@ -23,7 +23,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * App coroutine dispatchers
  */
 @Immutable
-data class AppDispatchers(
+data class AppCoroutineDispatchers(
     val default: CoroutineDispatcher,
     val io: CoroutineDispatcher,
     val main: CoroutineDispatcher,

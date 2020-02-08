@@ -19,7 +19,7 @@ package com.ivianuu.essentials.foreground
 import android.app.NotificationManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.service.EsService
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 
 class ForegroundService : EsService() {
 
-    private val dispatchers: AppDispatchers by inject()
+    private val dispatchers: AppCoroutineDispatchers by inject()
     private val foregroundManager: ForegroundManager by inject()
     private var lastComponents = listOf<ForegroundComponent>()
     private var foregroundId: Int? = null

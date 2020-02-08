@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
  * Shell
  */
 @Factory
-class Shell(private val dispatchers: AppDispatchers) {
+class Shell(private val dispatchers: AppCoroutineDispatchers) {
 
     suspend fun run(vararg commands: String): List<String> = withContext(dispatchers.io) {
         SU.run(commands).toList()

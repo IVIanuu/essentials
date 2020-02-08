@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Provider
 import kotlinx.coroutines.withContext
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 class ActionStore(
     private val actions: Map<String, Provider<Action>>,
     private val actionFactories: Set<Provider<ActionFactory>>,
-    private val dispatchers: AppDispatchers
+    private val dispatchers: AppCoroutineDispatchers
 ) {
 
     suspend fun getActions(): List<Action> = withContext(dispatchers.default) {

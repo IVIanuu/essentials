@@ -22,7 +22,7 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val foregroundComponent: TorchForegroundComponent,
     private val toaster: Toaster

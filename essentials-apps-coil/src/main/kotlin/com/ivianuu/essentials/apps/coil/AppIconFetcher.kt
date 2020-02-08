@@ -25,7 +25,7 @@ import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.size.Size
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
@@ -34,7 +34,7 @@ data class AppIcon(val packageName: String)
 
 @Factory
 internal class AppIconFetcher(
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager
 ) : Fetcher<AppIcon> {
 

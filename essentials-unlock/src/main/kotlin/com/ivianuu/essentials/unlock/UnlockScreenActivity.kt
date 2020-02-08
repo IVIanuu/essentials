@@ -26,7 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 class UnlockScreenActivity : EsActivity() {
 
     private val broadcastFactory: BroadcastFactory by inject()
-    private val dispatchers: AppDispatchers by inject()
+    private val dispatchers: AppCoroutineDispatchers by inject()
     private val keyguardManager: KeyguardManager by inject()
     private val screenUnlocker: ScreenUnlocker by inject()
     private val systemBuildInfo: SystemBuildInfo by inject()

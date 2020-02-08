@@ -44,7 +44,7 @@ import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -114,7 +114,7 @@ private fun Permission(
 
 @Factory
 private class PermissionDialogViewModel(
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val manager: PermissionManager,
     @Param private val request: PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers

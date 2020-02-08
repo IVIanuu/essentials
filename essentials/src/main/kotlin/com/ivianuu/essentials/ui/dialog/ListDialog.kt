@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 
-// todo
+// todo add list dialog
 
 @Composable
 fun SimpleDialogListItem(

@@ -25,6 +25,7 @@ import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.app.AppComponent
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
@@ -36,9 +37,9 @@ import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -131,6 +132,8 @@ class NavigatorState(
 
     internal var defaultRouteTransition = DefaultRouteTransition
 
+    private val mainDispatcher = AppComponent.get().get<AppCoroutineDispatchers>().main
+
     init {
         if (startRoute != null && !hasRoot) {
             setRoot(startRoute)
@@ -144,10 +147,10 @@ class NavigatorState(
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
         @Suppress("DeferredResultUnused")
-        coroutineScope.launch(Dispatchers.Main) { push<Any?>(route) }
+        coroutineScope.launch(mainDispatcher) { push<Any?>(route) }
     }
 
-    suspend fun <T> push(route: Route): T? = withContext(Dispatchers.Main) {
+    suspend fun <T> push(route: Route): T? = withContext(mainDispatcher) {
         d { "push $route" }
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
@@ -162,10 +165,10 @@ class NavigatorState(
     @JvmName("replaceWithoutResult")
     fun replace(route: Route) {
         @Suppress("DeferredResultUnused")
-        coroutineScope.launch(Dispatchers.Main) { replace<Any?>(route) }
+        coroutineScope.launch(mainDispatcher) { replace<Any?>(route) }
     }
 
-    suspend fun <T> replace(route: Route): T? = withContext(Dispatchers.Main) {
+    suspend fun <T> replace(route: Route): T? = withContext(mainDispatcher) {
         d { "replace $route" }
 
         val routeState = RouteState(route)
@@ -176,28 +179,28 @@ class NavigatorState(
     }
 
     fun pop(route: Route, result: Any? = null) {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(mainDispatcher) {
             val routeState = _backStack.first { it.route == route }
             popInternal(route = routeState, result = result)
         }
     }
 
     fun popTop(result: Any? = null) {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(mainDispatcher) {
             val topRoute = _backStack.last()
             popInternal(route = topRoute, result = result)
         }
     }
 
     fun popToRoot() {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(mainDispatcher) {
             val newTopRoute = _backStack.first()
             setBackStackInternal(listOf(newTopRoute), false, null)
         }
     }
 
     fun popToRoute(route: Route) {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(mainDispatcher) {
             val index = _backStack.indexOfFirst { it.route == route }
             val newBackStack = _backStack.subList(0, index)
             setBackStackInternal(newBackStack, false, null)
@@ -207,7 +210,7 @@ class NavigatorState(
     private suspend fun popInternal(
         route: RouteState,
         result: Any?
-    ) = withContext(Dispatchers.Main) {
+    ) = withContext(mainDispatcher) {
         d { "pop route ${route.route} with result $result" }
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
@@ -216,7 +219,7 @@ class NavigatorState(
     }
 
     fun clear() {
-        coroutineScope.launch(Dispatchers.Main) { setBackStack(emptyList(), false, null) }
+        coroutineScope.launch(mainDispatcher) { setBackStack(emptyList(), false, null) }
     }
 
     fun setBackStack(
@@ -224,7 +227,7 @@ class NavigatorState(
         isPush: Boolean,
         transition: RouteTransition? = null
     ) {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(mainDispatcher) {
             setBackStackSuspend(newBackStack, isPush, transition)
         }
     }
@@ -233,7 +236,7 @@ class NavigatorState(
         newBackStack: List<Route>,
         isPush: Boolean,
         transition: RouteTransition? = null
-    ) = withContext(Dispatchers.Main) {
+    ) = withContext(mainDispatcher) {
         setBackStackInternal(
             newBackStack.map { route ->
                 _backStack.firstOrNull { it.route == route } ?: RouteState(route)
@@ -250,7 +253,7 @@ class NavigatorState(
         newBackStack: List<RouteState>,
         isPush: Boolean,
         transition: RouteTransition?
-    ) = withContext(Dispatchers.Main) {
+    ) = withContext(mainDispatcher) {
         if (newBackStack == _backStack) return@withContext
 
         d { "set back stack ${newBackStack.map { it.route }}" }

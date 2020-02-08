@@ -3,14 +3,14 @@ package com.ivianuu.essentials.gestures.action
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
 @Factory
 class ActionExecutors(
     private val actionStore: ActionStore,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val permissionManager: PermissionManager,
     private val screenUnlocker: ScreenUnlocker
 ) {

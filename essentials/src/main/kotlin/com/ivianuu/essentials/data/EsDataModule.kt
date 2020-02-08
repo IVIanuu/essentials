@@ -19,7 +19,7 @@ package com.ivianuu.essentials.data
 import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.android.ForApplication
@@ -35,7 +35,7 @@ val EsDataModule = Module {
 
     single {
         PrefBoxFactory(
-            dispatcher = get<AppDispatchers>().io,
+            dispatcher = get<AppCoroutineDispatchers>().io,
             prefsPath = get(name = PrefsPath)
         )
     }
@@ -43,7 +43,7 @@ val EsDataModule = Module {
     single {
         SettingsBoxFactory(
             context = get(name = ForApplication),
-            dispatcher = get<AppDispatchers>().io
+            dispatcher = get<AppCoroutineDispatchers>().io
         )
     }
 }

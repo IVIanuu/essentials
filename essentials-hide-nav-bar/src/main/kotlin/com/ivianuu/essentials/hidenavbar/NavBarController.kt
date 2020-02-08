@@ -26,7 +26,7 @@ import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.ui.core.DisplayRotation
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -48,7 +48,7 @@ class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val displayRotationProvider: DisplayRotationProvider,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,

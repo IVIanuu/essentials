@@ -21,7 +21,7 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -38,7 +38,7 @@ import kotlin.time.seconds
 @Single
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
 ) {

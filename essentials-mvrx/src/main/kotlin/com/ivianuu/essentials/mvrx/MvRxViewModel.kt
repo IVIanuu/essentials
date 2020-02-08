@@ -17,9 +17,11 @@
 package com.ivianuu.essentials.mvrx
 
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.app.AppComponent
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -28,7 +30,6 @@ import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -50,9 +51,11 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     val flow: Flow<S> get() = _state
     val state: S get() = _state.value
 
+    protected open val coroutineDispatcher = AppComponent.get()
+        .get<AppCoroutineDispatchers>().default
+
     protected suspend fun setState(reducer: suspend S.() -> S) {
-        // todo we need a way to use the AppDispatchers.default dispatcher
-        withContext(Dispatchers.Default) {
+        withContext(coroutineDispatcher) {
             val currentState = _state.value
             val newState = reducer(currentState)
             _state.setIfChanged(newState)
@@ -65,11 +68,11 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
         flow.onEach(consumer)
-            .flowOn(Dispatchers.Default)
+            .flowOn(coroutineDispatcher)
             .launchIn(scope.coroutineScope)
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = Dispatchers.Default,
+        context: CoroutineContext = coroutineDispatcher,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
     ): Job = scope.coroutineScope.execute(
@@ -84,12 +87,12 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         return this
             .map { Success(it) }
             .catch { Fail<V>(it) }
-            .flowOn(Dispatchers.Default)
+            .flowOn(coroutineDispatcher)
             .collect { setState { reducer(it) } }
     }
 
     protected fun <V> Flow<V>.executeIn(scope: CoroutineScope, reducer: S.(Async<V>) -> S): Job {
-        return scope.launch(Dispatchers.Default) {
+        return scope.launch(coroutineDispatcher) {
             setState { reducer(Loading()) }
             this@executeIn
                 .map { Success(it) }
@@ -99,7 +102,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = Dispatchers.Default,
+        context: CoroutineContext = coroutineDispatcher,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
         reducer: S.(Async<V>) -> S

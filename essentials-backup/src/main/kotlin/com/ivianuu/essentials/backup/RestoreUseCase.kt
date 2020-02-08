@@ -6,7 +6,7 @@ import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
@@ -19,7 +19,7 @@ import java.util.zip.ZipInputStream
 @Factory
 class RestoreUseCase(
     private val activity: Activity,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val navigator: NavigatorState,
     private val processRestarter: ProcessRestarter,
     private val toaster: Toaster

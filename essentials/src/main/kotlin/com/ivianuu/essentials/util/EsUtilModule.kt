@@ -26,7 +26,7 @@ import kotlinx.coroutines.Dispatchers
 
 val EsUtilModule = Module {
     single {
-        AppDispatchers(
+        AppCoroutineDispatchers(
             default = Dispatchers.Default,
             io = Dispatchers.IO,
             main = Dispatchers.Main,

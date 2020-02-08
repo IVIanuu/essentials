@@ -19,7 +19,7 @@ package com.ivianuu.essentials.unlock
 import android.app.KeyguardManager
 import android.content.Context
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Single
 class ScreenUnlocker(
     private val context: Context,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val keyguardManager: KeyguardManager
 ) {
 

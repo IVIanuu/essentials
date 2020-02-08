@@ -26,13 +26,14 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -60,10 +61,16 @@ fun ProvideCoroutineScope(
 }
 
 @Composable
-fun coroutineScope(context: CoroutineContext = remember { Job() + Dispatchers.Main }): CoroutineScope {
+fun coroutineScope(context: CoroutineContext = defaultCoroutineContext()): CoroutineScope {
     val coroutineScope = remember { CoroutineScope(context) }
     onDispose { context[Job]!!.cancel() }
     return coroutineScope
+}
+
+@Composable
+private fun defaultCoroutineContext(): CoroutineContext {
+    val dispatchers = inject<AppCoroutineDispatchers>()
+    return remember { Job() + dispatchers.main }
 }
 
 @Composable
@@ -141,9 +148,11 @@ fun <T> load(
     block: suspend CoroutineScope.() -> T
 ): T {
     val state = state { placeholder }
+    val dispatchers = inject<AppCoroutineDispatchers>()
     launchOnCommit(key) {
         val result = block()
-        withContext(Dispatchers.Main) {
+        withContext(dispatchers.main) {
+            // todo remove once safe
             state.value = result
         }
     }
@@ -156,17 +165,21 @@ fun <T> loadAsync(
     block: suspend CoroutineScope.() -> T
 ): Async<T> {
     val state = state<Async<T>> { Uninitialized }
+    val dispatchers = inject<AppCoroutineDispatchers>()
     launchOnCommit(key) {
-        state.value = withContext(Dispatchers.Main) {
+        state.value = withContext(dispatchers.main) {
+            // todo remove once safe
             Loading()
         }
         try {
             val result = block()
-            withContext(Dispatchers.Main) {
+            withContext(dispatchers.main) {
+                // todo remove once safe
                 state.value = Success(result)
             }
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
+            withContext(dispatchers.main) {
+                // todo remove once safe
                 state.value = Fail(e)
             }
         }
@@ -183,10 +196,12 @@ fun <T> collect(
     placeholder: T
 ): T {
     val state = state { placeholder }
+    val dispatchers = inject<AppCoroutineDispatchers>()
     launchOnCommit(flow) {
         flow
             .collect { item ->
-                withContext(Dispatchers.Main) {
+                withContext(dispatchers.main) {
+                    // todo remove once safe
                     state.value = item
                 }
             }
@@ -197,13 +212,15 @@ fun <T> collect(
 @Composable
 fun <T> collectAsync(flow: Flow<T>): Async<T> {
     val state = state<Async<T>> { Uninitialized }
+    val dispatchers = inject<AppCoroutineDispatchers>()
     launchOnCommit(flow) {
         flow
             .map { Success(it) as Async<T> }
             .onStart { emit(Loading()) }
             .catch { emit(Fail(it)) }
             .collect { item ->
-                withContext(Dispatchers.Main) {
+                withContext(dispatchers.main) {
+                    // todo remove once safe
                     state.value = item
                 }
             }

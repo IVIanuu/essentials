@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.Composable
 import androidx.ui.core.gesture.PressReleasedGestureDetector
 
-// todo remove once fixd
+// todo remove once fixed
 
 @Composable
 fun Clickable(

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
  */
 @Factory
 class AppStore(
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager
 ) {
 

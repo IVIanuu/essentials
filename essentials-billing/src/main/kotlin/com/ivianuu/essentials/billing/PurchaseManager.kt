@@ -35,7 +35,7 @@ import com.android.billingclient.api.querySkuDetails
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.callbackFlowNoInline
-import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -64,7 +64,7 @@ import kotlin.coroutines.suspendCoroutine
 class PurchaseManager(
     billingClientProvider: Provider<BillingClient>,
     private val context: Context,
-    private val dispatchers: AppDispatchers
+    private val dispatchers: AppCoroutineDispatchers
 ) {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->

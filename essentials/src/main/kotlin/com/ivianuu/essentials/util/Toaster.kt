@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Factory
 class Toaster(
     private val context: Context,
-    private val dispatchers: AppDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val resourceProvider: ResourceProvider
 ) {
 
