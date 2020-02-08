@@ -134,7 +134,7 @@ fun TopAppBar(
                         },
                         actions = actions?.let {
                             {
-                                SpacingRow(spacing = 8.dp) {
+                                SpacingRow(spacing = 16.dp) {
                                     actions()
                                 }
                             }
