@@ -26,6 +26,7 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.app.AppComponent
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Async
@@ -68,10 +69,8 @@ fun coroutineScope(context: CoroutineContext = defaultCoroutineContext()): Corou
 }
 
 @Composable
-private fun defaultCoroutineContext(): CoroutineContext {
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    return remember { Job() + dispatchers.main }
-}
+private fun defaultCoroutineContext(): CoroutineContext =
+    remember { Job() + AppComponent.get().get<AppCoroutineDispatchers>().main }
 
 @Composable
 fun launchOnActive(
