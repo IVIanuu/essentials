@@ -23,7 +23,6 @@ import com.ivianuu.essentials.data.EsDataModule
 import com.ivianuu.essentials.ui.core.EsUiInitializersModule
 import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.essentials.util.containsFlag
-import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.CodegenJustInTimeLookupFactory
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektPlugins
@@ -41,10 +40,15 @@ import com.ivianuu.injekt.inject
  */
 abstract class EsApp : Application(), InjektTrait {
 
-    override val component by unsafeLazy {
-        configureInjekt()
-        createComponent()
-    }
+    override val component: Component
+        get() {
+            if (!AppComponent.isInitialized) {
+                configureInjekt()
+                initializeComponent()
+            }
+
+            return AppComponent.get()
+        }
 
     private val appServices: Map<String, Provider<AppService>> by inject(name = AppServices)
 
@@ -62,19 +66,21 @@ abstract class EsApp : Application(), InjektTrait {
         }
     }
 
-    protected open fun createComponent(): Component {
-        return ApplicationComponent {
-            modules(
-                EsAppModule,
-                EsAppInitializersModule,
-                EsAppServicesModule,
-                EsDataModule,
-                SystemServiceModule,
-                EsUiInitializersModule,
-                EsUtilModule
-            )
-            modules(this@EsApp.modules())
-        }
+    protected open fun initializeComponent() {
+        AppComponent.init(
+            ApplicationComponent {
+                modules(
+                    EsAppModule,
+                    EsAppInitializersModule,
+                    EsAppServicesModule,
+                    EsDataModule,
+                    SystemServiceModule,
+                    EsUiInitializersModule,
+                    EsUtilModule
+                )
+                modules(this@EsApp.modules())
+            }
+        )
     }
 
     protected open fun invokeInitializers() {
