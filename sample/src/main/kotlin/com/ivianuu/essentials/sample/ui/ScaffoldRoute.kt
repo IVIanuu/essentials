@@ -183,7 +183,7 @@ val ScaffoldRoute = Route {
                                         items = ScaffoldState.BodyLayoutMode.values().toList(),
                                         selectedItem = controls.bodyLayoutMode,
                                         onSelect = { controls.bodyLayoutMode = it },
-                                        item = {
+                                        itemCallback = {
                                             Text(
                                                 it.name,
                                                 )
@@ -224,7 +224,7 @@ val ScaffoldRoute = Route {
                                         items = ScaffoldState.FabPosition.values().toList(),
                                         selectedItem = controls.fabPosition,
                                         onSelect = { controls.fabPosition = it },
-                                        item = {
+                                        itemCallback = {
                                             Text(it.name)
                                         },
                                         )
