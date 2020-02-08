@@ -30,11 +30,11 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.Scroller
 import com.ivianuu.essentials.ui.material.AppBarStyle
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.FloatingActionButton
@@ -162,7 +162,7 @@ val ScaffoldRoute = Route {
                             }
                         },
                         onClick = { controls.showTopAppBar = !controls.showTopAppBar },
-                    )
+                        )
                     ListItem(
                         title = { Text("Center title") },
                         trailing = {
@@ -171,7 +171,7 @@ val ScaffoldRoute = Route {
                             }
                         },
                         onClick = { controls.centerTitle = !controls.centerTitle },
-                    )
+                        )
 
                     Subheader("Body")
                     ListItem(
@@ -186,13 +186,13 @@ val ScaffoldRoute = Route {
                                         item = {
                                             Text(
                                                 it.name,
-                                            )
+                                                )
                                         },
-                                    )
+                                        )
                                 },
-                            )
+                                )
                         },
-                    )
+                        )
 
                     Subheader("Bottom bar")
                     ListItem(
@@ -203,7 +203,7 @@ val ScaffoldRoute = Route {
                             }
                         },
                         onClick = { controls.showBottomBar = !controls.showBottomBar },
-                    )
+                        )
 
                     Subheader("Fab")
                     ListItem(
@@ -214,7 +214,7 @@ val ScaffoldRoute = Route {
                             }
                         },
                         onClick = { controls.showFab = !controls.showFab },
-                    )
+                        )
                     ListItem(
                         title = { Text("Fab location") },
                         onClick = {
@@ -227,11 +227,11 @@ val ScaffoldRoute = Route {
                                         item = {
                                             Text(it.name)
                                         },
-                                    )
+                                        )
                                 },
-                            )
+                                )
                         },
-                    )
+                        )
                 }
             }
         },

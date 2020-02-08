@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.layout
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Model

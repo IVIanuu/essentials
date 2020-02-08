@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.layout
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
@@ -30,10 +30,9 @@ import androidx.ui.unit.min
 import androidx.ui.unit.px
 import androidx.ui.unit.round
 import androidx.ui.unit.toPx
-import com.ivianuu.essentials.ui.common.ScrollPosition
-import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.layout.SingleChildLayout
 
 @Composable
 fun Scroller(

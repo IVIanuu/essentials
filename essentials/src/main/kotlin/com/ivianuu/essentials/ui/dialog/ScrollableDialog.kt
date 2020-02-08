@@ -18,10 +18,10 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.common.ScrollPosition
+import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.Scroller
 
 @Composable
 fun ScrollableDialog(

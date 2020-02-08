@@ -24,9 +24,9 @@ import com.ivianuu.essentials.store.prefs.duration
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
+import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.Scroller
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route

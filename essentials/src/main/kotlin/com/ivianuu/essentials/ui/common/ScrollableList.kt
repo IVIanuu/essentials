@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.layout
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Compose
@@ -27,8 +27,6 @@ import androidx.ui.unit.max
 import androidx.ui.unit.px
 import androidx.ui.unit.round
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.ScrollPosition
-import com.ivianuu.essentials.ui.common.Scrollable
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
 

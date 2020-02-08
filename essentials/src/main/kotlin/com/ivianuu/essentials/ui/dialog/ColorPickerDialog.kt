@@ -45,6 +45,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.ArrowBack
 import com.ivianuu.essentials.material.icons.filled.Check
+import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -54,7 +55,6 @@ import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.Scroller
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle

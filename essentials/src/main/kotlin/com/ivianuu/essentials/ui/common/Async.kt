@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -40,7 +39,10 @@ fun <T> RenderAsyncList(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                ScrollableList(items = items, item = successItem)
+                ScrollableList(
+                    items = items,
+                    item = successItem
+                )
             } else {
                 successEmpty()
             }

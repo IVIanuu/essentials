@@ -36,6 +36,8 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.coerceIn
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.common.Swapper
+import com.ivianuu.essentials.ui.common.SwapperState
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -45,8 +47,6 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.Swapper
-import com.ivianuu.essentials.ui.layout.SwapperState
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.Renderable
 

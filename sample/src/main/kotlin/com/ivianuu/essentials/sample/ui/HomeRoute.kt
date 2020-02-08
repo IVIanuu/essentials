@@ -34,6 +34,7 @@ import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
@@ -41,7 +42,6 @@ import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Divider
