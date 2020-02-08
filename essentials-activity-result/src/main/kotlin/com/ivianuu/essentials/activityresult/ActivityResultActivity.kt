@@ -21,11 +21,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 
 class ActivityResultActivity : EsActivity() {
 
-    private val activityResultController: ActivityResultController by inject()
+    private val activityResultController: ActivityResultController by getLazy()
 
     private var isValid = true
     private var hasResult = false

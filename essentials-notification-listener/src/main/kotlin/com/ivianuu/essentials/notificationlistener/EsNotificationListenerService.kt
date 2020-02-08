@@ -32,7 +32,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsNotificationListenerService : NotificationListenerService(), InjektTrait {
 
     override val component by unsafeLazy {
-        ServiceComponent {
+        ServiceComponent(this) {
             modules(this@EsNotificationListenerService.modules())
         }
     }

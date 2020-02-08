@@ -24,7 +24,6 @@ import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.get
 import kotlin.reflect.KClass
 
 @Name
@@ -77,7 +76,7 @@ inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetch
         moduleBuilder.set<FetcherBinding<*>>(
             Fetchers
         ) {
-            add(bbc.key, false)
+            add(bbc.key)
         }
     }
 
@@ -110,7 +109,7 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMap
         moduleBuilder.set<MapperBinding<*>>(
             Mappers
         ) {
-            add(bbc.key, false)
+            add(bbc.key)
         }
 
         return this
@@ -149,7 +148,7 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>
         moduleBuilder.set<MeasuredMapperBinding<*>>(
             MeasuredMappers
         ) {
-            add(bbc.key, false)
+            add(bbc.key)
         }
     }
 

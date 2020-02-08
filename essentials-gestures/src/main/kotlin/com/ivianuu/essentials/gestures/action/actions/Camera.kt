@@ -7,7 +7,6 @@ import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.PhotoCamera
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 internal val EsCameraActionModule = Module {
@@ -17,9 +16,7 @@ internal val EsCameraActionModule = Module {
         iconProvider = { SingleActionIconProvider(Icons.Default.PhotoCamera) },
         unlockScreen = { true },
         executor = {
-            get<IntentActionExecutor> {
-                parametersOf(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
-            }
+            get<IntentActionExecutor>(parametersOf(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)))
         }
     )
 }

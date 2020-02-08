@@ -18,7 +18,7 @@ package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 
 /**
  * Stateful tile service
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.inject
 @TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
 
-    private val resourceProvider: ResourceProvider by inject()
+    private val resourceProvider: ResourceProvider by getLazy()
 
     abstract fun createTile(state: T): Tile
 

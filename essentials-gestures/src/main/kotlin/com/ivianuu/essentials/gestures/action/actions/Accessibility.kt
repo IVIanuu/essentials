@@ -8,7 +8,6 @@ import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 fun ModuleBuilder.bindAccessibilityAction(
@@ -23,7 +22,7 @@ fun ModuleBuilder.bindAccessibilityAction(
         iconProvider = { SingleActionIconProvider(icon) },
         permissions = { listOf(actionPermission { accessibility }) },
         executor = {
-            get<AccessibilityActionExecutor> { parametersOf(accessibilityAction) }
+            get<AccessibilityActionExecutor>(parametersOf(accessibilityAction))
         }
     )
 }

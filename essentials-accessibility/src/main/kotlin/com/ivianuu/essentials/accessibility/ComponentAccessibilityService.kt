@@ -22,11 +22,11 @@ import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 
 class ComponentAccessibilityService : EsAccessibilityService() {
 
-    private val components: Set<AccessibilityComponent> by inject(name = AccessibilityComponents)
+    private val components: Set<AccessibilityComponent> by getLazy(name = AccessibilityComponents)
 
     override fun modules(): List<Module> = super.modules() + listOf(AccessibilityComponentsModule)
 

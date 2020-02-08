@@ -38,13 +38,13 @@ import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class DebugBillingActivity : EsActivity() {
 
-    private val client: DebugBillingClient by inject()
+    private val client: DebugBillingClient by getLazy()
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
 

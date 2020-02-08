@@ -9,7 +9,6 @@ import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.PhotoAlbum
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 
@@ -27,13 +26,9 @@ internal val EsScreenshotActionModule = Module {
         },
         executor = {
             val executor = if (get<SystemBuildInfo>().sdk >= 28) {
-                get<AccessibilityActionExecutor> {
-                    parametersOf(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-                }
+                get<AccessibilityActionExecutor>(parametersOf(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT))
             } else {
-                get<RootActionExecutor> {
-                    parametersOf("input keyevent 26")
-                }
+                get<RootActionExecutor>(parametersOf("input keyevent 26"))
             }
 
             return@bindAction executor.beforeAction { delay(500) }

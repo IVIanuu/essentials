@@ -21,7 +21,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -29,11 +29,11 @@ import kotlinx.coroutines.withContext
 
 class ForegroundService : EsService() {
 
-    private val dispatchers: AppCoroutineDispatchers by inject()
-    private val foregroundManager: ForegroundManager by inject()
+    private val dispatchers: AppCoroutineDispatchers by getLazy()
+    private val foregroundManager: ForegroundManager by getLazy()
     private var lastComponents = listOf<ForegroundComponent>()
     private var foregroundId: Int? = null
-    private val notificationManager: NotificationManager by inject()
+    private val notificationManager: NotificationManager by getLazy()
 
     override fun onCreate() {
         super.onCreate()

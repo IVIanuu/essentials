@@ -507,10 +507,10 @@ class ComposableCallTransformer(private val context: IrPluginContext) : IrElemen
         extensionReceiverParameter = descriptor.extensionReceiverParameter?.irValueParameter()
 
         assert(valueParameters.isEmpty())
-        descriptor.valueParameters.mapTo(valueParameters) { it.irValueParameter() }
+        valueParameters = descriptor.valueParameters.map { it.irValueParameter() }
 
         assert(typeParameters.isEmpty())
-        descriptor.typeParameters.mapTo(typeParameters) { it.irTypeParameter() }
+        typeParameters = descriptor.typeParameters.map { it.irTypeParameter() }
     }
 
     private fun KotlinType.toIrType(): IrType = context.typeTranslator.translateType(this)

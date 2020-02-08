@@ -11,10 +11,9 @@ import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -38,7 +37,7 @@ fun SingleActionIconProvider(
     icon: VectorAsset
 ): ActionIconProvider = SingleActionIconProvider(VectorRenderable(icon))
 
-fun DefinitionContext.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
+fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 
 fun ActionExecutor.beforeAction(
     block: suspend () -> Unit

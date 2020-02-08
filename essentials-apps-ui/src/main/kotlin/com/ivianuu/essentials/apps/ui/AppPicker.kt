@@ -48,9 +48,7 @@ fun AppPickerRoute(
         topAppBar = { TopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {
             val viewModel =
-                injectMvRxViewModel<AppPickerViewModel> {
-                    parametersOf(appFilter)
-                }
+                injectMvRxViewModel<AppPickerViewModel>(parametersOf(appFilter))
 
             RenderAsyncList(
                 state = viewModel.state.apps,

@@ -16,7 +16,6 @@ import com.ivianuu.essentials.material.icons.path
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 val EssentialsIcons.ActionHome: VectorAsset by lazyMaterialIcon {
@@ -63,8 +62,6 @@ internal class IntentHomeActionExecutor(
             e.printStackTrace()
         }
 
-        lazyDelegate {
-            parametersOf(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) })
-        }()
+        lazyDelegate(parametersOf(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) }))()
     }
 }

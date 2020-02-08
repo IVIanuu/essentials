@@ -23,12 +23,12 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 
 class PermissionActivity : EsActivity() {
 
-    private val manager: PermissionManager by inject()
-    private val requestUi: PermissionRequestUi by inject()
+    private val manager: PermissionManager by getLazy()
+    private val requestUi: PermissionRequestUi by getLazy()
     private lateinit var finalRequest: PermissionRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {

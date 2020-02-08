@@ -25,5 +25,5 @@ interface AppUi {
 }
 
 inline fun <reified T> ModuleBuilder.bindAppUi(name: Any? = null) {
-    withBinding<T>(name = name) { bindType<AppUi>() }
+    withBinding<T>(name = name) { bindAlias<AppUi>() }
 }

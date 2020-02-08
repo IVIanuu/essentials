@@ -44,9 +44,7 @@ internal class AppActionExecutor(
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
-            lazyDelegate {
-                parametersOf({ packageManager.getLaunchIntentForPackage(packageName) })
-            }()
+            lazyDelegate(parametersOf({ packageManager.getLaunchIntentForPackage(packageName) }))()
         } catch (e: Exception) {
             e.printStackTrace()
             toaster.toast(R.string.es_activity_not_found)
@@ -67,8 +65,8 @@ internal class AppActionFactory(
             key = key,
             title = appStore.getAppInfo(packageName).packageName,
             unlockScreen = true,
-            iconProvider = appActionIconProvider { parametersOf(packageName) },
-            executor = appActionExecutorProvider { parametersOf(packageName) }
+            iconProvider = appActionIconProvider(parametersOf(packageName)),
+            executor = appActionExecutorProvider(parametersOf(packageName))
         )
     }
 }
@@ -97,7 +95,7 @@ internal class AppActionIconProvider(
     @Param private val packageName: String
 ) : ActionIconProvider {
     override val icon: Flow<Renderable>
-        get() = lazyDelegate { parametersOf(AppIcon(packageName)) }.icon
+        get() = lazyDelegate(parametersOf(AppIcon(packageName))).icon
 }
 
 private const val ACTION_KEY_PREFIX = "app=:="

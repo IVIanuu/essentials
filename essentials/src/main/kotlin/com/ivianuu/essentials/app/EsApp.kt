@@ -33,7 +33,7 @@ import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
 import com.ivianuu.injekt.android.SystemServiceModule
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 
 /**
  * App
@@ -50,7 +50,7 @@ abstract class EsApp : Application(), InjektTrait {
             return AppComponent.get()
         }
 
-    private val appServices: Map<String, Provider<AppService>> by inject(name = AppServices)
+    private val appServices: Map<String, Provider<AppService>> by getLazy(name = AppServices)
 
     override fun onCreate() {
         super.onCreate()
@@ -68,7 +68,7 @@ abstract class EsApp : Application(), InjektTrait {
 
     protected open fun initializeComponent() {
         AppComponent.init(
-            ApplicationComponent {
+            ApplicationComponent(this) {
                 modules(
                     EsAppModule,
                     EsAppInitializersModule,

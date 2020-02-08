@@ -21,12 +21,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.launch
 
 class PurchaseActivity : EsActivity() {
 
-    private val manager: PurchaseManager by inject()
+    private val manager: PurchaseManager by getLazy()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

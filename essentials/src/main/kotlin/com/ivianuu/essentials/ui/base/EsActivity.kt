@@ -37,7 +37,7 @@ import com.ivianuu.injekt.android.ActivityComponent
 abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        ActivityComponent {
+        ActivityComponent(this) {
             modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }

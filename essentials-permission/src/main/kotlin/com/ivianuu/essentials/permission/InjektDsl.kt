@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.OverrideStrategy
 
 @Name
 annotation class PermissionStateProvidersSet {
@@ -59,6 +60,6 @@ inline fun <reified T : PermissionRequestUi> ModuleBuilder.bindPermissionRequest
 }
 
 fun <T : PermissionRequestUi> BindingContext<T>.bindPermissionRequestUi(): BindingContext<T> {
-    bindType<PermissionRequestUi>(override = true)
+    bindAlias<PermissionRequestUi>(overrideStrategy = OverrideStrategy.Override)
     return this
 }

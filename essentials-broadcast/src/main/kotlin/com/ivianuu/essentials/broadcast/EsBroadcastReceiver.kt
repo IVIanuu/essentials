@@ -32,7 +32,7 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait {
     override lateinit var component: Component
 
     override fun onReceive(context: Context, intent: Intent) {
-        component = ReceiverComponent(context) {
+        component = ReceiverComponent(context, this) {
             modules(this@EsBroadcastReceiver.modules(context))
         }
     }

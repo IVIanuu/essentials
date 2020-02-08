@@ -28,7 +28,7 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -39,11 +39,11 @@ import kotlinx.coroutines.withContext
  */
 class UnlockScreenActivity : EsActivity() {
 
-    private val broadcastFactory: BroadcastFactory by inject()
-    private val dispatchers: AppCoroutineDispatchers by inject()
-    private val keyguardManager: KeyguardManager by inject()
-    private val screenUnlocker: ScreenUnlocker by inject()
-    private val systemBuildInfo: SystemBuildInfo by inject()
+    private val broadcastFactory: BroadcastFactory by getLazy()
+    private val dispatchers: AppCoroutineDispatchers by getLazy()
+    private val keyguardManager: KeyguardManager by getLazy()
+    private val screenUnlocker: ScreenUnlocker by getLazy()
+    private val systemBuildInfo: SystemBuildInfo by getLazy()
 
     private var hasResult = false
     private var valid = true

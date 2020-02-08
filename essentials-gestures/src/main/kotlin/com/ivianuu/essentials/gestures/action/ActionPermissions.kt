@@ -15,15 +15,13 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.ui.painter.VectorRenderable
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.injekt.get
 
 @ApplicationScope
 @Single
-internal class ActionPermissions(resourceProvider: ResourceProvider) {
+internal class ActionPermissions {
     val accessibility = AccessibilityServicePermission(
         ComponentAccessibilityService::class,
         Metadata.Title withValue "Accessibility",
@@ -41,6 +39,6 @@ internal class ActionPermissions(resourceProvider: ResourceProvider) {
     )
 }
 
-internal inline fun DefinitionContext.actionPermission(
+internal inline fun Component.actionPermission(
     choosingBlock: ActionPermissions.() -> Permission
 ): Permission = get<ActionPermissions>().choosingBlock()

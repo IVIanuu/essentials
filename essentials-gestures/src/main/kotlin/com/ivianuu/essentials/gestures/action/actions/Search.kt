@@ -7,7 +7,6 @@ import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.material.icons.Icons
 import com.ivianuu.essentials.material.icons.filled.Search
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 internal val EsSearchActionModule = Module {
@@ -17,7 +16,7 @@ internal val EsSearchActionModule = Module {
         iconProvider = { SingleActionIconProvider(Icons.Default.Search) },
         unlockScreen = { true },
         executor = {
-            get<IntentActionExecutor> {
+            get<IntentActionExecutor>(
                 parametersOf(
                     Intent(Intent.ACTION_MAIN).apply {
                         component = ComponentName(
@@ -27,7 +26,7 @@ internal val EsSearchActionModule = Module {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
                 )
-            }
+            )
         }
     )
 }

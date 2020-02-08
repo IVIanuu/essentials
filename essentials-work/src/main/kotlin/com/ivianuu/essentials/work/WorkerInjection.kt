@@ -30,7 +30,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -46,7 +45,7 @@ class InjektWorkerFactory(
         workerClassName: String,
         workerParameters: WorkerParameters
     ): ListenableWorker? {
-        return workers[workerClassName]?.invoke { parametersOf(appContext, workerParameters) }
+        return workers[workerClassName]?.invoke(parametersOf(appContext, workerParameters))
             ?: error("Could not find a worker for $workerClassName")
     }
 }
@@ -57,7 +56,7 @@ class InjektWorkerFactory(
 val EsWorkModule = Module {
     factory { WorkManager.getInstance(get()) }
     map<String, ListenableWorker>(mapName = WorkersMap)
-    withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
+    withBinding<InjektWorkerFactory> { bindAlias<WorkerFactory>() }
     bindAppInitializer<WorkerAppInitializer>()
 }
 

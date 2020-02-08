@@ -21,8 +21,9 @@ import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.util.sourceLocation
-import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Parameters
 import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.emptyParameters
 import com.ivianuu.injekt.typeOf
 
 @Composable
@@ -38,7 +39,7 @@ fun <T : ViewModel> viewModel(
 @Composable
 inline fun <reified T : ViewModel> injectViewModel(
     name: Any? = null,
-    noinline parameters: ParametersDefinition? = null
+    parameters: Parameters = emptyParameters()
 ): T = injectViewModel(
     typeOf(),
     sourceLocation(),
@@ -51,7 +52,7 @@ fun <T : ViewModel> injectViewModel(
     type: Type<T>,
     key: Any,
     name: Any? = null,
-    parameters: ParametersDefinition? = null
+    parameters: Parameters = emptyParameters()
 ): T {
     val component = ComponentAmbient.current
     return viewModel(

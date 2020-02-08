@@ -5,7 +5,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ModuleBuilder
 import kotlinx.coroutines.flow.Flow
 
@@ -29,11 +29,11 @@ interface ActionExecutor {
 
 fun ModuleBuilder.bindAction(
     key: String,
-    title: DefinitionContext.() -> String,
-    permissions: DefinitionContext.() -> List<Permission> = { emptyList() },
-    unlockScreen: DefinitionContext.() -> Boolean = { false },
-    iconProvider: DefinitionContext.() -> ActionIconProvider,
-    executor: DefinitionContext.() -> ActionExecutor
+    title: Component.() -> String,
+    permissions: Component.() -> List<Permission> = { emptyList() },
+    unlockScreen: Component.() -> Boolean = { false },
+    iconProvider: Component.() -> ActionIconProvider,
+    executor: Component.() -> ActionExecutor
 ) {
     action(key = key) {
         Action(
@@ -49,7 +49,7 @@ fun ModuleBuilder.bindAction(
 
 fun ModuleBuilder.action(
     key: String,
-    definition: DefinitionContext.() -> Action
+    definition: Component.() -> Action
 ) {
     factory(name = key) { definition() }
         .intoMap<String, Action>(entryKey = key)

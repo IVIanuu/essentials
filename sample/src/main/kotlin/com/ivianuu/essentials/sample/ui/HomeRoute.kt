@@ -180,9 +180,7 @@ enum class HomeItem(
         title = "App picker",
         route = {
             AppPickerRoute(
-                appFilter = inject<IntentAppFilter> {
-                    parametersOf(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER))
-                }
+                appFilter = inject<IntentAppFilter>(parametersOf(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)))
             )
         }
     ),

@@ -20,5 +20,5 @@ import com.android.billingclient.api.BillingClient
 import com.ivianuu.injekt.Module
 
 val EsBillingModule = Module {
-    withBinding<DebugBillingClient> { bindType<BillingClient>() }
+    withBinding<DebugBillingClient> { bindAlias<BillingClient>() }
 }

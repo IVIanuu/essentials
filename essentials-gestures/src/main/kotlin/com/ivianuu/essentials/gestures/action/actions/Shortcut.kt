@@ -46,7 +46,7 @@ internal class ShortcutActionExecutor(
     private val lazyDelegate: Provider<IntentActionExecutor>
 ) : ActionExecutor {
     override suspend fun invoke() {
-        lazyDelegate { parametersOf(intent) }()
+        lazyDelegate(parametersOf(intent))()
     }
 }
 
@@ -67,7 +67,7 @@ internal class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             iconProvider = SingleActionIconProvider(icon),
-            executor = intentActionExecutorProvider { parametersOf(intent) }
+            executor = intentActionExecutorProvider(parametersOf(intent))
         )
     }
 }

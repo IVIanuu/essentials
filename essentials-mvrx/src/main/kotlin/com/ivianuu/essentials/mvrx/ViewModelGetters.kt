@@ -21,8 +21,9 @@ import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
-import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Parameters
 import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.emptyParameters
 import com.ivianuu.injekt.typeOf
 
 @Composable
@@ -43,7 +44,7 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
 @Composable
 inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
     name: Any? = null,
-    noinline parameters: ParametersDefinition? = null
+    parameters: Parameters = emptyParameters()
 ): T {
     return injectMvRxViewModel(
         typeOf(),
@@ -58,7 +59,7 @@ fun <T : MvRxViewModel<*>> injectMvRxViewModel(
     type: Type<T>,
     key: Any,
     name: Any? = null,
-    parameters: ParametersDefinition? = null
+    parameters: Parameters = emptyParameters()
 ): T {
     val viewModel = injectViewModel(type, key, name, parameters)
     // recompose on changes

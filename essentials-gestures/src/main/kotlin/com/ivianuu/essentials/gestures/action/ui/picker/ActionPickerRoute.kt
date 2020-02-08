@@ -17,9 +17,12 @@ fun ActionPickerRoute(
     showNoneOption: Boolean = true
 ) = Route {
     SimpleScreen(title = stringResource(R.string.es_action_picker_title)) {
-        val viewModel = injectMvRxViewModel<ActionPickerViewModel> {
-            parametersOf(showDefaultOption, showNoneOption)
-        }
+        val viewModel = injectMvRxViewModel<ActionPickerViewModel>(
+            parametersOf(
+                showDefaultOption,
+                showNoneOption
+            )
+        )
 
         RenderAsyncList(
             state = viewModel.state.items,

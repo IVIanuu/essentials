@@ -31,7 +31,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override val component by unsafeLazy {
-        ServiceComponent {
+        ServiceComponent(this) {
             modules(this@EsAccessibilityService.modules())
         }
     }
