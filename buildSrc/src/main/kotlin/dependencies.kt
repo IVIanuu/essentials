@@ -18,7 +18,7 @@
 
 object Build {
     const val applicationId = "com.ivianuu.essentials.sample"
-    const val buildToolsVersion = "28.0.3"
+    const val buildToolsVersion = "29.0.3"
 
     const val compileSdk = 29
     const val minSdk = 23
@@ -41,7 +41,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
-        private const val composeVersion = "0.0.1-dev32"
+        private const val composeVersion = "0.0.1-dev33"
 
         object Compose {
             private const val version = composeVersion

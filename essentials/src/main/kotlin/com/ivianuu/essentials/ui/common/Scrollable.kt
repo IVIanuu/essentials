@@ -17,15 +17,18 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.animation.AnimationBuilder
+import androidx.animation.AnimationClockObservable
 import androidx.animation.AnimationEndReason
 import androidx.compose.Composable
 import androidx.compose.Model
+import androidx.ui.animation.AnimatedFloatModel
+import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.Direction
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.TouchSlopDragGestureDetector
-import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
+import androidx.ui.foundation.animation.fling
 import androidx.ui.unit.Px
 import androidx.ui.unit.PxPosition
 import androidx.ui.unit.coerceIn
@@ -37,13 +40,16 @@ import com.ivianuu.essentials.ui.core.Axis
 fun ScrollPosition(
     initial: Px = 0.px,
     minValue: Px = 0.px,
-    maxValue: Px = Px.Infinity
+    maxValue: Px = Px.Infinity,
+    animationClock: AnimationClockObservable = AnimationClockAmbient.current
 ) = ScrollPosition(
+    animationClock,
     initial, minValue, maxValue, FlingConfig().let { { _ -> it } }
 )
 
 @Model
 class ScrollPosition(
+    animationClock: AnimationClockObservable,
     initial: Px = 0.px,
     minValue: Px = 0.px,
     maxValue: Px = Px.Infinity,
@@ -51,7 +57,7 @@ class ScrollPosition(
 ) {
 
     val value: Px
-        get() = holder.value.px
+        get() = animatedFloat.value.px
             .coerceIn(_minValue, _maxValue) // todo remove once fixed
 
     private var _minValue = minValue
@@ -60,13 +66,12 @@ class ScrollPosition(
     private var _maxValue = maxValue
     val maxValue: Px get() = _maxValue
 
-    private val holder =
-        AnimatedValueHolder(initial.value).apply {
-            setBounds(minValue.value, maxValue.value)
-        }
+    private val animatedFloat = AnimatedFloatModel(initial.value, animationClock).apply {
+        setBounds(minValue.value, maxValue.value)
+    }
 
     val isAnimating: Boolean
-        get() = holder.animatedFloat.isRunning
+        get() = animatedFloat.isRunning
 
     var direction = ScrollDirection.Idle
         internal set
@@ -76,7 +81,7 @@ class ScrollPosition(
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        holder.animatedFloat.animateTo(value.value, anim) { endReason, finishValue ->
+        animatedFloat.animateTo(value.value, anim) { endReason, finishValue ->
             onEnd(endReason, finishValue)
             direction = ScrollDirection.Idle
         }
@@ -96,7 +101,7 @@ class ScrollPosition(
     fun scrollTo(value: Px) {
         if (this.value != value) {
             d { "scroll to $value" }
-            holder.animatedFloat.snapTo(value.value)
+            animatedFloat.snapTo(value.value)
         }
     }
 
@@ -110,7 +115,7 @@ class ScrollPosition(
 
     fun flingBy(velocity: Px) {
         d { "fling by $velocity" }
-        holder.fling(
+        animatedFloat.fling(
             flingConfigFactory(velocity),
             velocity.value
         )
@@ -122,7 +127,7 @@ class ScrollPosition(
         }
         _minValue = minValue
         _maxValue = maxValue
-        holder.setBounds(minValue.value, maxValue.value)
+        animatedFloat.setBounds(minValue.value, maxValue.value)
         scrollTo(value.coerceIn(_minValue, _maxValue))
 
         d { "update bounds $minValue $maxValue" }

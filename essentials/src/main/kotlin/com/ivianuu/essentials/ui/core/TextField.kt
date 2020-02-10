@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
-import androidx.ui.core.EditorModel
 import androidx.ui.core.Modifier
 import androidx.ui.core.currentTextStyle
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.VisualTransformation
+import androidx.ui.text.TextFieldValue
 import androidx.ui.text.TextRange
 import androidx.ui.text.TextStyle
 
@@ -59,9 +59,9 @@ fun TextField(
 
 @Composable
 fun TextField(
-    value: EditorModel,
+    value: TextFieldValue,
     modifier: Modifier = Modifier.None,
-    onValueChange: (EditorModel) -> Unit = {},
+    onValueChange: (TextFieldValue) -> Unit = {},
     textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
@@ -88,10 +88,10 @@ fun TextField(
 
 @Composable
 fun TextField(
-    model: EditorModel,
+    model: TextFieldValue,
     compositionRange: TextRange?,
     modifier: Modifier = Modifier.None,
-    onValueChange: (EditorModel, TextRange?) -> Unit = { _, _ -> },
+    onValueChange: (TextFieldValue, TextRange?) -> Unit = { _, _ -> },
     textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,

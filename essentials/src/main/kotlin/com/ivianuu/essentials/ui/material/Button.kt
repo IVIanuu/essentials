@@ -18,18 +18,17 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
-import androidx.ui.graphics.Brush
+import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
-import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -37,8 +36,7 @@ data class ButtonStyle(
     val backgroundColor: Color,
     val contentColor: Color,
     val shape: Shape,
-    val borderWidth: Dp = 0.dp,
-    val borderBrush: Brush? = null,
+    val border: Border? = null,
     val elevation: Dp = 0.dp,
     val paddings: EdgeInsets = EdgeInsets(
         left = 16.dp,
@@ -63,9 +61,9 @@ fun ContainedButtonStyle(
 
 @Composable
 fun OutlinedButtonStyle(
-    borderWidth: Dp = 1.dp,
-    borderBrush: Brush = SolidColor(
-        MaterialTheme.colors().onSurface.copy(alpha = 0.12f)
+    border: Border = Border(
+        size = 1.dp,
+        color = MaterialTheme.colors().onSurface.copy(alpha = 0.12f)
     ),
     backgroundColor: Color = MaterialTheme.colors().surface,
     contentColor: Color = MaterialTheme.colors().primary,
@@ -74,8 +72,7 @@ fun OutlinedButtonStyle(
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
     shape = shape,
-    borderBrush = borderBrush,
-    borderWidth = borderWidth,
+    border = border,
     elevation = elevation,
     contentColor = contentColor
 )
@@ -103,7 +100,12 @@ fun Button(
     androidx.ui.material.Button(
         modifier = modifier,
         onClick = onClick,
-        style = style.toAndroidxButtonStyle(),
+        backgroundColor = style.backgroundColor,
+        contentColor = style.contentColor,
+        shape = style.shape,
+        border = style.border,
+        elevation = style.elevation,
+        paddings = style.paddings,
         children = children
     )
 }
@@ -115,23 +117,10 @@ fun Button(
     onClick: (() -> Unit)? = null,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() }
 ) {
-    androidx.ui.material.Button(
+    Button(
         modifier = modifier,
         onClick = onClick,
-        style = style.toAndroidxButtonStyle(),
-        text = text.toUpperCase()
-    )
-}
-
-@Composable
-private fun ButtonStyle.toAndroidxButtonStyle() = remember(this) {
-    androidx.ui.material.ButtonStyle(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        shape = shape,
-        borderWidth = borderWidth,
-        borderBrush = borderBrush,
-        elevation = elevation,
-        paddings = paddings
+        style = style,
+        children = { Text(text) }
     )
 }

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
+import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
@@ -82,8 +82,10 @@ fun ColorPreference(
             Surface(
                 modifier = LayoutSize(width = 40.dp, height = 40.dp),
                 color = context.currentValue,
-                borderWidth = 1.dp,
-                borderBrush = SolidColor(MaterialTheme.colors().onSurface)
+                border = Border(
+                    size = 1.dp,
+                    color = MaterialTheme.colors().onSurface
+                )
             ) {}
         },
         dialog = { context, _ ->

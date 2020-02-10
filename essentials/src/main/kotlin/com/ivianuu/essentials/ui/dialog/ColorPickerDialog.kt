@@ -23,10 +23,10 @@ import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.foundation.Border
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.SolidColor
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutAlign
@@ -229,8 +229,10 @@ private fun ColorGridItem(
             modifier = LayoutSize.Fill,
             color = color,
             shape = RoundedCornerShape(50),
-            borderBrush = SolidColor(MaterialTheme.colors().onSurface),
-            borderWidth = 1.dp,
+            border = Border(
+                size = 1.dp,
+                color = MaterialTheme.colors().onSurface
+            ),
             elevation = 0.dp
         ) {
             if (isSelected) {

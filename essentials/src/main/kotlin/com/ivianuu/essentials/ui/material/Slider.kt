@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.animation.AnimationClockObservable
 import androidx.animation.AnimationEndReason
 import androidx.animation.TargetAnimation
 import androidx.animation.TweenBuilder
@@ -25,15 +26,17 @@ import androidx.compose.Stable
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
+import androidx.ui.animation.AnimatedFloatModel
+import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Alignment
+import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.foundation.ValueHolder
-import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
+import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
 import androidx.ui.foundation.gestures.Draggable
 import androidx.ui.foundation.shape.corner.CircleShape
@@ -71,23 +74,31 @@ val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
 fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
     SliderStyle(color = color)
 
+@Composable
+fun SliderPosition(
+    initial: Float = 0f,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int = 0
+) = SliderPosition(initial, valueRange, steps, AnimationClockAmbient.current)
+
 @Stable
 class SliderPosition(
     initial: Float = 0f,
     val valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    val steps: Int = 0
+    val steps: Int = 0,
+    val animationClock: AnimationClockObservable
 ) {
 
     internal val startValue: Float = valueRange.start
     internal val endValue: Float = valueRange.endInclusive
 
     var value
-        get() = holder.value
+        get() = animatedFloat.value
         set(value) {
-            holder.animatedFloat.snapTo(value)
+            animatedFloat.snapTo(value)
         }
 
-    internal val holder = AnimatedValueHolder(initial).apply {
+    internal val animatedFloat = AnimatedFloatModel(initial, animationClock).apply {
         setBounds(startValue, endValue)
     }
 
@@ -130,7 +141,7 @@ fun Slider(
                 }
             val gestureEndAction = { velocity: Float ->
                 if (flingConfig != null) {
-                    position.holder.fling(flingConfig, velocity)
+                    position.animatedFloat.fling(flingConfig, velocity)
                 } else {
                     onValueChangeEnd()
                 }
@@ -148,17 +159,16 @@ fun Slider(
             ) {
                 Draggable(
                     dragDirection = DragDirection.Horizontal,
-                    dragValue = remember(position) {
-                        object : ValueHolder<Float> {
-                            override val value: Float
-                                get() = scale(
-                                    position.startValue,
-                                    position.endValue,
-                                    position.value,
-                                    minPx,
-                                    maxPx
-                                )
-                        }
+                    dragValue = remember(position.value) {
+                        animatedFloat(
+                            initVal = scale(
+                                position.startValue,
+                                position.endValue,
+                                position.value,
+                                minPx,
+                                maxPx
+                            )
+                        )
                     },
                     onDragStarted = { pressed.value = true },
                     onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
