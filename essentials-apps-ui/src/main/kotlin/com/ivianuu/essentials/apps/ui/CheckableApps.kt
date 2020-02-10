@@ -60,7 +60,7 @@ fun CheckableAppsScreen(
     appFilter: AppFilter = DefaultAppFilter
 ) {
     val viewModel =
-        injectMvRxViewModel<CheckableAppsViewModel>(parametersOf(appFilter))
+        injectMvRxViewModel<CheckableAppsViewModel>(parameters = parametersOf(appFilter))
 
     onCommit(checkedAppsFlow, onCheckedAppsChanged) {
         viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)

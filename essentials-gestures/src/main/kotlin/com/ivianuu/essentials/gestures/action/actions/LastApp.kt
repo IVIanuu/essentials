@@ -44,7 +44,7 @@ internal class LastAppActionExecutor(
     override suspend fun invoke() {
         if (systemBuildInfo.sdk >= 24) {
             val executor =
-                lazyRecentAppsExecutor(parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS))
+                lazyRecentAppsExecutor(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS))
             executor()
             delay(250)
             executor()
@@ -54,7 +54,7 @@ internal class LastAppActionExecutor(
             d { "recent apps $recentApps" }
             val lastApp = recentApps.getOrNull(1) ?: return
             val intent = packageManager.getLaunchIntentForPackage(lastApp) ?: return
-            intentExecutorProvider(parametersOf(intent))()
+            intentExecutorProvider(parameters = parametersOf(intent))()
         }
     }
 

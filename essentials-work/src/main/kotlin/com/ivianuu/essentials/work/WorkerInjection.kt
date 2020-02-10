@@ -45,7 +45,12 @@ class InjektWorkerFactory(
         workerClassName: String,
         workerParameters: WorkerParameters
     ): ListenableWorker? {
-        return workers[workerClassName]?.invoke(parametersOf(appContext, workerParameters))
+        return workers[workerClassName]?.invoke(
+            parameters = parametersOf(
+                appContext,
+                workerParameters
+            )
+        )
             ?: error("Could not find a worker for $workerClassName")
     }
 }

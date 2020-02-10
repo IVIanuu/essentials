@@ -18,7 +18,9 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.painter.Renderable
@@ -43,7 +45,9 @@ fun IconButton(
         enabled = onClick != null
     ) {
         Clickable(onClick = onClick) {
-            Container {
+            Container(
+                modifier = LayoutSize.Min(minSize = 48.dp)
+            ) {
                 icon()
             }
         }

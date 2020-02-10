@@ -22,7 +22,7 @@ fun ModuleBuilder.bindAccessibilityAction(
         iconProvider = { SingleActionIconProvider(icon) },
         permissions = { listOf(actionPermission { accessibility }) },
         executor = {
-            get<AccessibilityActionExecutor>(parametersOf(accessibilityAction))
+            get<AccessibilityActionExecutor>(parameters = parametersOf(accessibilityAction))
         }
     )
 }

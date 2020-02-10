@@ -25,9 +25,9 @@ internal val EsLockScreenActionModule = Module {
         },
         executor = {
             if (get<SystemBuildInfo>().sdk >= 28) {
-                get<AccessibilityActionExecutor>(parametersOf(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN))
+                get<AccessibilityActionExecutor>(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN))
             } else {
-                get<RootActionExecutor>(parametersOf("input keyevent 26"))
+                get<RootActionExecutor>(parameters = parametersOf("input keyevent 26"))
             }
         }
     )

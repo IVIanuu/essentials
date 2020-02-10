@@ -78,7 +78,8 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
         ScrollableDialog(
             title = { Text("Required Permissions") }, // todo customizable
             listContent = {
-                val viewModel = injectViewModel<PermissionDialogViewModel>(parametersOf(request))
+                val viewModel =
+                    injectViewModel<PermissionDialogViewModel>(parameters = parametersOf(request))
                 val activity = ActivityAmbient.current as PermissionActivity
                 viewModel.permissionsToProcess.forEach { permission ->
                     Permission(

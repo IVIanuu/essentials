@@ -62,6 +62,6 @@ internal class IntentHomeActionExecutor(
             e.printStackTrace()
         }
 
-        lazyDelegate(parametersOf(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) }))()
+        lazyDelegate(parameters = parametersOf(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) }))()
     }
 }

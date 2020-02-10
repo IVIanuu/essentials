@@ -16,7 +16,7 @@ internal val EsCameraActionModule = Module {
         iconProvider = { SingleActionIconProvider(Icons.Default.PhotoCamera) },
         unlockScreen = { true },
         executor = {
-            get<IntentActionExecutor>(parametersOf(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)))
+            get<IntentActionExecutor>(parameters = parametersOf(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)))
         }
     )
 }
