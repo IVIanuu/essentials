@@ -287,14 +287,14 @@ private class ScrollableListState {
                     if (child == null || child!!.state.index != index) {
                         // We are missing a child. Insert it (and lay it out) if possible.
                         child = addChild(trailingChildWithLayout!!.state.index + 1)
-                        child?.measure(childConstraints)
+                        child?.doMeasure(childConstraints)
                         if (child == null) {
                             // We have run out of children.
                             return false
                         }
                     } else {
                         // Lay out the child.
-                        child!!.measure(childConstraints)
+                        child!!.doMeasure(childConstraints)
                     }
                     trailingChildWithLayout = child
                 }
@@ -353,6 +353,13 @@ private class ScrollableListState {
                 viewportCrossAxisSize,
                 scrollPosition
             )
+        }
+    }
+
+    private fun LayoutNode.doMeasure(constraints: Constraints) {
+        try {
+            measure(constraints)
+        } catch (e: Exception) {
         }
     }
 
