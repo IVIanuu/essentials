@@ -46,7 +46,7 @@ fun IconButton(
     ) {
         Clickable(onClick = onClick) {
             Container(
-                modifier = LayoutSize.Min(minSize = 48.dp)
+                modifier = LayoutSize.Min(minSize = 40.dp)
             ) {
                 icon()
             }

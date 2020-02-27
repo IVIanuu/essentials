@@ -16,10 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.animation.AnimationClockObservable
-import androidx.animation.AnimationEndReason
-import androidx.animation.TargetAnimation
-import androidx.animation.TweenBuilder
+import androidx.animation.*
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Stable
@@ -27,7 +24,6 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.AnimatedFloatModel
-import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.DensityAmbient
@@ -35,6 +31,7 @@ import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.gesture.PressGestureDetector
+import androidx.ui.foundation.ValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
@@ -160,15 +157,17 @@ fun Slider(
                 Draggable(
                     dragDirection = DragDirection.Horizontal,
                     dragValue = remember(position.value) {
-                        animatedFloat(
-                            initVal = scale(
-                                position.startValue,
-                                position.endValue,
-                                position.value,
-                                minPx,
-                                maxPx
-                            )
-                        )
+                        object : ValueHolder<Float> {
+                            override var value: Float
+                                get() = scale(
+                                        position.startValue,
+                                        position.endValue,
+                                        position.value,
+                                        minPx,
+                                        maxPx
+                                )
+                                set(value) {}
+                        }
                     },
                     onDragStarted = { pressed.value = true },
                     onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
