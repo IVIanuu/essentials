@@ -27,7 +27,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.action.actions.Settings
 import com.ivianuu.essentials.icon.Essentials
-import com.ivianuu.essentials.material.icons.Icons
+import androidx.ui.material.icons.Icons
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog

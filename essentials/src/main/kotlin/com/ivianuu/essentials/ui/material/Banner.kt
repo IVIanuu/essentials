@@ -63,7 +63,7 @@ fun Banner(
 
             Container(
                 modifier = LayoutWidth.Fill,
-                alignment = Alignment.CenterRight,
+                alignment = Alignment.CenterEnd,
                 padding = EdgeInsets(left = 8.dp, right = 8.dp)
             ) {
                 Providers(ButtonStyleAmbient provides TextButtonStyle()) {

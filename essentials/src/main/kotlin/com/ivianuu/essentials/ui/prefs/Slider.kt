@@ -518,8 +518,8 @@ fun <T : Comparable<T>> BaseSliderPreference(
 
             Row(
                 modifier = LayoutGravity.BottomCenter + LayoutPadding(
-                    left = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
-                    right = listItemStyle.contentPadding.right
+                    start = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
+                    end = listItemStyle.contentPadding.right
                 ),
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {

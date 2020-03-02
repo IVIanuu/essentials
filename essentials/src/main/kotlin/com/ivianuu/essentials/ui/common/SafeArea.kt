@@ -79,7 +79,7 @@ fun SafeArea(
                 minimum?.bottom
             )
         ),
-        alignment = Alignment.TopLeft
+        alignment = Alignment.TopStart
     ) {
         WindowInsetsProvider(
             value = WindowInsets(

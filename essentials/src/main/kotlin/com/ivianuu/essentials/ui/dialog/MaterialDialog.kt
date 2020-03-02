@@ -179,7 +179,7 @@ private fun DialogContentLayout(
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
                 Container(
-                    alignment = Alignment.CenterLeft,
+                    alignment = Alignment.CenterStart,
                     padding = EdgeInsets(
                         left = 24.dp,
                         top = 24.dp,
@@ -206,7 +206,7 @@ private fun DialogContentLayout(
                         right = if (applyContentPadding) 24.dp else 0.dp,
                         bottom = if (buttons == null) 24.dp else 0.dp
                     ),
-                    alignment = Alignment.TopLeft,
+                    alignment = Alignment.TopStart,
                     children = content
                 )
             }
@@ -232,7 +232,7 @@ private fun DialogContentLayout(
         }
     }
 
-    Layout(children = children) { measurables, constraints ->
+    Layout(children = children) { measurables, constraints, _ ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = 0.ipx
@@ -297,7 +297,7 @@ private fun DialogButtons(
         AlertDialogButtonLayout.SideBySide -> {
             Container(
                 expanded = true,
-                alignment = Alignment.CenterLeft,
+                alignment = Alignment.CenterStart,
                 height = 52.dp,
                 padding = EdgeInsets(all = 8.dp)
             ) {
@@ -334,7 +334,7 @@ private fun DialogButtons(
         AlertDialogButtonLayout.Stacked -> {
             Container(
                 padding = EdgeInsets(all = 8.dp),
-                alignment = Alignment.CenterRight
+                alignment = Alignment.CenterEnd
             ) {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,

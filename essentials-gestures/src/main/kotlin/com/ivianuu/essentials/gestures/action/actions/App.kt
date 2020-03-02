@@ -15,8 +15,8 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Apps
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable

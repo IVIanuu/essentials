@@ -38,14 +38,13 @@ dependencies {
     api(Deps.AndroidX.Lifecycle.runtime)
 
     api(Deps.AndroidX.Ui.androidText)
-    api(Deps.AndroidX.Ui.androidView)
-    api(Deps.AndroidX.Ui.androidViewNonIr)
     api(Deps.AndroidX.Ui.animation)
     api(Deps.AndroidX.Ui.core)
     api(Deps.AndroidX.Ui.foundation)
     api(Deps.AndroidX.Ui.framework)
     api(Deps.AndroidX.Ui.layout)
     api(Deps.AndroidX.Ui.material)
+    api(Deps.AndroidX.Ui.materialIconsExtended)
     api(Deps.AndroidX.Ui.platform)
     api(Deps.AndroidX.Ui.text)
     api(Deps.AndroidX.Ui.tooling)
@@ -55,7 +54,6 @@ dependencies {
     api(Deps.Coroutines.core)
 
     api(project(":essentials-coroutines"))
-    api(Deps.essentialsMaterialIcons)
     api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)

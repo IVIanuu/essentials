@@ -44,6 +44,10 @@ buildConfig {
     version = Publishing.version
     buildConfigField("String", "GROUP_ID", Publishing.groupId)
     buildConfigField("String", "ARTIFACT_ID", "essentials-kotlin-compiler")
+
+    buildConfigField("String", "COMPOSE_GROUP_ID", "androidx.compose")
+    buildConfigField("String", "COMPOSE_ARTIFACT_ID", "compose-compiler")
+    buildConfigField("String", "COMPOSE_VERSION",  Deps.AndroidX.Compose.version)
 }
 
 dependencies {

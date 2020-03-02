@@ -16,10 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.animation.AnimationClockObservable
-import androidx.animation.AnimationEndReason
-import androidx.animation.TargetAnimation
-import androidx.animation.TweenBuilder
+import androidx.animation.*
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Stable
@@ -49,8 +46,8 @@ import androidx.ui.graphics.PointMode
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutSize
-import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
@@ -159,17 +156,13 @@ fun Slider(
             ) {
                 Draggable(
                     dragDirection = DragDirection.Horizontal,
-                    dragValue = remember(position.value) {
-                        animatedFloat(
-                            initVal = scale(
-                                position.startValue,
-                                position.endValue,
-                                position.value,
-                                minPx,
-                                maxPx
-                            )
-                        )
-                    },
+                    dragValue = animatedFloat(scale(
+                        position.startValue,
+                        position.endValue,
+                        position.value,
+                        minPx,
+                        maxPx
+                    )),
                     onDragStarted = { pressed.value = true },
                     onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
                     onDragStopped = { velocity ->
@@ -195,21 +188,20 @@ private fun SliderImpl(
         Container(
             expanded = true,
             constraints = DefaultSliderConstraints,
-            alignment = Alignment.CenterLeft
+            alignment = Alignment.CenterStart
         ) {
             val thumbSize = ThumbRadius * 2
             val fraction = with(position) { calcFraction(startValue, endValue, value) }
             val offset = (widthDp - thumbSize) * fraction
             DrawTrack(color, position)
-            Padding(left = offset) {
-                Ripple(bounded = false) {
-                    Surface(
-                        shape = CircleShape,
-                        color = color,
-                        modifier = LayoutSize(thumbSize, thumbSize),
-                        elevation = if (pressed) 6.dp else 1.dp
-                    ) {
-                    }
+
+            Ripple(bounded = false) {
+                Surface(
+                    shape = CircleShape,
+                    color = color,
+                    modifier = LayoutSize(thumbSize, thumbSize) + LayoutPadding(start = offset),
+                    elevation = if (pressed) 6.dp else 1.dp
+                ) {
                 }
             }
         }

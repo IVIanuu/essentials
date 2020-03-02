@@ -42,9 +42,9 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.ArrowBack
-import com.ivianuu.essentials.material.icons.filled.Check
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.ArrowBack
+import androidx.ui.material.icons.filled.Check
 import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
@@ -134,7 +134,7 @@ fun ColorPickerDialog(
         content = {
             Container(
                 modifier = LayoutHeight(300.dp) +
-                        LayoutPadding(left = 24.dp, right = 24.dp)
+                        LayoutPadding(start = 24.dp, end = 24.dp)
             ) {
                 when (currentPage) {
                     ColorPickerPage.Colors -> {

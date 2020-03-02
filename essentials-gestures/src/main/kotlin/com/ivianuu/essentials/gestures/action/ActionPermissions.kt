@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Accessibility
-import com.ivianuu.essentials.material.icons.filled.Adb
-import com.ivianuu.essentials.material.icons.filled.SettingsApplications
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Accessibility
+import androidx.ui.material.icons.filled.Adb
+import androidx.ui.material.icons.filled.SettingsApplications
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata

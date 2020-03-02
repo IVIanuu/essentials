@@ -10,8 +10,8 @@ import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Repeat
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Repeat
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy

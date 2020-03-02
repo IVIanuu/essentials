@@ -108,11 +108,11 @@ private fun PopupMenuItem(
             children = {
                 Container(
                     modifier = LayoutWidth.Min(200.dp) + LayoutHeight(48.dp),
-                    alignment = Alignment.CenterLeft
+                    alignment = Alignment.CenterStart
                 ) {
-                    Wrap(Alignment.CenterLeft) {
+                    Wrap(Alignment.CenterStart) {
                         Container(
-                            modifier = LayoutPadding(left = 16.dp, right = 16.dp),
+                            modifier = LayoutPadding(start = 16.dp, end = 16.dp),
                             children = children
                         )
                     }

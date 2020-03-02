@@ -171,7 +171,7 @@ private fun TopAppBarLayout(
                 actions()
             }
         }
-    }) { measurables, constraints ->
+    }) { measurables, constraints, _ ->
         val leadingMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
         val titleMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Title }
         val actionsMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Actions }

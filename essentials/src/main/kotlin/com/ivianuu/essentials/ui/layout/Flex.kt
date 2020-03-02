@@ -525,7 +525,7 @@ private fun FlexLayout(
         minIntrinsicHeightMeasureBlock = MinIntrinsicHeightMeasureBlock(orientation),
         maxIntrinsicWidthMeasureBlock = MaxIntrinsicWidthMeasureBlock(orientation),
         maxIntrinsicHeightMeasureBlock = MaxIntrinsicHeightMeasureBlock(orientation)
-    ) { measurables, outerConstraints ->
+    ) { measurables, outerConstraints, _ ->
         val constraints = OrientationIndependentConstraints(outerConstraints, orientation)
 
         var totalFlex = 0f
@@ -728,7 +728,7 @@ private /*inline*/ fun MaxIntrinsicHeightMeasureBlock(orientation: LayoutOrienta
     }
 
 private object IntrinsicMeasureBlocks {
-    val HorizontalMinWidth: IntrinsicMeasureBlock = { measurables, availableHeight ->
+    val HorizontalMinWidth: IntrinsicMeasureBlock = { measurables, availableHeight, _ ->
         intrinsicSize(
             measurables,
             { h -> minIntrinsicWidth(h) },
@@ -738,7 +738,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Horizontal
         )
     }
-    val VerticalMinWidth: IntrinsicMeasureBlock = { measurables, availableHeight ->
+    val VerticalMinWidth: IntrinsicMeasureBlock = { measurables, availableHeight, _ ->
         intrinsicSize(
             measurables,
             { h -> minIntrinsicWidth(h) },
@@ -748,7 +748,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Horizontal
         )
     }
-    val HorizontalMinHeight: IntrinsicMeasureBlock = { measurables, availableWidth ->
+    val HorizontalMinHeight: IntrinsicMeasureBlock = { measurables, availableWidth, _ ->
         intrinsicSize(
             measurables,
             { w -> minIntrinsicHeight(w) },
@@ -758,7 +758,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Vertical
         )
     }
-    val VerticalMinHeight: IntrinsicMeasureBlock = { measurables, availableWidth ->
+    val VerticalMinHeight: IntrinsicMeasureBlock = { measurables, availableWidth, _ ->
         intrinsicSize(
             measurables,
             { w -> minIntrinsicHeight(w) },
@@ -768,7 +768,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Vertical
         )
     }
-    val HorizontalMaxWidth: IntrinsicMeasureBlock = { measurables, availableHeight ->
+    val HorizontalMaxWidth: IntrinsicMeasureBlock = { measurables, availableHeight, _ ->
         intrinsicSize(
             measurables,
             { h -> maxIntrinsicWidth(h) },
@@ -778,7 +778,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Horizontal
         )
     }
-    val VerticalMaxWidth: IntrinsicMeasureBlock = { measurables, availableHeight ->
+    val VerticalMaxWidth: IntrinsicMeasureBlock = { measurables, availableHeight, _ ->
         intrinsicSize(
             measurables,
             { h -> maxIntrinsicWidth(h) },
@@ -788,7 +788,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Horizontal
         )
     }
-    val HorizontalMaxHeight: IntrinsicMeasureBlock = { measurables, availableWidth ->
+    val HorizontalMaxHeight: IntrinsicMeasureBlock = { measurables, availableWidth, _ ->
         intrinsicSize(
             measurables,
             { w -> maxIntrinsicHeight(w) },
@@ -798,7 +798,7 @@ private object IntrinsicMeasureBlocks {
             LayoutOrientation.Vertical
         )
     }
-    val VerticalMaxHeight: IntrinsicMeasureBlock = { measurables, availableWidth ->
+    val VerticalMaxHeight: IntrinsicMeasureBlock = { measurables, availableWidth, _ ->
         intrinsicSize(
             measurables,
             { w -> maxIntrinsicHeight(w) },

@@ -122,7 +122,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                     if (index != items.lastIndex) {
                         Divider(
                             axis = Axis.Horizontal,
-                            modifier = LayoutPadding(left = 72.dp)
+                            modifier = LayoutPadding(start = 72.dp)
                         )
                     }
                 }

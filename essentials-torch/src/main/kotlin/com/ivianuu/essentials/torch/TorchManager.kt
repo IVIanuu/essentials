@@ -77,7 +77,7 @@ class TorchManager internal constructor(
         }
     }
 
-    private fun tryOrToast(action: () -> Unit) {
+    private inline fun tryOrToast(action: () -> Unit) {
         try {
             action()
         } catch (e: Exception) {

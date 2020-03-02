@@ -21,8 +21,8 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.layout.Center
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Menu
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon

@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.graphics.vector.path
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.lazyMaterialIcon
-import com.ivianuu.essentials.material.icons.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
@@ -47,7 +47,6 @@ private val EssentialsIcons.Google: VectorAsset by lazyMaterialIcon {
         close()
     }
 }
-
 
 @Factory
 internal class AssistantActionExecutor(

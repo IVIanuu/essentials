@@ -4,9 +4,9 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.FlashOff
-import com.ivianuu.essentials.material.icons.filled.FlashOn
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.FlashOff
+import androidx.ui.material.icons.filled.FlashOn
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable

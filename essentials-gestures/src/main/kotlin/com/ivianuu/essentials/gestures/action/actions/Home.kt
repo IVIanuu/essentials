@@ -10,9 +10,9 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.lazyMaterialIcon
-import com.ivianuu.essentials.material.icons.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
+import androidx.ui.graphics.vector.path
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module

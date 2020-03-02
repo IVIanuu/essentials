@@ -1,34 +1,24 @@
 package com.ivianuu.essentials.ui.common
 
+import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.Compose
 import androidx.compose.CompositionReference
-import androidx.compose.Context
 import androidx.compose.FrameManager
 import androidx.compose.Observe
 import androidx.compose.composer
 import androidx.compose.compositionReference
 import androidx.compose.onDispose
 import androidx.compose.remember
-import androidx.ui.core.Clip
-import androidx.ui.core.Constraints
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.LayoutNode
-import androidx.ui.core.Measurable
-import androidx.ui.core.MeasureScope
-import androidx.ui.core.MeasuringIntrinsicsMeasureBlocks
-import androidx.ui.core.Modifier
-import androidx.ui.core.Ref
+import androidx.compose.viewComposer
+import androidx.ui.core.*
 import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.unit.IntPx
-import androidx.ui.unit.Px
-import androidx.ui.unit.ipx
-import androidx.ui.unit.max
-import androidx.ui.unit.px
-import androidx.ui.unit.round
+import androidx.ui.unit.*
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
+import kotlin.ranges.coerceAtLeast
+import kotlin.ranges.coerceIn
 
 @Composable
 fun <T> ScrollableList(
@@ -94,13 +84,12 @@ fun ScrollableList(
         enabled = enabled
     ) {
         Clip(shape = RectangleShape) {
-            composer.emit<LayoutNode>(
-                key = 0,
+            viewComposer.emit2(
                 ctor = { LayoutNode() },
                 update = {
-                    node.modifier = modifier
-                    node.ref = state.rootNodeRef
-                    node.measureBlocks = state.measureBlocks
+                    set(modifier) { this.modifier = it }
+                    set(state.rootNodeRef) { this.ref = it }
+                    set(state.measureBlocks) { this.measureBlocks = it }
                 }
             )
         }
@@ -175,7 +164,8 @@ private class ScrollableListState {
         override fun measure(
             measureScope: MeasureScope,
             measurables: List<Measurable>,
-            constraints: Constraints
+            constraints: Constraints,
+            layoutDirection: LayoutDirection
         ): MeasureScope.LayoutResult {
             version++
 
@@ -376,7 +366,7 @@ private class ScrollableListState {
         val childNode = LayoutNode()
 
         childNode.measureBlocks =
-            MeasuringIntrinsicsMeasureBlocks { measurables, constraints ->
+            MeasuringIntrinsicsMeasureBlocks { measurables, constraints, _ ->
                 val childConstraints = Constraints(
                     minWidth = constraints.minWidth,
                     maxWidth = constraints.maxWidth

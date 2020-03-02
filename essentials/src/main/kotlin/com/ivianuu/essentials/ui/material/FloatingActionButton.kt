@@ -24,13 +24,14 @@ import androidx.ui.core.Text
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
-import androidx.ui.layout.Padding
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -106,7 +107,7 @@ fun FloatingActionButton(
     icon: Renderable,
     modifier: Modifier = Modifier.None,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: DefaultFloatingActionButtonStyle()
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrNull ?: DefaultFloatingActionButtonStyle()
 ) {
     FloatingActionButton(
         modifier = modifier,
@@ -123,7 +124,7 @@ fun FloatingActionButton(
     modifier: Modifier = Modifier.None,
     icon: Renderable? = null,
     onClick: (() -> Unit)? = null,
-    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.current ?: ExtendedFloatingActionButtonStyle()
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrNull ?: ExtendedFloatingActionButtonStyle()
 ) {
     FloatingActionButton(
         modifier = modifier,
@@ -131,19 +132,19 @@ fun FloatingActionButton(
         style = style
     ) {
         if (icon == null) {
-            Padding(left = 20.dp, right = 20.dp) {
-                Text(text = text.toUpperCase())
-            }
+            Text(
+                text = text.toUpperCase(),
+                modifier = LayoutPadding(start = 20.dp, end = 20.dp)
+            )
         } else {
-            Padding(left = 12.dp, right = 20.dp) {
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    DrawRenderable(renderable = icon)
-                    Spacer(LayoutWidth(12.dp))
-                    Text(text = text.toUpperCase())
-                }
+            Row(
+                mainAxisAlignment = MainAxisAlignment.Center,
+                crossAxisAlignment = CrossAxisAlignment.Center,
+                modifier = LayoutPadding(start = 12.dp, end = 20.dp)
+            ) {
+                DrawRenderable(renderable = icon)
+                Spacer(LayoutWidth(12.dp))
+                Text(text = text.toUpperCase())
             }
         }
     }

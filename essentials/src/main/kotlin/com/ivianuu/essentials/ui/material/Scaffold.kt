@@ -216,7 +216,7 @@ private fun ScaffoldLayout(
 
     val fabPadding = with(DensityAmbient.current) { 16.dp.toIntPx() }
 
-    Layout(children = children) { measurables, incomingConstraints ->
+    Layout(children = children) { measurables, incomingConstraints, _ ->
         val width = incomingConstraints.maxWidth
         val height = incomingConstraints.maxHeight
 

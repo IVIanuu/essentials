@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Link
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Link
 import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
 import com.ivianuu.essentials.ui.injekt.inject

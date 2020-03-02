@@ -22,7 +22,7 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.gesture.LongPressGestureDetector
-import androidx.ui.foundation.background
+import androidx.ui.foundation.DrawBackground
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
@@ -101,8 +101,8 @@ fun ListItem(
         }
 
         Container(
-            modifier = background(
-                if (selected) contentColor().copy(
+            modifier = DrawBackground(
+                color = if (selected) contentColor().copy(
                     alpha = RippleThemeAmbient.current.opacity()
                 ) else Color.Transparent
             ),
@@ -117,7 +117,7 @@ fun ListItem(
                 if (leading != null) {
                     Container(
                         modifier = LayoutInflexible,
-                        alignment = Alignment.CenterLeft
+                        alignment = Alignment.CenterStart
                     ) {
                         AddPaddingIfNeededLayout(
                             padding = EdgeInsets(
@@ -140,7 +140,7 @@ fun ListItem(
                         left = if (leading != null) HorizontalTextPadding else 0.dp,
                         right = if (trailing != null) HorizontalTextPadding else 0.dp
                     ),
-                    alignment = Alignment.CenterLeft
+                    alignment = Alignment.CenterStart
                 ) {
                     AddPaddingIfNeededLayout(
                         padding = EdgeInsets(

@@ -7,8 +7,8 @@ import androidx.ui.core.boundsInRoot
 import androidx.ui.layout.Wrap
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.round
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.MoreVert
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.MoreVert
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
