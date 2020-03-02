@@ -65,7 +65,7 @@ private fun ScrollerLayout(
 ) {
     SingleChildLayout(child = {
         Clip(RectangleShape) {
-            Container(alignment = Alignment.TopLeft) {
+            Container(alignment = Alignment.TopStart) {
                 RepaintBoundary(children = child)
             }
         }

@@ -16,9 +16,9 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.lazyMaterialIcon
-import com.ivianuu.essentials.material.icons.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
+import androidx.ui.graphics.vector.path
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.ui.image.toBitmap

@@ -5,7 +5,6 @@ import androidx.compose.Stable
 import androidx.ui.core.Alignment
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.BlendMode
@@ -77,7 +76,7 @@ class ImageRenderable(
             width = finalSize.width,
             height = finalSize.height
         ) {
-            DrawImage(image = image, tint = tintColor)
+            // todo DrawImage(image = image, tint = tintColor)
         }
     }
 }

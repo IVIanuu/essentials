@@ -138,7 +138,7 @@ val ScaffoldRoute = Route {
                     Container(
                         height = 56.dp,
                         expanded = true,
-                        alignment = Alignment.CenterLeft,
+                        alignment = Alignment.CenterStart,
                         padding = EdgeInsets(16.dp),
                     ) {
                         Text(

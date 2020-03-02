@@ -24,7 +24,6 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.asRenderableComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
-import com.ivianuu.essentials.ui.core.Ignore
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.painter.Renderable
 
@@ -124,10 +123,9 @@ fun <T> ValueController(
 @Model
 class PreferenceContext<T> {
 
-    @Ignore
-    internal lateinit var valueController: ValueController<T>
+    internal var valueController: ValueController<T>? = null // todo lateinit
 
-    val currentValue: T get() = valueController.currentValue
+    val currentValue: T get() = valueController!!.currentValue
 
     var dependenciesOk = false
         internal set
@@ -137,7 +135,7 @@ class PreferenceContext<T> {
 
     fun setIfOk(newValue: T): Boolean {
         val isOk = shouldBeEnabled
-        if (isOk) valueController.setValue(newValue)
+        if (isOk) valueController!!.setValue(newValue)
         return isOk
     }
 }

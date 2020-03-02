@@ -4,8 +4,8 @@ import android.content.ComponentName
 import android.content.Intent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Search
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Search
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 

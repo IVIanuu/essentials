@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.Providers
+import androidx.compose.emptyContent
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
@@ -27,6 +28,7 @@ import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retainFor
 
 @Model
@@ -96,8 +98,8 @@ val TabIndexAmbient =
 
 @Composable
 fun Tab(
-    text: String? = null,
-    icon: Image? = null
+    text: @Composable() () -> Unit = emptyContent(),
+    icon: @Composable() () -> Unit = emptyContent()
 ) {
     val tabController = ambientTabController<Any?>()
     val tabIndex = TabIndexAmbient.current

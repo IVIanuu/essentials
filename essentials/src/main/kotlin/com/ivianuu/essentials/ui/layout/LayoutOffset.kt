@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Immutable
+import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutModifier
 import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
@@ -27,12 +28,13 @@ import androidx.ui.unit.dp
 @Immutable
 data class LayoutOffset(
     val offsetX: Dp = 0.dp,
-    val offsetY: Dp = 0.dp,
+    val offsetY: Dp = 0.dp
 ) : LayoutModifier {
 
     override fun Density.modifyPosition(
         childSize: IntPxSize,
         containerSize: IntPxSize,
+        layoutDirection: LayoutDirection
     ): IntPxPosition = IntPxPosition(offsetX.toIntPx(), offsetY.toIntPx())
 
     @Immutable
@@ -42,7 +44,8 @@ data class LayoutOffset(
     ) : LayoutModifier {
         override fun Density.modifyPosition(
             childSize: IntPxSize,
-            containerSize: IntPxSize
+            containerSize: IntPxSize,
+            layoutDirection: LayoutDirection
         ): IntPxPosition {
             return IntPxPosition(
                 childSize.width * fractionX,

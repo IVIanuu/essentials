@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.SettingsPower
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.SettingsPower
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf

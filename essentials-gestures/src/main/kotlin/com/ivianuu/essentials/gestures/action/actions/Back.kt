@@ -5,9 +5,9 @@ import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.lazyMaterialIcon
-import com.ivianuu.essentials.material.icons.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
+import androidx.ui.graphics.vector.path
 import com.ivianuu.injekt.Module
 
 val EssentialsIcons.ActionBack: VectorAsset by lazyMaterialIcon {

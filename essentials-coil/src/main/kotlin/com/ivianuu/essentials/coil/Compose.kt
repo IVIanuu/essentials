@@ -22,7 +22,6 @@ import androidx.compose.Stable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
@@ -55,7 +54,7 @@ class CoilRenderable(
         ) {
             if (image != null) {
                 RepaintBoundary {
-                    DrawImage(image = image, tint = tintColor)
+                    // todo DrawImage(image = image, tint = tintColor)
                 }
             }
         }

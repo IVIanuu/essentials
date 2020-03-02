@@ -38,7 +38,7 @@ val TabsRoute = Route {
                 Column {
                     TopAppBar("Tabs")
                     TabRow<Color> { index, item ->
-                        Tab(text = "Item: $index")
+                        Tab(text = { Text("Item: $index") })
                     }
                 }
             },

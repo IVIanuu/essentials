@@ -21,11 +21,11 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.action.actions.Settings
 import com.ivianuu.essentials.icon.Essentials
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Email
-import com.ivianuu.essentials.material.icons.filled.Home
-import com.ivianuu.essentials.material.icons.filled.Search
-import com.ivianuu.essentials.material.icons.filled.ViewAgenda
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Email
+import androidx.ui.material.icons.filled.Home
+import androidx.ui.material.icons.filled.Search
+import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper

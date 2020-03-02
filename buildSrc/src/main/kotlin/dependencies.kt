@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev459"
+    const val version = "${Build.versionName}-dev460"
 }
 
 object Deps {
@@ -41,10 +41,10 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
-        private const val composeVersion = "0.0.1-dev40"
+        private const val composeVersion = "0.0.1-dev58"
 
         object Compose {
-            private const val version = composeVersion
+            const val version = composeVersion
             const val runtime = "androidx.compose:compose-runtime:$version"
         }
 
@@ -64,14 +64,13 @@ object Deps {
         object Ui {
             private const val version = composeVersion
             const val androidText = "androidx.ui:ui-android-text:$version"
-            const val androidView = "androidx.ui:ui-android-view:$version"
-            const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"
             const val animation = "androidx.ui:ui-animation:$version"
             const val core = "androidx.ui:ui-core:$version"
             const val foundation = "androidx.ui:ui-foundation:$version"
             const val framework = "androidx.ui:ui-framework:$version"
             const val layout = "androidx.ui:ui-layout:$version"
             const val material = "androidx.ui:ui-material:$version"
+            const val materialIconsExtended = "androidx.ui:ui-material-icons-extended:$version"
             const val platform = "androidx.ui:ui-platform:$version"
             const val test = "androidx.ui:ui-test:$version"
             const val text = "androidx.ui:ui-text:$version"
@@ -103,17 +102,15 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev458"
-    const val essentialsMaterialIcons =
-        "com.ivianuu.essentials:essentials-material-icons:0.0.1-dev445"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev460"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev97"
+        private const val version = "0.0.1-dev98"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
-        const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
+        const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:0.0.1-dev95"
     }
 
     const val junit = "junit:junit:4.12"

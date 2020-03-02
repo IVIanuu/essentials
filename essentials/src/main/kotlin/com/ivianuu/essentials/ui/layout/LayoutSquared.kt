@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Immutable
 import androidx.ui.core.Constraints
+import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutModifier
 import androidx.ui.core.enforce
 import androidx.ui.unit.Density
@@ -27,7 +28,7 @@ data class LayoutSquared(
     val fit: Fit
 ) : LayoutModifier {
 
-    override fun Density.modifyConstraints(constraints: Constraints): Constraints {
+    override fun Density.modifyConstraints(constraints: Constraints, layoutDirection: LayoutDirection): Constraints {
         val size = when (fit) {
             Fit.MatchWidth -> constraints.maxWidth
             Fit.MatchHeight -> constraints.maxHeight

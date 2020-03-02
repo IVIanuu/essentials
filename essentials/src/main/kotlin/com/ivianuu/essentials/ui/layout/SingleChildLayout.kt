@@ -31,7 +31,7 @@ fun SingleChildLayout(
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
 ) {
-    Layout(children = child, modifier = modifier) { measurables, constraints ->
+    Layout(children = child, modifier = modifier) { measurables, constraints, _ ->
         check(measurables.size <= 1) { "Only 1 child allowed" }
         measureBlock(measurables.firstOrNull(), constraints)
     }
@@ -43,7 +43,7 @@ fun NonNullSingleChildLayout(
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable, Constraints) -> MeasureScope.LayoutResult
 ) {
-    Layout(children = child, modifier = modifier) { measurables, constraints ->
+    Layout(children = child, modifier = modifier) { measurables, constraints, _ ->
         check(measurables.size == 1) { "Requires exactly 1 child" }
         measureBlock(measurables.single(), constraints)
     }

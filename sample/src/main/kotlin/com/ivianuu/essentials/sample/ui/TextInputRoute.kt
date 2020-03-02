@@ -62,7 +62,7 @@ val TextInputRoute = Route {
                     if (state.searchVisible) {
                         Container(
                             expanded = true,
-                            alignment = Alignment.CenterLeft
+                            alignment = Alignment.CenterStart
                         ) {
                             Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
                                 if (state.inputValue.isEmpty()) {

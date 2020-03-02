@@ -24,6 +24,7 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.AnimatedFloatModel
+import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.DensityAmbient
@@ -31,7 +32,6 @@ import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.foundation.ValueHolder
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
@@ -46,8 +46,8 @@ import androidx.ui.graphics.PointMode
 import androidx.ui.graphics.StrokeCap
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutSize
-import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
@@ -156,19 +156,13 @@ fun Slider(
             ) {
                 Draggable(
                     dragDirection = DragDirection.Horizontal,
-                    dragValue = remember(position.value) {
-                        object : ValueHolder<Float> {
-                            override var value: Float
-                                get() = scale(
-                                        position.startValue,
-                                        position.endValue,
-                                        position.value,
-                                        minPx,
-                                        maxPx
-                                )
-                                set(value) {}
-                        }
-                    },
+                    dragValue = animatedFloat(scale(
+                        position.startValue,
+                        position.endValue,
+                        position.value,
+                        minPx,
+                        maxPx
+                    )),
                     onDragStarted = { pressed.value = true },
                     onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
                     onDragStopped = { velocity ->
@@ -194,21 +188,20 @@ private fun SliderImpl(
         Container(
             expanded = true,
             constraints = DefaultSliderConstraints,
-            alignment = Alignment.CenterLeft
+            alignment = Alignment.CenterStart
         ) {
             val thumbSize = ThumbRadius * 2
             val fraction = with(position) { calcFraction(startValue, endValue, value) }
             val offset = (widthDp - thumbSize) * fraction
             DrawTrack(color, position)
-            Padding(left = offset) {
-                Ripple(bounded = false) {
-                    Surface(
-                        shape = CircleShape,
-                        color = color,
-                        modifier = LayoutSize(thumbSize, thumbSize),
-                        elevation = if (pressed) 6.dp else 1.dp
-                    ) {
-                    }
+
+            Ripple(bounded = false) {
+                Surface(
+                    shape = CircleShape,
+                    color = color,
+                    modifier = LayoutSize(thumbSize, thumbSize) + LayoutPadding(start = offset),
+                    elevation = if (pressed) 6.dp else 1.dp
+                ) {
                 }
             }
         }

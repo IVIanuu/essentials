@@ -96,6 +96,9 @@ private object NoopSelectionRegistrar : SelectionRegistrar {
     override fun subscribe(selectable: Selectable): Selectable =
         NoopSelectable
 
+    override fun onPositionChange() {
+    }
+
     override fun unsubscribe(selectable: Selectable) {
     }
 
@@ -108,6 +111,9 @@ private object NoopSelectionRegistrar : SelectionRegistrar {
             previousSelection: Selection?,
             isStartHandle: Boolean
         ): Selection? = null
+
+        override fun getHandlePosition(selection: Selection, isStartHandle: Boolean): PxPosition = PxPosition.Origin
+        override fun getLayoutCoordinates(): LayoutCoordinates? = null
     }
 }
 

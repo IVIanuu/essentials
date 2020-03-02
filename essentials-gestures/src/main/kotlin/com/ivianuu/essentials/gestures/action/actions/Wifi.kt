@@ -6,9 +6,9 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.Wifi
-import com.ivianuu.essentials.material.icons.filled.WifiOff
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Wifi
+import androidx.ui.material.icons.filled.WifiOff
 import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.injekt.Factory

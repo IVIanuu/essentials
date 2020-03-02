@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.layout
 import androidx.compose.Immutable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
+import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutModifier
 import androidx.ui.unit.Density
 import androidx.ui.unit.IntPxPosition
@@ -30,7 +31,10 @@ data class LayoutSizeFraction(
     private val heightFactor: Float? = null,
     private val alignment: Alignment = Alignment.Center
 ) : LayoutModifier {
-    override fun Density.modifyConstraints(constraints: Constraints): Constraints {
+    override fun Density.modifyConstraints(
+        constraints: Constraints,
+        layoutDirection: LayoutDirection
+    ): Constraints {
         var (minWidth, maxWidth, minHeight, maxHeight) = constraints
 
         if (widthFactor != null) {
@@ -50,7 +54,8 @@ data class LayoutSizeFraction(
 
     override fun Density.modifyPosition(
         childSize: IntPxSize,
-        containerSize: IntPxSize
+        containerSize: IntPxSize,
+        layoutDirection: LayoutDirection
     ): IntPxPosition {
         return alignment.align(
             IntPxSize(

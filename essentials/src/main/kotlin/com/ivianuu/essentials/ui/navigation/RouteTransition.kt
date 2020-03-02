@@ -92,7 +92,7 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
         Container(
             modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None,
-            alignment = Alignment.TopLeft,
+            alignment = Alignment.TopStart,
             children = children
         )
     }

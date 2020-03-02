@@ -45,9 +45,9 @@ fun Dialog(
 ) {
     Surface(
         modifier = LayoutPadding(
-            left = 32.dp,
+            start = 32.dp,
             top = 32.dp,
-            right = 32.dp,
+            end = 32.dp,
             bottom = 32.dp
         ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp),
         color = MaterialTheme.colors().surface,

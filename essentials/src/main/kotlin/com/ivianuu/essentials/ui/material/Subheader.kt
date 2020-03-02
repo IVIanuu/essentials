@@ -64,8 +64,8 @@ fun Subheader(
     Container(
         height = 48.dp,
         expanded = true,
-        modifier = LayoutPadding(left = 16.dp, right = 16.dp),
-        alignment = Alignment.CenterLeft
+        modifier = LayoutPadding(start = 16.dp, end = 16.dp),
+        alignment = Alignment.CenterStart
     ) {
         ProvideContentColor(color = style.textColor) {
             CurrentTextStyleProvider(value = style.textStyle, children = text)

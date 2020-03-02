@@ -3,8 +3,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.os.Build
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.material.icons.Icons
-import com.ivianuu.essentials.material.icons.filled.PowerSettingsNew
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.PowerSettingsNew
 import com.ivianuu.injekt.Module
 
 internal val EsSplitScreenActionModule = Module {

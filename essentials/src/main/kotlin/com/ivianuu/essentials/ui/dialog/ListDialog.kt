@@ -51,7 +51,7 @@ fun SimpleDialogListItem(
                     left = 24.dp,
                     right = 24.dp
                 ),
-                alignment = Alignment.CenterLeft
+                alignment = Alignment.CenterStart
             ) {
                 ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
                     Row(

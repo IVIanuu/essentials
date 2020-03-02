@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.icon
 
-import com.ivianuu.essentials.material.icons.Icons
+import androidx.ui.material.icons.Icons
 
 object EssentialsIcons
 

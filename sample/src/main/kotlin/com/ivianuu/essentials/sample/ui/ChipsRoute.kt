@@ -47,7 +47,7 @@ val ChipsRoute = Route {
         body = {
             Container(
                 modifier = LayoutPadding(all = 8.dp),
-                alignment = Alignment.TopLeft
+                alignment = Alignment.TopStart
             ) {
                 FlowRow(
                     mainAxisSpacing = 8.dp,

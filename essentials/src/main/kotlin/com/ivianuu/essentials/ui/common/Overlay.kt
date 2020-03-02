@@ -111,7 +111,7 @@ val OverlayAmbient =
 private fun OverlayLayout(
     children: @Composable () -> Unit
 ) {
-    Layout(children = children) { measurables, constraints ->
+    Layout(children = children) { measurables, constraints, _ ->
         // force children to fill the whole space
         val childConstraints = constraints.tightMax()
 
