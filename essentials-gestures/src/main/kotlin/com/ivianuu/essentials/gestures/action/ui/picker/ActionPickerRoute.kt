@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
-import androidx.compose.key
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
@@ -26,13 +25,11 @@ fun ActionPickerRoute(
 
         RenderAsyncList(
             state = viewModel.state.items,
-            successItemCallback = { index, item ->
-                key(index) {
-                    ActionPickerItem(
-                        item = item,
-                        onClick = { viewModel.itemClicked(item) }
-                    )
-                }
+            successItemCallback = { item ->
+                ActionPickerItem(
+                    item = item,
+                    onClick = { viewModel.itemClicked(item) }
+                )
             }
         )
     }

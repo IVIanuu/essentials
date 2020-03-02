@@ -20,6 +20,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.res.imageResource
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ColorShape
-import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
@@ -111,12 +111,10 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
 
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
-                ScrollableList(
-                    items = items
-                ) { index, item ->
+                AdapterList(data = items) { item ->
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
-                    if (index != items.lastIndex) {
+                    if (items.indexOf(item) != items.lastIndex) {
                         Divider(
                             axis = Axis.Horizontal,
                             modifier = LayoutPadding(start = 72.dp)

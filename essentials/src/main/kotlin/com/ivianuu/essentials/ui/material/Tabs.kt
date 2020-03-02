@@ -23,13 +23,11 @@ import androidx.compose.emptyContent
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.retainFor
+import com.ivianuu.essentials.ui.core.retain
 
 @Model
 class TabController<T>(
@@ -52,7 +50,7 @@ fun <T> ProvideTabController(
     initialIndex: Int = 0,
     children: @Composable () -> Unit
 ) {
-    val controller = retainFor(items, initialIndex) {
+    val controller = retain(items, initialIndex) {
         TabController(items = items, initialIndex = initialIndex)
     }
 

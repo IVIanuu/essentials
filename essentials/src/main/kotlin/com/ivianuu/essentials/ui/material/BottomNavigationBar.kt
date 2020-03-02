@@ -42,7 +42,6 @@ import com.ivianuu.essentials.ui.common.SwapperState
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.retain
-import com.ivianuu.essentials.ui.core.retainFor
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -190,7 +189,7 @@ fun <T> ProvideBottomNavigationController(
     initial: T = items.first(),
     children: @Composable () -> Unit
 ) {
-    val controller = retainFor(items, initial) {
+    val controller = retain(items, initial) {
         BottomNavigationController(items = items, initial = initial)
     }
 

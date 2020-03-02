@@ -49,7 +49,7 @@ fun ShortcutPickerRoute(
 ) = Route {
     val viewModel = injectMvRxViewModel<ShortcutPickerViewModel>()
     SimpleScreen(title = title ?: stringResource(R.string.es_title_shortcut_picker)) {
-        RenderAsyncList(state = viewModel.state.shortcuts) { _, info ->
+        RenderAsyncList(state = viewModel.state.shortcuts) { info ->
             ShortcutInfo(info = info, onClick = { viewModel.infoClicked(info) })
         }
     }

@@ -12,7 +12,6 @@ import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.currentOrElse
 
@@ -34,7 +33,7 @@ fun DefaultDividerStyle(
 fun Divider(
     axis: Axis,
     modifier: Modifier = Modifier.None,
-    style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() },
+    style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() }
 ) {
     val sizeModifiers = remember(axis, style.size) {
         when (axis) {
@@ -42,7 +41,6 @@ fun Divider(
             Axis.Vertical -> LayoutHeight.Fill + LayoutWidth(style.size)
         }
     }
-    d { "render divider $axis $style" }
     ColoredRect(
         color = style.color,
         modifier = modifier + sizeModifiers
