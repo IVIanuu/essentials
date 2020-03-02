@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.openUrlOnClick
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
@@ -47,7 +48,9 @@ fun AboutSection(
     privacyPolicyUrl: String? = null
 ) {
     if (showHeader) {
-        Subheader(stringResource(R.string.about_title))
+        Subheader {
+            Text(stringResource(R.string.about_title))
+        }
     }
 
     AboutItem(
@@ -103,8 +106,12 @@ private fun AboutItem(
     url: () -> String
 ) {
     ListItem(
-        title = stringResource(titleRes),
-        subtitle = descRes?.let { stringResource(it) },
+        title = { Text(stringResource(titleRes)) },
+        subtitle = descRes?.let {
+            {
+                Text(stringResource(it))
+            }
+        },
         onClick = openUrlOnClick(url)
     )
 }

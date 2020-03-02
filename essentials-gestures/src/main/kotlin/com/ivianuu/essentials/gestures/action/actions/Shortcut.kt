@@ -4,7 +4,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.Composable
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.graphics.vector.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -16,17 +20,13 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.lazyMaterialIcon
-import androidx.ui.graphics.vector.path
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.essentials.ui.image.DrawImage
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.ui.painter.ImageRenderable
-import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
@@ -61,12 +61,12 @@ internal class ShortcutActionFactory(
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)
-        val icon = ImageRenderable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImage())
+        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImage()
         return Action(
             key = key,
             title = label,
             unlockScreen = true,
-            iconProvider = SingleActionIconProvider(icon),
+            iconProvider = SingleActionIconProvider { DrawImage(icon) },
             executor = intentActionExecutorProvider(parameters = parametersOf(intent))
         )
     }
@@ -78,8 +78,8 @@ internal class ShortcutActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_shortcut)
-    override val icon: Renderable
-        get() = VectorRenderable(Icons.Essentials.ContentCut)
+    override val icon: @Composable () -> Unit
+        get() = { VectorImage(Icons.Essentials.ContentCut) }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(

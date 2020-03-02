@@ -124,7 +124,7 @@ val TextInputRoute = Route {
         fab = {
             if (!state.searchVisible) {
                 FloatingActionButton(
-                    text = "Search",
+                    text = { Text("Search") },
                     onClick = { state.searchVisible = true }
                 )
             }

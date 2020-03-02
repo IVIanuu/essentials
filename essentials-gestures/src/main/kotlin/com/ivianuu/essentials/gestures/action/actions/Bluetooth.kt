@@ -1,19 +1,18 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
+import androidx.compose.Composable
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Bluetooth
+import androidx.ui.material.icons.filled.BluetoothDisabled
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Bluetooth
-import androidx.ui.material.icons.filled.BluetoothDisabled
-import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -46,7 +45,7 @@ internal class BluetoothActionExecutor : ActionExecutor {
 internal class BluetoothActionIconProvider(
     private val broadcastFactory: BroadcastFactory
 ) : ActionIconProvider {
-    override val icon: Flow<Renderable>
+    override val icon: Flow<@Composable () -> Unit>
         get() = broadcastFactory.create(BluetoothAdapter.ACTION_STATE_CHANGED)
             .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
             .onStart { emit(BluetoothAdapter.getDefaultAdapter()?.state ?: BluetoothAdapter.STATE_OFF) }
@@ -55,5 +54,9 @@ internal class BluetoothActionIconProvider(
                 if (it) Icons.Default.Bluetooth
                 else Icons.Default.BluetoothDisabled
             }
-            .map { VectorRenderable(it) }
+            .map {
+                {
+                    VectorImage(it)
+                }
+            }
 }

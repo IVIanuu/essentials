@@ -31,7 +31,7 @@ fun <T> flowNever(): Flow<T> = flow {
     }
 }
 
-fun <T> flowOf(block: suspend () -> T) = flow { emit(block()) }
+fun <T> flowOf(block: suspend () -> T): Flow<T> = flow { emit(block()) }
 
 fun <T1, T2> combine(flow: Flow<T1>, flow2: Flow<T2>): Flow<Pair<T1, T2>> {
     return combine(

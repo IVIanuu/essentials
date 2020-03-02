@@ -23,16 +23,17 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.coil.CoilRenderable
+import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.AvatarSize
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.painter.AvatarSize
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
@@ -71,11 +72,13 @@ private fun AppInfo(
     onClick: () -> Unit
 ) {
     ListItem(
-        title = app.appName,
-        image = CoilRenderable(
-            data = AppIcon(packageName = app.packageName),
-            size = AvatarSize
-        ),
+        title = { Text(app.appName) },
+        leading = {
+            CoilImage(
+                data = AppIcon(packageName = app.packageName),
+                size = AvatarSize
+            )
+        },
         onClick = onClick
     )
 }

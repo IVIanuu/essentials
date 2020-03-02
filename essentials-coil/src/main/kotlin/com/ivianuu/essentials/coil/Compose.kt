@@ -18,7 +18,6 @@ package com.ivianuu.essentials.coil
 
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
-import androidx.compose.Stable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.RepaintBoundary
@@ -30,33 +29,26 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.coroutines.load
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.ImageRenderable
-import com.ivianuu.essentials.ui.painter.Renderable
 
-@Stable
-class CoilRenderable(
-    private val data: Any,
-    private val tintColor: Color? = null,
-    private val size: Size? = null
-) : Renderable {
-    @Composable
-    override fun content() {
-        val image = loadImage(data = data, size = size)
-        val density = DensityAmbient.current
+@Composable
+fun CoilImage(
+    data: Any,
+    tintColor: Color? = null,
+    size: Size? = null
+) {
+    val image = loadImage(data = data, size = size)
+    val density = DensityAmbient.current
+    RepaintBoundary {
         Container(
             width = size?.width ?: with(density) { image?.width?.ipx?.toDp() } ?: 0.dp,
             height = size?.height ?: with(density) { image?.height?.ipx?.toDp() } ?: 0.dp
         ) {
-            if (image != null) {
-                RepaintBoundary {
-                    // todo DrawImage(image = image, tint = tintColor)
-                }
-            }
+            Text("TODO")
         }
     }
 }
@@ -66,7 +58,7 @@ fun loadImage(
     data: Any,
     placeholder: Image? = PlaceholderAmbient.currentOrNull,
     size: Size? = null,
-    imageLoader: ImageLoader = inject(),
+    imageLoader: ImageLoader = inject()
 ): Image? {
     return if (placeholder != null) {
         loadImage(data = data, placeholder = placeholder, size = size, imageLoader = imageLoader)
@@ -113,14 +105,14 @@ fun loadImage(
 val PlaceholderAmbient = staticAmbientOf<Image>()
 
 @Composable
-fun Image(
+fun CoilImage(
     data: Any,
     size: Size? = null,
     placeholder: Image? = PlaceholderAmbient.currentOrNull,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image?) -> Unit = {
-        if (it != null) DrawRenderable(ImageRenderable(it))
-    },
+        if (it != null) CoilImage(data, size, placeholder, imageLoader)
+    }
 ) {
     RepaintBoundary {
         val loadedImage = loadImage(
@@ -145,13 +137,13 @@ fun Image(
 }
 
 @Composable
-fun Image(
+fun CoilImage(
     data: Any,
     size: Size? = null,
     placeholder: Image,
     imageLoader: ImageLoader = inject(),
     image: @Composable (Image) -> Unit = {
-        DrawRenderable(ImageRenderable(it))
+        CoilImage(data, size, placeholder, imageLoader)
     }
 ) {
     RepaintBoundary {

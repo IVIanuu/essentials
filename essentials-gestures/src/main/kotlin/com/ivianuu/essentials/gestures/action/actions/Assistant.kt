@@ -5,16 +5,15 @@ import android.app.SearchManager
 import android.os.Bundle
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.lazyMaterialIcon
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
 
 internal val EsAssistantActionModule = Module {
     bindAction(

@@ -5,11 +5,17 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.core.graphics.drawable.toBitmap
+import androidx.ui.core.Alignment
+import androidx.ui.core.DensityAmbient
+import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.AndroidImageAccessor
+import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.ScaleFit
+import androidx.ui.graphics.vector.DefaultTintBlendMode
+import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.graphics.vector.Group
 import androidx.ui.graphics.vector.Path
 import androidx.ui.graphics.vector.VectorAsset
@@ -19,10 +25,64 @@ import androidx.ui.graphics.vector.VectorPath
 import androidx.ui.graphics.vector.VectorScope
 import androidx.ui.graphics.vector.composeVector
 import androidx.ui.graphics.vector.disposeVector
+import androidx.ui.layout.Container
 import androidx.ui.unit.Density
 import androidx.ui.unit.PxSize
+import androidx.ui.unit.Size
+import androidx.ui.unit.dp
+import androidx.ui.unit.ipx
 import androidx.ui.unit.px
 import androidx.ui.unit.round
+
+@Composable
+fun DrawImage(
+    image: Image,
+    tintColor: Color? = null,
+    size: Size? = null
+) {
+    val finalSize = size ?: with(DensityAmbient.current) {
+        Size(
+            width = image.width.ipx.toDp(),
+            height = image.height.ipx.toDp()
+        )
+    }
+
+    Container(
+        width = finalSize.width,
+        height = finalSize.height
+    ) {
+        // todo DrawImage(image = image, tint = tintColor)
+    }
+}
+
+@Composable
+fun VectorImage(
+    image: VectorAsset,
+    tintColor: Color? = null,
+    tintBlendMode: BlendMode = DefaultTintBlendMode,
+    size: Size = Size(image.defaultWidth, image.defaultHeight)
+) {
+    Container(
+        width = size.width,
+        height = size.height
+    ) {
+        DrawVector(
+            name = image.name,
+            viewportWidth = image.viewportWidth,
+            viewportHeight = image.viewportHeight,
+            defaultWidth = size.width,
+            defaultHeight = size.height,
+            tintColor = tintColor ?: contentColor(),
+            tintBlendMode = tintBlendMode,
+            alignment = Alignment.Center,
+            scaleFit = ScaleFit.Fit
+        ) { _, _ ->
+            RenderVectorGroup(group = image.root)
+        }
+    }
+}
+
+val AvatarSize = Size(40.dp, 40.dp)
 
 fun Drawable.toImage(): Image = toBitmap().toImage()
 

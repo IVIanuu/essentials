@@ -22,18 +22,6 @@ import androidx.ui.layout.LayoutSize
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Clickable
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.Renderable
-
-@Composable
-fun IconButton(
-    onClick: (() -> Unit)? = null,
-    image: Renderable
-) {
-    IconButton(onClick = onClick) {
-        DrawRenderable(renderable = image)
-    }
-}
 
 @Composable
 fun IconButton(

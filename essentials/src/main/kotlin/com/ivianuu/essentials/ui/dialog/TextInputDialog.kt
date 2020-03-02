@@ -24,7 +24,6 @@ import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -46,7 +45,11 @@ fun TextInputRoute(
         onValueChange = setCurrentValue,
         hint = hint,
         keyboardType = keyboardType,
-        title = title?.asTextComposable(),
+        title = title?.let {
+            {
+                Text(it)
+            }
+        },
         positiveButton = {
             DialogButton(
                 text = stringResource(R.string.es_ok),

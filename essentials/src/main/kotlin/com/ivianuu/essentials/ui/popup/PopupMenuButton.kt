@@ -5,19 +5,18 @@ import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.boundsInRoot
 import androidx.ui.layout.Wrap
-import androidx.ui.unit.IntPxBounds
-import androidx.ui.unit.round
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
+import androidx.ui.unit.IntPxBounds
+import androidx.ui.unit.round
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 
 @Composable
 fun PopupMenuButton(
-    image: Renderable = VectorRenderable(Icons.Default.MoreVert),
+    icon: @Composable () -> Unit = { VectorImage(Icons.Default.MoreVert) },
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<PopupMenu.Item>
@@ -50,20 +49,20 @@ fun PopupMenuButton(
                     }
                 )
             },
-            image = image
+            icon = icon
         )
     }
 }
 
 @Composable
 fun <T> PopupMenuButton(
-    image: Renderable = VectorRenderable(Icons.Default.MoreVert),
+    icon: @Composable () -> Unit = { VectorImage(Icons.Default.MoreVert) },
     popupStyle: PopupStyle = PopupStyleAmbient.current,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
+    itemCallback: @Composable (T, Boolean) -> Unit,
     onSelected: (T) -> Unit,
-    selectedItem: T? = null,
-    itemCallback: @Composable (T, Boolean) -> Unit
+    selectedItem: T? = null
 ) {
     val navigator = NavigatorAmbient.current
 
@@ -96,7 +95,7 @@ fun <T> PopupMenuButton(
                     }
                 )
             },
-            image = image
+            icon = icon
         )
     }
 }

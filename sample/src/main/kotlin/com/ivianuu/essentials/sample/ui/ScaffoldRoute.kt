@@ -107,16 +107,16 @@ val ScaffoldRoute = Route {
                 style = AppBarStyle(
                     color = color,
                     elevation = if (alpha == 1f) 8.dp else 0.dp,
-                    centerTitle = controls.centerTitle,
-                ),
+                    centerTitle = controls.centerTitle
+                )
             )
         }) else null,
         fabPosition = controls.fabPosition,
         fab = {
             FabAnimation(
-                visible = controls.showFab,
+                visible = controls.showFab
             ) {
-                FloatingActionButton("Click me", onClick = {})
+                FloatingActionButton(text = { Text("Click me") }, onClick = {})
             }
         },
         bottomBar = if (controls.showBottomBar) ({
@@ -133,17 +133,17 @@ val ScaffoldRoute = Route {
                     top = false,
                     left = false,
                     right = false,
-                    bottom = true,
+                    bottom = true
                 ) {
                     Container(
                         height = 56.dp,
                         expanded = true,
                         alignment = Alignment.CenterStart,
-                        padding = EdgeInsets(16.dp),
+                        padding = EdgeInsets(16.dp)
                     ) {
                         Text(
                             text = "Bottom bar",
-                            style = MaterialTheme.typography().h6,
+                            style = MaterialTheme.typography().h6
                         )
                     }
                 }
@@ -153,7 +153,7 @@ val ScaffoldRoute = Route {
         body = {
             Scroller {
                 Column {
-                    Subheader("Top bar")
+                    Subheader { Text("Top bar") }
                     ListItem(
                         title = { Text("Show top bar") },
                         trailing = {
@@ -161,8 +161,8 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showTopAppBar = !controls.showTopAppBar },
-                        )
+                        onClick = { controls.showTopAppBar = !controls.showTopAppBar }
+                    )
                     ListItem(
                         title = { Text("Center title") },
                         trailing = {
@@ -170,10 +170,10 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.centerTitle, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.centerTitle = !controls.centerTitle },
-                        )
+                        onClick = { controls.centerTitle = !controls.centerTitle }
+                    )
 
-                    Subheader("Body")
+                    Subheader { Text("Body") }
                     ListItem(
                         title = { Text("Body layout mode") },
                         onClick = {
@@ -184,17 +184,15 @@ val ScaffoldRoute = Route {
                                         selectedItem = controls.bodyLayoutMode,
                                         onSelect = { controls.bodyLayoutMode = it },
                                         itemCallback = {
-                                            Text(
-                                                it.name,
-                                                )
-                                        },
-                                        )
-                                },
-                                )
-                        },
-                        )
+                                            Text(it.name)
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
 
-                    Subheader("Bottom bar")
+                    Subheader { Text("Bottom bar") }
                     ListItem(
                         title = { Text("Show bottom bar") },
                         trailing = {
@@ -202,10 +200,10 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showBottomBar = !controls.showBottomBar },
-                        )
+                        onClick = { controls.showBottomBar = !controls.showBottomBar }
+                    )
 
-                    Subheader("Fab")
+                    Subheader { Text("Fab") }
                     ListItem(
                         title = { Text("Show fab") },
                         trailing = {
@@ -213,8 +211,8 @@ val ScaffoldRoute = Route {
                                 Checkbox(checked = controls.showFab, onCheckedChange = {})
                             }
                         },
-                        onClick = { controls.showFab = !controls.showFab },
-                        )
+                        onClick = { controls.showFab = !controls.showFab }
+                    )
                     ListItem(
                         title = { Text("Fab location") },
                         onClick = {
@@ -226,15 +224,15 @@ val ScaffoldRoute = Route {
                                         onSelect = { controls.fabPosition = it },
                                         itemCallback = {
                                             Text(it.name)
-                                        },
-                                        )
-                                },
-                                )
-                        },
-                        )
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
                 }
             }
-        },
+        }
     )
 }
 

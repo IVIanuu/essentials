@@ -20,27 +20,24 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
-import com.ivianuu.essentials.ui.common.asRenderableComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun CheckboxPreference(
     @Pivotal box: Box<Boolean>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: String? = null,
-    summary: String? = null,
-    image: Renderable? = null
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null
 ) {
     CheckboxPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
-        title = title.asTextComposable(),
-        summary = summary.asTextComposable(),
-        leading = image.asRenderableComposable()
+        title = title,
+        summary = summary,
+        leading = leading
     )
 }
 

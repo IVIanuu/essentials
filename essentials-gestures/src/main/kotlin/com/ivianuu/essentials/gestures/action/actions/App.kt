@@ -1,6 +1,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
+import androidx.compose.Composable
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -15,11 +18,8 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Apps
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
@@ -82,8 +82,8 @@ internal class AppActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_app)
-    override val icon: Renderable
-        get() = VectorRenderable(Icons.Default.Apps)
+    override val icon: @Composable () -> Unit
+        get() = { VectorImage(Icons.Default.Apps) }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val app = navigator.push<AppInfo>(
@@ -98,7 +98,7 @@ internal class AppActionIconProvider(
     private val lazyDelegate: Lazy<CoilActionIconProvider>,
     @Param private val packageName: String
 ) : ActionIconProvider {
-    override val icon: Flow<Renderable>
+    override val icon: Flow<@Composable () -> Unit>
         get() = lazyDelegate(parameters = parametersOf(AppIcon(packageName))).icon
 }
 

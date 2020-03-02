@@ -34,12 +34,14 @@ import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.common.ColorShape
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
+import com.ivianuu.essentials.ui.image.DrawImage
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
@@ -51,9 +53,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.painter.ColorRenderable
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
@@ -88,10 +87,8 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 if (showBanner) {
                     Banner(
                         leading = {
-                            DrawRenderable(
-                                ImageRenderable(
-                                    imageResource(R.mipmap.ic_launcher)
-                                )
+                            DrawImage(
+                                imageResource(R.mipmap.ic_launcher)
                             )
                         },
                         content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
@@ -146,12 +143,10 @@ private fun HomeItem(
                     .first()
                     .front
             }
-            DrawRenderable(
-                ColorRenderable(
-                    color = color,
-                    shape = CircleShape,
-                    size = Size(40.dp, 40.dp)
-                )
+            ColorShape(
+                color = color,
+                shape = CircleShape,
+                size = Size(40.dp, 40.dp)
             )
         },
         trailing = {

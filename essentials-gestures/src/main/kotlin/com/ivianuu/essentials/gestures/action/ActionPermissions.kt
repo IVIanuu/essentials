@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Accessibility
 import androidx.ui.material.icons.filled.Adb
 import androidx.ui.material.icons.filled.SettingsApplications
+import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
@@ -14,7 +14,7 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.ui.painter.VectorRenderable
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -26,16 +26,16 @@ internal class ActionPermissions {
         ComponentAccessibilityService::class,
         Metadata.Title withValue "Accessibility",
         Metadata.Desc withValue "Required to click buttons",
-        Metadata.Icon withValue VectorRenderable(Icons.Default.Accessibility)
+        Metadata.Icon withValue { VectorImage(Icons.Default.Accessibility) }
     )
     val root = RootPermission(
         Metadata.Title withValue "Root",
-        Metadata.Icon withValue VectorRenderable(Icons.Default.Adb)
+        Metadata.Icon withValue { VectorImage(Icons.Default.Adb) }
     )
     val secureSettings = WriteSecureSettingsPermission(
         Metadata.Title withValue "Write secure settings",
         Metadata.Desc withValue "Required to change the navigation bar visibility",
-        Metadata.Icon withValue VectorRenderable(Icons.Default.SettingsApplications)
+        Metadata.Icon withValue { VectorImage(Icons.Default.SettingsApplications) }
     )
 }
 

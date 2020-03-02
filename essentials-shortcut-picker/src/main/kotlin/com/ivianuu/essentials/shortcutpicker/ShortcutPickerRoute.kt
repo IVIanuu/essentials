@@ -31,12 +31,13 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.AvatarSize
+import com.ivianuu.essentials.ui.image.DrawImage
 import com.ivianuu.essentials.ui.image.toImage
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.painter.AvatarSize
-import com.ivianuu.essentials.ui.painter.ImageRenderable
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
@@ -60,8 +61,8 @@ private fun ShortcutInfo(
     onClick: () -> Unit
 ) {
     ListItem(
-        image = ImageRenderable(image = info.icon, size = AvatarSize),
-        title = info.name,
+        leading = { DrawImage(image = info.icon, size = AvatarSize) },
+        title = { Text(info.name) },
         onClick = onClick
     )
 }

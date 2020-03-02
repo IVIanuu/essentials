@@ -25,6 +25,7 @@ import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.common.Scroller
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -55,7 +56,7 @@ val PrefsRoute = Route {
 
                     SwitchPreference(
                         box = boxFactory.boolean("switch"),
-                        title = "Switch"
+                        title = { Text("Switch") }
                     )
 
                     val dependencies = listOf(
@@ -65,62 +66,66 @@ val PrefsRoute = Route {
                         )
                     )
 
-                    PreferenceSubheader(text = "Category", dependencies = dependencies)
+                    PreferenceSubheader(dependencies = dependencies) {
+                        Text("Category")
+                    }
 
                     CheckboxPreference(
                         box = boxFactory.boolean("checkbox"),
                         dependencies = dependencies,
-                        title = "Checkbox",
-                        summary = "This is a checkbox preference"
+                        title = { Text("Checkbox") },
+                        summary = { Text("This is a checkbox preference") }
                     )
 
                     RadioButtonPreference(
                         box = boxFactory.boolean("radio_button"),
                         dependencies = dependencies,
-                        title = "Radio Button",
-                        summary = "This is a radio button preference"
+                        title = { Text("Radio Button") },
+                        summary = { Text("This is a radio button preference") }
                     )
 
                     IntSliderPreference(
                         box = boxFactory.int("slider"),
                         dependencies = dependencies,
-                        title = "Slider",
+                        title = { Text("Slider") },
+                        summary = { Text("This is a slider preference") },
                         steps = 10,
-                        valueRange = 0..100,
-                        summary = "This is a slider preference"
+                        valueRange = 0..100
                     )
 
                     DurationSliderPreference(
                         box = boxFactory.duration("slider_dur", 33.minutes),
                         dependencies = dependencies,
-                        title = "Slider duration",
+                        title = { Text("Slider duration") },
+                        summary = { Text("This is a slider preference") },
                         steps = 10,
-                        valueRange = 1.minutes..1.hours,
-                        summary = "This is a slider preference"
+                        valueRange = 1.minutes..1.hours
                     )
 
-                    PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
+                    PreferenceSubheader(dependencies = dependencies) {
+                        Text("Dialogs")
+                    }
 
                     TextInputPreference(
                         box = boxFactory.string("text_input"),
                         dependencies = dependencies,
-                        title = "Text input",
-                        summary = "This is a text input preference",
+                        title = { Text("Text input") },
+                        summary = { Text("This is a text input preference") },
                         allowEmpty = false
                     )
 
                     ColorPreference(
                         box = boxFactory.color("color", Color.Red),
                         dependencies = dependencies,
-                        title = "Color",
-                        summary = "This is a color preference"
+                        title = { Text("Color") },
+                        summary = { Text("This is a color preference") }
                     )
 
                     MultiChoiceListPreference(
                         box = boxFactory.stringSet("multi_select_list", setOf("A", "B", "C")),
                         dependencies = dependencies,
-                        title = "Multi select list",
-                        summary = "This is a multi select list preference",
+                        title = { Text("Multi select list") },
+                        summary = { Text("This is a multi select list preference") },
                         items = listOf(
                             MultiChoiceListPreference.Item("A", "A"),
                             MultiChoiceListPreference.Item("B", "B"),
@@ -131,8 +136,8 @@ val PrefsRoute = Route {
                     SingleChoiceListPreference(
                         box = boxFactory.string("single_item_list", "C"),
                         dependencies = dependencies,
-                        title = "Single item list",
-                        summary = "This is a single item list preference",
+                        title = { Text("Single item list") },
+                        summary = { Text("This is a single item list preference") },
                         items = listOf(
                             SingleChoiceListPreference.Item("A", "A"),
                             SingleChoiceListPreference.Item("B", "B"),
@@ -141,8 +146,8 @@ val PrefsRoute = Route {
                     )
 
                     ClipboardPreference(
-                        title = "Clipboard",
-                        summary = "This is a clipboard preference",
+                        title = { Text("Clipboard") },
+                        summary = { Text("This is a clipboard preference") },
                         clipboardText = { "cool clip" },
                         dependencies = dependencies
                     )

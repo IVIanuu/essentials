@@ -1,15 +1,15 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import androidx.compose.Composable
 import androidx.ui.graphics.vector.VectorAsset
 import coil.ImageLoader
 import com.ivianuu.essentials.coil.getAnyNoInline
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.ui.image.DrawImage
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.image.toImage
-import com.ivianuu.essentials.ui.painter.ImageRenderable
-import com.ivianuu.essentials.ui.painter.Renderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
@@ -22,20 +22,23 @@ class CoilActionIconProvider(
     @Param private val data: Any,
     private val imageLoader: ImageLoader
 ) : ActionIconProvider {
-    override val icon: Flow<Renderable>
-        get() = flowOf { ImageRenderable(imageLoader.getAnyNoInline(data).toImage()) }
+    override val icon: Flow<@Composable () -> Unit>
+        get() = flowOf {
+            val image = imageLoader.getAnyNoInline(data).toImage();
+            { DrawImage(image) }
+        }
 }
 
 fun SingleActionIconProvider(
-    icon: Renderable
+    icon: @Composable () -> Unit
 ): ActionIconProvider = object : ActionIconProvider {
-    override val icon: Flow<Renderable>
+    override val icon: Flow<@Composable () -> Unit>
         get() = flowOf(icon)
 }
 
 fun SingleActionIconProvider(
     icon: VectorAsset
-): ActionIconProvider = SingleActionIconProvider(VectorRenderable(icon))
+): ActionIconProvider = SingleActionIconProvider { VectorImage(icon) }
 
 fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 

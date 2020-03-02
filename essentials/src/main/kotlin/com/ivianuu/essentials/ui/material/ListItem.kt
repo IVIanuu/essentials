@@ -34,15 +34,12 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.ripple.RippleThemeAmbient
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.asRenderableComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Clickable
-import com.ivianuu.essentials.ui.core.currentOrElse
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.painter.Renderable
 
 @Immutable
 data class ListItemStyle(
@@ -60,38 +57,15 @@ val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
 
 @Composable
 fun ListItem(
-    title: String? = null,
-    subtitle: String? = null,
-    image: Renderable? = null,
-    enabled: Boolean = true,
-    selected: Boolean = false,
-    style: ListItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() },
-    onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null,
-) {
-    ListItem(
-        title = title.asTextComposable(),
-        subtitle = subtitle.asTextComposable(),
-        leading = image.asRenderableComposable(),
-        enabled = enabled,
-        selected = selected,
-        style = style,
-        onClick = onClick,
-        onLongClick = onLongClick
-    )
-}
-
-@Composable
-fun ListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     selected: Boolean = false,
-    style: ListItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle(),
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
+    style: ListItemStyle = ListItemStyleAmbient.currentOrNull ?: DefaultListItemStyle()
 ) {
     val item: @Composable () -> Unit = {
         val minHeight = if (subtitle != null) {

@@ -13,7 +13,6 @@ import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Uninitialized
@@ -105,7 +104,7 @@ sealed class ActionPickerItem {
 
         @Composable
         override fun icon() {
-            DrawRenderable(renderable = delegate.icon)
+            delegate.icon()
         }
 
         override suspend fun getResult() = delegate.getResult(navigator)

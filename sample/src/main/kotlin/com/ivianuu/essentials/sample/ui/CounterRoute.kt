@@ -50,14 +50,14 @@ val CounterRoute = Route {
                     Spacer(LayoutHeight(8.dp))
 
                     FloatingActionButton(
-                        text = "Inc",
+                        text = { Text("Inc") },
                         onClick = { setCount(count + 1) }
                     )
 
                     Spacer(LayoutHeight(8.dp))
 
                     FloatingActionButton(
-                        text = "dec",
+                        text = { Text("dec") },
                         onClick = { setCount(count - 1) }
                     )
                 }

@@ -37,19 +37,20 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.ArrowBack
+import androidx.ui.material.icons.filled.Check
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.icons.filled.Check
 import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
@@ -61,8 +62,6 @@ import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 import com.ivianuu.essentials.util.toColor
 import com.ivianuu.essentials.util.toHexString
 
@@ -237,11 +236,9 @@ private fun ColorGridItem(
         ) {
             if (isSelected) {
                 Center {
-                    DrawRenderable(
-                        renderable = VectorRenderable(
-                            image = Icons.Default.Check,
-                            size = Size(width = 36.dp, height = 36.dp)
-                        )
+                    VectorImage(
+                        image = Icons.Default.Check,
+                        size = Size(width = 36.dp, height = 36.dp)
                     )
                 }
             }
@@ -252,11 +249,9 @@ private fun ColorGridItem(
 @Composable
 private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
-        DrawRenderable(
-            renderable = VectorRenderable(
-                image = Icons.Default.ArrowBack,
-                size = Size(width = 36.dp, height = 36.dp)
-            )
+        VectorImage(
+            image = Icons.Default.ArrowBack,
+            size = Size(width = 36.dp, height = 36.dp)
         )
     }
 }

@@ -23,33 +23,30 @@ import androidx.compose.stateFor
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.asRenderableComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
-import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun <T> MultiChoiceListPreference(
     @Pivotal box: Box<Set<T>>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: String? = null,
-    summary: String? = null,
-    image: Renderable? = null,
-    dialogTitle: String? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceListPreference.Item<T>>
 ) {
     MultiChoiceListPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
-        title = title.asTextComposable(),
-        summary = summary.asTextComposable(),
-        leading = image.asRenderableComposable(),
-        dialogTitle = dialogTitle.asTextComposable(),
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
         items = items
     )
 }

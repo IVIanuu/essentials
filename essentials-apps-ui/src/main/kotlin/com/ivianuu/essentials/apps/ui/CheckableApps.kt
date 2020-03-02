@@ -24,19 +24,18 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.coil.CoilRenderable
+import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.AvatarSize
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.painter.AvatarSize
-import com.ivianuu.essentials.ui.painter.DrawRenderable
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Async
@@ -111,11 +110,9 @@ private fun CheckableApp(
     ListItem(
         title = { Text(app.info.appName) },
         leading = {
-            DrawRenderable(
-                CoilRenderable(
-                    data = AppIcon(packageName = app.info.packageName),
-                    size = AvatarSize
-                )
+            CoilImage(
+                data = AppIcon(packageName = app.info.packageName),
+                size = AvatarSize
             )
         },
         trailing = {

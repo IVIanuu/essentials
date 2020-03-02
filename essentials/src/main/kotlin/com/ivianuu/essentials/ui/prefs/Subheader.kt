@@ -17,21 +17,8 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
 import androidx.ui.core.Opacity
 import com.ivianuu.essentials.ui.material.Subheader
-
-@Composable
-fun PreferenceSubheader(
-    @Pivotal text: String,
-    dependencies: List<Dependency<*>>? = null
-) {
-    Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
-        Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
-            Subheader(text = text)
-        }
-    }
-}
 
 @Composable
 fun PreferenceSubheader(

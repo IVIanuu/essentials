@@ -104,9 +104,13 @@ private fun Permission(
     onClick: () -> Unit
 ) {
     ListItem(
-        title = permission.metadata[Metadata.Title],
-        subtitle = permission.metadata.getOrNull(Metadata.Desc),
-        image = permission.metadata.getOrNull(Metadata.Icon),
+        title = { Text(permission.metadata[Metadata.Title]) },
+        subtitle = permission.metadata.getOrNull(Metadata.Desc)?.let{
+            {
+                Text(it)
+            }
+        },
+        leading = permission.metadata.getOrNull(Metadata.Icon),
         onClick = onClick
     )
 }

@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action
 
+import androidx.compose.Composable
 import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ModuleBuilder
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ data class Action(
 )
 
 interface ActionIconProvider {
-    val icon: Flow<Renderable>
+    val icon: Flow<@Composable () -> Unit>
 }
 
 interface ActionExecutor {
@@ -66,7 +66,7 @@ inline fun <reified T : ActionFactory> ModuleBuilder.bindActionFactory() {
 
 interface ActionPickerDelegate {
     val title: String
-    val icon: Renderable
+    val icon: @Composable () -> Unit
     suspend fun getResult(navigator: NavigatorState): ActionPickerResult?
 }
 

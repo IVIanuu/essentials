@@ -19,6 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
@@ -44,8 +45,8 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
         )
 
         ListItem(
-            title = stringResource(R.string.es_pref_use_pc),
-            subtitle = stringResource(R.string.es_pref_use_pc_summary),
+            title = { Text(stringResource(R.string.es_pref_use_pc)) },
+            subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
             onClick = navigateOnClick { SecureSettingsInstructionsRoute }
         )
 
@@ -53,8 +54,8 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
         val secureSettingsHelper = inject<SecureSettingsHelper>()
         val toaster = inject<Toaster>()
         ListItem(
-            title = stringResource(R.string.es_pref_use_root),
-            subtitle = stringResource(R.string.es_pref_use_root_summary),
+            title = { Text(stringResource(R.string.es_pref_use_root)) },
+            subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
             onClick = {
                 coroutineScope.launch {
                     if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {

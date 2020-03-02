@@ -28,7 +28,6 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -50,16 +49,8 @@ val SubheaderStyleAmbient = staticAmbientOf<SubheaderStyle>()
 
 @Composable
 fun Subheader(
-    text: String,
     style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
-) {
-    Subheader(style = style) { Text(text) }
-}
-
-@Composable
-fun Subheader(
-    style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
-    text: @Composable () -> Unit,
+    text: @Composable () -> Unit
 ) {
     Container(
         height = 48.dp,

@@ -23,6 +23,7 @@ import androidx.compose.Providers
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
@@ -39,7 +40,6 @@ import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
 import com.ivianuu.essentials.ui.core.Clickable
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.core.retainFor
@@ -47,8 +47,6 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.Renderable
 
 @Immutable
 data class BottomNavigationBarStyle(
@@ -129,7 +127,8 @@ fun <T> BottomNavigationBar(
 @Composable
 fun BottomNavigationBarItem(
     onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
-    children: @Composable () -> Unit
+    text: @Composable () -> Unit,
+    icon: @Composable () -> Unit
 ) {
     Ripple(bounded = false, radius = BottomNavigationBarItemRippleRadius) {
         Clickable(onClick = onSelected) {
@@ -139,26 +138,16 @@ fun BottomNavigationBarItem(
                     top = BottomNavigationBarItemPaddingTop,
                     right = BottomNavigationBarItemPaddingSide,
                     bottom = BottomNavigationBarItemPaddingBottom
-                ),
-                children = children
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomNavigationBarItem(
-    onSelected: (() -> Unit)? = defaultOnSelected<Any?>(),
-    text: String,
-    icon: Renderable
-) {
-    BottomNavigationBarItem(onSelected = onSelected) {
-        Column(
-            mainAxisAlignment = MainAxisAlignment.Center,
-            crossAxisAlignment = CrossAxisAlignment.Center
-        ) {
-            DrawRenderable(renderable = icon)
-            Text(text = text, style = MaterialTheme.typography().caption)
+                )
+            ) {
+                Column(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    icon()
+                    CurrentTextStyleProvider(value = MaterialTheme.typography().caption, children = text)
+                }
+            }
         }
     }
 }

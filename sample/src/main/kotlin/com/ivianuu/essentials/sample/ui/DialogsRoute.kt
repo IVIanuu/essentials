@@ -24,10 +24,10 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.icons.Icons
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.action.actions.Settings
 import com.ivianuu.essentials.icon.Essentials
-import androidx.ui.material.icons.Icons
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -48,8 +49,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.painter.DrawRenderable
-import com.ivianuu.essentials.ui.painter.VectorRenderable
 
 val DialogsRoute = Route {
     Scaffold(
@@ -119,9 +118,7 @@ val DialogsRoute = Route {
                         MaterialDialog(
                             title = { Text("With icon") },
                             icon = {
-                                DrawRenderable(
-                                    VectorRenderable(Icons.Essentials.Settings)
-                                )
+                                VectorImage(Icons.Essentials.Settings)
                             },
                             positiveButton = {
                                 DialogCloseButton(

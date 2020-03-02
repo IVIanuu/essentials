@@ -2,10 +2,10 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.provider.MediaStore
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.bindAction
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoCamera
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 

@@ -24,22 +24,19 @@ import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.asRenderableComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.painter.Renderable
 
 @Composable
 fun ColorPreference(
     @Pivotal box: Box<Color>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: String? = null,
-    summary: String? = null,
-    image: Renderable? = null,
-    dialogTitle: String? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     showAlphaSelector: Boolean = true,
     allowCustomArgb: Boolean = true
@@ -48,10 +45,10 @@ fun ColorPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
-        title = title.asTextComposable(),
-        summary = summary.asTextComposable(),
-        leading = image.asRenderableComposable(),
-        dialogTitle = dialogTitle.asTextComposable(),
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
         colorPalettes = colorPalettes,
         showAlphaSelector = showAlphaSelector,
         allowCustomArgb = allowCustomArgb

@@ -20,26 +20,23 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import androidx.compose.Composable
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.asRenderableComposable
-import com.ivianuu.essentials.ui.common.asTextComposable
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.painter.Renderable
 import com.ivianuu.essentials.util.Toaster
 
 @Composable
 fun ClipboardPreference(
     clipboardText: () -> String,
     dependencies: List<Dependency<*>>? = null,
-    title: String? = null,
-    summary: String? = null,
-    image: Renderable? = null
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null
 ) {
     ClipboardPreference(
         clipboardText = clipboardText,
         dependencies = dependencies,
-        title = title?.asTextComposable(),
-        summary = summary?.asTextComposable(),
-        leading = image?.asRenderableComposable()
+        title = title,
+        summary = summary,
+        leading = leading
     )
 }
 
