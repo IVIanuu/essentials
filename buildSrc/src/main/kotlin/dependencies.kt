@@ -41,7 +41,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
-        private const val composeVersion = "0.0.1-dev58"
+        private const val composeVersion = "0.0.1-dev61"
 
         object Compose {
             const val version = composeVersion
@@ -107,10 +107,10 @@ object Deps {
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev98"
+        private const val version = "0.0.1-dev102"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
-        const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:0.0.1-dev95"
+        const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
     const val junit = "junit:junit:4.12"

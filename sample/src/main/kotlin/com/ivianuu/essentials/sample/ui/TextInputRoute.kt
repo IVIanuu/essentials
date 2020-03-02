@@ -17,24 +17,20 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Model
-import androidx.compose.Observe
 import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
 import androidx.ui.foundation.AdapterList
-import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -91,7 +87,7 @@ val TextInputRoute = Route {
         },
         body = {
             if (items.isNotEmpty()) {
-                val scrollerPosition = retain(items) { ScrollerPosition() }
+                /*val scrollerPosition = retain(items) { ScrollerPosition() }
 
                 Observe {
                     val lastScrollerPosition = holderFor(scrollerPosition) { scrollerPosition.value }
@@ -102,7 +98,7 @@ val TextInputRoute = Route {
                             state.searchVisible = false
                         }
                     }
-                }
+                }*/
 
                 AdapterList(data = items) { item ->
                     ListItem(

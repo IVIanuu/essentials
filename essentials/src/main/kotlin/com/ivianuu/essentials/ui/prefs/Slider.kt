@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
 import androidx.ui.core.Alignment
+import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
@@ -36,6 +37,7 @@ import androidx.ui.unit.px
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
@@ -511,7 +513,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                 )
             }
 
-            val listItemStyle = ListItemStyleAmbient.current ?: DefaultListItemStyle()
+            val listItemStyle = ListItemStyleAmbient.currentOrNull ?: DefaultListItemStyle()
 
             Row(
                 modifier = LayoutGravity.BottomCenter + LayoutPadding(
@@ -520,6 +522,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                 ),
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {
+                val animationClock = AnimationClockAmbient.current
                 val position = remember(valueRange, steps) {
                     val initial = toFloat(context.currentValue)
                     val floatRange =
@@ -528,12 +531,14 @@ fun <T : Comparable<T>> BaseSliderPreference(
                         SliderPosition(
                             initial = initial,
                             valueRange = floatRange,
-                            steps = steps
+                            steps = steps,
+                            animationClock = animationClock
                         )
                     } else {
                         SliderPosition(
                             initial = initial,
-                            valueRange = floatRange
+                            valueRange = floatRange,
+                            animationClock = animationClock
                         )
                     }
                 }

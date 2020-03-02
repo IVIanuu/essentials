@@ -29,23 +29,6 @@ fun ClipboardPreference(
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
-) {
-    ClipboardPreference(
-        clipboardText = clipboardText,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading
-    )
-}
-
-@Composable
-fun ClipboardPreference(
-    clipboardText: () -> String,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null
 ) {
