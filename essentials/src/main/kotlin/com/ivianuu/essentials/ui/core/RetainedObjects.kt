@@ -98,7 +98,7 @@ val RetainedObjectsAmbient =
 @Composable
 inline fun <T> retain(noinline init: () -> T): T =
     retain(
-        key = sourceLocation(),
+        key = pointInComposition(),
         init = init
     )
 
@@ -116,7 +116,7 @@ inline fun <T> retainFor(
     vararg inputs: Any?,
     noinline init: () -> T
 ): T = retainFor(
-    key = sourceLocation(),
+    key = pointInComposition(),
     inputs = *inputs,
     init = init
 )
@@ -135,7 +135,7 @@ fun <T> retainFor(
 inline fun <T> retainedState(
     noinline init: () -> T
 ): MutableState<T> = retainedState(
-    key = sourceLocation(),
+    key = pointInComposition(),
     init = init
 )
 
@@ -151,7 +151,7 @@ inline fun <T> retainedStateFor(
     vararg inputs: Any?,
     noinline init: () -> T
 ): MutableState<T> = retainedStateFor(
-    key = sourceLocation(),
+    key = pointInComposition(),
     inputs = *inputs,
     init = init
 )

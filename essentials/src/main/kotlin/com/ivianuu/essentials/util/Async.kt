@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.compose.stateFor
+import com.ivianuu.essentials.ui.core.pointInComposition
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.coroutines.launchOnCommit
 import kotlinx.coroutines.Deferred
@@ -97,7 +98,7 @@ fun <T> collectAsync(flow: Flow<T>) = collect(
 @Composable
 fun <T> loadAsync(block: suspend () -> T): Async<T> =
     loadAsync(
-        key = sourceLocation(),
+        key = pointInComposition(),
         block = block
     )
 

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.core.pointInComposition
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.util.sourceLocation
@@ -28,7 +29,7 @@ import com.ivianuu.injekt.typeOf
 
 @Composable
 inline fun <T : ViewModel> viewModel(noinline factory: () -> T): T =
-    viewModel(key = sourceLocation(), factory = factory)
+    viewModel(key = pointInComposition(), factory = factory)
 
 @Composable
 fun <T : ViewModel> viewModel(
@@ -42,7 +43,7 @@ inline fun <reified T : ViewModel> injectViewModel(
     parameters: Parameters = emptyParameters()
 ): T = injectViewModel(
     typeOf(),
-    sourceLocation(),
+    pointInComposition(),
     name,
     parameters
 )

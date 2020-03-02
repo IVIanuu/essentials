@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.core.pointInComposition
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
@@ -28,7 +29,7 @@ import com.ivianuu.injekt.typeOf
 
 @Composable
 inline fun <T : MvRxViewModel<*>> mvRxViewModel(noinline factory: () -> T): T =
-    viewModel(key = sourceLocation(), factory = factory)
+    viewModel(key = pointInComposition(), factory = factory)
 
 @Composable
 fun <T : MvRxViewModel<*>> mvRxViewModel(
@@ -48,7 +49,7 @@ inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
 ): T {
     return injectMvRxViewModel(
         typeOf(),
-        sourceLocation(),
+        pointInComposition(),
         name,
         parameters
     )
