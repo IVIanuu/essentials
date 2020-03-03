@@ -74,14 +74,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     }
 
     @Composable
-    protected open fun WrapContentWithEnvironment(content: @Composable () -> Unit) {
+    protected open fun WrapContentWithEnvironment(children: @Composable () -> Unit) {
         Environment(
             activity = this,
             component = component,
-            retainedObjects = retainedObjects
-        ) {
-            content()
-        }
+            retainedObjects = retainedObjects,
+            children = children
+        )
     }
 
     @Composable

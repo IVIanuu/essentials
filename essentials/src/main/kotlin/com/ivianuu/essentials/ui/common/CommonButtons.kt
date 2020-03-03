@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.material
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.remember
@@ -23,6 +23,8 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.ui.image.VectorImage
+import com.ivianuu.essentials.ui.material.IconButton
+import com.ivianuu.essentials.ui.material.ScaffoldAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
@@ -59,4 +61,3 @@ fun NavigationButton() {
         }
     }
 }
-

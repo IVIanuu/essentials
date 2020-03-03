@@ -41,7 +41,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
-        private const val composeVersion = "0.0.1-dev61"
+        private const val composeVersion = "0.0.1-dev63"
 
         object Compose {
             const val version = composeVersion
