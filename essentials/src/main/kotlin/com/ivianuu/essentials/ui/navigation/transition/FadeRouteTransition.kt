@@ -33,7 +33,7 @@ private fun fadeRouteTransitionDefinition(
     state(RouteTransition.State.ExitFromPop) { set(Alpha, 0f) }
 
     transition {
-        Alpha using tween<Float> { // todo ir
+        Alpha using tween { // todo ir
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }

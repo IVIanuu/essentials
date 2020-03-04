@@ -20,11 +20,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.essentials.coroutines.callbackFlowNoInline
 import com.ivianuu.injekt.Factory
-import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * A factory for broadcast receiver observables
@@ -38,15 +37,19 @@ class BroadcastFactory(private val context: Context) {
         }
     )
 
-    fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlowNoInline<Intent> {
+    fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
         // todo ir anonymous
-        val broadcastReceiver = ChannelBroadcastReceiver(it.channel)
+        val broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                offer(intent)
+            }
+        }
         try {
             context.registerReceiver(broadcastReceiver, intentFilter)
         } catch (e: Exception) {
         }
 
-        it.awaitClose {
+        awaitClose {
             try {
                 context.unregisterReceiver(broadcastReceiver)
             } catch (e: Exception) {
@@ -54,9 +57,4 @@ class BroadcastFactory(private val context: Context) {
         }
     }
 
-    private class ChannelBroadcastReceiver(private val channel: SendChannel<Intent>) : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            channel.offer(intent)
-        }
-    }
 }
