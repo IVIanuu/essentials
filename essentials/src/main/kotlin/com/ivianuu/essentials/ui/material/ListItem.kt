@@ -34,7 +34,7 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.ripple.RippleThemeAmbient
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Clickable
+import androidx.ui.foundation.Clickable
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column

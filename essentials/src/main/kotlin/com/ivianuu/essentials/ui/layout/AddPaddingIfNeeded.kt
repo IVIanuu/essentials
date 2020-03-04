@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.ui.layout
 
 import androidx.compose.Composable
+import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.unit.ipx
 import androidx.ui.unit.max
 import androidx.ui.unit.min
-import com.ivianuu.essentials.ui.core.looseMin
 
 // todo remove
 
@@ -32,10 +32,12 @@ fun AddPaddingIfNeededLayout(
     modifier: Modifier = Modifier.None,
     child: @Composable () -> Unit
 ) {
-    SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
-        if (measureable == null) return@SingleChildLayout layout(0.ipx, 0.ipx) {}
+    Layout(children = child, modifier = modifier) { measureables, constraints, _ ->
+        if (measureables.isEmpty()) return@Layout layout(0.ipx, 0.ipx) {}
 
-        val placeable = measureable.measure(constraints.looseMin())
+        val placeable = measureables.single().measure(constraints.copy(
+            minWidth = 0.ipx, minHeight = 0.ipx
+        ))
         val width = max(
             constraints.minWidth,
             placeable.width + padding.left.toIntPx() + padding.right.toIntPx()

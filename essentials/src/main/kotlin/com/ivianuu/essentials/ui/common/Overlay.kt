@@ -27,9 +27,10 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
+import androidx.ui.core.hasBoundedHeight
+import androidx.ui.core.hasBoundedWidth
 import androidx.ui.layout.Stack
 import androidx.ui.unit.IntPxPosition
-import com.ivianuu.essentials.ui.core.tightMax
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {
@@ -113,7 +114,10 @@ private fun OverlayLayout(
 ) {
     Layout(children = children) { measurables, constraints, _ ->
         // force children to fill the whole space
-        val childConstraints = constraints.tightMax()
+        val childConstraints = constraints.copy(
+            minWidth = if (constraints.hasBoundedWidth) constraints.maxWidth else constraints.minWidth,
+            minHeight = if (constraints.hasBoundedHeight) constraints.maxHeight else constraints.minHeight
+        )
 
         val placeables = measurables
             .filter { (it.parentData as OverlayEntryParentData).isVisible }

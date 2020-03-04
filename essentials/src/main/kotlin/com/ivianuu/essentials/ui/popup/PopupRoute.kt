@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.popup
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
+import androidx.ui.core.Layout
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
-import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
@@ -69,15 +69,15 @@ fun PopupRoute(
 @Composable
 private fun PopupLayout(
     position: IntPxBounds,
-    child: @Composable () -> Unit
+    children: @Composable () -> Unit
 ) {
-    NonNullSingleChildLayout(child = child) { measureable, constraints ->
+    Layout(children = children) { measureables, constraints, _ ->
         val childConstraints = constraints.copy(
             minWidth = 0.ipx,
             minHeight = 0.ipx
         )
 
-        val placeable = measureable.measure(childConstraints)
+        val placeable = measureables.single().measure(childConstraints)
 
         var y = position.top
         var x: IntPx

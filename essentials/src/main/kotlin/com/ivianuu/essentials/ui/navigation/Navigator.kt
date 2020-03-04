@@ -24,6 +24,7 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
+import androidx.ui.layout.Column
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppComponent
 import com.ivianuu.essentials.ui.common.AbsorbPointer

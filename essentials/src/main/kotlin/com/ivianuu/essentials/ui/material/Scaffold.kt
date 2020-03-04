@@ -34,7 +34,6 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.looseMin
 
 @Composable
 fun Scaffold(
@@ -296,7 +295,7 @@ private fun ScaffoldLayout(
             bodyMeasureable.measure(bodyConstraints)
         }
 
-        val fabPlaceable = fabMeasureable?.measure(incomingConstraints.looseMin())
+        val fabPlaceable = fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0.ipx, minHeight = 0.ipx))
 
         val fabTop = if (fabPlaceable != null) {
             if (bottomBarMeasureable != null) bottomBarTop!! - fabPlaceable.height - fabPadding

@@ -68,7 +68,7 @@ internal class ActionPickerViewModel(
 
     fun itemClicked(selectedItem: ActionPickerItem) {
         scope.coroutineScope.launch {
-            val result = selectedItem.getResult() ?: return@launch
+            val result = selectedItem.getResult()
             if (result is ActionPickerResult.Action) {
                 val action = actionStore.getAction(result.actionKey)
                 if (!permissionManager.request(action.permissions)) return@launch
@@ -129,7 +129,7 @@ sealed class ActionPickerItem {
     @Composable
     abstract fun icon()
 
-    abstract suspend fun getResult(): ActionPickerResult? // todo ir
+    abstract suspend fun getResult(): ActionPickerResult?
 }
 
 @Immutable

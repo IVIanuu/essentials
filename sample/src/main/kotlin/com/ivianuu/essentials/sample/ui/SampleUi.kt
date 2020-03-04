@@ -19,8 +19,10 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.remember
+import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle

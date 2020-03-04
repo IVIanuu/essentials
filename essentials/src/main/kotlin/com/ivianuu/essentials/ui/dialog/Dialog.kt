@@ -28,8 +28,6 @@ import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.material.Surface
 
-// todo rename to dialog frame
-
 @Immutable
 data class DialogStyle(
     val shape: Shape = RoundedCornerShape(size = 4.dp),

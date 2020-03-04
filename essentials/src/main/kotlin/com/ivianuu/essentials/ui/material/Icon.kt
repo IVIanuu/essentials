@@ -21,7 +21,7 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Clickable
+import androidx.ui.foundation.Clickable
 
 @Composable
 fun IconButton(

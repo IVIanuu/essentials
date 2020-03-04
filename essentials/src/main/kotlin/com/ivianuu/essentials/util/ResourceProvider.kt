@@ -29,7 +29,7 @@ class ResourceProvider(
         context.resources.getDimension(id).px.toDp()
     }
 
-    fun getDrawable(id: Int): ImageAsset = getBitmap(id) // todo
+    fun getDrawable(id: Int): ImageAsset = getBitmap(id)
 
     fun getFloat(id: Int): Float = ResourcesCompat.getFloat(context.resources, id)
 

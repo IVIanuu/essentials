@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.core.looseMin
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -178,7 +177,7 @@ private fun TopAppBarLayout(
         val titleMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Title }
         val actionsMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
 
-        var childConstraints = constraints.looseMin()
+        var childConstraints = constraints.copy(minWidth = 0.ipx, minHeight = 0.ipx)
 
         val leadingPlaceable = leadingMeasureable?.measure(childConstraints)
         if (leadingPlaceable != null) {

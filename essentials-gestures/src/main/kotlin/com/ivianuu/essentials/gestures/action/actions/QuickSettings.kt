@@ -8,6 +8,7 @@ import com.ivianuu.essentials.icon.EssentialsIcons
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
 import androidx.ui.graphics.vector.path
+import androidx.ui.material.icons.filled.Add
 import com.ivianuu.injekt.Module
 
 val EssentialsIcons.Settings: VectorAsset by lazyMaterialIcon {

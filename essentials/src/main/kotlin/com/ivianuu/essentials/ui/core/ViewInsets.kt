@@ -147,7 +147,6 @@ private fun calculateZeroSides(
     return ZeroSides.None
 }
 
-// todo add padding field
 @Stable
 interface WindowInsets {
     val viewPadding: EdgeInsets
