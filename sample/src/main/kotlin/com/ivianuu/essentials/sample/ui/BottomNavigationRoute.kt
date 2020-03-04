@@ -28,8 +28,8 @@ import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.gestures.action.actions.Settings
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.BottomNavigationBar
-import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
+import com.ivianuu.essentials.ui.material.BottomNavigation
+import com.ivianuu.essentials.ui.material.BottomNavigationItem
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
 import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -37,19 +37,17 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 
 val BottomNavigationRoute = Route {
-    ProvideBottomNavigationController(
-        items = BottomNavItem.values().toList()
-    ) {
+    ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {
         Scaffold(
             topAppBar = { TopAppBar("Bottom navigation") },
             body = {
-                BottomNavigationSwapper<BottomNavItem>(keepState = true) { item ->
+                BottomNavigationSwapper<BottomNavItem> { item ->
                     ColoredRect(item.color)
                 }
             },
             bottomBar = {
-                BottomNavigationBar<BottomNavItem> { item ->
-                    BottomNavigationBarItem(
+                BottomNavigation<BottomNavItem> { item ->
+                    BottomNavigationItem(
                         icon = { Icon(item.icon) },
                         text = { Text(item.title) }
                     )
