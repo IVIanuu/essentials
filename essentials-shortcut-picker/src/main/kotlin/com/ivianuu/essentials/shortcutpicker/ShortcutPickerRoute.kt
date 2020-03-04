@@ -23,7 +23,7 @@ import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.ui.graphics.Image
+import androidx.ui.graphics.ImageAsset
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
@@ -33,8 +33,8 @@ import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.AvatarSize
-import com.ivianuu.essentials.ui.image.DrawImage
-import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.image.Image
+import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
@@ -61,7 +61,7 @@ private fun ShortcutInfo(
     onClick: () -> Unit
 ) {
     ListItem(
-        leading = { DrawImage(image = info.icon, size = AvatarSize) },
+        leading = { Image(image = info.icon, size = AvatarSize) },
         title = { Text(info.name) },
         onClick = onClick
     )
@@ -90,7 +90,7 @@ private class ShortcutPickerViewModel(
                                     )
                                 },
                                 name = resolveInfo.loadLabel(packageManager).toString(),
-                                icon = resolveInfo.loadIcon(packageManager).toImage()
+                                icon = resolveInfo.loadIcon(packageManager).toImageAsset()
                             )
                         } catch (e: Exception) {
                             null
@@ -119,13 +119,13 @@ private class ShortcutPickerViewModel(
                     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
                 val icon = when {
-                    bitmapIcon != null -> bitmapIcon.toImage()
+                    bitmapIcon != null -> bitmapIcon.toImageAsset()
                     iconResource != null -> {
                         val resources =
                             packageManager.getResourcesForApplication(iconResource.packageName)
                         val iconResId =
                             resources.getIdentifier(iconResource.resourceName, null, null)
-                        resources.getDrawable(iconResId).toImage()
+                        resources.getDrawable(iconResId).toImageAsset()
                     }
                     else -> error("no icon provided $shortcutRequestResult")
                 }
@@ -153,5 +153,5 @@ internal data class ShortcutPickerState(
 internal data class ShortcutInfo(
     val intent: Intent,
     val name: String,
-    val icon: Image
+    val icon: ImageAsset
 )

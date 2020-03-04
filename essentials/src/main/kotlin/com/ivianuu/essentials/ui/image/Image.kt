@@ -8,11 +8,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.Alignment
 import androidx.ui.core.DensityAmbient
 import androidx.ui.foundation.contentColor
-import androidx.ui.graphics.AndroidImageAccessor
+import androidx.ui.graphics.AndroidImageAssetAccessor
 import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
+import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.vector.DefaultTintBlendMode
 import androidx.ui.graphics.vector.DrawVector
@@ -35,8 +35,8 @@ import androidx.ui.unit.px
 import androidx.ui.unit.round
 
 @Composable
-fun DrawImage(
-    image: Image,
+fun Image(
+    image: ImageAsset,
     tintColor: Color? = null,
     size: Size? = null
 ) {
@@ -84,11 +84,11 @@ fun VectorImage(
 
 val AvatarSize = Size(40.dp, 40.dp)
 
-fun Drawable.toImage(): Image = toBitmap().toImage()
+fun Drawable.toImageAsset(): ImageAsset = toBitmap().toImageAsset()
 
-fun Bitmap.toImage(): Image = AndroidImageAccessor.createAndroidImage(this)
+fun Bitmap.toImageAsset(): ImageAsset = AndroidImageAssetAccessor.createAndroidImage(this)
 
-fun Image.toBitmap(): Bitmap = nativeImage
+fun ImageAsset.toBitmap(): Bitmap = nativeImage
 
 fun VectorAsset.toBitmap(
     context: Context,

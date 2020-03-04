@@ -3,7 +3,7 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
+import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.imageFromResource
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.font
@@ -17,7 +17,7 @@ class ResourceProvider(
     private val densityProvider: DensityProvider
 ) {
 
-    fun getBitmap(id: Int): Image {
+    fun getBitmap(id: Int): ImageAsset {
         return imageFromResource(context.resources, id)
     }
 
@@ -29,7 +29,7 @@ class ResourceProvider(
         context.resources.getDimension(id).px.toDp()
     }
 
-    fun getDrawable(id: Int): Image = getBitmap(id) // todo
+    fun getDrawable(id: Int): ImageAsset = getBitmap(id) // todo
 
     fun getFloat(id: Int): Float = ResourcesCompat.getFloat(context.resources, id)
 

@@ -4,12 +4,12 @@ import android.graphics.Bitmap;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class AndroidImageAccessor {
+public final class AndroidImageAssetAccessor {
 
     @NotNull
-    public static Image createAndroidImage(Bitmap bitmap) {
+    public static ImageAsset createAndroidImage(Bitmap bitmap) {
         //noinspection KotlinInternalInJava
-        return new AndroidImage(bitmap);
+        return new AndroidImageAsset(bitmap);
     }
 
 }

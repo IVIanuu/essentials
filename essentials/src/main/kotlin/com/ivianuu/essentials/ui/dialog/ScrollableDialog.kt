@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.core.retain
 
 @Composable
 fun ScrollableDialog(
-    scrollerPosition: ScrollerPosition = retain { ScrollerPosition() },
+    scrollerPosition: ScrollerPosition = ScrollerPosition(),
     dragDirection: DragDirection = DragDirection.Vertical,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,

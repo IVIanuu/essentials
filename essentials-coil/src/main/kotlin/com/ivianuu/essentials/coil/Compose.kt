@@ -22,7 +22,7 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
+import androidx.ui.graphics.ImageAsset
 import androidx.ui.layout.Container
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
@@ -32,7 +32,7 @@ import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.coroutines.load
-import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.injekt.inject
 
 @Composable
@@ -56,10 +56,10 @@ fun CoilImage(
 @Composable
 fun loadImage(
     data: Any,
-    placeholder: Image? = PlaceholderAmbient.currentOrNull,
+    placeholder: ImageAsset? = PlaceholderAmbient.currentOrNull,
     size: Size? = null,
     imageLoader: ImageLoader = inject()
-): Image? {
+): ImageAsset? {
     return if (placeholder != null) {
         loadImage(data = data, placeholder = placeholder, size = size, imageLoader = imageLoader)
     } else {
@@ -70,10 +70,10 @@ fun loadImage(
 @Composable
 fun loadImage(
     data: Any,
-    placeholder: Image,
+    placeholder: ImageAsset,
     size: Size? = null,
     imageLoader: ImageLoader = inject()
-): Image = loadImage(data = data, size = size, imageLoader = imageLoader) ?: placeholder
+): ImageAsset = loadImage(data = data, size = size, imageLoader = imageLoader) ?: placeholder
 
 // todo ir
 suspend fun ImageLoader.getAnyNoInline(
@@ -86,7 +86,7 @@ fun loadImage(
     data: Any,
     size: Size? = null,
     imageLoader: ImageLoader = inject()
-): Image? {
+): ImageAsset? {
     val density = DensityAmbient.current
     return load(placeholder = null, key = listOf(data, size, imageLoader)) {
         imageLoader.getAnyNoInline(data) {
@@ -98,19 +98,19 @@ fun loadImage(
                     )
                 }
             }
-        }.toImage()
+        }.toImageAsset()
     }
 }
 
-val PlaceholderAmbient = staticAmbientOf<Image>()
+val PlaceholderAmbient = staticAmbientOf<ImageAsset>()
 
 @Composable
 fun CoilImage(
     data: Any,
     size: Size? = null,
-    placeholder: Image? = PlaceholderAmbient.currentOrNull,
+    placeholder: ImageAsset? = PlaceholderAmbient.currentOrNull,
     imageLoader: ImageLoader = inject(),
-    image: @Composable (Image?) -> Unit = {
+    image: @Composable (ImageAsset?) -> Unit = {
         if (it != null) CoilImage(data, size, placeholder, imageLoader)
     }
 ) {
@@ -140,9 +140,9 @@ fun CoilImage(
 fun CoilImage(
     data: Any,
     size: Size? = null,
-    placeholder: Image,
+    placeholder: ImageAsset,
     imageLoader: ImageLoader = inject(),
-    image: @Composable (Image) -> Unit = {
+    image: @Composable (ImageAsset) -> Unit = {
         CoilImage(data, size, placeholder, imageLoader)
     }
 ) {

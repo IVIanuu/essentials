@@ -22,10 +22,10 @@ import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
-import com.ivianuu.essentials.ui.image.DrawImage
+import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Factory
@@ -61,12 +61,12 @@ internal class ShortcutActionFactory(
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)
-        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImage()
+        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageAsset()
         return Action(
             key = key,
             title = label,
             unlockScreen = true,
-            iconProvider = SingleActionIconProvider { DrawImage(icon) },
+            iconProvider = SingleActionIconProvider { Image(icon) },
             executor = intentActionExecutorProvider(parameters = parametersOf(intent))
         )
     }

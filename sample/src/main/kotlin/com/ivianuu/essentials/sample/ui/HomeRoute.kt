@@ -41,14 +41,13 @@ import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.image.DrawImage
+import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Divider
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
@@ -59,7 +58,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
 val HomeRoute = Route(transition = DefaultRouteTransition) {
-    Scaffold(
+    androidx.ui.material.Scaffold(
         topAppBar = {
             TopAppBar(
                 title = { Text("Home") },
@@ -81,13 +80,13 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 }
             )
         },
-        body = {
+        bodyContent = {
             Column {
                 var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
                 if (showBanner) {
                     Banner(
                         leading = {
-                            DrawImage(
+                            Image(
                                 imageResource(R.mipmap.ic_launcher)
                             )
                         },
