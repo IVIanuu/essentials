@@ -17,7 +17,7 @@ fun Scroller(
     modifier: Modifier = Modifier.None,
     scrollerPosition: ScrollerPosition = RetainedScrollerPosition(),
     dragDirection: DragDirection = DragDirection.Vertical,
-    scrollable: Boolean = false,
+    scrollable: Boolean = true,
     children: @Composable () -> Unit
 ) {
     when (dragDirection) {
