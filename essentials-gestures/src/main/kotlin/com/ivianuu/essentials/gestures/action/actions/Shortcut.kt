@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
+import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.path
 import androidx.ui.material.icons.Icons
@@ -22,8 +24,6 @@ import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
-import com.ivianuu.essentials.ui.image.Image
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.NavigatorState
@@ -66,7 +66,7 @@ internal class ShortcutActionFactory(
             key = key,
             title = label,
             unlockScreen = true,
-            iconProvider = SingleActionIconProvider { Image(icon) },
+            iconProvider = SingleActionIconProvider { Icon(ImagePainter(icon)) },
             executor = intentActionExecutorProvider(parameters = parametersOf(intent))
         )
     }
@@ -79,7 +79,7 @@ internal class ShortcutActionPickerDelegate(
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit
-        get() = { VectorImage(Icons.Essentials.ContentCut) }
+        get() = { Icon(Icons.Essentials.ContentCut) }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(

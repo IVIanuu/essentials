@@ -24,6 +24,7 @@ import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.Border
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -42,7 +43,6 @@ import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
-import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.Scroller
@@ -50,7 +50,6 @@ import com.ivianuu.essentials.ui.core.Clickable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
@@ -236,9 +235,9 @@ private fun ColorGridItem(
         ) {
             if (isSelected) {
                 Center {
-                    VectorImage(
-                        image = Icons.Default.Check,
-                        size = Size(width = 36.dp, height = 36.dp)
+                    Icon(
+                        icon = Icons.Default.Check,
+                        modifier = LayoutSize(size = 36.dp)
                     )
                 }
             }
@@ -249,9 +248,9 @@ private fun ColorGridItem(
 @Composable
 private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
-        VectorImage(
-            image = Icons.Default.ArrowBack,
-            size = Size(width = 36.dp, height = 36.dp)
+        Icon(
+            icon = Icons.Default.ArrowBack,
+            modifier = LayoutSize(size = 36.dp)
         )
     }
 }

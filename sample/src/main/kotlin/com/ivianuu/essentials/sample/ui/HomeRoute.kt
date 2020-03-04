@@ -21,7 +21,9 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.foundation.AdapterList
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.shape.corner.CircleShape
+import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.res.imageResource
 import androidx.ui.unit.Size
@@ -41,7 +43,6 @@ import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
@@ -86,9 +87,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 if (showBanner) {
                     Banner(
                         leading = {
-                            Image(
-                                imageResource(R.mipmap.ic_launcher)
-                            )
+                            Icon(ImagePainter(imageResource(R.mipmap.ic_launcher)))
                         },
                         content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
                         actions = {

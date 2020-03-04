@@ -1,14 +1,14 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
+import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import coil.ImageLoader
 import com.ivianuu.essentials.coil.getAnyNoInline
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.ui.image.Image
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component
@@ -25,7 +25,7 @@ class CoilActionIconProvider(
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {
             val image = imageLoader.getAnyNoInline(data).toImageAsset();
-            { Image(image) }
+            { Icon(ImagePainter(image)) }
         }
 }
 
@@ -38,7 +38,7 @@ fun SingleActionIconProvider(
 
 fun SingleActionIconProvider(
     icon: VectorAsset
-): ActionIconProvider = SingleActionIconProvider { VectorImage(icon) }
+): ActionIconProvider = SingleActionIconProvider { Icon(icon) }
 
 fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 

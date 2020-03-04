@@ -2,6 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
@@ -18,7 +19,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
@@ -83,7 +83,7 @@ internal class AppActionPickerDelegate(
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
-        get() = { VectorImage(Icons.Default.Apps) }
+        get() = { Icon(Icons.Default.Apps) }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val app = navigator.push<AppInfo>(

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.state
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
@@ -39,7 +40,6 @@ import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -117,9 +117,7 @@ val DialogsRoute = Route {
                     ) {
                         MaterialDialog(
                             title = { Text("With icon") },
-                            icon = {
-                                VectorImage(Icons.Essentials.Settings)
-                            },
+                            icon = { Icon(Icons.Essentials.Settings) },
                             positiveButton = {
                                 DialogCloseButton(
                                     "OK"

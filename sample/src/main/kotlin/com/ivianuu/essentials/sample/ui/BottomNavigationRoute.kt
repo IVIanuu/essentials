@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.foundation.ColoredRect
+import androidx.ui.foundation.Icon
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.material.icons.Icons
@@ -27,7 +28,6 @@ import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.gestures.action.actions.Settings
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
@@ -50,7 +50,7 @@ val BottomNavigationRoute = Route {
             bottomBar = {
                 BottomNavigationBar<BottomNavItem> { item ->
                     BottomNavigationBarItem(
-                        icon = { VectorImage(item.icon) },
+                        icon = { Icon(item.icon) },
                         text = { Text(item.title) }
                     )
                 }

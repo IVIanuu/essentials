@@ -17,7 +17,7 @@ fun ActionPickerRoute(
 ) = Route {
     SimpleScreen(title = stringResource(R.string.es_action_picker_title)) {
         val viewModel = injectMvRxViewModel<ActionPickerViewModel>(
-            parametersOf(
+            parameters = parametersOf(
                 showDefaultOption,
                 showNoneOption
             )

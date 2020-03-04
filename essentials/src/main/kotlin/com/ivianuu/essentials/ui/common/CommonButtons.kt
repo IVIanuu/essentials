@@ -18,30 +18,30 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.foundation.Icon
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Menu
-import com.ivianuu.essentials.ui.image.VectorImage
 import com.ivianuu.essentials.ui.material.IconButton
 import com.ivianuu.essentials.ui.material.ScaffoldAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 @Composable
-fun DrawerButton(image: VectorAsset = Icons.Default.Menu) {
+fun DrawerButton(icon: VectorAsset = Icons.Default.Menu) {
     val scaffold = ScaffoldAmbient.current
     IconButton(
-        icon = { VectorImage(image) },
+        icon = { Icon(icon) },
         onClick = { scaffold.isDrawerOpen = !scaffold.isDrawerOpen }
     )
 }
 
 @Composable
-fun BackButton(image: VectorAsset = Icons.Default.ArrowBack) {
+fun BackButton(icon: VectorAsset = Icons.Default.ArrowBack) {
     val navigator = NavigatorAmbient.current
     IconButton(
-        icon = { VectorImage(image) },
+        icon = { Icon(icon) },
         onClick = { navigator.popTop() }
     )
 }
