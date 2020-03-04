@@ -18,10 +18,8 @@ package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.Composable
 import androidx.compose.Providers
-import androidx.compose.onActive
 import androidx.compose.onCommit
 import androidx.compose.onDispose
-import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
@@ -29,18 +27,10 @@ import androidx.ui.core.CoroutineContextAmbient
 import com.ivianuu.essentials.app.AppComponent
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Fail
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.Uninitialized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -72,116 +62,34 @@ fun coroutineScope(context: CoroutineContext = defaultCoroutineContext()): Corou
 private fun defaultCoroutineContext(): CoroutineContext =
     remember { Job() + AppComponent.get().get<AppCoroutineDispatchers>().main }
 
-@Composable
-fun launchOnActive(
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val coroutineScope = CoroutineScopeAmbient.current
-    onActive {
-        val job = coroutineScope.launch(block = block)
-        onDispose { job.cancel() }
-    }
-}
-
-@Composable
-fun launchOnPreCommit(
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val coroutineScope = CoroutineScopeAmbient.current
-    onPreCommit {
-        val job = coroutineScope.launch(block = block)
-        onDispose { job.cancel() }
-    }
-}
-
-@Composable
-fun launchOnPreCommit(
-    vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val coroutineScope = CoroutineScopeAmbient.current
-    onPreCommit(*inputs) {
-        val job = coroutineScope.launch(block = block)
-        onDispose { job.cancel() }
-    }
-}
-
-@Composable
-fun launchOnCommit(
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val coroutineScope = CoroutineScopeAmbient.current
-    onCommit {
-        val job = coroutineScope.launch(block = block)
-        onDispose { job.cancel() }
-    }
-}
-
-@Composable
-fun launchOnCommit(
-    vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val coroutineScope = CoroutineScopeAmbient.current
-    onCommit(*inputs) {
-        val job = coroutineScope.launch(block = block)
-        onDispose { job.cancel() }
-    }
-}
-
 @BuilderInference
 @Composable
-fun <T> load(
-    key: Any,
+fun <T> launch(
+    vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
-): T? = load(
-    placeholder = null,
-    key = key,
+): T? = launch(
+    initial = null,
+    inputs = *inputs,
     block = block
 )
 
 @Composable
-fun <T> load(
-    placeholder: T,
-    key: Any,
+fun <T> launch(
+    vararg inputs: Any?,
+    initial: T,
     block: suspend CoroutineScope.() -> T
 ): T {
-    val state = state { placeholder }
+    val state = state { initial }
+    val coroutineScope = CoroutineScopeAmbient.current
     val dispatchers = inject<AppCoroutineDispatchers>()
-    launchOnCommit(key) {
-        val result = block()
-        withContext(dispatchers.main) {
-            // todo remove once safe
-            state.value = result
-        }
-    }
-    return state.value
-}
-
-@Composable
-fun <T> loadAsync(
-    key: Any,
-    block: suspend CoroutineScope.() -> T
-): Async<T> {
-    val state = state<Async<T>> { Uninitialized }
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    launchOnCommit(key) {
-        state.value = withContext(dispatchers.main) {
-            // todo remove once safe
-            Loading()
-        }
-        try {
+    onCommit(*inputs) {
+        val job = coroutineScope.launch {
             val result = block()
-            withContext(dispatchers.main) {
-                // todo remove once safe
-                state.value = Success(result)
-            }
-        } catch (e: Exception) {
-            withContext(dispatchers.main) {
-                // todo remove once safe
-                state.value = Fail(e)
+            withContext(dispatchers.main) { // todo remove once safe
+                state.value = result
             }
         }
+        onDispose { job.cancel() }
     }
     return state.value
 }
@@ -192,34 +100,14 @@ fun <T> collect(flow: Flow<T>): T? = collect(flow, null)
 @Composable
 fun <T> collect(
     flow: Flow<T>,
-    placeholder: T
+    initial: T
 ): T {
-    val state = state { placeholder }
+    val state = state { initial }
     val dispatchers = inject<AppCoroutineDispatchers>()
-    launchOnCommit(flow) {
+    launch(flow) {
         flow
             .collect { item ->
-                withContext(dispatchers.main) {
-                    // todo remove once safe
-                    state.value = item
-                }
-            }
-    }
-    return state.value
-}
-
-@Composable
-fun <T> collectAsync(flow: Flow<T>): Async<T> {
-    val state = state<Async<T>> { Uninitialized }
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    launchOnCommit(flow) {
-        flow
-            .map { Success(it) as Async<T> }
-            .onStart { emit(Loading()) }
-            .catch { emit(Fail(it)) }
-            .collect { item ->
-                withContext(dispatchers.main) {
-                    // todo remove once safe
+                withContext(dispatchers.main) { // todo remove once safe
                     state.value = item
                 }
             }

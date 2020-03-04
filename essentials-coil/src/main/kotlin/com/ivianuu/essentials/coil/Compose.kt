@@ -31,7 +31,7 @@ import coil.ImageLoader
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.coroutines.load
+import com.ivianuu.essentials.ui.coroutines.launch
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.injekt.inject
 
@@ -88,7 +88,7 @@ fun loadImage(
     imageLoader: ImageLoader = inject()
 ): ImageAsset? {
     val density = DensityAmbient.current
-    return load(placeholder = null, key = listOf(data, size, imageLoader)) {
+    return launch(data, size, imageLoader) {
         imageLoader.getAnyNoInline(data) {
             if (size != null) {
                 with(density) {

@@ -19,16 +19,18 @@ package com.ivianuu.essentials.util
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
-import androidx.compose.stateFor
-import com.ivianuu.essentials.ui.core.pointInComposition
+import androidx.compose.state
 import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.coroutines.launchOnCommit
+import com.ivianuu.essentials.ui.coroutines.launch
+import com.ivianuu.essentials.ui.injekt.inject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 @Immutable
 sealed class Async<out T>(val complete: Boolean, val shouldLoad: Boolean) {
@@ -92,31 +94,30 @@ fun <T> Async<T>.valueOrThrow(): T {
 @Composable
 fun <T> collectAsync(flow: Flow<T>) = collect(
     flow = remember(flow) { flow.executeAsync() },
-    placeholder = Uninitialized
+    initial = Uninitialized
 )
 
 @Composable
-fun <T> loadAsync(block: suspend () -> T): Async<T> =
-    loadAsync(
-        key = pointInComposition(),
-        block = block
-    )
-
-@Composable
-fun <T> loadAsync(
-    key: Any,
-    block: suspend () -> T
+fun <T> launchAsync(
+    vararg inputs: Any?,
+    block: suspend CoroutineScope.() -> T
 ): Async<T> {
-    val state = stateFor<Async<T>>(key) { Uninitialized }
-
-    launchOnCommit(key) {
-        state.value = Loading()
+    val state = state<Async<T>> { Uninitialized }
+    val dispatchers = inject<AppCoroutineDispatchers>()
+    launch(*inputs) {
+        state.value = withContext(dispatchers.main) { // todo remove once safe
+            Loading()
+        }
         try {
-            state.value = Success(block())
-        } catch (e: Throwable) {
-            state.value = Fail<T>(e)
+            val result = block()
+            withContext(dispatchers.main) { // todo remove once safe
+                state.value = Success(result)
+            }
+        } catch (e: Exception) {
+            withContext(dispatchers.main) { // todo remove once safe
+                state.value = Fail(e)
+            }
         }
     }
-
     return state.value
 }

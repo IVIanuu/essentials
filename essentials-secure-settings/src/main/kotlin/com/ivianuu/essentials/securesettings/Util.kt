@@ -23,7 +23,7 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.launchOnActive
+import com.ivianuu.essentials.ui.coroutines.launch
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.Toaster
@@ -49,7 +49,7 @@ internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
 
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
-    launchOnActive {
+    launch {
         while (true) {
             if (secureSettingsHelper.canWriteSecureSettings()) {
                 if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
