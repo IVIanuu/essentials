@@ -16,21 +16,17 @@
 
 package com.ivianuu.essentials.coil
 
-import android.graphics.drawable.Drawable
 import androidx.compose.Composable
-import androidx.compose.staticAmbientOf
-import androidx.ui.core.DensityAmbient
+import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.ImageAsset
-import androidx.ui.layout.Container
-import androidx.ui.unit.Size
-import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
+import androidx.ui.core.WithConstraints
+import androidx.ui.core.asModifier
+import androidx.ui.foundation.Box
+import androidx.ui.graphics.painter.ImagePainter
+import androidx.ui.unit.isFinite
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.coroutines.launch
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.injekt.inject
@@ -38,129 +34,33 @@ import com.ivianuu.essentials.ui.injekt.inject
 @Composable
 fun CoilImage(
     data: Any,
-    tintColor: Color? = null,
-    size: Size? = null
+    modifier: Modifier = Modifier.None,
+    builderBlock: (GetRequestBuilder.() -> Unit)? = null,
+    imageLoader: ImageLoader = inject()
 ) {
-    val image = loadImage(data = data, size = size)
-    val density = DensityAmbient.current
-    RepaintBoundary {
-        Container(
-            width = size?.width ?: with(density) { image?.width?.ipx?.toDp() } ?: 0.dp,
-            height = size?.height ?: with(density) { image?.height?.ipx?.toDp() } ?: 0.dp
-        ) {
-            Text("TODO")
+    WithConstraints(modifier = modifier) { constraints ->
+        val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
+        val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
+
+        val image = launch(data, builderBlock, imageLoader, width, height) {
+            imageLoader.get(
+                GetRequestBuilder(imageLoader.defaults)
+                    .apply {
+                        data(data)
+
+                        if (width != null && height != null) {
+                            size(width.value, height.value)
+                        }
+                        builderBlock?.invoke(this)
+                    }
+                    .build()
+            ).toImageAsset()
         }
-    }
-}
 
-@Composable
-fun loadImage(
-    data: Any,
-    placeholder: ImageAsset? = PlaceholderAmbient.currentOrNull,
-    size: Size? = null,
-    imageLoader: ImageLoader = inject()
-): ImageAsset? {
-    return if (placeholder != null) {
-        loadImage(data = data, placeholder = placeholder, size = size, imageLoader = imageLoader)
-    } else {
-        loadImage(data = data, imageLoader = imageLoader, size = size)
-    }
-}
-
-@Composable
-fun loadImage(
-    data: Any,
-    placeholder: ImageAsset,
-    size: Size? = null,
-    imageLoader: ImageLoader = inject()
-): ImageAsset = loadImage(data = data, size = size, imageLoader = imageLoader) ?: placeholder
-
-// todo ir
-suspend fun ImageLoader.getAnyNoInline(
-    data: Any,
-    builder: GetRequestBuilder.() -> Unit = {}
-): Drawable = get(GetRequestBuilder(defaults).data(data).apply(builder).build())
-
-@Composable
-fun loadImage(
-    data: Any,
-    size: Size? = null,
-    imageLoader: ImageLoader = inject()
-): ImageAsset? {
-    val density = DensityAmbient.current
-    return launch(data, size, imageLoader) {
-        imageLoader.getAnyNoInline(data) {
-            if (size != null) {
-                with(density) {
-                    size(
-                        width = size.width.toIntPx().value,
-                        height = size.height.toIntPx().value
-                    )
-                }
-            }
-        }.toImageAsset()
-    }
-}
-
-val PlaceholderAmbient = staticAmbientOf<ImageAsset>()
-
-@Composable
-fun CoilImage(
-    data: Any,
-    size: Size? = null,
-    placeholder: ImageAsset? = PlaceholderAmbient.currentOrNull,
-    imageLoader: ImageLoader = inject(),
-    image: @Composable (ImageAsset?) -> Unit = {
-        if (it != null) CoilImage(data, size, placeholder, imageLoader)
-    }
-) {
-    RepaintBoundary {
-        val loadedImage = loadImage(
-            placeholder = placeholder,
-            data = data,
-            size = size,
-            imageLoader = imageLoader
-        )
-
-        val density = DensityAmbient.current
-        Container(
-            width = size?.width ?: with(density) { loadedImage?.width?.ipx?.toDp() } ?: 0.dp,
-            height = size?.height ?: with(density) { loadedImage?.height?.ipx?.toDp() } ?: 0.dp
-        ) {
-            if (loadedImage != null) {
-                RepaintBoundary {
-                    image(loadedImage)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CoilImage(
-    data: Any,
-    size: Size? = null,
-    placeholder: ImageAsset,
-    imageLoader: ImageLoader = inject(),
-    image: @Composable (ImageAsset) -> Unit = {
-        CoilImage(data, size, placeholder, imageLoader)
-    }
-) {
-    RepaintBoundary {
-        val loadedImage = loadImage(
-            placeholder = placeholder,
-            data = data,
-            size = size,
-            imageLoader = imageLoader
-        )
-
-        val density = DensityAmbient.current
-        Container(
-            width = size?.width ?: with(density) { loadedImage.width.ipx.toDp() } ?: 0.dp,
-            height = size?.height ?: with(density) { loadedImage.height.ipx.toDp() } ?: 0.dp
-        ) {
+        val painter = remember(image) { image?.let { ImagePainter(it) } }
+        if (painter != null) {
             RepaintBoundary {
-                image(loadedImage)
+                Box(modifier = painter.asModifier())
             }
         }
     }

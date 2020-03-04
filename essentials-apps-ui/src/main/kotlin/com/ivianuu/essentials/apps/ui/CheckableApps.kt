@@ -20,7 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.compose.onCommit
+import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -31,7 +33,6 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.image.AvatarSize
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -112,7 +113,7 @@ private fun CheckableApp(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.info.packageName),
-                size = AvatarSize
+                modifier = LayoutSize(40.dp)
             )
         },
         trailing = {

@@ -5,7 +5,7 @@ import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import coil.ImageLoader
-import com.ivianuu.essentials.coil.getAnyNoInline
+import coil.api.getAny
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
@@ -24,7 +24,7 @@ class CoilActionIconProvider(
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {
-            val image = imageLoader.getAnyNoInline(data).toImageAsset();
+            val image = imageLoader.getAny(data).toImageAsset();
             { Icon(ImagePainter(image)) }
         }
 }

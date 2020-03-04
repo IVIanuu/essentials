@@ -19,7 +19,9 @@ package com.ivianuu.essentials.apps.ui
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
+import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -28,7 +30,6 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.image.AvatarSize
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -76,7 +77,7 @@ private fun AppInfo(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.packageName),
-                size = AvatarSize
+                modifier = LayoutSize(40.dp)
             )
         },
         onClick = onClick
