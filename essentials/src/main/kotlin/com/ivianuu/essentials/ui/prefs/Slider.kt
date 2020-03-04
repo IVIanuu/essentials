@@ -28,6 +28,7 @@ import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.SliderPosition
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
@@ -43,7 +44,6 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
@@ -57,7 +57,7 @@ fun DoubleSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Double) -> Unit)? = null
 ) {
     DoubleSliderPreference(
@@ -82,7 +82,7 @@ fun DoubleSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Double) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -109,7 +109,7 @@ fun FloatSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Float) -> Unit)? = null
 ) {
     FloatSliderPreference(
@@ -134,7 +134,7 @@ fun FloatSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Float) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -161,7 +161,7 @@ fun IntSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Int) -> Unit)? = null
 ) {
     IntSliderPreference(
@@ -186,7 +186,7 @@ fun IntSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Int) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -213,7 +213,7 @@ fun LongSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Long) -> Unit)? = null
 ) {
     LongSliderPreference(
@@ -238,7 +238,7 @@ fun LongSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Long) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -265,7 +265,7 @@ fun DpSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Dp) -> Unit)? = null
 ) {
     DpSliderPreference(
@@ -290,7 +290,7 @@ fun DpSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Dp) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -317,7 +317,7 @@ fun PxSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Px> = 0.px..100.px,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Px) -> Unit)? = null
 ) {
     PxSliderPreference(
@@ -342,7 +342,7 @@ fun PxSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Px> = 0.px..100.px,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Px) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -369,7 +369,7 @@ fun IntPxSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((IntPx) -> Unit)? = null
 ) {
     IntPxSliderPreference(
@@ -394,7 +394,7 @@ fun IntPxSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((IntPx) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -421,7 +421,7 @@ fun DurationSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Duration) -> Unit)? = null
 ) {
     DurationSliderPreference(
@@ -446,7 +446,7 @@ fun DurationSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((Duration) -> Unit)? = null
 ) {
     BaseSliderPreference(
@@ -496,7 +496,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<T>,
-    steps: Int? = null,
+    steps: Int = 0,
     valueText: @Composable ((T) -> Unit)? = null
 ) {
     PreferenceWrapper(
@@ -527,20 +527,12 @@ fun <T : Comparable<T>> BaseSliderPreference(
                     val initial = toFloat(context.currentValue)
                     val floatRange =
                         toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
-                    if (steps != null) {
-                        SliderPosition(
-                            initial = initial,
-                            valueRange = floatRange,
-                            steps = steps,
-                            animationClock = animationClock
-                        )
-                    } else {
-                        SliderPosition(
-                            initial = initial,
-                            valueRange = floatRange,
-                            animationClock = animationClock
-                        )
-                    }
+                    SliderPosition(
+                        initial = initial,
+                        valueRange = floatRange,
+                        steps = steps,
+                        animatedClock = animationClock
+                    )
                 }
 
                 remember(context.currentValue) { position.value = toFloat(context.currentValue) }

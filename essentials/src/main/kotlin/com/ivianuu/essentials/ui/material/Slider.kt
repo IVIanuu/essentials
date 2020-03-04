@@ -16,51 +16,15 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.animation.*
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Stable
-import androidx.compose.remember
-import androidx.compose.state
 import androidx.compose.staticAmbientOf
-import androidx.ui.animation.AnimatedFloatModel
-import androidx.ui.animation.animatedFloat
-import androidx.ui.core.Alignment
-import androidx.ui.core.AnimationClockAmbient
-import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.foundation.animation.FlingConfig
-import androidx.ui.foundation.animation.fling
-import androidx.ui.foundation.gestures.DragDirection
-import androidx.ui.foundation.gestures.Draggable
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.geometry.Offset
-import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Paint
-import androidx.ui.graphics.PaintingStyle
-import androidx.ui.graphics.PointMode
-import androidx.ui.graphics.StrokeCap
-import androidx.ui.layout.Container
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.Ripple
-import androidx.ui.semantics.Semantics
-import androidx.ui.semantics.accessibilityValue
-import androidx.ui.unit.PxSize
-import androidx.ui.unit.dp
-import androidx.ui.unit.lerp
-import androidx.ui.unit.px
-import androidx.ui.unit.toRect
+import androidx.ui.material.Slider
+import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.core.currentOrElse
-import kotlin.math.abs
-
-// todo remove once fixed in compose
 
 @Immutable
 data class SliderStyle(val color: Color)
@@ -72,225 +36,18 @@ fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
     SliderStyle(color = color)
 
 @Composable
-fun SliderPosition(
-    initial: Float = 0f,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0
-) = SliderPosition(initial, valueRange, steps, AnimationClockAmbient.current)
-
-@Stable
-class SliderPosition(
-    initial: Float = 0f,
-    val valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    val steps: Int = 0,
-    val animationClock: AnimationClockObservable
-) {
-
-    internal val startValue: Float = valueRange.start
-    internal val endValue: Float = valueRange.endInclusive
-
-    var value
-        get() = animatedFloat.value
-        set(value) {
-            animatedFloat.snapTo(value)
-        }
-
-    internal val animatedFloat = AnimatedFloatModel(initial, animationClock).apply {
-        setBounds(startValue, endValue)
-    }
-
-    internal val tickValues: List<Float> =
-        if (steps == 0) emptyList() else List(steps + 1) { step ->
-            startValue + (endValue - startValue) / steps * step
-        }
-
-    init {
-        require(steps >= 0) {
-            "steps should be >= 0"
-        }
-    }
-}
-
-@Composable
 fun Slider(
     position: SliderPosition,
     onValueChange: (Float) -> Unit = { position.value = it },
     modifier: Modifier = Modifier.None,
     onValueChangeEnd: () -> Unit = {},
-    style: SliderStyle = SliderStyleAmbient.currentOrElse { DefaultSliderStyle() },
+    style: SliderStyle = SliderStyleAmbient.currentOrElse { DefaultSliderStyle() }
 ) {
-    Container(modifier = modifier) {
-        WithConstraints { constraints ->
-            val maxPx = constraints.maxWidth.value.toFloat()
-            val minPx = 0f
-
-            fun Float.toSliderPosition(): Float =
-                scale(minPx, maxPx, this, position.startValue, position.endValue)
-
-            val flingConfig =
-                if (position.tickValues.isNotEmpty()) {
-                    SliderFlingConfig(position, position.tickValues) { endValue ->
-                        onValueChange(endValue)
-                        onValueChangeEnd()
-                    }
-                } else {
-                    null
-                }
-            val gestureEndAction = { velocity: Float ->
-                if (flingConfig != null) {
-                    position.animatedFloat.fling(flingConfig, velocity)
-                } else {
-                    onValueChangeEnd()
-                }
-            }
-            val pressed = state { false }
-            PressGestureDetector(
-                onPress = { pos ->
-                    onValueChange(pos.x.value.toSliderPosition())
-                    pressed.value = true
-                },
-                onRelease = {
-                    pressed.value = false
-                    gestureEndAction(0f)
-                }
-            ) {
-                Draggable(
-                    dragDirection = DragDirection.Horizontal,
-                    dragValue = animatedFloat(scale(
-                        position.startValue,
-                        position.endValue,
-                        position.value,
-                        minPx,
-                        maxPx
-                    )),
-                    onDragStarted = { pressed.value = true },
-                    onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
-                    onDragStopped = { velocity ->
-                        pressed.value = false
-                        gestureEndAction(velocity)
-                    },
-                    children = { SliderImpl(position, style.color, maxPx, pressed.value) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SliderImpl(
-    position: SliderPosition,
-    color: Color,
-    width: Float,
-    pressed: Boolean
-) {
-    val widthDp = with(DensityAmbient.current) { width.px.toDp() }
-    Semantics(container = true, properties = { accessibilityValue = "${position.value}" }) {
-        Container(
-            expanded = true,
-            constraints = DefaultSliderConstraints,
-            alignment = Alignment.CenterStart
-        ) {
-            val thumbSize = ThumbRadius * 2
-            val fraction = with(position) { calcFraction(startValue, endValue, value) }
-            val offset = (widthDp - thumbSize) * fraction
-            DrawTrack(color, position)
-
-            Ripple(bounded = false) {
-                Surface(
-                    shape = CircleShape,
-                    color = color,
-                    modifier = LayoutSize(thumbSize, thumbSize) + LayoutPadding(start = offset),
-                    elevation = if (pressed) 6.dp else 1.dp
-                ) {
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun DrawTrack(
-    color: Color,
-    position: SliderPosition
-) {
-    val activeTickColor = MaterialTheme.colors().onPrimary.copy(alpha = TickColorAlpha)
-    val inactiveTickColor = color.copy(alpha = TickColorAlpha)
-    val paint = remember {
-        Paint().apply {
-            this.isAntiAlias = true
-            this.strokeCap = StrokeCap.round
-            this.style = PaintingStyle.stroke
-        }
-    }
-    Draw { canvas: Canvas, parentSize: PxSize ->
-        paint.strokeWidth = TrackHeight.toPx().value
-        val fraction = with(position) { calcFraction(startValue, endValue, value) }
-        val parentRect = parentSize.toRect()
-        val thumbPx = ThumbRadius.toPx().value
-        val centerHeight = parentSize.height.value / 2
-        val sliderStart = Offset(parentRect.left + thumbPx, centerHeight)
-        val sliderMax = Offset(parentRect.right - thumbPx, centerHeight)
-        paint.color = color.copy(alpha = InactiveTrackColorAlpha)
-        canvas.drawLine(sliderStart, sliderMax, paint)
-        val sliderValue = Offset(
-            sliderStart.dx + (sliderMax.dx - sliderStart.dx) * fraction,
-            centerHeight
-        )
-        paint.color = color
-        canvas.drawLine(sliderStart, sliderValue, paint)
-
-        position.tickValues
-            .groupBy { it > position.value }
-            .mapValues { (_, values) ->
-                values.map { value ->
-                    calcFraction(position.startValue, position.endValue, value)
-                }
-            }
-            .forEach { (afterFraction, list) ->
-                paint.color = if (afterFraction) inactiveTickColor else activeTickColor
-                val points = list.map { fraction ->
-                    Offset(Offset.lerp(sliderStart, sliderMax, fraction).dx, centerHeight)
-                }
-                canvas.drawPoints(PointMode.points, points, paint)
-            }
-    }
-}
-
-// Scale x1 from a1..b1 range to a2..b2 range
-private fun scale(a1: Float, b1: Float, x1: Float, a2: Float, b2: Float) =
-    lerp(a2.px, b2.px, calcFraction(a1, b1, x1)).value
-
-// Calculate the 0..1 fraction that `pos` value represents between `a` and `b`
-private fun calcFraction(a: Float, b: Float, pos: Float) =
-    (if (b - a == 0f) 0f else (pos - a) / (b - a)).coerceIn(0f, 1f)
-
-private fun SliderFlingConfig(
-    position: SliderPosition,
-    tickValues: List<Float>,
-    onSuccessfulEnd: (Float) -> Unit
-): FlingConfig {
-    val adjustTarget: (Float) -> TargetAnimation? = { _ ->
-        val now = position.value
-        val point = tickValues.minBy { abs(it - now) }
-        val adjusted = point ?: now
-        TargetAnimation(adjusted, SliderToTickAnimation)
-    }
-    return FlingConfig(
-        adjustTarget = adjustTarget,
-        onAnimationEnd = { reason, endValue, _ ->
-            if (reason != AnimationEndReason.Interrupted) {
-                onSuccessfulEnd(endValue)
-            }
-        }
+    Slider(
+        position = position,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        onValueChangeEnd = onValueChangeEnd,
+        color = style.color
     )
 }
-
-private val ThumbRadius = 6.dp
-private val TrackHeight = 4.dp
-private val SliderHeight = 48.dp
-private val SliderMinWidth = 144.dp
-private val DefaultSliderConstraints =
-    DpConstraints(minWidth = SliderMinWidth, maxHeight = SliderHeight)
-private val InactiveTrackColorAlpha = 0.24f
-private val TickColorAlpha = 0.54f
-private val SliderToTickAnimation = TweenBuilder<Float>().apply { duration = 100 }

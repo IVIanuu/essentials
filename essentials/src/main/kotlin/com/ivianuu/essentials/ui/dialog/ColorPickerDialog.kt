@@ -39,6 +39,7 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.SliderPosition
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
@@ -56,7 +57,6 @@ import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TextButtonStyle
@@ -384,9 +384,7 @@ private fun ColorComponentItem(
 
         Spacer(LayoutWidth(8.dp))
 
-        val position = remember {
-            SliderPosition(initial = value)
-        }
+        val position = SliderPosition(initial = value)
 
         Slider(
             position = position,
