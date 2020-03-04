@@ -99,7 +99,7 @@ class DisplayRotationProvider(
         awaitClose { listener.disable() }
     }
 
-    private fun configChanges() = callbackFlow {
+    private fun configChanges() = callbackFlow<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
                 offer(Unit)

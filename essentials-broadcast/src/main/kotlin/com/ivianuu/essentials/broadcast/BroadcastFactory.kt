@@ -38,7 +38,6 @@ class BroadcastFactory(private val context: Context) {
     )
 
     fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
-        // todo ir anonymous
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 offer(intent)

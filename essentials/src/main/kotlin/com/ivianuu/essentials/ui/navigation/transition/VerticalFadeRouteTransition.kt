@@ -53,10 +53,10 @@ private fun verticalFadeRouteTransitionDefinition(
     }
 
     transition {
-        Alpha using tween<Float> { // todo ir
+        Alpha using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
-        VerticalOffset using tween<Float> { // todo ir
+        VerticalOffset using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }

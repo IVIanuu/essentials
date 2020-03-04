@@ -36,7 +36,7 @@ private fun verticalRouteTransitionDefinition(
     state(RouteTransition.State.ExitFromPop) { set(VerticalOffset, 1f) }
 
     transition {
-        VerticalOffset using tween<Float> { // todo ir
+        VerticalOffset using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }

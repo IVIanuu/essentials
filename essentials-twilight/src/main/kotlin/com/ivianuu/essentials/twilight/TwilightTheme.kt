@@ -58,7 +58,7 @@ private val TwilightTransitionDefinition = transitionDefinition {
     state(false) { set(Fraction, 0f) }
 
     transition {
-        Fraction using tween<Float> { // todo ir
+        Fraction using tween {
             duration = 150
         }
     }

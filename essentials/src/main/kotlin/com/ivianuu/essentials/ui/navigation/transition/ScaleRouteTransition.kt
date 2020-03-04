@@ -37,8 +37,7 @@ private fun scaleRouteTransitionDefinition(
     state(RouteTransition.State.ExitFromPop) { set(Scale, 0f) }
 
     transition {
-        Scale using tween<Float> {
-            // todo ir
+        Scale using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }

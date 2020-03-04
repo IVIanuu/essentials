@@ -23,7 +23,8 @@ import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.ui.foundation.Icon
+import androidx.ui.core.asModifier
+import androidx.ui.foundation.Box
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.LayoutSize
@@ -63,7 +64,11 @@ private fun ShortcutInfo(
     onClick: () -> Unit
 ) {
     ListItem(
-        leading = { Icon(icon = ImagePainter(info.icon), modifier = LayoutSize(size = 40.dp)) },
+        leading = {
+            Box(
+                modifier = LayoutSize(size = 40.dp) + ImagePainter(info.icon).asModifier()
+            )
+        },
         title = { Text(info.name) },
         onClick = onClick
     )

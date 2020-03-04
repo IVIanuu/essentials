@@ -21,12 +21,8 @@ import androidx.ui.graphics.vector.composeVector
 import androidx.ui.graphics.vector.disposeVector
 import androidx.ui.unit.Density
 import androidx.ui.unit.PxSize
-import androidx.ui.unit.Size
-import androidx.ui.unit.dp
 import androidx.ui.unit.px
 import androidx.ui.unit.round
-
-val AvatarSize = Size(40.dp, 40.dp)
 
 fun Drawable.toImageAsset(): ImageAsset = toBitmap().toImageAsset()
 
