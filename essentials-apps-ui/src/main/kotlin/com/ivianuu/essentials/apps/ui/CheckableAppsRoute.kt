@@ -108,6 +108,12 @@ private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) {
+    try {
+        error("lol $app")
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
     ListItem(
         title = { Text(app.info.appName) },
         leading = {
@@ -174,6 +180,7 @@ private class CheckableAppsViewModel(
     fun appClicked(app: CheckableApp) {
         scope.coroutineScope.launch {
             pushNewCheckedApps {
+
                 if (!app.isChecked) {
                     it += app.info.packageName
                 } else {
