@@ -29,7 +29,7 @@ class StartupReceiver : EsBroadcastReceiver() {
         d { "on system start" }
 
         val bootAwareComponents = component.get<Map<String, Provider<BootAware>>>(
-            name = BootAwareComponents
+            qualifier = BootAwareComponents
         )
 
         bootAwareComponents.forEach {

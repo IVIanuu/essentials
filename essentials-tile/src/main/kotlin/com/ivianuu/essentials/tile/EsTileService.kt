@@ -18,10 +18,10 @@ package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import android.service.quicksettings.TileService
+import com.ivianuu.essentials.app.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
@@ -31,11 +31,11 @@ import com.ivianuu.scopes.Scope
  * Base tile service
  */
 @TargetApi(24)
-abstract class EsTileService : TileService(), InjektTrait {
+abstract class EsTileService : TileService(), InjektTrait, ComponentBuilderInterceptor {
 
     override val component by unsafeLazy {
         ServiceComponent(this) {
-            modules(this@EsTileService.modules())
+            buildComponent()
         }
     }
 
@@ -54,8 +54,4 @@ abstract class EsTileService : TileService(), InjektTrait {
         _listeningScope.clear()
         super.onStopListening()
     }
-
-    protected open fun dependencies() = emptyList<Component>()
-
-    protected open fun modules(): List<Module> = emptyList()
 }

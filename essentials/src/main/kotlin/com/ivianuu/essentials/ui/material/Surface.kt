@@ -36,7 +36,7 @@ fun Surface(
     elevation: Dp = 0.dp,
     children: @Composable () -> Unit
 ) {
-    androidx.ui.material.surface.Surface(
+    androidx.ui.material.Surface(
         modifier = modifier,
         shape = shape,
         color = color,

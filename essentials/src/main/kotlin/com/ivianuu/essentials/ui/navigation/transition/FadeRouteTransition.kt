@@ -3,7 +3,8 @@ package com.ivianuu.essentials.ui.navigation.transition
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.navigation.OpacityRouteTransitionType
+import androidx.ui.core.drawOpacity
+import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
 import com.ivianuu.essentials.ui.navigation.opsOf
 import com.ivianuu.essentials.ui.navigation.with
@@ -18,7 +19,7 @@ fun FadeRouteTransition(duration: Duration = 150.milliseconds) = RouteTransition
     },
     generateOps = { transitionState, _ ->
         opsOf(
-            OpacityRouteTransitionType.Opacity with transitionState[Alpha]
+            ModifierRouteTransitionType.Modifier with drawOpacity(transitionState[Alpha])
         )
     }
 )

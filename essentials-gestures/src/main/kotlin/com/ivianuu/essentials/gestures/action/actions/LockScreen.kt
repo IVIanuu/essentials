@@ -8,11 +8,11 @@ import com.ivianuu.essentials.gestures.action.bindAction
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.SettingsPower
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.parametersOf
 
 @SuppressLint("InlinedApi")
-internal val EsLockScreenActionModule = Module {
+internal fun ComponentBuilder.esLockScreenActionBindings() {
     bindAction(
         key = "lock_screen",
         title = { getStringResource(R.string.es_action_lock_screen) },

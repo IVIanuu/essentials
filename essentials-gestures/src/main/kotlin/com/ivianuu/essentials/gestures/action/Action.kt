@@ -6,7 +6,12 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.ModuleBuilder
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.map
+import com.ivianuu.injekt.common.set
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.keyOf
 import kotlinx.coroutines.flow.Flow
 
 @Immutable
@@ -27,7 +32,7 @@ interface ActionExecutor {
     suspend operator fun invoke()
 }
 
-fun ModuleBuilder.bindAction(
+fun ComponentBuilder.bindAction(
     key: String,
     title: Component.() -> String,
     permissions: Component.() -> List<Permission> = { emptyList() },
@@ -47,21 +52,26 @@ fun ModuleBuilder.bindAction(
     }
 }
 
-fun ModuleBuilder.action(
+fun ComponentBuilder.action(
     key: String,
-    definition: Component.() -> Action
+    provider: Component.() -> Action
 ) {
-    factory(name = key) { definition() }
-        .intoMap<String, Action>(entryKey = key)
+    val actionKey = keyOf<Action>(qualifier = ActionQualifier(key))
+    factory(key = actionKey) { provider() }
+    map<String, Action> {
+        put(entryKey = key, entryValueKey = actionKey)
+    }
 }
+
+data class ActionQualifier(val key: String) : Qualifier.Element
 
 interface ActionFactory {
     fun handles(key: String): Boolean
     suspend fun createAction(key: String): Action
 }
 
-inline fun <reified T : ActionFactory> ModuleBuilder.bindActionFactory() {
-    withBinding<T> { intoSet<ActionFactory>() }
+inline fun <reified T : ActionFactory> ComponentBuilder.bindActionFactoryIntoSet() {
+    set<ActionFactory> { add<T>() }
 }
 
 interface ActionPickerDelegate {
@@ -70,6 +80,6 @@ interface ActionPickerDelegate {
     suspend fun getResult(navigator: NavigatorState): ActionPickerResult?
 }
 
-inline fun <reified T : ActionPickerDelegate> ModuleBuilder.bindActionPickerDelegate() {
-    withBinding<T> { intoSet<ActionPickerDelegate>() }
+inline fun <reified T : ActionPickerDelegate> ComponentBuilder.bindActionPickerDelegateIntoSet() {
+    set<ActionPickerDelegate> { add<T>() }
 }

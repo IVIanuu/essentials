@@ -57,6 +57,7 @@ dependencies {
     api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)
+    api(Deps.Injekt.common)
     api(Deps.Injekt.android)
 
     api(Deps.Kotlin.stdlib)

@@ -19,26 +19,24 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.data.EsDataModule
-import com.ivianuu.essentials.ui.core.EsUiInitializersModule
-import com.ivianuu.essentials.util.EsUtilModule
+import com.ivianuu.essentials.data.esDataBindings
+import com.ivianuu.essentials.ui.core.esUiInitializersBindings
+import com.ivianuu.essentials.util.esUtilBindings
 import com.ivianuu.essentials.util.containsFlag
-import com.ivianuu.injekt.CodegenJustInTimeLookupFactory
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektPlugins
 import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
-import com.ivianuu.injekt.android.SystemServiceModule
+import com.ivianuu.injekt.android.systemServiceBindings
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.getLazy
 
 /**
  * App
  */
-abstract class EsApp : Application(), InjektTrait {
+abstract class EsApp : Application(), InjektTrait, ComponentBuilderInterceptor {
 
     override val component: Component
         get() {
@@ -50,7 +48,7 @@ abstract class EsApp : Application(), InjektTrait {
             return AppComponent.get()
         }
 
-    private val appServices: Map<String, Provider<AppService>> by getLazy(name = AppServices)
+    private val appServices: Map<String, Provider<AppService>> by getLazy(qualifier = AppServices)
 
     override fun onCreate() {
         super.onCreate()
@@ -61,30 +59,26 @@ abstract class EsApp : Application(), InjektTrait {
     protected open fun configureInjekt() {
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             InjektPlugins.logger = AndroidLogger()
-        } else {
-            InjektPlugins.justInTimeLookupFactory = CodegenJustInTimeLookupFactory
         }
     }
 
     protected open fun initializeComponent() {
         AppComponent.init(
             ApplicationComponent(this) {
-                modules(
-                    EsAppModule,
-                    EsAppInitializersModule,
-                    EsAppServicesModule,
-                    EsDataModule,
-                    SystemServiceModule,
-                    EsUiInitializersModule,
-                    EsUtilModule
-                )
-                modules(this@EsApp.modules())
+                esAppBindings()
+                esAppInitializersBindings()
+                esAppServicesBindings()
+                esDataBindings()
+                systemServiceBindings()
+                esUiInitializersBindings()
+                esUtilBindings()
+                buildComponent()
             }
         )
     }
 
     protected open fun invokeInitializers() {
-        get<Map<String, Provider<AppInitializer>>>(name = AppInitializers)
+        get<Map<String, Provider<AppInitializer>>>(qualifier = AppInitializers)
             .forEach {
                 if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
                     println("initialize ${it.key}")
@@ -100,6 +94,4 @@ abstract class EsApp : Application(), InjektTrait {
                 it.value()
             }
     }
-
-    protected open fun modules(): List<Module> = emptyList()
 }

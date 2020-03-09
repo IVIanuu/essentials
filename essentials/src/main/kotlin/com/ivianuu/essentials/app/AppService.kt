@@ -16,34 +16,30 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.essentials.util.BoxLoggerAppInitializer
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.map
 
 /**
  * Will be started on app start up and lives as long as the app lives
  */
 interface AppService
 
-@Name
+@QualifierMarker
 annotation class AppServices {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : AppService> ModuleBuilder.bindAppService(
-    name: Any? = null
+inline fun <reified T : AppService> ComponentBuilder.bindAppServiceIntoMap(
+    serviceQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindAppService() }
+    map<String, AppService>(AppServices) {
+        put<T>(T::class.java.name, entryValueQualifier = serviceQualifier)
+    }
 }
 
-inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> {
-    intoMap<String, AppService>(
-        entryKey = T::class.java.name, mapName = AppServices
-    )
-    return this
-}
-
-val EsAppServicesModule = Module {
-    map<String, AppService>(mapName = AppServices)
+fun ComponentBuilder.esAppServicesBindings() {
+    map<String, AppInitializer>(mapQualifier = AppInitializers)
 }

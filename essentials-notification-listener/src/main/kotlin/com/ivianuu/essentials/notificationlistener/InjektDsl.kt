@@ -16,27 +16,22 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.set
 
-@Name
+@QualifierMarker
 annotation class NotificationComponents {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : NotificationComponent> ModuleBuilder.bindNotificationComponent(
-    name: Any? = null
+inline fun <reified T : NotificationComponent> ComponentBuilder.bindNotificationComponentIntoSet(
+    componentQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindNotificationComponent() }
+    set<NotificationComponent>(NotificationComponents) { add<T>(elementQualifier = componentQualifier) }
 }
 
-fun <T : NotificationComponent> BindingContext<T>.bindNotificationComponent(): BindingContext<T> {
-    intoSet<NotificationComponent>(setName = NotificationComponents)
-    return this
-}
-
-internal val NotificationComponentsModule = Module {
-    set<NotificationComponent>(setName = NotificationComponents)
+internal fun ComponentBuilder.notificationComponentsBindings() {
+    set<NotificationComponent>(setQualifier = NotificationComponents)
 }

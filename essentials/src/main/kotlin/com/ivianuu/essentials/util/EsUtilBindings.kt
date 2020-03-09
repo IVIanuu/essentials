@@ -20,11 +20,12 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.get
+import com.ivianuu.injekt.single
 import kotlinx.coroutines.Dispatchers
 
-val EsUtilModule = Module {
+fun ComponentBuilder.esUtilBindings() {
     single {
         AppCoroutineDispatchers(
             default = Dispatchers.Default,

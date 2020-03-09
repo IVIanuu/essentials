@@ -21,6 +21,7 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container

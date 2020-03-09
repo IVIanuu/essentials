@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.billing
 
-import com.ivianuu.essentials.app.bindAppInitializer
-import com.ivianuu.essentials.sample.PurchaseInitializer
-import com.ivianuu.injekt.Module
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.single
 
-val AppModule = Module {
-    bindAppInitializer<PurchaseInitializer>()
+fun ComponentBuilder.esBillingBindings() {
+    single { (updateListener: PurchasesUpdatedListener) ->
+        BillingClient
+            .newBuilder(get())
+            .enablePendingPurchases()
+            .setListener(updateListener)
+            .build()
+    }
 }

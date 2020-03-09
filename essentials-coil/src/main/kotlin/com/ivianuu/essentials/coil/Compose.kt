@@ -18,9 +18,10 @@ package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.asModifier
+import androidx.ui.core.drawLayer
+import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
@@ -40,7 +41,7 @@ fun CoilImage(
     error: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = inject()
 ) {
-    WithConstraints(modifier = modifier) { constraints ->
+    WithConstraints(modifier = modifier) { constraints, _ ->
         val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
 
@@ -64,9 +65,7 @@ fun CoilImage(
             fail = { error?.invoke() },
             loading = { placeholder?.invoke() },
             success = {
-                RepaintBoundary {
-                    Box(modifier = it.asModifier())
-                }
+                Box(modifier = drawLayer() + it.asModifier())
             }
         )
     }

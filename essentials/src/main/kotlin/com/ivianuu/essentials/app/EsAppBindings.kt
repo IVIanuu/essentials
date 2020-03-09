@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.accessibility.bindAccessibilityComponent
-import com.ivianuu.essentials.gestures.action.EsActionModule
-import com.ivianuu.injekt.Module
+import android.content.Context
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
 
-val EsGesturesModule = Module {
-    include(EsActionModule)
-
-    bindAccessibilityComponent<GlobalActions>()
-    bindAccessibilityComponent<KeyboardVisibilityDetector>()
-    bindAccessibilityComponent<RecentAppsProvider>()
-    bindAccessibilityComponent<SecureScreenDetector>()
+/**
+ * Basic app dependencies such as preferences or package manager
+ */
+fun ComponentBuilder.esAppBindings() {
+    factory { get<Context>().packageManager!! }
 }

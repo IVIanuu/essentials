@@ -162,7 +162,7 @@ fun ListItem(
 
     val maybeWithClick: @Composable () -> Unit = if (onClick == null) item else ({
         Clickable(
-            onClick = if (enabled) onClick else null,
+            onClick = if (enabled) onClick else ({ }),
             children = item
         )
     })

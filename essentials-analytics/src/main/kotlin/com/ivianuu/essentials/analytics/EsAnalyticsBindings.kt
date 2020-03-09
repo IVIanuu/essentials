@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.coil
+package com.ivianuu.essentials.analytics
 
-import com.ivianuu.essentials.coil.bindFetcher
-import com.ivianuu.injekt.Module
+import com.ivianuu.essentials.app.bindAppInitializerIntoMap
+import com.ivianuu.injekt.ComponentBuilder
 
-/**
- * Binds dependencies related to this module
- */
-val EsAppsCoilModule = Module {
-    bindFetcher<AppIconFetcher, AppIcon>(AppIcon::class)
+fun ComponentBuilder.esAnalyticsBindings() {
+    bindAppInitializerIntoMap<AnalyticsAppInitializer>()
 }

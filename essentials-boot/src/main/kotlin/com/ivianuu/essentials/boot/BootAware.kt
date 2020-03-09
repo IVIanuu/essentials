@@ -16,34 +16,30 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.map
+import com.ivianuu.injekt.common.set
 
 /**
  * Marks a component as boot aware
  */
 interface BootAware
 
-@Name
+@QualifierMarker
 annotation class BootAwareComponents {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : BootAware> ModuleBuilder.bindBootAware(
-    name: Any? = null
+inline fun <reified T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
+    componentQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindBootAware() }
+    map<String, BootAware>(BootAwareComponents) {
+        put<T>(entryKey = T::class.java.name, entryValueQualifier = componentQualifier)
+    }
 }
 
-inline fun <reified T : BootAware> BindingContext<T>.bindBootAware(): BindingContext<T> {
-    intoMap<String, BootAware>(
-        entryKey = T::class.java.name, mapName = BootAwareComponents
-    )
-    return this
-}
-
-val EsBootModule = Module {
-    map<String, BootAware>(mapName = BootAwareComponents)
+fun ComponentBuilder.esBootBindings() {
+    map<String, BootAware>(mapQualifier = BootAwareComponents)
 }

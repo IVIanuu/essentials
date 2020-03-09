@@ -18,14 +18,16 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
 import com.github.ajalt.timberkt.d
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.getLazy
 
 class ComponentNotificationListenerService : EsNotificationListenerService() {
 
-    private val components: Set<NotificationComponent> by getLazy(name = NotificationComponents)
+    private val components: Set<NotificationComponent> by getLazy(qualifier = NotificationComponents)
 
-    override fun modules(): List<Module> = super.modules() + listOf(NotificationComponentsModule)
+    override fun ComponentBuilder.buildComponent() {
+
+    }
 
     override fun onListenerConnected() {
         super.onListenerConnected()

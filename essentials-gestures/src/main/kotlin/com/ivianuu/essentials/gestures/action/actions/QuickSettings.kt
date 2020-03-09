@@ -9,7 +9,7 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
 import androidx.ui.graphics.vector.path
 import androidx.ui.material.icons.filled.Add
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
 val EssentialsIcons.Settings: VectorAsset by lazyMaterialIcon {
     path {
@@ -62,7 +62,7 @@ val EssentialsIcons.Settings: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal val EsQuickSettingsActionModule = Module {
+internal fun ComponentBuilder.esQuickSettingsActionBindings() {
     bindAccessibilityAction(
         key = "quick_settings",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,

@@ -13,9 +13,9 @@ import com.ivianuu.essentials.icon.EssentialsIcons
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
 import androidx.ui.graphics.vector.path
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
 val EssentialsIcons.ActionHome: VectorAsset by lazyMaterialIcon {
@@ -31,7 +31,7 @@ val EssentialsIcons.ActionHome: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal val EsHomeActionModule = Module {
+internal fun ComponentBuilder.esHomeActionBindings() {
     if (Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913") {
         bindAccessibilityAction(
             key = "home",

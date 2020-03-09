@@ -20,26 +20,26 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Parameters
-import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.emptyParameters
-import com.ivianuu.injekt.typeOf
+import com.ivianuu.injekt.keyOf
 
 val ComponentAmbient =
     staticAmbientOf<Component> { error("No component found") }
 
 @Composable
 inline fun <reified T> inject(
-    name: Any? = null,
+    qualifier: Qualifier = Qualifier.None,
     parameters: Parameters = emptyParameters()
-) = inject(type = typeOf<T>(), name = name, parameters = parameters)
+) = inject(key = keyOf<T>(qualifier = qualifier), parameters = parameters)
 
 @Composable
 fun <T> inject(
-    type: Type<T>,
-    name: Any? = null,
+    key: Key<T>,
     parameters: Parameters = emptyParameters()
 ): T {
     val component = ComponentAmbient.current
-    return remember { component.get(type = type, name = name, parameters = parameters) }
+    return remember { component.get(key = key, parameters = parameters) }
 }

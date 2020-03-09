@@ -18,9 +18,9 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.app.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -28,11 +28,11 @@ import com.ivianuu.scopes.Scope
 /**
  * Base accessibility service
  */
-abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
+abstract class EsAccessibilityService : AccessibilityService(), InjektTrait, ComponentBuilderInterceptor {
 
     override val component by unsafeLazy {
         ServiceComponent(this) {
-            modules(this@EsAccessibilityService.modules())
+            buildComponent()
         }
     }
 
@@ -49,6 +49,4 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override fun onInterrupt() {
     }
-
-    protected open fun modules(): List<Module> = emptyList()
 }

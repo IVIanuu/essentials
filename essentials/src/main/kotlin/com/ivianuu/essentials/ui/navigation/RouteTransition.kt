@@ -25,13 +25,12 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.core.Opacity
 import androidx.ui.layout.Container
 
 @Immutable
 class RouteTransition(
     val definition: @Composable () -> TransitionDefinition<State>,
-    val generateOps: (TransitionState, State) -> Ops
+    val generateOps: @Composable (TransitionState, State) -> Ops
 ) {
     @Immutable
     interface Type {
@@ -74,17 +73,6 @@ fun opsOf(
         }
         .mapValues { it.value.toSet() }
 )
-
-object OpacityRouteTransitionType : RouteTransition.Type {
-    val Opacity = RouteTransition.Ops.Key<Float>()
-    @Composable
-    override fun apply(
-        ops: RouteTransition.Ops,
-        children: @Composable () -> Unit
-    ) {
-        Opacity(opacity = ops[Opacity].singleOrNull() ?: 1f, children = children)
-    }
-}
 
 object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()

@@ -86,14 +86,8 @@ fun TextInputPreference(
                 positiveButton = {
                     DialogButton(
                         text = stringResource(R.string.es_ok),
-                        onClick = if (allowEmpty || currentValue.isNotEmpty()) {
-                            {
-                                context.setIfOk(currentValue)
-                                Unit
-                            }
-                        } else {
-                            null
-                        }
+                        enabled = allowEmpty || currentValue.isNotEmpty(),
+                        onClick = { context.setIfOk(currentValue) }
                     )
                 },
                 negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }

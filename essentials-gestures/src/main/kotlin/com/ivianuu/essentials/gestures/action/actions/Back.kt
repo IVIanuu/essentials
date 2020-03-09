@@ -8,7 +8,7 @@ import com.ivianuu.essentials.icon.EssentialsIcons
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
 import androidx.ui.graphics.vector.path
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
 val EssentialsIcons.ActionBack: VectorAsset by lazyMaterialIcon {
     path {
@@ -28,7 +28,7 @@ val EssentialsIcons.ActionBack: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal val EsBackActionModule = Module {
+internal fun ComponentBuilder.esBackActionBindings() {
     bindAccessibilityAction(
         key = "back",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_BACK,

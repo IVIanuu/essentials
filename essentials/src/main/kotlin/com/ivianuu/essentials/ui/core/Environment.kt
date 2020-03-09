@@ -28,11 +28,12 @@ import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.map
+import com.ivianuu.injekt.keyOf
 
 @Composable
 fun Environment(
@@ -58,7 +59,7 @@ fun Environment(
                 SystemBarManager {
                     ConfigurationFix {
                         val uiInitializers =
-                            inject<Map<String, UiInitializer>>(name = UiInitializers)
+                            inject<Map<String, UiInitializer>>(qualifier = UiInitializers)
                         uiInitializers.entries
                             .map { (key, initializer) ->
                                 val function: @Composable (@Composable () -> Unit) -> Unit =
@@ -83,25 +84,19 @@ interface UiInitializer {
     fun apply(children: @Composable () -> Unit)
 }
 
-@Name
+@QualifierMarker
 annotation class UiInitializers {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : UiInitializer> ModuleBuilder.bindUiInitializer(
-    name: Any? = null
+inline fun <reified T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap(
+    initializerQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindUiInitializer() }
+    map<String, UiInitializer>(mapQualifier = UiInitializers) {
+        put(T::class.java.name, keyOf<T>(qualifier = initializerQualifier))
+    }
 }
 
-inline fun <reified T : UiInitializer> BindingContext<T>.bindUiInitializer(): BindingContext<T> {
-    intoMap<String, UiInitializer>(
-        entryKey = T::class.java.name,
-        mapName = UiInitializers
-    )
-    return this
-}
-
-val EsUiInitializersModule = Module {
-    map<String, UiInitializer>(mapName = UiInitializers)
+fun ComponentBuilder.esUiInitializersBindings() {
+    map<String, UiInitializer>(mapQualifier = UiInitializers)
 }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.compose.state
-import androidx.ui.core.Opacity
+import androidx.ui.core.drawOpacity
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
@@ -54,12 +54,9 @@ fun TextInputRoute(
             DialogButton(
                 text = stringResource(R.string.es_ok),
                 dismissDialogOnClick = false,
-                onClick = if (allowEmpty || currentValue.isNotEmpty()) {
-                    {
-                        navigator.popTop(result = currentValue)
-                    }
-                } else {
-                    null
+                enabled = allowEmpty || currentValue.isNotEmpty(),
+                onClick = {
+                    navigator.popTop(result = currentValue)
                 }
             )
         },
@@ -88,12 +85,11 @@ fun TextInputDialog(
         title = title,
         content = {
             if (value.isEmpty() && hint != null) {
-                Opacity(0.5f) {
-                    Text(
-                        text = hint,
-                        style = MaterialTheme.typography().subtitle1
-                    )
-                }
+                Text(
+                    text = hint,
+                    style = MaterialTheme.typography().subtitle1,
+                    modifier = drawOpacity(0.5f)
+                )
             }
             TextField(
                 value = value,

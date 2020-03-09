@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.material.Checkbox
 fun <T> MultiChoiceListDialog(
     items: List<T>,
     selectedItems: List<T>,
-    onSelectionsChanged: ((List<T>) -> Unit)? = null,
+    onSelectionsChanged: (List<T>) -> Unit,
     itemCallback: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
@@ -44,17 +44,15 @@ fun <T> MultiChoiceListDialog(
                     MultiChoiceDialogListItem(
                         title = { itemCallback(item) },
                         checked = item in selectedItems,
-                        onCheckedChange = onSelectionsChanged?.let {
-                            {
-                                val newSelectedItems = selectedItems.toMutableList()
-                                if (it) {
-                                    newSelectedItems += item
-                                } else {
-                                    newSelectedItems -= item
-                                }
-
-                                onSelectionsChanged(newSelectedItems)
+                        onCheckedChange = {
+                            val newSelectedItems = selectedItems.toMutableList()
+                            if (it) {
+                                newSelectedItems += item
+                            } else {
+                                newSelectedItems -= item
                             }
+
+                            onSelectionsChanged(newSelectedItems)
                         }
                     )
                 }
@@ -69,7 +67,7 @@ fun <T> MultiChoiceListDialog(
 @Composable
 private fun MultiChoiceDialogListItem(
     checked: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)? = null,
+    onCheckedChange: (Boolean) -> Unit,
     title: @Composable () -> Unit
 ) {
     SimpleDialogListItem(
@@ -82,8 +80,8 @@ private fun MultiChoiceDialogListItem(
             }
         },
         title = title,
-        onClick = onCheckedChange?.let {
-            { onCheckedChange(!checked) }
+        onClick = {
+            onCheckedChange(!checked)
         }
     )
 }

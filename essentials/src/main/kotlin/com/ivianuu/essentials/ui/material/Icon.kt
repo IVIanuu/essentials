@@ -25,12 +25,13 @@ import androidx.ui.foundation.Clickable
 
 @Composable
 fun IconButton(
-    onClick: (() -> Unit)? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
     icon: @Composable () -> Unit
 ) {
     Ripple(
         bounded = false,
-        enabled = onClick != null
+        enabled = enabled
     ) {
         Clickable(onClick = onClick) {
             Container(

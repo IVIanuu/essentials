@@ -36,9 +36,9 @@ import com.ivianuu.essentials.ui.layout.Row
 
 @Composable
 fun SimpleDialogListItem(
+    onClick: () -> Unit,
     leading: @Composable (() -> Unit)? = null,
-    title: @Composable () -> Unit,
-    onClick: (() -> Unit)? = null
+    title: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {

@@ -22,10 +22,12 @@ import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Parameters
-import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.emptyParameters
-import com.ivianuu.injekt.typeOf
+import com.ivianuu.injekt.keyOf
+
 
 @Composable
 inline fun <T : MvRxViewModel<*>> mvRxViewModel(noinline factory: () -> T): T =
@@ -44,25 +46,21 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
 
 @Composable
 inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
-    name: Any? = null,
+    qualifier: Qualifier = Qualifier.None,
     parameters: Parameters = emptyParameters()
-): T {
-    return injectMvRxViewModel(
-        typeOf(),
-        pointInComposition(),
-        name,
-        parameters
-    )
-}
+): T = injectMvRxViewModel(
+    key = keyOf(qualifier = qualifier),
+    viewModelKey = pointInComposition(),
+    parameters = parameters
+)
 
 @Composable
 fun <T : MvRxViewModel<*>> injectMvRxViewModel(
-    type: Type<T>,
-    key: Any,
-    name: Any? = null,
+    key: Key<T>,
+    viewModelKey: Any,
     parameters: Parameters = emptyParameters()
 ): T {
-    val viewModel = injectViewModel(type, key, name, parameters)
+    val viewModel = injectViewModel(key = key, viewModelKey = viewModelKey, parameters = parameters)
     // recompose on changes
     collect(viewModel.flow)
     return viewModel

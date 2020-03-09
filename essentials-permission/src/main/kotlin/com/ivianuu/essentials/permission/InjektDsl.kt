@@ -16,50 +16,42 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.OverrideStrategy
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.common.set
 
-@Name
+@QualifierMarker
 annotation class PermissionStateProvidersSet {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : PermissionStateProvider> ModuleBuilder.bindPermissionStateProvider(
-    name: Any? = null
+inline fun <reified T : PermissionStateProvider> ComponentBuilder.bindPermissionStateProviderIntoSet(
+    providerQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name = name) { bindPermissionStateProvider() }
+    set<PermissionStateProvider>(PermissionStateProvidersSet) {
+        add<T>(elementQualifier = providerQualifier)
+    }
 }
 
-fun <T : PermissionStateProvider> BindingContext<T>.bindPermissionStateProvider(): BindingContext<T> {
-    intoSet<PermissionStateProvider>(setName = PermissionStateProvidersSet)
-    return this
-}
-
-@Name
+@QualifierMarker
 annotation class PermissionRequestHandlersSet {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : PermissionRequestHandler> ModuleBuilder.bindPermissionRequestHandler(
-    name: Any? = null
+inline fun <reified T : PermissionRequestHandler> ComponentBuilder.bindPermissionRequestHandlerIntoSet(
+    handlerQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name = name) { bindPermissionRequestHandler() }
+    set<PermissionRequestHandler>(PermissionRequestHandlersSet) {
+        add<T>(elementQualifier = handlerQualifier)
+    }
 }
 
-fun <T : PermissionRequestHandler> BindingContext<T>.bindPermissionRequestHandler(): BindingContext<T> {
-    intoSet<PermissionRequestHandler>(setName = PermissionRequestHandlersSet)
-    return this
-}
-
-inline fun <reified T : PermissionRequestUi> ModuleBuilder.bindPermissionRequestUi(
-    name: Any? = null
+inline fun <reified T : PermissionRequestUi> ComponentBuilder.permissionRequestUi(
+    uiQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name = name) { bindPermissionRequestUi() }
-}
-
-fun <T : PermissionRequestUi> BindingContext<T>.bindPermissionRequestUi(): BindingContext<T> {
-    bindAlias<PermissionRequestUi>(overrideStrategy = OverrideStrategy.Override)
-    return this
+    alias<T, PermissionRequestUi>(
+        originalQualifier = uiQualifier
+    )
 }

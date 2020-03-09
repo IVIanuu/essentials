@@ -38,7 +38,7 @@ data class ButtonStyle(
     val shape: Shape,
     val border: Border? = null,
     val elevation: Dp = 0.dp,
-    val paddings: EdgeInsets = EdgeInsets(
+    val innerPadding: EdgeInsets = EdgeInsets(
         left = 16.dp,
         top = 8.dp,
         right = 16.dp,
@@ -84,7 +84,7 @@ fun TextButtonStyle(
 ) = ButtonStyle(
     backgroundColor = Color.Transparent,
     shape = shape,
-    paddings = EdgeInsets(all = 8.dp),
+    innerPadding = EdgeInsets(all = 8.dp),
     contentColor = contentColor
 )
 
@@ -93,19 +93,21 @@ val ButtonStyleAmbient = staticAmbientOf<ButtonStyle>()
 @Composable
 fun Button(
     modifier: Modifier = Modifier.None,
-    onClick: (() -> Unit)? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
     children: @Composable () -> Unit
 ) {
     androidx.ui.material.Button(
         modifier = modifier,
         onClick = onClick,
+        enabled = enabled,
         backgroundColor = style.backgroundColor,
         contentColor = style.contentColor,
         shape = style.shape,
         border = style.border,
         elevation = style.elevation,
-        paddings = style.paddings,
+        innerPadding = style.innerPadding,
         children = children
     )
 }
@@ -114,12 +116,14 @@ fun Button(
 fun Button(
     text: String,
     modifier: Modifier = Modifier.None,
-    onClick: (() -> Unit)? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() }
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
+        enabled = enabled,
         style = style,
         children = { Text(text) }
     )

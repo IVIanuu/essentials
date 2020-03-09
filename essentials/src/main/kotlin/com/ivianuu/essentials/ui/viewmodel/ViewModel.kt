@@ -22,10 +22,11 @@ import com.ivianuu.essentials.ui.core.pointInComposition
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Parameters
-import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.emptyParameters
-import com.ivianuu.injekt.typeOf
+import com.ivianuu.injekt.keyOf
 
 @Composable
 inline fun <T : ViewModel> viewModel(noinline factory: () -> T): T =
@@ -39,25 +40,23 @@ fun <T : ViewModel> viewModel(
 
 @Composable
 inline fun <reified T : ViewModel> injectViewModel(
-    name: Any? = null,
+    qualifier: Qualifier = Qualifier.None,
     parameters: Parameters = emptyParameters()
 ): T = injectViewModel(
-    typeOf(),
+    keyOf(qualifier = qualifier),
     pointInComposition(),
-    name,
     parameters
 )
 
 @Composable
 fun <T : ViewModel> injectViewModel(
-    type: Type<T>,
-    key: Any,
-    name: Any? = null,
+    key: Key<T>,
+    viewModelKey: Any,
     parameters: Parameters = emptyParameters()
 ): T {
     val component = ComponentAmbient.current
     return viewModel(
-        key = key,
-        factory = { component.get(type = type, name = name, parameters = parameters) }
+        key = viewModelKey,
+        factory = { component.get(key = key, parameters = parameters) }
     )
 }

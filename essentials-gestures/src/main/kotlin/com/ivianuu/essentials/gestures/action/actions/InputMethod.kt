@@ -6,11 +6,11 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.KeyboardHide
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
 
-internal val EsInputMethodActionModule = Module {
+internal fun ComponentBuilder.esInputMethodActionBindings() {
     bindAction(
         key = "input_method",
         title = { getStringResource(R.string.es_action_input_method) },

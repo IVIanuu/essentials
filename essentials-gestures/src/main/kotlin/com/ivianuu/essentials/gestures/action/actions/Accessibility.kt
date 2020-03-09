@@ -6,11 +6,11 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.ModuleBuilder
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun ModuleBuilder.bindAccessibilityAction(
+fun ComponentBuilder.bindAccessibilityAction(
     key: String,
     accessibilityAction: Int,
     titleRes: Int,

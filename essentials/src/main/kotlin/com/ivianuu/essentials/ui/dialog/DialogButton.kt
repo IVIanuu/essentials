@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.ui.core.Opacity
+import androidx.ui.core.drawOpacity
+import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ButtonStyle
 import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
@@ -27,23 +28,21 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 @Composable
 fun DialogButton(
     text: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
     dismissDialogOnClick: Boolean = true,
-    style: ButtonStyle = ButtonStyleAmbient.current ?: TextButtonStyle(),
-    onClick: (() -> Unit)? = null
+    style: ButtonStyle = ButtonStyleAmbient.currentOrNull ?: TextButtonStyle()
 ) {
     val navigator = NavigatorAmbient.current
-    Opacity(opacity = if (onClick != null) 1f else 0.5f) {
-        Button(
-            text = text,
-            onClick = onClick?.let {
-                {
-                    onClick()
-                    if (dismissDialogOnClick) navigator.popTop()
-                }
-            },
-            style = style
-        )
-    }
+    Button(
+        text = text,
+        onClick = {
+            onClick()
+            if (dismissDialogOnClick) navigator.popTop()
+        },
+        style = style,
+        modifier = drawOpacity(opacity = if (enabled) 1f else 0.5f)
+    )
 }
 
 @Composable

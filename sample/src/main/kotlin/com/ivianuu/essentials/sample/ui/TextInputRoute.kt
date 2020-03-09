@@ -21,7 +21,7 @@ import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Alignment
-import androidx.ui.core.Opacity
+import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.AdapterList
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
@@ -62,12 +62,11 @@ val TextInputRoute = Route {
                         ) {
                             Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
                                 if (state.inputValue.isEmpty()) {
-                                    Opacity(0.5f) {
-                                        Text(
-                                            text = "Search..",
-                                            style = MaterialTheme.typography().subtitle1
-                                        )
-                                    }
+                                    Text(
+                                        text = "Search..",
+                                        style = MaterialTheme.typography().subtitle1,
+                                        modifier = drawOpacity(0.5f)
+                                    )
                                 }
                                 TextField(
                                     value = state.inputValue,

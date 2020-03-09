@@ -19,7 +19,8 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.remember
-import androidx.ui.core.Opacity
+import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.material.ListItem
@@ -58,7 +59,7 @@ fun <T> PreferenceWrapper(
         context.dependenciesOk = dependenciesOk
 
         val finalEnabled = enabled && dependenciesOk
-        Opacity(if (finalEnabled) 1f else 0.5f) {
+        Box(modifier = drawOpacity(if (finalEnabled) 1f else 0.5f)) {
             preference(context)
         }
     }

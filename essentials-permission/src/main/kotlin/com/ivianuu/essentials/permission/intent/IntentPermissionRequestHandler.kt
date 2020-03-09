@@ -24,19 +24,13 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
-import com.ivianuu.essentials.permission.bindPermissionRequestHandler
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.delay
 
 val Metadata.Companion.Intent by lazy {
     Metadata.Key<Intent>(
         "Intent"
     )
-}
-
-internal val EsIntentPermissionRequestHandlerModule = Module {
-    bindPermissionRequestHandler<IntentPermissionRequestHandler>()
 }
 
 @Factory

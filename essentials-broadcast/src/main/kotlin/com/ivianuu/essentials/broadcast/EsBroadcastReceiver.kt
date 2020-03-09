@@ -19,23 +19,22 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.ivianuu.essentials.app.ComponentBuilderInterceptor
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ReceiverComponent
 
 /**
  * Base broadcast receiver
  */
-abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait {
+abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait, ComponentBuilderInterceptor {
 
     override lateinit var component: Component
 
     override fun onReceive(context: Context, intent: Intent) {
         component = ReceiverComponent(context, this) {
-            modules(this@EsBroadcastReceiver.modules(context))
+            buildComponent()
         }
     }
 
-    protected open fun modules(context: Context): List<Module> = emptyList()
 }

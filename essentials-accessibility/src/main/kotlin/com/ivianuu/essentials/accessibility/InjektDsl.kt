@@ -16,27 +16,24 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.set
 
-@Name
+@QualifierMarker
 annotation class AccessibilityComponents {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : AccessibilityComponent> ModuleBuilder.bindAccessibilityComponent(
-    name: Any? = null
+inline fun <reified T : AccessibilityComponent> ComponentBuilder.bindAccessibilityComponentIntoSet(
+    componentQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindAccessibilityComponent() }
+    set<AccessibilityComponent>(AccessibilityComponents) {
+        add<T>(elementQualifier = componentQualifier)
+    }
 }
 
-fun <T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent(): BindingContext<T> {
-    intoSet<AccessibilityComponent>(setName = AccessibilityComponents)
-    return this
-}
-
-internal val AccessibilityComponentsModule = Module {
-    set<AccessibilityComponent>(setName = AccessibilityComponents)
+internal fun ComponentBuilder.accessibilityComponentsBindings() {
+    set<AccessibilityComponent>(setQualifier = AccessibilityComponents)
 }

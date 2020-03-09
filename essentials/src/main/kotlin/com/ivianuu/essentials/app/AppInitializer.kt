@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.BoxLoggerAppInitializer
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.common.map
 
 /**
  * Will be instantiated on app start up
@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Name
  * Must be bound inside your module like this:
  *
  * ´´´
- * val analyticsModule = module {
+ * fun ComponentBuilder.analyticsBindings() {
  *     bindAppInitializer<AnalyticsInitializer>()
  * }
  * ´´´
@@ -45,27 +45,21 @@ import com.ivianuu.injekt.Name
  */
 interface AppInitializer
 
-@Name
+@QualifierMarker
 annotation class AppInitializers {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : AppInitializer> ModuleBuilder.bindAppInitializer(
-    name: Any? = null
+inline fun <reified T : AppInitializer> ComponentBuilder.bindAppInitializerIntoMap(
+    initializerQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindAppInitializer() }
+    map<String, AppInitializer>(AppInitializers) {
+        put<T>(T::class.java.name, entryValueQualifier = initializerQualifier)
+    }
 }
 
-inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): BindingContext<T> {
-    intoMap<String, AppInitializer>(
-        entryKey = T::class.java.name,
-        mapName = AppInitializers
-    )
-    return this
-}
-
-val EsAppInitializersModule = Module {
-    map<String, AppInitializer>(mapName = AppInitializers)
-    bindAppInitializer<TimberAppInitializer>()
-    bindAppInitializer<BoxLoggerAppInitializer>()
+fun ComponentBuilder.esAppInitializersBindings() {
+    map<String, AppInitializer>(mapQualifier = AppInitializers)
+    bindAppInitializerIntoMap<TimberAppInitializer>()
+    bindAppInitializerIntoMap<BoxLoggerAppInitializer>()
 }

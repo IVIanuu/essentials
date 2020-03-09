@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample
 
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.boot.BootAware
-import com.ivianuu.essentials.boot.bindBootAware
+import com.ivianuu.essentials.boot.bindBootAwareIntoMap
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 
 @Factory
 class BootLogger : BootAware {
@@ -29,6 +29,6 @@ class BootLogger : BootAware {
     }
 }
 
-val BootModule = Module {
-    bindBootAware<BootLogger>()
+fun ComponentBuilder.bootBindings() {
+    bindBootAwareIntoMap<BootLogger>()
 }

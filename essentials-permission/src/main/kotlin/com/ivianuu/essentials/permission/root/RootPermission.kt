@@ -9,14 +9,11 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.bindPermissionRequestHandler
-import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 
 fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
@@ -27,11 +24,6 @@ fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
 
 val Metadata.Companion.IsRootPermission by lazy {
     Metadata.Key<Unit>("IsRootPermission")
-}
-
-internal val EsRootPermissionModule = Module {
-    bindPermissionRequestHandler<RootPermissionRequestHandler>()
-    bindPermissionStateProvider<RootPermissionStateProvider>()
 }
 
 @Factory

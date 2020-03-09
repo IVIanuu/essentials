@@ -19,32 +19,34 @@ package com.ivianuu.essentials.coil
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.common.set
 import com.ivianuu.injekt.get
+import com.ivianuu.injekt.single
 
-val EsCoilModule = Module {
-    set<Decoder>(setName = Decoders)
-    set<FetcherBinding<*>>(setName = Fetchers)
-    set<MapperBinding<*>>(setName = Mappers)
-    set<MeasuredMapperBinding<*>>(setName = MeasuredMappers)
+fun ComponentBuilder.esCoilBindings() {
+    set<Decoder>(setQualifier = Decoders)
+    set<FetcherBinding<*>>(setQualifier = Fetchers)
+    set<MapperBinding<*>>(setQualifier = Mappers)
+    set<MeasuredMapperBinding<*>>(setQualifier = MeasuredMappers)
 
     single {
         ImageLoader(get()) {
             componentRegistry {
-                get<Set<Decoder>>(name = Decoders)
+                get<Set<Decoder>>(qualifier = Decoders)
                     .forEach { add(it) }
 
-                get<Set<FetcherBinding<*>>>(name = Fetchers)
+                get<Set<FetcherBinding<*>>>(qualifier = Fetchers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.fetcher)
                     }
 
-                get<Set<MapperBinding<*>>>(name = Mappers)
+                get<Set<MapperBinding<*>>>(qualifier = Mappers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
 
-                get<Set<MeasuredMapperBinding<*>>>(name = MeasuredMappers)
+                get<Set<MeasuredMapperBinding<*>>>(qualifier = MeasuredMappers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }

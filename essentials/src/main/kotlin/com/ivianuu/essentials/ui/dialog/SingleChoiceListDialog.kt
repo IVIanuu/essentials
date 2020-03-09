@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 fun <T> SingleChoiceListDialog(
     items: List<T>,
     selectedItem: T,
-    onSelect: ((T) -> Unit)? = null,
+    onSelect: (T) -> Unit,
     itemCallback: @Composable (T) -> Unit,
     dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
@@ -48,11 +48,9 @@ fun <T> SingleChoiceListDialog(
                     SingleChoiceDialogListItem(
                         title = { itemCallback(item) },
                         selected = item == selectedItem,
-                        onSelect = onSelect?.let {
-                            {
-                                onSelect(item)
-                                if (dismissOnSelection) navigator.popTop()
-                            }
+                        onSelect = {
+                            onSelect(item)
+                            if (dismissOnSelection) navigator.popTop()
                         }
                     )
                 }
@@ -67,7 +65,7 @@ fun <T> SingleChoiceListDialog(
 @Composable
 private fun SingleChoiceDialogListItem(
     selected: Boolean,
-    onSelect: (() -> Unit)? = null,
+    onSelect: () -> Unit,
     title: @Composable () -> Unit
 ) {
     SimpleDialogListItem(

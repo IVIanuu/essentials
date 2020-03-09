@@ -20,29 +20,31 @@ import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.android.ForApplication
 import com.ivianuu.injekt.get
+import com.ivianuu.injekt.single
 
-@Name
+@QualifierMarker
 annotation class PrefsPath {
-    companion object
+    companion object : Qualifier.Element
 }
 
-val EsDataModule = Module {
-    single(name = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
+fun ComponentBuilder.esDataBindings() {
+    single(qualifier = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
 
     single {
         PrefBoxFactory(
             dispatcher = get<AppCoroutineDispatchers>().io,
-            prefsPath = get(name = PrefsPath)
+            prefsPath = get(qualifier = PrefsPath)
         )
     }
 
     single {
         SettingsBoxFactory(
-            context = get(name = ForApplication),
+            context = get(qualifier = ForApplication),
             dispatcher = get<AppCoroutineDispatchers>().io
         )
     }

@@ -17,13 +17,15 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
-import com.ivianuu.injekt.ModuleBuilder
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.alias
 
 interface AppUi {
     @Composable
     fun runApp()
 }
 
-inline fun <reified T> ModuleBuilder.bindAppUi(name: Any? = null) {
-    withBinding<T>(name = name) { bindAlias<AppUi>() }
+inline fun <reified T : AppUi> ComponentBuilder.appUi(uiQualifier: Qualifier = Qualifier.None) {
+    alias<T, AppUi>(originalQualifier = uiQualifier)
 }

@@ -61,7 +61,7 @@ fun Card(
     style: CardStyle = CardStyleAmbient.currentOrElse { DefaultCardStyle() },
     children: @Composable () -> Unit,
 ) {
-    androidx.ui.material.surface.Card(
+    androidx.ui.material.Card(
         modifier = modifier,
         shape = style.shape,
         color = style.color,

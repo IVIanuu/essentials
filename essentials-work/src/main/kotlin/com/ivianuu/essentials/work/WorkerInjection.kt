@@ -23,13 +23,16 @@ import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.bindAppInitializer
-import com.ivianuu.injekt.BindingContext
+import com.ivianuu.essentials.app.bindAppInitializerIntoMap
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.common.map
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.keyOf
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -58,11 +61,11 @@ class InjektWorkerFactory(
 /**
  * Contains the [InjektWorkerFactory]
  */
-val EsWorkModule = Module {
+fun ComponentBuilder.esWorkBindings() {
     factory { WorkManager.getInstance(get()) }
-    map<String, ListenableWorker>(mapName = WorkersMap)
-    withBinding<InjektWorkerFactory> { bindAlias<WorkerFactory>() }
-    bindAppInitializer<WorkerAppInitializer>()
+    map<String, ListenableWorker>(mapQualifier = WorkersMap)
+    alias<InjektWorkerFactory, WorkerFactory>()
+    bindAppInitializerIntoMap<WorkerAppInitializer>()
 }
 
 /**
@@ -82,21 +85,15 @@ internal class WorkerAppInitializer(
     }
 }
 
-@Name
+@QualifierMarker
 annotation class WorkersMap {
-    companion object
+    companion object : Qualifier.Element
 }
 
-inline fun <reified T : ListenableWorker> ModuleBuilder.bindWorker(
-    name: Any? = null
+inline fun <reified T : ListenableWorker> ComponentBuilder.bindWorkerIntoMap(
+    workerQualifier: Qualifier = Qualifier.None
 ) {
-    withBinding<T>(name) { bindWorker() }
-}
-
-inline fun <reified T : ListenableWorker> BindingContext<T>.bindWorker(): BindingContext<T> {
-    intoMap<String, ListenableWorker>(
-        entryKey = T::class.java.name,
-        mapName = WorkersMap
-    )
-    return this
+    map<String, ListenableWorker>(mapQualifier = WorkersMap) {
+        put(T::class.java.name, keyOf<T>(qualifier = workerQualifier))
+    }
 }

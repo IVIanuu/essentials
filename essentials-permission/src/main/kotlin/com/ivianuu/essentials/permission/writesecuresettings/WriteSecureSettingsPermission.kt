@@ -8,15 +8,12 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.bindPermissionRequestHandler
-import com.ivianuu.essentials.permission.bindPermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 
 fun WriteSecureSettingsPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
@@ -27,11 +24,6 @@ fun WriteSecureSettingsPermission(vararg metadata: MetaDataKeyWithValue<*>) = Pe
 
 val Metadata.Companion.IsWriteSecureSettingsPermission by lazy {
     Metadata.Key<Unit>("IsWriteSecureSettingsPermission")
-}
-
-internal val EsWriteSecureSettingsPermissionModule = Module {
-    bindPermissionRequestHandler<WriteSecureSettingsPermissionRequestHandler>()
-    bindPermissionStateProvider<WriteSecureSettingsPermissionStateProvider>()
 }
 
 @Factory

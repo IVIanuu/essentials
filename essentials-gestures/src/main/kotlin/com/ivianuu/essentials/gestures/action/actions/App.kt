@@ -16,23 +16,23 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactory
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.bindActionFactoryIntoSet
+import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.flow.Flow
 
-internal val EsAppActionModule = Module {
-    bindActionFactory<AppActionFactory>()
-    bindActionPickerDelegate<AppActionPickerDelegate>()
+internal fun ComponentBuilder.esAppActionBindings() {
+    bindActionFactoryIntoSet<AppActionFactory>()
+    bindActionPickerDelegateIntoSet<AppActionPickerDelegate>()
 }
 
 @Factory

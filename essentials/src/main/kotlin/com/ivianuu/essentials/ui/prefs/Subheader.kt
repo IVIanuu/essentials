@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.ui.core.Opacity
+import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.Box
 import com.ivianuu.essentials.ui.material.Subheader
 
 @Composable
@@ -26,7 +27,7 @@ fun PreferenceSubheader(
     text: @Composable () -> Unit
 ) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
-        Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
+        Box(modifier = drawOpacity(opacity = if (dependenciesOk) 1f else 0.5f)) {
             Subheader(text = text)
         }
     }

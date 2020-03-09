@@ -1,5 +1,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import com.ivianuu.essentials.gestures.action.actions.SingleActionIconProvider
+import com.ivianuu.essentials.gestures.action.actions.getStringResource
+import com.ivianuu.injekt.ComponentBuilder
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
@@ -13,9 +16,8 @@ import com.ivianuu.essentials.gestures.action.bindAction
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 
-internal val EsAssistantActionModule = Module {
+internal fun ComponentBuilder.esAssistantActionBindings() {
     bindAction(
         key = "assistant",
         title = { getStringResource(R.string.es_action_assistant) },

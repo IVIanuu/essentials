@@ -99,7 +99,7 @@ fun <T> PopupMenu(
 
 @Composable
 private fun PopupMenuItem(
-    onSelected: (() -> Unit)?,
+    onSelected: () -> Unit,
     children: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {

@@ -30,18 +30,18 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev461"
+    const val version = "${Build.versionName}-dev462"
 }
 
 object Deps {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0-beta01"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0"
 
     object AndroidX {
         const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
-        private const val composeVersion = "0.0.1-dev65"
+        private const val composeVersion = "0.0.1-dev66"
 
         object Compose {
             const val version = composeVersion
@@ -102,13 +102,14 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev460"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev462"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev104"
+        private const val version = "0.0.1-dev106"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
+        const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
