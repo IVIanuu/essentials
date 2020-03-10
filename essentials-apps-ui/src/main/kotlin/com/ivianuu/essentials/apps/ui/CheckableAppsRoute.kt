@@ -108,12 +108,6 @@ private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) {
-    try {
-        error("lol $app")
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-
     ListItem(
         title = { Text(app.info.appName) },
         leading = {

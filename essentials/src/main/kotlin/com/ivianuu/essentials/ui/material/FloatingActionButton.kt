@@ -86,14 +86,12 @@ val FloatingActionButtonStyleAmbient = staticAmbientOf<FloatingActionButtonStyle
 fun FloatingActionButton(
     modifier: Modifier = Modifier.None,
     onClick: () -> Unit,
-    enabled: Boolean = true,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { DefaultFloatingActionButtonStyle() },
     children: @Composable () -> Unit
 ) {
     androidx.ui.material.FloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        enabled = enabled,
         minSize = style.minSize,
         shape = style.shape,
         color = style.color,
@@ -108,13 +106,11 @@ fun FloatingActionButton(
     icon: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier.None,
     onClick: () -> Unit,
-    enabled: Boolean = true,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrNull ?: ExtendedFloatingActionButtonStyle()
 ) {
     FloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        enabled = enabled,
         style = style
     ) {
         if (icon != null) {
@@ -127,13 +123,12 @@ fun FloatingActionButton(
                 Spacer(LayoutWidth(12.dp))
                 text()
             }
-        } else if (text != null) {
+        }
+        else {
             Container(
                 modifier = LayoutPadding(start = 20.dp, end = 20.dp),
                 children = text
             )
-        } else if (icon != null) {
-            Container(children = icon)
         }
     }
 }

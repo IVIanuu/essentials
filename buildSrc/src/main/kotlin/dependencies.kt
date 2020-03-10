@@ -37,11 +37,10 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0"
 
     object AndroidX {
-        const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
-        const val core = "androidx.core:core-ktx:1.2.0-beta02"
+        const val core = "androidx.core:core-ktx:1.2.0"
 
-        private const val composeVersion = "0.0.1-dev66"
+        private const val composeVersion = "0.0.1-dev68"
 
         object Compose {
             const val version = composeVersion
@@ -49,7 +48,7 @@ object Deps {
         }
 
         object Lifecycle {
-            private const val version = "2.2.0-rc02"
+            private const val version = "2.2.0"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
         }
