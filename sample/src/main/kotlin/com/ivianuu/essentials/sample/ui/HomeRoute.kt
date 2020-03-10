@@ -20,7 +20,6 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.Icon
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.painter.ImagePainter
@@ -38,6 +37,7 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ColorShape
+import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
@@ -49,6 +49,7 @@ import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Divider
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
@@ -59,7 +60,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
 val HomeRoute = Route(transition = DefaultRouteTransition) {
-    androidx.ui.material.Scaffold(
+    Scaffold(
         topAppBar = {
             TopAppBar(
                 title = { Text("Home") },
@@ -81,7 +82,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 }
             )
         },
-        bodyContent = {
+        body = {
             Column {
                 var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
                 if (showBanner) {
@@ -109,7 +110,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
 
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
-                AdapterList(data = items) { item ->
+                ScrollableList(items = items) { _, item ->
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
                     if (items.indexOf(item) != items.lastIndex) {

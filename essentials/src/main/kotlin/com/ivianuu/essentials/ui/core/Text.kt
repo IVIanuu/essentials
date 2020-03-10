@@ -80,11 +80,11 @@ fun Text(
 @Composable
 private fun ToggleableSelectable(
     selectable: Boolean,
-    child: @Composable () -> Unit
+    children: @Composable () -> Unit
 ) {
     Providers(
         SelectionRegistrarAmbient provides if (selectable) SelectionRegistrarAmbient.current else NoopSelectionRegistrar,
-        children = child
+        children = children
     )
 }
 

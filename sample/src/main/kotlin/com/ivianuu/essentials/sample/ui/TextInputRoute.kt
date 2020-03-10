@@ -17,20 +17,26 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Model
+import androidx.compose.Observe
 import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Alignment
+import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.drawOpacity
-import androidx.ui.foundation.AdapterList
+import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import androidx.ui.foundation.Clickable
+import com.ivianuu.essentials.ui.common.ScrollPosition
+import com.ivianuu.essentials.ui.common.ScrollableList
+import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -86,20 +92,24 @@ val TextInputRoute = Route {
         },
         body = {
             if (items.isNotEmpty()) {
-                /*val scrollerPosition = retain(items) { ScrollerPosition() }
+                val animationClock = AnimationClockAmbient.current
+                val flingConfig = FlingConfig()
+                val scrollPosition = retain(items) {
+                    ScrollPosition(animationClock, flingConfigFactory = { flingConfig })
+                }
 
                 Observe {
-                    val lastScrollerPosition = holderFor(scrollerPosition) { scrollerPosition.value }
+                    val lastScrollPosition = holderFor(scrollPosition) { scrollPosition.value }
 
-                    if (lastScrollerPosition.value < scrollerPosition.value) {
+                    if (lastScrollPosition.value < scrollPosition.value) {
                         keyboardManager.hideKeyboard()
                         if (state.searchVisible && state.inputValue.isEmpty()) {
                             state.searchVisible = false
                         }
                     }
-                }*/
+                }
 
-                AdapterList(data = items) { item ->
+                ScrollableList(items = items) { _, item ->
                     ListItem(
                         title = { Text(item) },
                         onClick = {

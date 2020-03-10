@@ -129,7 +129,7 @@ fun Scrollable(
     position: ScrollPosition,
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
-    child: @Composable () -> Unit
+    children: @Composable () -> Unit
 ) {
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         TouchSlopDragGestureDetector(
@@ -185,8 +185,7 @@ fun Scrollable(
                     Axis.Vertical -> dragDirection == Direction.UP || dragDirection == Direction.DOWN
                 }
             },
-            startDragImmediately = position.isAnimating,
-            children = child
+            children = children
         )
     }
 }

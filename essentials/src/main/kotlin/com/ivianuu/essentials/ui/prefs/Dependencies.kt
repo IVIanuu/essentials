@@ -29,13 +29,13 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun Dependencies(
     dependencies: List<Dependency<*>>,
-    child: @Composable (Boolean) -> Unit
+    children: @Composable (Boolean) -> Unit
 ) {
     val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
         dependencies.asDependencyFlow()
     }
     val dependenciesOk = collect(dependenciesOkFlow, false)
-    child(dependenciesOk)
+    children(dependenciesOk)
 }
 
 @Immutable

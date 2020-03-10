@@ -54,7 +54,7 @@ fun AppPickerRoute(
 
             RenderAsyncList(
                 state = viewModel.state.apps,
-                successItemCallback = { app ->
+                successItemCallback = { _, app ->
                     key(app.packageName) {
                         AppInfo(
                             app = app,

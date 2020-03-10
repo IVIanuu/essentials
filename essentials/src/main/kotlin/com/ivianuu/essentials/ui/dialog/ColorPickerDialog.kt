@@ -258,7 +258,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
 @Composable
 private fun BaseColorGridItem(
     onClick: () -> Unit,
-    child: @Composable () -> Unit
+    children: @Composable () -> Unit
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
@@ -266,7 +266,7 @@ private fun BaseColorGridItem(
                 modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
                         LayoutPadding(all = 4.dp) +
                         LayoutAlign.Center,
-                children = child
+                children = children
             )
         }
     }

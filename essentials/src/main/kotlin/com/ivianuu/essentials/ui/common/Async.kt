@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.foundation.AdapterList
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -31,7 +30,7 @@ fun <T> RenderAsyncList(
     loading: @Composable () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItemCallback: @Composable (T) -> Unit
+    successItemCallback: @Composable (Int, T) -> Unit
 ) {
     RenderAsync(
         state = state,
@@ -40,8 +39,8 @@ fun <T> RenderAsyncList(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                AdapterList(
-                    data = items,
+                ScrollableList(
+                    items = items,
                     itemCallback = successItemCallback
                 )
             } else {
