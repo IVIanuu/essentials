@@ -23,14 +23,13 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.layout.Container
+import androidx.ui.foundation.Box
 
 @Immutable
 class RouteTransition(
     val definition: @Composable () -> TransitionDefinition<State>,
-    val generateOps: @Composable (TransitionState, State) -> Ops
+    val generateOps: (TransitionState, State) -> Ops
 ) {
     @Immutable
     interface Type {
@@ -78,9 +77,8 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     val Modifier = RouteTransition.Ops.Key<Modifier>()
     @Composable
     override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
-        Container(
+        Box(
             modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None,
-            alignment = Alignment.TopStart,
             children = children
         )
     }
