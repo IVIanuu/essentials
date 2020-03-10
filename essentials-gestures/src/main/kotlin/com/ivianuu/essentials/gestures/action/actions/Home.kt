@@ -5,17 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.ui.graphics.vector.VectorAsset
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.icon.Essentials
-import com.ivianuu.essentials.icon.EssentialsIcons
+import androidx.ui.graphics.vector.path
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
-import androidx.ui.graphics.vector.path
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.essentials.icon.Essentials
+import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
 val EssentialsIcons.ActionHome: VectorAsset by lazyMaterialIcon {
@@ -31,7 +31,7 @@ val EssentialsIcons.ActionHome: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal fun ComponentBuilder.esHomeActionBindings() {
+internal val EsHomeActionModule = Module {
     if (Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913") {
         bindAccessibilityAction(
             key = "home",
@@ -40,7 +40,7 @@ internal fun ComponentBuilder.esHomeActionBindings() {
             icon = Icons.Essentials.ActionHome
         )
     } else {
-        bindAction(
+        action(
             key = "home",
             title = { getStringResource(R.string.es_action_home) },
             iconProvider = { SingleActionIconProvider(Icons.Essentials.ActionHome) },

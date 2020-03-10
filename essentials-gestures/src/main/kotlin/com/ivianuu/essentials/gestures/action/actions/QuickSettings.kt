@@ -2,14 +2,13 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.graphics.vector.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.lazyMaterialIcon
-import androidx.ui.graphics.vector.path
-import androidx.ui.material.icons.filled.Add
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
 val EssentialsIcons.Settings: VectorAsset by lazyMaterialIcon {
     path {
@@ -62,7 +61,7 @@ val EssentialsIcons.Settings: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal fun ComponentBuilder.esQuickSettingsActionBindings() {
+internal val EsQuickSettingsActionModule = Module {
     bindAccessibilityAction(
         key = "quick_settings",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,

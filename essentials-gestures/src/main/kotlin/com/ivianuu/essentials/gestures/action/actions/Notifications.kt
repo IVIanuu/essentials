@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.gestures.R
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Notifications
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.esNotificationsActionBindings() {
+internal val EsNotificationsActionModule = Module {
     bindAccessibilityAction(
         key = "notifications",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,

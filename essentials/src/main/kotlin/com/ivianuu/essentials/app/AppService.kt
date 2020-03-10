@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.BoxLoggerAppInitializer
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
@@ -40,6 +40,6 @@ inline fun <reified T : AppService> ComponentBuilder.bindAppServiceIntoMap(
     }
 }
 
-fun ComponentBuilder.esAppServicesBindings() {
+val EsAppServiceModule = Module {
     map<String, AppInitializer>(mapQualifier = AppInitializers)
 }

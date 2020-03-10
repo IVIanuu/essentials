@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.coil
+package com.ivianuu.essentials.billing
 
-import com.ivianuu.essentials.coil.bindFetcherIntoMap
-import com.ivianuu.injekt.ComponentBuilder
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.single
 
-/**
- * Binds dependencies related to this module
- */
-fun ComponentBuilder.esAppsCoilBindings() {
-    bindFetcherIntoMap<AppIconFetcher, AppIcon>()
+val EsBillingModule = Module {
+    single { (updateListener: PurchasesUpdatedListener) ->
+        BillingClient
+            .newBuilder(get())
+            .enablePendingPurchases()
+            .setListener(updateListener)
+            .build()
+    }
 }

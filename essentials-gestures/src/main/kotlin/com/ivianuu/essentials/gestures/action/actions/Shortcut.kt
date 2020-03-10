@@ -28,14 +28,14 @@ import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import java.io.ByteArrayOutputStream
 
-internal fun ComponentBuilder.esShortcutActionBindings() {
+internal val EsShortcutActionModule = Module {
     bindActionFactoryIntoSet<ShortcutActionFactory>()
     bindActionPickerDelegateIntoSet<ShortcutActionPickerDelegate>()
 }

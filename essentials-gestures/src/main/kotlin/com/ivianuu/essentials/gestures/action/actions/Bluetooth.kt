@@ -10,16 +10,16 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-internal fun ComponentBuilder.esBluetoothActionBindings() {
+internal val EsBluetoothActionModule = Module {
     if (BluetoothAdapter.getDefaultAdapter() != null) {
-        bindAction(
+        action(
             key = "bluetooth",
             title = { getStringResource(R.string.es_action_bluetooth) },
             iconProvider = { get<BluetoothActionIconProvider>() },

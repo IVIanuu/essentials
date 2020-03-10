@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ComponentOwner
 
 object AppComponent {
     private lateinit var _component: Component
@@ -15,7 +15,7 @@ object AppComponent {
     }
 }
 
-interface AppComponentInjektTrait : InjektTrait {
+interface AppComponentOwner : ComponentOwner {
     override val component: Component
         get() = AppComponent.get()
 }

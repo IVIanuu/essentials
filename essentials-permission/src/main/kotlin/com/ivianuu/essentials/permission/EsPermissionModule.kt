@@ -32,10 +32,10 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermissionSt
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermissionRequestHandler
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermissionStateProvider
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermissionStateProvider
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.set
 
-fun ComponentBuilder.esPermissionBindings() {
+val EsPermissionModule = Module {
     set<PermissionRequestHandler>(setQualifier = PermissionRequestHandlersSet)
     set<PermissionStateProvider>(setQualifier = PermissionStateProvidersSet)
 

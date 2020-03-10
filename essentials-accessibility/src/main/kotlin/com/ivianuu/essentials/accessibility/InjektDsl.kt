@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.set
@@ -34,6 +35,6 @@ inline fun <reified T : AccessibilityComponent> ComponentBuilder.bindAccessibili
     }
 }
 
-internal fun ComponentBuilder.accessibilityComponentsBindings() {
+internal val AccessibilityComponentsModule = Module {
     set<AccessibilityComponent>(setQualifier = AccessibilityComponents)
 }

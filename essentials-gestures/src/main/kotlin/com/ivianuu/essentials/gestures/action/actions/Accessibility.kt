@@ -3,10 +3,10 @@ package com.ivianuu.essentials.gestures.action.actions
 import androidx.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.GlobalActions
 import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
@@ -16,7 +16,7 @@ fun ComponentBuilder.bindAccessibilityAction(
     titleRes: Int,
     icon: VectorAsset
 ) {
-    bindAction(
+    action(
         key = key,
         title = { getStringResource(titleRes) },
         iconProvider = { SingleActionIconProvider(icon) },

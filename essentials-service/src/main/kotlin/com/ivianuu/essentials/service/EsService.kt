@@ -19,9 +19,9 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.app.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -29,7 +29,8 @@ import com.ivianuu.scopes.Scope
 /**
  * Base service
  */
-abstract class EsService : Service(), InjektTrait, ComponentBuilderInterceptor {
+abstract class EsService : Service(), ComponentOwner,
+    ComponentBuilderInterceptor {
 
     override val component by unsafeLazy {
         ServiceComponent(this) {

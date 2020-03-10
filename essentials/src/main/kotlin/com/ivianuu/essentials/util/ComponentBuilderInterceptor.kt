@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.util
 
 import com.ivianuu.injekt.ComponentBuilder
 

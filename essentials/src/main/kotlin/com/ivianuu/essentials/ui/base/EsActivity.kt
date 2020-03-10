@@ -23,24 +23,24 @@ import androidx.compose.Composable
 import androidx.compose.Composition
 import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.app.ComponentBuilderInterceptor
 import com.ivianuu.essentials.ui.core.Environment
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ComponentOwner
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.single
 
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, ComponentBuilderInterceptor {
+abstract class EsActivity : AppCompatActivity(), ComponentOwner, ComponentBuilderInterceptor {
 
     override val component by unsafeLazy {
         ActivityComponent(this) {
-            esActivityBindings(this@EsActivity)
+            modules(EsActivityModule(this@EsActivity))
             buildComponent()
         }
     }
@@ -89,6 +89,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, ComponentBuilderIn
     protected abstract fun content()
 }
 
-private fun ComponentBuilder.esActivityBindings(activity: EsActivity) {
+private fun EsActivityModule(activity: EsActivity) = Module {
     single { NavigatorState(coroutineScope = activity.lifecycleScope) }
 }

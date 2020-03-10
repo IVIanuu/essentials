@@ -8,16 +8,16 @@ import androidx.ui.material.icons.filled.FlashOn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.torch.TorchManager
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal fun ComponentBuilder.esTorchActionBindings() {
+internal val EsTorchActionModule = Module {
     // todo check if device has a torch packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
-    bindAction(
+    action(
         key = "torch",
         title = { getStringResource(R.string.es_action_torch) },
         iconProvider = { get<TorchActionIconProvider>() },

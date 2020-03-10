@@ -20,11 +20,10 @@ import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.android.ForApplication
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.single
 
 @QualifierMarker
@@ -32,7 +31,7 @@ annotation class PrefsPath {
     companion object : Qualifier.Element
 }
 
-fun ComponentBuilder.esDataBindings() {
+val EsDataModule = Module {
     single(qualifier = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
 
     single {

@@ -4,25 +4,25 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Repeat
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.gestures.action.bindAction
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Repeat
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
-internal fun ComponentBuilder.esLastAppActionBindings() {
-    bindAction(
+internal val EsLastAppActionModule = Module {
+    action(
         key = "last_app",
         title = { getStringResource(R.string.es_action_last_app) },
         iconProvider = { SingleActionIconProvider(Icons.Default.Repeat) },

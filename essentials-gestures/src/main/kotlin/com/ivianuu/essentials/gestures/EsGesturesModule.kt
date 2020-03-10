@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing
+package com.ivianuu.essentials.gestures
 
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.essentials.accessibility.bindAccessibilityComponentIntoSet
+import com.ivianuu.essentials.gestures.action.EsActionModule
+import com.ivianuu.injekt.Module
 
-fun ComponentBuilder.esBillingBindings() {
-    single { (updateListener: PurchasesUpdatedListener) ->
-        BillingClient
-            .newBuilder(get())
-            .enablePendingPurchases()
-            .setListener(updateListener)
-            .build()
-    }
+val EsGesturesModule = Module {
+    modules(EsActionModule)
+
+    bindAccessibilityComponentIntoSet<GlobalActions>()
+    bindAccessibilityComponentIntoSet<KeyboardVisibilityDetector>()
+    bindAccessibilityComponentIntoSet<RecentAppsProvider>()
+    bindAccessibilityComponentIntoSet<SecureScreenDetector>()
 }

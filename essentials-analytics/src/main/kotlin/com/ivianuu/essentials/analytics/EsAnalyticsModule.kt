@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.analytics
 
 import com.ivianuu.essentials.app.bindAppInitializerIntoMap
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-fun ComponentBuilder.esAnalyticsBindings() {
+val EsAnalyticsModule = Module {
     bindAppInitializerIntoMap<AnalyticsAppInitializer>()
 }

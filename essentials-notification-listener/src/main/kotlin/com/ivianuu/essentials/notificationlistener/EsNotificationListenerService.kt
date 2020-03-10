@@ -18,9 +18,9 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.app.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
@@ -29,7 +29,8 @@ import com.ivianuu.scopes.Scope
 /**
  * Base notification listener service
  */
-abstract class EsNotificationListenerService : NotificationListenerService(), InjektTrait, ComponentBuilderInterceptor {
+abstract class EsNotificationListenerService : NotificationListenerService(), ComponentOwner,
+    ComponentBuilderInterceptor {
 
     override val component by unsafeLazy {
         ServiceComponent(this) {

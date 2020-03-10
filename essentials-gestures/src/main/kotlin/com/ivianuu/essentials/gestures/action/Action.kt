@@ -32,7 +32,7 @@ interface ActionExecutor {
     suspend operator fun invoke()
 }
 
-fun ComponentBuilder.bindAction(
+fun ComponentBuilder.action(
     key: String,
     title: Component.() -> String,
     permissions: Component.() -> List<Permission> = { emptyList() },

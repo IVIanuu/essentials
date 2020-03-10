@@ -2,13 +2,13 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.graphics.vector.path
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.lazyMaterialIcon
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.icon.Essentials
 import com.ivianuu.essentials.icon.EssentialsIcons
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.lazyMaterialIcon
-import androidx.ui.graphics.vector.path
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
 val EssentialsIcons.ActionRecentApps: VectorAsset by lazyMaterialIcon {
     path {
@@ -31,7 +31,7 @@ val EssentialsIcons.ActionRecentApps: VectorAsset by lazyMaterialIcon {
     }
 }
 
-internal fun ComponentBuilder.esRecentsAppsActionBindings() {
+internal val EsRecentsAppsActionModule = Module {
     bindAccessibilityAction(
         key = "recent_apps",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_RECENTS,

@@ -5,12 +5,12 @@ import android.provider.MediaStore
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoCamera
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
-internal fun ComponentBuilder.esCameraActionBindings() {
-    bindAction(
+internal val EsCameraActionModule = Module {
+    action(
         key = "camera",
         title = { getStringResource(R.string.es_action_camera) },
         iconProvider = { SingleActionIconProvider(Icons.Default.PhotoCamera) },

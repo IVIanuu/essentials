@@ -22,15 +22,15 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.flow.Flow
 
-internal fun ComponentBuilder.esAppActionBindings() {
+internal val EsAppActionModule = Module {
     bindActionFactoryIntoSet<AppActionFactory>()
     bindActionPickerDelegateIntoSet<AppActionPickerDelegate>()
 }

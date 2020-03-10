@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.twilight
 
-import android.content.Context
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.app.bindAppServiceIntoMap
+import com.ivianuu.injekt.Module
 
-/**
- * Basic app dependencies such as preferences or package manager
- */
-fun ComponentBuilder.esAppBindings() {
-    factory { get<Context>().packageManager!! }
+val EsTwilightModule = Module {
+    bindAppServiceIntoMap<TwilightHelper>()
 }

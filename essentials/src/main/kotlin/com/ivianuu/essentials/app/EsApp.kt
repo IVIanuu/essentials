@@ -19,24 +19,25 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.data.esDataBindings
-import com.ivianuu.essentials.ui.core.esUiInitializersBindings
-import com.ivianuu.essentials.util.esUtilBindings
+import com.ivianuu.essentials.data.EsDataModule
+import com.ivianuu.essentials.ui.core.EsUiInitializerModule
+import com.ivianuu.essentials.util.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.InjektPlugins
-import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
-import com.ivianuu.injekt.android.systemServiceBindings
+import com.ivianuu.injekt.android.SystemServiceModule
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.getLazy
 
 /**
  * App
  */
-abstract class EsApp : Application(), InjektTrait, ComponentBuilderInterceptor {
+abstract class EsApp : Application(), ComponentOwner, ComponentBuilderInterceptor {
 
     override val component: Component
         get() {
@@ -65,13 +66,15 @@ abstract class EsApp : Application(), InjektTrait, ComponentBuilderInterceptor {
     protected open fun initializeComponent() {
         AppComponent.init(
             ApplicationComponent(this) {
-                esAppBindings()
-                esAppInitializersBindings()
-                esAppServicesBindings()
-                esDataBindings()
-                systemServiceBindings()
-                esUiInitializersBindings()
-                esUtilBindings()
+                modules(
+                    EsAppModule,
+                    EsAppInitializerModule,
+                    EsAppServiceModule,
+                    EsDataModule,
+                    SystemServiceModule(),
+                    EsUiInitializerModule,
+                    EsUtilModule
+                )
                 buildComponent()
             }
         )

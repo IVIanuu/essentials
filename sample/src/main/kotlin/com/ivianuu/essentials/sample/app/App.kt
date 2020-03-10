@@ -17,37 +17,37 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.app.bindAppInitializerIntoMap
-import com.ivianuu.essentials.apps.coil.esAppsCoilBindings
-import com.ivianuu.essentials.billing.esBillingBindings
-import com.ivianuu.essentials.boot.esBootBindings
-import com.ivianuu.essentials.coil.esCoilBindings
-import com.ivianuu.essentials.gestures.esGesturesBindings
-import com.ivianuu.essentials.permission.esPermissionBindings
-import com.ivianuu.essentials.sample.PurchaseInitializer
-import com.ivianuu.essentials.sample.bootBindings
-import com.ivianuu.essentials.sample.ui.uiBindings
-import com.ivianuu.essentials.sample.work.workBindings
-import com.ivianuu.essentials.twilight.esTwilightBindings
-import com.ivianuu.essentials.work.esWorkBindings
+import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
+import com.ivianuu.essentials.billing.EsBillingModule
+import com.ivianuu.essentials.boot.EsBootModule
+import com.ivianuu.essentials.coil.EsCoilModule
+import com.ivianuu.essentials.gestures.EsGesturesModule
+import com.ivianuu.essentials.permission.EsPermissionModule
+import com.ivianuu.essentials.sample.BootModule
+import com.ivianuu.essentials.sample.ui.UiModule
+import com.ivianuu.essentials.sample.work.WorkModule
+import com.ivianuu.essentials.twilight.EsTwilightModule
+import com.ivianuu.essentials.work.WorkInjectionModule
 import com.ivianuu.injekt.ComponentBuilder
 
 class App : EsApp() {
 
     override fun ComponentBuilder.buildComponent() {
-        esAppsCoilBindings()
-        esBillingBindings()
-        esBootBindings()
-        esCoilBindings()
-        esGesturesBindings()
-        esPermissionBindings()
-        esTwilightBindings()
-        esWorkBindings()
+        modules(
+            EsAppsCoilModule,
+            EsBillingModule,
+            EsBootModule,
+            EsCoilModule,
+            EsGesturesModule,
+            EsPermissionModule,
+            EsTwilightModule,
+            WorkInjectionModule,
 
-        appBindings()
-        bootBindings()
-        uiBindings()
-        workBindings()
+            AppModule,
+            BootModule,
+            UiModule,
+            WorkModule
+        )
     }
 
 }

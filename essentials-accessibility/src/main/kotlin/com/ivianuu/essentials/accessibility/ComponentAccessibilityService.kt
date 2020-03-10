@@ -20,13 +20,19 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.app.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.addFlag
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.getLazy
 
-class ComponentAccessibilityService : EsAccessibilityService(), ComponentBuilderInterceptor {
+class ComponentAccessibilityService : EsAccessibilityService(),
+    ComponentBuilderInterceptor {
 
     private val components: Set<AccessibilityComponent> by getLazy(qualifier = AccessibilityComponents)
+
+    override fun ComponentBuilder.buildComponent() {
+        modules(AccessibilityComponentsModule)
+    }
 
     override fun onServiceConnected() {
         super.onServiceConnected()

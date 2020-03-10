@@ -5,12 +5,12 @@ import android.content.Intent
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Search
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
-internal fun ComponentBuilder.esSearchActionBindings() {
-    bindAction(
+internal val EsSearchActionModule = Module {
+    action(
         key = "search",
         title = { getStringResource(R.string.es_action_search) },
         iconProvider = { SingleActionIconProvider(Icons.Default.Search) },

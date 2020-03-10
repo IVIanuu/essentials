@@ -21,12 +21,12 @@ import androidx.work.WorkerParameters
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorkerIntoMap
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.delay
 
-fun ComponentBuilder.workBindings() {
+val WorkModule = Module {
     bindWorkerIntoMap<TestWorker>()
 }
 

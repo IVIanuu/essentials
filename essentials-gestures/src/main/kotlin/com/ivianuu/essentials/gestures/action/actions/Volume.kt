@@ -1,17 +1,16 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.media.AudioManager
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.bindAction
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.VolumeUp
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.esVolumeActionBindings() {
-    bindAction(
+internal val EsVolumeActionModule = Module {
+    action(
         key = "volume",
         title = { getStringResource(R.string.es_action_volume) },
         iconProvider = { SingleActionIconProvider(Icons.Default.VolumeUp) },

@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.common.set
 
 /**
  * Marks a component as boot aware
@@ -40,6 +40,6 @@ inline fun <reified T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
     }
 }
 
-fun ComponentBuilder.esBootBindings() {
+val EsBootModule = Module {
     map<String, BootAware>(mapQualifier = BootAwareComponents)
 }

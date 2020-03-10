@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
 
-fun ComponentBuilder.esBillingBindings() {
+val EsBillingModule = Module {
     alias<DebugBillingClient, BillingClient>()
 }

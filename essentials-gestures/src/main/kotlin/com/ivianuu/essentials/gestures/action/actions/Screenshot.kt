@@ -2,19 +2,19 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.gestures.action.bindAction
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoAlbum
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 
 @SuppressLint("InlinedApi")
-internal fun ComponentBuilder.esScreenshotActionBindings() {
-    bindAction(
+internal val EsScreenshotActionModule = Module {
+    action(
         key = "screenshot",
         title = { getStringResource(R.string.es_action_screenshot) },
         iconProvider = { SingleActionIconProvider(Icons.Default.PhotoAlbum) },
@@ -31,7 +31,7 @@ internal fun ComponentBuilder.esScreenshotActionBindings() {
                 get<RootActionExecutor>(parameters = parametersOf("input keyevent 26"))
             }
 
-            return@bindAction executor.beforeAction { delay(500) }
+            return@action executor.beforeAction { delay(500) }
         }
     )
 }

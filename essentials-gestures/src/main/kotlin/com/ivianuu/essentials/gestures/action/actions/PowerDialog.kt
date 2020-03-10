@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.gestures.R
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PowerSettingsNew
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.esPowerDialogActionBindings() {
+internal val EsPowerDialogActionModule = Module {
     bindAccessibilityAction(
         key = "power_dialog",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_POWER_DIALOG,
