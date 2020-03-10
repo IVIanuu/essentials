@@ -91,7 +91,6 @@ val NavBarRoute = Route {
                     val navigator = NavigatorAmbient.current
 
                     Button(
-                        "Toggle nav bar",
                         onClick = {
                             if (secureSettingsHelper.canWriteSecureSettings()) {
                                 hideNavBar.value = !hideNavBar.value
@@ -99,7 +98,9 @@ val NavBarRoute = Route {
                                 navigator.push(SecureSettingsRoute(true))
                             }
                         }
-                    )
+                    ) {
+                        Text("Toggle nav bar")
+                    }
                 }
             }
         }

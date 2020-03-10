@@ -27,33 +27,34 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
 fun DialogButton(
-    text: String,
     onClick: () -> Unit,
     enabled: Boolean = true,
     dismissDialogOnClick: Boolean = true,
-    style: ButtonStyle = ButtonStyleAmbient.currentOrNull ?: TextButtonStyle()
+    style: ButtonStyle = ButtonStyleAmbient.currentOrNull ?: TextButtonStyle(),
+    children: @Composable () -> Unit
 ) {
     val navigator = NavigatorAmbient.current
     Button(
-        text = text,
         onClick = {
             onClick()
             if (dismissDialogOnClick) navigator.popTop()
         },
+        enabled = enabled,
         style = style,
-        modifier = drawOpacity(opacity = if (enabled) 1f else 0.5f)
+        modifier = drawOpacity(opacity = if (enabled) 1f else 0.5f),
+        children = children
     )
 }
 
 @Composable
 fun DialogCloseButton(
-    text: String,
-    style: ButtonStyle = TextButtonStyle()
+    style: ButtonStyle = TextButtonStyle(),
+    children: @Composable() () -> Unit
 ) {
     DialogButton(
-        text = text,
+        onClick = {},
         dismissDialogOnClick = true,
         style = style,
-        onClick = {}
+        children = children
     )
 }

@@ -92,18 +92,18 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                         },
                         content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
                         actions = {
-                            Button(
-                                text = "Dismiss",
-                                onClick = { showBanner = false }
-                            )
+                            Button(onClick = { showBanner = false }) {
+                                Text("Dismiss")
+                            }
 
                             Button(
-                                text = "Learn More",
                                 onClick = navigateOnClick {
                                     showBanner = false
                                     UrlRoute("https://google.com")
                                 }
-                            )
+                            ) {
+                                Text("Learn More")
+                            }
                         }
                     )
                 }
@@ -127,8 +127,8 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
 
 @Composable
 private fun HomeItem(
-    item: HomeItem,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    item: HomeItem
 ) {
     ListItem(
         title = { Text(item.title) },

@@ -57,20 +57,18 @@ val BillingRoute = Route {
 
             if (!isPurchased) {
                 Button(
-                    text = "Purchase",
                     onClick = launchOnClick {
                         val result = purchaseManager.purchase(DummySku)
                         d { "purchase result $result" }
                     }
-                )
+                ) { Text("Purchase") }
             } else {
                 Button(
-                    text = "Consume",
                     onClick = launchOnClick {
                         val result = purchaseManager.consume(DummySku)
                         d { "consume result $result" }
                     }
-                )
+                ) { Text("Consume") }
             }
         }
     }

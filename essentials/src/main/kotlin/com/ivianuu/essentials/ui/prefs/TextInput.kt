@@ -23,6 +23,7 @@ import androidx.ui.input.KeyboardType
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
@@ -85,12 +86,15 @@ fun TextInputPreference(
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     DialogButton(
-                        text = stringResource(R.string.es_ok),
                         enabled = allowEmpty || currentValue.isNotEmpty(),
                         onClick = { context.setIfOk(currentValue) }
-                    )
+                    ) { Text(stringResource(R.string.es_ok)) }
                 },
-                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
+                negativeButton = {
+                    DialogCloseButton {
+                        Text(stringResource(R.string.es_cancel))
+                    }
+                }
             )
         }
     )

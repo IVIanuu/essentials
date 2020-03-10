@@ -105,8 +105,8 @@ fun CheckableAppsScreen(
 
 @Composable
 private fun CheckableApp(
-    app: CheckableApp,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    app: CheckableApp
 ) {
     ListItem(
         title = { Text(app.info.appName) },

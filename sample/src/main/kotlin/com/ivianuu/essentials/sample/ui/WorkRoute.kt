@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.layout.Center
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
@@ -27,10 +28,9 @@ val WorkRoute = Route {
     SimpleScreen(title = "Work") {
         Center {
             val workScheduler = inject<WorkScheduler>()
-            Button(
-                text = "Perform work",
-                onClick = { workScheduler.scheduleWork() }
-            )
+            Button(onClick = { workScheduler.scheduleWork() }) {
+                Text("Perform work")
+            }
         }
     }
 }

@@ -57,8 +57,8 @@ fun AppPickerRoute(
                 successItemCallback = { _, app ->
                     key(app.packageName) {
                         AppInfo(
-                            app = app,
-                            onClick = { viewModel.appClicked(app) }
+                            onClick = { viewModel.appClicked(app) },
+                            app = app
                         )
                     }
                 }
@@ -69,8 +69,8 @@ fun AppPickerRoute(
 
 @Composable
 private fun AppInfo(
+    onClick: () -> Unit,
     app: AppInfo,
-    onClick: () -> Unit
 ) {
     ListItem(
         title = { Text(app.appName) },

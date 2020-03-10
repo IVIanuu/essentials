@@ -49,13 +49,14 @@ val TorchRoute = Route {
                 val coroutineScope = CoroutineScopeAmbient.current
                 val dispatchers = inject<AppCoroutineDispatchers>()
                 Button(
-                    text = "Toggle torch",
                     onClick = {
                         coroutineScope.launch(dispatchers.default) {
                             torchManager.toggleTorch()
                         }
                     }
-                )
+                ) {
+                    Text("Toggle torch")
+                }
             }
         }
     }

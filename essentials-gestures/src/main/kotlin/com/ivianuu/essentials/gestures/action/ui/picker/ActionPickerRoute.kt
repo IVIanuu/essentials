@@ -43,8 +43,8 @@ sealed class ActionPickerResult {
 
 @Composable
 private fun ActionPickerItem(
-    item: ActionPickerItem,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    item: ActionPickerItem
 ) {
     ListItem(
         leading = { item.icon() },

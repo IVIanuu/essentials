@@ -67,14 +67,10 @@ val DialogsRoute = Route {
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
                             positiveButton = {
-                                DialogCloseButton(
-                                    "OK"
-                                )
+                                DialogCloseButton { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Cancel"
-                                )
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -86,19 +82,13 @@ val DialogsRoute = Route {
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
                             positiveButton = {
-                                DialogCloseButton(
-                                    "Positive"
-                                )
+                                DialogCloseButton { Text("Positive") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Negative"
-                                )
+                                DialogCloseButton { Text("Negative") }
                             },
                             neutralButton = {
-                                DialogCloseButton(
-                                    "Neutral"
-                                )
+                                DialogCloseButton { Text("Neutral") }
                             }
                         )
                     }
@@ -119,9 +109,7 @@ val DialogsRoute = Route {
                             title = { Text("With icon") },
                             icon = { Icon(Icons.Essentials.Settings) },
                             positiveButton = {
-                                DialogCloseButton(
-                                    "OK"
-                                )
+                                DialogCloseButton { Text("OK") }
                             }
                         )
                     }
@@ -139,14 +127,10 @@ val DialogsRoute = Route {
                     ) {
                         MaterialDialog(
                             positiveButton = {
-                                DialogCloseButton(
-                                    "OK"
-                                )
+                                DialogCloseButton { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Cancel"
-                                )
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -159,14 +143,10 @@ val DialogsRoute = Route {
                             content = { Text("Shows stacked buttons") },
                             buttonLayout = AlertDialogButtonLayout.Stacked,
                             positiveButton = {
-                                DialogCloseButton(
-                                    "OK"
-                                )
+                                DialogCloseButton { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Cancel"
-                                )
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -179,19 +159,13 @@ val DialogsRoute = Route {
                             content = { Text("Shows stacked buttons") },
                             buttonLayout = AlertDialogButtonLayout.Stacked,
                             positiveButton = {
-                                DialogCloseButton(
-                                    "Positive"
-                                )
+                                DialogCloseButton { Text("Positive") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Negative"
-                                )
+                                DialogCloseButton { Text("Negative") }
                             },
                             neutralButton = {
-                                DialogCloseButton(
-                                    "Neutral"
-                                )
+                                DialogCloseButton { Text("Neutral") }
                             }
                         )
                     }
@@ -203,9 +177,7 @@ val DialogsRoute = Route {
                         MaterialDialog(
                             title = { Text("Not cancelable") },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Close"
-                                )
+                                DialogCloseButton { Text("Close") }
                             }
                         )
                     }
@@ -230,9 +202,7 @@ val DialogsRoute = Route {
                                 }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    "Close"
-                                )
+                                DialogCloseButton { Text("Close") }
                             }
                         )
                     }
@@ -253,13 +223,12 @@ val DialogsRoute = Route {
                             itemCallback = { Text("Item: $it") },
                             positiveButton = {
                                 DialogButton(
-                                    text = "OK",
                                     onClick = {
                                         setSelectedSingleChoiceItem(tmpSelectedItem)
-                                    })
+                                    }) { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(text = "Cancel")
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -279,13 +248,12 @@ val DialogsRoute = Route {
                             itemCallback = { Text(it) },
                             positiveButton = {
                                 DialogButton(
-                                    text = "OK",
                                     onClick = {
                                         setSelectedMultiChoiceItems(tmpSelectedItems)
-                                    })
+                                    }) { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(text = "Cancel")
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -311,15 +279,13 @@ val DialogsRoute = Route {
                             hint = "Hint..",
                             positiveButton = {
                                 DialogButton(
-                                    text = "OK",
+                                    enabled = tmpTextInputValue.isNotEmpty(),
                                     onClick = {
                                         setTextInputValue(tmpTextInputValue)
-                                    })
+                                    }) { Text("OK") }
                             },
                             negativeButton = {
-                                DialogCloseButton(
-                                    text = "Cancel"
-                                )
+                                DialogCloseButton { Text("Cancel") }
                             }
                         )
                     }
@@ -337,11 +303,10 @@ private fun DialogLauncherButton(
 ) {
     val navigator = NavigatorAmbient.current
     Button(
-        text = text,
         onClick = {
             navigator.push(DialogRoute(dismissible = dismissible, dialog = dialog))
         }
-    )
+    ) { Text(text) }
 
     Spacer(LayoutHeight(8.dp))
 }

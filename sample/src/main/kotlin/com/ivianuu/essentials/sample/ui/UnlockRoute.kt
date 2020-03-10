@@ -21,6 +21,7 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
@@ -36,7 +37,6 @@ val UnlockRoute = Route {
             val screenUnlocker = inject<ScreenUnlocker>()
             val toaster = inject<Toaster>()
             Button(
-                text = "Unlock",
                 onClick = launchOnClick {
                     toaster.toast("Turn the screen off and on")
 
@@ -47,7 +47,7 @@ val UnlockRoute = Route {
                     val unlocked = screenUnlocker.unlockScreen()
                     toaster.toast("Screen unlocked $unlocked")
                 }
-            )
+            ) { Text("Unlock") }
         }
     }
 }

@@ -60,8 +60,8 @@ fun ShortcutPickerRoute(
 
 @Composable
 private fun ShortcutInfo(
-    @Pivotal info: ShortcutInfo,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    @Pivotal info: ShortcutInfo
 ) {
     ListItem(
         leading = {

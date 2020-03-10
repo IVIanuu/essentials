@@ -74,7 +74,11 @@ fun <T> SingleChoiceListPreference(
                 onSelect = { context.setIfOk(it.value) },
                 itemCallback = { Text(it.title) },
                 title = dialogTitle,
-                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
+                negativeButton = {
+                    DialogCloseButton {
+                        Text(stringResource(R.string.es_cancel))
+                    }
+                }
             )
         }
     )

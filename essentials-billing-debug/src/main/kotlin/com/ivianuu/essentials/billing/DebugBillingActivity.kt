@@ -113,7 +113,6 @@ class DebugBillingActivity : EsActivity() {
             content = { Text(skuDetails.description) },
             positiveButton = {
                 DialogButton(
-                    text = "Purchase",
                     style = ContainedButtonStyle(
                         backgroundColor = GooglePlayGreen,
                         contentColor = guessingContentColorFor(GooglePlayGreen)
@@ -129,7 +128,7 @@ class DebugBillingActivity : EsActivity() {
                             finish()
                         }
                     }
-                )
+                ) { Text("Purchase") }
             }
         )
     }

@@ -84,9 +84,9 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
             },
             negativeButton = {
                 val activity = ActivityAmbient.current
-                DialogButton(text = stringResource(R.string.es_cancel), onClick = {
-                    activity.finish()
-                })
+                DialogButton(onClick = { activity.finish() }) {
+                    Text(stringResource(R.string.es_cancel))
+                }
             }
         )
     }
@@ -94,8 +94,8 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
 
 @Composable
 private fun Permission(
-    @Pivotal permission: Permission,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    @Pivotal permission: Permission
 ) {
     ListItem(
         title = { Text(permission.metadata[Metadata.Title]) },

@@ -28,7 +28,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -109,22 +108,5 @@ fun Button(
         elevation = style.elevation,
         innerPadding = style.innerPadding,
         children = children
-    )
-}
-
-@Composable
-fun Button(
-    text: String,
-    modifier: Modifier = Modifier.None,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() }
-) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        enabled = enabled,
-        style = style,
-        children = { Text(text) }
     )
 }

@@ -45,8 +45,8 @@ val TwilightSettingsRoute = Route {
 @Composable
 private fun TwilightModeItem(
     @Pivotal mode: TwilightMode,
-    isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isSelected: Boolean
 ) {
     ListItem(
         title = { Text(stringResource(mode.titleRes)) },

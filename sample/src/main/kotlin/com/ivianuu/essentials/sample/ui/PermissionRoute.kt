@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
 import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Text
 import androidx.ui.foundation.Icon
 import androidx.ui.layout.Center
 import androidx.ui.material.icons.Icons
@@ -100,7 +101,6 @@ val PermissionRoute = Route {
 
         Center {
             Button(
-                text = "Request",
                 onClick = {
                     coroutineScope.launch {
                         val granted = manager.request(
@@ -115,7 +115,9 @@ val PermissionRoute = Route {
                         d { "granted $granted" }
                     }
                 }
-            )
+            ) {
+                Text("Request")
+            }
         }
     }
 }

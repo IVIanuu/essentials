@@ -52,16 +52,15 @@ fun TextInputRoute(
         },
         positiveButton = {
             DialogButton(
-                text = stringResource(R.string.es_ok),
                 dismissDialogOnClick = false,
                 enabled = allowEmpty || currentValue.isNotEmpty(),
                 onClick = {
                     navigator.popTop(result = currentValue)
                 }
-            )
+            ) { Text(stringResource(R.string.es_ok)) }
         },
         negativeButton = {
-            DialogCloseButton(stringResource(R.string.es_cancel))
+            DialogCloseButton { Text(stringResource(R.string.es_cancel)) }
         }
     )
 }

@@ -6,6 +6,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutors
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerRoute
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -21,7 +22,6 @@ val ActionsRoute = Route {
 
         Center {
             Button(
-                text = "Pick action",
                 onClick = {
                     GlobalScope.launch {
                         val action = navigator.push<ActionPickerResult>(
@@ -34,7 +34,7 @@ val ActionsRoute = Route {
                         actionExecutors.execute(action)
                     }
                 }
-            )
+            ) { Text("Pick action") }
         }
     }
 }

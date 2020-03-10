@@ -83,14 +83,17 @@ fun <T> MultiChoiceListPreference(
                 title = dialogTitle,
                 positiveButton = {
                     DialogButton(
-                        text = stringResource(R.string.es_ok),
                         onClick = {
                             val newValue = selectedItems.map { it.value }.toSet()
                             context.setIfOk(newValue)
                         }
-                    )
+                    ) { Text(stringResource(R.string.es_ok)) }
                 },
-                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
+                negativeButton = {
+                    DialogCloseButton {
+                        Text(stringResource(R.string.es_cancel))
+                    }
+                }
             )
         }
     )

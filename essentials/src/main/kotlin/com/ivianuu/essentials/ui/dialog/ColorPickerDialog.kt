@@ -113,20 +113,20 @@ fun ColorPickerDialog(
         applyContentPadding = false,
         positiveButton = {
             ColoredDialogButton(
-                text = "OK",
                 color = currentColor,
                 dismissOnSelection = dismissOnSelection,
                 onClick = { onColorSelected(currentColor) }
-            )
+            ) { Text("OK") }
         },
-        negativeButton = { DialogCloseButton(text = "Cancel") },
+        negativeButton = { DialogCloseButton { Text("Cancel") } },
         neutralButton = {
             if (allowCustomArgb) {
                 DialogButton(
-                    text = otherPage.title,
                     dismissDialogOnClick = false,
                     onClick = { setCurrentPage(otherPage) }
-                )
+                ) {
+                    Text(otherPage.title)
+                }
             }
         },
         content = {
@@ -218,9 +218,9 @@ private sealed class ColorGridItem {
 
 @Composable
 private fun ColorGridItem(
+    onClick: () -> Unit,
     color: Color,
-    isSelected: Boolean,
-    onClick: () -> Unit
+    isSelected: Boolean
 ) {
     BaseColorGridItem(onClick = onClick) {
         Surface(
@@ -246,7 +246,10 @@ private fun ColorGridItem(
 }
 
 @Composable
-private fun ColorGridBackButton(onClick: () -> Unit) {
+private fun ColorGridBackButton(
+    onClick: () -> Unit,
+    unit: Unit = Unit
+) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             icon = Icons.Default.ArrowBack,
@@ -353,16 +356,16 @@ private fun ColorEditorHeader(
 
 @Composable
 private fun ColoredDialogButton(
-    text: String,
+    onClick: () -> Unit,
     color: Color,
     dismissOnSelection: Boolean,
-    onClick: () -> Unit
+    children: @Composable() () -> Unit
 ) {
     DialogButton(
-        text = text,
+        onClick = onClick,
         dismissDialogOnClick = dismissOnSelection,
         style = TextButtonStyle(contentColor = color),
-        onClick = onClick
+        children = children
     )
 }
 
