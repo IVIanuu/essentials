@@ -39,10 +39,11 @@ fun <T> RenderAsyncList(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                ScrollableList(
-                    items = items,
-                    itemCallback = successItemCallback
-                )
+                ScrollableList(items = items) { index, item ->
+                    ifChanged(item) {
+                        successItemCallback(index, item)
+                    }
+                }
             } else {
                 successEmpty()
             }

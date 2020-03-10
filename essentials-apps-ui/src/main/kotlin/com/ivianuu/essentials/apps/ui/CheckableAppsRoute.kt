@@ -18,11 +18,11 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.key
 import androidx.compose.onCommit
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -91,12 +91,10 @@ fun CheckableAppsScreen(
             RenderAsyncList(
                 state = viewModel.state.apps,
                 successItemCallback = { _, app ->
-                    key(app.info.packageName) {
-                        CheckableApp(
-                            app = app,
-                            onClick = { viewModel.appClicked(app) }
-                        )
-                    }
+                    CheckableApp(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
                 }
             )
         }
@@ -108,6 +106,7 @@ private fun CheckableApp(
     onClick: () -> Unit,
     app: CheckableApp
 ) {
+    d { "invoke checkable app $app" }
     ListItem(
         title = { Text(app.info.appName) },
         leading = {
