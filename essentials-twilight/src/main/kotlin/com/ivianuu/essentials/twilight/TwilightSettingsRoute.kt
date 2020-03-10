@@ -28,9 +28,8 @@ import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.Route
 
 val TwilightSettingsRoute = Route {
-    val prefs = inject<TwilightPrefs>()
-
     ScrollableScreen(title = stringResource(R.string.es_twilight_title)) {
+        val prefs = inject<TwilightPrefs>()
         var twilightMode by unfoldBox(prefs.twilightMode)
         TwilightMode.values().toList().forEach { mode ->
             TwilightModeItem(
