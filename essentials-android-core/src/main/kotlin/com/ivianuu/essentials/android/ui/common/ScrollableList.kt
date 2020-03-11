@@ -33,7 +33,7 @@ fun <T> ScrollableList(
     items: List<T>,
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    position: ScrollPosition = RetainedScrollPosition(),
+    scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
     itemCallback: @Composable (Int, T) -> Unit
 ) {
@@ -41,7 +41,7 @@ fun <T> ScrollableList(
         itemCount = items.size,
         modifier = modifier,
         direction = direction,
-        position = position,
+        scrollableState = scrollableState,
         enabled = enabled,
         itemCallback = { itemCallback(it, items[it]) }
     )
@@ -52,14 +52,14 @@ fun ScrollableList(
     itemCount: Int,
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    position: ScrollPosition = RetainedScrollPosition(),
+    scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
     itemCallback: @Composable (Int) -> Unit
 ) {
     ScrollableList(
         modifier = modifier,
         direction = direction,
-        position = position,
+        scrollableState = scrollableState,
         enabled = enabled,
         itemCallbackFactory = { index ->
             if (index in 0 until itemCount) (@Composable { itemCallback(index) })
@@ -72,7 +72,7 @@ fun ScrollableList(
 fun ScrollableList(
     modifier: Modifier = Modifier.None,
     direction: Axis = Axis.Vertical,
-    position: ScrollPosition = RetainedScrollPosition(),
+    scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
     itemCallbackFactory: (Int) -> @Composable (() -> Unit)?
 ) {
@@ -81,13 +81,13 @@ fun ScrollableList(
     state.compositionRef = compositionReference()
     state.forceRecompose = true
     state.composableFactory = itemCallbackFactory
-    state.position = position
+    state.scrollableState = scrollableState
     state.direction = direction
 
     onDispose { state.dispose() }
 
     Scrollable(
-        position = state.position,
+        state = state.scrollableState,
         direction = direction,
         enabled = enabled
     ) {
@@ -98,7 +98,7 @@ fun ScrollableList(
         )
 
         Observe {
-            position.value // force recompose on reads
+            scrollableState.value // force recompose on reads
             state.onScroll()
         }
     }
@@ -112,7 +112,7 @@ private class ScrollableListState {
     var forceRecompose = false
     lateinit var compositionRef: CompositionReference
     lateinit var context: Context
-    lateinit var position: ScrollPosition
+    lateinit var scrollableState: ScrollableState
 
     lateinit var direction: Axis
 
@@ -180,7 +180,7 @@ private class ScrollableListState {
             val cacheSize = with(measureScope) { 250.ipx/*.toIntPx()*/ }
 
             lateinit var scrollPosition: Px
-            rootNode.ignoreModelReads { scrollPosition = position.value }
+            rootNode.ignoreModelReads { scrollPosition = scrollableState.value }
 
             val targetStartScrollPosition = max(scrollPosition - cacheSize, 0.px)
 
@@ -242,7 +242,7 @@ private class ScrollableListState {
                         break
                     } else {
                         rootNode.ignoreModelReads {
-                            position.correctBy(-scrollPosition)
+                            scrollableState.correctBy(-scrollPosition)
                         }
                         d { "end measure $version ran out of children with correction $scrollPosition" }
                         return doLayout(
@@ -332,9 +332,9 @@ private class ScrollableListState {
                     endScrollPosition - viewportMainAxisSize,
                     0.px
                 ) else Px.Infinity
-                if (estimatedMaxScrollPosition != position.maxValue) {
+                if (estimatedMaxScrollPosition != scrollableState.maxValue) {
                     d { "update max scroll position $estimatedMaxScrollPosition" }
-                    position.updateBounds(maxValue = estimatedMaxScrollPosition)
+                    scrollableState.updateBounds(maxValue = estimatedMaxScrollPosition)
                 }
             }
 

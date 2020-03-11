@@ -2,14 +2,15 @@ package com.ivianuu.essentials.android.ui.common
 
 import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationClockObservable
+import androidx.animation.AnimationClockObserver
 import androidx.animation.AnimationEndReason
 import androidx.compose.Composable
 import androidx.compose.Model
+import androidx.compose.mutableStateOf
 import androidx.ui.animation.AnimatedFloatModel
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.Direction
 import androidx.ui.core.gesture.DragObserver
-import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.TouchSlopDragGestureDetector
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.animation.fling
@@ -22,28 +23,29 @@ import com.ivianuu.essentials.android.ui.core.Axis
 import com.ivianuu.essentials.android.ui.core.retain
 
 @Composable
-fun RetainedScrollPosition(
+fun RetainedScrollableState(
     initial: Px = 0.px,
     minValue: Px = 0.px,
     maxValue: Px = Px.Infinity,
     animationClock: AnimationClockObservable = AnimationClockAmbient.current
-): ScrollPosition {
+): ScrollableState {
     val flingConfig = FlingConfig()
     return retain {
-        ScrollPosition(
+        ScrollableState(
             animationClock,
-            initial, minValue, maxValue
-        ) { flingConfig }
+            initial, minValue, maxValue,
+            flingConfig
+        )
     }
 }
 
 @Model
-class ScrollPosition(
+class ScrollableState(
     animationClock: AnimationClockObservable,
     initial: Px = 0.px,
     minValue: Px = 0.px,
     maxValue: Px = Px.Infinity,
-    var flingConfigFactory: (Px) -> FlingConfig
+    val flingConfig: FlingConfig
 ) {
 
     val value: Px
@@ -56,25 +58,31 @@ class ScrollPosition(
     private var _maxValue = maxValue
     val maxValue: Px get() = _maxValue
 
-    private val animatedFloat = AnimatedFloatModel(initial.value, animationClock).apply {
-        setBounds(minValue.value, maxValue.value)
+    var isAnimating: Boolean by mutableStateOf(false)
+        private set
+
+    private val clocksProxy = object : AnimationClockObservable {
+        override fun subscribe(observer: AnimationClockObserver) {
+            isAnimating = true
+            animationClock.subscribe(observer)
+        }
+
+        override fun unsubscribe(observer: AnimationClockObserver) {
+            isAnimating = false
+            animationClock.unsubscribe(observer)
+        }
     }
 
-    val isAnimating: Boolean
-        get() = animatedFloat.isRunning
-
-    var direction = ScrollDirection.Idle
-        internal set
+    private val animatedFloat = AnimatedFloatModel(initial.value, clocksProxy).apply {
+        setBounds(minValue.value, maxValue.value)
+    }
 
     fun smoothScrollTo(
         value: Px,
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        animatedFloat.animateTo(value.value, anim) { endReason, finishValue ->
-            onEnd(endReason, finishValue)
-            direction = ScrollDirection.Idle
-        }
+        animatedFloat.animateTo(value.value, anim, onEnd)
     }
 
     fun smoothScrollBy(
@@ -82,17 +90,12 @@ class ScrollPosition(
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        smoothScrollTo(this.value + value, anim) { endReason, finishValue ->
-            onEnd(endReason, finishValue)
-            direction = ScrollDirection.Idle
-        }
+        smoothScrollTo(this.value + value, anim, onEnd)
     }
 
     fun scrollTo(value: Px) {
-        if (this.value != value) {
-            d { "scroll to $value" }
-            animatedFloat.snapTo(value.value)
-        }
+        if (this.value != value) d { "scroll to $value" }
+        animatedFloat.snapTo(value.value.coerceIn(_minValue.value, _maxValue.value))
     }
 
     fun scrollBy(value: Px) {
@@ -126,72 +129,55 @@ class ScrollPosition(
 
 @Composable
 fun Scrollable(
-    position: ScrollPosition,
+    state: ScrollableState,
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
     children: @Composable () -> Unit
 ) {
-    PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
-        TouchSlopDragGestureDetector(
-            dragObserver = object : DragObserver {
-                override fun onDrag(dragDistance: PxPosition): PxPosition {
-                    if (!enabled) return PxPosition.Origin
-                    val oldValue = position.value
-                    val distance = -when (direction) {
-                        Axis.Horizontal -> dragDistance.x
-                        Axis.Vertical -> dragDistance.y
-                    }
-                    val newValue =
-                        (oldValue + distance).coerceIn(position.minValue, position.maxValue)
-
-                    val scrollDirection = when (direction) {
-                        Axis.Horizontal -> {
-                            if (dragDistance.x <= 0.px) ScrollDirection.Forward else ScrollDirection.Reverse
-                        }
-                        Axis.Vertical -> {
-                            if (dragDistance.y <= 0.px) ScrollDirection.Forward else ScrollDirection.Reverse
-                        }
-                    }
-
-                    val consumed = -(newValue - oldValue)
-                    position.direction = scrollDirection
-                    position.scrollTo(newValue)
-
-                    return when (direction) {
-                        Axis.Horizontal -> PxPosition(
-                            x = consumed,
-                            y = 0.px
-                        )
-                        Axis.Vertical -> PxPosition(
-                            x = 0.px,
-                            y = consumed
-                        )
-                    }
+    TouchSlopDragGestureDetector(
+        dragObserver = object : DragObserver {
+            override fun onDrag(dragDistance: PxPosition): PxPosition {
+                if (!enabled) return PxPosition.Origin
+                val oldValue = state.value
+                val distance = -when (direction) {
+                    Axis.Horizontal -> dragDistance.x
+                    Axis.Vertical -> dragDistance.y
                 }
+                val newValue =
+                    (oldValue + distance).coerceIn(state.minValue, state.maxValue)
 
-                override fun onStop(velocity: PxPosition) {
-                    if (!enabled) return
-                    val mainAxisVelocity = -when (direction) {
-                        Axis.Horizontal -> velocity.x
-                        Axis.Vertical -> velocity.y
-                    }
-                    position.flingBy(mainAxisVelocity)
-                }
-            },
-            canDrag = { dragDirection ->
-                if (!enabled) return@TouchSlopDragGestureDetector false
-                return@TouchSlopDragGestureDetector when (direction) {
-                    Axis.Horizontal -> dragDirection == Direction.LEFT || dragDirection == Direction.RIGHT
-                    Axis.Vertical -> dragDirection == Direction.UP || dragDirection == Direction.DOWN
-                }
-            },
-            children = children
-        )
-    }
-}
+                val consumed = -(newValue - oldValue)
+                state.scrollTo(newValue)
 
-enum class ScrollDirection {
-    Idle,
-    Forward,
-    Reverse
+                return when (direction) {
+                    Axis.Horizontal -> PxPosition(
+                        x = consumed,
+                        y = 0.px
+                    )
+                    Axis.Vertical -> PxPosition(
+                        x = 0.px,
+                        y = consumed
+                    )
+                }
+            }
+
+            override fun onStop(velocity: PxPosition) {
+                if (!enabled) return
+                val mainAxisVelocity = -when (direction) {
+                    Axis.Horizontal -> velocity.x
+                    Axis.Vertical -> velocity.y
+                }
+                state.flingBy(mainAxisVelocity)
+            }
+        },
+        canDrag = { dragDirection ->
+            if (!enabled) return@TouchSlopDragGestureDetector false
+            return@TouchSlopDragGestureDetector when (direction) {
+                Axis.Horizontal -> dragDirection == Direction.LEFT || dragDirection == Direction.RIGHT
+                Axis.Vertical -> dragDirection == Direction.UP || dragDirection == Direction.DOWN
+            }
+        },
+        startDragImmediately = state.isAnimating,
+        children = children
+    )
 }

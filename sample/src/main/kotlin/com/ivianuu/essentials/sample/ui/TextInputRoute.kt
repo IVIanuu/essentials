@@ -30,8 +30,8 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.android.ui.common.ScrollPosition
 import com.ivianuu.essentials.android.ui.common.ScrollableList
+import com.ivianuu.essentials.android.ui.common.ScrollableState
 import com.ivianuu.essentials.android.ui.common.holderFor
 import com.ivianuu.essentials.android.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.android.ui.core.Text
@@ -95,7 +95,7 @@ val TextInputRoute = Route {
                 val animationClock = AnimationClockAmbient.current
                 val flingConfig = FlingConfig()
                 val scrollPosition = retain(items) {
-                    ScrollPosition(animationClock, flingConfigFactory = { flingConfig })
+                    ScrollableState(animationClock, flingConfigFactory = { flingConfig })
                 }
 
                 Observe {
