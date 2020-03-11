@@ -109,7 +109,7 @@ class ScrollableState(
     fun flingBy(velocity: Px) {
         d { "fling by $velocity" }
         animatedFloat.fling(
-            flingConfigFactory(velocity),
+            flingConfig,
             velocity.value
         )
     }
