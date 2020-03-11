@@ -25,8 +25,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials-coroutines"))
-    api(Deps.Coroutines.core)
-    api(Deps.kotlinSerialization)
-    api(Deps.Kotlin.stdlib)
+    compile(project(":essentials-coroutines"))
+    compile(Deps.Coroutines.core)
+    compile(Deps.kotlinSerialization)
+    compile(Deps.Kotlin.stdlib)
 }

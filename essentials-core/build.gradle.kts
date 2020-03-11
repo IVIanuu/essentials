@@ -10,18 +10,18 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.Coroutines.core)
+    compile(Deps.Coroutines.core)
 
-    api(project(":essentials-coroutines"))
-    api(project(":essentials-store"))
+    compile(project(":essentials-coroutines"))
+    compile(project(":essentials-store"))
 
-    api(Deps.Injekt.injekt)
-    api(Deps.Injekt.common)
+    compile(Deps.Injekt.injekt)
+    compile(Deps.Injekt.common)
 
-    api(Deps.Kotlin.stdlib)
+    compile(Deps.Kotlin.stdlib)
 
-    api(Deps.kotlinFlowExtensions)
+    compile(Deps.kotlinFlowExtensions)
 
-    api(Deps.Scopes.scopes)
-    api(Deps.Scopes.coroutines)
+    compile(Deps.Scopes.scopes)
+    compile(Deps.Scopes.coroutines)
 }
