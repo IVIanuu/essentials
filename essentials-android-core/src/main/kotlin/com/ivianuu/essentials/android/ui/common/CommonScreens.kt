@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.android.ui.common
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.layout.Column
 import com.ivianuu.essentials.android.ui.material.Scaffold
 import com.ivianuu.essentials.android.ui.material.TopAppBar
@@ -27,7 +28,7 @@ fun SimpleScreen(
     content: @Composable () -> Unit
 ) {
     Scaffold(
-        topAppBar = { TopAppBar(title = title) },
+        topAppBar = { TopAppBar(title = { Text(title) }) },
         body = content
     )
 }
@@ -38,7 +39,7 @@ fun ScrollableScreen(
     content: @Composable () -> Unit
 ) {
     Scaffold(
-        topAppBar = { TopAppBar(title = title) },
+        topAppBar = { TopAppBar(title = { Text(title) }) },
         body = {
             Scroller {
                 Column {

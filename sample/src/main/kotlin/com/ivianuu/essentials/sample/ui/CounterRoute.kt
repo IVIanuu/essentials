@@ -33,7 +33,7 @@ import com.ivianuu.essentials.android.ui.navigation.Route
 
 val CounterRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar("Counter") },
+        topAppBar = { TopAppBar(title = { Text("Counter") }) },
         body = {
             Center {
                 Column(

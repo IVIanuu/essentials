@@ -28,7 +28,7 @@ import com.ivianuu.essentials.android.ui.navigation.transition.FadeRouteTransiti
 
 val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(
-        topAppBar = { TopAppBar("Drawer") },
+        topAppBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {
             Surface(color = Color.Blue) {
                 Center {

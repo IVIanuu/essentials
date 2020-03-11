@@ -24,6 +24,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.ivianuu.essentials.store.getValue
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
@@ -40,49 +41,49 @@ class BillingStore internal constructor(
     private val purchases = prefs.purchases
 
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> = withContext(dispatchers.default) {
-        products.get().filter { it.sku in params.skusList && it.type == params.skuType }
+        products.getValue().filter { it.sku in params.skusList && it.type == params.skuType }
     }
 
     suspend fun getPurchases(@SkuType skuType: String): PurchasesResult = withContext(dispatchers.default) {
         InternalPurchasesResult(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build(),
-            purchases.get().filter { it.signature.endsWith(skuType) })
+            purchases.getValue().filter { it.signature.endsWith(skuType) })
     }
 
     suspend fun getPurchaseByToken(purchaseToken: String): Purchase? = withContext(dispatchers.default) {
-        purchases.get().firstOrNull { it.purchaseToken == purchaseToken }
+        purchases.getValue().firstOrNull { it.purchaseToken == purchaseToken }
     }
 
     suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
-        products.get()
+        products.getValue()
             .toMutableList()
             .also { it += skuDetails }
-            .let { products.set(it) }
+            .let { products.update(it) }
     }
 
     suspend fun removeProduct(sku: String) = withContext(dispatchers.default) {
-        products.get()
+        products.getValue()
             .filter { it.sku != sku }
-            .let { products.set(it) }
+            .let { products.update(it) }
     }
 
     suspend fun clearProducts() = withContext(dispatchers.default) {
-        products.delete()
+        products.update(emptyList())
     }
 
     suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.default) {
-        purchases.get()
+        purchases.getValue()
             .toMutableList()
             .also { it += purchase }
-            .let { purchases.set(it) }
+            .let { purchases.update(it) }
     }
 
     suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.default) {
-        purchases.get()
+        purchases.getValue()
             .filter { it.purchaseToken != purchaseToken }
-            .let { purchases.set(it) }
+            .let { purchases.update(it) }
     }
 
     suspend fun clearPurchases() = withContext(dispatchers.default) {
-        purchases.delete()
+        purchases.update(emptyList())
     }
 }

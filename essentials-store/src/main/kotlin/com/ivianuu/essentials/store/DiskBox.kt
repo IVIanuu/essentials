@@ -97,7 +97,7 @@ internal class DiskBoxImpl<T>(
 
     private val file by lazy { File(path) }
 
-    private val flow: Flow<T> = changeNotifier
+    private val _value: Flow<T> = changeNotifier
         .map { get() }
         .onStart { emit(get()) }
         .distinctUntilChanged()
@@ -106,6 +106,12 @@ internal class DiskBoxImpl<T>(
             cacheSize = 1,
             tag = if (logger != null) "DiskBox:$path" else null
         )
+    override val value: Flow<T>
+        get() {
+            checkNotDisposed()
+            log { "$path -> value" }
+            return _value
+        }
 
     init {
         log { "$path -> init" }
@@ -116,7 +122,7 @@ internal class DiskBoxImpl<T>(
         }
     }
 
-    override suspend fun set(value: T) {
+    override suspend fun update(value: T) {
         checkNotDisposed()
         log { "$path -> set '$value'" }
         maybeWithDispatcher {
@@ -168,9 +174,7 @@ internal class DiskBoxImpl<T>(
         }
     }
 
-    override suspend fun get(): T {
-        checkNotDisposed()
-        log { "$path -> get" }
+    private suspend fun get(): T {
         return maybeWithDispatcher {
             measured("get") {
                 writeLock.awaitWrite()
@@ -180,7 +184,7 @@ internal class DiskBoxImpl<T>(
                     return@measured cached as T
                 }
 
-                return@measured if (isSet()) {
+                return@measured if (file.exists()) {
                     valueFetcher().also {
                         cachedValue.set(it)
                         log { "$path -> return fetched '$it'" }
@@ -192,40 +196,6 @@ internal class DiskBoxImpl<T>(
                 }
             }
         }
-    }
-
-    override suspend fun delete() {
-        checkNotDisposed()
-        log { "$path -> delete" }
-        maybeWithDispatcher {
-            measured("delete") {
-                if (file.exists()) {
-                    if (!file.delete()) {
-                        throw IOException("Couldn't delete file '$path'")
-                    }
-                }
-
-                cachedValue.set(this)
-                changeNotifier.offer(Unit)
-            }
-        }
-    }
-
-    override suspend fun isSet(): Boolean {
-        checkNotDisposed()
-        return maybeWithDispatcher {
-            measured("exists") {
-                file.exists().also {
-                    log { "$path -> exists $it" }
-                }
-            }
-        }
-    }
-
-    override fun asFlow(): Flow<T> {
-        checkNotDisposed()
-        log { "$path -> as flow" }
-        return flow
     }
 
     override fun dispose() {

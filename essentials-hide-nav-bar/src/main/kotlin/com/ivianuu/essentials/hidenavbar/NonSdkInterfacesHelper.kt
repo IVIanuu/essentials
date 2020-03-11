@@ -39,8 +39,7 @@ internal class NonSdkInterfacesHelper(
             val hiddenApiPolicy = settings.int(
                 "hidden_api_policy", SettingBox.Type.Global
             )
-            hiddenApiPolicy.set(1)
-            hiddenApiPolicy.get()
+            hiddenApiPolicy.update(1)
         } else if (systemBuildInfo.sdk >= 28) {
             d { "disable non sdk on p" }
 
@@ -53,8 +52,8 @@ internal class NonSdkInterfacesHelper(
                 SettingBox.Type.Global
             )
 
-            hiddenApiPrePieAppsSetting.set(1)
-            hiddenApiOnPieAppsSetting.set(1)
+            hiddenApiPrePieAppsSetting.update(1)
+            hiddenApiOnPieAppsSetting.update(1)
         }
     }
 }

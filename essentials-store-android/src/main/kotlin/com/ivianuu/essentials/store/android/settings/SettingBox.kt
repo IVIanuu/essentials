@@ -87,7 +87,7 @@ class SettingBoxImpl<T>(
 
     private val coroutineScope = CoroutineScope(Job())
 
-    private val flow = callbackFlow<Unit> {
+    private val _value = callbackFlow<Unit> {
         val observer = withContext(Dispatchers.Main) {
             object : ContentObserver(MainHandler) {
                 override fun onChange(selfChange: Boolean) {
@@ -103,8 +103,13 @@ class SettingBoxImpl<T>(
         .map { get() }
         .distinctUntilChanged()
         .shareIn(scope = coroutineScope, cacheSize = 1, tag = "SettingBox:$uri")
+    override val value: Flow<T>
+        get() {
+            checkNotDisposed()
+            return _value
+        }
 
-    override suspend fun set(value: T) {
+    override suspend fun update(value: T) {
         checkNotDisposed()
         maybeWithDispatcher {
             try {
@@ -115,8 +120,7 @@ class SettingBoxImpl<T>(
         }
     }
 
-    override suspend fun get(): T {
-        checkNotDisposed()
+    private suspend fun get(): T {
         return maybeWithDispatcher {
             try {
                 adapter.get(name, defaultValue, contentResolver, type)
@@ -125,17 +129,6 @@ class SettingBoxImpl<T>(
             }
         }
     }
-
-    override suspend fun delete() {
-        checkNotDisposed()
-        maybeWithDispatcher {
-            adapter.set(name, defaultValue, contentResolver, type)
-        }
-    }
-
-    override suspend fun isSet(): Boolean = true
-
-    override fun asFlow(): Flow<T> = flow
 
     override fun dispose() {
         if (!_isDisposed.getAndSet(true)) {

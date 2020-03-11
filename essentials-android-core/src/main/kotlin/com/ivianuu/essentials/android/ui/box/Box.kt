@@ -31,13 +31,13 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->
             coroutineScope.launch {
-                box.set(newValue)
+                box.update(newValue)
             }
         }
 
         return@remember BoxWrapper(value = box.defaultValue, setter = setter)
     }
-    wrapper.internalValue = collect(box.asFlow(), box.defaultValue)
+    wrapper.internalValue = collect(box.value, box.defaultValue)
     return wrapper
 }
 

@@ -40,7 +40,7 @@ val TabsRoute = Route {
         Scaffold(
             topAppBar = {
                 Column {
-                    TopAppBar("Tabs")
+                    TopAppBar(title = { Text("Tabs") })
                     Box(
                         modifier = drawShadow(shape = RectangleShape, elevation = 8.dp)
                     ) {

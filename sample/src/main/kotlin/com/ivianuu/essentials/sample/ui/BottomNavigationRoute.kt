@@ -39,7 +39,7 @@ import com.ivianuu.essentials.gestures.action.actions.Settings
 val BottomNavigationRoute = Route {
     ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {
         Scaffold(
-            topAppBar = { TopAppBar("Bottom navigation") },
+            topAppBar = { TopAppBar(title = { Text("Bottom navigation") }) },
             body = {
                 BottomNavigationSwapper<BottomNavItem> { item ->
                     ColoredRect(item.color)

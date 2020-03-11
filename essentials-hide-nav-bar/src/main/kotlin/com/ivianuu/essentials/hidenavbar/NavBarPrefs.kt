@@ -24,5 +24,5 @@ import com.ivianuu.injekt.android.ApplicationScope
 @ApplicationScope
 @Single
 internal class NavBarPrefs(factory: PrefBoxFactory) {
-    val wasNavBarHidden = factory.boolean("was_nav_bar_hidden")
+    val wasNavBarHidden = factory.boolean("was_nav_bar_hidden_2")
 }

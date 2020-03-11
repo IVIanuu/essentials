@@ -26,6 +26,7 @@ import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
+import com.ivianuu.essentials.store.getValue
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Single
@@ -61,9 +62,9 @@ class NavBarController internal constructor(
         scope.clear()
 
         if (!config.hidden) {
-            if (prefs.wasNavBarHidden.isSet() && prefs.wasNavBarHidden.get()) {
+            if (prefs.wasNavBarHidden.getValue()) {
                 setNavBarConfigInternal(false, config)
-                prefs.wasNavBarHidden.delete()
+                prefs.wasNavBarHidden.update(false)
             }
 
             return
@@ -86,7 +87,7 @@ class NavBarController internal constructor(
                 !config.showWhileScreenOff || screenStateProvider.getScreenState() == ScreenState.Unlocked
             }
             .onEach {
-                prefs.wasNavBarHidden.set(it)
+                prefs.wasNavBarHidden.update(it)
                 setNavBarConfigInternal(it, config)
             }
             .flowOn(dispatchers.default)

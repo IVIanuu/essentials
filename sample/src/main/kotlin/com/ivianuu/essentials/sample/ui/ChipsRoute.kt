@@ -43,7 +43,7 @@ import com.ivianuu.essentials.android.util.Toaster
 
 val ChipsRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar("Chips") },
+        topAppBar = { TopAppBar(title = { Text("Chips") }) },
         body = {
             Container(
                 modifier = LayoutPadding(all = 8.dp),

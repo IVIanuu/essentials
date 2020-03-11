@@ -25,29 +25,24 @@ fun <T, S> Box<T>.map(
 ): Box<S> {
     val wrapped = this
     return object : Box<S> {
+
         override val defaultValue: S
             get() = fromRaw(wrapped.defaultValue)
 
         override val isDisposed: Boolean
             get() = wrapped.isDisposed
 
-        override fun asFlow(): Flow<S> = wrapped.asFlow()
-            .map { fromRaw(it) }
+        override val value: Flow<S>
+            get() = wrapped.value
+                .map { fromRaw(it) }
 
-        override suspend fun delete() {
-            wrapped.delete()
+        override suspend fun update(value: S) {
+            wrapped.update(toRaw(value))
         }
 
         override fun dispose() {
             wrapped.dispose()
         }
 
-        override suspend fun get(): S = fromRaw(wrapped.get())
-
-        override suspend fun isSet(): Boolean = wrapped.isSet()
-
-        override suspend fun set(value: S) {
-            wrapped.set(toRaw(value))
-        }
     }
 }

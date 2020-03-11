@@ -48,7 +48,7 @@ import kotlin.time.minutes
 
 val PrefsRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar(title = "Prefs") },
+        topAppBar = { TopAppBar(title = { Text("Prefs") }) },
         body = {
             Scroller {
                 Column {

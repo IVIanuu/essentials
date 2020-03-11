@@ -52,7 +52,7 @@ import com.ivianuu.essentials.gestures.action.actions.Settings
 
 val DialogsRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar("Dialogs") },
+        topAppBar = { TopAppBar(title = { Text("Dialogs") }) },
         body = {
             VerticalScroller {
                 Column(

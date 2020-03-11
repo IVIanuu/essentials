@@ -47,7 +47,11 @@ fun AppPickerRoute(
     appFilter: AppFilter = DefaultAppFilter
 ) = Route {
     Scaffold(
-        topAppBar = { TopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
+        topAppBar = {
+            TopAppBar(
+                title = { Text(title ?: stringResource(R.string.es_title_app_picker)) }
+            )
+        },
         body = {
             val viewModel =
                 injectMvRxViewModel<AppPickerViewModel>(parameters = parametersOf(appFilter))

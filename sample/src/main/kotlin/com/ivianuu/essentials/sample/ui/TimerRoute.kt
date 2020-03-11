@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.flow
 
 val TimerRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar(title = "Timer") },
+        topAppBar = { TopAppBar(title = { Text("Timer") }) },
         body = {
             Center {
                 val value = collect(remember { timerFlow() })

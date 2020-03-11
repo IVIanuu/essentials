@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 
 val NavBarRoute = Route {
     Scaffold(
-        topAppBar = { TopAppBar(title = "Nav bar settings") },
+        topAppBar = { TopAppBar(title = { Text("Nav bar settings") }) },
         body = {
             Center {
                 Column(
