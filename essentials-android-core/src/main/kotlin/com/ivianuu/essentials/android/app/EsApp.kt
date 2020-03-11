@@ -27,6 +27,7 @@ import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializers
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.app.AppServices
+import com.ivianuu.essentials.app.ApplicationScope
 import com.ivianuu.essentials.app.EsAppInitializerModule
 import com.ivianuu.essentials.app.EsAppServiceModule
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
@@ -75,6 +76,8 @@ abstract class EsApp : Application(), ComponentOwner,
     protected open fun initializeComponent() {
         AppComponentHolder.init(
             ApplicationComponent(this) {
+                scopes(ApplicationScope)
+
                 modules(
                     EsAndroidUtilModule,
                     EsAppModule,
