@@ -51,6 +51,7 @@ buildConfig {
 }
 
 dependencies {
+    api(Deps.androidGradlePlugin)
     api(Deps.autoService)
     kapt(Deps.autoService)
     api(Deps.Kotlin.gradlePluginApi)
