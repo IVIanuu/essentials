@@ -35,7 +35,6 @@ import com.ivianuu.essentials.android.ui.common.BackButton
 import com.ivianuu.essentials.android.ui.common.DrawerButton
 import com.ivianuu.essentials.android.ui.common.SafeArea
 import com.ivianuu.essentials.android.ui.core.ProvideSystemBarStyle
-import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.android.ui.core.currentOrElse
 import com.ivianuu.essentials.android.ui.core.currentOrNull
@@ -84,11 +83,6 @@ fun SurfaceAppBarStyle(
 }
 
 val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
-
-@Composable
-fun TopAppBar(title: String) {
-    TopAppBar(title = { Text(title) })
-}
 
 @Composable
 fun TopAppBar(
