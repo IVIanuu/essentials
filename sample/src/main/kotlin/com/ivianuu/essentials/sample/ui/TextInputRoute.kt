@@ -95,7 +95,7 @@ val TextInputRoute = Route {
                 val animationClock = AnimationClockAmbient.current
                 val flingConfig = FlingConfig()
                 val scrollPosition = retain(items) {
-                    ScrollableState(animationClock, flingConfigFactory = { flingConfig })
+                    ScrollableState(animationClock, flingConfig = flingConfig)
                 }
 
                 Observe {
