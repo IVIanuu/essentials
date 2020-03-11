@@ -18,14 +18,14 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.ScrollableScreen
-import com.ivianuu.essentials.ui.common.openUrlOnClick
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.android.ui.common.ScrollableScreen
+import com.ivianuu.essentials.android.ui.common.openUrlOnClick
+import com.ivianuu.essentials.android.ui.core.Text
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.android.ui.material.ListItem
+import com.ivianuu.essentials.android.ui.material.Subheader
+import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.android.util.BuildInfo
 
 fun AboutRoute(
     hasDebugPackageName: Boolean = true,

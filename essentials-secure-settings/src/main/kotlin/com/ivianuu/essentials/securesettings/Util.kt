@@ -22,11 +22,11 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.launch
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.android.ui.core.Text
+import com.ivianuu.essentials.android.ui.coroutines.launch
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.android.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.android.util.Toaster
 import kotlinx.coroutines.delay
 
 @Composable

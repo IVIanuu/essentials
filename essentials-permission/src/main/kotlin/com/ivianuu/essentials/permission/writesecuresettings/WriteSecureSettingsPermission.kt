@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.android.ui.navigation.NavigatorState
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
@@ -12,7 +13,6 @@ import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
-import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.Factory
 
 fun WriteSecureSettingsPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(

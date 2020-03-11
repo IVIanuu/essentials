@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
 import androidx.ui.core.Alignment
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
@@ -30,16 +31,15 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
-import androidx.ui.foundation.Clickable
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.RippleColorProvider
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.android.ui.core.Text
+import com.ivianuu.essentials.android.ui.dialog.ColorPickerPalette
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.android.ui.material.RippleColorProvider
+import com.ivianuu.essentials.android.ui.material.Scaffold
+import com.ivianuu.essentials.android.ui.material.Surface
+import com.ivianuu.essentials.android.ui.material.TopAppBar
+import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.android.util.Toaster
 
 val ChipsRoute = Route {
     Scaffold(

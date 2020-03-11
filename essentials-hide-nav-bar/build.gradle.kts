@@ -32,7 +32,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials"))
+    api(project(":essentials-android-core"))
     api(project(":essentials-screen-state"))
     api(project(":essentials-secure-settings"))
 }

@@ -11,11 +11,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/essentials" />
             <option value="$PROJECT_DIR$/essentials-about" />
             <option value="$PROJECT_DIR$/essentials-accessibility" />
             <option value="$PROJECT_DIR$/essentials-activity-result" />
             <option value="$PROJECT_DIR$/essentials-analytics" />
+            <option value="$PROJECT_DIR$/essentials-android-core" />
             <option value="$PROJECT_DIR$/essentials-apps" />
             <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />
@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/essentials-broadcast" />
             <option value="$PROJECT_DIR$/essentials-coil" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
+            <option value="$PROJECT_DIR$/essentials-core" />
             <option value="$PROJECT_DIR$/essentials-coroutines" />
             <option value="$PROJECT_DIR$/essentials-foreground" />
             <option value="$PROJECT_DIR$/essentials-gestures" />
@@ -43,6 +44,7 @@
             <option value="$PROJECT_DIR$/essentials-shell" />
             <option value="$PROJECT_DIR$/essentials-shortcut-picker" />
             <option value="$PROJECT_DIR$/essentials-store" />
+            <option value="$PROJECT_DIR$/essentials-store-android" />
             <option value="$PROJECT_DIR$/essentials-test" />
             <option value="$PROJECT_DIR$/essentials-tile" />
             <option value="$PROJECT_DIR$/essentials-torch" />

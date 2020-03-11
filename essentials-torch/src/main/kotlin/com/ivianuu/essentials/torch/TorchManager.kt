@@ -18,12 +18,12 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope

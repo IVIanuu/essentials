@@ -21,8 +21,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
+import android.os.Process
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Factory
 
@@ -35,7 +36,7 @@ class ProcessRestarter(
 ) {
 
     val isRestartProcess by unsafeLazy {
-        val currentPid = android.os.Process.myPid()
+        val currentPid = Process.myPid()
         return@unsafeLazy activityManager.runningAppProcesses?.any {
             it.pid == currentPid && it.processName == ":restartprocess"
         }

@@ -21,6 +21,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
@@ -28,7 +29,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
 import kotlin.reflect.KClass
 

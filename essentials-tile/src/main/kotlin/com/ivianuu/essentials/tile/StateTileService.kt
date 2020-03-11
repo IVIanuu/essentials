@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.android.util.ResourceProvider
 import com.ivianuu.injekt.getLazy
 
 /**

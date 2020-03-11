@@ -6,11 +6,11 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import coil.ImageLoader
 import coil.api.getAny
+import com.ivianuu.essentials.android.ui.image.toImageAsset
+import com.ivianuu.essentials.android.util.ResourceProvider
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param

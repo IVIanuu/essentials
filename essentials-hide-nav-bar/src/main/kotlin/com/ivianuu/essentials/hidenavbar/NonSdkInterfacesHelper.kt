@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.hidenavbar
 
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.android.util.SystemBuildInfo
+import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
+import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.store.settings.SettingBox
-import com.ivianuu.essentials.store.settings.SettingsBoxFactory
-import com.ivianuu.essentials.store.settings.int
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Factory
 
 /**

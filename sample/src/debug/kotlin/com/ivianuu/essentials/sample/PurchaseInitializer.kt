@@ -25,7 +25,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Factory
-class PurchaseInitializer(billingStore: BillingStore) : AppInitializer {
+class PurchaseInitializer(billingStore: BillingStore) :
+    AppInitializer {
     init {
         GlobalScope.launch {
             billingStore.addProduct(SkuDetails(DummySku))

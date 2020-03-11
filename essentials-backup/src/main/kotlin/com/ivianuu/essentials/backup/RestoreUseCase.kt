@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
+import com.ivianuu.essentials.android.ui.navigation.NavigatorState
+import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 import java.io.File

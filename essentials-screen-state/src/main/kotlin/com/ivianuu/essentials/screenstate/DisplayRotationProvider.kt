@@ -24,9 +24,9 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
-import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope

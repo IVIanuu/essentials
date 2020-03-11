@@ -22,18 +22,18 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.android.ui.common.SimpleScreen
+import com.ivianuu.essentials.android.ui.common.launchOnClick
+import com.ivianuu.essentials.android.ui.core.Text
+import com.ivianuu.essentials.android.ui.coroutines.collect
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.android.ui.layout.Column
+import com.ivianuu.essentials.android.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.android.ui.layout.MainAxisAlignment
+import com.ivianuu.essentials.android.ui.material.Button
+import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.common.launchOnClick
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.navigation.Route
 
 val BillingRoute = Route {
     val purchaseManager = inject<PurchaseManager>()

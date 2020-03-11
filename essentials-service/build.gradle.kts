@@ -19,7 +19,7 @@ plugins {
     id("com.github.ben-manes.versions")
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")
-    id("kotlin-android")
+    kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -31,5 +31,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials"))
+    api(project(":essentials-android-core"))
 }

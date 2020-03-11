@@ -2,13 +2,13 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
 import androidx.ui.res.stringResource
+import com.ivianuu.essentials.android.ui.common.RenderAsyncList
+import com.ivianuu.essentials.android.ui.common.SimpleScreen
+import com.ivianuu.essentials.android.ui.core.Text
+import com.ivianuu.essentials.android.ui.material.ListItem
+import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.RenderAsyncList
-import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.injekt.parametersOf
 
 fun ActionPickerRoute(

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.analytics
 
 import android.content.Context
 import com.crashlytics.android.Crashlytics
+import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
 import io.fabric.sdk.android.Fabric
 

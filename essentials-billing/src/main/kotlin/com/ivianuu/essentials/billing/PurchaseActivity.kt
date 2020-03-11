@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.android.ui.base.EsActivity
 import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.launch
 

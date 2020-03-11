@@ -8,11 +8,11 @@ import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.path
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.lazyMaterialIcon
+import com.ivianuu.essentials.android.icon.Essentials
+import com.ivianuu.essentials.android.icon.EssentialsIcons
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.icon.Essentials
-import com.ivianuu.essentials.icon.EssentialsIcons
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module

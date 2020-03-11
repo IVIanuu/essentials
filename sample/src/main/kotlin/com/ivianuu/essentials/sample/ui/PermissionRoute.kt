@@ -25,6 +25,11 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
+import com.ivianuu.essentials.android.ui.common.SimpleScreen
+import com.ivianuu.essentials.android.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.android.ui.material.Button
+import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -38,11 +43,6 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.common.SimpleScreen
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.launch
 
 val PermissionRoute = Route {

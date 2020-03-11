@@ -4,10 +4,10 @@ import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoAlbum
+import com.ivianuu.essentials.android.util.SystemBuildInfo
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay

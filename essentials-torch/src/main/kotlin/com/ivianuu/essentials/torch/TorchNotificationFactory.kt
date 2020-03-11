@@ -25,12 +25,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.foreground.AbstractNotificationFactory
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.FlashOn
-import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.essentials.util.setSmallIcon
+import com.ivianuu.essentials.android.ui.image.toBitmap
+import com.ivianuu.essentials.android.util.ResourceProvider
+import com.ivianuu.essentials.android.util.setSmallIcon
+import com.ivianuu.essentials.foreground.AbstractNotificationFactory
 import com.ivianuu.injekt.Factory
 
 @Factory

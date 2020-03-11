@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 

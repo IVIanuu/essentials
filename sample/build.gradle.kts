@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":essentials"))
+    implementation(project(":essentials-android-core"))
     implementation(project(":essentials-about"))
     api(project(":essentials-accessibility"))
     api(project(":essentials-activity-result"))

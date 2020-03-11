@@ -17,11 +17,10 @@
 package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.core.pointInComposition
-import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.viewmodel.injectViewModel
-import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.sourceLocation
+import com.ivianuu.essentials.android.ui.core.pointInComposition
+import com.ivianuu.essentials.android.ui.coroutines.collect
+import com.ivianuu.essentials.android.ui.viewmodel.injectViewModel
+import com.ivianuu.essentials.android.ui.viewmodel.viewModel
 import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Parameters
 import com.ivianuu.injekt.Qualifier

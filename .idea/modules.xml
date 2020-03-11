@@ -46,6 +46,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-accessibility/essentials-accessibility.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-accessibility/essentials-accessibility.iml" group="essentials/essentials-accessibility" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-activity-result/essentials-activity-result.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-activity-result/essentials-activity-result.iml" group="essentials/essentials-activity-result" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-analytics/essentials-analytics.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-analytics/essentials-analytics.iml" group="essentials/essentials-analytics" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-android-core/essentials-android-core.iml" filepath="$PROJECT_DIR$/essentials-android-core/essentials-android-core.iml" group="essentials/essentials-android-core" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-apps.iml" group="essentials/essentials-apps" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials-apps-coil.iml" group="essentials/essentials-apps-coil" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-apps-ui.iml" group="essentials/essentials-apps-ui" />
@@ -57,6 +58,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-broadcast/essentials-broadcast.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-broadcast/essentials-broadcast.iml" group="essentials/essentials-broadcast" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-coil/essentials-coil.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-coil/essentials-coil.iml" group="essentials/essentials-coil" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-compiler/essentials-compiler.iml" group="essentials/essentials-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-core/essentials-core.iml" filepath="$PROJECT_DIR$/essentials-core/essentials-core.iml" group="essentials/essentials-core" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-coroutines/essentials-coroutines.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-coroutines/essentials-coroutines.iml" group="essentials/essentials-coroutines" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials/essentials-essentials.iml" group="essentials/essentials" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-about/essentials-essentials-about.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-about/essentials-essentials-about.iml" group="essentials/essentials-about" />
@@ -112,6 +114,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-shell/essentials-shell.iml" group="essentials/essentials-shell" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-shortcut-picker/essentials-shortcut-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-shortcut-picker/essentials-shortcut-picker.iml" group="essentials/essentials-shortcut-picker" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-store/essentials-store.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-store/essentials-store.iml" group="essentials/essentials-store" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-store-android/essentials-store-android.iml" filepath="$PROJECT_DIR$/essentials-store-android/essentials-store-android.iml" group="essentials/essentials-store-android" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-test/essentials-test.iml" group="essentials/essentials-test" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tile/essentials-tile.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tile/essentials-tile.iml" group="essentials/essentials-tile" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-torch/essentials-torch.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-torch/essentials-torch.iml" group="essentials/essentials-torch" />
@@ -121,7 +124,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials_buildSrc.iml" group="essentials/essentials_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/home-ivianuu-studio-projects-essentials.iml" filepath="$PROJECT_DIR$/.idea/modules/home-ivianuu-studio-projects-essentials.iml" group="essentials" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ivianuu-studio-projects-essentials.iml" filepath="$PROJECT_DIR$/.idea/modules/ivianuu-studio-projects-essentials.iml" group="essentials" />
-      <module fileurl="file://$PROJECT_DIR$/essentials/ivianuu-studio-projects-essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/ivianuu-studio-projects-essentials-essentials.iml" group="essentials/essentials" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ivianuu-studio-projects-essentials_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/ivianuu-studio-projects-essentials_buildSrc.iml" group="essentials/essentials_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample.iml" group="essentials/sample" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/studio-projects-essentials.iml" filepath="$PROJECT_DIR$/.idea/modules/studio-projects-essentials.iml" group="essentials" />

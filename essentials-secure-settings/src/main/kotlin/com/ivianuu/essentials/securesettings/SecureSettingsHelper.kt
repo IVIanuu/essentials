@@ -19,8 +19,8 @@ package com.ivianuu.essentials.securesettings
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.Context
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Factory
 
 /**
