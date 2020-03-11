@@ -25,24 +25,14 @@ fun <T, S> Box<T>.map(
 ): Box<S> {
     val wrapped = this
     return object : Box<S> {
-
         override val defaultValue: S
             get() = fromRaw(wrapped.defaultValue)
-
-        override val isDisposed: Boolean
-            get() = wrapped.isDisposed
-
-        override val value: Flow<S>
-            get() = wrapped.value
+        override val data: Flow<S>
+            get() = wrapped.data
                 .map { fromRaw(it) }
 
-        override suspend fun update(value: S) {
-            wrapped.update(toRaw(value))
+        override suspend fun updateData(transform: suspend (S) -> S) {
+            wrapped.updateData { toRaw(transform(fromRaw(it))) }
         }
-
-        override fun dispose() {
-            wrapped.dispose()
-        }
-
     }
 }

@@ -49,7 +49,7 @@ private fun List<Dependency<*>>?.asDependencyFlow(): Flow<Boolean> {
 
     val flows =
         map { dependency ->
-            dependency.box.value
+            dependency.box.data
                 .map { currentValue -> currentValue == dependency.value }
         }
             .toTypedArray()

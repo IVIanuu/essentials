@@ -25,6 +25,8 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.android.ForApplication
 import com.ivianuu.injekt.single
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.plus
 
 @QualifierMarker
 annotation class PrefsPath {
@@ -36,7 +38,7 @@ val EsDataModule = Module {
 
     single {
         PrefBoxFactory(
-            dispatcher = get<AppCoroutineDispatchers>().io,
+            coroutineScope = GlobalScope + get<AppCoroutineDispatchers>().io,
             prefsPath = get(qualifier = PrefsPath)
         )
     }
@@ -44,7 +46,7 @@ val EsDataModule = Module {
     single {
         SettingsBoxFactory(
             context = get(qualifier = ForApplication),
-            dispatcher = get<AppCoroutineDispatchers>().io
+            coroutineScope = GlobalScope + get<AppCoroutineDispatchers>().io,
         )
     }
 }

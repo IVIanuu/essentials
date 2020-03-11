@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
-import com.ivianuu.essentials.store.getValue
+import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -29,9 +29,9 @@ abstract class CycleBoxTileService<T> : BoxTileService<T>() {
     override fun onClick() {
         super.onClick()
         scope.coroutineScope.launch {
-            val newValue = box.getValue().next()
+            val newValue = box.getCurrentData().next()
             if (onRequestValueChange(newValue)) {
-                box.update(newValue)
+                box.updateData { newValue }
             }
         }
     }

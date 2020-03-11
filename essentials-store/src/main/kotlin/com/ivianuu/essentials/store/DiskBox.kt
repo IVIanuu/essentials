@@ -19,10 +19,8 @@ package com.ivianuu.essentials.store
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.shareIn
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -30,16 +28,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
-    val path: String
-
     interface Serializer<T> {
         fun deserialize(serialized: String): T
         fun serialize(value: T): String
@@ -50,25 +44,21 @@ fun <T> DiskBox(
     path: String,
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
-    dispatcher: CoroutineDispatcher? = null
+    coroutineScope: CoroutineScope
 ): DiskBox<T> =
     DiskBoxImpl(
         path = path,
         defaultValue = defaultValue,
         serializer = serializer,
-        dispatcher = dispatcher
+        coroutineScope = coroutineScope
     )
 
 internal class DiskBoxImpl<T>(
-    override val path: String,
+    private val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
-    private val dispatcher: CoroutineDispatcher?
+    coroutineScope: CoroutineScope
 ) : DiskBox<T> {
-
-    private val _isDisposed = AtomicBoolean(false)
-    override val isDisposed: Boolean
-        get() = _isDisposed.get()
 
     private val changeNotifier = EventFlow<Unit>()
     private val cachedValue = AtomicReference<Any?>(this)
@@ -93,8 +83,6 @@ internal class DiskBoxImpl<T>(
     }
     private val writeLock = WriteLock(path)
 
-    private val coroutineScope = CoroutineScope(Job())
-
     private val file by lazy { File(path) }
 
     private val _value: Flow<T> = changeNotifier
@@ -106,110 +94,87 @@ internal class DiskBoxImpl<T>(
             cacheSize = 1,
             tag = if (logger != null) "DiskBox:$path" else null
         )
-    override val value: Flow<T>
+    override val data: Flow<T>
         get() {
-            checkNotDisposed()
             log { "$path -> value" }
             return _value
         }
 
     init {
         log { "$path -> init" }
-        coroutineScope.launch {
-            maybeWithDispatcher {
-                check(!file.isDirectory)
-            }
-        }
+        coroutineScope.launch { check(!file.isDirectory) }
     }
 
-    override suspend fun update(value: T) {
-        checkNotDisposed()
-        log { "$path -> set '$value'" }
-        maybeWithDispatcher {
-            measured("set") {
-                try {
-                    writeLock.beginWrite()
+    override suspend fun updateData(transform: suspend (T) -> T) {
+        val newValue = transform(get())
+        log { "$path -> set '$newValue'" }
+        measured("set") {
+            try {
+                writeLock.beginWrite()
 
-                    if (!file.exists()) {
-                        file.parentFile?.mkdirs()
+                if (!file.exists()) {
+                    file.parentFile?.mkdirs()
 
-                        if (!file.createNewFile()) {
-                            throw IOException("Couldn't create $path")
-                        }
+                    if (!file.createNewFile()) {
+                        throw IOException("Couldn't create $path")
                     }
-
-                    val serialized = try {
-                        serializer.serialize(value)
-                    } catch (e: Exception) {
-                        throw RuntimeException(
-                            "Couldn't serialize value '$value' for file $path",
-                            e
-                        )
-                    }
-
-                    log { "$path -> write serialized '$serialized'" }
-
-                    val tmpFile = File.createTempFile(
-                        "new", "tmp", file.parentFile
-                    )
-                    try {
-                        tmpFile.bufferedWriter().use {
-                            it.write(serialized)
-                        }
-                        if (!tmpFile.renameTo(file)) {
-                            throw IOException("Couldn't move tmp file to file $path")
-                        }
-                    } catch (e: Exception) {
-                        throw IOException("Couldn't write to file $path '$serialized'", e)
-                    } finally {
-                        tmpFile.delete()
-                    }
-
-                    cachedValue.set(value)
-                    changeNotifier.offer(Unit)
-                } finally {
-                    writeLock.endWrite()
                 }
+
+                val serialized = try {
+                    serializer.serialize(newValue)
+                } catch (e: Exception) {
+                    throw RuntimeException(
+                        "Couldn't serialize value '$newValue' for file $path",
+                        e
+                    )
+                }
+
+                log { "$path -> write serialized '$serialized'" }
+
+                val tmpFile = File.createTempFile(
+                    "new", "tmp", file.parentFile
+                )
+                try {
+                    tmpFile.bufferedWriter().use {
+                        it.write(serialized)
+                    }
+                    if (!tmpFile.renameTo(file)) {
+                        throw IOException("Couldn't move tmp file to file $path")
+                    }
+                } catch (e: Exception) {
+                    throw IOException("Couldn't write to file $path '$serialized'", e)
+                } finally {
+                    tmpFile.delete()
+                }
+
+                cachedValue.set(newValue)
+                changeNotifier.offer(Unit)
+            } finally {
+                writeLock.endWrite()
             }
         }
     }
 
     private suspend fun get(): T {
-        return maybeWithDispatcher {
-            measured("get") {
-                writeLock.awaitWrite()
-                val cached = cachedValue.get()
-                if (cached != this) {
-                    log { "$path -> return cached '$cached'" }
-                    return@measured cached as T
-                }
+        return measured("get") {
+            writeLock.awaitWrite()
+            val cached = cachedValue.get()
+            if (cached != this) {
+                log { "$path -> return cached '$cached'" }
+                return@measured cached as T
+            }
 
-                return@measured if (file.exists()) {
-                    valueFetcher().also {
-                        cachedValue.set(it)
-                        log { "$path -> return fetched '$it'" }
-                    }
-                } else {
-                    defaultValue.also {
-                        log { "$path -> return default value '$it'" }
-                    }
+            return@measured if (file.exists()) {
+                valueFetcher().also {
+                    cachedValue.set(it)
+                    log { "$path -> return fetched '$it'" }
+                }
+            } else {
+                defaultValue.also {
+                    log { "$path -> return default value '$it'" }
                 }
             }
         }
-    }
-
-    override fun dispose() {
-        log { "$path -> dispose" }
-        if (_isDisposed.getAndSet(true)) {
-            coroutineScope.coroutineContext[Job.Key]?.cancel()
-        }
-    }
-
-    private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
-        if (dispatcher != null) withContext(dispatcher) { block() } else block()
-
-    private fun checkNotDisposed() {
-        require(!_isDisposed.get()) { "Box is already disposed" }
     }
 
     private inline fun <T> measured(tag: String, block: () -> T): T {

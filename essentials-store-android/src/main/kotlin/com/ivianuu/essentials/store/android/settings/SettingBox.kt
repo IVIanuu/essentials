@@ -23,10 +23,8 @@ import android.os.Handler
 import android.provider.Settings
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.store.Box
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -34,12 +32,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicBoolean
 
 interface SettingBox<T> : Box<T> {
-    val uri: Uri
-    val type: Type
-
     enum class Type {
         Global, Secure, System
     }
@@ -65,19 +59,15 @@ interface SettingBox<T> : Box<T> {
 private val MainHandler = Handler()
 
 class SettingBoxImpl<T>(
-    override val type: SettingBox.Type,
+    private val type: SettingBox.Type,
     val name: String,
     override val defaultValue: T,
     private val adapter: SettingBox.Adapter<T>,
     private val contentResolver: ContentResolver,
-    private val dispatcher: CoroutineDispatcher?
+    private val coroutineScope: CoroutineScope
 ) : SettingBox<T> {
 
-    private val _isDisposed = AtomicBoolean(false)
-    override val isDisposed: Boolean
-        get() = false
-
-    override val uri: Uri by lazy {
+    private val uri: Uri by lazy {
         when (type) {
             SettingBox.Type.Global -> Settings.Global.getUriFor(name)
             SettingBox.Type.Secure -> Settings.Secure.getUriFor(name)
@@ -85,9 +75,7 @@ class SettingBoxImpl<T>(
         }
     }
 
-    private val coroutineScope = CoroutineScope(Job())
-
-    private val _value = callbackFlow<Unit> {
+    override val data: Flow<T> = callbackFlow<Unit> {
         val observer = withContext(Dispatchers.Main) {
             object : ContentObserver(MainHandler) {
                 override fun onChange(selfChange: Boolean) {
@@ -103,43 +91,20 @@ class SettingBoxImpl<T>(
         .map { get() }
         .distinctUntilChanged()
         .shareIn(scope = coroutineScope, cacheSize = 1, tag = "SettingBox:$uri")
-    override val value: Flow<T>
-        get() {
-            checkNotDisposed()
-            return _value
-        }
 
-    override suspend fun update(value: T) {
-        checkNotDisposed()
-        maybeWithDispatcher {
-            try {
-                adapter.set(name, value, contentResolver, type)
-            } catch (e: Exception) {
-                throw RuntimeException("couldn't write value for name: $name", e)
-            }
+    override suspend fun updateData(transform: suspend (T) -> T) {
+        try {
+            adapter.set(name, transform(get()), contentResolver, type)
+        } catch (e: Exception) {
+            throw RuntimeException("couldn't write value for name: $name", e)
         }
     }
 
-    private suspend fun get(): T {
-        return maybeWithDispatcher {
-            try {
-                adapter.get(name, defaultValue, contentResolver, type)
-            } catch (e: Exception) {
-                throw RuntimeException("couldn't read value for name: $name", e)
-            }
+    private fun get(): T {
+        return try {
+            adapter.get(name, defaultValue, contentResolver, type)
+        } catch (e: Exception) {
+            throw RuntimeException("couldn't read value for name: $name", e)
         }
-    }
-
-    override fun dispose() {
-        if (!_isDisposed.getAndSet(true)) {
-            coroutineScope.coroutineContext[Job]!!.cancel()
-        }
-    }
-
-    private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
-        if (dispatcher != null) withContext(dispatcher) { block() } else block()
-
-    private fun checkNotDisposed() {
-        require(!_isDisposed.get()) { "Box is already disposed" }
     }
 }

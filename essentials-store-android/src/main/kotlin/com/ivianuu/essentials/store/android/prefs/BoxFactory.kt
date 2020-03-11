@@ -18,11 +18,11 @@ package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.ConcurrentHashMap
 
 class PrefBoxFactory(
-    private val dispatcher: CoroutineDispatcher,
+    private val coroutineScope: CoroutineScope,
     private val prefsPath: String
 ) {
 
@@ -34,13 +34,12 @@ class PrefBoxFactory(
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
         var box = boxes[name]
-        if (box?.isDisposed == true) box = null
         if (box == null) {
             box = DiskBox(
                 path = "$prefsPath/$name",
                 serializer = serializer,
                 defaultValue = defaultValue,
-                dispatcher = dispatcher
+                coroutineScope = coroutineScope
             )
             boxes[name] = box
         }

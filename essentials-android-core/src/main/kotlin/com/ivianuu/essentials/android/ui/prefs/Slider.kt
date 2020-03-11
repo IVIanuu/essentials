@@ -509,7 +509,9 @@ fun <T : Comparable<T>> BaseSliderPreference(
                 PreferenceLayout(
                     title = title,
                     summary = summary,
-                    leading = leading
+                    leading = leading,
+                    enabled = false,
+                    onClick = {}
                 )
             }
 

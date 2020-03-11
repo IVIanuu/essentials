@@ -67,7 +67,8 @@ fun <T> PreferenceWrapper(
 
 @Composable
 fun PreferenceLayout(
-    onClick: (() -> Unit)? = null,
+    enabled: Boolean,
+    onClick: () -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -75,6 +76,7 @@ fun PreferenceLayout(
 ) {
     ListItem(
         onClick = onClick,
+        enabled = enabled,
         title = title,
         subtitle = summary,
         leading = leading,

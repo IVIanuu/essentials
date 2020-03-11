@@ -50,7 +50,7 @@ class TwilightHelper(
     prefs: TwilightPrefs
 ) : AppService {
 
-    val isDark: Flow<Boolean> = prefs.twilightMode.value
+    val isDark: Flow<Boolean> = prefs.twilightMode.data
         .flatMapLatest { mode ->
             when (mode) {
                 TwilightMode.System -> system()

@@ -42,12 +42,11 @@ fun <T> DialogPreference(
             summary = summary?.let { { summary(context) } },
             leading = leading?.let { { leading(context) } },
             trailing = trailing?.let { { trailing(context) } },
-            onClick = if (!context.shouldBeEnabled) null else {
-                {
-                    navigator.push(DialogRoute {
-                        dialog(context) { navigator.popTop() }
-                    })
-                }
+            enabled = context.shouldBeEnabled,
+            onClick = {
+                navigator.push(DialogRoute {
+                    dialog(context) { navigator.popTop() }
+                })
             }
         )
     }

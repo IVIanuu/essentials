@@ -29,5 +29,5 @@ abstract class BoxTileService<T> : FlowTileService<T>() {
     protected abstract val box: Box<T>
 
     final override val flow: Flow<T>
-        get() = box.value
+        get() = box.data
 }

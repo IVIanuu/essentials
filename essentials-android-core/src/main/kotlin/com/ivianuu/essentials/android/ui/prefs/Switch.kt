@@ -67,9 +67,8 @@ fun SwitchPreference(
                     )
                 }
             },
-            onClick = if (!context.shouldBeEnabled) null else {
-                { context.setIfOk(!context.currentValue); Unit }
-            }
+            enabled = context.shouldBeEnabled,
+            onClick = { context.setIfOk(!context.currentValue); Unit }
         )
     }
 }

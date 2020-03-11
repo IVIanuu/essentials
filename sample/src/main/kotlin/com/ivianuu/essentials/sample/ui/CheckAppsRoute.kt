@@ -28,8 +28,10 @@ val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()
     val box = remember { boxFactory.stringSet("apps") }
     CheckableAppsScreen(
-        checkedAppsFlow = box.value,
-        onCheckedAppsChanged = { newValue -> box.update(newValue) },
+        checkedAppsFlow = box.data,
+        onCheckedAppsChanged = { newValue ->
+            box.updateData { newValue }
+        },
         appBarTitle = "Send check apps",
         appFilter = inject<LaunchableAppFilter>()
     )

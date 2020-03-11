@@ -19,15 +19,28 @@ package com.ivianuu.essentials.store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
+/**
+ * A lightweight reactive persistence model which is thread safe
+ */
 interface Box<T> {
-
+    /**
+     * The default value
+     */
     val defaultValue: T
-    val isDisposed: Boolean
-    val value: Flow<T>
 
-    suspend fun update(value: T)
+    /**
+     * A flow which always emits the current value
+     */
+    val data: Flow<T>
 
-    fun dispose()
+    /**
+     * Updates the data with the result of the [transform] block
+     * The f
+     */
+    suspend fun updateData(transform: suspend (T) -> T)
 }
 
-suspend fun <T> Box<T>.getValue(): T = value.first()
+/**
+ * Returns a snapshot of the current data
+ */
+suspend fun <T> Box<T>.getCurrentData(): T = data.first()

@@ -21,11 +21,11 @@ import android.content.Context
 import android.provider.Settings
 import com.ivianuu.essentials.store.settings.SettingBox
 import com.ivianuu.essentials.store.settings.SettingBoxImpl
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 
 class SettingsBoxFactory(
     private val context: Context,
-    private val dispatcher: CoroutineDispatcher
+    private val coroutineScope: CoroutineScope
 ) {
 
     fun <T> setting(
@@ -40,7 +40,7 @@ class SettingsBoxFactory(
             defaultValue = defaultValue,
             adapter = adapter,
             contentResolver = context.contentResolver,
-            dispatcher = dispatcher
+            coroutineScope = coroutineScope
         )
 }
 
