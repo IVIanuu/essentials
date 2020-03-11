@@ -36,7 +36,7 @@ inline fun <reified T : AppService> ComponentBuilder.bindAppServiceIntoMap(
 }
 
 val EsAppServiceModule = Module {
-    map<String, AppInitializer>(mapQualifier = AppInitializers)
+    map<String, AppService>(mapQualifier = AppServices)
 }
 
 @QualifierMarker
