@@ -6,10 +6,10 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoCamera
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.parametersOf
 
-internal val EsCameraActionModule = Module {
+internal fun ComponentBuilder.cameraAction() {
     action(
         key = "camera",
         title = { getStringResource(R.string.es_action_camera) },

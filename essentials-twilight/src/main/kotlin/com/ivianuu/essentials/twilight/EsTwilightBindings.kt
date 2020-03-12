@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.accessibility.bindAccessibilityComponentIntoSet
-import com.ivianuu.essentials.gestures.action.EsActionModule
-import com.ivianuu.injekt.Module
+import com.ivianuu.essentials.app.bindAppServiceIntoMap
+import com.ivianuu.injekt.ComponentBuilder
 
-val EsGesturesModule = Module {
-    modules(EsActionModule)
-
-    bindAccessibilityComponentIntoSet<GlobalActions>()
-    bindAccessibilityComponentIntoSet<KeyboardVisibilityDetector>()
-    bindAccessibilityComponentIntoSet<RecentAppsProvider>()
-    bindAccessibilityComponentIntoSet<SecureScreenDetector>()
+fun ComponentBuilder.esTwilight() {
+    bindAppServiceIntoMap<TwilightHelper>()
 }

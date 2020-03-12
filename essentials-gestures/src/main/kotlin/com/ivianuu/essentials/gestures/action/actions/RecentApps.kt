@@ -4,9 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.foundation.Icon
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsRecentsAppsActionModule = Module {
+internal fun ComponentBuilder.recentAppsAction() {
     bindAccessibilityAction(
         key = "recent_apps",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_RECENTS,

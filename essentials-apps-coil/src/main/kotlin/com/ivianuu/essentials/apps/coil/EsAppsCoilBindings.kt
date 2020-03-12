@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.android.app
+package com.ivianuu.essentials.apps.coil
 
-import android.content.Context
-import com.ivianuu.essentials.android.util.BoxLoggerAppInitializer
-import com.ivianuu.essentials.app.bindAppInitializerIntoMap
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.factory
+import com.ivianuu.essentials.coil.bindFetcherIntoMap
+import com.ivianuu.injekt.ComponentBuilder
 
-val EsAppModule = Module {
-    factory { get<Context>().packageManager!! }
-
-    bindAppInitializerIntoMap<TimberAppInitializer>()
-    bindAppInitializerIntoMap<BoxLoggerAppInitializer>()
+/**
+ * Binds dependencies related to this module
+ */
+fun ComponentBuilder.esAppsCoilBindings() {
+    bindFetcherIntoMap<AppIconFetcher, AppIcon>()
 }

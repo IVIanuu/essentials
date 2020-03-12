@@ -5,9 +5,9 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PowerSettingsNew
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsPowerDialogActionModule = Module {
+internal fun ComponentBuilder.powerDialogAction() {
     bindAccessibilityAction(
         key = "power_dialog",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_POWER_DIALOG,

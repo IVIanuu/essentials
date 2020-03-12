@@ -23,14 +23,14 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import java.io.ByteArrayOutputStream
 
-internal val EsShortcutActionModule = Module {
+internal fun ComponentBuilder.shortcutAction() {
     bindActionFactoryIntoSet<ShortcutActionFactory>()
     bindActionPickerDelegateIntoSet<ShortcutActionPickerDelegate>()
 }

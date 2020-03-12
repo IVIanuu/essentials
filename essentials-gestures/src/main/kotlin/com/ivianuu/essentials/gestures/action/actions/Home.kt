@@ -9,12 +9,12 @@ import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
-internal val EsHomeActionModule = Module {
+internal fun ComponentBuilder.homeAction() {
     if (Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913") {
         bindAccessibilityAction(
             key = "home",

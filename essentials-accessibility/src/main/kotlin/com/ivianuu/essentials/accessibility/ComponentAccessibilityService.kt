@@ -31,7 +31,7 @@ class ComponentAccessibilityService : EsAccessibilityService(),
     private val components: Set<AccessibilityComponent> by getLazy(qualifier = AccessibilityComponents)
 
     override fun ComponentBuilder.buildComponent() {
-        modules(AccessibilityComponentsModule)
+        accessibilityComponentInjection()
     }
 
     override fun onServiceConnected() {

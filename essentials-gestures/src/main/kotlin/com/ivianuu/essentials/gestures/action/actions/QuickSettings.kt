@@ -5,9 +5,9 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsQuickSettingsActionModule = Module {
+internal fun ComponentBuilder.quickSettingsAction() {
     bindAccessibilityAction(
         key = "quick_settings",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,

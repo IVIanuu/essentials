@@ -106,7 +106,7 @@ object Deps {
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev107"
+        private const val version = "0.0.1-dev109"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"

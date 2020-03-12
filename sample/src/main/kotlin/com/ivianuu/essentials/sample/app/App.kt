@@ -17,37 +17,35 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.android.app.EsApp
-import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
-import com.ivianuu.essentials.billing.EsBillingModule
-import com.ivianuu.essentials.boot.EsBootModule
-import com.ivianuu.essentials.coil.EsCoilModule
-import com.ivianuu.essentials.gestures.EsGesturesModule
-import com.ivianuu.essentials.permission.EsPermissionModule
-import com.ivianuu.essentials.sample.BootModule
-import com.ivianuu.essentials.sample.ui.UiModule
-import com.ivianuu.essentials.sample.work.WorkModule
-import com.ivianuu.essentials.twilight.EsTwilightModule
-import com.ivianuu.essentials.work.WorkInjectionModule
+import com.ivianuu.essentials.apps.coil.esAppsCoilBindings
+import com.ivianuu.essentials.billing.esBilling
+import com.ivianuu.essentials.boot.esBootInjection
+import com.ivianuu.essentials.coil.esCoil
+import com.ivianuu.essentials.gestures.esGestures
+import com.ivianuu.essentials.permission.esPermissions
+import com.ivianuu.essentials.sample.bootBindings
+import com.ivianuu.essentials.sample.ui.uiBindings
+import com.ivianuu.essentials.sample.work.workBindings
+import com.ivianuu.essentials.twilight.esTwilight
+import com.ivianuu.essentials.work.workerInjectionModule
 import com.ivianuu.injekt.ComponentBuilder
 
 class App : EsApp() {
 
     override fun ComponentBuilder.buildComponent() {
-        modules(
-            EsAppsCoilModule,
-            EsBillingModule,
-            EsBootModule,
-            EsCoilModule,
-            EsGesturesModule,
-            EsPermissionModule,
-            EsTwilightModule,
-            WorkInjectionModule,
+        esAppsCoilBindings()
+        esBilling()
+        esBootInjection()
+        esCoil()
+        esGestures()
+        esPermissions()
+        esTwilight()
+        workerInjectionModule()
 
-            AppModule,
-            BootModule,
-            UiModule,
-            WorkModule
-        )
+        appBindings()
+        bootBindings()
+        uiBindings()
+        workBindings()
     }
 
 }

@@ -2,8 +2,8 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.bindAppInitializerIntoMap
 import com.ivianuu.essentials.sample.PurchaseInitializer
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-val AppModule = Module {
+fun ComponentBuilder.appBindings() {
     bindAppInitializerIntoMap<PurchaseInitializer>()
 }

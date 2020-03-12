@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.analytics
+package com.ivianuu.essentials.android.app
 
+import android.content.Context
+import com.ivianuu.essentials.android.util.BoxLoggerAppInitializer
 import com.ivianuu.essentials.app.bindAppInitializerIntoMap
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.factory
 
-val EsAnalyticsModule = Module {
-    bindAppInitializerIntoMap<AnalyticsAppInitializer>()
+fun ComponentBuilder.esAppBindings() {
+    factory { get<Context>().packageManager!! }
+
+    bindAppInitializerIntoMap<TimberAppInitializer>()
+    bindAppInitializerIntoMap<BoxLoggerAppInitializer>()
 }

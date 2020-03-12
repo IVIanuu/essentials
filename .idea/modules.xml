@@ -50,6 +50,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-apps.iml" group="essentials/essentials-apps" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials-apps-coil.iml" group="essentials/essentials-apps-coil" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-apps-ui.iml" group="essentials/essentials-apps-ui" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-async/essentials-async.iml" filepath="$PROJECT_DIR$/essentials-async/essentials-async.iml" group="essentials/essentials-async" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-backup/essentials-backup.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-backup/essentials-backup.iml" group="essentials/essentials-backup" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-billing/essentials-billing.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-billing/essentials-billing.iml" group="essentials/essentials-billing" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-billing-debug/essentials-billing-debug.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-billing-debug/essentials-billing-debug.iml" group="essentials/essentials-billing-debug" />

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.billing
 
-import com.ivianuu.essentials.app.bindAppServiceIntoMap
-import com.ivianuu.injekt.Module
+import com.android.billingclient.api.BillingClient
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.alias
 
-val EsTwilightModule = Module {
-    bindAppServiceIntoMap<TwilightHelper>()
+fun ComponentBuilder.esBilling() {
+    alias<DebugBillingClient, BillingClient>()
 }

@@ -5,9 +5,9 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Notifications
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsNotificationsActionModule = Module {
+internal fun ComponentBuilder.notificationsAction() {
     bindAccessibilityAction(
         key = "notifications",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,

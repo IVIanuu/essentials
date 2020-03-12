@@ -13,15 +13,15 @@ import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
-internal val EsLastAppActionModule = Module {
+internal fun ComponentBuilder.lastAppAction() {
     action(
         key = "last_app",
         title = { getStringResource(R.string.es_action_last_app) },

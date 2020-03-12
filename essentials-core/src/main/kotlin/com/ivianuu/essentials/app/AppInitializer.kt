@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
@@ -53,7 +52,7 @@ inline fun <reified T : AppInitializer> ComponentBuilder.bindAppInitializerIntoM
     }
 }
 
-val EsAppInitializerModule = Module {
+fun ComponentBuilder.esAppInitializerInjection() {
     map<String, AppInitializer>(mapQualifier = AppInitializers)
 }
 

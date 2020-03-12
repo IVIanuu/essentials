@@ -6,10 +6,10 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Search
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.parametersOf
 
-internal val EsSearchActionModule = Module {
+internal fun ComponentBuilder.searchAction() {
     action(
         key = "search",
         title = { getStringResource(R.string.es_action_search) },

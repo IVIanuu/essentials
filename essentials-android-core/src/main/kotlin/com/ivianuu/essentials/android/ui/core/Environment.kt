@@ -30,7 +30,6 @@ import com.ivianuu.essentials.android.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.android.ui.injekt.inject
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
@@ -96,6 +95,6 @@ inline fun <reified T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap
     }
 }
 
-val EsUiInitializerModule = Module {
+fun ComponentBuilder.esUiInitializerInjection() {
     map<String, UiInitializer>(mapQualifier = UiInitializers)
 }

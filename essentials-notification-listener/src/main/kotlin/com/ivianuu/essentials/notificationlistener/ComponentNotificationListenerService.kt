@@ -26,7 +26,7 @@ class ComponentNotificationListenerService : EsNotificationListenerService() {
     private val components: Set<NotificationComponent> by getLazy(qualifier = NotificationComponents)
 
     override fun ComponentBuilder.buildComponent() {
-        modules(NotificationComponentsModule)
+        notificationComponentInjection()
     }
 
     override fun onListenerConnected() {

@@ -6,9 +6,9 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PowerSettingsNew
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsSplitScreenActionModule = Module {
+internal fun ComponentBuilder.splitScreenAction() {
     if (Build.VERSION.SDK_INT >= 24) {
         bindAccessibilityAction(
             key = "split_screen",

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.set
@@ -33,6 +32,6 @@ inline fun <reified T : NotificationComponent> ComponentBuilder.bindNotification
     set<NotificationComponent>(NotificationComponents) { add<T>(elementQualifier = componentQualifier) }
 }
 
-internal val NotificationComponentsModule = Module {
+internal fun ComponentBuilder.notificationComponentInjection() {
     set<NotificationComponent>(setQualifier = NotificationComponents)
 }

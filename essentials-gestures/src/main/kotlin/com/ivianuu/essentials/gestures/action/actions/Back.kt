@@ -4,9 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.foundation.Icon
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 
-internal val EsBackActionModule = Module {
+internal fun ComponentBuilder.backAction() {
     bindAccessibilityAction(
         key = "back",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_BACK,

@@ -32,8 +32,8 @@ import com.ivianuu.essentials.android.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.android.ui.navigation.transition.VerticalFadeRouteTransition
 import com.ivianuu.essentials.android.util.isDark
 import com.ivianuu.essentials.twilight.TwilightTheme
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
 
 @Factory
 class SampleUi : AppUi {
@@ -64,7 +64,7 @@ class SampleUiInitializer : UiInitializer {
     }
 }
 
-val UiModule = Module {
+fun ComponentBuilder.uiBindings() {
     appUi<SampleUi>()
     bindUiInitializerIntoMap<SampleUiInitializer>()
 }

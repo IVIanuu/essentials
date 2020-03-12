@@ -21,10 +21,10 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.ivianuu.essentials.util.containsFlag
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.single
 
-val EsAndroidUtilModule = Module {
+fun ComponentBuilder.esAndroidUtil() {
     single {
         val appInfo = get<Application>().applicationInfo
         val packageInfo = get<PackageManager>()
