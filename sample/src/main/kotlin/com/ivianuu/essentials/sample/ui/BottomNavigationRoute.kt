@@ -24,8 +24,8 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Email
 import androidx.ui.material.icons.filled.Home
 import androidx.ui.material.icons.filled.Search
+import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
-import com.ivianuu.essentials.android.icon.Essentials
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.material.BottomNavigation
 import com.ivianuu.essentials.android.ui.material.BottomNavigationItem
@@ -34,7 +34,6 @@ import com.ivianuu.essentials.android.ui.material.ProvideBottomNavigationControl
 import com.ivianuu.essentials.android.ui.material.Scaffold
 import com.ivianuu.essentials.android.ui.material.TopAppBar
 import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.gestures.action.actions.Settings
 
 val BottomNavigationRoute = Route {
     ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {
@@ -84,7 +83,7 @@ private enum class BottomNavItem(
     ),
     Settings(
         title = "Settings",
-        icon = Icons.Essentials.Settings,
+        icon = Icons.Default.Settings,
         color = Color.Green
     )
 }

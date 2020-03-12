@@ -7,13 +7,8 @@ import android.util.Base64
 import androidx.compose.Composable
 import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.graphics.vector.VectorAsset
-import androidx.ui.graphics.vector.path
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.lazyMaterialIcon
+import androidx.ui.res.vectorResource
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.android.icon.Essentials
-import com.ivianuu.essentials.android.icon.EssentialsIcons
 import com.ivianuu.essentials.android.ui.image.toBitmap
 import com.ivianuu.essentials.android.ui.image.toImageAsset
 import com.ivianuu.essentials.android.ui.navigation.NavigatorState
@@ -78,8 +73,9 @@ internal class ShortcutActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_shortcut)
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Essentials.ContentCut) }
+    override val icon: @Composable () -> Unit = {
+        Icon(vectorResource(R.drawable.es_ic_content_cut))
+    }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(
@@ -93,78 +89,6 @@ internal class ShortcutActionPickerDelegate(
         val iconBytes = stream.toByteArray()
         val key = "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(iconBytes, 0)}"
         return ActionPickerResult.Action(key)
-    }
-}
-
-val EssentialsIcons.ContentCut: VectorAsset by lazyMaterialIcon {
-    path {
-        moveTo(6.0f, 16.0f)
-        curveTo(7.1045694f, 16.0f, 8.0f, 16.89543f, 8.0f, 18.0f)
-        curveTo(8.0f, 19.10457f, 7.1045694f, 20.0f, 6.0f, 20.0f)
-        curveTo(4.8954306f, 20.0f, 4.0f, 19.10457f, 4.0f, 18.0f)
-        curveTo(4.0f, 16.89543f, 4.8954306f, 16.0f, 6.0f, 16.0f)
-        close()
-    }
-    path {
-        moveTo(12.0f, 11.5f)
-        curveTo(12.276142f, 11.5f, 12.5f, 11.723858f, 12.5f, 12.0f)
-        curveTo(12.5f, 12.276142f, 12.276142f, 12.5f, 12.0f, 12.5f)
-        curveTo(11.723858f, 12.5f, 11.5f, 12.276142f, 11.5f, 12.0f)
-        curveTo(11.5f, 11.723858f, 11.723858f, 11.5f, 12.0f, 11.5f)
-        close()
-    }
-    path {
-        moveTo(6.0f, 4.0f)
-        curveTo(7.1045694f, 4.0f, 8.0f, 4.8954306f, 8.0f, 6.0f)
-        curveTo(8.0f, 7.1045694f, 7.1045694f, 8.0f, 6.0f, 8.0f)
-        curveTo(4.8954306f, 8.0f, 4.0f, 7.1045694f, 4.0f, 6.0f)
-        curveTo(4.0f, 4.8954306f, 4.8954306f, 4.0f, 6.0f, 4.0f)
-        close()
-    }
-    path {
-        moveTo(9.64f, 7.64f)
-        curveToRelative(0.23f, -0.5f, 0.36f, -1.05f, 0.36f, -1.64f)
-        curveToRelative(0.0f, -2.21f, -1.79f, -4.0f, -4.0f, -4.0f)
-        reflectiveCurveTo(2.0f, 3.79f, 2.0f, 6.0f)
-        reflectiveCurveToRelative(1.79f, 4.0f, 4.0f, 4.0f)
-        curveToRelative(0.59f, 0.0f, 1.14f, -0.13f, 1.64f, -0.36f)
-        lineTo(10.0f, 12.0f)
-        lineToRelative(-2.36f, 2.36f)
-        curveTo(7.14f, 14.13f, 6.59f, 14.0f, 6.0f, 14.0f)
-        curveToRelative(-2.21f, 0.0f, -4.0f, 1.79f, -4.0f, 4.0f)
-        reflectiveCurveToRelative(1.79f, 4.0f, 4.0f, 4.0f)
-        reflectiveCurveToRelative(4.0f, -1.79f, 4.0f, -4.0f)
-        curveToRelative(0.0f, -0.59f, -0.13f, -1.14f, -0.36f, -1.64f)
-        lineTo(12.0f, 14.0f)
-        lineToRelative(7.0f, 7.0f)
-        horizontalLineToRelative(3.0f)
-        verticalLineToRelative(-1.0f)
-        lineTo(9.64f, 7.64f)
-        close()
-        moveTo(6.0f, 8.0f)
-        curveToRelative(-1.1f, 0.0f, -2.0f, -0.89f, -2.0f, -2.0f)
-        reflectiveCurveToRelative(0.9f, -2.0f, 2.0f, -2.0f)
-        reflectiveCurveToRelative(2.0f, 0.89f, 2.0f, 2.0f)
-        reflectiveCurveToRelative(-0.9f, 2.0f, -2.0f, 2.0f)
-        close()
-        moveToRelative(0.0f, 12.0f)
-        curveToRelative(-1.1f, 0.0f, -2.0f, -0.89f, -2.0f, -2.0f)
-        reflectiveCurveToRelative(0.9f, -2.0f, 2.0f, -2.0f)
-        reflectiveCurveToRelative(2.0f, 0.89f, 2.0f, 2.0f)
-        reflectiveCurveToRelative(-0.9f, 2.0f, -2.0f, 2.0f)
-        close()
-        moveToRelative(6.0f, -7.5f)
-        curveToRelative(-0.28f, 0.0f, -0.5f, -0.22f, -0.5f, -0.5f)
-        reflectiveCurveToRelative(0.22f, -0.5f, 0.5f, -0.5f)
-        reflectiveCurveToRelative(0.5f, 0.22f, 0.5f, 0.5f)
-        reflectiveCurveToRelative(-0.22f, 0.5f, -0.5f, 0.5f)
-        close()
-        moveTo(19.0f, 3.0f)
-        lineToRelative(-6.0f, 6.0f)
-        lineToRelative(2.0f, 2.0f)
-        lineToRelative(7.0f, -7.0f)
-        verticalLineTo(3.0f)
-        close()
     }
 }
 

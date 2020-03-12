@@ -58,22 +58,20 @@ fun Environment(
         ProvideCoroutineScope(coroutineScope = coroutineScope) {
             WindowInsetsManager {
                 SystemBarManager {
-                    ConfigurationFix {
-                        val uiInitializers =
-                            inject<Map<String, UiInitializer>>(qualifier = UiInitializers)
-                        uiInitializers.entries
-                            .map { (key, initializer) ->
-                                val function: @Composable (@Composable () -> Unit) -> Unit =
-                                    { children ->
-                                        d { "apply ui initializer $key" }
-                                        initializer.apply(children)
-                                    }
-                                function
-                            }
-                            .fold(children) { current, initializer ->
-                                { initializer(current) }
-                            }.invoke()
-                    }
+                    val uiInitializers =
+                        inject<Map<String, UiInitializer>>(qualifier = UiInitializers)
+                    uiInitializers.entries
+                        .map { (key, initializer) ->
+                            val function: @Composable (@Composable () -> Unit) -> Unit =
+                                { children ->
+                                    d { "apply ui initializer $key" }
+                                    initializer.apply(children)
+                                }
+                            function
+                        }
+                        .fold(children) { current, initializer ->
+                            { initializer(current) }
+                        }.invoke()
                 }
             }
         }

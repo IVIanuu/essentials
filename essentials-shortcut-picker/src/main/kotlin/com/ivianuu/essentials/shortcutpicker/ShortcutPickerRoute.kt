@@ -130,9 +130,9 @@ private class ShortcutPickerViewModel(
                     iconResource != null -> {
                         val resources =
                             packageManager.getResourcesForApplication(iconResource.packageName)
-                        val iconResId =
+                        val id =
                             resources.getIdentifier(iconResource.resourceName, null, null)
-                        resources.getDrawable(iconResId).toImageAsset()
+                        resources.getDrawable(id).toImageAsset()
                     }
                     else -> error("no icon provided $shortcutRequestResult")
                 }

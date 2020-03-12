@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.ui.graphics.vector.VectorAsset
+import androidx.compose.Composable
 import com.ivianuu.essentials.gestures.GlobalActions
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
@@ -14,7 +14,7 @@ fun ComponentBuilder.bindAccessibilityAction(
     key: String,
     accessibilityAction: Int,
     titleRes: Int,
-    icon: VectorAsset
+    icon: @Composable () -> Unit
 ) {
     action(
         key = key,

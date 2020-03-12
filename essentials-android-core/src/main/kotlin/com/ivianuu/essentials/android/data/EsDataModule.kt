@@ -28,11 +28,6 @@ import com.ivianuu.injekt.single
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.plus
 
-@QualifierMarker
-annotation class PrefsPath {
-    companion object : Qualifier.Element
-}
-
 val EsDataModule = Module {
     single(qualifier = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
 
@@ -49,4 +44,9 @@ val EsDataModule = Module {
             coroutineScope = GlobalScope + get<AppCoroutineDispatchers>().io,
         )
     }
+}
+
+@QualifierMarker
+annotation class PrefsPath {
+    companion object : Qualifier.Element
 }

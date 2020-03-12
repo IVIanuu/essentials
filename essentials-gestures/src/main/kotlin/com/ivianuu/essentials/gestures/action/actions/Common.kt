@@ -4,6 +4,7 @@ import androidx.compose.Composable
 import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.res.vectorResource
 import coil.ImageLoader
 import coil.api.getAny
 import com.ivianuu.essentials.android.ui.image.toImageAsset
@@ -39,6 +40,10 @@ fun SingleActionIconProvider(
 fun SingleActionIconProvider(
     icon: VectorAsset
 ): ActionIconProvider = SingleActionIconProvider { Icon(icon) }
+
+fun SingleActionIconProvider(
+    id: Int
+): ActionIconProvider = SingleActionIconProvider { Icon(vectorResource(id)) }
 
 fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 

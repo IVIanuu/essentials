@@ -26,8 +26,8 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.android.icon.Essentials
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.android.ui.dialog.ColorPickerDialog
@@ -48,7 +48,6 @@ import com.ivianuu.essentials.android.ui.material.Scaffold
 import com.ivianuu.essentials.android.ui.material.TopAppBar
 import com.ivianuu.essentials.android.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.gestures.action.actions.Settings
 
 val DialogsRoute = Route {
     Scaffold(
@@ -107,7 +106,7 @@ val DialogsRoute = Route {
                     ) {
                         MaterialDialog(
                             title = { Text("With icon") },
-                            icon = { Icon(Icons.Essentials.Settings) },
+                            icon = { Icon(Icons.Default.Settings) },
                             positiveButton = {
                                 DialogCloseButton { Text("OK") }
                             }
