@@ -27,17 +27,32 @@ import com.ivianuu.injekt.common.set
 import com.ivianuu.injekt.factory
 import kotlin.reflect.KClass
 
+inline fun <reified D : Decoder> ComponentBuilder.bindDecoderIntoSet(
+    decoderQualifier: Qualifier = Qualifier.None
+) {
+    val finalQualifier = Qualifier(D::class) + decoderQualifier
+    set<Decoder>(setQualifier = Fetchers) {
+        add<Decoder>(elementQualifier = finalQualifier)
+    }
+}
+
 @QualifierMarker
 annotation class Decoders {
     companion object : Qualifier.Element
 }
 
-inline fun <reified D : Decoder> ComponentBuilder.bindDecoderIntoSet(
-    decoderQualifier: Qualifier = Qualifier.None
+inline fun <reified F : Fetcher<T>, reified T : Any> ComponentBuilder.bindFetcherIntoMap(
+    mapperQualifier: Qualifier = Qualifier.None
 ) {
-    val finalQualifier = CoilQualifier(D::class) + decoderQualifier
-    set<Decoder>(setQualifier = Fetchers) {
-        add<Decoder>(elementQualifier = finalQualifier)
+    val finalQualifier = Qualifier(T::class) + mapperQualifier
+    factory(qualifier = finalQualifier) {
+        FetcherBinding(
+            fetcher = get<F>(qualifier = mapperQualifier),
+            type = T::class
+        )
+    }
+    set<FetcherBinding<*>>(setQualifier = Fetchers) {
+        add<FetcherBinding<T>>(elementQualifier = finalQualifier)
     }
 }
 
@@ -51,35 +66,10 @@ data class FetcherBinding<T : Any>(
     val type: KClass<T>
 )
 
-inline fun <reified F : Fetcher<T>, reified T : Any> ComponentBuilder.bindFetcherIntoMap(
-    mapperQualifier: Qualifier = Qualifier.None
-) {
-    val finalQualifier = CoilQualifier(T::class) + mapperQualifier
-    factory(qualifier = finalQualifier) {
-        FetcherBinding(
-            fetcher = get<F>(qualifier = mapperQualifier),
-            type = T::class
-        )
-    }
-    set<FetcherBinding<*>>(setQualifier = Fetchers) {
-        add<FetcherBinding<T>>(elementQualifier = finalQualifier)
-    }
-}
-
-@QualifierMarker
-annotation class Mappers {
-    companion object : Qualifier.Element
-}
-
-data class MapperBinding<T : Any>(
-    val mapper: Mapper<T, *>,
-    val type: KClass<T>
-)
-
 inline fun <reified M : Mapper<T, *>, reified T : Any> ComponentBuilder.bindMapperIntoMap(
     mapperQualifier: Qualifier = Qualifier.None
 ) {
-    val finalQualifier = CoilQualifier(T::class) + mapperQualifier
+    val finalQualifier = Qualifier(T::class) + mapperQualifier
     factory(qualifier = finalQualifier) {
         MapperBinding(
             mapper = get<M>(qualifier = mapperQualifier),
@@ -91,20 +81,20 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> ComponentBuilder.bindMapp
     }
 }
 
-@QualifierMarker
-annotation class MeasuredMappers {
-    companion object : Qualifier.Element
-}
-
-data class MeasuredMapperBinding<T : Any>(
-    val mapper: MeasuredMapper<T, *>,
+data class MapperBinding<T : Any>(
+    val mapper: Mapper<T, *>,
     val type: KClass<T>
 )
+
+@QualifierMarker
+annotation class Mappers {
+    companion object : Qualifier.Element
+}
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ComponentBuilder.bindMeasuredMapperIntoMap(
     mapperQualifier: Qualifier = Qualifier.None
 ) {
-    val finalQualifier = CoilQualifier(T::class) + mapperQualifier
+    val finalQualifier = Qualifier(T::class) + mapperQualifier
     factory(qualifier = finalQualifier) {
         MeasuredMapperBinding(
             mapper = get<M>(qualifier = mapperQualifier),
@@ -116,5 +106,12 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ComponentBuilder.
     }
 }
 
-@PublishedApi
-internal data class CoilQualifier(val type: KClass<*>) : Qualifier.Element
+data class MeasuredMapperBinding<T : Any>(
+    val mapper: MeasuredMapper<T, *>,
+    val type: KClass<T>
+)
+
+@QualifierMarker
+annotation class MeasuredMappers {
+    companion object : Qualifier.Element
+}
