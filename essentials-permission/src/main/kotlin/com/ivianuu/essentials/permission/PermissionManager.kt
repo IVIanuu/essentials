@@ -18,10 +18,11 @@ package com.ivianuu.essentials.permission
 
 import android.content.Context
 import com.github.ajalt.timberkt.d
+import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -29,6 +30,7 @@ import java.util.UUID
 @Single
 class PermissionManager(
     private val context: Context,
+    @ForApplication private val coroutineScope: CoroutineScope,
     @PermissionStateProvidersSet private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
@@ -53,7 +55,7 @@ class PermissionManager(
             id = id,
             permissions = permissions.toList(),
             onComplete = {
-                GlobalScope.launch {
+                coroutineScope.launch {
                     finished.complete(Unit)
                     requests.remove(id)
                 }

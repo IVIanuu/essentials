@@ -35,9 +35,9 @@ import com.android.billingclient.api.querySkuDetails
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
@@ -86,7 +86,7 @@ class PurchaseManager(
         sku: Sku,
         acknowledge: Boolean = true,
         consumeOldPurchaseIfUnspecified: Boolean = true
-    ): Boolean = withContext(dispatchers.default) {
+    ): Boolean = withContext(dispatchers.computation) {
         val requestId = UUID.randomUUID().toString()
         val result = CompletableDeferred<Boolean>()
         requests[requestId] = PurchaseRequest(sku = sku, result = result)
@@ -123,7 +123,7 @@ class PurchaseManager(
         return@withContext if (success) acknowledge(sku) else return@withContext false
     }
 
-    suspend fun consume(sku: Sku): Boolean = withContext(dispatchers.default) {
+    suspend fun consume(sku: Sku): Boolean = withContext(dispatchers.computation) {
         ensureConnected()
 
         val purchase = getPurchase(sku) ?: return@withContext false
@@ -141,7 +141,7 @@ class PurchaseManager(
         return@withContext success
     }
 
-    suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.default) {
+    suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.computation) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
 
@@ -163,7 +163,7 @@ class PurchaseManager(
     internal suspend fun purchaseInternal(
         requestId: String,
         activity: PurchaseActivity
-    ) = withContext(dispatchers.default) {
+    ) = withContext(dispatchers.computation) {
         d { "purchase internal $requests" }
         val request = requests[requestId] ?: return@withContext
 
@@ -207,14 +207,15 @@ class PurchaseManager(
             .onEach { d { "is purchased flow for $sku -> emit $it" } }
     }
 
-    suspend fun isFeatureSupported(feature: BillingFeature): Boolean = withContext(dispatchers.default) {
+    suspend fun isFeatureSupported(feature: BillingFeature): Boolean =
+        withContext(dispatchers.computation) {
         ensureConnected()
         val result = billingClient.isFeatureSupported(feature.value)
         d { "is feature supported $feature ? ${result.responseCode} ${result.debugMessage}" }
         return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
     }
 
-    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.default) {
+    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.computation) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
         val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED

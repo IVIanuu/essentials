@@ -15,11 +15,11 @@ class ActionStore(
     private val dispatchers: AppCoroutineDispatchers
 ) {
 
-    suspend fun getActions(): List<Action> = withContext(dispatchers.default) {
+    suspend fun getActions(): List<Action> = withContext(dispatchers.computation) {
         actions.map { it.value() }
     }
 
-    suspend fun getAction(key: String): Action = withContext(dispatchers.default) {
+    suspend fun getAction(key: String): Action = withContext(dispatchers.computation) {
         actions[key]?.invoke()
             ?: actionFactories
                 .map { it() }

@@ -27,8 +27,8 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

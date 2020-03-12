@@ -41,11 +41,10 @@ import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.scopes.ReusableScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -132,11 +131,11 @@ private class CheckableAppsViewModel(
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
-    private val checkedAppsScope = ReusableScope()
+    private var checkedAppsJob: Job? = null
     private val checkedApps = StateFlow<Set<String>>()
 
     init {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             val appsFlow = flowOf {
                 appStore.getInstalledApps().filter(appFilter)
             }
@@ -160,18 +159,18 @@ private class CheckableAppsViewModel(
     ) {
         this.onCheckedAppsChanged = onCheckedAppsChanged
 
-        checkedAppsFlow
+        checkedAppsJob = checkedAppsFlow
             .onEach { checkedApps.value = it }
-            .launchIn(checkedAppsScope.coroutineScope)
+            .launchIn(coroutineScope)
     }
 
     fun detach() {
-        checkedAppsScope.clear()
+        checkedAppsJob?.cancel()
         onCheckedAppsChanged = null
     }
 
     fun appClicked(app: CheckableApp) {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             pushNewCheckedApps {
 
                 if (!app.isChecked) {
@@ -184,7 +183,7 @@ private class CheckableAppsViewModel(
     }
 
     fun selectAllClicked() {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             state.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
@@ -194,7 +193,7 @@ private class CheckableAppsViewModel(
     }
 
     fun deselectAllClicked() {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             pushNewCheckedApps { it.clear() }
         }
     }

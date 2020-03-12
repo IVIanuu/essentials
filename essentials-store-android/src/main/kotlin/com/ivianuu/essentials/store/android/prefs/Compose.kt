@@ -25,6 +25,7 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.px
 import com.ivianuu.essentials.store.DiskBox
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 
 fun PrefBoxFactory.color(
     name: String,

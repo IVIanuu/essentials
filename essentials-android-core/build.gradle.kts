@@ -56,7 +56,5 @@ dependencies {
 
     api(Deps.Injekt.android)
 
-    api(Deps.Scopes.android)
-
     api(Deps.timberKt)
 }

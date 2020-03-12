@@ -18,8 +18,8 @@ package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 
 /**
  * Simulates device inputs such as back or home

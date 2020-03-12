@@ -28,17 +28,21 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.scopes.ReusableScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 /**
  * Handles the state of the navigation bar
@@ -48,6 +52,7 @@ import kotlinx.coroutines.flow.onStart
 class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
+    @ForApplication private val coroutineScope: CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
@@ -56,10 +61,10 @@ class NavBarController internal constructor(
     private val screenStateProvider: ScreenStateProvider
 ) {
 
-    private val scope = ReusableScope()
+    private var job: Job? = null
 
     suspend fun setNavBarConfig(config: NavBarConfig) {
-        scope.clear()
+        job?.cancel()
 
         if (!config.hidden) {
             if (prefs.wasNavBarHidden.getCurrentData()) {
@@ -80,28 +85,35 @@ class NavBarController internal constructor(
             }
         }
 
-        // apply config
-        merge(flows)
-            .onStart { emit(Unit) }
-            .map {
-                !config.showWhileScreenOff || screenStateProvider.getScreenState() == ScreenState.Unlocked
-            }
-            .onEach { navBarHidden ->
-                prefs.wasNavBarHidden.updateData { navBarHidden }
-                setNavBarConfigInternal(navBarHidden, config)
-            }
-            .flowOn(dispatchers.default)
-            .launchIn(scope.coroutineScope)
-
-        // force show on shut downs
-        broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-            .onEach {
-                scope.clear()
-                d { "show nav bar because of shutdown" }
-                setNavBarConfigInternal(false, config)
-            }
-            .flowOn(dispatchers.default)
-            .launchIn(scope.coroutineScope)
+        job = coroutineScope.launch {
+            awaitAll(
+                async {
+                    // apply config
+                    merge(flows)
+                        .onStart { emit(Unit) }
+                        .map {
+                            !config.showWhileScreenOff || screenStateProvider.getScreenState() == ScreenState.Unlocked
+                        }
+                        .onEach { navBarHidden ->
+                            prefs.wasNavBarHidden.updateData { navBarHidden }
+                            setNavBarConfigInternal(navBarHidden, config)
+                        }
+                        .flowOn(dispatchers.computation)
+                        .collect()
+                },
+                async {
+                    // force show on shut downs
+                    broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+                        .onEach {
+                            job?.cancel()
+                            d { "show nav bar because of shutdown" }
+                            setNavBarConfigInternal(false, config)
+                        }
+                        .flowOn(dispatchers.computation)
+                        .collect()
+                }
+            )
+        }
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {

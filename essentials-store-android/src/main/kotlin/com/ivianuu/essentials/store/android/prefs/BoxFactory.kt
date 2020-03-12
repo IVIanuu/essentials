@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.prefs
+package com.ivianuu.essentials.store.android.prefs
 
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox

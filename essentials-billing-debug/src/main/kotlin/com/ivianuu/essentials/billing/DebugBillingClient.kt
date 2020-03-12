@@ -41,10 +41,11 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
+import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.UUID
@@ -54,6 +55,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Single
 class DebugBillingClient(
     private val context: Context,
+    @ForApplication private val coroutineScope: CoroutineScope,
     @Param private val purchasesUpdatedListener: PurchasesUpdatedListener,
     private val billingStore: BillingStore
 ) : BillingClient() {
@@ -118,7 +120,7 @@ class DebugBillingClient(
             return
         }
 
-        GlobalScope.launch {
+        coroutineScope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 billingStore.removePurchase(purchase.purchaseToken)
@@ -160,7 +162,7 @@ class DebugBillingClient(
             )
             return
         }
-        GlobalScope.launch {
+        coroutineScope.launch {
             val history = queryPurchases(skuType)
             listener.onPurchaseHistoryResponse(BillingResult.newBuilder().setResponseCode(history.responseCode).build(),
                 history.purchasesList.map { PurchaseHistoryRecord(it.originalJson, it.signature) })
@@ -179,7 +181,7 @@ class DebugBillingClient(
             )
             return
         }
-        GlobalScope.launch {
+        coroutineScope.launch {
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
@@ -232,7 +234,7 @@ class DebugBillingClient(
             return
         }
 
-        GlobalScope.launch {
+        coroutineScope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 val updated = Purchase(

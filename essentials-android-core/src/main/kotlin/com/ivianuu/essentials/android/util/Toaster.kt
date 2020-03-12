@@ -20,7 +20,8 @@ import android.content.Context
 import android.widget.Toast
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
-import kotlinx.coroutines.GlobalScope
+import com.ivianuu.injekt.ForApplication
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 @Factory
 class Toaster(
     private val context: Context,
+    @ForApplication private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val resourceProvider: ResourceProvider
 ) {
@@ -49,7 +51,7 @@ class Toaster(
         showToast(resourceProvider.getString(msgId, *args), true)
     }
 
-    private fun showToast(msg: String, long: Boolean) = GlobalScope.launch(dispatchers.main) {
+    private fun showToast(msg: String, long: Boolean) = coroutineScope.launch(dispatchers.main) {
         Toast.makeText(context, msg, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
             .show()
     }

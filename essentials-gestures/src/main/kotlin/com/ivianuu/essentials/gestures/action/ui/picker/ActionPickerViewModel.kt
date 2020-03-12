@@ -16,7 +16,6 @@ import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ internal class ActionPickerViewModel(
 ) : MvRxViewModel<ActionPickerState>(ActionPickerState()) {
 
     init {
-        scope.coroutineScope.execute(
+        coroutineScope.execute(
             block = {
                 val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
@@ -67,7 +66,7 @@ internal class ActionPickerViewModel(
     }
 
     fun itemClicked(selectedItem: ActionPickerItem) {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             val result = selectedItem.getResult()
             if (result is ActionPickerResult.Action) {
                 val action = actionStore.getAction(result.actionKey)

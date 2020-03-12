@@ -15,9 +15,9 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 
 @ApplicationScope
 @Single

@@ -36,7 +36,7 @@ import com.ivianuu.essentials.android.ui.prefs.RadioButtonPreference
 import com.ivianuu.essentials.android.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.android.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.android.ui.prefs.TextInputPreference
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.color
 import com.ivianuu.essentials.store.prefs.duration

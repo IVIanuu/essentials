@@ -16,8 +16,12 @@
 
 package com.ivianuu.essentials.android.ui.base
 
-import com.ivianuu.scopes.MutableScope
-import com.ivianuu.scopes.Scope
+import com.ivianuu.essentials.app.AppComponentHolder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import java.io.Closeable
 
 /**
@@ -25,10 +29,12 @@ import java.io.Closeable
  */
 abstract class ViewModel : Closeable {
 
-    private val _scope = MutableScope()
-    val scope: Scope get() = _scope
+    val coroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
 
     override fun close() {
-        _scope.close()
+        coroutineScope.cancel()
     }
 }

@@ -22,8 +22,8 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -54,7 +54,7 @@ class ScreenStateProvider(
         .distinctUntilChanged()
         .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "screen state")
 
-    suspend fun getScreenState() = withContext(dispatchers.default) {
+    suspend fun getScreenState() = withContext(dispatchers.computation) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
                 ScreenState.Locked

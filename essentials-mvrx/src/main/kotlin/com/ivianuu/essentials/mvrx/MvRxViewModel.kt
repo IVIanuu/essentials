@@ -27,7 +27,6 @@ import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -53,7 +52,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     val state: S get() = _state.value
 
     protected open val coroutineDispatcher = AppComponentHolder.component
-        .get<AppCoroutineDispatchers>().default
+        .get<AppCoroutineDispatchers>().computation
 
     init {
         if (AppComponentHolder.component.get<BuildInfo>().isDebug) {
@@ -72,13 +71,13 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
         flow.onEach(consumer)
             .flowOn(coroutineDispatcher)
-            .launchIn(scope.coroutineScope)
+            .launchIn(coroutineScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = coroutineDispatcher,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
-    ): Job = scope.coroutineScope.execute(
+    ): Job = coroutineScope.execute(
         context = context,
         start = start,
         block = { await() },

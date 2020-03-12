@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.DiskBox
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 

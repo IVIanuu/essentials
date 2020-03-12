@@ -18,13 +18,16 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.ivianuu.essentials.app.AppComponentHolder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.scopes.MutableScope
-import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.Scope
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 
 /**
  * Base notification listener service
@@ -38,19 +41,32 @@ abstract class EsNotificationListenerService : NotificationListenerService(), Co
         }
     }
 
-    private val _scope = MutableScope()
-    val scope: Scope get() = _scope
+    val coroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
 
-    private val _connectedScope = ReusableScope()
-    val connectedScope: Scope get() = _connectedScope
+    var connectedCoroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
+        private set
 
     override fun onDestroy() {
-        _scope.close()
+        coroutineScope.cancel()
         super.onDestroy()
     }
 
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        connectedCoroutineScope = CoroutineScope(
+            Job() +
+                    AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
+
     override fun onListenerDisconnected() {
-        _connectedScope.clear()
+        connectedCoroutineScope.cancel()
         super.onListenerDisconnected()
     }
 

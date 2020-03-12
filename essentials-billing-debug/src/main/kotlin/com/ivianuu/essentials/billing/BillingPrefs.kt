@@ -2,11 +2,11 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.map
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 
 @ApplicationScope
 @Single

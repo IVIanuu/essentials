@@ -18,6 +18,7 @@ package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.map
 import kotlin.time.Duration
 

@@ -22,8 +22,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.flow.Flow
 
 @ApplicationScope

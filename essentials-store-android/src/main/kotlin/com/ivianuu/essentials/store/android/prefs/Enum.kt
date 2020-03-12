@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.DiskBox
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import kotlin.reflect.KClass
 
 inline fun <reified T : Enum<T>> PrefBoxFactory.enum(

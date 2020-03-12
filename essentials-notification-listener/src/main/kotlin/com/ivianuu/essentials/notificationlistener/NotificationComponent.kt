@@ -18,16 +18,22 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.Scope
+import com.ivianuu.essentials.app.AppComponentHolder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 
 abstract class NotificationComponent {
 
     var service: ComponentNotificationListenerService? = null
         private set
 
-    private val _scope = ReusableScope()
-    val scope: Scope get() = _scope
+    val coroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
 
     open fun onServiceConnected(service: ComponentNotificationListenerService) {
         this.service = service
@@ -46,7 +52,7 @@ abstract class NotificationComponent {
     }
 
     open fun onServiceDisconnected() {
-        _scope.clear()
+        coroutineScope.cancel()
         service = null
     }
 }

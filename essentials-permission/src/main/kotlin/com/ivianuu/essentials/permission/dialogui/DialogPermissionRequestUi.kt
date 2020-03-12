@@ -44,7 +44,6 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -125,7 +124,7 @@ private class PermissionDialogViewModel(
     }
 
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             d { "request $permission" }
             withContext(dispatchers.main) {
                 requestHandlers.requestHandlerFor(permission)
@@ -137,7 +136,7 @@ private class PermissionDialogViewModel(
     }
 
     private fun updatePermissionsToProcessOrFinish() {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             val permissionsToProcess = request.permissions
                 .filterNot { manager.hasPermissions(it) }
 

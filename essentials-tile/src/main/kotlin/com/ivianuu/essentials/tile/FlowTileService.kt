@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
-import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,6 +30,6 @@ abstract class FlowTileService<T> : StateTileService<T>() {
         super.onStartListening()
         flow
             .onEach { setState(it) }
-            .launchIn(listeningScope.coroutineScope)
+            .launchIn(listeningCoroutineScope)
     }
 }

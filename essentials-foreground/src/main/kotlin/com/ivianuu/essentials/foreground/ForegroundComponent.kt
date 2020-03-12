@@ -16,8 +16,12 @@
 
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.Scope
+import com.ivianuu.essentials.app.AppComponentHolder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class ForegroundComponent {
@@ -28,15 +32,17 @@ abstract class ForegroundComponent {
     var manager: ForegroundManager? = null
         private set
 
-    private val _scope = ReusableScope()
-    val scope: Scope get() = _scope
+    val coroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
 
     open fun attach(manager: ForegroundManager) {
         this.manager = manager
     }
 
     open fun detach() {
-        _scope.clear()
+        coroutineScope.cancel()
         this.manager = null
     }
 

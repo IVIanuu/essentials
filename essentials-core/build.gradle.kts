@@ -21,7 +21,4 @@ dependencies {
     compile(Deps.Kotlin.stdlib)
 
     compile(Deps.kotlinFlowExtensions)
-
-    compile(Deps.Scopes.scopes)
-    compile(Deps.Scopes.coroutines)
 }

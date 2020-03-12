@@ -50,7 +50,7 @@ val TorchRoute = Route {
                 val dispatchers = inject<AppCoroutineDispatchers>()
                 Button(
                     onClick = {
-                        coroutineScope.launch(dispatchers.default) {
+                        coroutineScope.launch(dispatchers.computation) {
                             torchManager.toggleTorch()
                         }
                     }

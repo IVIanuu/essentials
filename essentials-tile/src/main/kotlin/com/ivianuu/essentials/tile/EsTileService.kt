@@ -18,13 +18,16 @@ package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import android.service.quicksettings.TileService
+import com.ivianuu.essentials.app.AppComponentHolder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.scopes.MutableScope
-import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.Scope
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 
 /**
  * Base tile service
@@ -39,19 +42,32 @@ abstract class EsTileService : TileService(), ComponentOwner,
         }
     }
 
-    private val _scope = MutableScope()
-    val scope: Scope get() = _scope
+    val coroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
 
-    private val _listeningScope = ReusableScope()
-    val listeningScope: Scope get() = _listeningScope
+    var listeningCoroutineScope = CoroutineScope(
+        Job() +
+                AppComponentHolder.get<AppCoroutineDispatchers>().computation
+    )
+        private set
 
     override fun onDestroy() {
-        _scope.close()
+        listeningCoroutineScope.cancel()
         super.onDestroy()
     }
 
+    override fun onStartListening() {
+        super.onStartListening()
+        listeningCoroutineScope = CoroutineScope(
+            Job() +
+                    AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
+
     override fun onStopListening() {
-        _listeningScope.clear()
+        listeningCoroutineScope.cancel()
         super.onStopListening()
     }
 }

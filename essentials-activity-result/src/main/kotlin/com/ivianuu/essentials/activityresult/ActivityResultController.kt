@@ -20,8 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.github.ajalt.timberkt.d
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger

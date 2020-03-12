@@ -21,7 +21,7 @@ import com.ivianuu.essentials.android.ui.injekt.inject
 import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
 
 val CheckAppsRoute = Route {

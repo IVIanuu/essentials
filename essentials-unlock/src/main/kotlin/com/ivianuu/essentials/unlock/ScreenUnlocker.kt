@@ -20,8 +20,8 @@ import android.app.KeyguardManager
 import android.content.Context
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -40,7 +40,7 @@ class ScreenUnlocker(
 
     private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
-    suspend fun unlockScreen(): Boolean = withContext(dispatchers.default) {
+    suspend fun unlockScreen(): Boolean = withContext(dispatchers.computation) {
         if (!keyguardManager.isKeyguardLocked) return@withContext true
 
         val result = CompletableDeferred<Boolean>()

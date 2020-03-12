@@ -7,10 +7,9 @@ import kotlinx.coroutines.Dispatchers
 fun ComponentBuilder.esUtil() {
     single {
         AppCoroutineDispatchers(
-            default = Dispatchers.Default,
             io = Dispatchers.IO,
-            main = Dispatchers.Main,
-            unconfined = Dispatchers.Unconfined
+            computation = Dispatchers.Default,
+            main = Dispatchers.Main
         )
     }
 }

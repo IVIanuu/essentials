@@ -20,7 +20,6 @@ import android.app.NotificationManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,11 +42,11 @@ class ForegroundService : EsService() {
         foregroundManager.updates
             .onStart { emit(Unit) }
             .onEach { update() }
-            .launchIn(scope.coroutineScope)
+            .launchIn(coroutineScope)
 
         foregroundManager.stopServiceRequests
             .onEach { stop() }
-            .launchIn(scope.coroutineScope)
+            .launchIn(coroutineScope)
     }
 
     override fun onDestroy() {

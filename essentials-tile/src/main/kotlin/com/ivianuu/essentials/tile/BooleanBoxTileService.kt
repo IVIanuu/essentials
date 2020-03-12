@@ -18,7 +18,6 @@ package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import com.ivianuu.essentials.store.getCurrentData
-import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -28,7 +27,7 @@ import kotlinx.coroutines.launch
 abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
     override fun onClick() {
         super.onClick()
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             val newValue = !box.getCurrentData()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

@@ -21,8 +21,8 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.flow.Flow
 
 @ApplicationScope

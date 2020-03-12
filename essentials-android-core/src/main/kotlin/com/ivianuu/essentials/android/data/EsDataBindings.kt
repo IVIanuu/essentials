@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.android.data
 
 import android.content.Context
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.android.ForApplication
 import com.ivianuu.injekt.single
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 
 fun ComponentBuilder.esData() {
@@ -33,7 +33,7 @@ fun ComponentBuilder.esData() {
 
     single {
         PrefBoxFactory(
-            coroutineScope = GlobalScope + get<AppCoroutineDispatchers>().io,
+            coroutineScope = get<CoroutineScope>(ForApplication) + get<AppCoroutineDispatchers>().io,
             prefsPath = get(qualifier = PrefsPath)
         )
     }
@@ -41,7 +41,7 @@ fun ComponentBuilder.esData() {
     single {
         SettingsBoxFactory(
             context = get(qualifier = ForApplication),
-            coroutineScope = GlobalScope + get<AppCoroutineDispatchers>().io,
+            coroutineScope = get<CoroutineScope>(ForApplication) + get<AppCoroutineDispatchers>().io
         )
     }
 }

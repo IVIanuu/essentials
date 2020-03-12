@@ -43,7 +43,6 @@ import com.ivianuu.essentials.android.util.Async
 import com.ivianuu.essentials.android.util.Uninitialized
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.launch
 
@@ -82,7 +81,7 @@ private class ShortcutPickerViewModel(
     ShortcutPickerState()
 ) {
     init {
-        scope.coroutineScope.execute(
+        coroutineScope.execute(
             block = {
                 val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
                 packageManager.queryIntentActivities(shortcutsIntent, 0)
@@ -110,7 +109,7 @@ private class ShortcutPickerViewModel(
     }
 
     fun infoClicked(info: ShortcutInfo) {
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             try {
                 val shortcutRequestResult = navigator.push<ActivityResult>(
                     ActivityResultRoute(

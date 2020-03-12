@@ -18,9 +18,10 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.single
 
-val EsBillingModule
-{
+fun ComponentBuilder.esBilling() {
     single { (updateListener: PurchasesUpdatedListener) ->
         BillingClient
             .newBuilder(get())

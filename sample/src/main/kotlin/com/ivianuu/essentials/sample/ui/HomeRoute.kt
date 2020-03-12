@@ -54,7 +54,7 @@ import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.injekt.parametersOf

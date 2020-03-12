@@ -37,7 +37,6 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -96,7 +95,7 @@ private class AppPickerViewModel(
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
-        scope.coroutineScope.execute(
+        coroutineScope.execute(
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)

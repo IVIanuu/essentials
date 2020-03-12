@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev468"
+    const val version = "${Build.versionName}-dev470"
 }
 
 object Deps {
@@ -40,7 +40,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        private const val composeVersion = "0.0.1-dev70"
+        private const val composeVersion = "0.0.1-dev71"
 
         object Compose {
             const val version = composeVersion
@@ -101,12 +101,12 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev462"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev470"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev109"
+        private const val version = "0.0.1-dev111"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
@@ -137,13 +137,6 @@ object Deps {
     const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
 
     const val roboelectric = "org.robolectric:robolectric:4.0.2"
-
-    object Scopes {
-        private const val version = "0.0.1-dev26"
-        const val scopes = "com.ivianuu.scopes:scopes:$version"
-        const val android = "com.ivianuu.scopes:scopes-android:$version"
-        const val coroutines = "com.ivianuu.scopes:scopes-coroutines:$version"
-    }
 
     const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
 

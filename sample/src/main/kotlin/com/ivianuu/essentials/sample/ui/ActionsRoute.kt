@@ -12,7 +12,8 @@ import com.ivianuu.essentials.gestures.action.ActionExecutors
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerRoute
 import com.ivianuu.essentials.util.safeAs
-import kotlinx.coroutines.GlobalScope
+import com.ivianuu.injekt.android.ForActivity
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 val ActionsRoute = Route {
@@ -21,9 +22,10 @@ val ActionsRoute = Route {
         val navigator = NavigatorAmbient.current
 
         Center {
+            val activityCoroutineScope = inject<CoroutineScope>(ForActivity)
             Button(
                 onClick = {
-                    GlobalScope.launch {
+                    activityCoroutineScope.launch {
                         val action = navigator.push<ActionPickerResult>(
                             ActionPickerRoute(
                                 showDefaultOption = false,

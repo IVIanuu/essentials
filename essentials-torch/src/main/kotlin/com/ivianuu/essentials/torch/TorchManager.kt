@@ -24,8 +24,8 @@ import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
