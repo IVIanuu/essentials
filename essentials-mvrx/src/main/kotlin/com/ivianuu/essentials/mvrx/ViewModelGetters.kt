@@ -39,7 +39,7 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
 ): T {
     val viewModel = viewModel(key = key, factory = factory)
     // recompose on changes
-    collect(viewModel.flow)
+    collect(viewModel.state)
     return viewModel
 }
 
@@ -61,6 +61,6 @@ fun <T : MvRxViewModel<*>> injectMvRxViewModel(
 ): T {
     val viewModel = injectViewModel(key = key, viewModelKey = viewModelKey, parameters = parameters)
     // recompose on changes
-    collect(viewModel.flow)
+    collect(viewModel.state)
     return viewModel
 }

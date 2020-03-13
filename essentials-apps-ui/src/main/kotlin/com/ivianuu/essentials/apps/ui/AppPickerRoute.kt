@@ -56,7 +56,7 @@ fun AppPickerRoute(
                 injectMvRxViewModel<AppPickerViewModel>(parameters = parametersOf(appFilter))
 
             RenderAsyncList(
-                state = viewModel.state.apps,
+                state = viewModel.getCurrentState().apps,
                 successItemCallback = { _, app ->
                     key(app.packageName) {
                         AppInfo(

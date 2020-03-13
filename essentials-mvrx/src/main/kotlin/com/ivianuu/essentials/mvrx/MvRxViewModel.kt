@@ -48,8 +48,9 @@ import kotlin.coroutines.CoroutineContext
 abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
     private val _state = StateFlow(initialState)
-    val flow: Flow<S> get() = _state
-    val state: S get() = _state.value
+    val state: Flow<S> get() = _state
+
+    fun getCurrentState(): S = _state.value
 
     protected open val coroutineDispatcher = AppComponentHolder.component
         .get<AppCoroutineDispatchers>().computation
@@ -69,7 +70,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
-        flow.onEach(consumer)
+        state.onEach(consumer)
             .flowOn(coroutineDispatcher)
             .launchIn(coroutineScope)
 

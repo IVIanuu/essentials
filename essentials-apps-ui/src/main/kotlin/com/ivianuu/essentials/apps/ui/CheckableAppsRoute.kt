@@ -88,7 +88,7 @@ fun CheckableAppsScreen(
         },
         body = {
             RenderAsyncList(
-                state = viewModel.state.apps,
+                state = viewModel.getCurrentState().apps,
                 successItemCallback = { _, app ->
                     CheckableApp(
                         app = app,
@@ -184,7 +184,7 @@ private class CheckableAppsViewModel(
 
     fun selectAllClicked() {
         coroutineScope.launch {
-            state.apps()?.let { allApps ->
+            getCurrentState().apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
                 }
