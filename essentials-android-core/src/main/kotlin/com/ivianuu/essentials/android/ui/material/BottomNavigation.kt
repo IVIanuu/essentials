@@ -189,6 +189,7 @@ fun RowScope.BottomNavigationItem(
 fun <T> BottomNavigationSwapper(
     bottomNavigationController: BottomNavigationController<T> = ambientBottomNavigationController(),
     keepState: Boolean = false,
+    modifier: Modifier = Modifier.None,
     contentCallback: @Composable (T) -> Unit
 ) {
     val swapperController = retain {
@@ -205,7 +206,7 @@ fun <T> BottomNavigationSwapper(
         swapperController.current = bottomNavigationController.selectedItem
     }
 
-    Swapper(state = swapperController) {
+    Swapper(state = swapperController, modifier = modifier) {
         Providers(BottomNavigationItemAmbient provides bottomNavigationController.selectedItem) {
             contentCallback(bottomNavigationController.selectedItem)
         }
