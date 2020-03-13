@@ -22,27 +22,19 @@ import com.ivianuu.essentials.android.data.esData
 import com.ivianuu.essentials.android.ui.core.esUiInitializerInjection
 import com.ivianuu.essentials.android.util.esAndroidUtil
 import com.ivianuu.essentials.app.AppComponentHolder
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.AppInitializers
-import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.app.AppServices
 import com.ivianuu.essentials.app.esAppInitializerInjection
 import com.ivianuu.essentials.app.esAppServiceInjection
 import com.ivianuu.essentials.moshi.android.esMoshiAndroid
 import com.ivianuu.essentials.moshi.esMoshi
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.esUtil
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.InjektPlugins
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
 import com.ivianuu.injekt.android.systemServices
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.getLazy
 
 /**
  * App
@@ -59,20 +51,15 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
             return AppComponentHolder.component
         }
 
-    private val appServices: Map<String, Provider<AppService>> by getLazy(qualifier = AppServices)
-
-    private val logger: Logger by getLazy()
-
-    override fun onCreate() {
-        super.onCreate()
-        invokeInitializers()
-        startAppServices()
-    }
-
     protected open fun configureInjekt() {
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             InjektPlugins.logger = AndroidLogger()
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        component
     }
 
     protected open fun initializeComponent() {
@@ -91,21 +78,5 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
                 buildComponent()
             }
         )
-    }
-
-    protected open fun invokeInitializers() {
-        get<Map<String, Provider<AppInitializer>>>(qualifier = AppInitializers)
-            .forEach {
-                logger.d("initialize ${it.key}")
-                it.value()
-            }
-    }
-
-    protected open fun startAppServices() {
-        appServices
-            .forEach {
-                logger.d("start service ${it.key}")
-                it.value()
-            }
     }
 }
