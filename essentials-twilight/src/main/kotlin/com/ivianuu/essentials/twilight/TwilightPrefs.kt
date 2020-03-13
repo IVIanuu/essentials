@@ -17,12 +17,11 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.enum
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 
 @ApplicationScope
 @Single
 class TwilightPrefs(factory: PrefBoxFactory) {
-    val twilightMode = factory.enum("twilight_mode", TwilightMode.System)
+    val twilightMode = factory.create("twilight_mode", TwilightMode.System)
 }

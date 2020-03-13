@@ -22,11 +22,10 @@ import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.stringSet
 
 val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()
-    val box = remember { boxFactory.stringSet("apps") }
+    val box = remember { boxFactory.create("apps", emptySet<String>()) }
     CheckableAppsScreen(
         checkedAppsFlow = box.data,
         onCheckedAppsChanged = { newValue ->

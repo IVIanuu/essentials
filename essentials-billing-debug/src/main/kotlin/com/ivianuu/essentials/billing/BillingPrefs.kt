@@ -4,14 +4,13 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.map
-import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 
 @ApplicationScope
 @Single
 internal class BillingPrefs(factory: PrefBoxFactory) {
-    val products = factory.stringSet("billing_products")
+    val products = factory.create("billing_products", emptySet<String>())
         .map(
             fromRaw = { productsJson -> productsJson.map {
                 SkuDetails(it)
@@ -19,7 +18,7 @@ internal class BillingPrefs(factory: PrefBoxFactory) {
             toRaw = { products -> products.map { it.originalJson }.toSet() }
         )
 
-    val purchases = factory.stringSet("billing_purchases")
+    val purchases = factory.create("billing_purchases", emptySet<String>())
         .map(
             fromRaw = { purchasesJson ->
                 purchasesJson.map { purchase ->

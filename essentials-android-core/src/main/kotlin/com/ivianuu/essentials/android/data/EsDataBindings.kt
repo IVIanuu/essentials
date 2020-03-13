@@ -34,7 +34,8 @@ fun ComponentBuilder.esData() {
     single {
         PrefBoxFactory(
             coroutineScope = get<CoroutineScope>(ForApplication) + get<AppCoroutineDispatchers>().io,
-            prefsPath = get(qualifier = PrefsPath)
+            prefsPath = get(qualifier = PrefsPath),
+            moshi = get()
         )
     }
 

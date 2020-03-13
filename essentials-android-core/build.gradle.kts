@@ -52,6 +52,8 @@ dependencies {
     api(Deps.Coroutines.android)
 
     api(project(":essentials-core"))
+    api(project(":essentials-moshi"))
+    api(project(":essentials-moshi-android"))
     api(project(":essentials-store-android"))
 
     api(Deps.Injekt.android)

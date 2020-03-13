@@ -18,17 +18,28 @@ package com.ivianuu.essentials.store.android.prefs
 
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.ConcurrentHashMap
 
 class PrefBoxFactory(
     private val coroutineScope: CoroutineScope,
+    @PublishedApi internal val moshi: Moshi,
     private val prefsPath: String
 ) {
 
     private val boxes = ConcurrentHashMap<String, Box<*>>()
 
-    fun <T> box(
+    inline fun <reified T> create(
+        name: String,
+        defaultValue: T
+    ): Box<T> = create(
+        name = name,
+        defaultValue = defaultValue,
+        serializer = MoshiSerializer(moshi.adapter(T::class.java))
+    )
+
+    fun <T> create(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>

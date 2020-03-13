@@ -126,11 +126,22 @@ object Deps {
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
-    const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0"
-
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+
+    object Moshi {
+        private const val version = "1.9.2"
+        const val adapters = "com.squareup.moshi:moshi-adapters:$version"
+        const val moshi = "com.squareup.moshi:moshi:$version"
+        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:$version"
+    }
+
+    object MoshiSealed {
+        private const val version = "0.1.0"
+        const val annotations = "dev.zacsweers.moshisealed:moshi-sealed-annotations:$version"
+        const val codegen = "dev.zacsweers.moshisealed:moshi-sealed-codegen:$version"
+    }
 
     const val playBilling = "com.android.billingclient:billing-ktx:2.1.0"
 

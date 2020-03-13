@@ -26,6 +26,10 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    implementation(Deps.Moshi.codegen)
+    implementation(Deps.MoshiSealed.annotations)
+    implementation(Deps.MoshiSealed.codegen)
+
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.processingX)
     kapt(Deps.processingX)

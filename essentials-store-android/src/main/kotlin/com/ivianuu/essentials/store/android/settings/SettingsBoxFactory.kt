@@ -28,7 +28,7 @@ class SettingsBoxFactory(
     private val coroutineScope: CoroutineScope
 ) {
 
-    fun <T> setting(
+    fun <T> create(
         name: String,
         type: SettingBox.Type,
         defaultValue: T,
@@ -48,7 +48,7 @@ fun SettingsBoxFactory.float(
     name: String,
     type: SettingBox.Type,
     defaultValue: Float = 0f
-) = setting(name = name, type = type, defaultValue = defaultValue, adapter = FloatAdapter)
+) = create(name = name, type = type, defaultValue = defaultValue, adapter = FloatAdapter)
 
 private object FloatAdapter :
     SettingBox.Adapter<Float> {
@@ -92,7 +92,7 @@ fun SettingsBoxFactory.int(
     name: String,
     type: SettingBox.Type,
     defaultValue: Int = 0
-) = setting(name = name, type = type, defaultValue = defaultValue, adapter = IntAdapter)
+) = create(name = name, type = type, defaultValue = defaultValue, adapter = IntAdapter)
 
 private object IntAdapter :
     SettingBox.Adapter<Int> {
@@ -136,7 +136,7 @@ fun SettingsBoxFactory.long(
     name: String,
     type: SettingBox.Type,
     defaultValue: Long = 0L
-) = setting(name = name, type = type, defaultValue = defaultValue, adapter = LongAdapter)
+) = create(name = name, type = type, defaultValue = defaultValue, adapter = LongAdapter)
 
 private object LongAdapter :
     SettingBox.Adapter<Long> {
@@ -179,7 +179,7 @@ fun SettingsBoxFactory.string(
     name: String,
     type: SettingBox.Type,
     defaultValue: String = ""
-) = setting(name = name, type = type, defaultValue = defaultValue, adapter = StringAdapter)
+) = create(name = name, type = type, defaultValue = defaultValue, adapter = StringAdapter)
 
 private object StringAdapter :
     SettingBox.Adapter<String> {

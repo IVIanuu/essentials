@@ -88,6 +88,10 @@ class TwilightHelper(
             hour < 6 || hour >= 22
         }
 
+    init {
+        print("")
+    }
+
     private fun configChanges() = callbackFlow<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {

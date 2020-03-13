@@ -24,7 +24,6 @@ import androidx.ui.foundation.Icon
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.LayoutPadding
-import androidx.ui.res.imageResource
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.about.AboutRoute
@@ -49,13 +48,13 @@ import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.android.ui.navigation.UrlRoute
 import com.ivianuu.essentials.android.ui.popup.PopupMenu
 import com.ivianuu.essentials.android.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.android.util.ResourceProvider
 import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.injekt.parametersOf
 
@@ -84,11 +83,12 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
         },
         body = {
             Column {
-                var showBanner by unfoldBox(inject<PrefBoxFactory>().boolean("show_banner"))
+                var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", true))
                 if (showBanner) {
                     Banner(
                         leading = {
-                            Icon(ImagePainter(imageResource(R.mipmap.ic_launcher)))
+                            val resourceProvider = inject<ResourceProvider>()
+                            Icon(ImagePainter(resourceProvider.getDrawable(R.mipmap.ic_launcher)))
                         },
                         content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
                         actions = {

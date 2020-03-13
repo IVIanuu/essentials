@@ -36,13 +36,8 @@ import com.ivianuu.essentials.android.ui.prefs.RadioButtonPreference
 import com.ivianuu.essentials.android.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.android.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.android.ui.prefs.TextInputPreference
+import com.ivianuu.essentials.store.android.duration
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.boolean
-import com.ivianuu.essentials.store.prefs.color
-import com.ivianuu.essentials.store.prefs.duration
-import com.ivianuu.essentials.store.prefs.int
-import com.ivianuu.essentials.store.prefs.string
-import com.ivianuu.essentials.store.prefs.stringSet
 import kotlin.time.hours
 import kotlin.time.minutes
 
@@ -55,13 +50,13 @@ val PrefsRoute = Route {
                     val boxFactory = inject<PrefBoxFactory>()
 
                     SwitchPreference(
-                        box = boxFactory.boolean("switch"),
+                        box = boxFactory.create("switch", false),
                         title = { Text("Switch") }
                     )
 
                     val dependencies = listOf(
                         Dependency(
-                            box = boxFactory.boolean("switch"),
+                            box = boxFactory.create("switch", false),
                             value = true
                         )
                     )
@@ -71,21 +66,21 @@ val PrefsRoute = Route {
                     }
 
                     CheckboxPreference(
-                        box = boxFactory.boolean("checkbox"),
+                        box = boxFactory.create("checkbox", false),
                         dependencies = dependencies,
                         title = { Text("Checkbox") },
                         summary = { Text("This is a checkbox preference") }
                     )
 
                     RadioButtonPreference(
-                        box = boxFactory.boolean("radio_button"),
+                        box = boxFactory.create("radio_button", false),
                         dependencies = dependencies,
                         title = { Text("Radio Button") },
                         summary = { Text("This is a radio button preference") }
                     )
 
                     IntSliderPreference(
-                        box = boxFactory.int("slider"),
+                        box = boxFactory.create("slider", 50),
                         dependencies = dependencies,
                         title = { Text("Slider") },
                         summary = { Text("This is a slider preference") },
@@ -107,7 +102,7 @@ val PrefsRoute = Route {
                     }
 
                     TextInputPreference(
-                        box = boxFactory.string("text_input"),
+                        box = boxFactory.create("text_input", ""),
                         dependencies = dependencies,
                         title = { Text("Text input") },
                         summary = { Text("This is a text input preference") },
@@ -115,14 +110,14 @@ val PrefsRoute = Route {
                     )
 
                     ColorPreference(
-                        box = boxFactory.color("color", Color.Red),
+                        box = boxFactory.create("color", Color.Red),
                         dependencies = dependencies,
                         title = { Text("Color") },
                         summary = { Text("This is a color preference") }
                     )
 
                     MultiChoiceListPreference(
-                        box = boxFactory.stringSet("multi_select_list", setOf("A", "B", "C")),
+                        box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
                         dependencies = dependencies,
                         title = { Text("Multi select list") },
                         summary = { Text("This is a multi select list preference") },
@@ -134,7 +129,7 @@ val PrefsRoute = Route {
                     )
 
                     SingleChoiceListPreference(
-                        box = boxFactory.string("single_item_list", "C"),
+                        box = boxFactory.create("single_item_list", "C"),
                         dependencies = dependencies,
                         title = { Text("Single item list") },
                         summary = { Text("This is a single item list preference") },

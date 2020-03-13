@@ -15,24 +15,17 @@
  */
 
 plugins {
-    id("com.android.library")
     id("com.github.ben-manes.versions")
-    id("com.ivianuu.injekt")
-    id("com.ivianuu.essentials")
-    kotlin("android")
-    kotlin("kapt")
+    kotlin("jvm")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
-
 dependencies {
-    api(project(":essentials-android-core"))
-    api(project(":essentials-broadcast"))
-    kapt(project(":essentials-compiler"))
+    compile(Deps.Injekt.injekt)
+    compile(Deps.Injekt.common)
+    compile(Deps.Moshi.moshi)
+    compile(Deps.Kotlin.stdlib)
 }

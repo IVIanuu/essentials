@@ -20,5 +20,7 @@ dependencies {
 
     compile(Deps.Kotlin.stdlib)
 
+    compile(Deps.Moshi.moshi)
+
     compile(Deps.kotlinFlowExtensions)
 }

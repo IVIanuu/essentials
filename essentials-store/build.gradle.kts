@@ -27,6 +27,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     compile(project(":essentials-coroutines"))
     compile(Deps.Coroutines.core)
-    compile(Deps.kotlinSerialization)
+    compile(Deps.Moshi.moshi)
     compile(Deps.Kotlin.stdlib)
 }

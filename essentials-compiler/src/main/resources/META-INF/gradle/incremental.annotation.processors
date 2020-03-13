@@ -1,2 +1,2 @@
-com.ivianuu.injekt.compiler.InjektProcessor,ISOLATING
-com.ivianuu.essentials.compiler.EssentialsProcessor,ISOLATING
+com.squareup.moshi.kotlin.codegen.JsonClassCodegenProcessor,ISOLATING
+dev.zacsweers.moshisealed.codegen.MoshiSealedProcessor,ISOLATING

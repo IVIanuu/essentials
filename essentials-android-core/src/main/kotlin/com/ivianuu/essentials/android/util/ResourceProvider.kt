@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.imageFromResource
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.font
 import androidx.ui.unit.Dp
 import androidx.ui.unit.px
+import com.ivianuu.essentials.android.ui.image.toImageAsset
 import com.ivianuu.injekt.Factory
 
 @Factory
@@ -18,7 +18,7 @@ class ResourceProvider(
 ) {
 
     fun getBitmap(id: Int): ImageAsset {
-        return imageFromResource(context.resources, id)
+        return context.getDrawable(id)!!.toImageAsset()
     }
 
     fun getBoolean(id: Int): Boolean = context.resources.getBoolean(id)

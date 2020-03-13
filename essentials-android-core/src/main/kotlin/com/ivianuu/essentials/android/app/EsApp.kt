@@ -28,6 +28,8 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.app.AppServices
 import com.ivianuu.essentials.app.esAppInitializerInjection
 import com.ivianuu.essentials.app.esAppServiceInjection
+import com.ivianuu.essentials.moshi.android.esMoshiAndroid
+import com.ivianuu.essentials.moshi.esMoshi
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
@@ -80,6 +82,8 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
                 esAppInitializerInjection()
                 esAppServiceInjection()
                 esData()
+                esMoshi()
+                esMoshiAndroid()
                 esUiInitializerInjection()
                 esUtil()
                 esAndroidUtil()
