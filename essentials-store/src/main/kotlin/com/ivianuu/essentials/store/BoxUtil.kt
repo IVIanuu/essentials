@@ -36,3 +36,5 @@ fun <T, S> Box<T>.map(
         }
     }
 }
+
+suspend fun <T> Box<T>.setDefaultData() = updateData { defaultValue }
