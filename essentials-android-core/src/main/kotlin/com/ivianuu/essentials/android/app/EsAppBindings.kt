@@ -24,7 +24,5 @@ import com.ivianuu.injekt.factory
 
 fun ComponentBuilder.esAppBindings() {
     factory { get<Context>().packageManager!! }
-
-    bindAppInitializerIntoMap<TimberAppInitializer>()
     bindAppInitializerIntoMap<BoxLoggerAppInitializer>()
 }

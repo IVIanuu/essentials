@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.store
 
 interface Logger {
-    fun log(msg: String)
+    fun log(message: String)
 }
 
 var logger: Logger? = null
 
-internal inline fun log(msg: () -> String) {
-    logger?.log(msg())
+internal inline fun log(message: () -> String) {
+    logger?.log(message())
 }

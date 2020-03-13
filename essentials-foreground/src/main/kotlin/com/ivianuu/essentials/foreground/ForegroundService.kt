@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,6 +30,7 @@ class ForegroundService : EsService() {
 
     private val dispatchers: AppCoroutineDispatchers by getLazy()
     private val foregroundManager: ForegroundManager by getLazy()
+    private val logger: Logger by getLazy()
     private var lastComponents = listOf<ForegroundComponent>()
     private var foregroundId: Int? = null
     private val notificationManager: NotificationManager by getLazy()
@@ -37,7 +38,7 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
-        d { "start" }
+        logger.d("start")
 
         foregroundManager.updates
             .onStart { emit(Unit) }
@@ -51,13 +52,13 @@ class ForegroundService : EsService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        d { "stop" }
+        logger.d("stop")
     }
 
     private suspend fun update() {
         val newComponents = foregroundManager.components
 
-        d { "update components $newComponents" }
+        logger.d("update components $newComponents")
 
         lastComponents
             .filter { it !in newComponents }

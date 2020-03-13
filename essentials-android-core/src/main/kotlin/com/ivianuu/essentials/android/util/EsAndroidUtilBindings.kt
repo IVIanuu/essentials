@@ -20,8 +20,11 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.DuplicateStrategy
+import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.single
 
 fun ComponentBuilder.esAndroidUtil() {
@@ -37,4 +40,5 @@ fun ComponentBuilder.esAndroidUtil() {
     }
     single { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
     single { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
+    alias<AndroidLogger, Logger>(duplicateStrategy = DuplicateStrategy.Override)
 }

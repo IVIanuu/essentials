@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.flow.Flow
 
 @ApplicationScope
 @Single
-class SecureScreenDetector : AccessibilityComponent() {
+class SecureScreenDetector(private val logger: Logger) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(
@@ -58,7 +58,7 @@ class SecureScreenDetector : AccessibilityComponent() {
         }
 
         // distinct
-        d { "on secure screen changed: $isOnSecureScreen" }
+        logger.d("on secure screen changed: $isOnSecureScreen")
         _isOnSecureScreen.setIfChanged(isOnSecureScreen)
     }
 }

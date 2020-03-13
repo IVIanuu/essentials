@@ -18,7 +18,6 @@ import androidx.ui.unit.Px
 import androidx.ui.unit.PxPosition
 import androidx.ui.unit.coerceIn
 import androidx.ui.unit.px
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.Axis
 import com.ivianuu.essentials.android.ui.core.retain
 
@@ -96,7 +95,6 @@ class ScrollableState(
     }
 
     fun scrollTo(value: Px) {
-        if (this.value != value) d { "scroll to $value" }
         animatedFloat.snapTo(value.value.coerceIn(_minValue.value, _maxValue.value))
     }
 
@@ -109,7 +107,6 @@ class ScrollableState(
     }
 
     fun flingBy(velocity: Px) {
-        d { "fling by $velocity" }
         animatedFloat.fling(
             flingConfig,
             velocity.value
@@ -124,8 +121,6 @@ class ScrollableState(
         _maxValue = maxValue
         animatedFloat.setBounds(minValue.value, maxValue.value)
         scrollTo(value.coerceIn(_minValue, _maxValue))
-
-        d { "update bounds $minValue $maxValue" }
     }
 }
 

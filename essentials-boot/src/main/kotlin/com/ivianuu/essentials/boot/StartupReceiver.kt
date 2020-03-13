@@ -18,22 +18,26 @@ package com.ivianuu.essentials.boot
 
 import android.content.Context
 import android.content.Intent
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.getLazy
 
 class StartupReceiver : EsBroadcastReceiver() {
+
+    private val logger: Logger by getLazy()
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        d { "on system start" }
+        logger.d("on system start")
 
         val bootAwareComponents = component.get<Map<String, Provider<BootAware>>>(
             qualifier = BootAwareComponents
         )
 
         bootAwareComponents.forEach {
-            d { "initialize system start component ${it.key}" }
+            logger.d("initialize system start component ${it.key}")
             it.value()
         }
     }

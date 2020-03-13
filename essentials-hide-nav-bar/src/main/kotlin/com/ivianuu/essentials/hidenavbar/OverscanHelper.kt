@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Factory
 
 /**
@@ -28,10 +28,10 @@ import com.ivianuu.injekt.Factory
  */
 @Factory
 @SuppressLint("PrivateApi")
-internal class OverscanHelper {
+internal class OverscanHelper(private val logger: Logger) {
 
     fun setOverscan(rect: Rect) {
-        d { "set overscan $rect" }
+        logger.d("set overscan $rect")
         setOverscanMethod.invoke(
             windowManagerService,
             Display.DEFAULT_DISPLAY, rect.left, rect.top, rect.right, rect.bottom

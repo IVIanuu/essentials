@@ -23,10 +23,9 @@ import androidx.ui.foundation.Icon
 import androidx.ui.layout.Center
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.android.ui.common.SimpleScreen
-import com.ivianuu.essentials.android.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.android.ui.common.launchOnClick
 import com.ivianuu.essentials.android.ui.injekt.inject
 import com.ivianuu.essentials.android.ui.material.Button
 import com.ivianuu.essentials.android.ui.navigation.Route
@@ -43,7 +42,6 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import kotlinx.coroutines.launch
 
 val PermissionRoute = Route {
     SimpleScreen(title = "Permissions") {
@@ -97,23 +95,18 @@ val PermissionRoute = Route {
             Metadata.Icon withValue { Icon(Icons.Default.Menu) }
         )
 
-        val coroutineScope = CoroutineScopeAmbient.current
-
         Center {
             Button(
-                onClick = {
-                    coroutineScope.launch {
-                        val granted = manager.request(
-                            camera,
-                            phone,
-                            accessibility,
-                            notificationListener,
-                            systemOverlay,
-                            writeSecureSettings,
-                            writeSettings
-                        )
-                        d { "granted $granted" }
-                    }
+                onClick = launchOnClick {
+                    manager.request(
+                        camera,
+                        phone,
+                        accessibility,
+                        notificationListener,
+                        systemOverlay,
+                        writeSecureSettings,
+                        writeSettings
+                    )
                 }
             ) {
                 Text("Request")

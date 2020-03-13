@@ -18,7 +18,6 @@ package com.ivianuu.essentials.android.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.data.esData
 import com.ivianuu.essentials.android.ui.core.esUiInitializerInjection
 import com.ivianuu.essentials.android.util.esAndroidUtil
@@ -30,6 +29,7 @@ import com.ivianuu.essentials.app.AppServices
 import com.ivianuu.essentials.app.esAppInitializerInjection
 import com.ivianuu.essentials.app.esAppServiceInjection
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.esUtil
 import com.ivianuu.injekt.Component
@@ -59,6 +59,8 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
 
     private val appServices: Map<String, Provider<AppService>> by getLazy(qualifier = AppServices)
 
+    private val logger: Logger by getLazy()
+
     override fun onCreate() {
         super.onCreate()
         invokeInitializers()
@@ -74,15 +76,14 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
     protected open fun initializeComponent() {
         AppComponentHolder.init(
             ApplicationComponent(this) {
-                esAndroidUtil()
                 esAppBindings()
                 esAppInitializerInjection()
                 esAppServiceInjection()
                 esData()
                 esUiInitializerInjection()
                 esUtil()
+                esAndroidUtil()
                 systemServices()
-
                 buildComponent()
             }
         )
@@ -91,9 +92,7 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
     protected open fun invokeInitializers() {
         get<Map<String, Provider<AppInitializer>>>(qualifier = AppInitializers)
             .forEach {
-                if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-                    println("initialize ${it.key}")
-                }
+                logger.d("initialize ${it.key}")
                 it.value()
             }
     }
@@ -101,7 +100,7 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
     protected open fun startAppServices() {
         appServices
             .forEach {
-                d { "start service ${it.key}" }
+                logger.d("start service ${it.key}")
                 it.value()
             }
     }

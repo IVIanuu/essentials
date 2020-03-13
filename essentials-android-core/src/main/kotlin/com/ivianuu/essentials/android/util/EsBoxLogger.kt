@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.android.app
+package com.ivianuu.essentials.android.util
 
-import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.store.Logger
+import com.ivianuu.essentials.store.logger
 import com.ivianuu.injekt.Factory
-import timber.log.Timber
+import com.ivianuu.injekt.Provider
 
-/**
- * Initializes timber in debug builds
- */
 @Factory
-internal class TimberAppInitializer(buildInfo: BuildInfo) :
-    AppInitializer {
+class EsBoxLogger(private val esLogger: com.ivianuu.essentials.util.Logger) : Logger {
+    override fun log(message: String) {
+        esLogger.d(message = message, tag = "Box")
+    }
+}
+
+@Factory
+class BoxLoggerAppInitializer(
+    buildInfo: BuildInfo,
+    esBoxLoggerProvider: Provider<EsBoxLogger>
+) : AppInitializer {
     init {
-        if (buildInfo.isDebug) {
-            Timber.plant(Timber.DebugTree())
-        }
+        if (buildInfo.isDebug) logger = esBoxLoggerProvider()
     }
 }

@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.layout.Center
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.common.SimpleScreen
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.injekt.inject
@@ -32,7 +31,6 @@ val ActionsRoute = Route {
                                 showNoneOption = false
                             )
                         ).safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
-                        d { "picked action $action" }
                         actionExecutors.execute(action)
                     }
                 }

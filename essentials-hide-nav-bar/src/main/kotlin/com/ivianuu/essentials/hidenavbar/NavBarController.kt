@@ -19,7 +19,6 @@ package com.ivianuu.essentials.hidenavbar
 import android.app.Application
 import android.content.Intent
 import android.graphics.Rect
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.merge
@@ -28,6 +27,7 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
@@ -55,6 +55,7 @@ class NavBarController internal constructor(
     @ForApplication private val coroutineScope: CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
@@ -106,7 +107,7 @@ class NavBarController internal constructor(
                     broadcastFactory.create(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             job?.cancel()
-                            d { "show nav bar because of shutdown" }
+                            logger.d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
                         .flowOn(dispatchers.computation)
@@ -117,7 +118,7 @@ class NavBarController internal constructor(
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        d { "set nav bar hidden: $config" }
+        logger.d("set nav bar hidden: $config")
         try {
             try {
                 // ensure that we can access non sdk interfaces

@@ -30,7 +30,6 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.android.ui.injekt.inject
@@ -84,9 +83,7 @@ private fun Chip(@Pivotal name: String) {
                     }) {
                         Text(
                             text = name,
-                            style = MaterialTheme.typography().body2.also {
-                                d { "body 2 color $it" }
-                            }
+                            style = MaterialTheme.typography().body2
                         )
                     }
                 }

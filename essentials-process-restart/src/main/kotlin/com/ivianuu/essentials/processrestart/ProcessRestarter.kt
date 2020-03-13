@@ -22,8 +22,8 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.os.Process
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.util.BuildInfo
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Factory
 
@@ -32,6 +32,7 @@ class ProcessRestarter(
     private val activityManager: ActivityManager,
     private val buildInfo: BuildInfo,
     private val context: Context,
+    private val logger: Logger,
     private val packageManager: PackageManager
 ) {
 
@@ -43,7 +44,7 @@ class ProcessRestarter(
     }
 
     fun restartProcess(intent: Intent = getMainIntent()) {
-        d { "restart process %$intent" }
+        logger.d("restart process %$intent")
         ProcessRestartActivity.launch(context, intent)
         Runtime.getRuntime().exit(0)
     }

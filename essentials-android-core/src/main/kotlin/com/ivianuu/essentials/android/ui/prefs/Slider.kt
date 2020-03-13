@@ -35,7 +35,6 @@ import androidx.ui.unit.Px
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.px
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.core.currentOrNull
 import com.ivianuu.essentials.android.ui.layout.CrossAxisAlignment
@@ -451,14 +450,8 @@ fun DurationSliderPreference(
 ) {
     BaseSliderPreference(
         valueController = valueController,
-        toFloat = {
-            it.toFloat()
-                .apply { d { "duration to float $it = $this" } }
-        },
-        fromFloat = {
-            it.toDuration()
-                .apply { d { "float to duration $this = $it" } }
-        },
+        toFloat = { it.toFloat() },
+        fromFloat = { it.toDuration() },
         enabled = enabled,
         dependencies = dependencies,
         title = title,

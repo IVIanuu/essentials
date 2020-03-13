@@ -22,7 +22,6 @@ import androidx.compose.onCommit
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.common.RenderAsyncList
 import com.ivianuu.essentials.android.ui.core.Text
 import com.ivianuu.essentials.android.ui.material.Checkbox
@@ -105,7 +104,6 @@ private fun CheckableApp(
     onClick: () -> Unit,
     app: CheckableApp
 ) {
-    d { "invoke checkable app $app" }
     ListItem(
         title = { Text(app.info.appName) },
         leading = {

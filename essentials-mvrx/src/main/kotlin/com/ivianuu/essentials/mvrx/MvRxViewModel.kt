@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.mvrx
 
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.base.ViewModel
 import com.ivianuu.essentials.android.util.Async
-import com.ivianuu.essentials.android.util.BuildInfo
 import com.ivianuu.essentials.android.util.Fail
 import com.ivianuu.essentials.android.util.Loading
 import com.ivianuu.essentials.android.util.Success
@@ -27,6 +25,8 @@ import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -52,13 +52,11 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
     fun getCurrentState(): S = _state.value
 
-    protected open val coroutineDispatcher = AppComponentHolder.component
+    protected open val coroutineDispatcher = AppComponentHolder
         .get<AppCoroutineDispatchers>().computation
 
     init {
-        if (AppComponentHolder.component.get<BuildInfo>().isDebug) {
-            subscribe { d { "new state -> $it" } }
-        }
+        subscribe { AppComponentHolder.get<Logger>().d("new state -> $it") }
     }
 
     protected suspend fun setState(reducer: suspend S.() -> S) {

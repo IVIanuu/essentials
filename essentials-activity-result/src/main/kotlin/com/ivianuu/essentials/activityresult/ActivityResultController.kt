@@ -19,7 +19,7 @@ package com.ivianuu.essentials.activityresult
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CompletableDeferred
@@ -29,7 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger
 @ApplicationScope
 @Single
 class ActivityResultController(
-    private val context: Context
+    private val context: Context,
+    private val logger: Logger
 ) {
 
     private val resultsByRequestCode = ConcurrentHashMap<Int, CompletableDeferred<ActivityResult>>()
@@ -39,12 +40,12 @@ class ActivityResultController(
         options: Bundle? = null
     ): ActivityResult {
         val requestCode = requestCodes.incrementAndGet()
-        d { "start for result $requestCode $intent $options" }
+        logger.d("start for result $requestCode $intent $options")
         val result = CompletableDeferred<ActivityResult>()
         resultsByRequestCode[requestCode] = result
         ActivityResultActivity.startActivityForResult(context, intent, requestCode, options)
         val resultValue = result.await()
-        d { "got result for $requestCode = $resultValue" }
+        logger.d("got result for $requestCode = $resultValue")
         return resultValue
     }
 

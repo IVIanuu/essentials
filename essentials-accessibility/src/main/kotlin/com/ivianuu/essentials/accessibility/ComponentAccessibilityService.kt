@@ -19,8 +19,8 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.getLazy
@@ -29,6 +29,7 @@ class ComponentAccessibilityService : EsAccessibilityService(),
     ComponentBuilderInterceptor {
 
     private val components: Set<AccessibilityComponent> by getLazy(qualifier = AccessibilityComponents)
+    private val logger: Logger by getLazy()
 
     override fun ComponentBuilder.buildComponent() {
         accessibilityComponentInjection()
@@ -37,21 +38,21 @@ class ComponentAccessibilityService : EsAccessibilityService(),
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        d { "initialize with components $components" }
+        logger.d("initialize with components $components")
         components.forEach { it.onServiceConnected(this) }
 
         updateServiceInfo()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        d { "on accessibility event $event" }
+        logger.d("on accessibility event $event")
         components
             .filter { it.config.packageNames == null || event.packageName in it.config.packageNames!! }
             .forEach { it.onAccessibilityEvent(event) }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        d { "on unbind" }
+        logger.d("on unbind")
         components.reversed().forEach { it.onServiceDisconnected() }
         return super.onUnbind(intent)
     }
@@ -77,7 +78,7 @@ class ComponentAccessibilityService : EsAccessibilityService(),
 
             packageNames = null
 
-            d { "update service info $this" }
+            logger.d("update service info $this")
         }
     }
 }

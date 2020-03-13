@@ -21,7 +21,6 @@ import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.common.SimpleScreen
 import com.ivianuu.essentials.android.ui.common.launchOnClick
 import com.ivianuu.essentials.android.ui.core.Text
@@ -57,17 +56,11 @@ val BillingRoute = Route {
 
             if (!isPurchased) {
                 Button(
-                    onClick = launchOnClick {
-                        val result = purchaseManager.purchase(DummySku)
-                        d { "purchase result $result" }
-                    }
+                    onClick = launchOnClick { purchaseManager.purchase(DummySku) }
                 ) { Text("Purchase") }
             } else {
                 Button(
-                    onClick = launchOnClick {
-                        val result = purchaseManager.consume(DummySku)
-                        d { "consume result $result" }
-                    }
+                    onClick = launchOnClick { purchaseManager.consume(DummySku) }
                 ) { Text("Consume") }
             }
         }

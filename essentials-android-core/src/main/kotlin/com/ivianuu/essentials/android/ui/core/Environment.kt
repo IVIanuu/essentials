@@ -23,11 +23,11 @@ import androidx.compose.remember
 import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.android.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.android.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Qualifier
@@ -59,11 +59,12 @@ fun Environment(
                 SystemBarManager {
                     val uiInitializers =
                         inject<Map<String, UiInitializer>>(qualifier = UiInitializers)
+                    val logger = inject<Logger>()
                     uiInitializers.entries
                         .map { (key, initializer) ->
                             val function: @Composable (@Composable () -> Unit) -> Unit =
                                 { children ->
-                                    d { "apply ui initializer $key" }
+                                    logger.d("apply ui initializer $key")
                                     initializer.apply(children)
                                 }
                             function

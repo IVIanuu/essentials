@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.GlobalScope
@@ -43,6 +43,7 @@ class TorchManager internal constructor(
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val foregroundComponent: TorchForegroundComponent,
+    private val logger: Logger,
     private val toaster: Toaster
 ) {
 
@@ -87,7 +88,7 @@ class TorchManager internal constructor(
     }
 
     private fun updateState(enabled: Boolean) {
-        d { "update state $enabled" }
+        logger.d("update state $enabled")
         if (enabled) {
             foregroundManager.startForeground(foregroundComponent)
         } else {

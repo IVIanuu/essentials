@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
@@ -11,27 +11,28 @@ import kotlinx.coroutines.withContext
 class ActionExecutors(
     private val actionStore: ActionStore,
     private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger,
     private val permissionManager: PermissionManager,
     private val screenUnlocker: ScreenUnlocker
 ) {
 
     suspend fun execute(key: String) = withContext(dispatchers.computation) {
-        d { "execute $key" }
+        logger.d("execute $key")
         val action = actionStore.getAction(key)
 
         // check permissions
         if (!permissionManager.request(action.permissions)) {
-            d { "couldn't get permissions for $key" }
+            logger.d("couldn't get permissions for $key")
             return@withContext
         }
 
         // unlock screen
         if (action.unlockScreen && !screenUnlocker.unlockScreen()) {
-            d { "couldn't unlock screen for $key" }
+            logger.d("couldn't unlock screen for $key")
             return@withContext
         }
 
-        d { "fire $key" }
+        logger.d("fire $key")
 
         // fire
         try {

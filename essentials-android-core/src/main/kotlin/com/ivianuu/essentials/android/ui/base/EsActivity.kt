@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.Composition
-import androidx.lifecycle.lifecycleScope
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.android.ui.core.Environment
 import com.ivianuu.essentials.android.ui.core.RetainedObjects
@@ -31,6 +30,7 @@ import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.ForActivity
 import com.ivianuu.injekt.single
 
 /**
@@ -41,7 +41,7 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
 
     override val component by unsafeLazy {
         ActivityComponent(this) {
-            esActivityBindings(this@EsActivity)
+            esActivityBindings()
             buildComponent()
         }
     }
@@ -90,6 +90,11 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
     protected abstract fun content()
 }
 
-private fun ComponentBuilder.esActivityBindings(activity: EsActivity) {
-    single { NavigatorState(coroutineScope = activity.lifecycleScope) }
+private fun ComponentBuilder.esActivityBindings() {
+    single {
+        NavigatorState(
+            coroutineScope = get(qualifier = ForActivity),
+            logger = get()
+        )
+    }
 }

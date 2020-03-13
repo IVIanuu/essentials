@@ -142,7 +142,5 @@ object Deps {
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
 
-    const val timberKt = "com.github.ajalt:timberkt:1.5.1"
-
     const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }

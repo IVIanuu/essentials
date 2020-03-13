@@ -23,11 +23,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.base.EsActivity
 import com.ivianuu.essentials.android.util.SystemBuildInfo
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.getLazy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,6 +42,7 @@ class UnlockScreenActivity : EsActivity() {
     private val broadcastFactory: BroadcastFactory by getLazy()
     private val dispatchers: AppCoroutineDispatchers by getLazy()
     private val keyguardManager: KeyguardManager by getLazy()
+    private val logger: Logger by getLazy()
     private val screenUnlocker: ScreenUnlocker by getLazy()
     private val systemBuildInfo: SystemBuildInfo by getLazy()
 
@@ -61,10 +62,10 @@ class UnlockScreenActivity : EsActivity() {
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-        d { "unlock screen for $requestId" }
+        logger.d("unlock screen for $requestId")
 
         fun finishWithResult(success: Boolean) {
-            d { "finish with result $success" }
+            logger.d("finish with result $success")
             hasResult = true
             screenUnlocker.onUnlockScreenResult(requestId, success)
             finish()

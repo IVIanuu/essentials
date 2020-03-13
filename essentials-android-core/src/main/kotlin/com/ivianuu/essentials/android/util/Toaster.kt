@@ -35,24 +35,25 @@ class Toaster(
     private val resourceProvider: ResourceProvider
 ) {
 
-    fun toast(msg: String) {
-        showToast(msg, false)
+    fun toast(message: String) {
+        showToast(message, false)
     }
 
-    fun toast(msgId: Int, vararg args: Any?) {
-        showToast(resourceProvider.getString(msgId, *args), false)
+    fun toast(messageId: Int, vararg args: Any?) {
+        showToast(resourceProvider.getString(messageId, *args), false)
     }
 
-    fun toastLong(msg: String) {
-        showToast(msg, true)
+    fun toastLong(message: String) {
+        showToast(message, true)
     }
 
-    fun toastLong(msgId: Int, vararg args: Any?) {
-        showToast(resourceProvider.getString(msgId, *args), true)
+    fun toastLong(messageId: Int, vararg args: Any?) {
+        showToast(resourceProvider.getString(messageId, *args), true)
     }
 
-    private fun showToast(msg: String, long: Boolean) = coroutineScope.launch(dispatchers.main) {
-        Toast.makeText(context, msg, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+    private fun showToast(message: String, long: Boolean) =
+        coroutineScope.launch(dispatchers.main) {
+            Toast.makeText(context, message, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
             .show()
     }
 }

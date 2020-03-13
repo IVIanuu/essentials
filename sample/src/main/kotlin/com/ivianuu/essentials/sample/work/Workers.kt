@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.work
 
 import android.content.Context
 import androidx.work.WorkerParameters
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorkerIntoMap
 import com.ivianuu.injekt.ComponentBuilder
@@ -29,13 +29,14 @@ import kotlinx.coroutines.delay
 @Factory
 class TestWorker(
     @Param context: Context,
-    @Param workerParams: WorkerParameters
+    @Param workerParams: WorkerParameters,
+    private val logger: Logger
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        d { "start work" }
+        logger.d("start work")
         delay(5000)
-        d { "finish work" }
+        logger.d("finish work")
         return Result.success()
     }
 }

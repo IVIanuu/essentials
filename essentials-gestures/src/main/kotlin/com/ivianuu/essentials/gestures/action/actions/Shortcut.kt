@@ -8,7 +8,6 @@ import androidx.compose.Composable
 import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.res.vectorResource
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.image.toBitmap
 import com.ivianuu.essentials.android.ui.image.toImageAsset
 import com.ivianuu.essentials.android.ui.navigation.NavigatorState
@@ -23,6 +22,7 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
@@ -47,11 +47,12 @@ internal class ShortcutActionExecutor(
 
 @Factory
 internal class ShortcutActionFactory(
-    private val intentActionExecutorProvider: Provider<IntentActionExecutor>
+    private val intentActionExecutorProvider: Provider<IntentActionExecutor>,
+    private val logger: Logger
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
-        d { "create action from $key" }
+        logger.d("create action from $key")
         val tmp = key.split(DELIMITER)
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])

@@ -55,6 +55,4 @@ dependencies {
     api(project(":essentials-store-android"))
 
     api(Deps.Injekt.android)
-
-    api(Deps.timberKt)
 }

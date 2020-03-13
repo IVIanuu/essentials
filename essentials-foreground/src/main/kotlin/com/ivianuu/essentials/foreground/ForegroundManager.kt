@@ -19,15 +19,18 @@ package com.ivianuu.essentials.foreground
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.flow.Flow
 
 @ApplicationScope
 @Single
-class ForegroundManager(private val context: Context) {
+class ForegroundManager(
+    private val context: Context,
+    private val logger: Logger
+) {
 
     private val _updates = EventFlow<Unit>()
     val updates: Flow<Unit> get() = _updates
@@ -41,13 +44,13 @@ class ForegroundManager(private val context: Context) {
 
     fun startForeground(component: ForegroundComponent) = synchronized(this) {
         if (component in _components) {
-            d { "update foreground $component" }
+            logger.d("update foreground $component")
             updateServiceState()
             dispatchUpdate()
             return@synchronized
         }
 
-        d { "start foreground $component" }
+        logger.d("start foreground $component")
 
         _components += component
         component.attach(this)
@@ -57,7 +60,7 @@ class ForegroundManager(private val context: Context) {
 
     fun stopForeground(component: ForegroundComponent) = synchronized(this) {
         if (component !in _components) return@synchronized
-        d { "stop foreground $component" }
+        logger.d("stop foreground $component")
         component.detach()
         _components -= component
         updateServiceState()
@@ -69,15 +72,15 @@ class ForegroundManager(private val context: Context) {
     }
 
     private fun updateServiceState() = synchronized(this) {
-        d { "update service state $_components" }
+        logger.d("update service state $_components")
         if (_components.isNotEmpty()) {
-            d { "start foreground service" }
+            logger.d("start foreground service")
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, ForegroundService::class.java)
             )
         } else {
-            d { "stop foreground service" }
+            logger.d("stop foreground service")
             _stopServiceRequests.offer(Unit)
         }
     }

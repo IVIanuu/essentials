@@ -29,7 +29,6 @@ import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.common.ScrollableList
 import com.ivianuu.essentials.android.ui.common.ScrollableState
 import com.ivianuu.essentials.android.ui.common.holderFor
@@ -111,10 +110,7 @@ val TextInputRoute = Route {
 
                 ScrollableList(items = items) { _, item ->
                     ListItem(
-                        title = { Text(item) },
-                        onClick = {
-                            d { "clicked $item" }
-                        }
+                        title = { Text(item) }
                     )
                 }
             } else {

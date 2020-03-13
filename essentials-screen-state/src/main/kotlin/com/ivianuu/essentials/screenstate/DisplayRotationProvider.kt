@@ -23,10 +23,10 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.GlobalScope
@@ -45,6 +45,7 @@ import kotlin.time.seconds
 @Single
 class DisplayRotationProvider(
     private val app: Application,
+    private val logger: Logger,
     private val screenStateProvider: ScreenStateProvider,
     private val windowManager: WindowManager
 ) {
@@ -58,10 +59,10 @@ class DisplayRotationProvider(
                         configChanges()
                     )
                 )
-                    .onStart { d { "sub for rotation" } }
-                    .onCompletion { d { "dispose rotation" } }
+                    .onStart { logger.d("sub for rotation") }
+                    .onCompletion { logger.d("dispose rotation") }
             } else {
-                d { "do not observe rotation while screen is off" }
+                logger.d("do not observe rotation while screen is off")
                 emptyFlow()
             }
         }

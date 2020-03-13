@@ -22,7 +22,6 @@ import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
 import androidx.ui.res.stringResource
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.base.ViewModel
 import com.ivianuu.essentials.android.ui.core.ActivityAmbient
 import com.ivianuu.essentials.android.ui.core.Text
@@ -44,6 +43,7 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -111,6 +111,7 @@ private fun Permission(
 @Factory
 private class PermissionDialogViewModel(
     private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger,
     private val manager: PermissionManager,
     @Param private val request: PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers
@@ -125,7 +126,7 @@ private class PermissionDialogViewModel(
 
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
         coroutineScope.launch {
-            d { "request $permission" }
+            logger.d("request $permission")
             withContext(dispatchers.main) {
                 requestHandlers.requestHandlerFor(permission)
                     .request(activity, manager, permission)
@@ -140,7 +141,7 @@ private class PermissionDialogViewModel(
             val permissionsToProcess = request.permissions
                 .filterNot { manager.hasPermissions(it) }
 
-            d { "update permissions to process or finish not granted $permissionsToProcess" }
+            logger.d("update permissions to process or finish not granted $permissionsToProcess")
 
             if (permissionsToProcess.isEmpty()) {
                 request.onComplete()

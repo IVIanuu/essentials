@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.map
  */
 @ApplicationScope
 @Single
-class RecentAppsProvider : AccessibilityComponent() {
+class RecentAppsProvider(private val logger: Logger) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(
@@ -88,7 +88,7 @@ class RecentAppsProvider : AccessibilityComponent() {
         // make sure that were not getting bigger than the limit
         val finalRecentApps = recentApps.chunked(10).first()
 
-        d { "recent apps changed $finalRecentApps" }
+        logger.d("recent apps changed $finalRecentApps")
 
         // push
         _recentApps.setIfChanged(finalRecentApps)

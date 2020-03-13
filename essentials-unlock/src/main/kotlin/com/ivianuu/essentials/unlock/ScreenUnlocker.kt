@@ -18,8 +18,8 @@ package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
 import android.content.Context
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CompletableDeferred
@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap
 class ScreenUnlocker(
     private val context: Context,
     private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger,
     private val keyguardManager: KeyguardManager
 ) {
 
@@ -47,12 +48,12 @@ class ScreenUnlocker(
         val requestId = UUID.randomUUID().toString()
         requestsById[requestId] = result
 
-        d { "unlock screen $requestId" }
+        logger.d("unlock screen $requestId")
 
         UnlockScreenActivity.unlock(context, requestId)
 
         return@withContext result.await().also {
-            d { "unlock result $requestId -> $it" }
+            logger.d("unlock result $requestId -> $it")
         }
     }
 

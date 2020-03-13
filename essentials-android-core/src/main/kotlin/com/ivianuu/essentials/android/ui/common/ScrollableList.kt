@@ -25,7 +25,6 @@ import androidx.ui.unit.ipx
 import androidx.ui.unit.max
 import androidx.ui.unit.px
 import androidx.ui.unit.round
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.android.ui.core.Axis
 
 // todo remove
@@ -186,8 +185,6 @@ private class ScrollableListState {
 
             val targetStartScrollPosition = max(scrollPosition - cacheSize, 0.px)
 
-            d { "begin measure $version scroll pos $scrollPosition constraints $constraints" }
-
             val viewportMainAxisSize: IntPx
             val viewportCrossAxisSize: IntPx
             val childConstraints: Constraints
@@ -213,7 +210,6 @@ private class ScrollableListState {
 
             if (rootNode.layoutChildren.isEmpty()) {
                 if (addChild(0) == null) {
-                    d { "end measure $version with no children" }
                     // There are no children.
                     return doLayout(
                         measureScope,
@@ -246,7 +242,6 @@ private class ScrollableListState {
                         rootNode.ignoreModelReads {
                             scrollableState.correctBy(-scrollPosition)
                         }
-                        d { "end measure $version ran out of children with correction $scrollPosition" }
                         return doLayout(
                             measureScope,
                             viewportMainAxisSize,
@@ -302,7 +297,6 @@ private class ScrollableListState {
                 leadingGarbage += 1
                 if (!advance("first child that ends")) {
                     collectGarbage(leadingGarbage - 1, 0)
-                    d { "end measure $version todo" }
                     return doLayout(
                         measureScope,
                         viewportMainAxisSize,
@@ -335,12 +329,9 @@ private class ScrollableListState {
                     0.px
                 ) else Px.Infinity
                 if (estimatedMaxScrollPosition != scrollableState.maxValue) {
-                    d { "update max scroll position $estimatedMaxScrollPosition" }
                     scrollableState.updateBounds(maxValue = estimatedMaxScrollPosition)
                 }
             }
-
-            d { "end measure $version" }
 
             return doLayout(
                 measureScope,
@@ -365,7 +356,6 @@ private class ScrollableListState {
 
     private fun addChild(index: Int): LayoutNode? {
         val composable = composableFactory(index)
-        d { "create child for $index result is success ${composable != null}" }
         if (composable == null) return null
 
         val childNode = LayoutNode()
@@ -428,7 +418,6 @@ private class ScrollableListState {
         getChild(child.state.index + 1)
 
     fun collectGarbage(leadingGarbage: Int, trailingGarbage: Int) {
-        d { "collect garbage leading $leadingGarbage trailing $trailingGarbage" }
         repeat(leadingGarbage) {
             rootNode.layoutChildren
                 .minBy { it.state.index }
@@ -445,9 +434,7 @@ private class ScrollableListState {
 
     private fun insertAndLayoutLeadingChild(constraints: Constraints): LayoutNode? {
         val index = firstChild?.let { it.state.index - 1 } ?: 0
-        d { "try insert and layout leading child at $index" }
         val child = getOrAddChild(index) ?: return null
-        d { "insert and layout leading child $index" }
         child.measure(constraints)
         return child
     }
@@ -471,7 +458,6 @@ private class ScrollableListState {
             }
         }
         return measureScope.layout(width = width, height = height) {
-            d { "place items ${rootNode.layoutChildren.map { it.state.index }.sorted()}" }
             rootNode.layoutChildren
                 .forEach { child ->
                     when (direction) {

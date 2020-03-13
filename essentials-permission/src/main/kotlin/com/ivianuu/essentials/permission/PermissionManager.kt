@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.permission
 
 import android.content.Context
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
@@ -31,6 +31,7 @@ import java.util.UUID
 class PermissionManager(
     private val context: Context,
     @ForApplication private val coroutineScope: CoroutineScope,
+    private val logger: Logger,
     @PermissionStateProvidersSet private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
@@ -46,7 +47,7 @@ class PermissionManager(
         request(permissions.toList())
 
     suspend fun request(permissions: List<Permission>): Boolean {
-        d { "request permissions $permissions" }
+        logger.d("request permissions $permissions")
         if (hasPermissions(permissions)) return true
 
         val id = UUID.randomUUID().toString()

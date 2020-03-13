@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.sample
 
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.boot.BootAware
 import com.ivianuu.essentials.boot.bindBootAwareIntoMap
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 
 @Factory
-class BootLogger : BootAware {
+class BootLogger(private val logger: Logger) : BootAware {
     init {
-        d { "booted!" }
+        logger.d("booted!")
     }
 }
 

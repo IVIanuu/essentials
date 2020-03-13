@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.getLazy
 
 class ComponentNotificationListenerService : EsNotificationListenerService() {
 
     private val components: Set<NotificationComponent> by getLazy(qualifier = NotificationComponents)
+    private val logger: Logger by getLazy()
 
     override fun ComponentBuilder.buildComponent() {
         notificationComponentInjection()
@@ -31,37 +32,37 @@ class ComponentNotificationListenerService : EsNotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        d { "initialize with components $components" }
+        logger.d("initialize with components $components")
         components.forEach { it.onServiceConnected(this) }
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        d { "disconnected" }
+        logger.d("disconnected")
         components.reversed().forEach { it.onServiceDisconnected() }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        d { "notification posted $sbn" }
+        logger.d("notification posted $sbn")
         components.forEach { it.onNotificationPosted(sbn) }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        d { "notification removed $sbn" }
+        logger.d("notification removed $sbn")
         components.forEach { it.onNotificationRemoved(sbn) }
     }
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
-        d { "ranking update $rankingMap" }
+        logger.d("ranking update $rankingMap")
         components.forEach { it.onNotificationRankingUpdate(rankingMap) }
     }
 
     override fun onListenerHintsChanged(hints: Int) {
         super.onListenerHintsChanged(hints)
-        d { "hints changed $hints" }
+        logger.d("hints changed $hints")
         components.forEach { it.onListenerHintsChanged(hints) }
     }
 }

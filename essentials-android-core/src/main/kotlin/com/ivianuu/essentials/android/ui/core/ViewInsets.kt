@@ -37,7 +37,8 @@ import androidx.ui.core.DensityAmbient
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.android.ui.injekt.inject
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
 
@@ -45,6 +46,7 @@ import android.view.WindowInsets as AndroidWindowInsets
 fun WindowInsetsManager(children: @Composable () -> Unit) {
     val composeView = AndroidComposeViewAmbient.current
 
+    val logger = inject<Logger>()
     val density = DensityAmbient.current
     val (windowInsets, setWindowInsets) = state { WindowInsets() }
 
@@ -79,7 +81,7 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
                 val newWindowInsets = WindowInsets(viewPadding, viewInsets)
 
                 if (windowInsets != newWindowInsets) {
-                    d { "windows insets changed $newWindowInsets" }
+                    logger.d("windows insets changed $newWindowInsets")
                     setWindowInsets(newWindowInsets)
                 }
             }
