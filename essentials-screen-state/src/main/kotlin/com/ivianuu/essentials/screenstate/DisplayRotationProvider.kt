@@ -28,8 +28,9 @@ import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -45,6 +46,7 @@ import kotlin.time.seconds
 @Single
 class DisplayRotationProvider(
     private val app: Application,
+    @ForApplication private val coroutineScope: CoroutineScope,
     private val logger: Logger,
     private val screenStateProvider: ScreenStateProvider,
     private val windowManager: WindowManager
@@ -68,7 +70,7 @@ class DisplayRotationProvider(
         }
         .map { currentDisplayRotation }
         .distinctUntilChanged()
-        .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "display rotation")
+        .shareIn(scope = coroutineScope, cacheSize = 1, timeout = 1.seconds)
 
     val currentDisplayRotation: DisplayRotation
         get() = when (windowManager.defaultDisplay.rotation) {

@@ -23,8 +23,9 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -38,6 +39,7 @@ import kotlin.time.seconds
 @Single
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
+    @ForApplication private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
@@ -52,7 +54,7 @@ class ScreenStateProvider(
         .onStart { emit(Unit) }
         .map { getScreenState() }
         .distinctUntilChanged()
-        .shareIn(scope = GlobalScope, cacheSize = 1, timeout = 1.seconds, tag = "screen state")
+        .shareIn(scope = coroutineScope, cacheSize = 1, timeout = 1.seconds)
 
     suspend fun getScreenState() = withContext(dispatchers.computation) {
         if (powerManager.isInteractive) {

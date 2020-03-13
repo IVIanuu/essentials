@@ -23,8 +23,9 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -39,6 +40,7 @@ import kotlin.time.seconds
 @ApplicationScope
 @Single
 class KeyboardVisibilityDetector(
+    @ForApplication private val appCoroutineScope: CoroutineScope,
     private val inputMethodManager: InputMethodManager
 ) : AccessibilityComponent() {
 
@@ -60,7 +62,7 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .replayShareIn(scope = GlobalScope, timeout = 1.seconds, tag = "keyboard visibility")
+        .replayShareIn(scope = appCoroutineScope, timeout = 1.seconds)
 
     private fun getKeyboardHeight(): Int {
         return try {

@@ -27,5 +27,7 @@ dependencies {
     compile(Deps.Injekt.injekt)
     compile(Deps.Injekt.common)
     compile(Deps.Moshi.moshi)
+    compile(Deps.Moshi.adapters)
+    compile(Deps.MoshiSealed.annotations)
     compile(Deps.Kotlin.stdlib)
 }

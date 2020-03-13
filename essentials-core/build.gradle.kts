@@ -13,14 +13,13 @@ dependencies {
     compile(Deps.Coroutines.core)
 
     compile(project(":essentials-coroutines"))
+    compile(project(":essentials-moshi"))
     compile(project(":essentials-store"))
 
     compile(Deps.Injekt.injekt)
     compile(Deps.Injekt.common)
 
     compile(Deps.Kotlin.stdlib)
-
-    compile(Deps.Moshi.moshi)
 
     compile(Deps.kotlinFlowExtensions)
 }

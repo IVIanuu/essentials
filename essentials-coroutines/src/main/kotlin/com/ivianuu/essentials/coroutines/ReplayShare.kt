@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
@@ -31,42 +30,33 @@ import kotlin.time.Duration
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
-    timeout: Duration = Duration.ZERO,
-    tag: String? = null
-): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = Null, timeout = timeout, tag = tag)
+    timeout: Duration = Duration.ZERO
+): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = Null, timeout = timeout)
 
 fun <T> Flow<T>.replayShareIn(
     scope: CoroutineScope,
     defaultValue: T,
-    timeout: Duration = Duration.ZERO,
-    tag: String? = null
-): Flow<T> = ReplayShareFlow(upstream = this, scope = scope, defaultValue = defaultValue, timeout = timeout, tag = tag)
+    timeout: Duration = Duration.ZERO
+): Flow<T> =
+    ReplayShareFlow(upstream = this, scope = scope, defaultValue = defaultValue, timeout = timeout)
 
 private class ReplayShareFlow<T>(
     upstream: Flow<T>,
     scope: CoroutineScope,
     defaultValue: Any?,
-    timeout: Duration = Duration.ZERO,
-    private val tag: String?
+    timeout: Duration = Duration.ZERO
 ) : AbstractFlow<T>() {
 
     private var lastValue = defaultValue
     private val mutex = Mutex()
 
     private val sharedFlow = upstream
-        .onEach { item ->
-            println("ReplayShare: $tag -> source cache emission $item")
-            mutex.withLock { lastValue = item }
-        }
-        .onCompletion {
-            println("ReplayShare: $tag -> source completed with cause $it")
-        }
+        .onEach { item -> mutex.withLock { lastValue = item } }
         .catch {
             mutex.withLock { lastValue = defaultValue }
-            println("ReplayShare: $tag -> source error set to default $defaultValue")
             throw it
         }
-        .shareIn(scope = scope, cacheSize = 0, timeout = timeout, tag = tag)
+        .shareIn(scope = scope, cacheSize = 0, timeout = timeout)
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
         collector.emitAll(
@@ -74,20 +64,8 @@ private class ReplayShareFlow<T>(
                 .onStart {
                     val lastValue = mutex.withLock { lastValue }
                     if (lastValue !== Null) {
-                        println("ReplayShare: $tag -> shared emit last value on start $lastValue")
                         emit(lastValue as T)
-                    } else {
-                        println("ReplayShare: $tag -> shared no last value skip")
                     }
-                }
-                .onStart {
-                    println("ReplayShare: $tag -> shared on start")
-                }
-                .onEach {
-                    println("ReplayShare: $tag -> shared on value $it")
-                }
-                .onCompletion {
-                    println("ReplayShare: $tag -> shared on complete $it")
                 }
         )
     }

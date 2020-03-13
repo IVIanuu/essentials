@@ -83,7 +83,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
         },
         body = {
             Column {
-                var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", true))
+                var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", false))
                 if (showBanner) {
                     Banner(
                         leading = {

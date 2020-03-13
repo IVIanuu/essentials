@@ -90,7 +90,7 @@ class SettingBoxImpl<T>(
         .onStart { emit(Unit) }
         .map { get() }
         .distinctUntilChanged()
-        .shareIn(scope = coroutineScope, cacheSize = 1, tag = "SettingBox:$uri")
+        .shareIn(scope = coroutineScope, cacheSize = 1)
 
     override suspend fun updateData(transform: suspend (T) -> T) {
         try {

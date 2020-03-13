@@ -25,8 +25,9 @@ import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Single
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -40,6 +41,7 @@ import kotlinx.coroutines.withContext
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
+    @ForApplication private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val foregroundComponent: TorchForegroundComponent,
@@ -53,7 +55,7 @@ class TorchManager internal constructor(
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
-            .launchIn(GlobalScope)
+            .launchIn(coroutineScope)
     }
 
     suspend fun toggleTorch() = withContext(dispatchers.main) {

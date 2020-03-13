@@ -46,11 +46,14 @@ class DefaultLogger : Logger {
     }
 }
 
-@PublishedApi
-internal val Logger.stackTraceTag: String
+private val Logger.stackTraceTag: String
     get() = Throwable().stackTrace
-        .first { it.className != javaClass.canonicalName }
-        .let(::createStackElementTag)
+        .first {
+            it.className != javaClass.canonicalName &&
+                    it.className != "com.ivianuu.essentials.util.LoggerKt" &&
+                    it.className != "com.ivianuu.essentials.util.Logger\$DefaultImpls"
+        }
+        .let { createStackElementTag(it) }
 
 private fun createStackElementTag(element: StackTraceElement): String {
     var tag = element.className.substringAfterLast('.')

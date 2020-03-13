@@ -373,8 +373,6 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                logger.d("$route -> compose content")
-
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
@@ -397,7 +395,6 @@ class NavigatorState(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            logger.d("$route -> on transition complete $completedState")
             transitionRunning = false
             runningTransitions--
             lastTransitionState = completedState
@@ -408,7 +405,6 @@ class NavigatorState(
 
             if (completedState == RouteTransition.State.ExitFromPush ||
                 completedState == RouteTransition.State.ExitFromPop) {
-                logger.d("$route -> remove overlay entry")
                 overlayState.remove(overlayEntry)
             }
         }
@@ -434,7 +430,6 @@ class NavigatorState(
             isPush: Boolean,
             transition: RouteTransition?
         ) {
-            logger.d("$route -> enter from ${from?.route} is push $isPush")
             overlayEntry.opaque = route.opaque || isPush
             transitionRunning = true
             runningTransitions++
@@ -444,7 +439,6 @@ class NavigatorState(
                 if (isPush) fromIndex + 1 else fromIndex
             } else overlayState.entries.size
 
-            logger.d("$route -> add overlay entry at index $toIndex")
             overlayState.add(toIndex, overlayEntry)
 
             lastTransitionState = transitionState
@@ -458,8 +452,6 @@ class NavigatorState(
             isPush: Boolean,
             transition: RouteTransition?
         ) {
-            logger.d("$route -> exit to ${to?.route} is push $isPush")
-
             transitionRunning = true
             runningTransitions++
             overlayEntry.opaque = route.opaque || !isPush
@@ -471,7 +463,6 @@ class NavigatorState(
         }
 
         fun dispose() {
-            logger.d("$route -> dispose")
             retainedObjects.dispose()
         }
 
@@ -479,7 +470,6 @@ class NavigatorState(
 
         fun setResult(result: Any?) {
             if (!this.result.isCompleted) {
-                logger.d("$route -> set result $result")
                 this.result.complete(result)
             }
         }
