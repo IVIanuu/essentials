@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.gesture.TapGestureDetector
 import androidx.ui.foundation.Box
+import androidx.ui.layout.Center
 import androidx.ui.layout.Stack
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
@@ -55,7 +56,9 @@ fun DialogWrapper(
     ) {
         DialogScrim()
         SafeArea {
-            Box(modifier = TapGestureDetector(), children = dialog)
+            Box(modifier = TapGestureDetector()) {
+                Center(dialog)
+            }
         }
     }
 }
