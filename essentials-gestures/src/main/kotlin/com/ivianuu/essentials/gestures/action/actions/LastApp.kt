@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Repeat
-import com.ivianuu.essentials.android.util.SystemBuildInfo
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy

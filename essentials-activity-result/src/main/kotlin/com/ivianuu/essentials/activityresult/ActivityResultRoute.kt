@@ -18,10 +18,10 @@ package com.ivianuu.essentials.activityresult
 
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.essentials.android.ui.coroutines.launch
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.ui.coroutines.launch
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.Route
 
 fun ActivityResultRoute(
     intent: Intent,

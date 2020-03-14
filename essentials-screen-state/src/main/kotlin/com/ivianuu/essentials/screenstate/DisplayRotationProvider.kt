@@ -23,9 +23,9 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
+import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ForApplication

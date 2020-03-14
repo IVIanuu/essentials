@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
 import androidx.core.content.FileProvider
-import com.ivianuu.essentials.android.ui.navigation.ActivityRoute
-import com.ivianuu.essentials.android.ui.navigation.NavigatorState
-import com.ivianuu.essentials.android.util.BuildInfo
-import com.ivianuu.essentials.android.util.Toaster
+import com.ivianuu.essentials.ui.navigation.ActivityRoute
+import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream

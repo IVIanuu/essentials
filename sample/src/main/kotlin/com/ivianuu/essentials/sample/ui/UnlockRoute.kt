@@ -17,16 +17,16 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.layout.Center
-import com.ivianuu.essentials.android.ui.common.SimpleScreen
-import com.ivianuu.essentials.android.ui.common.launchOnClick
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.material.Button
-import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
+import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 

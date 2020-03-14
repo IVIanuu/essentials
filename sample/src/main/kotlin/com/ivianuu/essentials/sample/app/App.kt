@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.essentials.android.app.EsApp
+import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilBindings
 import com.ivianuu.essentials.billing.esBilling
 import com.ivianuu.essentials.boot.esBootInjection

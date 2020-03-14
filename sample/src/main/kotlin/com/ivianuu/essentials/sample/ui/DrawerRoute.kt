@@ -19,12 +19,12 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.material.Scaffold
-import com.ivianuu.essentials.android.ui.material.Surface
-import com.ivianuu.essentials.android.ui.material.TopAppBar
-import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.android.ui.navigation.transition.FadeRouteTransition
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
 
 val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(

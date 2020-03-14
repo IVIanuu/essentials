@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.navigation.Route
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Route
 
 val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()

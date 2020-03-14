@@ -32,17 +32,17 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
-import com.ivianuu.essentials.android.ui.common.RenderAsyncList
-import com.ivianuu.essentials.android.ui.common.SimpleScreen
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.image.toImageAsset
-import com.ivianuu.essentials.android.ui.material.ListItem
-import com.ivianuu.essentials.android.ui.navigation.NavigatorState
-import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.android.util.Async
-import com.ivianuu.essentials.android.util.Uninitialized
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
+import com.ivianuu.essentials.ui.common.RenderAsyncList
+import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.launch
 

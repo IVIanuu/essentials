@@ -24,10 +24,10 @@ import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
-import com.ivianuu.essentials.android.ui.core.EsTheme
-import com.ivianuu.essentials.android.ui.coroutines.collect
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.material.lerp
+import com.ivianuu.essentials.ui.core.EsTheme
+import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.lerp
 
 @Composable
 fun TwilightTheme(

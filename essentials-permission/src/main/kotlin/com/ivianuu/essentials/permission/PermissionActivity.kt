@@ -20,8 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.Composable
-import com.ivianuu.essentials.android.ui.base.EsActivity
-import com.ivianuu.essentials.android.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.getLazy
 

@@ -26,14 +26,14 @@ import androidx.ui.material.icons.filled.Home
 import androidx.ui.material.icons.filled.Search
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.material.BottomNavigation
-import com.ivianuu.essentials.android.ui.material.BottomNavigationItem
-import com.ivianuu.essentials.android.ui.material.BottomNavigationSwapper
-import com.ivianuu.essentials.android.ui.material.ProvideBottomNavigationController
-import com.ivianuu.essentials.android.ui.material.Scaffold
-import com.ivianuu.essentials.android.ui.material.TopAppBar
-import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.material.BottomNavigation
+import com.ivianuu.essentials.ui.material.BottomNavigationItem
+import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
+import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Route
 
 val BottomNavigationRoute = Route {
     ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {

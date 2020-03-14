@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.permission.root
 
 import androidx.fragment.app.FragmentActivity
-import com.ivianuu.essentials.android.util.Toaster
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
@@ -13,6 +12,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Factory
 
 fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(

@@ -19,13 +19,13 @@ package com.ivianuu.essentials.hidenavbar
 import android.app.Application
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.android.ui.core.DisplayRotation
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.store.getCurrentData
+import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope

@@ -2,9 +2,9 @@ package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import com.ivianuu.essentials.android.ui.navigation.NavigatorState
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Qualifier

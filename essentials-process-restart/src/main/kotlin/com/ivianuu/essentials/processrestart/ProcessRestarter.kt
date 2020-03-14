@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.os.Process
-import com.ivianuu.essentials.android.util.BuildInfo
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Factory

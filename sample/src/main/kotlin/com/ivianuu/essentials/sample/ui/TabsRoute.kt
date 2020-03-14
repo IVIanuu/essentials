@@ -22,16 +22,16 @@ import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.layout.Column
-import com.ivianuu.essentials.android.ui.material.ProvideTabController
-import com.ivianuu.essentials.android.ui.material.Scaffold
-import com.ivianuu.essentials.android.ui.material.Surface
-import com.ivianuu.essentials.android.ui.material.Tab
-import com.ivianuu.essentials.android.ui.material.TabContent
-import com.ivianuu.essentials.android.ui.material.TabRow
-import com.ivianuu.essentials.android.ui.material.TopAppBar
-import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.material.ProvideTabController
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
+import com.ivianuu.essentials.ui.material.Tab
+import com.ivianuu.essentials.ui.material.TabContent
+import com.ivianuu.essentials.ui.material.TabRow
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TabsRoute = Route {
     val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)

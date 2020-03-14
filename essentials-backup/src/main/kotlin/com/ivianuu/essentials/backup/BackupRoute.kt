@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.backup
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.android.ui.common.ScrollableScreen
-import com.ivianuu.essentials.android.ui.common.launchOnClick
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.android.ui.prefs.SimplePreference
+import com.ivianuu.essentials.ui.common.ScrollableScreen
+import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.prefs.SimplePreference
 
 val BackupRoute = Route {
     ScrollableScreen(title = stringResource(R.string.es_backup_title)) {

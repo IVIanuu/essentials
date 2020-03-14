@@ -20,14 +20,14 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.android.ui.common.ScrollableScreen
-import com.ivianuu.essentials.android.ui.common.openUrlOnClick
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.ui.material.ListItem
-import com.ivianuu.essentials.android.ui.navigation.Route
-import com.ivianuu.essentials.android.util.BuildInfo
-import com.ivianuu.essentials.android.util.Toaster
+import com.ivianuu.essentials.ui.common.ScrollableScreen
+import com.ivianuu.essentials.ui.common.openUrlOnClick
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.Toaster
 
 /**
  * Asks the user for the secure settings permission

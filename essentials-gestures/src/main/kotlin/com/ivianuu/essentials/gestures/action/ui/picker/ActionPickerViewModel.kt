@@ -5,10 +5,6 @@ import androidx.compose.Immutable
 import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.android.ui.navigation.NavigatorState
-import com.ivianuu.essentials.android.util.Async
-import com.ivianuu.essentials.android.util.ResourceProvider
-import com.ivianuu.essentials.android.util.Uninitialized
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -16,6 +12,10 @@ import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.launch

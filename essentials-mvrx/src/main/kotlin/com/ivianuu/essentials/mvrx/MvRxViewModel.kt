@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.mvrx
 
-import com.ivianuu.essentials.android.ui.base.ViewModel
-import com.ivianuu.essentials.android.util.Async
-import com.ivianuu.essentials.android.util.Fail
-import com.ivianuu.essentials.android.util.Loading
-import com.ivianuu.essentials.android.util.Success
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.setIfChanged
+import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Fail
+import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.Success
 import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart

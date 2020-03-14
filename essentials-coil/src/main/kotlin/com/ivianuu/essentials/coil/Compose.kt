@@ -26,10 +26,10 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
 import coil.ImageLoader
 import coil.request.GetRequestBuilder
-import com.ivianuu.essentials.android.ui.common.RenderAsync
-import com.ivianuu.essentials.android.ui.image.toImageAsset
-import com.ivianuu.essentials.android.ui.injekt.inject
-import com.ivianuu.essentials.android.util.launchAsync
+import com.ivianuu.essentials.ui.common.RenderAsync
+import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.util.launchAsync
 
 @Composable
 fun CoilImage(

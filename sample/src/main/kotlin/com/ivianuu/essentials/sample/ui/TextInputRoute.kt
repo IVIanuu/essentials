@@ -29,18 +29,18 @@ import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.android.ui.common.ScrollableList
-import com.ivianuu.essentials.android.ui.common.ScrollableState
-import com.ivianuu.essentials.android.ui.common.holderFor
-import com.ivianuu.essentials.android.ui.core.KeyboardManagerAmbient
-import com.ivianuu.essentials.android.ui.core.Text
-import com.ivianuu.essentials.android.ui.core.TextField
-import com.ivianuu.essentials.android.ui.core.retain
-import com.ivianuu.essentials.android.ui.material.FloatingActionButton
-import com.ivianuu.essentials.android.ui.material.ListItem
-import com.ivianuu.essentials.android.ui.material.Scaffold
-import com.ivianuu.essentials.android.ui.material.TopAppBar
-import com.ivianuu.essentials.android.ui.navigation.Route
+import com.ivianuu.essentials.ui.common.ScrollableList
+import com.ivianuu.essentials.ui.common.ScrollableState
+import com.ivianuu.essentials.ui.common.holderFor
+import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.material.FloatingActionButton
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TextInputRoute = Route {
     val state = remember { TextInputState() }

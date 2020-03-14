@@ -8,10 +8,6 @@ import androidx.compose.Composable
 import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.res.vectorResource
-import com.ivianuu.essentials.android.ui.image.toBitmap
-import com.ivianuu.essentials.android.ui.image.toImageAsset
-import com.ivianuu.essentials.android.ui.navigation.NavigatorState
-import com.ivianuu.essentials.android.util.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -22,7 +18,11 @@ import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.essentials.ui.image.toBitmap
+import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
