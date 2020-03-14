@@ -23,6 +23,7 @@ import android.os.Build
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.DuplicateStrategy
 import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.single
 
 fun ComponentBuilder.esAndroidUtil() {
@@ -38,5 +39,11 @@ fun ComponentBuilder.esAndroidUtil() {
     }
     single { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
     single { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
-    alias<AndroidLogger, Logger>(duplicateStrategy = DuplicateStrategy.Override)
+    factory(duplicateStrategy = DuplicateStrategy.Override) {
+        if (get<BuildInfo>().isDebug) {
+            get<AndroidLogger>()
+        } else {
+            get<NoopLogger>()
+        }
+    }
 }

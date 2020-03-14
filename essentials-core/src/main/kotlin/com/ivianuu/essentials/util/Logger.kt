@@ -20,6 +20,27 @@ interface Logger {
 }
 
 @Factory
+object NoopLogger : Logger {
+    override fun v(message: String, tag: String) {
+    }
+
+    override fun d(message: String, tag: String) {
+    }
+
+    override fun i(message: String, tag: String) {
+    }
+
+    override fun w(message: String, tag: String) {
+    }
+
+    override fun e(message: String?, tag: String) {
+    }
+
+    override fun wtf(message: String?, tag: String) {
+    }
+}
+
+@Factory
 class DefaultLogger : Logger {
     override fun v(message: String, tag: String) {
         println("[VERBOSE] $tag $message")
