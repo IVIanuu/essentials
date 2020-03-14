@@ -94,6 +94,7 @@ private fun ComponentBuilder.esActivityBindings() {
     single {
         NavigatorState(
             coroutineScope = get(qualifier = ForActivity),
+            dispatchers = get(),
             logger = get()
         )
     }
