@@ -19,13 +19,20 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Alignment
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
+import androidx.ui.material.ripple.Ripple
+import androidx.ui.semantics.Semantics
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -91,14 +98,14 @@ val ButtonStyleAmbient = staticAmbientOf<ButtonStyle>()
 
 @Composable
 fun Button(
-    modifier: Modifier = Modifier.None,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier.None,
     enabled: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
     children: @Composable () -> Unit
 ) {
-    androidx.ui.material.Button(
-        modifier = modifier,
+    /*androidx.ui.material.Button(
+        modifier = modifier + drawOpacity(opacity = if (enabled) 1f else 0.5f),
         onClick = onClick,
         enabled = enabled,
         backgroundColor = style.backgroundColor,
@@ -108,5 +115,37 @@ fun Button(
         elevation = style.elevation,
         innerPadding = style.innerPadding,
         children = children
-    )
+    )*/
+
+    // todo remove once content gravity is fixed
+    // Since we're adding layouts in between the clickable layer and the content, we need to
+    // merge all descendants, or we'll get multiple nodes
+    Semantics(container = true, mergeAllDescendants = true) {
+        androidx.ui.material.Surface(
+            shape = style.shape,
+            color = style.backgroundColor,
+            contentColor = style.contentColor,
+            border = style.border,
+            elevation = style.elevation,
+            modifier = modifier
+        ) {
+            Ripple(bounded = true, enabled = enabled) {
+                Clickable(onClick = onClick, enabled = enabled) {
+                    Box(
+                        LayoutSize.Min(64.dp, 36.dp),
+                        paddingStart = style.innerPadding.left,
+                        paddingTop = style.innerPadding.top,
+                        paddingEnd = style.innerPadding.right,
+                        paddingBottom = style.innerPadding.bottom,
+                        gravity = Alignment.Center
+                    ) {
+                        CurrentTextStyleProvider(
+                            value = MaterialTheme.typography().button,
+                            children = children
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

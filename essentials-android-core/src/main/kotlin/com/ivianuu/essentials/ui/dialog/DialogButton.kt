@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.ui.core.drawOpacity
+import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ButtonStyle
@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 @Composable
 fun DialogButton(
     onClick: () -> Unit,
+    modifier: Modifier = Modifier.None,
     enabled: Boolean = true,
     dismissDialogOnClick: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrNull ?: TextButtonStyle(),
@@ -41,7 +42,6 @@ fun DialogButton(
         },
         enabled = enabled,
         style = style,
-        modifier = drawOpacity(opacity = if (enabled) 1f else 0.5f),
         children = children
     )
 }
