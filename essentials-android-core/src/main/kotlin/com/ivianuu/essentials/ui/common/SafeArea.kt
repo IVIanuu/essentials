@@ -17,19 +17,15 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.layout.Container
+import androidx.ui.foundation.Box
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.Stack
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import androidx.ui.unit.max
 import com.ivianuu.essentials.ui.core.WindowInsets
 import com.ivianuu.essentials.ui.core.WindowInsetsProvider
 import com.ivianuu.essentials.ui.core.ambientWindowInsets
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.util.Logger
 
 @Composable
 fun SafeArea(
@@ -41,11 +37,6 @@ fun SafeArea(
     minimum: EdgeInsets? = null,
     children: @Composable () -> Unit
 ) {
-    val windowInsets = ambientWindowInsets()
-
-    val logger = inject<Logger>()
-    logger.d("Window insets $windowInsets")
-
     fun safeAreaValue(
         enabled: Boolean,
         insetsValue: Dp,
@@ -56,48 +47,46 @@ fun SafeArea(
         return max(max(insetsValue, paddingValue), min ?: 0.dp)
     }
 
-    Container(
-        modifier = modifier,
-        padding = EdgeInsets(
-            left = safeAreaValue(
+    val windowInsets = ambientWindowInsets()
+
+    WindowInsetsProvider(
+        value = WindowInsets(
+            viewPadding = EdgeInsets(
+                left = if (left) 0.dp else windowInsets.viewPadding.left,
+                top = if (top) 0.dp else windowInsets.viewPadding.top,
+                right = if (right) 0.dp else windowInsets.viewPadding.right,
+                bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
+            ),
+            viewInsets = windowInsets.viewInsets
+        )
+    ) {
+        Box(
+            modifier = modifier,
+            paddingStart = safeAreaValue(
                 left,
                 windowInsets.viewInsets.left,
                 windowInsets.viewPadding.left,
                 minimum?.left
             ),
-            top = safeAreaValue(
+            paddingTop = safeAreaValue(
                 top,
                 windowInsets.viewInsets.top,
                 windowInsets.viewPadding.top,
                 minimum?.top
             ),
-            right = safeAreaValue(
+            paddingEnd = safeAreaValue(
                 right,
                 windowInsets.viewInsets.right,
                 windowInsets.viewPadding.right,
                 minimum?.right
             ),
-            bottom = safeAreaValue(
+            paddingBottom = safeAreaValue(
                 bottom,
                 windowInsets.viewInsets.bottom,
                 windowInsets.viewPadding.bottom,
                 minimum?.bottom
-            )
-        ),
-        alignment = Alignment.TopStart
-    ) {
-        WindowInsetsProvider(
-            value = WindowInsets(
-                viewPadding = EdgeInsets(
-                    left = if (left) 0.dp else windowInsets.viewPadding.left,
-                    top = if (top) 0.dp else windowInsets.viewPadding.top,
-                    right = if (right) 0.dp else windowInsets.viewPadding.right,
-                    bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
-                ),
-                viewInsets = windowInsets.viewInsets
-            )
-        ) {
-            Stack { children() }
-        }
+            ),
+            children = children
+        )
     }
 }
