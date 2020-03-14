@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
@@ -36,7 +37,7 @@ fun IconButton(
         enabled = enabled
     ) {
         Clickable(onClick = onClick) {
-            Box(modifier = modifier, children = children)
+            Box(modifier = modifier, gravity = Alignment.Center, children = children)
         }
     }
 }
