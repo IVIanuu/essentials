@@ -20,11 +20,16 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.gesture.TapGestureDetector
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ColoredRect
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.layout.Stack
+import androidx.ui.layout.Wrap
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.util.Logger
 
 @Composable
 fun DialogWrapper(
@@ -45,19 +50,26 @@ fun DialogWrapper(
         }
     }
 
-    Stack(
-        modifier = TapGestureDetector(
-            onTap = {
-                if (dismissible) {
-                    dismissed.value = true
+    Stack {
+        val logger = inject<Logger>()
+        ColoredRect(
+            color = Color.Black.copy(alpha = 0.6f),
+            modifier = TapGestureDetector(
+                onTap = {
+                    if (dismissible) {
+                        dismissed.value = true
+                    }
                 }
-            }
+            )
         )
-    ) {
-        DialogScrim()
         SafeArea {
-            Box(modifier = TapGestureDetector()) {
-                Center(dialog)
+            Center {
+                Wrap {
+                    Box(
+                        modifier = TapGestureDetector(),
+                        children = dialog
+                    )
+                }
             }
         }
     }
