@@ -27,7 +27,7 @@ import com.ivianuu.essentials.sample.bootBindings
 import com.ivianuu.essentials.sample.ui.uiBindings
 import com.ivianuu.essentials.sample.work.workBindings
 import com.ivianuu.essentials.twilight.esTwilight
-import com.ivianuu.essentials.work.workerInjectionModule
+import com.ivianuu.essentials.work.workerInjection
 import com.ivianuu.injekt.ComponentBuilder
 
 class App : EsApp() {
@@ -40,7 +40,7 @@ class App : EsApp() {
         esGestures()
         esPermissions()
         esTwilight()
-        workerInjectionModule()
+        workerInjection()
 
         appBindings()
         bootBindings()

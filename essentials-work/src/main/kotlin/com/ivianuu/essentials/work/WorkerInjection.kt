@@ -61,7 +61,7 @@ class InjektWorkerFactory(
 /**
  * Contains the [InjektWorkerFactory]
  */
-fun ComponentBuilder.workerInjectionModule() {
+fun ComponentBuilder.workerInjection() {
     map<String, ListenableWorker>(mapQualifier = WorkersMap)
     alias<InjektWorkerFactory, WorkerFactory>()
     esWork()
