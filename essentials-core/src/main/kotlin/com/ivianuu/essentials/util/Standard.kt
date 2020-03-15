@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.util
 
-fun Any?.andTrue() = true
-fun Any?.andFalse() = false
-
 inline val <T> T.exhaustive: T get() = this
 
 inline fun <reified T> Any?.safeAs(): T? = this as? T
