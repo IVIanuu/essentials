@@ -20,7 +20,6 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.shareIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -30,7 +29,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.atomic.AtomicReference
 
 interface DiskBox<T> : Box<T> {
     interface Serializer<T> {
@@ -60,25 +58,9 @@ internal class DiskBoxImpl<T>(
 ) : DiskBox<T> {
 
     private val changeNotifier = EventFlow<Unit>()
-    private val cachedValue = AtomicReference<Any?>(this)
-    private val valueFetcher = MutexValue {
-        val serialized = try {
-            file.bufferedReader().use {
-                it.readText()
-            }
-        } catch (e: Exception) {
-            throw IOException("Couldn't read file at $path", e)
-        }
-
-        return@MutexValue try {
-            val deserialized = serializer.deserialize(serialized)
-            log { "$path -> fetch '$serialized' deserialized '$deserialized'" }
-            deserialized
-        } catch (e: Exception) {
-            throw RuntimeException("Couldn't deserialize '$serialized' for file $path", e)
-        }
-    }
-    private val writeLock = WriteLock(path)
+    private var cachedValue: Any? = this
+    private val cachedValueMutex = Mutex()
+    private val writeLock = WriteLock()
 
     private val file by lazy { File(path) }
 
@@ -135,7 +117,7 @@ internal class DiskBoxImpl<T>(
                 tmpFile.delete()
             }
 
-            cachedValue.set(newValue)
+            cachedValueMutex.withLock { cachedValue = newValue }
             changeNotifier.offer(Unit)
         } finally {
             writeLock.endWrite()
@@ -144,18 +126,33 @@ internal class DiskBoxImpl<T>(
 
     private suspend fun get(): T {
         writeLock.awaitWrite()
-        val cached = cachedValue.get()
+        val cached = cachedValueMutex.withLock { cachedValue }
         if (cached != this) return cached as T
 
         return if (file.exists()) {
-            valueFetcher().also { cachedValue.set(it) }
+            val serialized = try {
+                file.bufferedReader().use {
+                    it.readText()
+                }
+            } catch (e: Exception) {
+                throw IOException("Couldn't read file at $path", e)
+            }
+
+            try {
+                val deserialized = serializer.deserialize(serialized)
+                log { "$path -> fetch '$serialized' deserialized '$deserialized'" }
+                cachedValueMutex.withLock { cachedValue = deserialized }
+                deserialized
+            } catch (e: Exception) {
+                throw RuntimeException("Couldn't deserialize '$serialized' for file $path", e)
+            }
         } else {
             defaultValue
         }
     }
 }
 
-private class WriteLock(private val path: String) {
+private class WriteLock {
 
     private var currentLock: CompletableDeferred<Unit>? = null
     private val mutex = Mutex()
@@ -178,30 +175,5 @@ private class WriteLock(private val path: String) {
         }
 
         lock?.complete(Unit)
-    }
-}
-
-private class MutexValue<T>(private val getter: suspend () -> T) {
-
-    private var currentDeferred: Deferred<T>? = null
-    private val mutex = Mutex()
-
-    suspend operator fun invoke(): T {
-        var deferred = mutex.withLock { currentDeferred }
-        if (deferred == null) {
-            deferred = CompletableDeferred()
-            mutex.withLock { currentDeferred = deferred }
-            try {
-                val result = getter.invoke()
-                deferred.complete(result)
-            } catch (e: Exception) {
-                deferred.completeExceptionally(e)
-            } finally {
-                @Suppress("DeferredResultUnused")
-                mutex.withLock { currentDeferred = null }
-            }
-        }
-
-        return deferred.await()
     }
 }
