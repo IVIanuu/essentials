@@ -35,6 +35,7 @@ import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ColorShape
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.common.skippable
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
@@ -53,6 +54,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -80,7 +82,10 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
             )
         },
         body = {
+            val logger = inject<Logger>()
+            logger.d("invoke body")
             Column {
+                logger.d("invoke column")
                 var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", false))
                 if (showBanner) {
                     Banner(
@@ -106,13 +111,15 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
                 ScrollableList(items = items) { _, item ->
-                    val route = item.route()
-                    HomeItem(item = item, onClick = navigateOnClick { route })
-                    if (items.indexOf(item) != items.lastIndex) {
-                        Divider(
-                            axis = Axis.Horizontal,
-                            modifier = LayoutPadding(start = 72.dp)
-                        )
+                    skippable(item) {
+                        val route = item.route()
+                        HomeItem(item = item, onClick = navigateOnClick { route })
+                        if (items.indexOf(item) != items.lastIndex) {
+                            Divider(
+                                axis = Axis.Horizontal,
+                                modifier = LayoutPadding(start = 72.dp)
+                            )
+                        }
                     }
                 }
             }

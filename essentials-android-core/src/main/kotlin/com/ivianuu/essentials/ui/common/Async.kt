@@ -40,7 +40,7 @@ fun <T> RenderAsyncList(
         success = { items ->
             if (items.isNotEmpty()) {
                 ScrollableList(items = items) { index, item ->
-                    ifChanged(item) {
+                    skippable(item) {
                         successItemCallback(index, item)
                     }
                 }
