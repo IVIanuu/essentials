@@ -57,16 +57,11 @@ class BillingStore internal constructor(
     }
 
     suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.computation) {
-        products.getCurrentData()
-            .toMutableList()
-            .also { it += skuDetails }
-            .let { products.updateData { it } }
+        products.updateData { it + skuDetails }
     }
 
     suspend fun removeProduct(sku: String) = withContext(dispatchers.computation) {
-        products.getCurrentData()
-            .filter { it.sku != sku }
-            .let { products.updateData { it } }
+        products.updateData { products -> products.filter { it.sku != sku } }
     }
 
     suspend fun clearProducts() = withContext(dispatchers.computation) {
@@ -74,13 +69,11 @@ class BillingStore internal constructor(
     }
 
     suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.computation) {
-        purchases.getCurrentData()
-            .toMutableList()
-            .also { it += purchase }
-            .let { purchases.updateData { it } }
+        purchases.updateData { it + purchase }
     }
 
     suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.computation) {
+        purchases.updateData { purchases -> purchases.filter { it.purchaseToken != purchaseToken } }
         purchases.getCurrentData()
             .filter { it.purchaseToken != purchaseToken }
             .let { purchases.updateData { it } }
