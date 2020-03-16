@@ -2,7 +2,6 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
 import androidx.compose.Composable
-import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Bluetooth
 import androidx.ui.material.icons.filled.BluetoothDisabled
@@ -11,6 +10,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.Flow
@@ -54,9 +54,5 @@ internal class BluetoothActionIconProvider(
                 if (it) Icons.Default.Bluetooth
                 else Icons.Default.BluetoothDisabled
             }
-            .map {
-                {
-                    Icon(it)
-                }
-            }
+            .map { { Icon(it) } }
 }

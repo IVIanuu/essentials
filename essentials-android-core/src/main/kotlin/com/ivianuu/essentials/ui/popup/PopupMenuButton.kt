@@ -5,13 +5,13 @@ import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.boundsInRoot
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.Icon
 import androidx.ui.layout.Stack
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.round
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable

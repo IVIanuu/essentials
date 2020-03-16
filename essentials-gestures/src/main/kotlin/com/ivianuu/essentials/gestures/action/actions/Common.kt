@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
-import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
@@ -10,6 +9,7 @@ import coil.api.getAny
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component

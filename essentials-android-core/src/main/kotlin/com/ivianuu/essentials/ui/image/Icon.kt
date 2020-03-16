@@ -6,6 +6,7 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorFilter
@@ -16,100 +17,89 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.VectorPainter
+import androidx.ui.layout.LayoutSize
 import androidx.ui.res.imageResource
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrNull
 
 @Immutable
-data class ImageStyle(
+data class IconStyle(
     val modifier: Modifier,
     val alignment: Alignment,
     val scaleFit: ScaleFit,
     val alpha: Float,
-    val colorFilter: ColorFilter?
+    val tint: Color
 )
 
-val ImageStyleAmbient = staticAmbientOf<ImageStyle>()
-
-@Composable
-fun DefaultImageStyle(
-    modifier: Modifier = Modifier.None,
-    alignment: Alignment = Alignment.Center,
-    scaleFit: ScaleFit = ScaleFit.Fit,
-    alpha: Float = DefaultAlpha,
-    colorFilter: ColorFilter? = null
-) = ImageStyle(
-    modifier = modifier,
-    alignment = alignment,
-    scaleFit = scaleFit,
-    alpha = alpha,
-    colorFilter = colorFilter
+fun IconStyle.toImageStyle() = ImageStyle(
+    modifier, alignment, scaleFit, alpha, ColorFilter(tint, BlendMode.srcIn)
 )
 
+
+val IconStyleAmbient = staticAmbientOf<IconStyle>()
+
 @Composable
-fun DefaultImageStyle(
-    tint: Color,
-    modifier: Modifier = Modifier.None,
+fun DefaultIconStyle(
+    tint: Color = contentColor(),
+    modifier: Modifier = LayoutSize(24.dp),
     alignment: Alignment = Alignment.Center,
     scaleFit: ScaleFit = ScaleFit.Fit,
     alpha: Float = DefaultAlpha
-) = ImageStyle(
+) = IconStyle(
     modifier = modifier,
     alignment = alignment,
     scaleFit = scaleFit,
     alpha = alpha,
-    colorFilter = ColorFilter(tint, BlendMode.srcIn)
+    tint = tint
 )
 
 @Composable
-fun Image(
+fun Icon(
     painter: Painter,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
 ) {
-    androidx.ui.foundation.Image(
+    Image(
         painter = painter,
         modifier = modifier,
-        alignment = style.alignment,
-        scaleFit = style.scaleFit,
-        alpha = style.alpha,
-        colorFilter = style.colorFilter
+        style = remember(style) { style.toImageStyle() }
     )
 }
 
 @Composable
-fun Image(
+fun Icon(
     id: Int,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
 ) {
-    Image(
-        image = imageResource(id),
+    Icon(
+        icon = imageResource(id),
         modifier = modifier,
         style = style
     )
 }
 
 @Composable
-fun Image(
-    image: ImageAsset,
+fun Icon(
+    icon: ImageAsset,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
 ) {
-    Image(
-        painter = remember(image) { ImagePainter(image) },
+    Icon(
+        painter = remember(icon) { ImagePainter(icon) },
         modifier = modifier,
         style = style
     )
 }
 
 @Composable
-fun Image(
-    image: VectorAsset,
+fun Icon(
+    icon: VectorAsset,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
 ) {
-    Image(
-        painter = VectorPainter(image),
+    Icon(
+        painter = VectorPainter(icon),
         modifier = modifier,
         style = style
     )

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.foundation.ColoredRect
-import androidx.ui.foundation.Icon
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.material.icons.Icons
@@ -27,6 +26,7 @@ import androidx.ui.material.icons.filled.Search
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.BottomNavigation
 import com.ivianuu.essentials.ui.material.BottomNavigationItem
 import com.ivianuu.essentials.ui.material.BottomNavigationSwapper

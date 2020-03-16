@@ -20,9 +20,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.foundation.Icon
 import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
@@ -41,6 +39,7 @@ import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
@@ -54,7 +53,6 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -86,10 +84,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                 var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", false))
                 if (showBanner) {
                     Banner(
-                        leading = {
-                            val resourceProvider = inject<ResourceProvider>()
-                            Icon(ImagePainter(resourceProvider.getDrawable(R.mipmap.ic_launcher)))
-                        },
+                        leading = { Icon(R.mipmap.ic_launcher) },
                         content = { Text("Welcome to Essentials Sample we have great new features for you. Go and check them out.") },
                         actions = {
                             Button(onClick = { showBanner = false }) {

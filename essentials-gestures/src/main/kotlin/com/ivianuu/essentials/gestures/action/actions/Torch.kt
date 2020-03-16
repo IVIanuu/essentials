@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
-import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.FlashOff
 import androidx.ui.material.icons.filled.FlashOn
@@ -10,6 +9,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.torch.TorchManager
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.Flow

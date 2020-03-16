@@ -18,8 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Text
-import androidx.ui.foundation.Icon
 import androidx.ui.layout.Center
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
@@ -39,6 +37,8 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route

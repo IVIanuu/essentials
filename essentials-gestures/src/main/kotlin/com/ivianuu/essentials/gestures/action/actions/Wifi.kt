@@ -2,7 +2,6 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
 import androidx.compose.Composable
-import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Wifi
 import androidx.ui.material.icons.filled.WifiOff
@@ -11,6 +10,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.Flow
