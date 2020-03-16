@@ -67,13 +67,14 @@ private fun ScrollerLayout(
         val height: IntPx
         when (direction) {
             Axis.Vertical -> {
-                width = max(placeables.maxBy { it.width }!!.width ?: 0.ipx, constraints.minWidth)
+                width = constraints.maxWidth
                 height = placeables.sumBy { it.height.value }.ipx
+                    .coerceIn(constraints.minHeight, constraints.maxHeight)
             }
             Axis.Horizontal -> {
                 width = placeables.sumBy { it.width.value }.ipx
-                height =
-                    max(placeables.maxBy { it.height }!!.height ?: 0.ipx, constraints.minHeight)
+                    .coerceIn(constraints.minWidth, constraints.maxWidth)
+                height = constraints.maxHeight
             }
         }
 

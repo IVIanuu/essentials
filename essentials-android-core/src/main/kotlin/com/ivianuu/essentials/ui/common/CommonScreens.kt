@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 
@@ -40,12 +39,6 @@ fun ScrollableScreen(
 ) {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text(title) }) },
-        body = {
-            Scroller {
-                Column {
-                    content()
-                }
-            }
-        }
+        body = { Scroller(children = content) }
     )
 }

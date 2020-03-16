@@ -19,15 +19,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.foundation.Icon
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -39,9 +37,6 @@ import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -53,241 +48,235 @@ val DialogsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Dialogs") }) },
         body = {
-            VerticalScroller {
-                Column(
-                    modifier = LayoutWidth.Fill + LayoutPadding(all = 8.dp),
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
+            Scroller {
+                DialogLauncherButton(
+                    text = "Simple"
                 ) {
-                    DialogLauncherButton(
-                        text = "Simple"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Simple") },
-                            content = { Text("This is a message") },
-                            positiveButton = {
-                                DialogCloseButton { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
-                            }
-                        )
-                    }
+                    MaterialDialog(
+                        title = { Text("Simple") },
+                        content = { Text("This is a message") },
+                        positiveButton = {
+                            DialogCloseButton { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "Simple with neutral"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Simple") },
-                            content = { Text("This is a message") },
-                            positiveButton = {
-                                DialogCloseButton { Text("Positive") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Negative") }
-                            },
-                            neutralButton = {
-                                DialogCloseButton { Text("Neutral") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Simple with neutral"
+                ) {
+                    MaterialDialog(
+                        title = { Text("Simple") },
+                        content = { Text("This is a message") },
+                        positiveButton = {
+                            DialogCloseButton { Text("Positive") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Negative") }
+                        },
+                        neutralButton = {
+                            DialogCloseButton { Text("Neutral") }
+                        }
+                    )
+                }
 
 
-                    DialogLauncherButton(
-                        text = "Title only"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Title only") }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Title only"
+                ) {
+                    MaterialDialog(
+                        title = { Text("Title only") }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "With icon"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("With icon") },
-                            icon = { Icon(Icons.Default.Settings) },
-                            positiveButton = {
-                                DialogCloseButton { Text("OK") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "With icon"
+                ) {
+                    MaterialDialog(
+                        title = { Text("With icon") },
+                        icon = { Icon(Icons.Default.Settings) },
+                        positiveButton = {
+                            DialogCloseButton { Text("OK") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "Message only"
-                    ) {
-                        MaterialDialog(
-                            content = { Text("Message only") }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Message only"
+                ) {
+                    MaterialDialog(
+                        content = { Text("Message only") }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "Buttons only"
-                    ) {
-                        MaterialDialog(
-                            positiveButton = {
-                                DialogCloseButton { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Buttons only"
+                ) {
+                    MaterialDialog(
+                        positiveButton = {
+                            DialogCloseButton { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "Stacked buttons"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Stacked buttons") },
-                            content = { Text("Shows stacked buttons") },
-                            buttonLayout = AlertDialogButtonLayout.Stacked,
-                            positiveButton = {
-                                DialogCloseButton { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Stacked buttons"
+                ) {
+                    MaterialDialog(
+                        title = { Text("Stacked buttons") },
+                        content = { Text("Shows stacked buttons") },
+                        buttonLayout = AlertDialogButtonLayout.Stacked,
+                        positiveButton = {
+                            DialogCloseButton { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "Stacked buttons with neutral"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Stacked buttons") },
-                            content = { Text("Shows stacked buttons") },
-                            buttonLayout = AlertDialogButtonLayout.Stacked,
-                            positiveButton = {
-                                DialogCloseButton { Text("Positive") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Negative") }
-                            },
-                            neutralButton = {
-                                DialogCloseButton { Text("Neutral") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    text = "Stacked buttons with neutral"
+                ) {
+                    MaterialDialog(
+                        title = { Text("Stacked buttons") },
+                        content = { Text("Shows stacked buttons") },
+                        buttonLayout = AlertDialogButtonLayout.Stacked,
+                        positiveButton = {
+                            DialogCloseButton { Text("Positive") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Negative") }
+                        },
+                        neutralButton = {
+                            DialogCloseButton { Text("Neutral") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        dismissible = false,
-                        text = "Not cancelable"
-                    ) {
-                        MaterialDialog(
-                            title = { Text("Not cancelable") },
-                            negativeButton = {
-                                DialogCloseButton { Text("Close") }
-                            }
-                        )
-                    }
+                DialogLauncherButton(
+                    dismissible = false,
+                    text = "Not cancelable"
+                ) {
+                    MaterialDialog(
+                        title = { Text("Not cancelable") },
+                        negativeButton = {
+                            DialogCloseButton { Text("Close") }
+                        }
+                    )
+                }
 
-                    DialogLauncherButton(
-                        text = "List"
-                    ) {
-                        ScrollableDialog(
-                            title = { Text("List") },
-                            listContent = {
-                                (1..100).forEach {
-                                    ListItem(
-                                        title = {
-                                            Text(
-                                                "Item: $it"
-                                            )
-                                        },
-                                        onClick = {
-
-                                        }
-                                    )
-                                }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Close") }
-                            }
-                        )
-                    }
-
-                    val singleChoiceItems = listOf(1, 2, 3, 4, 5)
-                    val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = state { 1 }
-                    DialogLauncherButton(
-                        text = "Single choice list"
-                    ) {
-                        val (tmpSelectedItem, setTmpSelectedItem) = state { selectedSingleChoiceItem }
-
-                        SingleChoiceListDialog(
-                            title = { Text("Single choice") },
-                            items = singleChoiceItems,
-                            selectedItem = tmpSelectedItem,
-                            onSelect = setTmpSelectedItem,
-                            dismissOnSelection = false,
-                            itemCallback = { Text("Item: $it") },
-                            positiveButton = {
-                                DialogButton(
+                DialogLauncherButton(
+                    text = "List"
+                ) {
+                    ScrollableDialog(
+                        title = { Text("List") },
+                        listContent = {
+                            (1..100).forEach {
+                                ListItem(
+                                    title = {
+                                        Text(
+                                            "Item: $it"
+                                        )
+                                    },
                                     onClick = {
-                                        setSelectedSingleChoiceItem(tmpSelectedItem)
-                                    }) { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
+
+                                    }
+                                )
                             }
-                        )
-                    }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Close") }
+                        }
+                    )
+                }
 
-                    val multiChoiceItems = listOf("A", "B", "C")
-                    val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = state { multiChoiceItems }
-                    DialogLauncherButton(
-                        text = "Multi choice list"
-                    ) {
-                        val (tmpSelectedItems, setTmpSelectedItems) = state { selectedMultiChoiceItems }
+                val singleChoiceItems = listOf(1, 2, 3, 4, 5)
+                val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = state { 1 }
+                DialogLauncherButton(
+                    text = "Single choice list"
+                ) {
+                    val (tmpSelectedItem, setTmpSelectedItem) = state { selectedSingleChoiceItem }
 
-                        MultiChoiceListDialog(
-                            title = { Text("Multi choice") },
-                            items = multiChoiceItems,
-                            selectedItems = tmpSelectedItems,
-                            onSelectionsChanged = setTmpSelectedItems,
-                            itemCallback = { Text(it) },
-                            positiveButton = {
-                                DialogButton(
-                                    onClick = {
-                                        setSelectedMultiChoiceItems(tmpSelectedItems)
-                                    }) { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
-                            }
-                        )
-                    }
+                    SingleChoiceListDialog(
+                        title = { Text("Single choice") },
+                        items = singleChoiceItems,
+                        selectedItem = tmpSelectedItem,
+                        onSelect = setTmpSelectedItem,
+                        dismissOnSelection = false,
+                        itemCallback = { Text("Item: $it") },
+                        positiveButton = {
+                            DialogButton(
+                                onClick = {
+                                    setSelectedSingleChoiceItem(tmpSelectedItem)
+                                }) { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
+                }
 
-                    val primaryColor = MaterialTheme.colors().primary
-                    val (currentColor, setCurrentColor) = state { primaryColor }
-                    DialogLauncherButton(text = "Color Picker") {
-                        ColorPickerDialog(
-                            title = { Text("Color Picker") },
-                            showAlphaSelector = true,
-                            initialColor = currentColor,
-                            onColorSelected = setCurrentColor
-                        )
-                    }
+                val multiChoiceItems = listOf("A", "B", "C")
+                val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = state { multiChoiceItems }
+                DialogLauncherButton(
+                    text = "Multi choice list"
+                ) {
+                    val (tmpSelectedItems, setTmpSelectedItems) = state { selectedMultiChoiceItems }
 
-                    val (textInputValue, setTextInputValue) = state { "" }
-                    DialogLauncherButton(text = "Text input") {
-                        val (tmpTextInputValue, setTmpTextInputValue) = state { textInputValue }
-                        TextInputDialog(
-                            title = { Text("Text input") },
-                            value = tmpTextInputValue,
-                            onValueChange = setTmpTextInputValue,
-                            hint = "Hint..",
-                            positiveButton = {
-                                DialogButton(
-                                    enabled = tmpTextInputValue.isNotEmpty(),
-                                    onClick = {
-                                        setTextInputValue(tmpTextInputValue)
-                                    }) { Text("OK") }
-                            },
-                            negativeButton = {
-                                DialogCloseButton { Text("Cancel") }
-                            }
-                        )
-                    }
+                    MultiChoiceListDialog(
+                        title = { Text("Multi choice") },
+                        items = multiChoiceItems,
+                        selectedItems = tmpSelectedItems,
+                        onSelectionsChanged = setTmpSelectedItems,
+                        itemCallback = { Text(it) },
+                        positiveButton = {
+                            DialogButton(
+                                onClick = {
+                                    setSelectedMultiChoiceItems(tmpSelectedItems)
+                                }) { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
+                }
+
+                val primaryColor = MaterialTheme.colors().primary
+                val (currentColor, setCurrentColor) = state { primaryColor }
+                DialogLauncherButton(text = "Color Picker") {
+                    ColorPickerDialog(
+                        title = { Text("Color Picker") },
+                        showAlphaSelector = true,
+                        initialColor = currentColor,
+                        onColorSelected = setCurrentColor
+                    )
+                }
+
+                val (textInputValue, setTextInputValue) = state { "" }
+                DialogLauncherButton(text = "Text input") {
+                    val (tmpTextInputValue, setTmpTextInputValue) = state { textInputValue }
+                    TextInputDialog(
+                        title = { Text("Text input") },
+                        value = tmpTextInputValue,
+                        onValueChange = setTmpTextInputValue,
+                        hint = "Hint..",
+                        positiveButton = {
+                            DialogButton(
+                                enabled = tmpTextInputValue.isNotEmpty(),
+                                onClick = {
+                                    setTextInputValue(tmpTextInputValue)
+                                }) { Text("OK") }
+                        },
+                        negativeButton = {
+                            DialogCloseButton { Text("Cancel") }
+                        }
+                    )
                 }
             }
         }
