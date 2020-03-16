@@ -1,58 +1,105 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.AnimationClockAmbient
+import androidx.ui.core.DrawClipToBounds
+import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.animation.FlingConfig
-import androidx.ui.foundation.gestures.DragDirection
-import com.ivianuu.essentials.ui.core.retain
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.Row
+import androidx.ui.unit.IntPx
+import androidx.ui.unit.Px
+import androidx.ui.unit.ipx
+import androidx.ui.unit.max
+import androidx.ui.unit.px
+import androidx.ui.unit.round
+import com.ivianuu.essentials.ui.core.Axis
 
 @Composable
 fun Scroller(
     modifier: Modifier = Modifier.None,
-    scrollerPosition: ScrollerPosition = RetainedScrollerPosition(),
-    dragDirection: DragDirection = DragDirection.Vertical,
-    scrollable: Boolean = true,
+    direction: Axis = Axis.Vertical,
+    scrollableState: ScrollableState = RetainedScrollableState(),
+    enabled: Boolean = true,
     children: @Composable () -> Unit
 ) {
-    when (dragDirection) {
-        DragDirection.Horizontal -> {
-            HorizontalScroller(
-                modifier = modifier,
-                scrollerPosition = scrollerPosition,
-                isScrollable = scrollable
-            ) {
-                Row {
-                    children()
-                }
-            }
-        }
-        DragDirection.Vertical -> {
-            VerticalScroller(
-                modifier = modifier,
-                scrollerPosition = scrollerPosition,
-                isScrollable = scrollable
-            ) {
-                Column {
-                    children()
-                }
-            }
-        }
+    Scrollable(
+        state = scrollableState,
+        direction = direction,
+        enabled = enabled
+    ) {
+        ScrollerLayout(
+            scrollableState,
+            modifier = modifier,
+            direction = direction,
+            children = children
+        )
     }
 }
 
 @Composable
-fun RetainedScrollerPosition(
-    initial: Float = 0f
-): ScrollerPosition {
-    val clock = AnimationClockAmbient.current
-    val config = FlingConfig()
-    return retain(clock, config) {
-        ScrollerPosition(flingConfig = config, initial = initial, animationClock = clock)
+private fun ScrollerLayout(
+    scrollableState: ScrollableState,
+    modifier: Modifier,
+    direction: Axis,
+    children: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier + DrawClipToBounds,
+        children = children
+    ) { measurables, constraints, _ ->
+        val childConstraints = constraints.copy(
+            maxHeight = when (direction) {
+                Axis.Vertical -> IntPx.Infinity
+                Axis.Horizontal -> constraints.maxHeight
+            },
+            maxWidth = when (direction) {
+                Axis.Vertical -> constraints.maxWidth
+                Axis.Horizontal -> IntPx.Infinity
+            }
+        )
+
+        val placeables = measurables.map { it.measure(childConstraints) }
+
+        val width: IntPx
+        val height: IntPx
+        when (direction) {
+            Axis.Vertical -> {
+                width = max(placeables.maxBy { it.width }!!.width, constraints.minWidth)
+                height = placeables.sumBy { it.height.value }.ipx
+            }
+            Axis.Horizontal -> {
+                width = placeables.sumBy { it.width.value }.ipx
+                height = max(placeables.maxBy { it.height }!!.height, constraints.minHeight)
+            }
+        }
+
+        layout(width, height) {
+            val newMaxValue = when (direction) {
+                Axis.Vertical -> max(
+                    0.px,
+                    placeables.sumBy { it.height.value }.px - height
+                )
+                Axis.Horizontal -> max(
+                    Px.Zero,
+                    placeables.sumBy { it.width.value }.px - width
+                )
+            }
+
+            if (scrollableState.maxValue != newMaxValue) {
+                scrollableState.updateBounds(Px.Zero, newMaxValue)
+            }
+
+            var offset = -scrollableState.value.round()
+            placeables.forEach { placeable ->
+                when (direction) {
+                    Axis.Vertical -> {
+                        placeable.place(0.ipx, offset)
+                        offset += placeable.height
+                    }
+                    Axis.Horizontal -> {
+                        placeable.place(offset, 0.ipx)
+                        offset += placeable.width
+                    }
+                }
+            }
+        }
     }
 }

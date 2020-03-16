@@ -497,10 +497,5 @@ private class ScrollableListState {
         fun dispose() {
             composition.dispose()
         }
-
-        @Composable
-        private fun OnlyOnce(children: @Composable () -> Unit) {
-            children()
-        }
     }
 }
