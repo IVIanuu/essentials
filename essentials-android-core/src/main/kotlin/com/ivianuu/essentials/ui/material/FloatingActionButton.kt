@@ -103,6 +103,7 @@ fun FloatingActionButton(
             currentTextComposableStyle()
                 .copy(
                     uppercase = true,
+                    maxLines = 1,
                     textStyle = MaterialTheme.typography().button
                 ),
             children = children

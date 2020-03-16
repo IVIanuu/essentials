@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
@@ -36,10 +35,12 @@ import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.common.DrawerButton
 import com.ivianuu.essentials.ui.common.SafeArea
+import com.ivianuu.essentials.ui.core.CurrentTextComposableStyleProvider
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -123,9 +124,15 @@ fun TopAppBar(
                                     mainAxisAlignment = MainAxisAlignment.Start,
                                     crossAxisAlignment = CrossAxisAlignment.Start
                                 ) {
-                                    CurrentTextStyleProvider(MaterialTheme.typography().h6) {
-                                        title()
-                                    }
+                                    CurrentTextComposableStyleProvider(
+                                        currentTextComposableStyle()
+                                            .copy(
+                                                uppercase = true,
+                                                maxLines = 1,
+                                                textStyle = MaterialTheme.typography().h6
+                                            ),
+                                        children = title
+                                    )
                                 }
                             }
                         },
