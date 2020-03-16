@@ -32,6 +32,7 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
+import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
@@ -85,7 +86,7 @@ private class ShortcutPickerViewModel(
             block = {
                 val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
                 packageManager.queryIntentActivities(shortcutsIntent, 0)
-                    .mapNotNull { resolveInfo ->
+                    .parallelMap { resolveInfo ->
                         try {
                             ShortcutInfo(
                                 intent = Intent().apply {
@@ -102,6 +103,7 @@ private class ShortcutPickerViewModel(
                             null
                         }
                     }
+                    .filterNotNull()
                     .sortedBy { it.name }
             },
             reducer = { copy(shortcuts = it) }

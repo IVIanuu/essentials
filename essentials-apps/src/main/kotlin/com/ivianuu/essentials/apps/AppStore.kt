@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
@@ -32,7 +33,7 @@ class AppStore(
 
     suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.computation) {
         packageManager.getInstalledApplications(0)
-            .map {
+            .parallelMap {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
                     packageName = it.packageName
