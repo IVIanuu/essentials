@@ -93,7 +93,7 @@ fun TopAppBar(
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
-    primary: Boolean = true
+    primary: Boolean = true // todo rename param
 ) {
     ProvideSystemBarStyle(
         value = ambientSystemBarStyle().let {
