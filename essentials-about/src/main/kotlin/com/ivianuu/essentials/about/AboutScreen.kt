@@ -49,7 +49,7 @@ fun AboutSection(
 ) {
     if (showHeader) {
         Subheader {
-            Text(stringResource(R.string.about_title))
+            Text(R.string.about_title)
         }
     }
 
@@ -106,10 +106,10 @@ private fun AboutItem(
     url: () -> String
 ) {
     ListItem(
-        title = { Text(stringResource(titleRes)) },
+        title = { Text(titleRes) },
         subtitle = descRes?.let {
             {
-                Text(stringResource(it))
+                Text(it)
             }
         },
         onClick = openUrlOnClick(url)

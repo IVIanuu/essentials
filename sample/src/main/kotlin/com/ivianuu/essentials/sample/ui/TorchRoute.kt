@@ -23,16 +23,15 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import kotlinx.coroutines.launch
 
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
@@ -43,17 +42,12 @@ val TorchRoute = Route {
             Column(crossAxisAlignment = CrossAxisAlignment.Center) {
                 Text(
                     "Torch is ${if (torchState) "enabled" else "disabled"}",
-                    style = MaterialTheme.typography().h4
+                    style = currentTextComposableStyle()
+                        .copy(textStyle = MaterialTheme.typography().h4)
                 )
                 Spacer(LayoutHeight(8.dp))
-                val coroutineScope = CoroutineScopeAmbient.current
-                val dispatchers = inject<AppCoroutineDispatchers>()
                 Button(
-                    onClick = {
-                        coroutineScope.launch(dispatchers.computation) {
-                            torchManager.toggleTorch()
-                        }
-                    }
+                    onClick = launchOnClick { torchManager.toggleTorch() }
                 ) {
                     Text("Toggle torch")
                 }

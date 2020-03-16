@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.layout.Column
@@ -143,7 +144,8 @@ val ScaffoldRoute = Route {
                     ) {
                         Text(
                             text = "Bottom bar",
-                            style = MaterialTheme.typography().h6
+                            style = currentTextComposableStyle()
+                                .copy(textStyle = MaterialTheme.typography().h6)
                         )
                     }
                 }

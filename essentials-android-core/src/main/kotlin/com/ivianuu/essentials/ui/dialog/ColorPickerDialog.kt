@@ -50,6 +50,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -382,7 +383,8 @@ private fun ColorComponentItem(
         Text(
             text = component.title,
             modifier = LayoutInflexible,
-            style = MaterialTheme.typography().subtitle1
+            style = currentTextComposableStyle()
+                .copy(textStyle = MaterialTheme.typography().subtitle1)
         )
 
         Spacer(LayoutWidth(8.dp))
@@ -404,7 +406,8 @@ private fun ColorComponentItem(
         Text(
             text = (255 * value).toInt().toString(),
             modifier = LayoutWidth.Min(56.dp) + LayoutInflexible,
-            style = MaterialTheme.typography().subtitle1
+            style = currentTextComposableStyle()
+                .copy(textStyle = MaterialTheme.typography().subtitle1)
         )
     }
 }

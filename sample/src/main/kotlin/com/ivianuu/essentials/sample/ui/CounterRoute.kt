@@ -23,6 +23,7 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -44,7 +45,8 @@ val CounterRoute = Route {
 
                     Text(
                         text = "Count: $count",
-                        style = MaterialTheme.typography().h3
+                        style = currentTextComposableStyle()
+                            .copy(textStyle = MaterialTheme.typography().h3)
                     )
 
                     Spacer(LayoutHeight(8.dp))

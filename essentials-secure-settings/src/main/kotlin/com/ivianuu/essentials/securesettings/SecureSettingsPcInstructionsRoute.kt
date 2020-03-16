@@ -41,29 +41,29 @@ val SecureSettingsInstructionsRoute = Route {
         )
 
         ListItem(
-            title = { Text(stringResource(R.string.es_pref_secure_settings_step_1)) },
-            subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_1_summary)) }
+            title = { Text(R.string.es_pref_secure_settings_step_1) },
+            subtitle = { Text(R.string.es_pref_secure_settings_step_1_summary) }
         )
 
         ListItem(
-            title = { Text(stringResource(R.string.es_pref_secure_settings_step_2)) },
-            subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_2_summary)) }
+            title = { Text(R.string.es_pref_secure_settings_step_2) },
+            subtitle = { Text(R.string.es_pref_secure_settings_step_2_summary) }
         )
 
         ListItem(
-            title = { Text(stringResource(R.string.es_pref_secure_settings_step_3)) },
-            subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_3_summary)) }
+            title = { Text(R.string.es_pref_secure_settings_step_3) },
+            subtitle = { Text(R.string.es_pref_secure_settings_step_3_summary) }
         )
 
         ListItem(
             leading = { Icon(Icons.Default.Link) },
-            title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
+            title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
             onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
         )
 
         ListItem(
             leading = { Icon(Icons.Default.Link) },
-            title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
+            title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
             onClick = openUrlOnClick {
                 "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
             }
@@ -71,7 +71,7 @@ val SecureSettingsInstructionsRoute = Route {
 
         ListItem(
             leading = { Icon(Icons.Default.Link) },
-            title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
+            title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
             onClick = openUrlOnClick {
                 "https://www.xda-developers.com/install-adb-windows-macos-linux/"
             }
@@ -82,7 +82,7 @@ val SecureSettingsInstructionsRoute = Route {
         val toaster = inject<Toaster>()
 
         ListItem(
-            title = { Text(stringResource(R.string.es_pref_secure_settings_step_4)) },
+            title = { Text(R.string.es_pref_secure_settings_step_4) },
             subtitle = {
                 Text(stringResource(
                     R.string.es_pref_secure_settings_step_4_summary,

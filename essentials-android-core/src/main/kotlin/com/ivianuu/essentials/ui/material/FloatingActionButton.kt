@@ -30,8 +30,10 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.CurrentTextComposableStyleProvider
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -95,9 +97,17 @@ fun FloatingActionButton(
         minSize = style.minSize,
         shape = style.shape,
         color = style.color,
-        elevation = style.elevation,
-        children = children
-    )
+        elevation = style.elevation
+    ) {
+        CurrentTextComposableStyleProvider(
+            currentTextComposableStyle()
+                .copy(
+                    uppercase = true,
+                    textStyle = MaterialTheme.typography().button
+                ),
+            children = children
+        )
+    }
 }
 
 @Composable

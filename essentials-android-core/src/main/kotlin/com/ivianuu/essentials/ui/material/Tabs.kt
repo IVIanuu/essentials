@@ -27,6 +27,8 @@ import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
+import com.ivianuu.essentials.ui.core.CurrentTextComposableStyleProvider
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.core.retain
 
 @Model
@@ -102,7 +104,13 @@ fun Tab(
     val tabController = ambientTabController<Any?>()
     val tabIndex = TabIndexAmbient.current
     Tab(
-        text = text,
+        text = {
+            CurrentTextComposableStyleProvider(
+                currentTextComposableStyle()
+                    .copy(uppercase = true),
+                children = text
+            )
+        },
         icon = icon,
         selected = tabController.selectedIndex == tabIndex,
         onSelected = { tabController.selectedIndex = tabIndex }

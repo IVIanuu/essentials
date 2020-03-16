@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
 import androidx.compose.stateFor
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.Text
@@ -87,11 +86,11 @@ fun <T> MultiChoiceListPreference(
                             val newValue = selectedItems.map { it.value }.toSet()
                             context.setIfOk(newValue)
                         }
-                    ) { Text(stringResource(R.string.es_ok)) }
+                    ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
                     DialogCloseButton {
-                        Text(stringResource(R.string.es_cancel))
+                        Text(R.string.es_cancel)
                     }
                 }
             )

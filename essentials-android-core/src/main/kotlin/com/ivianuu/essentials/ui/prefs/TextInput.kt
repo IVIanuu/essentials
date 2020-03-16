@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.stateFor
 import androidx.ui.input.KeyboardType
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.Text
@@ -88,11 +87,11 @@ fun TextInputPreference(
                     DialogButton(
                         enabled = allowEmpty || currentValue.isNotEmpty(),
                         onClick = { context.setIfOk(currentValue) }
-                    ) { Text(stringResource(R.string.es_ok)) }
+                    ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
                     DialogCloseButton {
-                        Text(stringResource(R.string.es_cancel))
+                        Text(R.string.es_cancel)
                     }
                 }
             )

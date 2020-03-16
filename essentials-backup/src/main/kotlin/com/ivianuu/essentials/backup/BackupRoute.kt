@@ -12,15 +12,15 @@ val BackupRoute = Route {
     ScrollableScreen(title = stringResource(R.string.es_backup_title)) {
         val backupUseCase = inject<BackupUseCase>()
         SimplePreference(
-            title = { Text(stringResource(R.string.es_pref_backup)) },
-            summary = { Text(stringResource(R.string.es_pref_backup_summary)) },
+            title = { Text(R.string.es_pref_backup) },
+            summary = { Text(R.string.es_pref_backup_summary) },
             onClick = launchOnClick { backupUseCase.backup() }
         )
 
         val restoreUseCase = inject<RestoreUseCase>()
         SimplePreference(
-            title = { Text(stringResource(R.string.es_pref_restore)) },
-            summary = { Text(stringResource(R.string.es_pref_restore_summary)) },
+            title = { Text(R.string.es_pref_restore) },
+            summary = { Text(R.string.es_pref_restore_summary) },
             onClick = launchOnClick { restoreUseCase.restore() }
         )
     }

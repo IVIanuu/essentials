@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.Text
@@ -76,7 +75,7 @@ fun <T> SingleChoiceListPreference(
                 title = dialogTitle,
                 negativeButton = {
                     DialogCloseButton {
-                        Text(stringResource(R.string.es_cancel))
+                        Text(R.string.es_cancel)
                     }
                 }
             )

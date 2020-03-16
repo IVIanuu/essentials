@@ -26,9 +26,11 @@ import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.billing.debug.R
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.common.RenderAsync
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MaterialDialog
@@ -104,9 +106,12 @@ class DebugBillingActivity : EsActivity() {
                     Text(
                         text = skuDetails.price,
                         modifier = LayoutInflexible,
-                        style = MaterialTheme.typography().subtitle1.copy(
-                            color = GooglePlayGreen
-                        )
+                        style = currentTextComposableStyle()
+                            .copy(
+                                textStyle = MaterialTheme.typography().subtitle1.copy(
+                                    color = GooglePlayGreen
+                                )
+                            )
                     )
                 }
             },
@@ -128,7 +133,7 @@ class DebugBillingActivity : EsActivity() {
                             finish()
                         }
                     }
-                ) { Text("Purchase") }
+                ) { Text(R.string.purchase) }
             }
         )
     }

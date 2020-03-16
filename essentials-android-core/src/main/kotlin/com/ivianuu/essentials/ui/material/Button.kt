@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
@@ -35,7 +34,9 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.CurrentTextComposableStyleProvider
 import com.ivianuu.essentials.ui.core.currentOrElse
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 
 @Immutable
 data class ButtonStyle(
@@ -139,8 +140,12 @@ fun Button(
                         paddingBottom = style.innerPadding.bottom,
                         gravity = Alignment.Center
                     ) {
-                        CurrentTextStyleProvider(
-                            value = MaterialTheme.typography().button,
+                        CurrentTextComposableStyleProvider(
+                            currentTextComposableStyle()
+                                .copy(
+                                    uppercase = true,
+                                    textStyle = MaterialTheme.typography().button
+                                ),
                             children = children
                         )
                     }

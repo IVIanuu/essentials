@@ -21,7 +21,6 @@ import androidx.compose.Pivotal
 import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
@@ -84,7 +83,7 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
             negativeButton = {
                 val activity = ActivityAmbient.current
                 DialogButton(onClick = { activity.finish() }) {
-                    Text(stringResource(R.string.es_cancel))
+                    Text(R.string.es_cancel)
                 }
             }
         )

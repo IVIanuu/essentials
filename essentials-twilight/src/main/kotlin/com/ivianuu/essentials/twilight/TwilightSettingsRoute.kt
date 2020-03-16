@@ -48,8 +48,8 @@ private fun TwilightModeItem(
     isSelected: Boolean
 ) {
     ListItem(
-        title = { Text(stringResource(mode.titleRes)) },
-        subtitle = { Text(stringResource(mode.descRes)) },
+        title = { Text(mode.titleRes) },
+        subtitle = { Text(mode.descRes) },
         trailing = {
             RadioButton(
                 selected = isSelected,

@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Providers
+import androidx.compose.staticAmbientOf
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.currentTextStyle
@@ -26,31 +29,80 @@ import androidx.ui.core.selection.Selection
 import androidx.ui.core.selection.SelectionRegistrar
 import androidx.ui.core.selection.SelectionRegistrarAmbient
 import androidx.ui.foundation.contentColor
+import androidx.ui.res.stringResource
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
 import androidx.ui.text.style.TextOverflow
 import androidx.ui.unit.PxPosition
 
-// todo remove once supported by original
+@Immutable
+data class TextComposableStyle(
+    val uppercase: Boolean,
+    val textStyle: TextStyle,
+    val softWrap: Boolean,
+    val overflow: TextOverflow,
+    val maxLines: Int,
+    val selectable: Boolean
+)
+
+@Composable
+fun DefaultTextComposableStyle(
+    uppercase: Boolean = false,
+    textStyle: TextStyle = currentTextStyle(),
+    softWrap: Boolean = DefaultSoftWrap,
+    overflow: TextOverflow = DefaultOverflow,
+    maxLines: Int = DefaultMaxLines,
+    selectable: Boolean = false
+) = TextComposableStyle(
+    uppercase = uppercase,
+    textStyle = textStyle,
+    softWrap = softWrap,
+    overflow = overflow,
+    maxLines = maxLines,
+    selectable = selectable
+)
+
+private val TextComposableStyleAmbient = staticAmbientOf<TextComposableStyle>()
+
+@Composable
+fun currentTextComposableStyle() =
+    TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() }
+
+@Composable
+fun CurrentTextComposableStyleProvider(
+    value: TextComposableStyle,
+    children: @Composable() () -> Unit
+) {
+    Providers(
+        TextComposableStyleAmbient provides value
+    ) {
+        CurrentTextStyleProvider(value = value.textStyle, children = children)
+    }
+}
+
+@Composable
+fun Text(
+    textRes: Int,
+    modifier: Modifier = Modifier.None,
+    style: TextComposableStyle = currentTextComposableStyle()
+) {
+    Text(text = stringResource(textRes), modifier = modifier, style = style)
+}
 
 @Composable
 fun Text(
     text: String,
     modifier: Modifier = Modifier.None,
-    style: TextStyle = currentTextStyle(),
-    softWrap: Boolean = DefaultSoftWrap,
-    overflow: TextOverflow = DefaultOverflow,
-    maxLines: Int = DefaultMaxLines,
-    selectable: Boolean = false
+    style: TextComposableStyle = currentTextComposableStyle()
 ) {
-    ToggleableSelectable(selectable = selectable) {
+    ToggleableSelectable(selectable = style.selectable) {
         androidx.ui.core.Text(
-            text = text,
+            text = if (style.uppercase) text.toUpperCase() else text,
             modifier = modifier,
-            style = applyContentColor(style),
-            softWrap = softWrap,
-            overflow = overflow,
-            maxLines = maxLines
+            style = applyContentColor(style.textStyle),
+            softWrap = style.softWrap,
+            overflow = style.overflow,
+            maxLines = style.maxLines
         )
     }
 }
@@ -59,20 +111,16 @@ fun Text(
 fun Text(
     text: AnnotatedString,
     modifier: Modifier = Modifier.None,
-    style: TextStyle = currentTextStyle(),
-    softWrap: Boolean = DefaultSoftWrap,
-    overflow: TextOverflow = DefaultOverflow,
-    maxLines: Int = DefaultMaxLines,
-    selectable: Boolean = false
+    style: TextComposableStyle = currentTextComposableStyle()
 ) {
-    ToggleableSelectable(selectable = selectable) {
+    ToggleableSelectable(selectable = style.selectable) {
         androidx.ui.core.Text(
-            text = text,
+            text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
             modifier = modifier,
-            style = applyContentColor(style),
-            softWrap = softWrap,
-            overflow = overflow,
-            maxLines = maxLines
+            style = applyContentColor(style.textStyle),
+            softWrap = style.softWrap,
+            overflow = style.overflow,
+            maxLines = style.maxLines
         )
     }
 }
@@ -89,7 +137,7 @@ private fun ToggleableSelectable(
 }
 
 @Composable
-fun applyContentColor(style: TextStyle): TextStyle =
+internal fun applyContentColor(style: TextStyle): TextStyle =
     style.copy(color = contentColor())
 
 private object NoopSelectionRegistrar : SelectionRegistrar {

@@ -20,6 +20,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -34,7 +35,8 @@ val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
                 Center {
                     Text(
                         text = "Drawer",
-                        style = MaterialTheme.typography().h4
+                        style = currentTextComposableStyle()
+                            .copy(textStyle = MaterialTheme.typography().h4)
                     )
                 }
             }
@@ -44,7 +46,8 @@ val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
                 Center {
                     Text(
                         text = "Body",
-                        style = MaterialTheme.typography().h4
+                        style = currentTextComposableStyle()
+                            .copy(textStyle = MaterialTheme.typography().h4)
                     )
                 }
             }
