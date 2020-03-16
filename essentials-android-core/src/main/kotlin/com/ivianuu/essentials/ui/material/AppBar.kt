@@ -127,7 +127,6 @@ fun TopAppBar(
                                     CurrentTextComposableStyleProvider(
                                         currentTextComposableStyle()
                                             .copy(
-                                                uppercase = true,
                                                 maxLines = 1,
                                                 textStyle = MaterialTheme.typography().h6
                                             ),
