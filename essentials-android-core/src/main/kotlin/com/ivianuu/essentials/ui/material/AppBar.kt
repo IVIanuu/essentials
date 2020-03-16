@@ -22,10 +22,12 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
+import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
@@ -86,6 +88,7 @@ val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
 
 @Composable
 fun TopAppBar(
+    modifier: Modifier = Modifier.None,
     style: AppBarStyle = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() },
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
@@ -108,8 +111,7 @@ fun TopAppBar(
                 bottom = false
             ) {
                 Container(
-                    height = AppBarHeight,
-                    modifier = LayoutWidth.Fill,
+                    modifier = LayoutHeight(DefaultAppBarHeight) + LayoutWidth.Fill + modifier,
                     padding = EdgeInsets(left = 16.dp, right = 16.dp)
                 ) {
                     TopAppBarLayout(
@@ -228,7 +230,7 @@ private enum class TopAppBarSlot {
     Leading, Title, Actions
 }
 
-private val AppBarHeight = 56.dp
+private val DefaultAppBarHeight = 56.dp
 private val DefaultAppBarElevation = 8.dp
 
 @Composable
