@@ -41,5 +41,5 @@ fun <T> inject(
     parameters: Parameters = emptyParameters()
 ): T {
     val component = ComponentAmbient.current
-    return remember { component.get(key = key, parameters = parameters) }
+    return remember(component) { component.get(key = key, parameters = parameters) }
 }
