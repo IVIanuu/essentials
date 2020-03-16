@@ -42,9 +42,11 @@ abstract class EsService : Service(), ComponentOwner,
         }
     }
 
-    val coroutineScope = CoroutineScope(
-        Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
 
     override fun onDestroy() {
         coroutineScope.cancel()

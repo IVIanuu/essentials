@@ -42,15 +42,13 @@ abstract class EsTileService : TileService(), ComponentOwner,
         }
     }
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
 
-    var listeningCoroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    lateinit var listeningCoroutineScope: CoroutineScope
         private set
 
     override fun onDestroy() {

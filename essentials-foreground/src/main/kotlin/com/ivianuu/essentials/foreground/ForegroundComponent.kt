@@ -18,6 +18,7 @@ package com.ivianuu.essentials.foreground
 
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -32,10 +33,11 @@ abstract class ForegroundComponent {
     var manager: ForegroundManager? = null
         private set
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
 
     open fun attach(manager: ForegroundManager) {
         this.manager = manager

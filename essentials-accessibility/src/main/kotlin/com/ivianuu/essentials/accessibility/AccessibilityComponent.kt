@@ -19,6 +19,7 @@ package com.ivianuu.essentials.accessibility
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -31,10 +32,11 @@ abstract class AccessibilityComponent {
     var service: ComponentAccessibilityService? = null
         private set
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
 
     open fun onServiceConnected(service: ComponentAccessibilityService) {
         this.service = service

@@ -20,6 +20,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -30,10 +31,11 @@ abstract class NotificationComponent {
     var service: ComponentNotificationListenerService? = null
         private set
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
+        )
+    }
 
     open fun onServiceConnected(service: ComponentNotificationListenerService) {
         this.service = service

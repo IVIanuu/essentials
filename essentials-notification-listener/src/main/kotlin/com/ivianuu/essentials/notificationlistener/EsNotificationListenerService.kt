@@ -41,15 +41,13 @@ abstract class EsNotificationListenerService : NotificationListenerService(), Co
         }
     }
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + get<AppCoroutineDispatchers>().computation
+        )
+    }
 
-    var connectedCoroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    lateinit var connectedCoroutineScope: CoroutineScope
         private set
 
     override fun onDestroy() {

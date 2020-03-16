@@ -18,7 +18,6 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
@@ -41,10 +40,11 @@ abstract class EsAccessibilityService : AccessibilityService(), ComponentOwner,
         }
     }
 
-    val coroutineScope = CoroutineScope(
-        Job() +
-                AppComponentHolder.get<AppCoroutineDispatchers>().computation
-    )
+    val coroutineScope by unsafeLazy {
+        CoroutineScope(
+            Job() + get<AppCoroutineDispatchers>().computation
+        )
+    }
 
     override fun onDestroy() {
         coroutineScope.cancel()
