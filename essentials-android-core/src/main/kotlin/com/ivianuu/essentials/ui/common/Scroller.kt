@@ -45,6 +45,11 @@ private fun ScrollerLayout(
         modifier = modifier + DrawClipToBounds,
         children = children
     ) { measurables, constraints, _ ->
+        if (measurables.isEmpty()) return@Layout layout(
+            constraints.minWidth,
+            constraints.minHeight
+        ) {}
+
         val childConstraints = constraints.copy(
             maxHeight = when (direction) {
                 Axis.Vertical -> IntPx.Infinity
@@ -62,12 +67,13 @@ private fun ScrollerLayout(
         val height: IntPx
         when (direction) {
             Axis.Vertical -> {
-                width = max(placeables.maxBy { it.width }!!.width, constraints.minWidth)
+                width = max(placeables.maxBy { it.width }!!.width ?: 0.ipx, constraints.minWidth)
                 height = placeables.sumBy { it.height.value }.ipx
             }
             Axis.Horizontal -> {
                 width = placeables.sumBy { it.width.value }.ipx
-                height = max(placeables.maxBy { it.height }!!.height, constraints.minHeight)
+                height =
+                    max(placeables.maxBy { it.height }!!.height ?: 0.ipx, constraints.minHeight)
             }
         }
 
