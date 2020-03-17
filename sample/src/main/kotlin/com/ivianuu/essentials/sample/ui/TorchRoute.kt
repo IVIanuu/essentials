@@ -25,7 +25,6 @@ import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
@@ -42,8 +41,7 @@ val TorchRoute = Route {
             Column(crossAxisAlignment = CrossAxisAlignment.Center) {
                 Text(
                     "Torch is ${if (torchState) "enabled" else "disabled"}",
-                    style = currentTextComposableStyle()
-                        .copy(textStyle = MaterialTheme.typography().h4)
+                    textStyle = MaterialTheme.typography().h4
                 )
                 Spacer(LayoutHeight(8.dp))
                 Button(

@@ -18,7 +18,9 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
@@ -30,10 +32,10 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.CurrentTextComposableStyleProvider
+import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
+import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
@@ -99,15 +101,17 @@ fun FloatingActionButton(
         color = style.color,
         elevation = style.elevation
     ) {
-        CurrentTextComposableStyleProvider(
-            currentTextComposableStyle()
-                .copy(
-                    uppercase = true,
-                    maxLines = 1,
-                    textStyle = MaterialTheme.typography().button
-                ),
-            children = children
-        )
+        Providers(
+            TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                uppercase = true,
+                maxLines = 1
+            )
+        ) {
+            CurrentTextStyleProvider(
+                MaterialTheme.typography().button,
+                children = children
+            )
+        }
     }
 }
 

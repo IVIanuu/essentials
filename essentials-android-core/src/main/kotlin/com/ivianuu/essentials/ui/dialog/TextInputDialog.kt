@@ -23,7 +23,6 @@ import androidx.ui.core.drawOpacity
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -86,9 +85,7 @@ fun TextInputDialog(
             if (value.isEmpty() && hint != null) {
                 Text(
                     text = hint,
-                    style = DefaultTextComposableStyle(
-                        textStyle = MaterialTheme.typography().subtitle1
-                    ),
+                    textStyle = MaterialTheme.typography().subtitle1,
                     modifier = drawOpacity(0.5f)
                 )
             }

@@ -31,7 +31,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.RippleColorProvider
@@ -84,8 +83,7 @@ private fun Chip(@Pivotal name: String) {
                     }) {
                         Text(
                             text = name,
-                            style = currentTextComposableStyle()
-                                .copy(textStyle = MaterialTheme.typography().body2)
+                            textStyle = MaterialTheme.typography().body2
                         )
                     }
                 }

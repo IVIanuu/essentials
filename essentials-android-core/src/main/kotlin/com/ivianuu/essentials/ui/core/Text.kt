@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.currentTextStyle
@@ -38,7 +37,6 @@ import androidx.ui.unit.PxPosition
 @Immutable
 data class TextComposableStyle(
     val uppercase: Boolean,
-    val textStyle: TextStyle,
     val softWrap: Boolean,
     val overflow: TextOverflow,
     val maxLines: Int,
@@ -48,58 +46,47 @@ data class TextComposableStyle(
 @Composable
 fun DefaultTextComposableStyle(
     uppercase: Boolean = false,
-    textStyle: TextStyle = currentTextStyle(),
     softWrap: Boolean = DefaultSoftWrap,
     overflow: TextOverflow = DefaultOverflow,
     maxLines: Int = DefaultMaxLines,
     selectable: Boolean = false
 ) = TextComposableStyle(
     uppercase = uppercase,
-    textStyle = textStyle,
     softWrap = softWrap,
     overflow = overflow,
     maxLines = maxLines,
     selectable = selectable
 )
 
-private val TextComposableStyleAmbient = staticAmbientOf<TextComposableStyle>()
-
-@Composable
-fun currentTextComposableStyle() =
-    TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() }
-
-@Composable
-fun CurrentTextComposableStyleProvider(
-    value: TextComposableStyle,
-    children: @Composable() () -> Unit
-) {
-    Providers(
-        TextComposableStyleAmbient provides value
-    ) {
-        CurrentTextStyleProvider(value = value.textStyle, children = children)
-    }
-}
+val TextComposableStyleAmbient = staticAmbientOf<TextComposableStyle>()
 
 @Composable
 fun Text(
     textRes: Int,
     modifier: Modifier = Modifier.None,
-    style: TextComposableStyle = currentTextComposableStyle()
+    style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
+    textStyle: TextStyle = currentTextStyle()
 ) {
-    Text(text = stringResource(textRes), modifier = modifier, style = style)
+    Text(
+        text = stringResource(textRes),
+        modifier = modifier,
+        style = style,
+        textStyle = textStyle
+    )
 }
 
 @Composable
 fun Text(
     text: String,
     modifier: Modifier = Modifier.None,
-    style: TextComposableStyle = currentTextComposableStyle()
+    style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
+    textStyle: TextStyle = currentTextStyle()
 ) {
     ToggleableSelectable(selectable = style.selectable) {
         androidx.ui.core.Text(
             text = if (style.uppercase) text.toUpperCase() else text,
             modifier = modifier,
-            style = applyContentColor(style.textStyle),
+            style = ensureColor(textStyle),
             softWrap = style.softWrap,
             overflow = style.overflow,
             maxLines = style.maxLines
@@ -111,13 +98,14 @@ fun Text(
 fun Text(
     text: AnnotatedString,
     modifier: Modifier = Modifier.None,
-    style: TextComposableStyle = currentTextComposableStyle()
+    style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
+    textStyle: TextStyle = currentTextStyle()
 ) {
     ToggleableSelectable(selectable = style.selectable) {
         androidx.ui.core.Text(
             text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
             modifier = modifier,
-            style = applyContentColor(style.textStyle),
+            style = ensureColor(textStyle),
             softWrap = style.softWrap,
             overflow = style.overflow,
             maxLines = style.maxLines
@@ -137,8 +125,8 @@ private fun ToggleableSelectable(
 }
 
 @Composable
-internal fun applyContentColor(style: TextStyle): TextStyle =
-    style.copy(color = contentColor())
+internal fun ensureColor(style: TextStyle): TextStyle =
+    if (style.color != null) style else style.copy(color = contentColor())
 
 private object NoopSelectionRegistrar : SelectionRegistrar {
     override fun subscribe(selectable: Selectable): Selectable =

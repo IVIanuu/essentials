@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.common.holderFor
 import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
@@ -70,8 +69,7 @@ val TextInputRoute = Route {
                                 if (state.inputValue.isEmpty()) {
                                     Text(
                                         text = "Search..",
-                                        style = currentTextComposableStyle()
-                                            .copy(textStyle = MaterialTheme.typography().subtitle1),
+                                        textStyle = MaterialTheme.typography().subtitle1,
                                         modifier = drawOpacity(0.5f)
                                     )
                                 }

@@ -26,7 +26,6 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
@@ -50,8 +49,7 @@ val BillingRoute = Route {
         ) {
             Text(
                 text = "Is purchased ? $isPurchased",
-                style = currentTextComposableStyle()
-                    .copy(textStyle = MaterialTheme.typography().h6)
+                textStyle = MaterialTheme.typography().h6
             )
 
             Spacer(LayoutHeight(8.dp))

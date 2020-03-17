@@ -23,7 +23,6 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.coroutines.launch
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -36,8 +35,7 @@ internal fun SecureSettingsHeader(text: String) {
         val textColor = contentColor().copy(alpha = 0.6f)
         Text(
             text = text,
-            style = currentTextComposableStyle()
-                .copy(textStyle = MaterialTheme.typography().body2.copy(color = textColor))
+            textStyle = MaterialTheme.typography().body2.copy(color = textColor)
         )
     }
 }

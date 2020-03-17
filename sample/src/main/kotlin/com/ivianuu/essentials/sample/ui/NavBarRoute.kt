@@ -29,7 +29,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
@@ -85,8 +84,7 @@ val NavBarRoute = Route {
                             } else {
                                 "Unknown nav bar state"
                             },
-                            style = currentTextComposableStyle()
-                                .copy(textStyle = MaterialTheme.typography().h3)
+                            textStyle = MaterialTheme.typography().h3
                         )
                     }
 

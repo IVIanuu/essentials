@@ -36,9 +36,9 @@ import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import androidx.ui.unit.px
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.core.currentTextComposableStyle
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
@@ -570,11 +570,8 @@ fun <T : Comparable<T>> BaseSliderPreference(
 fun <T> SimpleSliderValueText(value: T) {
     Text(
         text = value.toString(),
-        style = currentTextComposableStyle()
-            .copy(
-                textStyle = MaterialTheme.typography().body2,
-                maxLines = 1
-            )
+        textStyle = MaterialTheme.typography().body2,
+        style = DefaultTextComposableStyle(maxLines = 1)
     )
 }
 
