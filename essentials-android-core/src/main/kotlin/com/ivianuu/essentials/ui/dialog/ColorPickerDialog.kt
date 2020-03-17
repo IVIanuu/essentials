@@ -108,7 +108,7 @@ fun ColorPickerDialog(
         setCurrentPage(ColorPickerPage.Colors)
     }
 
-    MaterialDialog(
+    Dialog(
         icon = icon,
         title = title,
         applyContentPadding = false,

@@ -34,7 +34,7 @@ fun ScrollableDialog(
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null
 ) {
-    MaterialDialog(
+    Dialog(
         icon = icon,
         title = title,
         // showTopDivider = scrollerPosition.value > scrollerPosition.minValue,

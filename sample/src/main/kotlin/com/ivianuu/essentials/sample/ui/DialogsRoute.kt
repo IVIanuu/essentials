@@ -29,10 +29,10 @@ import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -52,7 +52,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Simple"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Simple") },
                         content = { Text("This is a message") },
                         positiveButton = {
@@ -67,7 +67,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Simple with neutral"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Simple") },
                         content = { Text("This is a message") },
                         positiveButton = {
@@ -86,7 +86,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Title only"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Title only") }
                     )
                 }
@@ -94,7 +94,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "With icon"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("With icon") },
                         icon = { Icon(Icons.Default.Settings) },
                         positiveButton = {
@@ -106,7 +106,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Message only"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         content = { Text("Message only") }
                     )
                 }
@@ -114,7 +114,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Buttons only"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         positiveButton = {
                             DialogCloseButton { Text("OK") }
                         },
@@ -127,7 +127,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Stacked buttons"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Stacked buttons") },
                         content = { Text("Shows stacked buttons") },
                         buttonLayout = AlertDialogButtonLayout.Stacked,
@@ -143,7 +143,7 @@ val DialogsRoute = Route {
                 DialogLauncherButton(
                     text = "Stacked buttons with neutral"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Stacked buttons") },
                         content = { Text("Shows stacked buttons") },
                         buttonLayout = AlertDialogButtonLayout.Stacked,
@@ -163,7 +163,7 @@ val DialogsRoute = Route {
                     dismissible = false,
                     text = "Not cancelable"
                 ) {
-                    MaterialDialog(
+                    Dialog(
                         title = { Text("Not cancelable") },
                         negativeButton = {
                             DialogCloseButton { Text("Close") }

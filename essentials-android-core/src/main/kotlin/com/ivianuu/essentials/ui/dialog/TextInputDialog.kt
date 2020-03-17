@@ -77,7 +77,7 @@ fun TextInputDialog(
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null
 ) {
-    MaterialDialog(
+    Dialog(
         buttonLayout = buttonLayout,
         icon = icon,
         title = title,

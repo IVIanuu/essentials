@@ -30,9 +30,9 @@ import com.ivianuu.essentials.billing.debug.R
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.common.RenderAsync
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
@@ -92,7 +92,7 @@ class DebugBillingActivity : EsActivity() {
             }
         }
     ) {
-        MaterialDialog(
+        Dialog(
             title = {
                 Row {
                     Text(
