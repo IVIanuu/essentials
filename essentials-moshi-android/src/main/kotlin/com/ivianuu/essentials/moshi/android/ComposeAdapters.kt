@@ -2,7 +2,6 @@ package com.ivianuu.essentials.moshi.android
 
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorAccessor
-import androidx.ui.graphics.toArgb
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
@@ -18,7 +17,7 @@ class ColorJsonAdapter {
     @FromJson
     fun fromJson(value: String) = ColorAccessor.newColor(value.toLong())
     @ToJson
-    fun toJson(color: Color) = color.toArgb()
+    fun toJson(color: Color) = color.value
 }
 
 @Factory
@@ -44,4 +43,3 @@ class IntPxJsonAdapter {
     @ToJson
     fun toJson(value: IntPx) = value.value.toString()
 }
-
