@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.layout.Center
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
@@ -34,7 +36,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
-        Center {
+        Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
             val torchManager = inject<TorchManager>()
             val torchState = collect(torchManager.torchState, false)
 

@@ -24,11 +24,12 @@ import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.Border
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutAlign
 import androidx.ui.layout.LayoutHeight
@@ -234,7 +235,7 @@ private fun ColorGridItem(
             elevation = 0.dp
         ) {
             if (isSelected) {
-                Center {
+                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
                     Icon(
                         icon = Icons.Default.Check,
                         modifier = LayoutSize(size = 36.dp)
@@ -314,7 +315,7 @@ private fun ColorEditorHeader(
                 modifier = LayoutHeight(72.dp) +
                         LayoutWidth.Fill + LayoutPadding(all = 8.dp)
             ) {
-                Center {
+                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
                     Row(
                         mainAxisAlignment = MainAxisAlignment.Center,
                         crossAxisAlignment = CrossAxisAlignment.Center

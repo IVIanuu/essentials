@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import androidx.ui.layout.Center
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collect
@@ -31,7 +33,7 @@ val TimerRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Timer") }) },
         body = {
-            Center {
+            Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
                 val value = collect(remember { timerFlow() })
 
                 Text(

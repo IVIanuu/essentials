@@ -17,12 +17,14 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.layout.Center
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.LayoutSize
 import com.ivianuu.essentials.ui.material.CircularProgressIndicator
 
 @Composable
 fun FullScreenLoading() {
-    Center {
+    Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
         CircularProgressIndicator()
     }
 }

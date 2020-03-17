@@ -20,8 +20,10 @@ import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.ui.core.Alignment
-import androidx.ui.layout.Center
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
@@ -45,7 +47,7 @@ val NavBarRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Nav bar settings") }) },
         body = {
-            Center {
+            Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center

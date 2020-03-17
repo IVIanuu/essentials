@@ -24,10 +24,12 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.animation.FlingConfig
-import androidx.ui.layout.Center
 import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.ScrollableState
@@ -114,7 +116,7 @@ val TextInputRoute = Route {
                     )
                 }
             } else {
-                Center {
+                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
                     Text("No results")
                 }
             }
