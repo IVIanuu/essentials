@@ -36,7 +36,7 @@ class PrefBoxFactory(
     ): Box<T> = create(
         name = name,
         defaultValue = defaultValue,
-        serializer = MoshiSerializer(moshi.adapter(T::class.java))
+        serializer = MoshiSerializer(moshi.adapter(javaTypeOf<T>()))
     )
 
     fun <T> create(
