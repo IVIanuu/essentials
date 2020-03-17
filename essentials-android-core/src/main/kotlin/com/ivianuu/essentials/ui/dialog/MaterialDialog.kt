@@ -25,6 +25,7 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
@@ -332,18 +333,14 @@ private fun DialogButtons(
             }
         }
         AlertDialogButtonLayout.Stacked -> {
-            Container(
-                padding = EdgeInsets(all = 8.dp),
-                alignment = Alignment.CenterEnd
+            Column(
+                modifier = LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                mainAxisAlignment = MainAxisAlignment.Center,
+                crossAxisAlignment = CrossAxisAlignment.End
             ) {
-                Column(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    positiveButton?.invoke()
-                    negativeButton?.invoke()
-                    neutralButton?.invoke()
-                }
+                positiveButton?.invoke()
+                negativeButton?.invoke()
+                neutralButton?.invoke()
             }
         }
     }
