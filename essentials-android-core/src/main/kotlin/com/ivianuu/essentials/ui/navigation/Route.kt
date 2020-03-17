@@ -59,4 +59,4 @@ class Route(
 }
 
 val RouteAmbient =
-    staticAmbientOf<Route> { error("No route provided") }
+    staticAmbientOf<Route>()

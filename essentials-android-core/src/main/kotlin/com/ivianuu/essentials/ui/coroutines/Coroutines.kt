@@ -37,7 +37,7 @@ import kotlin.coroutines.CoroutineContext
 
 @Composable
 val CoroutineScopeAmbient =
-    staticAmbientOf<CoroutineScope> { error("No coroutineScope provided") }
+    staticAmbientOf<CoroutineScope>()
 
 @Composable
 fun ProvideCoroutineScope(

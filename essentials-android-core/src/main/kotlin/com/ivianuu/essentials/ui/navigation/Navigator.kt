@@ -497,4 +497,4 @@ class NavigatorState(
 }
 
 val NavigatorAmbient =
-    staticAmbientOf<NavigatorState> { error("No navigator provided") }
+    staticAmbientOf<NavigatorState>()

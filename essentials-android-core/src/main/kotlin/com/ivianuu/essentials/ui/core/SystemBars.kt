@@ -22,6 +22,7 @@ import android.view.View
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
+import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
@@ -123,7 +124,7 @@ fun SystemBarManager(children: @Composable () -> Unit) {
 }
 
 private val SystemBarStyleAmbient =
-    ambientOf { SystemBarStyle() }
+    ambientOf(StructurallyEqual) { SystemBarStyle() }
 
 internal class SystemBarManager(
     private val activity: Activity,
@@ -178,4 +179,4 @@ internal class SystemBarManager(
 }
 
 internal val SystemBarManagerAmbient =
-    staticAmbientOf<SystemBarManager> { error("No system bar manager provided") }
+    staticAmbientOf<SystemBarManager>()

@@ -217,6 +217,4 @@ fun WindowInsetsProvider(
 }
 
 private val WindowInsetsAmbient =
-    ambientOf<WindowInsets> {
-        error("No window insets provided")
-    }
+    ambientOf<WindowInsets>(StructurallyEqual)

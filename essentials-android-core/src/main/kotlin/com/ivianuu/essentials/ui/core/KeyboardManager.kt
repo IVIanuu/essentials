@@ -40,7 +40,7 @@ class KeyboardManager(
 }
 
 val KeyboardManagerAmbient =
-    staticAmbientOf<KeyboardManager> { error("No keyboard manager found") }
+    staticAmbientOf<KeyboardManager>()
 
 @Composable
 fun hideKeyboardOnDispose() {

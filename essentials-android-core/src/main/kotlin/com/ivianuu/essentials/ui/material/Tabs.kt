@@ -41,7 +41,7 @@ class TabController<T>(
 }
 
 private val TabControllerAmbient =
-    staticAmbientOf<TabController<*>> { error("No tab controller provided") }
+    staticAmbientOf<TabController<*>>()
 
 @Composable
 fun <T> ambientTabController(): TabController<T> = TabControllerAmbient.current as TabController<T>
@@ -94,7 +94,7 @@ fun <T> TabRow(
 }
 
 val TabIndexAmbient =
-    staticAmbientOf<Int> { error("No tab index provided") }
+    staticAmbientOf<Int>()
 
 @Composable
 fun Tab(

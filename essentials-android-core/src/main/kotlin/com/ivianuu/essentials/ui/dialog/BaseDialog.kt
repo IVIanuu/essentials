@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutPadding
@@ -34,7 +34,7 @@ data class DialogStyle(
     val elevation: Dp = 24.dp
 )
 
-val DialogStyleAmbient = ambientOf { DialogStyle() }
+val DialogStyleAmbient = staticAmbientOf { DialogStyle() }
 
 @Composable
 fun BaseDialog(

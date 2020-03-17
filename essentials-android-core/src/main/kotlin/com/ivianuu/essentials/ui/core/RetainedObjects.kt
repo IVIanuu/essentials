@@ -91,8 +91,7 @@ fun <T> RetainedObjects.getOrSetIfChanged(
     return value.value
 }
 
-val RetainedObjectsAmbient =
-    staticAmbientOf<RetainedObjects> { error("No retained objects provided") }
+val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
 
 @Composable
 inline fun <T> retain(noinline init: () -> T): T =

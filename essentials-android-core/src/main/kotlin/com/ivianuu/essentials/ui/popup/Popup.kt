@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.ambientOf
+import androidx.compose.staticAmbientOf
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
@@ -34,7 +34,7 @@ data class PopupStyle(
 )
 
 val PopupStyleAmbient =
-    ambientOf { PopupStyle() }
+    staticAmbientOf { PopupStyle() }
 
 @Composable
 fun Popup(

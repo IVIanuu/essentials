@@ -20,4 +20,4 @@ import androidx.activity.ComponentActivity
 import androidx.compose.staticAmbientOf
 
 val ActivityAmbient =
-    staticAmbientOf<ComponentActivity> { error("No activity provided") }
+    staticAmbientOf<ComponentActivity>()

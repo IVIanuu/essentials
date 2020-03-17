@@ -177,7 +177,7 @@ class ScaffoldState {
 }
 
 val ScaffoldAmbient =
-    staticAmbientOf<ScaffoldState> { error("No scaffold provided") }
+    staticAmbientOf<ScaffoldState>()
 
 @Composable
 private fun ScaffoldLayout(

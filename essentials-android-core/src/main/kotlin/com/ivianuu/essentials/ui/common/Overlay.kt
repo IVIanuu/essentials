@@ -106,7 +106,7 @@ class OverlayEntry(
 )
 
 val OverlayAmbient =
-    staticAmbientOf<OverlayState> { error("No overlay provided") }
+    staticAmbientOf<OverlayState>()
 
 @Composable
 private fun OverlayLayout(

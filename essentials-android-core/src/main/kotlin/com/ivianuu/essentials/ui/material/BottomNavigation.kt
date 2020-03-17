@@ -140,7 +140,7 @@ private val BottomNavigationControllerAmbient =
 fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = BottomNavigationControllerAmbient.current as BottomNavigationController<T>
 
 private val BottomNavigationItemAmbient =
-    staticAmbientOf<Any?> { error("No bottom navigation item found") }
+    staticAmbientOf<Any?>()
 
 @Composable
 fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current as T

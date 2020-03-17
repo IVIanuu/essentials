@@ -58,7 +58,8 @@ fun DefaultTextComposableStyle(
     selectable = selectable
 )
 
-val TextComposableStyleAmbient = staticAmbientOf<TextComposableStyle>()
+val TextComposableStyleAmbient =
+    staticAmbientOf<TextComposableStyle>()
 
 @Composable
 fun Text(

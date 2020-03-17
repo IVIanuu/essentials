@@ -27,7 +27,7 @@ import com.ivianuu.injekt.emptyParameters
 import com.ivianuu.injekt.keyOf
 
 val ComponentAmbient =
-    staticAmbientOf<Component> { error("No component found") }
+    staticAmbientOf<Component>()
 
 @Composable
 inline fun <reified T> inject(
