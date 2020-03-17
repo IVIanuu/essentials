@@ -22,10 +22,10 @@ import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
@@ -140,7 +140,7 @@ fun FloatingActionButton(
             }
         }
         else {
-            Container(
+            Box(
                 modifier = LayoutPadding(start = 20.dp, end = 20.dp),
                 children = text
             )

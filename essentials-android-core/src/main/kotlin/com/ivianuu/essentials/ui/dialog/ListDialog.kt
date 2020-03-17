@@ -17,11 +17,9 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.foundation.Clickable
-import androidx.ui.layout.Container
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
@@ -42,29 +40,19 @@ fun SimpleDialogListItem(
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
-            Container(
-                modifier = LayoutWidth.Fill,
-                constraints = DpConstraints(
-                    minHeight = 48.dp
-                ),
-                padding = EdgeInsets(
-                    left = 24.dp,
-                    right = 24.dp
-                ),
-                alignment = Alignment.CenterStart
+            Row(
+                modifier = LayoutWidth.Fill + LayoutHeight.Min(48.dp) +
+                        LayoutPadding(start = 24.dp, end = 24.dp),
+                mainAxisAlignment = MainAxisAlignment.Start,
+                crossAxisAlignment = CrossAxisAlignment.Center
             ) {
                 ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
-                    Row(
-                        mainAxisAlignment = MainAxisAlignment.End,
-                        crossAxisAlignment = CrossAxisAlignment.Center
-                    ) {
-                        if (leading != null) {
-                            leading()
-                            Spacer(LayoutWidth(24.dp))
-                        }
-
-                        title()
+                    if (leading != null) {
+                        leading()
+                        Spacer(LayoutWidth(24.dp))
                     }
+
+                    title()
                 }
             }
         }

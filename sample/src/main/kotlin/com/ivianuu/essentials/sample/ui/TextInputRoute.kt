@@ -21,14 +21,12 @@ import androidx.compose.Observe
 import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
-import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.animation.FlingConfig
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.ScrollableList
@@ -63,9 +61,9 @@ val TextInputRoute = Route {
             TopAppBar(
                 title = {
                     if (state.searchVisible) {
-                        Container(
-                            expanded = true,
-                            alignment = Alignment.CenterStart
+                        Box(
+                            modifier = LayoutSize.Fill,
+                            gravity = ContentGravity.CenterStart
                         ) {
                             Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
                                 if (state.inputValue.isEmpty()) {

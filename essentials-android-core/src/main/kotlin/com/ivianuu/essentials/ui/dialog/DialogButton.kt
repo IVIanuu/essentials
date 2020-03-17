@@ -36,6 +36,7 @@ fun DialogButton(
 ) {
     val navigator = NavigatorAmbient.current
     Button(
+        modifier = modifier,
         onClick = {
             onClick()
             if (dismissDialogOnClick) navigator.popTop()

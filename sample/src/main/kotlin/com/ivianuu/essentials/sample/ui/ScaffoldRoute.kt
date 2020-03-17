@@ -23,9 +23,11 @@ import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.remember
 import androidx.ui.animation.Transition
-import androidx.ui.core.Alignment
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.AbsorbPointer
@@ -57,7 +59,7 @@ fun FabAnimation(
         definition = fabTransitionDefinition,
         toState = visible
     ) { state ->
-        Container(
+        Box(
             modifier = TransformScale(
                 scaleX = state[FabScale],
                 scaleY = state[FabScale],
@@ -134,11 +136,9 @@ val ScaffoldRoute = Route {
                     right = false,
                     bottom = true
                 ) {
-                    Container(
-                        height = 56.dp,
-                        expanded = true,
-                        alignment = Alignment.CenterStart,
-                        padding = EdgeInsets(16.dp)
+                    Box(
+                        modifier = LayoutHeight(56.dp) + LayoutWidth.Fill + LayoutPadding(16.dp),
+                        gravity = ContentGravity.CenterStart
                     ) {
                         Text(
                             text = "Bottom bar",

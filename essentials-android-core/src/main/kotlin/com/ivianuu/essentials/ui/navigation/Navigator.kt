@@ -21,6 +21,7 @@ import androidx.compose.Model
 import androidx.compose.Observe
 import androidx.compose.Providers
 import androidx.compose.frames.modelListOf
+import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
@@ -55,7 +56,6 @@ fun InjectedNavigator(
     Observe {
         state.handleBack = handleBack
         state.popsLastRoute = popsLastRoute
-
         if (!state.hasRoot) {
             state.setRoot(startRoute)
         }
@@ -92,17 +92,22 @@ fun Navigator(
 @Composable
 fun Navigator(state: NavigatorState) {
     state.defaultRouteTransition = DefaultRouteTransitionAmbient.current
-    Providers(NavigatorAmbient provides state) {
-        Observe {
-            val enabled = state.handleBack &&
-                    state.backStack.isNotEmpty() &&
-                    (state.popsLastRoute || state.backStack.size > 1)
-            onBackPressed(enabled = enabled) {
-                if (state.runningTransitions == 0) state.popTop()
-            }
-        }
 
+    Providers(NavigatorAmbient provides state) {
         Overlay(state = state.overlayState)
+    }
+
+    val logger = inject<Logger>()
+
+    Observe {
+        val enabled = state.handleBack &&
+                state.backStack.isNotEmpty() &&
+                (state.popsLastRoute || state.backStack.size > 1)
+        logger.d("back press enabled $enabled")
+        onBackPressed(enabled = enabled) {
+            logger.d("on back pressed ${state.runningTransitions}")
+            if (state.runningTransitions == 0) state.popTop()
+        }
     }
 
     onDispose { state.dispose() }
@@ -371,6 +376,12 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
+                onActive {
+                    logger.d("$name on active")
+                    onDispose {
+                        logger.d("$name on dispose")
+                    }
+                }
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
@@ -382,10 +393,9 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes
-                            ) {
-                                route.compose()
-                            }
+                                types = routeTransitionTypes,
+                                children = route.content
+                            )
                         }
                     }
                 }
@@ -396,12 +406,13 @@ class NavigatorState(
             transitionRunning = false
             runningTransitions--
             lastTransitionState = completedState
+            logger.d("$name on transition complete $completedState")
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
                 other = null
             }
 
-            if (completedState == RouteTransition.State.ExitFromPush ||
+            if ((completedState == RouteTransition.State.ExitFromPush && !route.keepState) ||
                 completedState == RouteTransition.State.ExitFromPop) {
                 overlayState.remove(overlayEntry)
             }
@@ -423,6 +434,8 @@ class NavigatorState(
             overlayEntry.opaque = route.opaque
         }
 
+        private val name: Any get() = route
+
         fun enter(
             from: RouteState?,
             isPush: Boolean,
@@ -432,12 +445,19 @@ class NavigatorState(
             transitionRunning = true
             runningTransitions++
 
+            logger.d("$name enter -> from ${from?.name} is push $isPush trans $transition running trans $runningTransitions")
+
             val fromIndex = overlayState.entries.indexOf(from?.overlayEntry)
             val toIndex = if (fromIndex != -1) {
                 if (isPush) fromIndex + 1 else fromIndex
             } else overlayState.entries.size
 
-            overlayState.add(toIndex, overlayEntry)
+            val oldToIndex = overlayState.entries.indexOf(overlayEntry)
+            if (oldToIndex == -1) {
+                overlayState.add(toIndex, overlayEntry)
+            } else if (oldToIndex != toIndex) {
+                overlayState.move(oldToIndex, toIndex)
+            }
 
             lastTransitionState = transitionState
             transitionState = if (isPush) RouteTransition.State.EnterFromPush
@@ -452,6 +472,8 @@ class NavigatorState(
         ) {
             transitionRunning = true
             runningTransitions++
+            logger.d("$name exit -> to ${to?.name} is push $isPush trans $transition running trans $runningTransitions")
+
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = to
             lastTransitionState = transitionState

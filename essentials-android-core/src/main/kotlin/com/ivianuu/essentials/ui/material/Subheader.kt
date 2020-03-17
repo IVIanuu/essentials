@@ -19,12 +19,14 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
@@ -52,11 +54,12 @@ fun Subheader(
     style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
     text: @Composable () -> Unit
 ) {
-    Container(
-        height = 48.dp,
-        expanded = true,
-        modifier = LayoutPadding(start = 16.dp, end = 16.dp),
-        alignment = Alignment.CenterStart
+    Box(
+        modifier = LayoutHeight(48.dp) + LayoutWidth.Fill + LayoutPadding(
+            start = 16.dp,
+            end = 16.dp
+        ),
+        gravity = ContentGravity.CenterStart
     ) {
         ProvideContentColor(color = style.textColor) {
             CurrentTextStyleProvider(value = style.textStyle, children = text)

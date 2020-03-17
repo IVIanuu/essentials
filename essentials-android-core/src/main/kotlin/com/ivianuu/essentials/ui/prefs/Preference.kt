@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
@@ -68,13 +69,15 @@ fun <T> PreferenceWrapper(
 @Composable
 fun PreferenceLayout(
     enabled: Boolean,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier.None,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null
 ) {
     ListItem(
+        modifier = modifier,
         onClick = onClick,
         enabled = enabled,
         title = title,

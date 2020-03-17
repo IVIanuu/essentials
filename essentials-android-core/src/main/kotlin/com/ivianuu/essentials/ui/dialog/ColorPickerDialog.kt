@@ -30,7 +30,6 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutAlign
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
@@ -131,7 +130,7 @@ fun ColorPickerDialog(
             }
         },
         content = {
-            Container(
+            Box(
                 modifier = LayoutHeight(300.dp) +
                         LayoutPadding(start = 24.dp, end = 24.dp)
             ) {
@@ -266,7 +265,7 @@ private fun BaseColorGridItem(
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
-            Container(
+            Box(
                 modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
                         LayoutPadding(all = 4.dp) +
                         LayoutAlign.Center,
@@ -311,44 +310,42 @@ private fun ColorEditorHeader(
 ) {
     CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
         Surface(color = color) {
-            Container(
-                modifier = LayoutHeight(72.dp) +
-                        LayoutWidth.Fill + LayoutPadding(all = 8.dp)
+            Box(
+                modifier = LayoutHeight(72.dp) + LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                gravity = ContentGravity.Center
             ) {
-                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
-                    Row(
-                        mainAxisAlignment = MainAxisAlignment.Center,
-                        crossAxisAlignment = CrossAxisAlignment.Center
-                    ) {
-                        val (hexInput, setHexInput) = stateFor(color) {
-                            color.toHexString(includeAlpha = showAlphaSelector)
-                        }
-                        hideKeyboardOnDispose()
-                        Text("#")
-                        TextField(
-                            value = hexInput,
-                            onValueChange = { newValue ->
-                                if ((showAlphaSelector && newValue.length > 8) ||
-                                    (!showAlphaSelector && newValue.length > 6)
-                                ) return@TextField
-
-                                setHexInput(newValue)
-
-                                if ((showAlphaSelector && newValue.length < 8) ||
-                                    (!showAlphaSelector && newValue.length < 6)
-                                ) return@TextField
-
-                                val newColor = try {
-                                    newValue.toColor()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    null
-                                }
-
-                                if (newColor != null) onColorChanged(newColor)
-                            }
-                        )
+                Row(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    val (hexInput, setHexInput) = stateFor(color) {
+                        color.toHexString(includeAlpha = showAlphaSelector)
                     }
+                    hideKeyboardOnDispose()
+                    Text("#")
+                    TextField(
+                        value = hexInput,
+                        onValueChange = { newValue ->
+                            if ((showAlphaSelector && newValue.length > 8) ||
+                                (!showAlphaSelector && newValue.length > 6)
+                            ) return@TextField
+
+                            setHexInput(newValue)
+
+                            if ((showAlphaSelector && newValue.length < 8) ||
+                                (!showAlphaSelector && newValue.length < 6)
+                            ) return@TextField
+
+                            val newColor = try {
+                                newValue.toColor()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                null
+                            }
+
+                            if (newColor != null) onColorChanged(newColor)
+                        }
+                    )
                 }
             }
         }
@@ -382,7 +379,6 @@ private fun ColorComponentItem(
     ) {
         Text(
             text = component.title,
-            modifier = LayoutInflexible,
             textStyle = MaterialTheme.typography().subtitle1
         )
 
@@ -404,7 +400,7 @@ private fun ColorComponentItem(
 
         Text(
             text = (255 * value).toInt().toString(),
-            modifier = LayoutWidth.Min(56.dp) + LayoutInflexible,
+            modifier = LayoutWidth.Min(56.dp),
             textStyle = MaterialTheme.typography().subtitle1
         )
     }

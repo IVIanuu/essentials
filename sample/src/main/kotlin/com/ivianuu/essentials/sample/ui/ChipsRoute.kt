@@ -19,13 +19,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
-import androidx.ui.core.Alignment
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.FlowRow
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
@@ -44,9 +44,9 @@ val ChipsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Chips") }) },
         body = {
-            Container(
+            Box(
                 modifier = LayoutPadding(all = 8.dp),
-                alignment = Alignment.TopStart
+                gravity = ContentGravity.TopStart
             ) {
                 FlowRow(
                     mainAxisSpacing = 8.dp,
@@ -66,26 +66,19 @@ private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
     val color = remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
     Surface(
+        modifier = LayoutHeight(32.dp) + LayoutPadding(start = 12.dp, end = 12.dp),
         color = color,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Container(
-            height = 32.dp,
-            padding = EdgeInsets(
-                left = 12.dp,
-                right = 12.dp
-            )
-        ) {
-            RippleColorProvider(color = contentColor().copy(alpha = 0.5f)) {
-                Ripple(bounded = false) {
-                    Clickable(onClick = {
-                        toaster.toast("Clicked $name")
-                    }) {
-                        Text(
-                            text = name,
-                            textStyle = MaterialTheme.typography().body2
-                        )
-                    }
+        RippleColorProvider(color = contentColor().copy(alpha = 0.5f)) {
+            Ripple(bounded = false) {
+                Clickable(onClick = {
+                    toaster.toast("Clicked $name")
+                }) {
+                    Text(
+                        text = name,
+                        textStyle = MaterialTheme.typography().body2
+                    )
                 }
             }
         }

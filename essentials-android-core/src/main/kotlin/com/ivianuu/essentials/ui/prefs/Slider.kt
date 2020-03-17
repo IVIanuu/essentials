@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
-import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContextAmbient
-import androidx.ui.layout.Container
-import androidx.ui.layout.DpConstraints
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.SliderPosition
@@ -499,15 +499,14 @@ fun <T : Comparable<T>> BaseSliderPreference(
         dependencies = dependencies
     ) { context ->
         Stack {
-            Container(modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp)) {
-                PreferenceLayout(
-                    title = title,
-                    summary = summary,
-                    leading = leading,
-                    enabled = false,
-                    onClick = {}
-                )
-            }
+            PreferenceLayout(
+                modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp),
+                title = title,
+                summary = summary,
+                leading = leading,
+                enabled = false,
+                onClick = {}
+            )
 
             val listItemStyle = ListItemStyleAmbient.currentOrNull ?: DefaultListItemStyle()
 
@@ -551,12 +550,9 @@ fun <T : Comparable<T>> BaseSliderPreference(
                 )
 
                 if (valueText != null) {
-                    Container(
-                        modifier = LayoutInflexible,
-                        alignment = Alignment.Center,
-                        constraints = DpConstraints(
-                            minWidth = 72.dp
-                        )
+                    Box(
+                        modifier = LayoutWidth.Min(72.dp),
+                        gravity = ContentGravity.Center
                     ) {
                         valueText(fromFloat(position.value))
                     }

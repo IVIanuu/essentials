@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Providers
-import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.EmphasisAmbient
@@ -40,38 +40,35 @@ fun Banner(
     content: @Composable () -> Unit,
     actions: @Composable () -> Unit
 ) {
-    Container(modifier = LayoutWidth.Fill) {
-        Column {
-            Spacer(LayoutHeight(24.dp))
+    Column(modifier = LayoutWidth.Fill) {
+        Spacer(LayoutHeight(24.dp))
 
-            Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                Spacer(LayoutWidth(16.dp))
+        Row(crossAxisAlignment = CrossAxisAlignment.Center) {
+            Spacer(LayoutWidth(16.dp))
 
-                if (leading != null) {
-                    leading()
-                    Spacer(LayoutWidth(16.dp))
-                }
-
-                CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                    ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
-                }
-
+            if (leading != null) {
+                leading()
                 Spacer(LayoutWidth(16.dp))
             }
 
-            Spacer(LayoutHeight(20.dp))
-
-            Container(
-                modifier = LayoutWidth.Fill,
-                alignment = Alignment.CenterEnd,
-                padding = EdgeInsets(left = 8.dp, right = 8.dp)
-            ) {
-                Providers(ButtonStyleAmbient provides TextButtonStyle()) {
-                    SpacingRow(spacing = 8.dp, children = actions)
-                }
+            CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
+                ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
             }
 
-            Spacer(LayoutHeight(8.dp))
+            Spacer(LayoutWidth(16.dp))
         }
+
+        Spacer(LayoutHeight(20.dp))
+
+        Box(
+            modifier = LayoutWidth.Fill + LayoutPadding(start = 8.dp, end = 8.dp),
+            gravity = ContentGravity.CenterEnd
+        ) {
+            Providers(ButtonStyleAmbient provides TextButtonStyle()) {
+                SpacingRow(spacing = 8.dp, children = actions)
+            }
+        }
+
+        Spacer(LayoutHeight(8.dp))
     }
 }

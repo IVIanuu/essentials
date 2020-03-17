@@ -56,10 +56,6 @@ class Route(
         content = content
     )
 
-    @Composable
-    internal fun compose() {
-        content()
-    }
 }
 
 val RouteAmbient =

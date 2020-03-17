@@ -19,10 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.state
-import androidx.ui.core.Alignment
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
@@ -72,9 +70,9 @@ val NavBarRoute = Route {
 
                     val secureSettingsHelper = inject<SecureSettingsHelper>()
 
-                    Container(
+                    Box(
                         modifier = LayoutWidth.Fill,
-                        alignment = Alignment.Center
+                        gravity = ContentGravity.Center
                     ) {
                         Text(
                             text = if (secureSettingsHelper.canWriteSecureSettings()) {

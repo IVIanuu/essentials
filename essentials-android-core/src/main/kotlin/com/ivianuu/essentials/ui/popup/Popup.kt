@@ -21,7 +21,6 @@ import androidx.compose.Immutable
 import androidx.compose.ambientOf
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -42,12 +41,9 @@ fun Popup(
     children: @Composable () -> Unit
 ) {
     Surface(
+        modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
         elevation = style.elevation,
-        shape = style.shape
-    ) {
-        Container(
-            modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
-            children = children
-        )
-    }
+        shape = style.shape,
+        children = children
+    )
 }

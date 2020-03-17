@@ -30,6 +30,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -58,6 +60,7 @@ val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
 
 @Composable
 fun ListItem(
+    modifier: Modifier = Modifier.None,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -75,90 +78,89 @@ fun ListItem(
     }
 
     val content: @Composable () -> Unit = {
-        Container(
-            modifier = DrawBackground(
-                color = if (selected) contentColor().copy(
-                    alpha = RippleThemeAmbient.current.opacity()
-                ) else Color.Transparent
-            ) + (onLongClick?.let {
+        Row(
+            modifier = LayoutHeight.Min(minHeight) +
+                    LayoutPadding(
+                        start = style.contentPadding.left,
+                        end = style.contentPadding.right
+                    ) +
+                    DrawBackground(
+                        color = if (selected) contentColor().copy(
+                            alpha = RippleThemeAmbient.current.opacity()
+                        ) else Color.Transparent
+                    ) + (onLongClick?.let {
                 LongPressGestureDetector {
                     if (enabled) onLongClick()
                 }
-            } ?: Modifier.None),
-            constraints = DpConstraints(minHeight = minHeight),
-            padding = EdgeInsets(
-                left = style.contentPadding.left,
-                right = style.contentPadding.right
-            )
+            } ?: Modifier.None) + modifier,
+            crossAxisAlignment = CrossAxisAlignment.Center
         ) {
-            Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                // leading
-                if (leading != null) {
-                    Container(
-                        modifier = LayoutInflexible,
-                        alignment = Alignment.CenterStart
-                    ) {
-                        AddPaddingIfNeededLayout(
-                            padding = EdgeInsets(
-                                top = style.contentPadding.top,
-                                bottom = style.contentPadding.bottom
-                            )
-                        ) {
-                            ProvideEmphasis(
-                                emphasis = EmphasisAmbient.current.high,
-                                children = leading
-                            )
-                        }
-                    }
-                }
-
-                // content
-                Container(
-                    modifier = LayoutFlexible(1f),
-                    padding = EdgeInsets(
-                        left = if (leading != null) HorizontalTextPadding else 0.dp,
-                        right = if (trailing != null) HorizontalTextPadding else 0.dp
-                    ),
-                    alignment = Alignment.CenterStart
-                ) {
+            // leading
+            if (leading != null) {
+                Container(alignment = Alignment.CenterStart) {
                     AddPaddingIfNeededLayout(
                         padding = EdgeInsets(
                             top = style.contentPadding.top,
                             bottom = style.contentPadding.bottom
                         )
                     ) {
-                        Column {
-                            if (title != null) {
-                                CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
-                                    ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = title)
-                                }
+                        ProvideEmphasis(
+                            emphasis = EmphasisAmbient.current.high,
+                            children = leading
+                        )
+                    }
+                }
+            }
+
+            // content
+            Container(
+                modifier = LayoutFlexible(1f),
+                padding = EdgeInsets(
+                    left = if (leading != null) HorizontalTextPadding else 0.dp,
+                    right = if (trailing != null) HorizontalTextPadding else 0.dp
+                ),
+                alignment = Alignment.CenterStart
+            ) {
+                AddPaddingIfNeededLayout(
+                    padding = EdgeInsets(
+                        top = style.contentPadding.top,
+                        bottom = style.contentPadding.bottom
+                    )
+                ) {
+                    Column {
+                        if (title != null) {
+                            CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
+                                ProvideEmphasis(
+                                    emphasis = EmphasisAmbient.current.high,
+                                    children = title
+                                )
                             }
-                            if (subtitle != null) {
-                                CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
-                                    ProvideEmphasis(emphasis = EmphasisAmbient.current.medium, children = subtitle)
-                                }
+                        }
+                        if (subtitle != null) {
+                            CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
+                                ProvideEmphasis(
+                                    emphasis = EmphasisAmbient.current.medium,
+                                    children = subtitle
+                                )
                             }
                         }
                     }
                 }
+            }
 
-                // trailing
-                if (trailing != null) {
-                    Container(
-                        modifier = LayoutInflexible,
-                        constraints = DpConstraints(minHeight = minHeight)
+            // trailing
+            if (trailing != null) {
+                Container(constraints = DpConstraints(minHeight = minHeight)) {
+                    AddPaddingIfNeededLayout(
+                        padding = EdgeInsets(
+                            top = style.contentPadding.top,
+                            bottom = style.contentPadding.bottom
+                        )
                     ) {
-                        AddPaddingIfNeededLayout(
-                            padding = EdgeInsets(
-                                top = style.contentPadding.top,
-                                bottom = style.contentPadding.bottom
-                            )
-                        ) {
-                            ProvideEmphasis(
-                                emphasis = EmphasisAmbient.current.high,
-                                children = trailing
-                            )
-                        }
+                        ProvideEmphasis(
+                            emphasis = EmphasisAmbient.current.high,
+                            children = trailing
+                        )
                     }
                 }
             }

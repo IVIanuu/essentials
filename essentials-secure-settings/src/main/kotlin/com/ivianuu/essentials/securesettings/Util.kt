@@ -18,7 +18,6 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
 import androidx.ui.foundation.contentColor
-import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
@@ -31,13 +30,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 internal fun SecureSettingsHeader(text: String) {
-    Container(modifier = LayoutPadding(all = 16.dp)) {
-        val textColor = contentColor().copy(alpha = 0.6f)
-        Text(
-            text = text,
-            textStyle = MaterialTheme.typography().body2.copy(color = textColor)
-        )
-    }
+    Text(
+        text = text,
+        textStyle = MaterialTheme.typography().body2.copy(color = contentColor().copy(alpha = 0.6f)),
+        modifier = LayoutPadding(all = 16.dp)
+    )
 }
 
 @Composable

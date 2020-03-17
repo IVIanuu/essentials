@@ -26,9 +26,8 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
@@ -113,41 +112,38 @@ fun TopAppBar(
                 right = false,
                 bottom = false
             ) {
-                Container(
-                    modifier = LayoutHeight(DefaultAppBarHeight) + LayoutWidth.Fill + modifier,
-                    padding = EdgeInsets(left = 16.dp, right = 16.dp)
-                ) {
-                    TopAppBarLayout(
-                        centerTitle = style.centerTitle,
-                        leading = leading,
-                        title = title?.let {
-                            {
-                                Column(
-                                    mainAxisAlignment = MainAxisAlignment.Start,
-                                    crossAxisAlignment = CrossAxisAlignment.Start
+                TopAppBarLayout(
+                    modifier = LayoutHeight(DefaultAppBarHeight) + LayoutWidth.Fill
+                            + LayoutPadding(start = 16.dp, end = 16.dp) + modifier,
+                    centerTitle = style.centerTitle,
+                    leading = leading,
+                    title = title?.let {
+                        {
+                            Column(
+                                mainAxisAlignment = MainAxisAlignment.Start,
+                                crossAxisAlignment = CrossAxisAlignment.Start
+                            ) {
+                                Providers(
+                                    TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                                        maxLines = 1
+                                    )
                                 ) {
-                                    Providers(
-                                        TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                                            maxLines = 1
-                                        )
-                                    ) {
-                                        CurrentTextStyleProvider(
-                                            MaterialTheme.typography().h6,
-                                            children = title
-                                        )
-                                    }
-                                }
-                            }
-                        },
-                        actions = actions?.let {
-                            {
-                                SpacingRow(spacing = 16.dp) {
-                                    actions()
+                                    CurrentTextStyleProvider(
+                                        MaterialTheme.typography().h6,
+                                        children = title
+                                    )
                                 }
                             }
                         }
-                    )
-                }
+                    },
+                    actions = actions?.let {
+                        {
+                            SpacingRow(spacing = 16.dp) {
+                                actions()
+                            }
+                        }
+                    }
+                )
             }
         }
     }
@@ -155,12 +151,13 @@ fun TopAppBar(
 
 @Composable
 private fun TopAppBarLayout(
+    modifier: Modifier,
     centerTitle: Boolean,
     leading: @Composable (() -> Unit)?,
     title: @Composable (() -> Unit)?,
     actions: @Composable (() -> Unit)?
 ) {
-    Layout(children = {
+    Layout(modifier = modifier, children = {
         if (leading != null) {
             ParentData(data = TopAppBarSlot.Leading) {
                 leading()

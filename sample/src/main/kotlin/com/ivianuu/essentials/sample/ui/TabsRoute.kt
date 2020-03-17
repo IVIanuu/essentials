@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Alignment
 import androidx.ui.core.drawShadow
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutSize
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
@@ -53,7 +54,7 @@ val TabsRoute = Route {
             body = {
                 TabContent<Color> { index, item ->
                     Surface(color = item) {
-                        Container(expanded = true) {
+                        Box(modifier = LayoutSize.Fill, gravity = Alignment.Center) {
                             Text("Index: $index")
                         }
                     }

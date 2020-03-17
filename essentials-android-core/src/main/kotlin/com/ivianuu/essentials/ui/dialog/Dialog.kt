@@ -23,8 +23,8 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.foundation.Box
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
@@ -177,12 +177,11 @@ private fun DialogContentLayout(
     val children: @Composable () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
-                Container(
-                    alignment = Alignment.CenterStart,
-                    padding = EdgeInsets(
-                        left = 24.dp,
+                Box(
+                    modifier = LayoutPadding(
+                        start = 24.dp,
                         top = 24.dp,
-                        right = 24.dp,
+                        end = 24.dp,
                         bottom = if (buttons != null && content == null) 28.dp else 24.dp
                     ),
                     children = header
@@ -198,14 +197,14 @@ private fun DialogContentLayout(
             }
 
             ParentData(DialogContentSlot.Content) {
-                Container(
-                    padding = EdgeInsets(
+                Box(
+                    modifier = LayoutPadding(
                         top = if (header == null) 24.dp else 0.dp,
-                        left = if (applyContentPadding) 24.dp else 0.dp,
-                        right = if (applyContentPadding) 24.dp else 0.dp,
+                        start = if (applyContentPadding) 24.dp else 0.dp,
+                        end = if (applyContentPadding) 24.dp else 0.dp,
                         bottom = if (buttons == null) 24.dp else 0.dp
                     ),
-                    alignment = Alignment.TopStart,
+                    gravity = Alignment.TopStart,
                     children = content
                 )
             }
@@ -220,8 +219,8 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
-                    Container(
-                        padding = EdgeInsets(top = 28.dp),
+                    Box(
+                        modifier = LayoutPadding(top = 28.dp),
                         children = buttons
                     )
                 } else {
@@ -294,39 +293,19 @@ private fun DialogButtons(
 ) {
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
-            Container(
-                expanded = true,
-                alignment = Alignment.CenterStart,
-                height = 52.dp,
-                padding = EdgeInsets(all = 8.dp)
+            Box(
+                modifier = LayoutHeight(52.dp) + LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                gravity = Alignment.CenterStart
             ) {
                 Row(
                     modifier = LayoutWidth.Fill,
                     mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    if (neutralButton != null) {
-                        Container(
-                            modifier = LayoutInflexible,
-                            children = neutralButton
-                        )
-                    }
-
+                    neutralButton?.invoke()
                     Spacer(LayoutFlexible(1f))
-
-                    if (negativeButton != null) {
-                        Container(
-                            modifier = LayoutInflexible,
-                            children = negativeButton
-                        )
-                    }
-
-                    if (positiveButton != null) {
-                        Container(
-                            modifier = LayoutInflexible,
-                            children = positiveButton
-                        )
-                    }
+                    negativeButton?.invoke()
+                    positiveButton?.invoke()
                 }
             }
         }
