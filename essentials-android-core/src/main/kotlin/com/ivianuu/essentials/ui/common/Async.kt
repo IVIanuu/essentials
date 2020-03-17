@@ -26,7 +26,7 @@ import com.ivianuu.essentials.util.Uninitialized
 @Composable
 fun <T> RenderAsyncList(
     state: Async<List<T>>,
-    fail: @Composable (Throwable) -> Unit = {},
+    fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
@@ -54,7 +54,7 @@ fun <T> RenderAsyncList(
 @Composable
 fun <T> RenderAsync(
     state: Async<T>,
-    fail: @Composable (Throwable) -> Unit = {},
+    fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
