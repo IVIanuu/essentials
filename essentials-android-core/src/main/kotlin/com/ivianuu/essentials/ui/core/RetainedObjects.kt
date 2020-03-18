@@ -94,36 +94,10 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
 
 @Composable
-inline fun <T> retain(noinline init: () -> T): T =
-    retain(
-        key = pointInComposition(),
-        init = init
-    )
-
-@Composable
-fun <T> retain(
-    key: Any,
-    init: () -> T
-): T {
-    val retainedObjects = RetainedObjectsAmbient.current
-    return retainedObjects.getOrSet(key, init)
-}
-
-@Composable
 inline fun <T> retain(
     vararg inputs: Any?,
+    key: Any = pointInComposition(),
     noinline init: () -> T
-): T = retain(
-    key = pointInComposition(),
-    inputs = *inputs,
-    init = init
-)
-
-@Composable
-fun <T> retain(
-    key: Any,
-    vararg inputs: Any?,
-    init: () -> T
 ): T {
     val retainedObjects = RetainedObjectsAmbient.current
     return retainedObjects.getOrSetIfChanged(key, *inputs, defaultValue = init)
@@ -131,34 +105,15 @@ fun <T> retain(
 
 @Composable
 inline fun <T> retainedState(
+    key: Any = pointInComposition(),
     noinline init: () -> T
-): MutableState<T> = retainedState(
-    key = pointInComposition(),
-    init = init
-)
-
-@Composable
-fun <T> retainedState(
-    key: Any,
-    init: () -> T
-): MutableState<T> =
-    retain(key) { mutableStateOf(init()) }
+): MutableState<T> = retain(key) { mutableStateOf(init()) }
 
 @Composable
 inline fun <T> retainedStateFor(
     vararg inputs: Any?,
+    key: Any = pointInComposition(),
     noinline init: () -> T
-): MutableState<T> = retainedStateFor(
-    key = pointInComposition(),
-    inputs = *inputs,
-    init = init
-)
-
-@Composable
-fun <T> retainedStateFor(
-    key: Any,
-    vararg inputs: Any?,
-    init: () -> T
 ): MutableState<T> = retain(
     key,
     *inputs
