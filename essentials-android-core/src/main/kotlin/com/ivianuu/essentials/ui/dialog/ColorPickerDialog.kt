@@ -248,7 +248,7 @@ private fun ColorGridItem(
 @Composable
 private fun ColorGridBackButton(
     onClick: () -> Unit,
-    unit: Unit = Unit
+    unused: Any? = null
 ) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
