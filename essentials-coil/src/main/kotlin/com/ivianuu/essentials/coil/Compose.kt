@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
+import androidx.ui.foundation.Box
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
 import coil.ImageLoader
@@ -57,11 +59,13 @@ fun CoilImage(
                 .let { ImagePainter(it) }
         }
 
-        RenderAsync(
-            state = state,
-            fail = { error?.invoke() },
-            loading = { placeholder?.invoke() },
-            success = { Image(it) }
-        )
+        Box(modifier = modifier, gravity = Alignment.Center) {
+            RenderAsync(
+                state = state,
+                fail = { error?.invoke() },
+                loading = { placeholder?.invoke() },
+                success = { Image(it) }
+            )
+        }
     }
 }
