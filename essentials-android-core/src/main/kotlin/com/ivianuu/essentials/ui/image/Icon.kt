@@ -35,7 +35,6 @@ fun IconStyle.toImageStyle() = ImageStyle(
     modifier, alignment, scaleFit, alpha, ColorFilter(tint, BlendMode.srcIn)
 )
 
-
 val IconStyleAmbient = staticAmbientOf<IconStyle>()
 
 @Composable

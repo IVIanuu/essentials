@@ -61,10 +61,10 @@ fun <T> ProvideTabController(
 
 @Composable
 fun <T> ProvideTabController(
-    controller: TabController<T>,
+    tabController: TabController<T>,
     children: @Composable () -> Unit
 ) {
-    Providers(TabControllerAmbient provides controller, children = children)
+    Providers(TabControllerAmbient provides tabController, children = children)
 }
 
 @Composable

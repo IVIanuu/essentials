@@ -1,16 +1,13 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
-import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
-import coil.ImageLoader
-import coil.api.getAny
+import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
@@ -20,13 +17,11 @@ import kotlinx.coroutines.flow.flowOf
 
 @Factory
 class CoilActionIconProvider(
-    @Param private val data: Any,
-    private val imageLoader: ImageLoader
+    @Param private val data: Any
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {
-            val image = imageLoader.getAny(data).toImageAsset();
-            { Icon(ImagePainter(image)) }
+            { CoilImage(data = data) }
         }
 }
 

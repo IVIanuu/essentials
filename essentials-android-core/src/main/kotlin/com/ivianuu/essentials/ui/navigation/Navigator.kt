@@ -21,7 +21,6 @@ import androidx.compose.Model
 import androidx.compose.Observe
 import androidx.compose.Providers
 import androidx.compose.frames.modelListOf
-import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
@@ -30,6 +29,7 @@ import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.common.skippable
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
@@ -376,12 +376,6 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                onActive {
-                    logger.d("$name on active")
-                    onDispose {
-                        logger.d("$name on dispose")
-                    }
-                }
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
@@ -393,9 +387,12 @@ class NavigatorState(
                                 state = transitionState,
                                 lastState = lastTransitionState,
                                 onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes,
-                                children = route.content
-                            )
+                                types = routeTransitionTypes
+                            ) {
+                                skippable(true) {
+                                    route.content()
+                                }
+                            }
                         }
                     }
                 }
