@@ -78,7 +78,10 @@ internal class DiskBoxImpl<T>(
     }
 
     override suspend fun updateData(transform: suspend (T) -> T) {
-        val newValue = transform(get())
+        val currentValue = get()
+        val newValue = transform(currentValue)
+        if (newValue === currentValue) return
+
         try {
             writeLock.beginWrite()
 
