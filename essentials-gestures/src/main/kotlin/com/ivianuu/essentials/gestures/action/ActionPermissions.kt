@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Single
 
 @ApplicationScope
 @Single
-internal class ActionPermissions(private val context: Context) {
+internal class ActionPermissions(context: Context) {
     val accessibility = AccessibilityServicePermission(
         ComponentAccessibilityService::class,
         Metadata.Title withValue "Accessibility", // todo res

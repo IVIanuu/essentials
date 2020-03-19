@@ -26,7 +26,7 @@ internal fun ComponentBuilder.torchAction() {
 }
 
 @Factory
-internal class TorchActionExecutor(
+private class TorchActionExecutor(
     private val torchManager: TorchManager
 ) : ActionExecutor {
     override suspend fun invoke() {
@@ -35,7 +35,7 @@ internal class TorchActionExecutor(
 }
 
 @Factory
-internal class TorchActionIconProvider(
+private class TorchActionIconProvider(
     private val torchManager: TorchManager
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>

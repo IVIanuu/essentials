@@ -33,7 +33,7 @@ internal fun ComponentBuilder.lastAppAction() {
 }
 
 @Factory
-internal class LastAppActionExecutor(
+private class LastAppActionExecutor(
     private val context: Context,
     private val intentExecutorProvider: Provider<IntentActionExecutor>,
     private val lazyRecentAppsExecutor: Lazy<AccessibilityActionExecutor>,

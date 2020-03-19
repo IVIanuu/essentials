@@ -22,12 +22,12 @@ fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     )
 )
 
-val Metadata.Companion.IsRootPermission by lazy {
+private val Metadata.Companion.IsRootPermission by lazy {
     Metadata.Key<Unit>("IsRootPermission")
 }
 
 @Factory
-internal class RootPermissionStateProvider(private val shell: Shell) : PermissionStateProvider {
+private class RootPermissionStateProvider(private val shell: Shell) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Metadata.IsRootPermission in permission.metadata
@@ -36,7 +36,7 @@ internal class RootPermissionStateProvider(private val shell: Shell) : Permissio
 }
 
 @Factory
-internal class RootPermissionRequestHandler(
+private class RootPermissionRequestHandler(
     private val shell: Shell,
     private val toaster: Toaster
 ) : PermissionRequestHandler {

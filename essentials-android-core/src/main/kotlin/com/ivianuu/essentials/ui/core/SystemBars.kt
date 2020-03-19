@@ -126,7 +126,7 @@ fun SystemBarManager(children: @Composable () -> Unit) {
 private val SystemBarStyleAmbient =
     ambientOf(StructurallyEqual) { SystemBarStyle() }
 
-internal class SystemBarManager(
+private class SystemBarManager(
     private val activity: Activity,
     private val logger: Logger
 ) {
@@ -178,5 +178,5 @@ internal class SystemBarManager(
     }
 }
 
-internal val SystemBarManagerAmbient =
+private val SystemBarManagerAmbient =
     staticAmbientOf<SystemBarManager>()

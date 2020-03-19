@@ -19,7 +19,7 @@ internal fun ComponentBuilder.volumeAction() {
 }
 
 @Factory
-internal class VolumeActionExecutor(
+private class VolumeActionExecutor(
     private val audioManager: AudioManager
 ) : ActionExecutor {
     override suspend fun invoke() {

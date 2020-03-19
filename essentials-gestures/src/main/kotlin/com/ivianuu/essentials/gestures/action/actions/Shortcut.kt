@@ -36,7 +36,7 @@ internal fun ComponentBuilder.shortcutAction() {
 }
 
 @Factory
-internal class ShortcutActionExecutor(
+private class ShortcutActionExecutor(
     @Param private val intent: Intent,
     private val lazyDelegate: Provider<IntentActionExecutor>
 ) : ActionExecutor {
@@ -46,7 +46,7 @@ internal class ShortcutActionExecutor(
 }
 
 @Factory
-internal class ShortcutActionFactory(
+private class ShortcutActionFactory(
     private val intentActionExecutorProvider: Provider<IntentActionExecutor>,
     private val logger: Logger
 ) : ActionFactory {
@@ -69,7 +69,7 @@ internal class ShortcutActionFactory(
 }
 
 @Factory
-internal class ShortcutActionPickerDelegate(
+private class ShortcutActionPickerDelegate(
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
     override val title: String
