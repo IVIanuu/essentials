@@ -19,6 +19,9 @@
     <string name="es_action_kill_foreground_app">Kill foreground app</string>
     <string name="es_action_last_app">Last app</string>
     <string name="es_action_lock_screen">Lock screen</string>
+    <string name="es_action_media_play_pause">Media play/pause</string>
+    <string name="es_action_media_skip_next">Media skip to next</string>
+    <string name="es_action_media_skip_previous">Media skip to previous</string>
     <string name="es_action_menu">Menu</string>
     <string name="es_action_none">None</string>
     <string name="es_action_notifications">Notifications</string>

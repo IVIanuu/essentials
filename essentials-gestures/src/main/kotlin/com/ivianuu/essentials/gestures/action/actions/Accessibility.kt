@@ -28,7 +28,7 @@ internal fun ComponentBuilder.bindAccessibilityAction(
 }
 
 @Factory
-class AccessibilityActionExecutor(
+internal class AccessibilityActionExecutor(
     @Param private val accessibilityAction: Int,
     private val globalActions: GlobalActions
 ) : ActionExecutor {

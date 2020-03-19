@@ -12,6 +12,9 @@ import com.ivianuu.essentials.gestures.action.actions.keycodeAction
 import com.ivianuu.essentials.gestures.action.actions.killForegroundAppAction
 import com.ivianuu.essentials.gestures.action.actions.lastAppAction
 import com.ivianuu.essentials.gestures.action.actions.lockScreenAction
+import com.ivianuu.essentials.gestures.action.actions.mediaPlayPauseAction
+import com.ivianuu.essentials.gestures.action.actions.mediaSkipNextAction
+import com.ivianuu.essentials.gestures.action.actions.mediaSkipPreviousAction
 import com.ivianuu.essentials.gestures.action.actions.menuAction
 import com.ivianuu.essentials.gestures.action.actions.notificationsAction
 import com.ivianuu.essentials.gestures.action.actions.powerDialogAction
@@ -45,6 +48,9 @@ fun ComponentBuilder.esActions() {
     killForegroundAppAction()
     lastAppAction()
     lockScreenAction()
+    mediaPlayPauseAction()
+    mediaSkipNextAction()
+    mediaSkipPreviousAction()
     menuAction()
     notificationsAction()
     powerDialogAction()

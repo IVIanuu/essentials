@@ -4,7 +4,6 @@ import androidx.compose.Composable
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Keyboard
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
@@ -57,10 +56,11 @@ private class KeycodeActionPickerDelegate(
         get() = { Icon(Icons.Default.Keyboard) }
 
     override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
-        val keycode = navigator.push<String>(
+        val keycode =
+            navigator.push<String>(
             TextInputRoute(
-                title = stringResource(R.string.es_keycode_picker_title),
-                hint = stringResource(R.string.es_keycode_input_hint),
+                title = resourceProvider.getString(R.string.es_keycode_picker_title),
+                hint = resourceProvider.getString(R.string.es_keycode_input_hint),
                 keyboardType = KeyboardType.Number,
                 allowEmpty = false
             )
