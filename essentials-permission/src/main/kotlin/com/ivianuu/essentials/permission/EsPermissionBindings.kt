@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermissionStateProvider
-import com.ivianuu.essentials.permission.deviceadmin.DeviceAdminPermissionStateProvider
-import com.ivianuu.essentials.permission.dialogui.DialogPermissionRequestUi
-import com.ivianuu.essentials.permission.ignorebatteryoptimizations.IgnoreBatteryOptimizationsPermissionStateProvider
-import com.ivianuu.essentials.permission.installunknownapps.InstallUnknownAppsPermissionStateProvider
-import com.ivianuu.essentials.permission.intent.IntentPermissionRequestHandler
-import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermissionStateProvider
-import com.ivianuu.essentials.permission.packageusagestats.PackageUsageStatsPermissionStateProvider
-import com.ivianuu.essentials.permission.root.RootPermissionRequestHandler
-import com.ivianuu.essentials.permission.root.RootPermissionStateProvider
-import com.ivianuu.essentials.permission.runtime.RuntimePermissionRequestHandler
-import com.ivianuu.essentials.permission.runtime.RuntimePermissionStateProvider
-import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermissionStateProvider
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermissionRequestHandler
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermissionStateProvider
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermissionStateProvider
+import com.ivianuu.essentials.permission.accessibility.accessibilityPermission
+import com.ivianuu.essentials.permission.deviceadmin.deviceAdminPermission
+import com.ivianuu.essentials.permission.dialogui.dialogPermission
+import com.ivianuu.essentials.permission.ignorebatteryoptimizations.ignoreBatteryOptimizationsPermission
+import com.ivianuu.essentials.permission.installunknownapps.installUnknownAppsPermission
+import com.ivianuu.essentials.permission.intent.intentPermission
+import com.ivianuu.essentials.permission.notificationlistener.notificationListenerPermission
+import com.ivianuu.essentials.permission.packageusagestats.packageUsageStatsPermission
+import com.ivianuu.essentials.permission.root.rootPermission
+import com.ivianuu.essentials.permission.runtime.runtimePermission
+import com.ivianuu.essentials.permission.systemoverlay.systemOverlayPermission
+import com.ivianuu.essentials.permission.writesecuresettings.writeSecureSettingsPermission
+import com.ivianuu.essentials.permission.writesettings.writeSettingsPermission
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.common.set
 
@@ -39,32 +36,17 @@ fun ComponentBuilder.esPermissions() {
     set<PermissionRequestHandler>(setQualifier = PermissionRequestHandlersSet)
     set<PermissionStateProvider>(setQualifier = PermissionStateProvidersSet)
 
-    bindPermissionStateProviderIntoSet<AccessibilityServicePermissionStateProvider>()
-
-    bindPermissionStateProviderIntoSet<DeviceAdminPermissionStateProvider>()
-
-    permissionRequestUi<DialogPermissionRequestUi>()
-
-    bindPermissionStateProviderIntoSet<IgnoreBatteryOptimizationsPermissionStateProvider>()
-
-    bindPermissionStateProviderIntoSet<InstallUnknownAppsPermissionStateProvider>()
-
-    bindPermissionRequestHandlerIntoSet<IntentPermissionRequestHandler>()
-
-    bindPermissionStateProviderIntoSet<NotificationListenerPermissionStateProvider>()
-
-    bindPermissionStateProviderIntoSet<PackageUsageStatsPermissionStateProvider>()
-
-    bindPermissionRequestHandlerIntoSet<RootPermissionRequestHandler>()
-    bindPermissionStateProviderIntoSet<RootPermissionStateProvider>()
-
-    bindPermissionRequestHandlerIntoSet<RuntimePermissionRequestHandler>()
-    bindPermissionStateProviderIntoSet<RuntimePermissionStateProvider>()
-
-    bindPermissionStateProviderIntoSet<SystemOverlayPermissionStateProvider>()
-
-    bindPermissionRequestHandlerIntoSet<WriteSecureSettingsPermissionRequestHandler>()
-    bindPermissionStateProviderIntoSet<WriteSecureSettingsPermissionStateProvider>()
-
-    bindPermissionStateProviderIntoSet<WriteSettingsPermissionStateProvider>()
+    accessibilityPermission()
+    deviceAdminPermission()
+    dialogPermission()
+    ignoreBatteryOptimizationsPermission()
+    installUnknownAppsPermission()
+    intentPermission()
+    notificationListenerPermission()
+    packageUsageStatsPermission()
+    rootPermission()
+    runtimePermission()
+    systemOverlayPermission()
+    writeSecureSettingsPermission()
+    writeSettingsPermission()
 }

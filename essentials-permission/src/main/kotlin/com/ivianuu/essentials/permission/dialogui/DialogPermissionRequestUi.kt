@@ -32,6 +32,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.permissionRequestUi
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.Text
@@ -43,14 +44,19 @@ import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+internal fun ComponentBuilder.dialogPermission() {
+    permissionRequestUi<DialogPermissionRequestUi>()
+}
+
 @Factory
-class DialogPermissionRequestUi(
+private class DialogPermissionRequestUi(
     private val navigator: NavigatorState
 ) : PermissionRequestUi {
 

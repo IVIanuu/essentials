@@ -24,9 +24,11 @@ import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 
 fun WriteSettingsPermission(
@@ -47,8 +49,12 @@ val Metadata.Companion.IsWriteSettingsPermission by lazy {
     Metadata.Key<Unit>("IsWriteSettingsPermission")
 }
 
+internal fun ComponentBuilder.writeSettingsPermission() {
+    bindPermissionStateProviderIntoSet<WriteSettingsPermissionStateProvider>()
+}
+
 @Factory
-internal class WriteSettingsPermissionStateProvider(
+private class WriteSettingsPermissionStateProvider(
     private val context: Context
 ) : PermissionStateProvider {
 
