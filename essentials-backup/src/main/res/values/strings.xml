@@ -3,9 +3,9 @@
     <!-- Backup -->
     <string name="es_backup_title">Backup and restore</string>
     <string name="es_pref_backup">Backup</string>
-    <string name="es_pref_backup_summary">Export your settings</string>
+    <string name="es_pref_backup_summary">Export your data</string>
     <string name="es_pref_restore">Restore</string>
-    <string name="es_pref_restore_summary">Restore your settings</string>
+    <string name="es_pref_restore_summary">Restore your data</string>
 
     <string name="es_backup_error">Failed to backup your data!</string>
     <string name="es_restore_error">Failed to restore your data!</string>
