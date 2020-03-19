@@ -32,7 +32,7 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.semantics.Semantics
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -132,27 +132,25 @@ fun Button(
             elevation = style.elevation,
             modifier = modifier
         ) {
-            Ripple(bounded = true, enabled = enabled) {
-                Clickable(onClick = onClick, enabled = enabled) {
-                    Box(
-                        LayoutSize.Min(64.dp, 36.dp),
-                        paddingStart = style.innerPadding.left,
-                        paddingTop = style.innerPadding.top,
-                        paddingEnd = style.innerPadding.right,
-                        paddingBottom = style.innerPadding.bottom,
-                        gravity = Alignment.Center
+            Clickable(onClick = onClick, modifier = ripple(enabled = enabled), enabled = enabled) {
+                Box(
+                    LayoutSize.Min(64.dp, 36.dp),
+                    paddingStart = style.innerPadding.left,
+                    paddingTop = style.innerPadding.top,
+                    paddingEnd = style.innerPadding.right,
+                    paddingBottom = style.innerPadding.bottom,
+                    gravity = Alignment.Center
+                ) {
+                    Providers(
+                        TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                            uppercase = true,
+                            maxLines = 1
+                        )
                     ) {
-                        Providers(
-                            TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                                uppercase = true,
-                                maxLines = 1
-                            )
-                        ) {
-                            CurrentTextStyleProvider(
-                                MaterialTheme.typography().button,
-                                children = children
-                            )
-                        }
+                        CurrentTextStyleProvider(
+                            MaterialTheme.typography().button,
+                            children = children
+                        )
                     }
                 }
             }

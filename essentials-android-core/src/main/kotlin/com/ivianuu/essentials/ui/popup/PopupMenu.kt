@@ -25,7 +25,7 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
@@ -74,14 +74,12 @@ private fun PopupMenuItem(
     onSelected: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Ripple(bounded = true) {
-        Clickable(onClick = onSelected) {
-            Box(
-                modifier = LayoutWidth.Min(200.dp) + LayoutHeight(48.dp) +
-                        LayoutPadding(start = 16.dp, end = 16.dp),
-                gravity = ContentGravity.CenterStart,
-                children = children
-            )
-        }
+    Clickable(onClick = onSelected, modifier = ripple()) {
+        Box(
+            modifier = LayoutWidth.Min(200.dp) + LayoutHeight(48.dp) +
+                    LayoutPadding(start = 16.dp, end = 16.dp),
+            gravity = ContentGravity.CenterStart,
+            children = children
+        )
     }
 }

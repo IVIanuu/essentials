@@ -42,7 +42,7 @@ import androidx.ui.material.SliderPosition
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
@@ -263,15 +263,13 @@ private fun BaseColorGridItem(
     onClick: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Ripple(bounded = true) {
-        Clickable(onClick = onClick) {
-            Box(
-                modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
-                        LayoutPadding(all = 4.dp) +
-                        LayoutAlign.Center,
-                children = children
-            )
-        }
+    Clickable(onClick = onClick, modifier = ripple()) {
+        Box(
+            modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
+                    LayoutPadding(all = 4.dp) +
+                    LayoutAlign.Center,
+            children = children
+        )
     }
 }
 

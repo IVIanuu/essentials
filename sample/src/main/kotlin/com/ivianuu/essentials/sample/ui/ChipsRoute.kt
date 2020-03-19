@@ -28,7 +28,7 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
@@ -71,15 +71,14 @@ private fun Chip(@Pivotal name: String) {
         shape = RoundedCornerShape(16.dp)
     ) {
         RippleColorProvider(color = contentColor().copy(alpha = 0.5f)) {
-            Ripple(bounded = false) {
-                Clickable(onClick = {
-                    toaster.toast("Clicked $name")
-                }) {
-                    Text(
-                        text = name,
-                        textStyle = MaterialTheme.typography().body2
-                    )
-                }
+            Clickable(
+                onClick = { toaster.toast("Clicked $name") },
+                modifier = ripple(bounded = false)
+            ) {
+                Text(
+                    text = name,
+                    textStyle = MaterialTheme.typography().body2
+                )
             }
         }
     }

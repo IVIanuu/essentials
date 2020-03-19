@@ -6,6 +6,7 @@ import androidx.animation.AnimationClockObserver
 import androidx.animation.AnimationEndReason
 import androidx.compose.Composable
 import androidx.compose.Model
+import androidx.compose.StructurallyEqual
 import androidx.compose.mutableStateOf
 import androidx.ui.animation.AnimatedFloatModel
 import androidx.ui.core.AnimationClockAmbient
@@ -60,7 +61,7 @@ class ScrollableState(
     private var _maxValue = maxValue
     val maxValue: Px get() = _maxValue
 
-    var isAnimating: Boolean by mutableStateOf(false)
+    var isAnimating: Boolean by mutableStateOf(false, StructurallyEqual)
         private set
 
     private val clocksProxy = object : AnimationClockObservable {

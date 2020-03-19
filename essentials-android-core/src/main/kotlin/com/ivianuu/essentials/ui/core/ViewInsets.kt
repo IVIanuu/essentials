@@ -32,8 +32,8 @@ import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.core.content.getSystemService
-import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.DensityAmbient
+import androidx.ui.core.OwnerAmbient
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
@@ -44,7 +44,7 @@ import android.view.WindowInsets as AndroidWindowInsets
 
 @Composable
 fun WindowInsetsManager(children: @Composable () -> Unit) {
-    val composeView = AndroidComposeViewAmbient.current
+    val ownerView = OwnerAmbient.current as View
 
     val logger = inject<Logger>()
     val density = DensityAmbient.current
@@ -53,11 +53,11 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, insets ->
             val statusBarHidden =
-                composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
+                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
             val navigationBarHidden =
-                composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
-            val zeroSides = if (navigationBarHidden) calculateZeroSides(composeView.context)
+            val zeroSides = if (navigationBarHidden) calculateZeroSides(ownerView.context)
             else ZeroSides.None
 
             with(density) {
@@ -73,7 +73,7 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
                     top = 0.dp,
                     right = 0.dp,
                     bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
-                        composeView,
+                        ownerView,
                         insets
                     ).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
                 )
@@ -93,7 +93,7 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
     val attachListener = remember {
         object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
-                composeView.requestApplyInsets()
+                ownerView.requestApplyInsets()
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -101,17 +101,17 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
         }
     }
 
-    onCommit(composeView) {
-        composeView.setOnApplyWindowInsetsListener(insetsListener)
-        composeView.addOnAttachStateChangeListener(attachListener)
+    onCommit(ownerView) {
+        ownerView.setOnApplyWindowInsetsListener(insetsListener)
+        ownerView.addOnAttachStateChangeListener(attachListener)
 
-        if (composeView.isAttachedToWindow) {
-            composeView.requestApplyInsets()
+        if (ownerView.isAttachedToWindow) {
+            ownerView.requestApplyInsets()
         }
 
         onDispose {
-            composeView.setOnApplyWindowInsetsListener(null)
-            composeView.removeOnAttachStateChangeListener(attachListener)
+            ownerView.setOnApplyWindowInsetsListener(null)
+            ownerView.removeOnAttachStateChangeListener(attachListener)
         }
     }
 

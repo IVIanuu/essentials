@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.compose.MutableState
+import androidx.compose.ReferentiallyEqual
 import androidx.compose.Stable
 import androidx.compose.mutableStateOf
 import androidx.compose.staticAmbientOf
@@ -106,15 +107,17 @@ inline fun <T> retain(
 @Composable
 inline fun <T> retainedState(
     key: Any = pointInComposition(),
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
-): MutableState<T> = retain(key) { mutableStateOf(init()) }
+): MutableState<T> = retain(key) { mutableStateOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T> retainedStateFor(
     vararg inputs: Any?,
     key: Any = pointInComposition(),
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
 ): MutableState<T> = retain(
     key,
     *inputs
-) { mutableStateOf(init()) }
+) { mutableStateOf(init(), areEquivalent) }

@@ -35,8 +35,8 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
-import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.ripple.RippleThemeAmbient
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
@@ -167,16 +167,12 @@ fun ListItem(
         }
     }
 
-    Ripple(
-        bounded = true,
-        enabled = enabled && (onClick != null || onLongClick != null)
-    ) {
-        Clickable(
-            onClick = onClick ?: { },
-            enabled = enabled && onClick != null,
-            children = content
-        )
-    }
+    Clickable(
+        onClick = onClick ?: { },
+        enabled = enabled && onClick != null,
+        modifier = if (onClick != null || onLongClick != null) ripple(enabled = enabled) else Modifier.None,
+        children = content
+    )
 }
 
 private val TitleOnlyMinHeight = 48.dp

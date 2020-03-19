@@ -24,7 +24,7 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -38,22 +38,20 @@ fun SimpleDialogListItem(
     leading: @Composable (() -> Unit)? = null,
     title: @Composable () -> Unit
 ) {
-    Ripple(bounded = true) {
-        Clickable(onClick = onClick) {
-            Row(
-                modifier = LayoutWidth.Fill + LayoutHeight.Min(48.dp) +
-                        LayoutPadding(start = 24.dp, end = 24.dp),
-                mainAxisAlignment = MainAxisAlignment.Start,
-                crossAxisAlignment = CrossAxisAlignment.Center
-            ) {
-                ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
-                    if (leading != null) {
-                        leading()
-                        Spacer(LayoutWidth(24.dp))
-                    }
-
-                    title()
+    Clickable(onClick = onClick, modifier = ripple()) {
+        Row(
+            modifier = LayoutWidth.Fill + LayoutHeight.Min(48.dp) +
+                    LayoutPadding(start = 24.dp, end = 24.dp),
+            mainAxisAlignment = MainAxisAlignment.Start,
+            crossAxisAlignment = CrossAxisAlignment.Center
+        ) {
+            ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
+                if (leading != null) {
+                    leading()
+                    Spacer(LayoutWidth(24.dp))
                 }
+
+                title()
             }
         }
     }

@@ -17,27 +17,24 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.LayoutSize
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 
 @Composable
 fun IconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
-    modifier: Modifier = LayoutSize.Min(minSize = 40.dp),
+    modifier: Modifier = Modifier.None,
     children: @Composable () -> Unit
 ) {
-    Ripple(
-        bounded = false,
-        enabled = enabled
-    ) {
-        Clickable(onClick = onClick) {
-            Box(modifier = modifier, gravity = Alignment.Center, children = children)
-        }
-    }
+    Clickable(
+        modifier = LayoutSize.Min(minSize = 40.dp) +
+                ripple(bounded = false, enabled = enabled) + modifier,
+        onClick = onClick,
+        enabled = enabled,
+        children = children
+    )
 }

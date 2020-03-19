@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.ui.core
 
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.remember
-import androidx.ui.core.AndroidComposeViewAmbient
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
+import androidx.ui.core.OwnerAmbient
 import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
 import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
@@ -42,7 +43,7 @@ fun Environment(
     retainedObjects: RetainedObjects,
     children: @Composable () -> Unit
 ) {
-    val composeView = AndroidComposeViewAmbient.current
+    val ownerView = OwnerAmbient.current as View
     val focusManager = FocusManagerAmbient.current
     val coroutineScope = coroutineScope()
     Providers(
@@ -50,7 +51,7 @@ fun Environment(
         ComponentAmbient provides component,
         CoroutineContextAmbient provides coroutineScope.coroutineContext,
         KeyboardManagerAmbient provides remember {
-            KeyboardManager(focusManager, composeView, component.get())
+            KeyboardManager(focusManager, ownerView, component.get())
         },
         RetainedObjectsAmbient provides retainedObjects
     ) {

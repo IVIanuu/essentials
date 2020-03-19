@@ -17,28 +17,54 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.compose.ReferentiallyEqual
 import androidx.compose.Stable
 import androidx.compose.remember
 
 @Composable
-inline fun <T> holder(crossinline init: () -> T): Holder<T> = remember { holderOf(init()) }
+inline fun <T> holder(
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
+    crossinline init: () -> T
+): Holder<T> = remember { holderOf(init(), areEquivalent) }
 
 @Composable
-inline fun <T, V1> holderFor(v1: V1, crossinline init: () -> T): Holder<T> = remember(v1) { holderOf(init()) }
+inline fun <T, V1> holderFor(
+    v1: V1,
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
+    crossinline init: () -> T
+): Holder<T> = remember(v1) { holderOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T, V1, V2> holderFor(
     v1: V1,
     v2: V2,
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): Holder<T> = remember(v1, v2) { holderOf(init()) }
+): Holder<T> = remember(v1, v2) { holderOf(init(), areEquivalent) }
 
 @Composable
-inline fun <T> holderFor(vararg inputs: Any?, crossinline init: () -> T): Holder<T> = remember(*inputs) {
-    holderOf(init())
+inline fun <T> holderFor(
+    vararg inputs: Any?,
+    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
+    crossinline init: () -> T
+): Holder<T> = remember(*inputs) {
+    holderOf(init(), areEquivalent)
 }
 
-fun <T> holderOf(value: T) = Holder(value)
+fun <T> holderOf(
+    value: T,
+    areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual
+) = Holder(value, areEquivalent)
 
 @Stable
-data class Holder<T> internal constructor(var value: T)
+class Holder<T> internal constructor(
+    value: T,
+    val areEquivalent: (old: T, new: T) -> Boolean
+) {
+    var value: T = value
+        set(value) {
+            if (!areEquivalent(field, value)) {
+                field = value
+            }
+        }
+}
