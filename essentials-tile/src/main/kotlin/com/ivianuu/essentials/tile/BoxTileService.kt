@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.tile
 
-import android.annotation.TargetApi
 import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Tile which is driven by a preference
  */
-@TargetApi(24)
 abstract class BoxTileService<T> : FlowTileService<T>() {
 
     protected abstract val box: Box<T>

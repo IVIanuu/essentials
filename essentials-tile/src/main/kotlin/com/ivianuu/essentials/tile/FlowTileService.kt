@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.tile
 
-import android.annotation.TargetApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@TargetApi(24)
 abstract class FlowTileService<T> : StateTileService<T>() {
 
     abstract val flow: Flow<T>

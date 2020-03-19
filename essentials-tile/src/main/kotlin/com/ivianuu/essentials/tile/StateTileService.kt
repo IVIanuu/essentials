@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.tile
 
-import android.annotation.TargetApi
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.getLazy
 
 /**
  * Stateful tile service
  */
-@TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
 
     private val resourceProvider: ResourceProvider by getLazy()

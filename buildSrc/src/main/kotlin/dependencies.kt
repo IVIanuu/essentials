@@ -21,7 +21,7 @@ object Build {
     const val buildToolsVersion = "29.0.3"
 
     const val compileSdk = 29
-    const val minSdk = 23
+    const val minSdk = 24
     const val targetSdk = 29
     const val versionCode = 1
     const val versionName = "0.0.1"
@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev495"
+    const val version = "${Build.versionName}-dev496"
 }
 
 object Deps {

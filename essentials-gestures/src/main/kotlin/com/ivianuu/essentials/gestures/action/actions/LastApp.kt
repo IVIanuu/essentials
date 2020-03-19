@@ -2,24 +2,17 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Repeat
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 
 internal fun ComponentBuilder.lastAppAction() {
     action(
@@ -35,38 +28,13 @@ internal fun ComponentBuilder.lastAppAction() {
 @Factory
 private class LastAppActionExecutor(
     private val context: Context,
-    private val intentExecutorProvider: Provider<IntentActionExecutor>,
-    private val lazyRecentAppsExecutor: Lazy<AccessibilityActionExecutor>,
-    private val logger: Logger,
-    private val packageManager: PackageManager,
-    private val recentAppsProvider: RecentAppsProvider,
-    private val systemBuildInfo: SystemBuildInfo
+    private val lazyRecentAppsExecutor: Lazy<AccessibilityActionExecutor>
 ) : ActionExecutor {
     override suspend fun invoke() {
-        if (systemBuildInfo.sdk >= 24) {
-            val executor =
-                lazyRecentAppsExecutor(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS))
-            executor()
-            delay(250)
-            executor()
-        } else {
-            val recentApps = recentAppsProvider.recentsApps.first()
-                .filter { it != getHomePackage() }
-            logger.d("recent apps $recentApps")
-            val lastApp = recentApps.getOrNull(1) ?: return
-            val intent = packageManager.getLaunchIntentForPackage(lastApp) ?: return
-            intentExecutorProvider(parameters = parametersOf(intent))()
-        }
-    }
-
-    private fun getHomePackage(): String {
-        val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-        }
-
-        return context.packageManager.resolveActivity(
-            intent,
-            PackageManager.MATCH_DEFAULT_ONLY
-        )?.activityInfo?.packageName ?: ""
+        val executor =
+            lazyRecentAppsExecutor(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_RECENTS))
+        executor()
+        delay(250)
+        executor()
     }
 }

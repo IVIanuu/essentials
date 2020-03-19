@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.tile
 
-import android.annotation.TargetApi
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -32,7 +31,6 @@ import kotlinx.coroutines.cancel
 /**
  * Base tile service
  */
-@TargetApi(24)
 abstract class EsTileService : TileService(), ComponentOwner,
     ComponentBuilderInterceptor {
 

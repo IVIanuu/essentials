@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.tile
 
-import android.annotation.TargetApi
 import com.ivianuu.essentials.store.getCurrentData
 import kotlinx.coroutines.launch
 
 /**
  * Tile which is driven by a boolean pref
  */
-@TargetApi(24)
 abstract class CycleBoxTileService<T> : BoxTileService<T>() {
     override fun onClick() {
         super.onClick()

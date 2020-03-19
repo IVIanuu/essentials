@@ -16,16 +16,11 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.os.Build
 import androidx.compose.Immutable
 
 @Immutable
 data class NavBarConfig(
     val hidden: Boolean,
-    val rotationMode: NavBarRotationMode = if (Build.VERSION.SDK_INT >= 24) {
-        NavBarRotationMode.Nougat
-    } else {
-        NavBarRotationMode.Marshmallow
-    },
+    val rotationMode: NavBarRotationMode = NavBarRotationMode.Nougat,
     val showWhileScreenOff: Boolean = true
 )
