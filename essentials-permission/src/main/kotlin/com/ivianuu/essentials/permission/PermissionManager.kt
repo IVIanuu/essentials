@@ -74,5 +74,6 @@ class PermissionManager(
     internal fun getRequest(id: String): PermissionRequest? = requests[id]
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =
-        permissionStateProviders.first { it.handles(permission) }
+        permissionStateProviders.firstOrNull { it.handles(permission) }
+            ?: error("Couln't find state provider for $permission")
 }

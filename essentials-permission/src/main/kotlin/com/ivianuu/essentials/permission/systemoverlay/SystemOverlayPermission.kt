@@ -24,6 +24,7 @@ import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
@@ -49,7 +50,7 @@ val Metadata.Companion.IsSystemOverlayPermission by lazy {
 }
 
 internal fun ComponentBuilder.systemOverlayPermission() {
-
+    bindPermissionStateProviderIntoSet<SystemOverlayPermissionStateProvider>()
 }
 
 @Factory
