@@ -8,8 +8,11 @@ import com.ivianuu.essentials.gestures.action.actions.bluetoothAction
 import com.ivianuu.essentials.gestures.action.actions.cameraAction
 import com.ivianuu.essentials.gestures.action.actions.homeAction
 import com.ivianuu.essentials.gestures.action.actions.inputMethodAction
+import com.ivianuu.essentials.gestures.action.actions.keycodeAction
+import com.ivianuu.essentials.gestures.action.actions.killForegroundAppAction
 import com.ivianuu.essentials.gestures.action.actions.lastAppAction
 import com.ivianuu.essentials.gestures.action.actions.lockScreenAction
+import com.ivianuu.essentials.gestures.action.actions.menuAction
 import com.ivianuu.essentials.gestures.action.actions.notificationsAction
 import com.ivianuu.essentials.gestures.action.actions.powerDialogAction
 import com.ivianuu.essentials.gestures.action.actions.quickSettingsAction
@@ -38,8 +41,11 @@ fun ComponentBuilder.esActions() {
     cameraAction()
     homeAction()
     inputMethodAction()
+    keycodeAction()
+    killForegroundAppAction()
     lastAppAction()
     lockScreenAction()
+    menuAction()
     notificationsAction()
     powerDialogAction()
     quickSettingsAction()

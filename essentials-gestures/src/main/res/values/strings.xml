@@ -15,6 +15,7 @@
     <string name="es_action_home">Home</string>
     <string name="es_action_input_method">Input method</string>
     <string name="es_action_keycode">Keycode</string>
+    <string name="es_action_keycode_suffix">Keycode: %d</string>
     <string name="es_action_kill_foreground_app">Kill foreground app</string>
     <string name="es_action_last_app">Last app</string>
     <string name="es_action_lock_screen">Lock screen</string>
@@ -31,6 +32,10 @@
     <string name="es_action_torch">Flashlight</string>
     <string name="es_action_volume">Volume</string>
     <string name="es_action_wifi">WiFi</string>
+
+    <!-- Keycode -->
+    <string name="es_keycode_picker_title">Keycode</string>
+    <string name="es_keycode_input_hint">Type in the keycode</string>
 
     <string name="es_activity_not_found">Failed to launch screen!</string>
 

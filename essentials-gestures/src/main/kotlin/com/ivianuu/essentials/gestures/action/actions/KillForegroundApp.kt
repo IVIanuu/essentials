@@ -1,42 +1,64 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-// todo
-
-/**
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.data.Flag
+import com.ivianuu.essentials.gestures.RecentAppsProvider
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.essentials.gestures.action.actionPermission
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.parametersOf
+import kotlinx.coroutines.flow.first
 
-private fun createKillForegroundAppAction() = Action(
-    key = KEY_KILL_FOREGROUND_APP,
-    title = string(R.string.action_kill_foreground_app),
-    states = stateless(R.drawable.es_ic_clear),
-    flags = setOf(Flag.RequiresRoot, Flag.RequiresAccessibilityPermission)
-)
-
-@SuppressLint("CheckResult")
-private suspend fun killForegroundApp() {
-    val currentApp = recentAppsProvider.currentApp.first()
-
-    if (currentApp != "android" &&
-        currentApp != "com.android.systemui" &&
-        currentApp != context.packageName && // we have no suicidal intentions :D
-        currentApp != getHomePackage()
-    ) {
-        runRootCommand("am force-stop $currentApp")
-    }
+internal fun ComponentBuilder.killForegroundAppAction() {
+    action(
+        key = "kill_foreground_action",
+        title = { getStringResource(R.string.es_action_kill_foreground_app) },
+        iconProvider = { SingleActionIconProvider(Icons.Default.Clear) },
+        permissions = {
+            listOf(
+                actionPermission { accessibility },
+                actionPermission { root }
+            )
+        },
+        executor = { get<KillForegroundAppActionExecutor>() }
+    )
 }
 
-private fun getHomePackage(): String {
-    val intent = Intent(Intent.ACTION_MAIN).apply {
-        addCategory(Intent.CATEGORY_HOME)
+@Factory
+private class KillForegroundAppActionExecutor(
+    private val buildInfo: BuildInfo,
+    private val recentAppsProvider: RecentAppsProvider,
+    private val packageManager: PackageManager,
+    private val rootActionExecutorProvider: Provider<RootActionExecutor>
+) : ActionExecutor {
+    override suspend fun invoke() {
+        val currentApp = recentAppsProvider.currentApp.first()
+
+        if (currentApp != "android" &&
+            currentApp != "com.android.systemui" &&
+            currentApp != buildInfo.packageName && // we have no suicidal intentions :D
+            currentApp != getHomePackage()
+        ) {
+            rootActionExecutorProvider(parameters = parametersOf("am force-stop $currentApp"))()
+        }
     }
 
-    return context.packageManager.resolveActivity(
-        intent,
-        PackageManager.MATCH_DEFAULT_ONLY
-    )?.activityInfo?.packageName ?: ""
-} */
+    private fun getHomePackage(): String {
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+        }
+
+        return packageManager.resolveActivity(
+            intent,
+            PackageManager.MATCH_DEFAULT_ONLY
+        )?.activityInfo?.packageName ?: ""
+    }
+
+}

@@ -9,7 +9,6 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.bindActionFactoryIntoSet
@@ -25,7 +24,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import java.io.ByteArrayOutputStream
@@ -33,16 +31,6 @@ import java.io.ByteArrayOutputStream
 internal fun ComponentBuilder.shortcutAction() {
     bindActionFactoryIntoSet<ShortcutActionFactory>()
     bindActionPickerDelegateIntoSet<ShortcutActionPickerDelegate>()
-}
-
-@Factory
-private class ShortcutActionExecutor(
-    @Param private val intent: Intent,
-    private val lazyDelegate: Provider<IntentActionExecutor>
-) : ActionExecutor {
-    override suspend fun invoke() {
-        lazyDelegate(parameters = parametersOf(intent))()
-    }
 }
 
 @Factory
