@@ -29,5 +29,5 @@
     <string name="es_copied_to_clipboard">Copied to clipboard!</string>
 
     <!-- Color picker -->
-    <string name="es_dialog_title_color_picker">Pick a color</string>
+    <string name="es_color_picker_title">Pick a color</string>
 </resources>

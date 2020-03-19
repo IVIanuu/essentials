@@ -80,7 +80,7 @@ fun ColorPickerRoute(
         showAlphaSelector = showAlphaSelector,
         dismissOnSelection = false,
         title = {
-            Text(title ?: stringResource(R.string.es_dialog_title_color_picker))
+            Text(title ?: stringResource(R.string.es_color_picker_title))
         }
     )
 }
