@@ -36,7 +36,7 @@ internal fun ComponentBuilder.appAction() {
 }
 
 @Factory
-internal class AppActionExecutor(
+private class AppActionExecutor(
     @Param private val packageName: String,
     private val packageManager: PackageManager,
     private val lazyDelegate: Lazy<IntentActionExecutor>,
@@ -57,7 +57,7 @@ internal class AppActionExecutor(
 }
 
 @Factory
-internal class AppActionFactory(
+private class AppActionFactory(
     private val appStore: AppStore,
     private val appActionExecutorProvider: Provider<AppActionExecutor>,
     private val appActionIconProvider: Provider<AppActionIconProvider>
@@ -76,7 +76,7 @@ internal class AppActionFactory(
 }
 
 @Factory
-internal class AppActionPickerDelegate(
+private class AppActionPickerDelegate(
     private val launchableAppFilter: LaunchableAppFilter,
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
@@ -94,7 +94,7 @@ internal class AppActionPickerDelegate(
 }
 
 @Factory
-internal class AppActionIconProvider(
+private class AppActionIconProvider(
     private val lazyDelegate: Lazy<CoilActionIconProvider>,
     @Param private val packageName: String
 ) : ActionIconProvider {

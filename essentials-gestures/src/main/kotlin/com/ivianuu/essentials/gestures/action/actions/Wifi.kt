@@ -27,7 +27,7 @@ internal fun ComponentBuilder.wifiAction() {
 }
 
 @Factory
-internal class WifiActionExecutor(private val wifiManager: WifiManager) :
+private class WifiActionExecutor(private val wifiManager: WifiManager) :
     ActionExecutor {
     override suspend fun invoke() {
         wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
@@ -35,7 +35,7 @@ internal class WifiActionExecutor(private val wifiManager: WifiManager) :
 }
 
 @Factory
-internal class WifiActionIconProvider(
+private class WifiActionIconProvider(
     broadcastFactory: BroadcastFactory,
     private val wifiManager: WifiManager
 ) : ActionIconProvider {

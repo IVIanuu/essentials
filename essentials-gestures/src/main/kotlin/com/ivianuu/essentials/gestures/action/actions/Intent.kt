@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 
 @Factory
-class IntentActionExecutor(
+internal class IntentActionExecutor(
     @Param private val intent: Intent,
     private val context: Context,
     private val toaster: Toaster

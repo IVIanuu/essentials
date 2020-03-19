@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun ComponentBuilder.bindAccessibilityAction(
+internal fun ComponentBuilder.bindAccessibilityAction(
     key: String,
     accessibilityAction: Int,
     titleRes: Int,

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Factory
-class CoilActionIconProvider(
+internal class CoilActionIconProvider(
     @Param private val data: Any
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
@@ -25,24 +25,24 @@ class CoilActionIconProvider(
         }
 }
 
-fun SingleActionIconProvider(
+internal fun SingleActionIconProvider(
     icon: @Composable () -> Unit
 ): ActionIconProvider = object : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf(icon)
 }
 
-fun SingleActionIconProvider(
+internal fun SingleActionIconProvider(
     icon: VectorAsset
 ): ActionIconProvider = SingleActionIconProvider { Icon(icon) }
 
-fun SingleActionIconProvider(
+internal fun SingleActionIconProvider(
     id: Int
 ): ActionIconProvider = SingleActionIconProvider { Icon(vectorResource(id)) }
 
-fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
+internal fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 
-fun ActionExecutor.beforeAction(
+internal fun ActionExecutor.beforeAction(
     block: suspend () -> Unit
 ) = object : ActionExecutor {
     override suspend fun invoke() {
@@ -51,7 +51,7 @@ fun ActionExecutor.beforeAction(
     }
 }
 
-fun ActionExecutor.afterAction(
+internal fun ActionExecutor.afterAction(
     block: suspend () -> Unit
 ) = object : ActionExecutor {
     override suspend fun invoke() {

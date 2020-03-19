@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
+import android.content.Context
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Accessibility
 import androidx.ui.material.icons.filled.Adb
@@ -14,6 +15,7 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Component
@@ -21,21 +23,27 @@ import com.ivianuu.injekt.Single
 
 @ApplicationScope
 @Single
-internal class ActionPermissions {
+internal class ActionPermissions(private val context: Context) {
     val accessibility = AccessibilityServicePermission(
         ComponentAccessibilityService::class,
-        Metadata.Title withValue "Accessibility",
-        Metadata.Desc withValue "Required to click buttons",
+        Metadata.Title withValue "Accessibility", // todo res
+        Metadata.Desc withValue "Required to click buttons", // todo res
         Metadata.Icon withValue { Icon(Icons.Default.Accessibility) }
     )
     val root = RootPermission(
-        Metadata.Title withValue "Root",
+        Metadata.Title withValue "Root", // todo res
         Metadata.Icon withValue { Icon(Icons.Default.Adb) }
     )
-    val secureSettings = WriteSecureSettingsPermission(
-        Metadata.Title withValue "Write secure settings",
-        Metadata.Desc withValue "Required to change the navigation bar visibility",
+    val writeSecureSettings = WriteSecureSettingsPermission(
+        Metadata.Title withValue "Write secure settings", // todo res
+        Metadata.Desc withValue "Required to change the navigation bar visibility", // todo res
         Metadata.Icon withValue { Icon(Icons.Default.SettingsApplications) }
+    )
+    val writeSettings = WriteSettingsPermission(
+        context,
+        Metadata.Title withValue "Write Settings", // todo res
+        Metadata.Desc withValue "Required to change settings", // todo res
+        Metadata.Icon withValue { Icon(Icons.Default.SettingsApplications) } // todo change icon
     )
 }
 

@@ -29,7 +29,7 @@ internal fun ComponentBuilder.bluetoothAction() {
 }
 
 @Factory
-internal class BluetoothActionExecutor : ActionExecutor {
+private class BluetoothActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         BluetoothAdapter.getDefaultAdapter()?.let {
             if (it.isEnabled) {
@@ -42,7 +42,7 @@ internal class BluetoothActionExecutor : ActionExecutor {
 }
 
 @Factory
-internal class BluetoothActionIconProvider(
+private class BluetoothActionIconProvider(
     private val broadcastFactory: BroadcastFactory
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>

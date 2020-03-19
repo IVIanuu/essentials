@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev494"
+    const val version = "${Build.versionName}-dev495"
 }
 
 object Deps {
@@ -40,7 +40,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        private const val composeVersion = "0.0.1-dev80"
+        private const val composeVersion = "0.0.1-dev81"
 
         object Compose {
             const val version = composeVersion
@@ -89,7 +89,7 @@ object Deps {
 
     const val coil = "io.coil-kt:coil:0.9.2"
 
-    const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.5"
+    const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
         private const val version = "1.3.4"
@@ -101,7 +101,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev483"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev495"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
@@ -113,7 +113,7 @@ object Deps {
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
-    const val junit = "junit:junit:4.12"
+    const val junit = "junit:junit:4.13"
 
     object Kotlin {
         private const val version = "1.4-SNAPSHOT"
@@ -128,7 +128,7 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
-    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 
     object Moshi {
         private const val version = "1.9.2"
@@ -147,7 +147,7 @@ object Deps {
 
     const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
 
-    const val roboelectric = "org.robolectric:robolectric:4.0.2"
+    const val roboelectric = "org.robolectric:robolectric:4.3.1"
 
     const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
 

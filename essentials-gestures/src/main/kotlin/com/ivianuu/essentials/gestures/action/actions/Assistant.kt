@@ -20,7 +20,7 @@ internal fun ComponentBuilder.assistantAction() {
 }
 
 @Factory
-internal class AssistantActionExecutor(
+private class AssistantActionExecutor(
     private val searchManager: SearchManager
 ) : ActionExecutor {
     @SuppressLint("DiscouragedPrivateApi")

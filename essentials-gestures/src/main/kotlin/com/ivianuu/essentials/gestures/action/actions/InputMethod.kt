@@ -19,7 +19,7 @@ internal fun ComponentBuilder.inputMethodAction() {
 }
 
 @Factory
-internal class InputMethodActionExecutor(
+private class InputMethodActionExecutor(
     private val inputMethodManager: InputMethodManager
 ) : ActionExecutor {
     override suspend fun invoke() {

@@ -37,7 +37,7 @@ internal fun ComponentBuilder.homeAction() {
 }
 
 @Factory
-internal class IntentHomeActionExecutor(
+private class IntentHomeActionExecutor(
     private val context: Context,
     private val lazyDelegate: Lazy<IntentActionExecutor>
 ) : ActionExecutor {

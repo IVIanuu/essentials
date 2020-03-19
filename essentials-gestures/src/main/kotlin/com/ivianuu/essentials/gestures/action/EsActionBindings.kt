@@ -2,6 +2,7 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.gestures.action.actions.appAction
 import com.ivianuu.essentials.gestures.action.actions.assistantAction
+import com.ivianuu.essentials.gestures.action.actions.autoRotation
 import com.ivianuu.essentials.gestures.action.actions.backAction
 import com.ivianuu.essentials.gestures.action.actions.bluetoothAction
 import com.ivianuu.essentials.gestures.action.actions.cameraAction
@@ -31,6 +32,7 @@ fun ComponentBuilder.esActions() {
 
     appAction()
     assistantAction()
+    autoRotation()
     backAction()
     bluetoothAction()
     cameraAction()
