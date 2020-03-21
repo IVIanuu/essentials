@@ -25,11 +25,11 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
-import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.material.ripple
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 object PopupMenu {

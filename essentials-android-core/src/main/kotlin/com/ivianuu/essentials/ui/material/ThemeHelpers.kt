@@ -17,13 +17,8 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.DefaultRippleEffectFactory
-import androidx.ui.material.ripple.RippleTheme
-import androidx.ui.material.ripple.RippleThemeAmbient
 import com.ivianuu.essentials.util.isDark
 
 @Composable
@@ -40,19 +35,4 @@ fun guessingContentColorFor(color: Color): Color {
             else -> if (color.isDark) Color.White else Color.Black
         }
     }
-}
-
-@Composable
-fun ProvideRippleColor(
-    color: Color,
-    children: @Composable () -> Unit
-) {
-    val theme = remember(color) {
-        RippleTheme(
-            factory = DefaultRippleEffectFactory,
-            defaultColor = { color },
-            opacity = { color.alpha }
-        )
-    }
-    Providers(RippleThemeAmbient provides theme, children = children)
 }

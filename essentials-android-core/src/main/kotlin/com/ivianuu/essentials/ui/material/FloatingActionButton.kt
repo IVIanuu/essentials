@@ -22,6 +22,8 @@ import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
@@ -103,24 +105,31 @@ fun FloatingActionButton(
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { DefaultFloatingActionButtonStyle() },
     children: @Composable () -> Unit
 ) {
-    androidx.ui.material.FloatingActionButton(
-        modifier = modifier,
-        onClick = onClick,
+    Surface(
         shape = style.shape,
-        backgroundColor = style.backgroundColor,
+        color = style.backgroundColor,
         contentColor = style.contentColor,
         elevation = style.elevation
     ) {
-        Providers(
-            TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                uppercase = true,
-                maxLines = 1
-            )
-        ) {
-            ProvideTextStyle(
-                MaterialTheme.typography().button,
-                children = children
-            )
+        Clickable(onClick, modifier = ripple()) {
+            ProvideTextStyle(MaterialTheme.typography().button) {
+                Box(
+                    modifier = style.modifier + modifier,
+                    gravity = ContentGravity.Center
+                ) {
+                    Providers(
+                        TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                            uppercase = true,
+                            maxLines = 1
+                        )
+                    ) {
+                        ProvideTextStyle(
+                            MaterialTheme.typography().button,
+                            children = children
+                        )
+                    }
+                }
+            }
         }
     }
 }

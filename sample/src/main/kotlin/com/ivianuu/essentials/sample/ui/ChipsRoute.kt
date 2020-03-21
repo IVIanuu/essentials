@@ -28,15 +28,15 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.ProvideRippleColor
+import com.ivianuu.essentials.ui.material.DefaultRippleStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.ripple
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -66,19 +66,25 @@ private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
     val color = remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
     Surface(
-        modifier = LayoutHeight(32.dp) + LayoutPadding(start = 12.dp, end = 12.dp),
         color = color,
         shape = RoundedCornerShape(16.dp)
     ) {
-        ProvideRippleColor(color = contentColor().copy(alpha = 0.5f)) {
-            Clickable(
-                onClick = { toaster.toast("Clicked $name") },
-                modifier = ripple(bounded = false)
+        Box(
+            modifier = ripple(
+                bounded = false,
+                style = DefaultRippleStyle(color = contentColor().copy(alpha = 0.5f))
+            )
+        ) {
+            Box(
+                modifier = LayoutHeight(32.dp) + LayoutPadding(start = 12.dp, end = 12.dp),
+                gravity = ContentGravity.Center
             ) {
-                Text(
-                    text = name,
-                    textStyle = MaterialTheme.typography().body2
-                )
+                Clickable(onClick = { toaster.toast("Clicked $name") }) {
+                    Text(
+                        text = name,
+                        textStyle = MaterialTheme.typography().body2
+                    )
+                }
             }
         }
     }

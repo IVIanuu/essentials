@@ -25,7 +25,6 @@ import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawBackground
 import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
@@ -35,8 +34,6 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
-import androidx.ui.material.ripple.RippleThemeAmbient
-import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
@@ -88,9 +85,7 @@ fun ListItem(
                         end = style.contentPadding.right
                     ) +
                     DrawBackground(
-                        color = if (selected) contentColor().copy(
-                            alpha = RippleThemeAmbient.current.opacity()
-                        ) else Color.Transparent
+                        color = if (selected) defaultRippleColor() else Color.Transparent
                     ) + (onLongClick?.let {
                 LongPressGestureDetector {
                     if (enabled) onLongClick()
