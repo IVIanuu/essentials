@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutPadding
@@ -26,19 +27,28 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
 data class DialogStyle(
-    val shape: Shape = RoundedCornerShape(size = 4.dp),
-    val elevation: Dp = 24.dp
+    val shape: Shape,
+    val elevation: Dp,
+    val modifier: Modifier
 )
 
-val DialogStyleAmbient = staticAmbientOf { DialogStyle() }
+@Composable
+fun DefaultDialogStyle(
+    shape: Shape = RoundedCornerShape(size = 4.dp),
+    elevation: Dp = 24.dp,
+    modifier: Modifier = Modifier.None
+) = DialogStyle(shape = shape, elevation = elevation, modifier = modifier)
+
+val DialogStyleAmbient = staticAmbientOf<DialogStyle>()
 
 @Composable
 fun BaseDialog(
-    style: DialogStyle = DialogStyleAmbient.current,
+    style: DialogStyle = DialogStyleAmbient.currentOrElse { DefaultDialogStyle() },
     children: @Composable () -> Unit
 ) {
     Surface(
@@ -47,7 +57,7 @@ fun BaseDialog(
             top = 32.dp,
             end = 32.dp,
             bottom = 32.dp
-        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp),
+        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp) + style.modifier,
         color = MaterialTheme.colors().surface,
         elevation = style.elevation,
         shape = style.shape,

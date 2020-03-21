@@ -63,7 +63,8 @@ fun SwitchPreference(
                 AbsorbPointer {
                     Switch(
                         checked = context.currentValue,
-                        onCheckedChange = if (context.shouldBeEnabled) { _: Boolean -> } else null
+                        enabled = context.shouldBeEnabled,
+                        onCheckedChange = { context.setIfOk(!context.currentValue); Unit }
                     )
                 }
             },

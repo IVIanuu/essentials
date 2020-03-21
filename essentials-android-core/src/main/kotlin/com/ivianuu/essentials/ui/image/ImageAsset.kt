@@ -20,7 +20,6 @@ import androidx.ui.graphics.vector.VectorGroup
 import androidx.ui.graphics.vector.VectorPath
 import androidx.ui.graphics.vector.VectorScope
 import androidx.ui.graphics.vector.composeVector
-import androidx.ui.graphics.vector.disposeVector
 import androidx.ui.unit.Density
 import androidx.ui.unit.PxSize
 import androidx.ui.unit.px
@@ -46,7 +45,7 @@ fun VectorAsset.toBitmap(
         )
     }
 
-    composeVector(vector) { _, _ ->
+    val composition = composeVector(vector) { _, _ ->
         RenderVectorGroup(group = root)
     }
 
@@ -65,7 +64,7 @@ fun VectorAsset.toBitmap(
     val canvas = Canvas(android.graphics.Canvas(bitmap))
     vector.draw(canvas, 1f, colorFilter)
 
-    disposeVector(vector)
+    composition.dispose()
 
     return bitmap
 }

@@ -20,7 +20,7 @@ import androidx.ui.graphics.vector.VectorPainter
 import androidx.ui.layout.LayoutSize
 import androidx.ui.res.imageResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class IconStyle(
@@ -40,7 +40,7 @@ val IconStyleAmbient = staticAmbientOf<IconStyle>()
 @Composable
 fun DefaultIconStyle(
     tint: Color = contentColor(),
-    modifier: Modifier = LayoutSize(24.dp),
+    modifier: Modifier = Modifier.None,
     alignment: Alignment = Alignment.Center,
     scaleFit: ScaleFit = ScaleFit.Fit,
     alpha: Float = DefaultAlpha
@@ -56,11 +56,11 @@ fun DefaultIconStyle(
 fun Icon(
     painter: Painter,
     modifier: Modifier = Modifier.None,
-    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
+    style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Image(
         painter = painter,
-        modifier = modifier,
+        modifier = LayoutSize(24.dp) + modifier,
         style = remember(style) { style.toImageStyle() }
     )
 }
@@ -69,7 +69,7 @@ fun Icon(
 fun Icon(
     id: Int,
     modifier: Modifier = Modifier.None,
-    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
+    style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(
         icon = imageResource(id),
@@ -82,7 +82,7 @@ fun Icon(
 fun Icon(
     icon: ImageAsset,
     modifier: Modifier = Modifier.None,
-    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
+    style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(
         painter = remember(icon) { ImagePainter(icon) },
@@ -95,7 +95,7 @@ fun Icon(
 fun Icon(
     icon: VectorAsset,
     modifier: Modifier = Modifier.None,
-    style: IconStyle = IconStyleAmbient.currentOrNull ?: DefaultIconStyle()
+    style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(
         painter = VectorPainter(icon),

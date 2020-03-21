@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Providers
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
@@ -51,7 +51,7 @@ fun Banner(
                 Spacer(LayoutWidth(16.dp))
             }
 
-            CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
+            ProvideTextStyle(value = MaterialTheme.typography().body2) {
                 ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
             }
 

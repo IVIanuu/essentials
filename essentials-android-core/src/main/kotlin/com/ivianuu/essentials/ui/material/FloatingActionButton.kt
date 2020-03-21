@@ -20,12 +20,13 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
@@ -35,53 +36,62 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 
 @Immutable
 data class FloatingActionButtonStyle(
-    val minSize: Dp,
-    val shape: Shape = CircleShape,
-    val color: Color,
-    val elevation: Dp = 6.dp
+    val shape: Shape,
+    val backgroundColor: Color,
+    val contentColor: Color,
+    val elevation: Dp,
+    val modifier: Modifier
 )
 
 @Composable
 fun DefaultFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    color: Color = MaterialTheme.colors().secondary,
-    elevation: Dp = 6.dp
+    backgroundColor: Color = MaterialTheme.colors().secondary,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    elevation: Dp = 6.dp,
+    modifier: Modifier = Modifier.None
 ) = FloatingActionButtonStyle(
-    minSize = 56.dp,
     shape = shape,
-    color = color,
-    elevation = elevation
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    elevation = elevation,
+    modifier = LayoutHeight.Min(56.dp) + modifier
 )
 
 @Composable
 fun MiniFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    color: Color = MaterialTheme.colors().secondary,
-    elevation: Dp = 6.dp
+    backgroundColor: Color = MaterialTheme.colors().secondary,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    elevation: Dp = 6.dp,
+    modifier: Modifier = Modifier.None
 ) = FloatingActionButtonStyle(
-    minSize = 40.dp,
     shape = shape,
-    color = color,
-    elevation = elevation
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    elevation = elevation,
+    modifier = LayoutHeight.Min(40.dp) + modifier
 )
 
 @Composable
 fun ExtendedFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    color: Color = MaterialTheme.colors().secondary,
-    elevation: Dp = 6.dp
+    backgroundColor: Color = MaterialTheme.colors().secondary,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    elevation: Dp = 6.dp,
+    modifier: Modifier = Modifier.None
 ) = FloatingActionButtonStyle(
-    minSize = 48.dp,
     shape = shape,
-    color = color,
-    elevation = elevation
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    elevation = elevation,
+    modifier = LayoutHeight.Min(48.dp) + modifier
 )
 
 val FloatingActionButtonStyleAmbient = staticAmbientOf<FloatingActionButtonStyle>()
@@ -96,9 +106,9 @@ fun FloatingActionButton(
     androidx.ui.material.FloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        minSize = style.minSize,
         shape = style.shape,
-        color = style.color,
+        backgroundColor = style.backgroundColor,
+        contentColor = style.contentColor,
         elevation = style.elevation
     ) {
         Providers(
@@ -107,7 +117,7 @@ fun FloatingActionButton(
                 maxLines = 1
             )
         ) {
-            CurrentTextStyleProvider(
+            ProvideTextStyle(
                 MaterialTheme.typography().button,
                 children = children
             )
@@ -121,7 +131,7 @@ fun FloatingActionButton(
     icon: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier.None,
     onClick: () -> Unit,
-    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrNull ?: ExtendedFloatingActionButtonStyle()
+    style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { ExtendedFloatingActionButtonStyle() }
 ) {
     FloatingActionButton(
         modifier = modifier,

@@ -63,7 +63,8 @@ fun CheckboxPreference(
                 AbsorbPointer {
                     Checkbox(
                         checked = context.currentValue,
-                        onCheckedChange = if (context.shouldBeEnabled) { _: Boolean -> } else null
+                        onCheckedChange = { context.setIfOk(!context.currentValue); Unit },
+                        enabled = context.shouldBeEnabled
                     )
                 }
             },

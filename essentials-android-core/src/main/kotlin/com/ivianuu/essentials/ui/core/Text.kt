@@ -22,12 +22,12 @@ import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
-import androidx.ui.core.currentTextStyle
 import androidx.ui.core.selection.Selectable
 import androidx.ui.core.selection.Selection
 import androidx.ui.core.selection.SelectionRegistrar
 import androidx.ui.core.selection.SelectionRegistrarAmbient
 import androidx.ui.foundation.contentColor
+import androidx.ui.foundation.currentTextStyle
 import androidx.ui.res.stringResource
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
@@ -40,7 +40,8 @@ data class TextComposableStyle(
     val softWrap: Boolean,
     val overflow: TextOverflow,
     val maxLines: Int,
-    val selectable: Boolean
+    val selectable: Boolean,
+    val modifier: Modifier
 )
 
 @Composable
@@ -55,7 +56,8 @@ fun DefaultTextComposableStyle(
     softWrap = softWrap,
     overflow = overflow,
     maxLines = maxLines,
-    selectable = selectable
+    selectable = selectable,
+    modifier = Modifier.None
 )
 
 val TextComposableStyleAmbient =
@@ -84,9 +86,9 @@ fun Text(
     textStyle: TextStyle = currentTextStyle()
 ) {
     ToggleableSelectable(selectable = style.selectable) {
-        androidx.ui.core.Text(
+        androidx.ui.foundation.Text(
             text = if (style.uppercase) text.toUpperCase() else text,
-            modifier = modifier,
+            modifier = style.modifier + modifier,
             style = ensureColor(textStyle),
             softWrap = style.softWrap,
             overflow = style.overflow,
@@ -103,7 +105,7 @@ fun Text(
     textStyle: TextStyle = currentTextStyle()
 ) {
     ToggleableSelectable(selectable = style.selectable) {
-        androidx.ui.core.Text(
+        androidx.ui.foundation.Text(
             text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
             modifier = modifier,
             style = ensureColor(textStyle),

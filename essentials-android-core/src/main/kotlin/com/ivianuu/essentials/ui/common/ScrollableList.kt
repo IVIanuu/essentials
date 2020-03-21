@@ -491,7 +491,7 @@ private class ScrollableListState {
         }
 
         fun compose() {
-            composition.compose()
+            composition.setContent(composable)
         }
 
         fun dispose() {

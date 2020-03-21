@@ -33,7 +33,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.RippleColorProvider
+import com.ivianuu.essentials.ui.material.ProvideRippleColor
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -70,7 +70,7 @@ private fun Chip(@Pivotal name: String) {
         color = color,
         shape = RoundedCornerShape(16.dp)
     ) {
-        RippleColorProvider(color = contentColor().copy(alpha = 0.5f)) {
+        ProvideRippleColor(color = contentColor().copy(alpha = 0.5f)) {
             Clickable(
                 onClick = { toaster.toast("Clicked $name") },
                 modifier = ripple(bounded = false)

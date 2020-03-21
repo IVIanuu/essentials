@@ -11,6 +11,7 @@ import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.round
 import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -18,7 +19,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
     onCancel: (() -> Unit)? = null,
-    popupStyle: PopupStyle = PopupStyleAmbient.current
+    popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
     PopupMenuButton(items = items, onCancel = onCancel, popupStyle = popupStyle) {
         Icon(Icons.Default.MoreVert)
@@ -29,7 +30,7 @@ fun PopupMenuButton(
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
     onCancel: (() -> Unit)? = null,
-    popupStyle: PopupStyle = PopupStyleAmbient.current,
+    popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
     children: @Composable () -> Unit
 ) {
     val navigator = NavigatorAmbient.current

@@ -27,13 +27,18 @@ import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
-data class SliderStyle(val color: Color)
+data class SliderStyle(
+    val modifier: Modifier,
+    val color: Color
+)
 
 val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
 
 @Composable
-fun DefaultSliderStyle(color: Color = MaterialTheme.colors().secondary) =
-    SliderStyle(color = color)
+fun DefaultSliderStyle(
+    modifier: Modifier = Modifier.None,
+    color: Color = MaterialTheme.colors().secondary
+) = SliderStyle(modifier = modifier, color = color)
 
 @Composable
 fun Slider(
@@ -46,7 +51,7 @@ fun Slider(
     Slider(
         position = position,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = style.modifier + modifier,
         onValueChangeEnd = onValueChangeEnd,
         color = style.color
     )

@@ -22,11 +22,11 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -56,8 +56,8 @@ import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.SliderStyle
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -306,7 +306,7 @@ private fun ColorEditorHeader(
     showAlphaSelector: Boolean,
     onColorChanged: (Color) -> Unit
 ) {
-    CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
+    ProvideTextStyle(value = MaterialTheme.typography().subtitle1) {
         Surface(color = color) {
             Box(
                 modifier = LayoutHeight(72.dp) + LayoutWidth.Fill + LayoutPadding(all = 8.dp),
@@ -391,7 +391,7 @@ private fun ColorComponentItem(
                 position.value = it
                 onChanged(it)
             },
-            style = SliderStyle(color = component.color())
+            style = DefaultSliderStyle(color = component.color())
         )
 
         Spacer(LayoutWidth(8.dp))

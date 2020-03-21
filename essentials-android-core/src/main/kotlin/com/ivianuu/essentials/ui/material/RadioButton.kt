@@ -23,6 +23,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.currentOrElse
 
+// todo checked color unchecked color
+
 @Immutable
 data class RadioButtonStyle(val color: Color)
 
@@ -35,8 +37,9 @@ fun DefaultRadioButtonStyle(color: Color = MaterialTheme.colors().secondary) =
 @Composable
 fun RadioButton(
     selected: Boolean,
-    onSelect: (() -> Unit)?,
-    style: RadioButtonStyle = RadioButtonStyleAmbient.currentOrElse { DefaultRadioButtonStyle() },
+    onSelect: () -> Unit,
+    enabled: Boolean = true, // todo
+    style: RadioButtonStyle = RadioButtonStyleAmbient.currentOrElse { DefaultRadioButtonStyle() }
 ) {
     androidx.ui.material.RadioButton(
         selected = selected,

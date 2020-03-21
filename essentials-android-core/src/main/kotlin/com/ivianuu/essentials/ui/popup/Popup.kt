@@ -25,20 +25,26 @@ import androidx.ui.graphics.Shape
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.material.Surface
 
 @Immutable
 data class PopupStyle(
-    val shape: Shape = RoundedCornerShape(size = 4.dp),
-    val elevation: Dp = 8.dp
+    val shape: Shape,
+    val elevation: Dp
 )
 
-val PopupStyleAmbient =
-    staticAmbientOf { PopupStyle() }
+val PopupStyleAmbient = staticAmbientOf<PopupStyle>()
+
+@Composable
+fun DefaultPopupStyle(
+    shape: Shape = RoundedCornerShape(size = 4.dp),
+    elevation: Dp = 8.dp
+) = PopupStyle(shape = shape, elevation = elevation)
 
 @Composable
 fun Popup(
-    style: PopupStyle = PopupStyleAmbient.current,
+    style: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
     children: @Composable () -> Unit
 ) {
     Surface(

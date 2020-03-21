@@ -30,6 +30,8 @@ data class CheckboxStyle(val color: Color)
 
 val CheckboxStyleAmbient = staticAmbientOf<CheckboxStyle>()
 
+// todo checked color unchecked color
+
 @Composable
 fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors().secondary) =
     CheckboxStyle(color = color)
@@ -37,29 +39,33 @@ fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors().secondary) =
 @Composable
 fun Checkbox(
     checked: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)?,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier.None,
-    style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() },
+    enabled: Boolean = true,
+    style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() }
 ) {
     androidx.ui.material.TriStateCheckbox(
-        value = ToggleableState(checked),
-        onClick = onCheckedChange?.let { { it(!checked) } },
+        state = ToggleableState(checked),
+        onClick = { onCheckedChange(!checked) },
         color = style.color,
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     )
 }
 
 @Composable
 fun TriStateCheckbox(
-    value: ToggleableState,
-    onClick: (() -> Unit)?,
+    state: ToggleableState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier.None,
-    style: CheckboxStyle = CheckboxStyleAmbient.current ?: DefaultCheckboxStyle()
+    enabled: Boolean = true,
+    style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() }
 ) {
     androidx.ui.material.TriStateCheckbox(
-        value = value,
+        state = state,
         onClick = onClick,
         color = style.color,
+        enabled = enabled,
         modifier = modifier
     )
 }

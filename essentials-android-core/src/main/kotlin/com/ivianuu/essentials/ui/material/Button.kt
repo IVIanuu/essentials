@@ -21,11 +21,11 @@ import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.EdgeInsets
@@ -52,7 +52,8 @@ data class ButtonStyle(
         top = 8.dp,
         right = 16.dp,
         bottom = 8.dp
-    )
+    ),
+    val modifier: Modifier
 )
 
 @Composable
@@ -60,12 +61,14 @@ fun ContainedButtonStyle(
     backgroundColor: Color = MaterialTheme.colors().primary,
     contentColor: Color = contentColorFor(backgroundColor),
     shape: Shape = MaterialTheme.shapes().button,
-    elevation: Dp = 2.dp
+    elevation: Dp = 2.dp,
+    modifier: Modifier = Modifier.None
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
     shape = shape,
     elevation = elevation,
-    contentColor = contentColor
+    contentColor = contentColor,
+    modifier = modifier
 )
 
 @Composable
@@ -77,24 +80,28 @@ fun OutlinedButtonStyle(
     backgroundColor: Color = MaterialTheme.colors().surface,
     contentColor: Color = MaterialTheme.colors().primary,
     shape: Shape = MaterialTheme.shapes().button,
-    elevation: Dp = 0.dp
+    elevation: Dp = 0.dp,
+    modifier: Modifier = Modifier.None
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
     shape = shape,
     border = border,
     elevation = elevation,
-    contentColor = contentColor
+    contentColor = contentColor,
+    modifier = modifier
 )
 
 @Composable
 fun TextButtonStyle(
     shape: Shape = MaterialTheme.shapes().button,
-    contentColor: Color = MaterialTheme.colors().primary
+    contentColor: Color = MaterialTheme.colors().primary,
+    modifier: Modifier = Modifier.None
 ) = ButtonStyle(
     backgroundColor = Color.Transparent,
     shape = shape,
     innerPadding = EdgeInsets(all = 8.dp),
-    contentColor = contentColor
+    contentColor = contentColor,
+    modifier = modifier
 )
 
 val ButtonStyleAmbient = staticAmbientOf<ButtonStyle>()
@@ -130,7 +137,7 @@ fun Button(
             contentColor = style.contentColor,
             border = style.border,
             elevation = style.elevation,
-            modifier = modifier
+            modifier = style.modifier + modifier
         ) {
             Clickable(onClick = onClick, modifier = ripple(enabled = enabled), enabled = enabled) {
                 Box(
@@ -147,7 +154,7 @@ fun Button(
                             maxLines = 1
                         )
                     ) {
-                        CurrentTextStyleProvider(
+                        ProvideTextStyle(
                             MaterialTheme.typography().button,
                             children = children
                         )

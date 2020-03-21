@@ -19,51 +19,69 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
-data class ProgressIndicatorStyle(val color: Color)
+data class ProgressIndicatorStyle(
+    val modifier: Modifier,
+    val color: Color
+)
 
 val ProgressIndicatorStyleAmbient = staticAmbientOf<ProgressIndicatorStyle>()
 
 @Composable
-fun DefaultProgressIndicatorStyle(color: Color = MaterialTheme.colors().secondary) =
-    ProgressIndicatorStyle(color = color)
+fun DefaultProgressIndicatorStyle(
+    modifier: Modifier = Modifier.None,
+    color: Color = MaterialTheme.colors().secondary
+) = ProgressIndicatorStyle(modifier = modifier, color = color)
 
 @Composable
 fun LinearProgressIndicator(
     progress: Float,
-    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() },
+    modifier: Modifier = Modifier.None,
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
     androidx.ui.material.LinearProgressIndicator(
         progress = progress,
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }
 
 @Composable
 fun LinearProgressIndicator(
-    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() },
+    modifier: Modifier = Modifier.None,
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
-    androidx.ui.material.LinearProgressIndicator(color = style.color)
-}
-
-@Composable
-fun CircularProgressIndicator(
-    progress: Float,
-    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() },
-) {
-    androidx.ui.material.CircularProgressIndicator(
-        progress = progress,
+    androidx.ui.material.LinearProgressIndicator(
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }
 
 @Composable
 fun CircularProgressIndicator(
-    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() },
+    progress: Float,
+    modifier: Modifier = Modifier.None,
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
-    androidx.ui.material.CircularProgressIndicator(color = style.color)
+    androidx.ui.material.CircularProgressIndicator(
+        progress = progress,
+        modifier = style.modifier + modifier,
+        color = style.color
+    )
+}
+
+@Composable
+fun CircularProgressIndicator(
+    modifier: Modifier = Modifier.None,
+    style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
+) {
+    androidx.ui.material.CircularProgressIndicator(
+        modifier = style.modifier + modifier,
+        color = style.color
+    )
 }

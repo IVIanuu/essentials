@@ -20,11 +20,11 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Modifier
 import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawBackground
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
@@ -38,7 +38,7 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.RippleThemeAmbient
 import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -46,14 +46,17 @@ import com.ivianuu.essentials.ui.layout.Row
 
 @Immutable
 data class ListItemStyle(
-    val contentPadding: EdgeInsets = ContentPadding
+    val contentPadding: EdgeInsets,
+    val modifier: Modifier
 )
 
 @Composable
 fun DefaultListItemStyle(
-    contentPadding: EdgeInsets = ContentPadding
+    contentPadding: EdgeInsets = ContentPadding,
+    modifier: Modifier = Modifier.None
 ) = ListItemStyle(
-    contentPadding = contentPadding
+    contentPadding = contentPadding,
+    modifier = modifier
 )
 
 val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
@@ -69,7 +72,7 @@ fun ListItem(
     selected: Boolean = false,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
-    style: ListItemStyle = ListItemStyleAmbient.currentOrNull ?: DefaultListItemStyle()
+    style: ListItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() }
 ) {
     val minHeight = if (subtitle != null) {
         if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
@@ -92,7 +95,7 @@ fun ListItem(
                 LongPressGestureDetector {
                     if (enabled) onLongClick()
                 }
-            } ?: Modifier.None) + modifier,
+            } ?: Modifier.None) + style.modifier + modifier,
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
             // leading
@@ -129,7 +132,7 @@ fun ListItem(
                 ) {
                     Column {
                         if (title != null) {
-                            CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
+                            ProvideTextStyle(value = MaterialTheme.typography().subtitle1) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.high,
                                     children = title
@@ -137,7 +140,7 @@ fun ListItem(
                             }
                         }
                         if (subtitle != null) {
-                            CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
+                            ProvideTextStyle(value = MaterialTheme.typography().body2) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.medium,
                                     children = subtitle

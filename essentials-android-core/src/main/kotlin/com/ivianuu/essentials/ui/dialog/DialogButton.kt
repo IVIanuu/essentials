@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ButtonStyle
 import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
@@ -31,7 +31,7 @@ fun DialogButton(
     modifier: Modifier = Modifier.None,
     enabled: Boolean = true,
     dismissDialogOnClick: Boolean = true,
-    style: ButtonStyle = ButtonStyleAmbient.currentOrNull ?: TextButtonStyle(),
+    style: ButtonStyle = ButtonStyleAmbient.currentOrElse { TextButtonStyle() },
     children: @Composable () -> Unit
 ) {
     val navigator = NavigatorAmbient.current

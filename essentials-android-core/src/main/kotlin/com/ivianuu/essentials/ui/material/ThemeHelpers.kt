@@ -43,7 +43,7 @@ fun guessingContentColorFor(color: Color): Color {
 }
 
 @Composable
-fun RippleColorProvider(
+fun ProvideRippleColor(
     color: Color,
     children: @Composable () -> Unit
 ) {

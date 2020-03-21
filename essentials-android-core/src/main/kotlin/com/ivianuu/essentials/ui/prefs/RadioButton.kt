@@ -63,9 +63,8 @@ fun RadioButtonPreference(
                 AbsorbPointer {
                     RadioButton(
                         selected = context.currentValue,
-                        onSelect = if (context.shouldBeEnabled) {
-                            {}
-                        } else null
+                        onSelect = { context.setIfOk(!context.currentValue); Unit },
+                        enabled = context.shouldBeEnabled
                     )
                 }
             },

@@ -21,10 +21,10 @@ import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
@@ -52,38 +52,56 @@ import com.ivianuu.essentials.util.isLight
 
 @Immutable
 data class AppBarStyle(
-    val color: Color,
+    val backgroundColor: Color,
     val contentColor: Color,
     val elevation: Dp,
-    val centerTitle: Boolean
+    val centerTitle: Boolean,
+    val modifier: Modifier
 )
 
 @Composable
-fun AppBarStyle(
-    color: Color,
+fun DefaultAppBarStyle(
+    backgroundColor: Color,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
-    centerTitle: Boolean = false
+    centerTitle: Boolean = false,
+    modifier: Modifier = Modifier.None
 ) = AppBarStyle(
-    color = color,
-    contentColor = guessingContentColorFor(color),
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
     elevation = elevation,
-    centerTitle = centerTitle
+    centerTitle = centerTitle,
+    modifier = modifier
 )
 
 @Composable
 fun PrimaryAppBarStyle(
     elevation: Dp = DefaultAppBarElevation,
-    centerTitle: Boolean = false
+    centerTitle: Boolean = false,
+    modifier: Modifier = Modifier.None
 ) = with(MaterialTheme.colors()) {
-    AppBarStyle(color = primary, contentColor = onPrimary, elevation = elevation, centerTitle = centerTitle)
+    DefaultAppBarStyle(
+        backgroundColor = primary,
+        contentColor = onPrimary,
+        elevation = elevation,
+        centerTitle = centerTitle,
+        modifier = modifier
+    )
 }
 
 @Composable
 fun SurfaceAppBarStyle(
     elevation: Dp = 0.dp,
-    centerTitle: Boolean = false
+    centerTitle: Boolean = false,
+    modifier: Modifier = Modifier.None
 ) = with(MaterialTheme.colors()) {
-    AppBarStyle(color = surface, contentColor = onSurface, elevation = elevation, centerTitle = centerTitle)
+    DefaultAppBarStyle(
+        backgroundColor = surface,
+        contentColor = onSurface,
+        elevation = elevation,
+        centerTitle = centerTitle,
+        modifier = modifier
+    )
 }
 
 val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
@@ -99,11 +117,11 @@ fun TopAppBar(
 ) {
     ProvideSystemBarStyle(
         value = ambientSystemBarStyle().let {
-            if (primary) it.copy(lightStatusBar = style.color.isLight) else it
+            if (primary) it.copy(lightStatusBar = style.backgroundColor.isLight) else it
         }
     ) {
         Surface(
-            color = style.color,
+            color = style.backgroundColor,
             elevation = style.elevation
         ) {
             SafeArea(
@@ -114,7 +132,7 @@ fun TopAppBar(
             ) {
                 TopAppBarLayout(
                     modifier = LayoutHeight(DefaultAppBarHeight) + LayoutWidth.Fill
-                            + LayoutPadding(start = 16.dp, end = 16.dp) + modifier,
+                            + LayoutPadding(start = 16.dp, end = 16.dp) + style.modifier + modifier,
                     centerTitle = style.centerTitle,
                     leading = leading,
                     title = title?.let {
@@ -128,7 +146,7 @@ fun TopAppBar(
                                         maxLines = 1
                                     )
                                 ) {
-                                    CurrentTextStyleProvider(
+                                    ProvideTextStyle(
                                         MaterialTheme.typography().h6,
                                         children = title
                                     )

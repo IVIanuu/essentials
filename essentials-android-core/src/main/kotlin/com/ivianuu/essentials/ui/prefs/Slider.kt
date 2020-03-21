@@ -38,7 +38,7 @@ import androidx.ui.unit.px
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
@@ -508,7 +508,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                 onClick = {}
             )
 
-            val listItemStyle = ListItemStyleAmbient.currentOrNull ?: DefaultListItemStyle()
+            val listItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() }
 
             Row(
                 modifier = LayoutGravity.BottomCenter + LayoutPadding(

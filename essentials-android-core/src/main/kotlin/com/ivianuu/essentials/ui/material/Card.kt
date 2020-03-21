@@ -35,7 +35,8 @@ data class CardStyle(
     val color: Color,
     val contentColor: Color,
     val border: Border? = null,
-    val elevation: Dp = 1.dp
+    val elevation: Dp = 1.dp,
+    val modifier: Modifier
 )
 
 val CardStyleAmbient = staticAmbientOf<CardStyle>()
@@ -46,23 +47,25 @@ fun DefaultCardStyle(
     color: Color = MaterialTheme.colors().surface,
     contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
-    elevation: Dp = 1.dp
+    elevation: Dp = 1.dp,
+    modifier: Modifier = Modifier.None
 ) = CardStyle(
     shape = shape,
     color = color,
     contentColor = contentColor,
     border = border,
-    elevation = elevation
+    elevation = elevation,
+    modifier = modifier
 )
 
 @Composable
 fun Card(
     modifier: Modifier = Modifier.None,
     style: CardStyle = CardStyleAmbient.currentOrElse { DefaultCardStyle() },
-    children: @Composable () -> Unit,
+    children: @Composable () -> Unit
 ) {
     androidx.ui.material.Card(
-        modifier = modifier,
+        modifier = style.modifier + modifier,
         shape = style.shape,
         color = style.color,
         contentColor = style.contentColor,

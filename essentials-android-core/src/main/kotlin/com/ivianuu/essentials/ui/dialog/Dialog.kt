@@ -18,12 +18,12 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
-import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
@@ -90,9 +90,7 @@ private fun DialogBody(
         {
             val styledTitle: @Composable (() -> Unit)? = title?.let {
                 {
-                    CurrentTextStyleProvider(
-                        MaterialTheme.typography().h6
-                    ) {
+                    ProvideTextStyle(MaterialTheme.typography().h6) {
                         ProvideEmphasis(
                             emphasis = MaterialTheme.emphasisLevels().high,
                             children = title
@@ -131,7 +129,7 @@ private fun DialogBody(
 
     val finalContent: @Composable (() -> Unit)? = if (content != null) {
         {
-            CurrentTextStyleProvider(MaterialTheme.typography().subtitle1) {
+            ProvideTextStyle(MaterialTheme.typography().subtitle1) {
                 ProvideEmphasis(
                     emphasis = MaterialTheme.emphasisLevels().medium,
                     children = content

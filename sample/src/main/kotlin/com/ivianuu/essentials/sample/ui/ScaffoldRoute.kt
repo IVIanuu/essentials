@@ -36,8 +36,8 @@ import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.material.AppBarStyle
 import com.ivianuu.essentials.ui.material.Checkbox
+import com.ivianuu.essentials.ui.material.DefaultAppBarStyle
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -105,8 +105,8 @@ val ScaffoldRoute = Route {
 
             TopAppBar(
                 title = { Text("Scaffold") },
-                style = AppBarStyle(
-                    color = color,
+                style = DefaultAppBarStyle(
+                    backgroundColor = color,
                     elevation = if (alpha == 1f) 8.dp else 0.dp,
                     centerTitle = controls.centerTitle
                 )

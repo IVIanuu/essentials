@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.core.currentTextStyle
+import androidx.ui.foundation.currentTextStyle
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.VisualTransformation

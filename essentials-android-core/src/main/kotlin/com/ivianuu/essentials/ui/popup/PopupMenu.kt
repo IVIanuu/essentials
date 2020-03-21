@@ -28,6 +28,7 @@ import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -49,7 +50,7 @@ object PopupMenu {
 @Composable
 fun PopupMenu(
     items: List<PopupMenu.Item>,
-    style: PopupStyle = PopupStyleAmbient.current
+    style: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
     Popup(style = style) {
         Column {

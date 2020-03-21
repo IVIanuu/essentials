@@ -17,7 +17,7 @@ import androidx.ui.graphics.painter.Painter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.VectorPainter
 import androidx.ui.res.imageResource
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class ImageStyle(
@@ -64,7 +64,7 @@ fun DefaultImageStyle(
 fun Image(
     painter: Painter,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     androidx.ui.foundation.Image(
         painter = painter,
@@ -80,7 +80,7 @@ fun Image(
 fun Image(
     id: Int,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(
         image = imageResource(id),
@@ -93,7 +93,7 @@ fun Image(
 fun Image(
     image: ImageAsset,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(
         painter = remember(image) { ImagePainter(image) },
@@ -106,7 +106,7 @@ fun Image(
 fun Image(
     image: VectorAsset,
     modifier: Modifier = Modifier.None,
-    style: ImageStyle = ImageStyleAmbient.currentOrNull ?: DefaultImageStyle()
+    style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(
         painter = VectorPainter(image),

@@ -34,7 +34,7 @@ import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
-import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.retain
 
 @Immutable
@@ -43,7 +43,8 @@ data class BottomNavigationStyle(
     val activeColor: Color,
     val inactiveColor: Color,
     val alwaysShowLabels: Boolean,
-    val elevation: Dp
+    val elevation: Dp,
+    val modifier: Modifier
 )
 
 val BottomNavigationStyleAmbient = staticAmbientOf<BottomNavigationStyle>()
@@ -54,23 +55,25 @@ fun DefaultBottomNavigationStyle(
     activeColor: Color = MaterialTheme.colors().onPrimary,
     inactiveColor: Color = MaterialTheme.colors().onPrimary.copy(alpha = 0.6f),
     alwaysShowLabels: Boolean = false,
-    elevation: Dp = 8.dp
+    elevation: Dp = 8.dp,
+    modifier: Modifier = Modifier.None
 ) = BottomNavigationStyle(
     color = color,
     activeColor = activeColor,
     inactiveColor = inactiveColor,
     alwaysShowLabels = alwaysShowLabels,
-    elevation = elevation
+    elevation = elevation,
+    modifier = modifier
 )
 
 @Composable
 fun BottomNavigation(
     modifier: Modifier = Modifier.None,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrNull ?: DefaultBottomNavigationStyle(),
+    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
     children: @Composable() RowScope.() -> Unit
 ) {
     BottomNavigation(
-        modifier = modifier,
+        modifier = style.modifier + modifier,
         color = style.color,
         contentColor = style.activeColor,
         elevation = style.elevation
@@ -88,7 +91,7 @@ fun RowScope.BottomNavigationItem(
     selected: Boolean,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier.None,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrNull ?: DefaultBottomNavigationStyle()
+    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() }
 ) {
     BottomNavigationItem(
         icon = icon,
@@ -149,7 +152,7 @@ fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current a
 fun <T> BottomNavigation(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     modifier: Modifier = Modifier.None,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrNull ?: DefaultBottomNavigationStyle(),
+    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
     itemCallback: @Composable() RowScope.(T) -> Unit
 ) {
     BottomNavigation(
@@ -171,7 +174,7 @@ fun RowScope.BottomNavigationItem(
     icon: @Composable() () -> Unit,
     text: @Composable() () -> Unit = emptyContent(),
     modifier: Modifier = Modifier.None,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrNull ?: DefaultBottomNavigationStyle()
+    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() }
 ) {
     val controller = ambientBottomNavigationController<Any?>()
     val item = ambientBottomNavigationItem<Any?>()
