@@ -25,7 +25,6 @@ import androidx.ui.core.Constraints
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout

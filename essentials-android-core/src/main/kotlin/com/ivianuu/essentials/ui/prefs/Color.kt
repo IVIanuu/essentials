@@ -18,9 +18,10 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.preferredSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
@@ -77,11 +78,11 @@ fun ColorPreference(
         leading = leading?.let { { leading() } },
         trailing = { context ->
             Surface(
-                modifier = LayoutSize(width = 40.dp, height = 40.dp),
+                modifier = Modifier.preferredSize(size),
                 color = context.currentValue,
                 border = Border(
                     size = 1.dp,
-                    color = MaterialTheme.colors().onSurface
+                    color = MaterialTheme.colors.onSurface
                 )
             ) {}
         },

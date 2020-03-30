@@ -1,7 +1,5 @@
 plugins {
     id("com.android.library")
-    id("com.github.ben-manes.versions")
-    id("com.ivianuu.injekt")
     kotlin("android")
 }
 

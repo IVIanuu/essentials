@@ -31,7 +31,7 @@ data class SwitchStyle(val color: Color)
 val SwitchStyleAmbient = staticAmbientOf<SwitchStyle>()
 
 @Composable
-fun DefaultSwitchStyle(color: Color = MaterialTheme.colors().secondary) =
+fun DefaultSwitchStyle(color: Color = MaterialTheme.colors.secondary) =
     SwitchStyle(color = color)
 
 @Composable

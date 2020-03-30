@@ -11,9 +11,9 @@ import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.store.android.settings.SettingBox
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.store.android.settings.int
-import com.ivianuu.essentials.store.settings.SettingBox
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory

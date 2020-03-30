@@ -39,11 +39,8 @@ buildscript {
         classpath(Deps.bintrayGradlePlugin)
         classpath(Deps.dexcountGradlePlugin)
         classpath(Deps.essentialsGradlePlugin)
-        classpath(Deps.Injekt.gradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
         classpath(Deps.mavenGradlePlugin)
-        classpath(Deps.spotlessGradlePlugin)
-        classpath(Deps.versionsGradlePlugin)
     }
 }
 

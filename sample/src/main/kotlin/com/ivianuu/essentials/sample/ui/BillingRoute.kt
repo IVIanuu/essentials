@@ -17,9 +17,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutSize
+import androidx.ui.core.Modifier
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
@@ -45,16 +46,16 @@ val BillingRoute = Route {
 
     SimpleScreen(title = "Billing") {
         Column(
-            modifier = LayoutSize.Fill,
+            modifier = Modifier.fillMaxSize(),
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
             Text(
                 text = "Is purchased ? $isPurchased",
-                textStyle = MaterialTheme.typography().h6
+                textStyle = MaterialTheme.typography.h6
             )
 
-            Spacer(LayoutHeight(8.dp))
+            Spacer(Modifier.preferredHeight(8.dp))
 
             if (!isPurchased) {
                 Button(

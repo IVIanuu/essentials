@@ -26,9 +26,9 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -79,7 +79,7 @@ fun PrimaryAppBarStyle(
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false,
     modifier: Modifier = Modifier.None
-) = with(MaterialTheme.colors()) {
+) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = primary,
         contentColor = onPrimary,
@@ -94,7 +94,7 @@ fun SurfaceAppBarStyle(
     elevation: Dp = 0.dp,
     centerTitle: Boolean = false,
     modifier: Modifier = Modifier.None
-) = with(MaterialTheme.colors()) {
+) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = surface,
         contentColor = onSurface,
@@ -131,8 +131,11 @@ fun TopAppBar(
                 bottom = false
             ) {
                 TopAppBarLayout(
-                    modifier = LayoutHeight(DefaultAppBarHeight) + LayoutWidth.Fill
-                            + LayoutPadding(start = 16.dp, end = 16.dp) + style.modifier + modifier,
+                    modifier = Modifier.preferredHeight(DefaultAppBarHeight)
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)
+                        .plus(style.modifier)
+                        .plus(modifier),
                     centerTitle = style.centerTitle,
                     leading = leading,
                     title = title?.let {
@@ -147,7 +150,7 @@ fun TopAppBar(
                                     )
                                 ) {
                                     ProvideTextStyle(
-                                        MaterialTheme.typography().h6,
+                                        MaterialTheme.typography.h6,
                                         children = title
                                     )
                                 }
@@ -229,12 +232,10 @@ private fun TopAppBarLayout(
             )
 
             if (titlePlaceable != null) {
-                val titleX = if (centerTitle) {
-                    (width / 2) - titlePlaceable.width / 2
-                } else if (leadingPlaceable != null) {
-                    56.dp.toIntPx()
-                } else {
-                    0.ipx
+                val titleX = when {
+                    centerTitle -> (width / 2) - titlePlaceable.width / 2
+                    leadingPlaceable != null -> 56.dp.toIntPx()
+                    else -> 0.ipx
                 }
 
                 titlePlaceable.place(

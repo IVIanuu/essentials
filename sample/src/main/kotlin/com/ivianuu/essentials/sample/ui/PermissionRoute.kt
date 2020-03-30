@@ -20,7 +20,6 @@ import android.Manifest
 import androidx.ui.core.ContextAmbient
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutSize
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService

@@ -23,14 +23,14 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawBackground
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeightIn
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -79,18 +79,16 @@ fun ListItem(
 
     val content: @Composable () -> Unit = {
         Row(
-            modifier = LayoutHeight.Min(minHeight) +
-                    LayoutPadding(
-                        start = style.contentPadding.left,
-                        end = style.contentPadding.right
-                    ) +
-                    DrawBackground(
-                        color = if (selected) defaultRippleColor() else Color.Transparent
-                    ) + (onLongClick?.let {
-                LongPressGestureDetector {
-                    if (enabled) onLongClick()
-                }
-            } ?: Modifier.None) + style.modifier + modifier,
+            modifier = Modifier.preferredHeightIn(minHeight = minHeight)
+                .padding(start = style.contentPadding.left, end = style.contentPadding.right)
+                .drawBackground(color = if (selected) defaultRippleColor() else Color.Transparent)
+                .plus(onLongClick?.let {
+                    LongPressGestureDetector {
+                        if (enabled) onLongClick()
+                    }
+                } ?: Modifier.None)
+                .plus(style.modifier)
+                .plus(modifier),
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
             // leading
@@ -127,7 +125,7 @@ fun ListItem(
                 ) {
                     Column {
                         if (title != null) {
-                            ProvideTextStyle(value = MaterialTheme.typography().subtitle1) {
+                            ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.high,
                                     children = title
@@ -135,7 +133,7 @@ fun ListItem(
                             }
                         }
                         if (subtitle != null) {
-                            ProvideTextStyle(value = MaterialTheme.typography().body2) {
+                            ProvideTextStyle(value = MaterialTheme.typography.body2) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.medium,
                                     children = subtitle

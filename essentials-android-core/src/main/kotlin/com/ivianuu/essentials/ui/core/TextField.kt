@@ -42,7 +42,7 @@ fun TextField(
     onImeActionPerformed: (ImeAction) -> Unit = {},
     visualTransformation: VisualTransformation? = null
 ) {
-    androidx.ui.core.TextField(
+    TextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
@@ -71,7 +71,7 @@ fun TextField(
     onImeActionPerformed: (ImeAction) -> Unit = {},
     visualTransformation: VisualTransformation? = null
 ) {
-    androidx.ui.core.TextField(
+    TextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
@@ -101,7 +101,7 @@ fun TextField(
     onImeActionPerformed: (ImeAction) -> Unit = {},
     visualTransformation: VisualTransformation? = null
 ) {
-    androidx.ui.core.TextField(
+    TextField(
         model = model,
         compositionRange = compositionRange,
         modifier = modifier,

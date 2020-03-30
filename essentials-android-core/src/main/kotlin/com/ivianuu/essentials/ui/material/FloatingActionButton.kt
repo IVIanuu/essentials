@@ -28,10 +28,10 @@ import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeightIn
+import androidx.ui.layout.preferredWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -54,7 +54,7 @@ data class FloatingActionButtonStyle(
 @Composable
 fun DefaultFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    backgroundColor: Color = MaterialTheme.colors().secondary,
+    backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
     modifier: Modifier = Modifier.None
@@ -63,13 +63,13 @@ fun DefaultFloatingActionButtonStyle(
     backgroundColor = backgroundColor,
     contentColor = contentColor,
     elevation = elevation,
-    modifier = LayoutHeight.Min(56.dp) + modifier
+    modifier = Modifier.preferredHeightIn(minHeight = 56.dp).plus(modifier)
 )
 
 @Composable
 fun MiniFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    backgroundColor: Color = MaterialTheme.colors().secondary,
+    backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
     modifier: Modifier = Modifier.None
@@ -78,13 +78,13 @@ fun MiniFloatingActionButtonStyle(
     backgroundColor = backgroundColor,
     contentColor = contentColor,
     elevation = elevation,
-    modifier = LayoutHeight.Min(40.dp) + modifier
+    modifier = Modifier.preferredHeightIn(minHeight = 40.dp).plus(modifier)
 )
 
 @Composable
 fun ExtendedFloatingActionButtonStyle(
     shape: Shape = CircleShape,
-    backgroundColor: Color = MaterialTheme.colors().secondary,
+    backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
     modifier: Modifier = Modifier.None
@@ -93,7 +93,7 @@ fun ExtendedFloatingActionButtonStyle(
     backgroundColor = backgroundColor,
     contentColor = contentColor,
     elevation = elevation,
-    modifier = LayoutHeight.Min(48.dp) + modifier
+    modifier = Modifier.preferredHeightIn(minHeight = 48.dp).plus(modifier)
 )
 
 val FloatingActionButtonStyleAmbient = staticAmbientOf<FloatingActionButtonStyle>()
@@ -112,9 +112,9 @@ fun FloatingActionButton(
         elevation = style.elevation
     ) {
         Clickable(onClick, modifier = ripple()) {
-            ProvideTextStyle(MaterialTheme.typography().button) {
+            ProvideTextStyle(MaterialTheme.typography.button) {
                 Box(
-                    modifier = style.modifier + modifier,
+                    modifier = style.modifier.plus(modifier),
                     gravity = ContentGravity.Center
                 ) {
                     Providers(
@@ -124,7 +124,7 @@ fun FloatingActionButton(
                         )
                     ) {
                         ProvideTextStyle(
-                            MaterialTheme.typography().button,
+                            MaterialTheme.typography.button,
                             children = children
                         )
                     }
@@ -151,16 +151,16 @@ fun FloatingActionButton(
             Row(
                 mainAxisAlignment = MainAxisAlignment.Center,
                 crossAxisAlignment = CrossAxisAlignment.Center,
-                modifier = LayoutPadding(start = 12.dp, end = 20.dp)
+                modifier = Modifier.padding(start = 12.dp, end = 20.dp)
             ) {
                 icon()
-                Spacer(LayoutWidth(12.dp))
+                Spacer(Modifier.preferredWidth(12.dp))
                 text()
             }
         }
         else {
             Box(
-                modifier = LayoutPadding(start = 20.dp, end = 20.dp),
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
                 children = text
             )
         }

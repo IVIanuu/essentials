@@ -22,7 +22,7 @@ fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTr
         opsOf(
             ModifierRouteTransitionType.Modifier with LayoutOffset.Fraction(
                 fractionY = transitionState[VerticalOffset]
-            ) + drawOpacity(transitionState[Alpha])
+            ).drawOpacity(transitionState[Alpha])
         )
     }
 )

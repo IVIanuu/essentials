@@ -51,9 +51,9 @@ val BottomNavigationStyleAmbient = staticAmbientOf<BottomNavigationStyle>()
 
 @Composable
 fun DefaultBottomNavigationStyle(
-    color: Color = MaterialTheme.colors().primary,
-    activeColor: Color = MaterialTheme.colors().onPrimary,
-    inactiveColor: Color = MaterialTheme.colors().onPrimary.copy(alpha = 0.6f),
+    color: Color = MaterialTheme.colors.primary,
+    activeColor: Color = MaterialTheme.colors.onPrimary,
+    inactiveColor: Color = MaterialTheme.colors.onPrimary.copy(alpha = 0.6f),
     alwaysShowLabels: Boolean = false,
     elevation: Dp = 8.dp,
     modifier: Modifier = Modifier.None
@@ -70,10 +70,10 @@ fun DefaultBottomNavigationStyle(
 fun BottomNavigation(
     modifier: Modifier = Modifier.None,
     style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
-    children: @Composable() RowScope.() -> Unit
+    children: @Composable RowScope.() -> Unit
 ) {
     BottomNavigation(
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         color = style.color,
         contentColor = style.activeColor,
         elevation = style.elevation
@@ -86,8 +86,8 @@ fun BottomNavigation(
 
 @Composable
 fun RowScope.BottomNavigationItem(
-    icon: @Composable() () -> Unit,
-    text: @Composable() () -> Unit = emptyContent(),
+    icon: @Composable () -> Unit,
+    text: @Composable () -> Unit = emptyContent(),
     selected: Boolean,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier.None,
@@ -153,7 +153,7 @@ fun <T> BottomNavigation(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     modifier: Modifier = Modifier.None,
     style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
-    itemCallback: @Composable() RowScope.(T) -> Unit
+    itemCallback: @Composable RowScope.(T) -> Unit
 ) {
     BottomNavigation(
         modifier = modifier,
@@ -171,8 +171,8 @@ fun <T> BottomNavigation(
 
 @Composable
 fun RowScope.BottomNavigationItem(
-    icon: @Composable() () -> Unit,
-    text: @Composable() () -> Unit = emptyContent(),
+    icon: @Composable () -> Unit,
+    text: @Composable () -> Unit = emptyContent(),
     modifier: Modifier = Modifier.None,
     style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() }
 ) {

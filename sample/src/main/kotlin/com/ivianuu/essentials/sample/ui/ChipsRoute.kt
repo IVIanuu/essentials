@@ -19,14 +19,15 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.FlowRow
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
@@ -45,7 +46,7 @@ val ChipsRoute = Route {
         topAppBar = { TopAppBar(title = { Text("Chips") }) },
         body = {
             Box(
-                modifier = LayoutPadding(all = 8.dp),
+                modifier = Modifier.padding(all = 8.dp),
                 gravity = ContentGravity.TopStart
             ) {
                 FlowRow(
@@ -76,13 +77,14 @@ private fun Chip(@Pivotal name: String) {
             )
         ) {
             Box(
-                modifier = LayoutHeight(32.dp) + LayoutPadding(start = 12.dp, end = 12.dp),
+                modifier = Modifier.preferredHeight(32.dp)
+                    .padding(start = 12.dp, end = 12.dp),
                 gravity = ContentGravity.Center
             ) {
                 Clickable(onClick = { toaster.toast("Clicked $name") }) {
                     Text(
                         text = name,
-                        textStyle = MaterialTheme.typography().body2
+                        textStyle = MaterialTheme.typography.body2
                     )
                 }
             }

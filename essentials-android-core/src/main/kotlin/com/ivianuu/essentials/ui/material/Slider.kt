@@ -37,7 +37,7 @@ val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
 @Composable
 fun DefaultSliderStyle(
     modifier: Modifier = Modifier.None,
-    color: Color = MaterialTheme.colors().secondary
+    color: Color = MaterialTheme.colors.secondary
 ) = SliderStyle(modifier = modifier, color = color)
 
 @Composable
@@ -51,7 +51,7 @@ fun Slider(
     Slider(
         position = position,
         onValueChange = onValueChange,
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         onValueChangeEnd = onValueChangeEnd,
         color = style.color
     )

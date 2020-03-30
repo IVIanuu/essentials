@@ -35,7 +35,7 @@ val ProgressIndicatorStyleAmbient = staticAmbientOf<ProgressIndicatorStyle>()
 @Composable
 fun DefaultProgressIndicatorStyle(
     modifier: Modifier = Modifier.None,
-    color: Color = MaterialTheme.colors().secondary
+    color: Color = MaterialTheme.colors.secondary
 ) = ProgressIndicatorStyle(modifier = modifier, color = color)
 
 @Composable
@@ -46,7 +46,7 @@ fun LinearProgressIndicator(
 ) {
     androidx.ui.material.LinearProgressIndicator(
         progress = progress,
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         color = style.color
     )
 }
@@ -57,7 +57,7 @@ fun LinearProgressIndicator(
     style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
     androidx.ui.material.LinearProgressIndicator(
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         color = style.color
     )
 }
@@ -70,7 +70,7 @@ fun CircularProgressIndicator(
 ) {
     androidx.ui.material.CircularProgressIndicator(
         progress = progress,
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         color = style.color
     )
 }
@@ -81,7 +81,7 @@ fun CircularProgressIndicator(
     style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
     androidx.ui.material.CircularProgressIndicator(
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         color = style.color
     )
 }

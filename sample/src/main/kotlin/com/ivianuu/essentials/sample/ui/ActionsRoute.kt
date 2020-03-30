@@ -1,8 +1,9 @@
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.gestures.action.ActionExecutors
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerRoute
@@ -22,7 +23,7 @@ val ActionsRoute = Route {
         val actionExecutors = inject<ActionExecutors>()
         val navigator = NavigatorAmbient.current
 
-        Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
             val activityCoroutineScope = inject<CoroutineScope>(ForActivity)
             Button(
                 onClick = {

@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
 import androidx.ui.core.LayoutCoordinates
+import androidx.ui.core.Modifier
 import androidx.ui.core.boundsInRoot
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Clickable
@@ -38,7 +39,7 @@ fun PopupMenuButton(
     val coordinatesHolder =
         holder<LayoutCoordinates?> { null }
 
-    Stack(modifier = onPositioned { coordinatesHolder.value = it }) {
+    Stack(modifier = Modifier.onPositioned { coordinatesHolder.value = it }) {
         Clickable(onClick = {
             navigator.push(
                 PopupRoute(

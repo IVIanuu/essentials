@@ -19,8 +19,6 @@ package com.ivianuu.essentials.store.android.settings
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
-import com.ivianuu.essentials.store.settings.SettingBox
-import com.ivianuu.essentials.store.settings.SettingBoxImpl
 import kotlinx.coroutines.CoroutineScope
 
 class SettingsBoxFactory(

@@ -31,7 +31,7 @@ data class RadioButtonStyle(val color: Color)
 val RadioButtonStyleAmbient = staticAmbientOf<RadioButtonStyle>()
 
 @Composable
-fun DefaultRadioButtonStyle(color: Color = MaterialTheme.colors().secondary) =
+fun DefaultRadioButtonStyle(color: Color = MaterialTheme.colors.secondary) =
     RadioButtonStyle(color = color)
 
 @Composable

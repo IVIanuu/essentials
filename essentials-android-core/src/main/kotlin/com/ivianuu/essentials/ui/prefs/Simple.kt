@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 
@@ -30,7 +31,7 @@ fun SimplePreference(
     trailing: @Composable (() -> Unit)? = null
 ) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
-        Box(modifier = drawOpacity(opacity = if (dependenciesOk) 1f else 0.5f)) {
+        Box(modifier = Modifier.drawOpacity(opacity = if (dependenciesOk) 1f else 0.5f)) {
             PreferenceLayout(
                 title = title,
                 summary = summary,

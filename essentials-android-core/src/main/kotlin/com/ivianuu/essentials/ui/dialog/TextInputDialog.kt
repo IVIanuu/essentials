@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.compose.state
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
@@ -85,8 +86,8 @@ fun TextInputDialog(
             if (value.isEmpty() && hint != null) {
                 Text(
                     text = hint,
-                    textStyle = MaterialTheme.typography().subtitle1,
-                    modifier = drawOpacity(0.5f)
+                    textStyle = MaterialTheme.typography.subtitle1,
+                    modifier = Modifier.drawOpacity(0.5f)
                 )
             }
             TextField(
@@ -94,7 +95,7 @@ fun TextInputDialog(
                 onValueChange = onValueChange,
                 focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
-                textStyle = MaterialTheme.typography().subtitle1
+                textStyle = MaterialTheme.typography.subtitle1
             )
 
             val keyboardManager = KeyboardManagerAmbient.current

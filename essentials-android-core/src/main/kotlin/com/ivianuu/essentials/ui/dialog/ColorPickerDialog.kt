@@ -22,6 +22,7 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
@@ -30,13 +31,16 @@ import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutAlign
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutSize
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.preferredSize
+import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.preferredWidthIn
+import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.icons.Icons
@@ -131,8 +135,8 @@ fun ColorPickerDialog(
         },
         content = {
             Box(
-                modifier = LayoutHeight(300.dp) +
-                        LayoutPadding(start = 24.dp, end = 24.dp)
+                modifier = Modifier.preferredHeight(300.dp)
+                    .padding(start = 24.dp, end = 24.dp)
             ) {
                 when (currentPage) {
                     ColorPickerPage.Colors -> {
@@ -170,7 +174,7 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        Scroller(modifier = LayoutPadding(all = 4.dp)) {
+        Scroller(modifier = Modifier.padding(all = 4.dp)) {
             Table(
                 columns = 4,
                 alignment = { Alignment.Center }
@@ -224,20 +228,20 @@ private fun ColorGridItem(
 ) {
     BaseColorGridItem(onClick = onClick) {
         Surface(
-            modifier = LayoutSize.Fill,
+            modifier = Modifier.fillMaxSize(),
             color = color,
             shape = RoundedCornerShape(50),
             border = Border(
                 size = 1.dp,
-                color = MaterialTheme.colors().onSurface
+                color = MaterialTheme.colors.onSurface
             ),
             elevation = 0.dp
         ) {
             if (isSelected) {
-                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                     Icon(
                         icon = Icons.Default.Check,
-                        modifier = LayoutSize(size = 36.dp)
+                        modifier = Modifier.preferredSize(size = 36.dp)
                     )
                 }
             }
@@ -253,7 +257,7 @@ private fun ColorGridBackButton(
     BaseColorGridItem(onClick = onClick) {
         Icon(
             icon = Icons.Default.ArrowBack,
-            modifier = LayoutSize(size = 36.dp)
+            modifier = Modifier.preferredSize(size = 36.dp)
         )
     }
 }
@@ -265,9 +269,9 @@ private fun BaseColorGridItem(
 ) {
     Clickable(onClick = onClick, modifier = ripple()) {
         Box(
-            modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
-                    LayoutPadding(all = 4.dp) +
-                    LayoutAlign.Center,
+            modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth)
+                .padding(all = 4.dp)
+                .wrapContentSize(Alignment.Center),
             children = children
         )
     }
@@ -306,10 +310,12 @@ private fun ColorEditorHeader(
     showAlphaSelector: Boolean,
     onColorChanged: (Color) -> Unit
 ) {
-    ProvideTextStyle(value = MaterialTheme.typography().subtitle1) {
+    ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
         Surface(color = color) {
             Box(
-                modifier = LayoutHeight(72.dp) + LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                modifier = Modifier.preferredHeight(72.dp)
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
                 gravity = ContentGravity.Center
             ) {
                 Row(
@@ -355,7 +361,7 @@ private fun ColoredDialogButton(
     onClick: () -> Unit,
     color: Color,
     dismissOnSelection: Boolean,
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     DialogButton(
         onClick = onClick,
@@ -372,15 +378,15 @@ private fun ColorComponentItem(
     onChanged: (Float) -> Unit
 ) {
     Row(
-        modifier = LayoutHeight(48.dp) + LayoutWidth.Fill,
+        modifier = Modifier.preferredHeight(48.dp).fillMaxWidth(),
         crossAxisAlignment = CrossAxisAlignment.Center
     ) {
         Text(
             text = component.title,
-            textStyle = MaterialTheme.typography().subtitle1
+            textStyle = MaterialTheme.typography.subtitle1
         )
 
-        Spacer(LayoutWidth(8.dp))
+        Spacer(Modifier.preferredWidth(8.dp))
 
         val position = SliderPosition(initial = value)
 
@@ -394,12 +400,12 @@ private fun ColorComponentItem(
             style = DefaultSliderStyle(color = component.color())
         )
 
-        Spacer(LayoutWidth(8.dp))
+        Spacer(Modifier.preferredWidth(8.dp))
 
         Text(
             text = (255 * value).toInt().toString(),
-            modifier = LayoutWidth.Min(56.dp),
-            textStyle = MaterialTheme.typography().subtitle1
+            modifier = Modifier.preferredWidthIn(minWidth = 56.dp),
+            textStyle = MaterialTheme.typography.subtitle1
         )
     }
 }

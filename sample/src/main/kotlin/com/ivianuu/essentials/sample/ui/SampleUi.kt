@@ -42,9 +42,9 @@ class SampleUi : AppUi {
         ProvideSystemBarStyle(
             SystemBarStyle(
                 statusBarColor = Color.Black.copy(alpha = 0.2f),
-                lightStatusBar = MaterialTheme.colors().onPrimary.isDark,
-                navigationBarColor = MaterialTheme.colors().surface.copy(alpha = 0.7f),
-                lightNavigationBar = MaterialTheme.colors().onSurface.isDark
+                lightStatusBar = MaterialTheme.colors.onPrimary.isDark,
+                navigationBarColor = MaterialTheme.colors.surface.copy(alpha = 0.7f),
+                lightNavigationBar = MaterialTheme.colors.onSurface.isDark
             )
         ) {
             InjectedNavigator(startRoute = HomeRoute)

@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -33,20 +34,20 @@ val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
         topAppBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {
             Surface(color = Color.Blue) {
-                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                     Text(
                         text = "Drawer",
-                        textStyle = MaterialTheme.typography().h4
+                        textStyle = MaterialTheme.typography.h4
                     )
                 }
             }
         },
         body = {
             Surface(color = Color.Red) {
-                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                     Text(
                         text = "Body",
-                        textStyle = MaterialTheme.typography().h4
+                        textStyle = MaterialTheme.typography.h4
                     )
                 }
             }

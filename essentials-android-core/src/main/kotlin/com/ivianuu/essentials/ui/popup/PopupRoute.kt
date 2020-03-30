@@ -66,7 +66,7 @@ fun PopupRoute(
             onTap = { dismiss(true) }
         )
     ) {
-        Box(modifier = TapGestureDetector(), children = popup)
+        Box(modifier = TapGestureDetector(onTap = {}), children = popup)
     }
 }
 

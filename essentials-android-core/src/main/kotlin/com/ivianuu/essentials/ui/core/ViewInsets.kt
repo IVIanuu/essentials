@@ -191,7 +191,7 @@ private class ObservableWindowInsets(
             viewPadding = viewPadding, viewInsets = viewInsets
         )
 
-    internal fun updateFrom(other: WindowInsets) {
+    fun updateFrom(other: WindowInsets) {
         viewPadding = other.viewPadding
         viewInsets = other.viewInsets
     }

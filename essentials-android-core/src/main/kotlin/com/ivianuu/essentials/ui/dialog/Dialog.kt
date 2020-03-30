@@ -20,14 +20,17 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
+import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.preferredWidth
+import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
@@ -90,9 +93,9 @@ private fun DialogBody(
         {
             val styledTitle: @Composable (() -> Unit)? = title?.let {
                 {
-                    ProvideTextStyle(MaterialTheme.typography().h6) {
+                    ProvideTextStyle(MaterialTheme.typography.h6) {
                         ProvideEmphasis(
-                            emphasis = MaterialTheme.emphasisLevels().high,
+                            emphasis = EmphasisAmbient.current.high,
                             children = title
                         )
                     }
@@ -102,7 +105,7 @@ private fun DialogBody(
             val styledIcon: @Composable (() -> Unit)? = icon?.let {
                 {
                     ProvideEmphasis(
-                        emphasis = MaterialTheme.emphasisLevels().high,
+                        emphasis = EmphasisAmbient.current.high,
                         children = icon
                     )
                 }
@@ -114,7 +117,7 @@ private fun DialogBody(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     styledIcon()
-                    Spacer(LayoutWidth(16.dp))
+                    Spacer(Modifier.preferredWidth(16.dp))
                     styledTitle()
                 }
             } else if (styledIcon != null) {
@@ -129,9 +132,9 @@ private fun DialogBody(
 
     val finalContent: @Composable (() -> Unit)? = if (content != null) {
         {
-            ProvideTextStyle(MaterialTheme.typography().subtitle1) {
+            ProvideTextStyle(MaterialTheme.typography.subtitle1) {
                 ProvideEmphasis(
-                    emphasis = MaterialTheme.emphasisLevels().medium,
+                    emphasis = EmphasisAmbient.current.medium,
                     children = content
                 )
             }
@@ -176,7 +179,7 @@ private fun DialogContentLayout(
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
                 Box(
-                    modifier = LayoutPadding(
+                    modifier = Modifier.padding(
                         start = 24.dp,
                         top = 24.dp,
                         end = 24.dp,
@@ -196,9 +199,9 @@ private fun DialogContentLayout(
 
             ParentData(DialogContentSlot.Content) {
                 Box(
-                    modifier = LayoutPadding(
-                        top = if (header == null) 24.dp else 0.dp,
+                    modifier = Modifier.padding(
                         start = if (applyContentPadding) 24.dp else 0.dp,
+                        top = if (header == null) 24.dp else 0.dp,
                         end = if (applyContentPadding) 24.dp else 0.dp,
                         bottom = if (buttons == null) 24.dp else 0.dp
                     ),
@@ -218,7 +221,7 @@ private fun DialogContentLayout(
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
                     Box(
-                        modifier = LayoutPadding(top = 28.dp),
+                        modifier = Modifier.padding(top = 28.dp),
                         children = buttons
                     )
                 } else {
@@ -292,11 +295,13 @@ private fun DialogButtons(
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
             Box(
-                modifier = LayoutHeight(52.dp) + LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                modifier = Modifier.preferredHeight(52.dp)
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
                 gravity = Alignment.CenterStart
             ) {
                 Row(
-                    modifier = LayoutWidth.Fill,
+                    modifier = Modifier.fillMaxWidth(),
                     mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
@@ -309,7 +314,7 @@ private fun DialogButtons(
         }
         AlertDialogButtonLayout.Stacked -> {
             Column(
-                modifier = LayoutWidth.Fill + LayoutPadding(all = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
                 mainAxisAlignment = MainAxisAlignment.Center,
                 crossAxisAlignment = CrossAxisAlignment.End
             ) {

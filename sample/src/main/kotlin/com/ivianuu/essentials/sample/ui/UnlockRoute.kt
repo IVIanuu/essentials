@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.ui.common.SimpleScreen
@@ -34,7 +35,7 @@ import kotlinx.coroutines.flow.first
 
 val UnlockRoute = Route {
     SimpleScreen(title = "Unlock") {
-        Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
             val screenStateProvider = inject<ScreenStateProvider>()
             val screenUnlocker = inject<ScreenUnlocker>()
             val toaster = inject<Toaster>()

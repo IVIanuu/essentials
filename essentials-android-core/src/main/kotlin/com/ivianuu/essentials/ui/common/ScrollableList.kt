@@ -10,7 +10,6 @@ import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.DrawClipToBounds
 import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutNode
 import androidx.ui.core.Measurable
@@ -18,6 +17,7 @@ import androidx.ui.core.MeasureScope
 import androidx.ui.core.MeasuringIntrinsicsMeasureBlocks
 import androidx.ui.core.Modifier
 import androidx.ui.core.Ref
+import androidx.ui.core.clipToBounds
 import androidx.ui.core.subcomposeInto
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
@@ -93,7 +93,7 @@ fun ScrollableList(
         enabled = enabled
     ) {
         LayoutNode(
-            modifier = modifier + DrawClipToBounds,
+            modifier = modifier.clipToBounds(),
             ref = state.rootNodeRef,
             measureBlocks = state.measureBlocks
         )
@@ -178,7 +178,7 @@ private class ScrollableListState {
                 FrameManager.nextFrame()
             }
 
-            val cacheSize = with(measureScope) { 250.ipx/*.toIntPx()*/ }
+            val cacheSize = 250.ipx
 
             lateinit var scrollPosition: Px
             rootNode.ignoreModelReads { scrollPosition = scrollableState.value }
@@ -355,8 +355,7 @@ private class ScrollableListState {
     }
 
     private fun addChild(index: Int): LayoutNode? {
-        val composable = composableFactory(index)
-        if (composable == null) return null
+        val composable = composableFactory(index) ?: return null
 
         val childNode = LayoutNode()
 
@@ -378,6 +377,7 @@ private class ScrollableListState {
                 layout(width, height) {
                     var offset = 0.ipx
                     placeables.forEach { placeable ->
+                        @Suppress("LiftReturnOrAssignment")
                         when (direction) {
                             Axis.Horizontal -> {
                                 placeable.place(offset, 0.ipx)

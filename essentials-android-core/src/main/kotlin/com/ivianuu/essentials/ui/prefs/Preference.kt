@@ -60,7 +60,7 @@ fun <T> PreferenceWrapper(
         context.dependenciesOk = dependenciesOk
 
         val finalEnabled = enabled && dependenciesOk
-        Box(modifier = drawOpacity(if (finalEnabled) 1f else 0.5f)) {
+        Box(modifier = Modifier.drawOpacity(if (finalEnabled) 1f else 0.5f)) {
             preference(context)
         }
     }

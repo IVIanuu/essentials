@@ -21,8 +21,6 @@ import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutSize
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
@@ -84,7 +82,7 @@ val NavBarRoute = Route {
                             } else {
                                 "Unknown nav bar state"
                             },
-                            textStyle = MaterialTheme.typography().h3
+                            textStyle = MaterialTheme.typography.h3
                         )
                     }
 

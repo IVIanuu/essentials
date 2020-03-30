@@ -23,7 +23,7 @@ import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun guessingContentColorFor(color: Color): Color {
-    return with(MaterialTheme.colors()) {
+    return with(MaterialTheme.colors) {
         when (color) {
             primary -> onPrimary
             primaryVariant -> onPrimary

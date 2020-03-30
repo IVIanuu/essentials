@@ -88,7 +88,7 @@ fun Text(
     ToggleableSelectable(selectable = style.selectable) {
         androidx.ui.foundation.Text(
             text = if (style.uppercase) text.toUpperCase() else text,
-            modifier = style.modifier + modifier,
+            modifier = style.modifier.plus(modifier),
             style = ensureColor(textStyle),
             softWrap = style.softWrap,
             overflow = style.overflow,
@@ -150,6 +150,8 @@ private object NoopSelectionRegistrar : SelectionRegistrar {
             previousSelection: Selection?,
             isStartHandle: Boolean
         ): Selection? = null
+
+        override fun getText(): AnnotatedString = AnnotatedString("")
 
         override fun getHandlePosition(selection: Selection, isStartHandle: Boolean): PxPosition = PxPosition.Origin
         override fun getLayoutCoordinates(): LayoutCoordinates? = null

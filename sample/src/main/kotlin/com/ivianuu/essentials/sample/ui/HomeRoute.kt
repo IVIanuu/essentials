@@ -20,8 +20,9 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.padding
 import androidx.ui.unit.Size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.about.AboutRoute
@@ -117,7 +118,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                         if (items.indexOf(item) != items.lastIndex) {
                             Divider(
                                 axis = Axis.Horizontal,
-                                modifier = LayoutPadding(start = 72.dp)
+                                modifier = Modifier.padding(start = 72.dp)
                             )
                         }
                     }

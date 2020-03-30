@@ -7,8 +7,10 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.fillMaxHeight
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.preferredWidth
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -34,11 +36,11 @@ fun Divider(
     style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() }
 ) {
     val sizeModifiers = when (axis) {
-        Axis.Horizontal -> LayoutWidth.Fill + LayoutHeight(1.dp) + style.modifier
-        Axis.Vertical -> LayoutHeight.Fill + LayoutWidth(1.dp) + style.modifier
+        Axis.Horizontal -> Modifier.fillMaxWidth().preferredHeight(1.dp).plus(style.modifier)
+        Axis.Vertical -> Modifier.fillMaxHeight().preferredWidth(1.dp).plus(style.modifier)
     }
     ColoredRect(
         color = style.color,
-        modifier = modifier + sizeModifiers
+        modifier = modifier.plus(sizeModifiers)
     )
 }

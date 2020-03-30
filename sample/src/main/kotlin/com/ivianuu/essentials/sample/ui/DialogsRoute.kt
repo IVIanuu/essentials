@@ -18,10 +18,11 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.state
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Icon
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
@@ -54,7 +55,7 @@ val DialogsRoute = Route {
         body = {
             Scroller {
                 Column(
-                    modifier = LayoutSize.Fill,
+                    modifier = Modifier.fillMaxSize(),
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
@@ -256,7 +257,7 @@ val DialogsRoute = Route {
                         )
                     }
 
-                    val primaryColor = MaterialTheme.colors().primary
+                    val primaryColor = MaterialTheme.colors.primary
                     val (currentColor, setCurrentColor) = state { primaryColor }
                     DialogLauncherButton(text = "Color Picker") {
                         ColorPickerDialog(
@@ -306,5 +307,5 @@ private fun DialogLauncherButton(
         }
     ) { Text(text) }
 
-    Spacer(LayoutHeight(8.dp))
+    Spacer(Modifier.preferredHeight(8.dp))
 }

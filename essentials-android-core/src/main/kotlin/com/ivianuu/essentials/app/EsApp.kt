@@ -28,10 +28,9 @@ import com.ivianuu.essentials.util.esAndroidUtil
 import com.ivianuu.essentials.util.esUtil
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.InjektPlugins
+import com.ivianuu.injekt.Injekt
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.ApplicationComponent
-import com.ivianuu.injekt.android.systemServices
 
 /**
  * App
@@ -50,7 +49,9 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
 
     protected open fun configureInjekt() {
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            InjektPlugins.logger = AndroidLogger()
+            Injekt {
+                logger = AndroidLogger()
+            }
         }
     }
 
@@ -71,7 +72,6 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
                 esUiInitializerInjection()
                 esUtil()
                 esAndroidUtil()
-                systemServices()
                 buildComponent()
             }
         )

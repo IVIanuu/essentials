@@ -19,10 +19,11 @@ package com.ivianuu.essentials.ui.popup
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.padding
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -51,6 +52,6 @@ fun Popup(
         elevation = style.elevation,
         shape = style.shape
     ) {
-        Box(modifier = LayoutPadding(top = 8.dp, bottom = 8.dp), children = children)
+        Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp), children = children)
     }
 }

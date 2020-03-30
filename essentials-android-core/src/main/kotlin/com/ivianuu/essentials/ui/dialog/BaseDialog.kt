@@ -22,8 +22,8 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -52,13 +52,10 @@ fun BaseDialog(
     children: @Composable () -> Unit
 ) {
     Surface(
-        modifier = LayoutPadding(
-            start = 32.dp,
-            top = 32.dp,
-            end = 32.dp,
-            bottom = 32.dp
-        ) + LayoutWidth.Constrain(minWidth = 280.dp, maxWidth = 356.dp) + style.modifier,
-        color = MaterialTheme.colors().surface,
+        modifier = Modifier
+            .preferredWidthIn(minWidth = 280.dp, maxWidth = 356.dp)
+            .padding(all = 32.dp).plus(style.modifier),
+        color = MaterialTheme.colors.surface,
         elevation = style.elevation,
         shape = style.shape,
         children = children

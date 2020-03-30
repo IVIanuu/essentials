@@ -23,11 +23,14 @@ import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.compose.remember
 import androidx.ui.animation.Transition
+import androidx.ui.core.Modifier
+import androidx.ui.core.TransformOrigin
+import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.AbsorbPointer
@@ -47,7 +50,6 @@ import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.transform.TransformScale
 import kotlin.time.milliseconds
 
 @Composable
@@ -60,11 +62,10 @@ fun FabAnimation(
         toState = visible
     ) { state ->
         Box(
-            modifier = TransformScale(
+            modifier = Modifier.drawLayer(
                 scaleX = state[FabScale],
                 scaleY = state[FabScale],
-                pivotX = 0.5f,
-                pivotY = 0.5f
+                transformOrigin = TransformOrigin(0.5f, 0.5f)
             ),
             children = fab
         )
@@ -101,7 +102,7 @@ val ScaffoldRoute = Route {
                 ) 0.5f else 1f
             }
 
-            val color = MaterialTheme.colors().primary.copy(alpha = alpha)
+            val color = MaterialTheme.colors.primary.copy(alpha = alpha)
 
             TopAppBar(
                 title = { Text("Scaffold") },
@@ -127,7 +128,7 @@ val ScaffoldRoute = Route {
                 ) 0.5f else 1f
             }
 
-            val color = MaterialTheme.colors().primary.copy(alpha = alpha)
+            val color = MaterialTheme.colors.primary.copy(alpha = alpha)
 
             Surface(color = color) {
                 SafeArea(
@@ -137,12 +138,14 @@ val ScaffoldRoute = Route {
                     bottom = true
                 ) {
                     Box(
-                        modifier = LayoutHeight(56.dp) + LayoutWidth.Fill + LayoutPadding(16.dp),
+                        modifier = Modifier.preferredHeight(56.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         gravity = ContentGravity.CenterStart
                     ) {
                         Text(
                             text = "Bottom bar",
-                            textStyle = MaterialTheme.typography().h6
+                            textStyle = MaterialTheme.typography.h6
                         )
                     }
                 }

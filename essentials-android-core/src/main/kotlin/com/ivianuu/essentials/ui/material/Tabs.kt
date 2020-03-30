@@ -98,8 +98,8 @@ val TabIndexAmbient =
 
 @Composable
 fun Tab(
-    text: @Composable() () -> Unit = emptyContent(),
-    icon: @Composable() () -> Unit = emptyContent()
+    text: @Composable () -> Unit = emptyContent(),
+    icon: @Composable () -> Unit = emptyContent()
 ) {
     val tabController = ambientTabController<Any?>()
     val tabIndex = TabIndexAmbient.current

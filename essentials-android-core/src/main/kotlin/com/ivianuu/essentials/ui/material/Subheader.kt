@@ -25,9 +25,9 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.unit.dp
@@ -43,8 +43,8 @@ data class SubheaderStyle(
 @Composable
 fun DefaultSubheaderStyle(
     modifier: Modifier = Modifier.None,
-    textStyle: TextStyle = MaterialTheme.typography().body2,
-    textColor: Color = MaterialTheme.colors().secondary
+    textStyle: TextStyle = MaterialTheme.typography.body2,
+    textColor: Color = MaterialTheme.colors.secondary
 ) = SubheaderStyle(
     modifier = modifier,
     textStyle = textStyle,
@@ -60,10 +60,11 @@ fun Subheader(
     text: @Composable () -> Unit
 ) {
     Box(
-        modifier = LayoutHeight(48.dp) + LayoutWidth.Fill + LayoutPadding(
-            start = 16.dp,
-            end = 16.dp
-        ) + style.modifier + modifier,
+        modifier = Modifier.preferredHeight(48.dp)
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+            .plus(style.modifier)
+            .plus(modifier),
         gravity = ContentGravity.CenterStart
     ) {
         ProvideContentColor(color = style.textColor) {

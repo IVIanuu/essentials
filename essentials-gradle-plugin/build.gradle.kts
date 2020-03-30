@@ -15,7 +15,6 @@
  */
 
 plugins {
-    id("com.github.ben-manes.versions")
     id("java-gradle-plugin")
     kotlin("jvm")
     kotlin("kapt")
@@ -51,8 +50,11 @@ buildConfig {
 }
 
 dependencies {
-    api(Deps.androidGradlePlugin)
-    api(Deps.autoService)
+    implementation(Deps.androidGradlePlugin)
+    implementation(Deps.autoService)
     kapt(Deps.autoService)
-    api(Deps.Kotlin.gradlePluginApi)
+    implementation(Deps.Kotlin.gradlePluginApi)
+    implementation(Deps.Injekt.gradlePlugin)
+    implementation(Deps.spotlessGradlePlugin)
+    implementation(Deps.versionsGradlePlugin)
 }

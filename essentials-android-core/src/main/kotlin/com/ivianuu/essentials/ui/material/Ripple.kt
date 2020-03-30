@@ -45,7 +45,7 @@ fun DefaultRippleStyle(
 val RippleStyleAmbient = staticAmbientOf<RippleStyle>()
 
 @Composable
-fun defaultRippleColor() = with(MaterialTheme.colors()) {
+fun defaultRippleColor() = with(MaterialTheme.colors) {
     onSurface.copy(alpha = if (isLight) 0.12f else 0.24f)
 }
 
@@ -73,7 +73,7 @@ fun ripple(
         onStop = { rippleModifier.handleFinish(false) },
         onCancel = { rippleModifier.handleFinish(true) }
     )
-    return pressIndicator + rippleModifier
+    return pressIndicator.plus(rippleModifier)
 }
 
 private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycleObserver {

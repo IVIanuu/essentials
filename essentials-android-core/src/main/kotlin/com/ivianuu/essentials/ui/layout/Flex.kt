@@ -201,7 +201,7 @@ fun Row(
     modifier: Modifier = Modifier.None,
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
-    children: @Composable() RowScope.() -> Unit
+    children: @Composable RowScope.() -> Unit
 ) {
     FlexLayout(
         orientation = LayoutOrientation.Horizontal,
@@ -234,7 +234,7 @@ fun Column(
     modifier: Modifier = Modifier.None,
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
-    children: @Composable() ColumnScope.() -> Unit
+    children: @Composable ColumnScope.() -> Unit
 ) {
     FlexLayout(
         orientation = LayoutOrientation.Vertical,
@@ -536,7 +536,7 @@ private fun FlexLayout(
 
         val placeables = arrayOfNulls<Placeable>(measurables.size)
         // First measure children with zero flex.
-        for (i in 0 until measurables.size) {
+        for (i in measurables.indices) {
             val child = measurables[i]
             val flex = child.flex
 
@@ -591,7 +591,7 @@ private fun FlexLayout(
 
         var flexibleSpace = 0.ipx
 
-        for (i in 0 until measurables.size) {
+        for (i in measurables.indices) {
             val child = measurables[i]
             val flex = child.flex
             if (flex > 0f) {
@@ -888,7 +888,7 @@ private data class FlexModifier(val flexProperties: FlexChildProperties) : Paren
 }
 
 private sealed class SiblingsAlignedModifier : ParentDataModifier {
-    internal data class WithAlignmentLineBlock(val block: (Placeable) -> IntPx) :
+    data class WithAlignmentLineBlock(val block: (Placeable) -> IntPx) :
         SiblingsAlignedModifier() {
         override fun Density.modifyParentData(parentData: Any?): Any? {
             return ((parentData as? FlexChildProperties) ?: FlexChildProperties()).also {
@@ -898,7 +898,7 @@ private sealed class SiblingsAlignedModifier : ParentDataModifier {
         }
     }
 
-    internal data class WithAlignmentLine(val line: AlignmentLine) :
+    data class WithAlignmentLine(val line: AlignmentLine) :
         SiblingsAlignedModifier() {
         override fun Density.modifyParentData(parentData: Any?): Any? {
             return ((parentData as? FlexChildProperties) ?: FlexChildProperties()).also {

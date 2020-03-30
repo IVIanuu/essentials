@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.state
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
@@ -37,7 +38,7 @@ val CounterRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Counter") }) },
         body = {
-            Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
@@ -46,17 +47,17 @@ val CounterRoute = Route {
 
                     Text(
                         text = "Count: $count",
-                        textStyle = MaterialTheme.typography().h3
+                        textStyle = MaterialTheme.typography.h3
                     )
 
-                    Spacer(LayoutHeight(8.dp))
+                    Spacer(Modifier.preferredHeight(8.dp))
 
                     FloatingActionButton(
                         text = { Text("Inc") },
                         onClick = { setCount(count + 1) }
                     )
 
-                    Spacer(LayoutHeight(8.dp))
+                    Spacer(Modifier.preferredHeight(8.dp))
 
                     FloatingActionButton(
                         text = { Text("dec") },

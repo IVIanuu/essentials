@@ -19,12 +19,13 @@ package com.ivianuu.essentials.ui.popup
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.preferredWidthIn
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -77,8 +78,9 @@ private fun PopupMenuItem(
 ) {
     Clickable(onClick = onSelected, modifier = ripple()) {
         Box(
-            modifier = LayoutWidth.Min(200.dp) + LayoutHeight(48.dp) +
-                    LayoutPadding(start = 16.dp, end = 16.dp),
+            modifier = Modifier.preferredWidthIn(minWidth = 200.dp)
+                .preferredHeight(48.dp)
+                .padding(start = 16.dp, end = 16.dp),
             gravity = ContentGravity.CenterStart,
             children = children
         )

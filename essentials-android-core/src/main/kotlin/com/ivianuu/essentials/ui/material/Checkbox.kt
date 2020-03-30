@@ -33,7 +33,7 @@ val CheckboxStyleAmbient = staticAmbientOf<CheckboxStyle>()
 // todo checked color unchecked color
 
 @Composable
-fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors().secondary) =
+fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors.secondary) =
     CheckboxStyle(color = color)
 
 @Composable

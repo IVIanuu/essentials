@@ -17,12 +17,14 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Clickable
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
-import androidx.ui.material.MaterialTheme
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeightIn
+import androidx.ui.layout.preferredWidth
+import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -40,15 +42,16 @@ fun SimpleDialogListItem(
 ) {
     Clickable(onClick = onClick, modifier = ripple()) {
         Row(
-            modifier = LayoutWidth.Fill + LayoutHeight.Min(48.dp) +
-                    LayoutPadding(start = 24.dp, end = 24.dp),
+            modifier = Modifier.fillMaxWidth()
+                .preferredHeightIn(minHeight = 48.dp)
+                .padding(start = 24.dp, end = 24.dp),
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
-            ProvideEmphasis(emphasis = MaterialTheme.emphasisLevels().high) {
+            ProvideEmphasis(emphasis = EmphasisAmbient.current.high) {
                 if (leading != null) {
                     leading()
-                    Spacer(LayoutWidth(24.dp))
+                    Spacer(Modifier.preferredWidth(24.dp))
                 }
 
                 title()

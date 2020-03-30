@@ -50,7 +50,7 @@ fun DialogButton(
 @Composable
 fun DialogCloseButton(
     style: ButtonStyle = TextButtonStyle(),
-    children: @Composable() () -> Unit
+    children: @Composable () -> Unit
 ) {
     DialogButton(
         onClick = {},

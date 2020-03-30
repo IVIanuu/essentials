@@ -18,13 +18,15 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Providers
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.preferredWidth
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -40,28 +42,29 @@ fun Banner(
     content: @Composable () -> Unit,
     actions: @Composable () -> Unit
 ) {
-    Column(modifier = LayoutWidth.Fill) {
-        Spacer(LayoutHeight(24.dp))
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Spacer(Modifier.preferredHeight(24.dp))
 
         Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-            Spacer(LayoutWidth(16.dp))
+            Spacer(Modifier.preferredWidth(16.dp))
 
             if (leading != null) {
                 leading()
-                Spacer(LayoutWidth(16.dp))
+                Spacer(Modifier.preferredWidth(16.dp))
             }
 
-            ProvideTextStyle(value = MaterialTheme.typography().body2) {
+            ProvideTextStyle(value = MaterialTheme.typography.body2) {
                 ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
             }
 
-            Spacer(LayoutWidth(16.dp))
+            Spacer(Modifier.preferredWidth(16.dp))
         }
 
-        Spacer(LayoutHeight(20.dp))
+        Spacer(Modifier.preferredHeight(20.dp))
 
         Box(
-            modifier = LayoutWidth.Fill + LayoutPadding(start = 8.dp, end = 8.dp),
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp),
             gravity = ContentGravity.CenterEnd
         ) {
             Providers(ButtonStyleAmbient provides TextButtonStyle()) {
@@ -69,6 +72,6 @@ fun Banner(
             }
         }
 
-        Spacer(LayoutHeight(8.dp))
+        Spacer(Modifier.preferredHeight(8.dp))
     }
 }

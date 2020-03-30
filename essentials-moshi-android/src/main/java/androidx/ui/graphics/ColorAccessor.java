@@ -16,8 +16,11 @@
 
 package androidx.ui.graphics;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class ColorAccessor {
 
+    @NotNull
     public static Color newColor(Long value) {
         return new Color(value, false);
     }

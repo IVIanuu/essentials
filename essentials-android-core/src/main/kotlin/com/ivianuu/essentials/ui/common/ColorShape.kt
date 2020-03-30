@@ -5,18 +5,16 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.LayoutSize
-import androidx.ui.unit.Size
 import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun ColorShape(
+    modifier: Modifier = Modifier.None,
     color: Color,
-    shape: Shape = RectangleShape,
-    size: Size? = null
+    shape: Shape = RectangleShape
 ) {
     Surface(
-        modifier = size?.let { LayoutSize(it.width, it.height) } ?: Modifier.None,
+        modifier = modifier,
         color = color,
         shape = shape
     ) {

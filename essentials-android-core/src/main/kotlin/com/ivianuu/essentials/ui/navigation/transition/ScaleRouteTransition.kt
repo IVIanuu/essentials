@@ -3,11 +3,13 @@ package com.ivianuu.essentials.ui.navigation.transition
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
+import androidx.ui.core.Modifier
+import androidx.ui.core.TransformOrigin
+import androidx.ui.core.drawLayer
 import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
 import com.ivianuu.essentials.ui.navigation.opsOf
 import com.ivianuu.essentials.ui.navigation.with
-import com.ivianuu.essentials.ui.transform.TransformScale
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -19,9 +21,9 @@ fun ScaleRouteTransition(duration: Duration = 300.milliseconds) = RouteTransitio
     },
     generateOps = { transitionState, _ ->
         opsOf(
-            ModifierRouteTransitionType.Modifier with TransformScale(
+            ModifierRouteTransitionType.Modifier with Modifier.drawLayer(
                 scaleX = transitionState[Scale], scaleY = transitionState[Scale],
-                pivotX = 0.5f, pivotY = 0.5f
+                transformOrigin = TransformOrigin(0.5f, 0.5f)
             )
         )
     }

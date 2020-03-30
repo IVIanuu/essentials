@@ -19,14 +19,15 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutGravity
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Stack
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.SliderPosition
 import androidx.ui.unit.Dp
@@ -500,7 +501,8 @@ fun <T : Comparable<T>> BaseSliderPreference(
     ) { context ->
         Stack {
             PreferenceLayout(
-                modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp),
+                modifier = Modifier.gravity(Alignment.BottomCenter)
+                    .padding(bottom = 32.dp),
                 title = title,
                 summary = summary,
                 leading = leading,
@@ -511,10 +513,11 @@ fun <T : Comparable<T>> BaseSliderPreference(
             val listItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() }
 
             Row(
-                modifier = LayoutGravity.BottomCenter + LayoutPadding(
-                    start = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
-                    end = listItemStyle.contentPadding.right
-                ),
+                modifier = Modifier.gravity(Alignment.BottomCenter)
+                    .padding(
+                        start = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
+                        end = listItemStyle.contentPadding.right
+                    ),
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {
                 val animationClock = AnimationClockAmbient.current
@@ -551,7 +554,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
 
                 if (valueText != null) {
                     Box(
-                        modifier = LayoutWidth.Min(72.dp),
+                        modifier = Modifier.preferredWidthIn(minWidth = 72.dp),
                         gravity = ContentGravity.Center
                     ) {
                         valueText(fromFloat(position.value))
@@ -566,7 +569,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
 fun <T> SimpleSliderValueText(value: T) {
     Text(
         text = value.toString(),
-        textStyle = MaterialTheme.typography().body2,
+        textStyle = MaterialTheme.typography.body2,
         style = DefaultTextComposableStyle(maxLines = 1)
     )
 }

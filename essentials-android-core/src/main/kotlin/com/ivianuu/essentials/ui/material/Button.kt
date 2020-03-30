@@ -29,7 +29,7 @@ import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.preferredSizeIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
 import androidx.ui.semantics.Semantics
@@ -57,9 +57,9 @@ data class ButtonStyle(
 
 @Composable
 fun ContainedButtonStyle(
-    backgroundColor: Color = MaterialTheme.colors().primary,
+    backgroundColor: Color = MaterialTheme.colors.primary,
     contentColor: Color = contentColorFor(backgroundColor),
-    shape: Shape = MaterialTheme.shapes().button,
+    shape: Shape = MaterialTheme.shapes.small,
     elevation: Dp = 2.dp,
     modifier: Modifier = Modifier.None
 ) = ButtonStyle(
@@ -74,11 +74,11 @@ fun ContainedButtonStyle(
 fun OutlinedButtonStyle(
     border: Border = Border(
         size = 1.dp,
-        color = MaterialTheme.colors().onSurface.copy(alpha = 0.12f)
+        color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
     ),
-    backgroundColor: Color = MaterialTheme.colors().surface,
-    contentColor: Color = MaterialTheme.colors().primary,
-    shape: Shape = MaterialTheme.shapes().button,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = MaterialTheme.colors.primary,
+    shape: Shape = MaterialTheme.shapes.small,
     elevation: Dp = 0.dp,
     modifier: Modifier = Modifier.None
 ) = ButtonStyle(
@@ -92,8 +92,8 @@ fun OutlinedButtonStyle(
 
 @Composable
 fun TextButtonStyle(
-    shape: Shape = MaterialTheme.shapes().button,
-    contentColor: Color = MaterialTheme.colors().primary,
+    shape: Shape = MaterialTheme.shapes.small,
+    contentColor: Color = MaterialTheme.colors.primary,
     modifier: Modifier = Modifier.None
 ) = ButtonStyle(
     backgroundColor = Color.Transparent,
@@ -136,11 +136,11 @@ fun Button(
             contentColor = style.contentColor,
             border = style.border,
             elevation = style.elevation,
-            modifier = style.modifier + modifier
+            modifier = style.modifier.plus(modifier)
         ) {
             Clickable(onClick = onClick, modifier = ripple(enabled = enabled), enabled = enabled) {
                 Box(
-                    LayoutSize.Min(64.dp, 36.dp),
+                    modifier = Modifier.preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp),
                     paddingStart = style.innerPadding.left,
                     paddingTop = style.innerPadding.top,
                     paddingEnd = style.innerPadding.right,
@@ -154,7 +154,7 @@ fun Button(
                         )
                     ) {
                         ProvideTextStyle(
-                            MaterialTheme.typography().button,
+                            MaterialTheme.typography.button,
                             children = children
                         )
                     }

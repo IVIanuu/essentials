@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.LayoutSize
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text

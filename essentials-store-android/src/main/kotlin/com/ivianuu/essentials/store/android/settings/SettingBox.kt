@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.settings
+package com.ivianuu.essentials.store.android.settings
 
 import android.content.ContentResolver
 import android.database.ContentObserver

@@ -30,7 +30,7 @@ import androidx.ui.unit.dp
 fun Surface(
     modifier: Modifier = Modifier.None,
     shape: Shape = RectangleShape,
-    color: Color = MaterialTheme.colors().surface,
+    color: Color = MaterialTheme.colors.surface,
     contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
     elevation: Dp = 0.dp,

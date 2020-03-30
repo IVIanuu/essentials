@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.DrawClipToBounds
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
+import androidx.ui.core.clipToBounds
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.Px
 import androidx.ui.unit.ipx
@@ -42,7 +42,7 @@ private fun ScrollerLayout(
     children: @Composable () -> Unit
 ) {
     Layout(
-        modifier = modifier + DrawClipToBounds,
+        modifier = modifier.clipToBounds(),
         children = children
     ) { measurables, constraints, _ ->
         if (measurables.isEmpty()) return@Layout layout(
@@ -96,6 +96,7 @@ private fun ScrollerLayout(
 
             var offset = -scrollableState.value.round()
             placeables.forEach { placeable ->
+                @Suppress("LiftReturnOrAssignment")
                 when (direction) {
                     Axis.Vertical -> {
                         placeable.place(0.ipx, offset)

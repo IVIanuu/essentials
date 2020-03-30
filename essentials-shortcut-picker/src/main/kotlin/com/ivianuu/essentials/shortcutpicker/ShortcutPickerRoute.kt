@@ -23,11 +23,12 @@ import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.ui.core.asModifier
+import androidx.ui.core.Modifier
+import androidx.ui.core.paint
 import androidx.ui.foundation.Box
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.preferredSize
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.activityresult.ActivityResult
@@ -66,7 +67,8 @@ private fun ShortcutInfo(
     ListItem(
         leading = {
             Box(
-                modifier = LayoutSize(size = 40.dp) + ImagePainter(info.icon).asModifier()
+                modifier = Modifier.preferredSize(size = 40.dp)
+                    .paint(ImagePainter(info.icon))
             )
         },
         title = { Text(info.name) },

@@ -105,7 +105,7 @@ class DebugBillingActivity : EsActivity() {
                     Text(
                         text = skuDetails.price,
                         modifier = LayoutInflexible,
-                        textStyle = MaterialTheme.typography().subtitle1.copy(
+                        textStyle = MaterialTheme.typography.subtitle1.copy(
                             color = GooglePlayGreen
                         )
                     )

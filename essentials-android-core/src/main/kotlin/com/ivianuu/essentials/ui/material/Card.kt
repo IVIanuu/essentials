@@ -44,7 +44,7 @@ val CardStyleAmbient = staticAmbientOf<CardStyle>()
 @Composable
 fun DefaultCardStyle(
     shape: Shape = RectangleShape,
-    color: Color = MaterialTheme.colors().surface,
+    color: Color = MaterialTheme.colors.surface,
     contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
     elevation: Dp = 1.dp,
@@ -65,7 +65,7 @@ fun Card(
     children: @Composable () -> Unit
 ) {
     androidx.ui.material.Card(
-        modifier = style.modifier + modifier,
+        modifier = style.modifier.plus(modifier),
         shape = style.shape,
         color = style.color,
         contentColor = style.contentColor,

@@ -18,13 +18,14 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.state
+import androidx.ui.core.Modifier
 import androidx.ui.core.gesture.TapGestureDetector
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutSize
 import androidx.ui.layout.Stack
+import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed
@@ -60,8 +61,8 @@ fun DialogWrapper(
             )
         )
         SafeArea {
-            Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
-                Stack(modifier = TapGestureDetector()) {
+            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
+                Stack(modifier = TapGestureDetector(onTap = {})) {
                     dialog()
                 }
             }

@@ -19,7 +19,8 @@ package com.ivianuu.essentials.apps.ui
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
-import androidx.ui.layout.LayoutSize
+import androidx.ui.core.Modifier
+import androidx.ui.layout.preferredSize
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
@@ -80,7 +81,7 @@ private fun AppInfo(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.packageName),
-                modifier = LayoutSize(40.dp)
+                modifier = Modifier.preferredSize(40.dp)
             )
         },
         onClick = onClick

@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawShadow
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.Column
@@ -43,7 +44,7 @@ val TabsRoute = Route {
                 Column {
                     TopAppBar(title = { Text("Tabs") })
                     Box(
-                        modifier = drawShadow(shape = RectangleShape, elevation = 8.dp)
+                        modifier = Modifier.drawShadow(shape = RectangleShape, elevation = 8.dp)
                     ) {
                         TabRow<Color> { index, item ->
                             Tab(text = { Text("Item: $index") })
@@ -54,7 +55,7 @@ val TabsRoute = Route {
             body = {
                 TabContent<Color> { index, item ->
                     Surface(color = item) {
-                        Box(modifier = LayoutSize.Fill, gravity = Alignment.Center) {
+                        Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
                             Text("Index: $index")
                         }
                     }

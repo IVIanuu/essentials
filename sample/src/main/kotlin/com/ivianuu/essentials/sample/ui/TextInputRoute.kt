@@ -22,12 +22,13 @@ import androidx.compose.onActive
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.AnimationClockAmbient
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.animation.FlingConfig
-import androidx.ui.layout.LayoutSize
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.ScrollableState
@@ -62,22 +63,22 @@ val TextInputRoute = Route {
                 title = {
                     if (state.searchVisible) {
                         Box(
-                            modifier = LayoutSize.Fill,
+                            modifier = Modifier.fillMaxSize(),
                             gravity = ContentGravity.CenterStart
                         ) {
                             Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
                                 if (state.inputValue.isEmpty()) {
                                     Text(
                                         text = "Search..",
-                                        textStyle = MaterialTheme.typography().subtitle1,
-                                        modifier = drawOpacity(0.5f)
+                                        textStyle = MaterialTheme.typography.subtitle1,
+                                        modifier = Modifier.drawOpacity(0.5f)
                                     )
                                 }
                                 TextField(
                                     value = state.inputValue,
                                     onValueChange = { state.inputValue = it },
                                     focusIdentifier = "id",
-                                    textStyle = MaterialTheme.typography().subtitle1
+                                    textStyle = MaterialTheme.typography.subtitle1
                                 )
                             }
                         }
@@ -114,7 +115,7 @@ val TextInputRoute = Route {
                     )
                 }
             } else {
-                Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                     Text("No results")
                 }
             }

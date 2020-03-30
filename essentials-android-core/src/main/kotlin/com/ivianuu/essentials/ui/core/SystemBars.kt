@@ -60,9 +60,9 @@ fun ColorOverlaySystemBarStyle(
 
 @Composable
 fun TintedSystemBarStyle(
-    statusBarColor: Color = MaterialTheme.colors().primary,
+    statusBarColor: Color = MaterialTheme.colors.primary,
     lightStatusBar: Boolean = statusBarColor.isLight,
-    navigationBarColor: Color = MaterialTheme.colors().primary,
+    navigationBarColor: Color = MaterialTheme.colors.primary,
     lightNavigationBar: Boolean = navigationBarColor.isLight
 ) = SystemBarStyle(
     statusBarColor = statusBarColor,
@@ -74,13 +74,13 @@ fun TintedSystemBarStyle(
 @Composable
 fun SurfaceSystemBarStyle(
     statusBarAlpha: Float = 0.7f,
-    lightStatusBar: Boolean = MaterialTheme.colors().surface.isLight,
+    lightStatusBar: Boolean = MaterialTheme.colors.surface.isLight,
     navigationBarAlpha: Float = 0.7f,
-    lightNavigationBar: Boolean = MaterialTheme.colors().surface.isLight
+    lightNavigationBar: Boolean = MaterialTheme.colors.surface.isLight
 ) = SystemBarStyle(
-    statusBarColor = MaterialTheme.colors().surface.copy(alpha = statusBarAlpha),
+    statusBarColor = MaterialTheme.colors.surface.copy(alpha = statusBarAlpha),
     lightStatusBar = lightStatusBar,
-    navigationBarColor = MaterialTheme.colors().surface.copy(alpha = navigationBarAlpha),
+    navigationBarColor = MaterialTheme.colors.surface.copy(alpha = navigationBarAlpha),
     lightNavigationBar = lightNavigationBar
 )
 

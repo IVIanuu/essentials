@@ -16,10 +16,18 @@
 
 package com.ivianuu.essentials.gradle
 
+import com.diffplug.gradle.spotless.SpotlessPlugin
+import com.github.benmanes.gradle.versions.VersionsPlugin
+import com.ivianuu.injekt.gradle.InjektGradlePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 open class EssentialsGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {
+        with(project.plugins) {
+            apply(InjektGradlePlugin::class.java)
+            apply(SpotlessPlugin::class.java)
+            apply(VersionsPlugin::class.java)
+        }
     }
 }
