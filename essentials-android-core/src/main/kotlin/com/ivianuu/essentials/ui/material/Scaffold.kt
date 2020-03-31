@@ -24,8 +24,10 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
+import androidx.ui.core.Modifier
 import androidx.ui.core.ParentData
 import androidx.ui.layout.Stack
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.unit.IntPx
@@ -139,7 +141,7 @@ fun Scaffold(
         }
 
         SafeArea(
-            modifier = LayoutSize.Fill,
+            modifier = Modifier.fillMaxSize(),
             left = scaffoldState.applySideSafeArea,
             top = false,
             right = scaffoldState.applySideSafeArea,

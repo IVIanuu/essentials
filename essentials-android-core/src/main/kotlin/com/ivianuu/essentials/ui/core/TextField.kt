@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.currentTextStyle
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.VisualTransformation
-import androidx.ui.text.TextFieldValue
 import androidx.ui.text.TextRange
 import androidx.ui.text.TextStyle
 

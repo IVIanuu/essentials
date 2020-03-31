@@ -78,7 +78,7 @@ fun ColorPreference(
         leading = leading?.let { { leading() } },
         trailing = { context ->
             Surface(
-                modifier = Modifier.preferredSize(size),
+                modifier = Modifier.preferredSize(40.dp),
                 color = context.currentValue,
                 border = Border(
                     size = 1.dp,

@@ -102,7 +102,7 @@ fun ListItem(
                     ) {
                         ProvideEmphasis(
                             emphasis = EmphasisAmbient.current.high,
-                            children = leading
+                            content = leading
                         )
                     }
                 }
@@ -128,7 +128,7 @@ fun ListItem(
                             ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.high,
-                                    children = title
+                                    content = title
                                 )
                             }
                         }
@@ -136,7 +136,7 @@ fun ListItem(
                             ProvideTextStyle(value = MaterialTheme.typography.body2) {
                                 ProvideEmphasis(
                                     emphasis = EmphasisAmbient.current.medium,
-                                    children = subtitle
+                                    content = subtitle
                                 )
                             }
                         }
@@ -155,7 +155,7 @@ fun ListItem(
                     ) {
                         ProvideEmphasis(
                             emphasis = EmphasisAmbient.current.high,
-                            children = trailing
+                            content = trailing
                         )
                     }
                 }

@@ -54,7 +54,7 @@ fun Banner(
             }
 
             ProvideTextStyle(value = MaterialTheme.typography.body2) {
-                ProvideEmphasis(emphasis = EmphasisAmbient.current.high, children = content)
+                ProvideEmphasis(emphasis = EmphasisAmbient.current.high, content = content)
             }
 
             Spacer(Modifier.preferredWidth(16.dp))

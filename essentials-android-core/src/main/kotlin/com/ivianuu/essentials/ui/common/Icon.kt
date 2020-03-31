@@ -19,8 +19,9 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Clickable
+import androidx.ui.layout.preferredSizeIn
+import androidx.ui.material.ripple.ripple
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.material.ripple
 
 @Composable
 fun IconButton(
@@ -30,8 +31,8 @@ fun IconButton(
     children: @Composable () -> Unit
 ) {
     Clickable(
-        modifier = LayoutSize.Min(minSize = 40.dp) +
-                ripple(bounded = false, enabled = enabled) + modifier,
+        modifier = Modifier.preferredSizeIn(minWidth = 40.dp, minHeight = 40.dp)
+            .ripple(bounded = false, enabled = enabled) + modifier,
         onClick = onClick,
         enabled = enabled,
         children = children

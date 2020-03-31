@@ -62,7 +62,7 @@ fun DefaultCardStyle(
 fun Card(
     modifier: Modifier = Modifier.None,
     style: CardStyle = CardStyleAmbient.currentOrElse { DefaultCardStyle() },
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     androidx.ui.material.Card(
         modifier = style.modifier.plus(modifier),
@@ -71,6 +71,6 @@ fun Card(
         contentColor = style.contentColor,
         border = style.border,
         elevation = style.elevation,
-        children = children
+        content = content
     )
 }

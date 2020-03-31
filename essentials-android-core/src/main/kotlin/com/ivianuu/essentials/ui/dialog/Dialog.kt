@@ -96,7 +96,7 @@ private fun DialogBody(
                     ProvideTextStyle(MaterialTheme.typography.h6) {
                         ProvideEmphasis(
                             emphasis = EmphasisAmbient.current.high,
-                            children = title
+                            content = title
                         )
                     }
                 }
@@ -106,7 +106,7 @@ private fun DialogBody(
                 {
                     ProvideEmphasis(
                         emphasis = EmphasisAmbient.current.high,
-                        children = icon
+                        content = icon
                     )
                 }
             }
@@ -135,7 +135,7 @@ private fun DialogBody(
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
                 ProvideEmphasis(
                     emphasis = EmphasisAmbient.current.medium,
-                    children = content
+                    content = content
                 )
             }
         }

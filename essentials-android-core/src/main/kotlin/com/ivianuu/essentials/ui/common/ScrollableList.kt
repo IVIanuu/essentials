@@ -170,7 +170,7 @@ private class ScrollableListState {
             measurables: List<Measurable>,
             constraints: Constraints,
             layoutDirection: LayoutDirection
-        ): MeasureScope.LayoutResult {
+        ): MeasureScope.MeasureResult {
             version++
 
             if (forceRecompose) {
@@ -355,7 +355,8 @@ private class ScrollableListState {
     }
 
     private fun addChild(index: Int): LayoutNode? {
-        val composable = composableFactory(index) ?: return null
+        val composable = composableFactory(index)
+        if (composable == null) return null
 
         val childNode = LayoutNode()
 
@@ -444,7 +445,7 @@ private class ScrollableListState {
         viewportMainAxisSize: IntPx,
         viewportCrossAxisSize: IntPx,
         position: Px
-    ): MeasureScope.LayoutResult {
+    ): MeasureScope.MeasureResult {
         val width: IntPx
         val height: IntPx
         when (direction) {

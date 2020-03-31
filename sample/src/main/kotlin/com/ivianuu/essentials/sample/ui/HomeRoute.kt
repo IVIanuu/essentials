@@ -23,7 +23,7 @@ import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.layout.padding
-import androidx.ui.unit.Size
+import androidx.ui.layout.preferredSize
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
@@ -144,9 +144,9 @@ private fun HomeItem(
                     .front
             }
             ColorShape(
+                modifier = Modifier.preferredSize(40.dp),
                 color = color,
-                shape = CircleShape,
-                size = Size(40.dp, 40.dp)
+                shape = CircleShape
             )
         },
         trailing = {

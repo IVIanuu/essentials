@@ -58,6 +58,6 @@ fun BaseDialog(
         color = MaterialTheme.colors.surface,
         elevation = style.elevation,
         shape = style.shape,
-        children = children
+        content = children
     )
 }

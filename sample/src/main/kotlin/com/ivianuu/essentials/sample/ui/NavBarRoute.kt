@@ -19,8 +19,11 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.state
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
@@ -43,7 +46,7 @@ val NavBarRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Nav bar settings") }) },
         body = {
-            Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
@@ -69,7 +72,7 @@ val NavBarRoute = Route {
                     val secureSettingsHelper = inject<SecureSettingsHelper>()
 
                     Box(
-                        modifier = LayoutWidth.Fill,
+                        modifier = Modifier.fillMaxWidth(),
                         gravity = ContentGravity.Center
                     ) {
                         Text(

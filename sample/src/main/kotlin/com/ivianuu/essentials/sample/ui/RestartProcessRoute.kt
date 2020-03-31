@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
@@ -27,7 +29,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 
 val RestartProcessRoute = Route {
     SimpleScreen(title = "Restart process") {
-        Box(modifier = LayoutSize.Fill, gravity = ContentGravity.Center) {
+        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
             val processRestarter = inject<ProcessRestarter>()
             Button(onClick = { processRestarter.restartProcess() }) {
                 Text("Restart process")
