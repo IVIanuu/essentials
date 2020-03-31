@@ -21,6 +21,7 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSize
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
-import com.ivianuu.essentials.ui.common.ColorShape
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.common.skippable
@@ -143,11 +143,11 @@ private fun HomeItem(
                     .first()
                     .front
             }
-            ColorShape(
+            Box(
                 modifier = Modifier.preferredSize(40.dp),
-                color = color,
+                backgroundColor = color,
                 shape = CircleShape
-            )
+            ) {}
         },
         trailing = {
             PopupMenuButton(
