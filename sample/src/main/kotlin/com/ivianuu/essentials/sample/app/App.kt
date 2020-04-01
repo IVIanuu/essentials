@@ -29,6 +29,7 @@ import com.ivianuu.essentials.sample.work.workBindings
 import com.ivianuu.essentials.twilight.esTwilight
 import com.ivianuu.essentials.work.workerInjection
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Injekt
 
 class App : EsApp() {
 
@@ -48,4 +49,8 @@ class App : EsApp() {
         workBindings()
     }
 
+    override fun initializeComponent() {
+        Injekt { initializeEndpoint() }
+        super.initializeComponent()
+    }
 }

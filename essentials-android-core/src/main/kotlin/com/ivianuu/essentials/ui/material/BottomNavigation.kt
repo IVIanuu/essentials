@@ -39,7 +39,7 @@ import com.ivianuu.essentials.ui.core.retain
 
 @Immutable
 data class BottomNavigationStyle(
-    val color: Color,
+    val backgroundColor: Color,
     val activeColor: Color,
     val inactiveColor: Color,
     val alwaysShowLabels: Boolean,
@@ -58,7 +58,7 @@ fun DefaultBottomNavigationStyle(
     elevation: Dp = 8.dp,
     modifier: Modifier = Modifier.None
 ) = BottomNavigationStyle(
-    color = color,
+    backgroundColor = color,
     activeColor = activeColor,
     inactiveColor = inactiveColor,
     alwaysShowLabels = alwaysShowLabels,
@@ -74,7 +74,7 @@ fun BottomNavigation(
 ) {
     BottomNavigation(
         modifier = style.modifier.plus(modifier),
-        color = style.color,
+        backgroundColor = style.backgroundColor,
         contentColor = style.activeColor,
         elevation = style.elevation
     ) {
