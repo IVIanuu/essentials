@@ -21,6 +21,7 @@ import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
+import androidx.ui.foundation.TextFieldValue
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
@@ -91,8 +92,8 @@ fun TextInputDialog(
                 )
             }
             TextField(
-                value = value,
-                onValueChange = onValueChange,
+                value = TextFieldValue(value),
+                onValueChange = { onValueChange(it.text) },
                 focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
                 textStyle = MaterialTheme.typography.subtitle1

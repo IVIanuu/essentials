@@ -28,6 +28,7 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -323,25 +324,25 @@ private fun ColorEditorHeader(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     val (hexInput, setHexInput) = stateFor(color) {
-                        color.toHexString(includeAlpha = showAlphaSelector)
+                        TextFieldValue(color.toHexString(includeAlpha = showAlphaSelector))
                     }
                     hideKeyboardOnDispose()
                     Text("#")
                     TextField(
                         value = hexInput,
                         onValueChange = { newValue ->
-                            if ((showAlphaSelector && newValue.length > 8) ||
-                                (!showAlphaSelector && newValue.length > 6)
+                            if ((showAlphaSelector && newValue.text.length > 8) ||
+                                (!showAlphaSelector && newValue.text.length > 6)
                             ) return@TextField
 
                             setHexInput(newValue)
 
-                            if ((showAlphaSelector && newValue.length < 8) ||
-                                (!showAlphaSelector && newValue.length < 6)
+                            if ((showAlphaSelector && newValue.text.length < 8) ||
+                                (!showAlphaSelector && newValue.text.length < 6)
                             ) return@TextField
 
                             val newColor = try {
-                                newValue.toColor()
+                                newValue.text.toColor()
                             } catch (e: Exception) {
                                 e.printStackTrace()
                                 null

@@ -23,45 +23,14 @@ import androidx.ui.foundation.currentTextStyle
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.VisualTransformation
-import androidx.ui.text.TextRange
+import androidx.ui.text.TextLayoutResult
 import androidx.ui.text.TextStyle
-
-// todo remove once supported by original
-
-@Composable
-fun TextField(
-    value: String,
-    modifier: Modifier = Modifier.None,
-    onValueChange: (String) -> Unit = {},
-    textStyle: TextStyle = currentTextStyle(),
-    keyboardType: KeyboardType = KeyboardType.Text,
-    imeAction: ImeAction = ImeAction.Unspecified,
-    onFocus: () -> Unit = {},
-    onBlur: () -> Unit = {},
-    focusIdentifier: String? = null,
-    onImeActionPerformed: (ImeAction) -> Unit = {},
-    visualTransformation: VisualTransformation? = null
-) {
-    TextField(
-        value = value,
-        modifier = modifier,
-        onValueChange = onValueChange,
-        textStyle = ensureColor(textStyle),
-        keyboardType = keyboardType,
-        imeAction = imeAction,
-        onFocus = onFocus,
-        onBlur = onBlur,
-        focusIdentifier = focusIdentifier,
-        onImeActionPerformed = onImeActionPerformed,
-        visualTransformation = visualTransformation
-    )
-}
 
 @Composable
 fun TextField(
     value: TextFieldValue,
     modifier: Modifier = Modifier.None,
-    onValueChange: (TextFieldValue) -> Unit = {},
+    onValueChange: (TextFieldValue) -> Unit,
     textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
@@ -69,9 +38,10 @@ fun TextField(
     onBlur: () -> Unit = {},
     focusIdentifier: String? = null,
     onImeActionPerformed: (ImeAction) -> Unit = {},
+    onTextLayout: (TextLayoutResult) -> Unit = {},
     visualTransformation: VisualTransformation? = null
 ) {
-    TextField(
+    androidx.ui.foundation.TextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
@@ -82,37 +52,7 @@ fun TextField(
         onBlur = onBlur,
         focusIdentifier = focusIdentifier,
         onImeActionPerformed = onImeActionPerformed,
-        visualTransformation = visualTransformation
-    )
-}
-
-@Composable
-fun TextField(
-    model: TextFieldValue,
-    compositionRange: TextRange?,
-    modifier: Modifier = Modifier.None,
-    onValueChange: (TextFieldValue, TextRange?) -> Unit = { _, _ -> },
-    textStyle: TextStyle = currentTextStyle(),
-    keyboardType: KeyboardType = KeyboardType.Text,
-    imeAction: ImeAction = ImeAction.Unspecified,
-    onFocus: () -> Unit = {},
-    onBlur: () -> Unit = {},
-    focusIdentifier: String? = null,
-    onImeActionPerformed: (ImeAction) -> Unit = {},
-    visualTransformation: VisualTransformation? = null
-) {
-    TextField(
-        model = model,
-        compositionRange = compositionRange,
-        modifier = modifier,
-        onValueChange = onValueChange,
-        textStyle = ensureColor(textStyle),
-        keyboardType = keyboardType,
-        imeAction = imeAction,
-        onFocus = onFocus,
-        onBlur = onBlur,
-        focusIdentifier = focusIdentifier,
-        onImeActionPerformed = onImeActionPerformed,
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        onTextLayout = onTextLayout
     )
 }
