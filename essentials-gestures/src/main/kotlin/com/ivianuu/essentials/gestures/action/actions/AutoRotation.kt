@@ -15,15 +15,19 @@ import com.ivianuu.essentials.store.android.settings.SettingBox
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal fun ComponentBuilder.autoRotation() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.autoRotation() {
     action(
         key = "auto_rotation",
         title = { getStringResource(R.string.es_action_auto_rotation) },

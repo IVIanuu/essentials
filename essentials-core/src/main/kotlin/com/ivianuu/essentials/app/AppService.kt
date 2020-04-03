@@ -19,14 +19,13 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.EagerBehavior
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.factory
-import java.util.UUID
+import com.ivianuu.injekt.eager
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -41,13 +40,11 @@ inline fun <reified T : AppService> ComponentBuilder.bindAppServiceIntoMap(
     }
 }
 
-fun ComponentBuilder.esAppServiceInjection() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esAppServiceInjectionModule() {
     map<String, AppService>(mapQualifier = AppServices)
-    // initialize on start
-    factory(
-        behavior = EagerBehavior,
-        qualifier = Qualifier(UUID.randomUUID())
-    ) { get<AppServiceRunner>() }
+    eager<AppServiceRunner>()
 }
 
 @QualifierMarker

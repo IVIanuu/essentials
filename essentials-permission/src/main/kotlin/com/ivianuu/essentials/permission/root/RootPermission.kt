@@ -15,8 +15,10 @@ import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
@@ -25,7 +27,9 @@ fun RootPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     )
 )
 
-internal fun ComponentBuilder.rootPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.rootPermission() {
     bindPermissionStateProviderIntoSet<RootPermissionStateProvider>()
     bindPermissionRequestHandlerIntoSet<RootPermissionRequestHandler>()
 }

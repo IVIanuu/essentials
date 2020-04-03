@@ -25,8 +25,10 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.bindPermissionRequestHandlerIntoSet
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.delay
 
 val Metadata.Companion.Intent by lazy {
@@ -35,7 +37,9 @@ val Metadata.Companion.Intent by lazy {
     )
 }
 
-internal fun ComponentBuilder.intentPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.intentPermission() {
     bindPermissionRequestHandlerIntoSet<IntentPermissionRequestHandler>()
 }
 

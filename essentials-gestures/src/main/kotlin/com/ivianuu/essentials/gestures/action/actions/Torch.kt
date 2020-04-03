@@ -10,12 +10,16 @@ import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal fun ComponentBuilder.torchAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.torchAction() {
     // todo check if device has a torch packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
     action(
         key = "torch",

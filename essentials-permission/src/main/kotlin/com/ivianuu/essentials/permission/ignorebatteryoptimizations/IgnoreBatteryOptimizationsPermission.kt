@@ -30,8 +30,10 @@ import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 @SuppressLint("BatteryLife")
 fun IgnoreBatteryOptimizationsPermission(
@@ -52,7 +54,9 @@ val Metadata.Companion.IgnoreBatteryOptimizationsPermission by lazy {
     Metadata.Key<Unit>("IgnoreBatteryOptimizationsPermission")
 }
 
-internal fun ComponentBuilder.ignoreBatteryOptimizationsPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.ignoreBatteryOptimizationsPermission() {
     bindPermissionStateProviderIntoSet<IgnoreBatteryOptimizationsPermissionStateProvider>()
 }
 

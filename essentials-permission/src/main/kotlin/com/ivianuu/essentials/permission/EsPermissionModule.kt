@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.analytics
+package com.ivianuu.essentials.permission
 
-import com.ivianuu.essentials.app.bindAppInitializerIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.common.set
 
-fun ComponentBuilder.esAnalytics() {
-    bindAppInitializerIntoMap<AnalyticsAppInitializer>()
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esPermissionsModule() {
+    set<PermissionRequestHandler>(setQualifier = PermissionRequestHandlersSet)
+    set<PermissionStateProvider>(setQualifier = PermissionStateProvidersSet)
 }

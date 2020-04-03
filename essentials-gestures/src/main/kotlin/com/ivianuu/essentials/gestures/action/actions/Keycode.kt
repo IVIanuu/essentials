@@ -16,12 +16,16 @@ import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 
-internal fun ComponentBuilder.keycodeAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.keycodeAction() {
     bindActionFactoryIntoSet<KeycodeActionFactory>()
     bindActionPickerDelegateIntoSet<KeycodeActionPickerDelegate>()
 }

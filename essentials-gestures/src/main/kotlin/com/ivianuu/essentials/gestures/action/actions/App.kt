@@ -22,15 +22,19 @@ import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.flow.Flow
 
-internal fun ComponentBuilder.appAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.appAction() {
     bindActionFactoryIntoSet<AppActionFactory>()
     bindActionPickerDelegateIntoSet<AppActionPickerDelegate>()
 }

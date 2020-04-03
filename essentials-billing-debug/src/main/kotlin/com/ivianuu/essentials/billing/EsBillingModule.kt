@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample
+package com.ivianuu.essentials.billing
 
-import com.ivianuu.essentials.boot.BootAware
-import com.ivianuu.essentials.boot.bindBootAwareIntoMap
-import com.ivianuu.essentials.util.Logger
+import com.android.billingclient.api.BillingClient
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
-
-@Factory
-class BootLogger(private val logger: Logger) : BootAware {
-    init {
-        logger.d("booted!")
-    }
-}
+import com.ivianuu.injekt.alias
 
 @ApplicationScope
 @Module
-private fun ComponentBuilder.bootModule() {
-    bindBootAwareIntoMap<BootLogger>()
+private fun ComponentBuilder.esBillingModule() {
+    alias<DebugBillingClient, BillingClient>()
 }

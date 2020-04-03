@@ -15,8 +15,10 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun WriteSecureSettingsPermission(vararg metadata: MetaDataKeyWithValue<*>) = Permission(
     metadata = metadataOf(
@@ -29,7 +31,9 @@ val Metadata.Companion.IsWriteSecureSettingsPermission by lazy {
     Metadata.Key<Unit>("IsWriteSecureSettingsPermission")
 }
 
-internal fun ComponentBuilder.writeSecureSettingsPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.writeSecureSettingsPermission() {
     bindPermissionStateProviderIntoSet<WriteSecureSettingsPermissionStateProvider>()
     bindPermissionRequestHandlerIntoSet<WriteSecureSettingsPermissionRequestHandler>()
 }

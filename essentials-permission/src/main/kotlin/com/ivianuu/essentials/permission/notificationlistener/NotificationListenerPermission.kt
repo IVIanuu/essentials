@@ -29,8 +29,10 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
@@ -50,7 +52,9 @@ val Metadata.Companion.NotificationListenerClass by lazy {
     )
 }
 
-internal fun ComponentBuilder.notificationListenerPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.notificationListenerPermission() {
     bindPermissionStateProviderIntoSet<NotificationListenerPermissionStateProvider>()
 }
 

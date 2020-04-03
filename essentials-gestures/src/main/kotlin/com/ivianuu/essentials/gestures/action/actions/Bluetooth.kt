@@ -11,13 +11,17 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-internal fun ComponentBuilder.bluetoothAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.bluetoothAction() {
     if (BluetoothAdapter.getDefaultAdapter() != null) {
         action(
             key = "bluetooth",

@@ -24,8 +24,10 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.bindAppInitializerIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
@@ -58,16 +60,16 @@ class InjektWorkerFactory(
     }
 }
 
-/**
- * Contains the [InjektWorkerFactory]
- */
-fun ComponentBuilder.workerInjection() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.workerInjectionModule() {
     map<String, ListenableWorker>(mapQualifier = WorkersMap)
     alias<InjektWorkerFactory, WorkerFactory>()
-    esWork()
 }
 
-private fun ComponentBuilder.esWork() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esWorkModule() {
     factory { WorkManager.getInstance(get()) }
     bindAppInitializerIntoMap<WorkerAppInitializer>()
 }

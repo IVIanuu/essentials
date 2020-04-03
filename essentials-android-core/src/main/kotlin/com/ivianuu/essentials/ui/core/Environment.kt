@@ -29,8 +29,10 @@ import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
@@ -97,6 +99,8 @@ inline fun <reified T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap
     }
 }
 
-fun ComponentBuilder.esUiInitializerInjection() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esUiInitializerInjectionModule() {
     map<String, UiInitializer>(mapQualifier = UiInitializers)
 }

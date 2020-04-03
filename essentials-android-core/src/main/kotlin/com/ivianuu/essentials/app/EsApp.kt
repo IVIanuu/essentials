@@ -18,14 +18,8 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import com.ivianuu.essentials.data.esData
-import com.ivianuu.essentials.moshi.android.esMoshiAndroid
-import com.ivianuu.essentials.moshi.esMoshi
-import com.ivianuu.essentials.ui.core.esUiInitializerInjection
 import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.containsFlag
-import com.ivianuu.essentials.util.esAndroidUtil
-import com.ivianuu.essentials.util.esUtil
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentOwner
 import com.ivianuu.injekt.Injekt
@@ -63,15 +57,6 @@ abstract class EsApp : Application(), ComponentOwner, ComponentBuilderIntercepto
     protected open fun initializeComponent() {
         AppComponentHolder.init(
             ApplicationComponent(this) {
-                esAppBindings()
-                esAppInitializerInjection()
-                esAppServiceInjection()
-                esData()
-                esMoshi()
-                esMoshiAndroid()
-                esUiInitializerInjection()
-                esUtil()
-                esAndroidUtil()
                 buildComponent()
             }
         )

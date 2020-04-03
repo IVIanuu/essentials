@@ -5,9 +5,13 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PowerSettingsNew
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.powerDialogAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.powerDialogAction() {
     bindAccessibilityAction(
         key = "power_dialog",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_POWER_DIALOG,

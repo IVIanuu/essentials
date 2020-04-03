@@ -9,12 +9,16 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
-internal fun ComponentBuilder.homeAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.homeAction() {
     if (Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913") {
         bindAccessibilityAction(
             key = "home",

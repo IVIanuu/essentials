@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing
+package com.ivianuu.essentials.gestures
 
-import com.android.billingclient.api.BillingClient
+import com.ivianuu.essentials.accessibility.bindAccessibilityComponentIntoSet
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.Module
 
-fun ComponentBuilder.esBilling() {
-    alias<DebugBillingClient, BillingClient>()
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esGesturesModule() {
+    bindAccessibilityComponentIntoSet<GlobalActions>()
+    bindAccessibilityComponentIntoSet<KeyboardVisibilityDetector>()
+    bindAccessibilityComponentIntoSet<RecentAppsProvider>()
+    bindAccessibilityComponentIntoSet<SecureScreenDetector>()
 }

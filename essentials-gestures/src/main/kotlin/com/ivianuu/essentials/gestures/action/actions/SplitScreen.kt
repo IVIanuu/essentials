@@ -5,9 +5,13 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.splitScreenAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.splitScreenAction() {
     bindAccessibilityAction(
         key = "split_screen",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN,

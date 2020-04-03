@@ -6,10 +6,14 @@ import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.assistantAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.assistantAction() {
     action(
         key = "assistant",
         title = { getStringResource(R.string.es_action_assistant) },

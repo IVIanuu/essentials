@@ -44,14 +44,18 @@ import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-internal fun ComponentBuilder.dialogPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.dialogPermission() {
     permissionRequestUi<DialogPermissionRequestUi>()
 }
 

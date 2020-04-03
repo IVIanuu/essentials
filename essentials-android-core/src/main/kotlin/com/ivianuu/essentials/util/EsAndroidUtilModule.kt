@@ -20,13 +20,16 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.DuplicateStrategy
-import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.single
 
-fun ComponentBuilder.esAndroidUtil() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esAndroidUtilModule() {
     single {
         val appInfo = get<Application>().applicationInfo
         val packageInfo = get<PackageManager>()
@@ -39,11 +42,16 @@ fun ComponentBuilder.esAndroidUtil() {
     }
     single { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
     single { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
-    factory(duplicateStrategy = DuplicateStrategy.Override) {
-        if (get<BuildInfo>().isDebug) {
-            get<AndroidLogger>()
-        } else {
-            get<NoopLogger>()
+
+    // we use on pre build to ensure that we override the DefaultLogger binding
+    onPreBuild {
+        factory(duplicateStrategy = DuplicateStrategy.Override) {
+            if (get<BuildInfo>().isDebug) {
+                get<AndroidLogger>()
+            } else {
+                get<NoopLogger>()
+            }
         }
+        false
     }
 }

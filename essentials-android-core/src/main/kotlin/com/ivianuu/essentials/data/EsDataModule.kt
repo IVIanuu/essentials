@@ -20,15 +20,19 @@ import android.content.Context
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 
-fun ComponentBuilder.esData() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esDataModule() {
     single(qualifier = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
 
     single {

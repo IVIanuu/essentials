@@ -4,9 +4,13 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.backAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.backAction() {
     bindAccessibilityAction(
         key = "back",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_BACK,

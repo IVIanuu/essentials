@@ -29,7 +29,9 @@ import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.ComponentOwner
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.android.ForActivity
 import com.ivianuu.injekt.single
 
@@ -41,7 +43,6 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
 
     override val component by unsafeLazy {
         ActivityComponent(this) {
-            esActivityBindings()
             buildComponent()
         }
     }
@@ -90,7 +91,9 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
     protected abstract fun content()
 }
 
-private fun ComponentBuilder.esActivityBindings() {
+@ActivityScope
+@Module
+private fun ComponentBuilder.esActivityModule() {
     single {
         NavigatorState(
             coroutineScope = get(qualifier = ForActivity),

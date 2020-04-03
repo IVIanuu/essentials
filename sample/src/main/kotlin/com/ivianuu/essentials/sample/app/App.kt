@@ -17,38 +17,9 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.apps.coil.esAppsCoilBindings
-import com.ivianuu.essentials.billing.esBilling
-import com.ivianuu.essentials.boot.esBootInjection
-import com.ivianuu.essentials.coil.esCoil
-import com.ivianuu.essentials.gestures.esGestures
-import com.ivianuu.essentials.permission.esPermissions
-import com.ivianuu.essentials.sample.bootBindings
-import com.ivianuu.essentials.sample.ui.uiBindings
-import com.ivianuu.essentials.sample.work.workBindings
-import com.ivianuu.essentials.twilight.esTwilight
-import com.ivianuu.essentials.work.workerInjection
-import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Injekt
 
 class App : EsApp() {
-
-    override fun ComponentBuilder.buildComponent() {
-        esAppsCoilBindings()
-        esBilling()
-        esBootInjection()
-        esCoil()
-        esGestures()
-        esPermissions()
-        esTwilight()
-        workerInjection()
-
-        appBindings()
-        bootBindings()
-        uiBindings()
-        workBindings()
-    }
-
     override fun initializeComponent() {
         Injekt { initializeEndpoint() }
         super.initializeComponent()

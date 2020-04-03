@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.apps.coil
 
-import com.ivianuu.essentials.accessibility.bindAccessibilityComponentIntoSet
-import com.ivianuu.essentials.gestures.action.esActions
+import com.ivianuu.essentials.coil.bindFetcherIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-fun ComponentBuilder.esGestures() {
-    esActions()
-
-    bindAccessibilityComponentIntoSet<GlobalActions>()
-    bindAccessibilityComponentIntoSet<KeyboardVisibilityDetector>()
-    bindAccessibilityComponentIntoSet<RecentAppsProvider>()
-    bindAccessibilityComponentIntoSet<SecureScreenDetector>()
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esAppsCoilModule() {
+    bindFetcherIntoMap<AppIconFetcher, AppIcon>()
 }

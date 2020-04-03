@@ -6,10 +6,14 @@ import androidx.ui.material.icons.filled.KeyboardHide
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.inputMethodAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.inputMethodAction() {
     action(
         key = "input_method",
         title = { getStringResource(R.string.es_action_input_method) },

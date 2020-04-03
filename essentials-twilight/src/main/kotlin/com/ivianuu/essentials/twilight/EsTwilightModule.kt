@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.coil
+package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.coil.bindFetcherIntoMap
+import com.ivianuu.essentials.app.bindAppServiceIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-/**
- * Binds dependencies related to this module
- */
-fun ComponentBuilder.esAppsCoilBindings() {
-    bindFetcherIntoMap<AppIconFetcher, AppIcon>()
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esTwilightModule() {
+    bindAppServiceIntoMap<TwilightHelper>()
 }

@@ -27,8 +27,10 @@ import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun InstallUnknownAppsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
@@ -44,7 +46,9 @@ val Metadata.Companion.IsUnknownAppsPermission by lazy {
     Metadata.Key<Unit>("IsUnknownAppsPermission")
 }
 
-internal fun ComponentBuilder.installUnknownAppsPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.installUnknownAppsPermission() {
     bindPermissionStateProviderIntoSet<InstallUnknownAppsPermissionStateProvider>()
 }
 

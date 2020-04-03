@@ -19,11 +19,15 @@ package com.ivianuu.essentials.coil
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.set
 import com.ivianuu.injekt.single
 
-fun ComponentBuilder.esCoil() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esCoilModule() {
     set<Decoder>(setQualifier = Decoders)
     set<FetcherBinding<*>>(setQualifier = Fetchers)
     set<MapperBinding<*>>(setQualifier = Mappers)

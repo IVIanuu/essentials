@@ -8,12 +8,16 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 
 @SuppressLint("InlinedApi")
-internal fun ComponentBuilder.screenshotAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.screenshotAction() {
     action(
         key = "screenshot",
         title = { getStringResource(R.string.es_action_screenshot) },

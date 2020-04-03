@@ -1,13 +1,17 @@
 package com.ivianuu.essentials.moshi
 
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.set
 import com.ivianuu.injekt.single
 import com.squareup.moshi.Moshi
 
-fun ComponentBuilder.esMoshi() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esMoshiModule() {
     set<Any>(setQualifier = JsonAdapters)
 
     single {

@@ -22,13 +22,17 @@ import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import java.io.ByteArrayOutputStream
 
-internal fun ComponentBuilder.shortcutAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.shortcutAction() {
     bindActionFactoryIntoSet<ShortcutActionFactory>()
     bindActionPickerDelegateIntoSet<ShortcutActionPickerDelegate>()
 }

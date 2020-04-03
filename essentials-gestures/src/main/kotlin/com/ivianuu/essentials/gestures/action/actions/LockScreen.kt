@@ -8,11 +8,15 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 
 @SuppressLint("InlinedApi")
-internal fun ComponentBuilder.lockScreenAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.lockScreenAction() {
     action(
         key = "lock_screen",
         title = { getStringResource(R.string.es_action_lock_screen) },

@@ -8,13 +8,17 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.gestures.action.actionPermission
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 
-internal fun ComponentBuilder.lastAppAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.lastAppAction() {
     action(
         key = "last_app",
         title = { getStringResource(R.string.es_action_last_app) },

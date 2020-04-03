@@ -29,8 +29,10 @@ import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 fun PackageUsageStatsPermission(
     vararg metadata: MetaDataKeyWithValue<*>
@@ -46,7 +48,9 @@ val Metadata.Companion.IsPackageUsageStatsPermission by lazy {
     Metadata.Key<Unit>("IsPackageUsageStatsPermission")
 }
 
-internal fun ComponentBuilder.packageUsageStatsPermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.packageUsageStatsPermission() {
     bindPermissionStateProviderIntoSet<PackageUsageStatsPermissionStateProvider>()
 }
 

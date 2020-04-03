@@ -21,8 +21,10 @@ import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorkerIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
 import kotlinx.coroutines.delay
 
@@ -41,6 +43,8 @@ class TestWorker(
     }
 }
 
-fun ComponentBuilder.workBindings() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.workModule() {
     bindWorkerIntoMap<TestWorker>()
 }

@@ -6,10 +6,14 @@ import androidx.ui.material.icons.filled.VolumeUp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.action
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.volumeAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.volumeAction() {
     action(
         key = "volume",
         title = { getStringResource(R.string.es_action_volume) },

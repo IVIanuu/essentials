@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.analytics
 
-import com.ivianuu.essentials.app.bindAppServiceIntoMap
+import com.ivianuu.essentials.app.bindAppInitializerIntoMap
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-fun ComponentBuilder.esTwilight() {
-    bindAppServiceIntoMap<TwilightHelper>()
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esAnalyticsModule() {
+    bindAppInitializerIntoMap<AnalyticsAppInitializer>()
 }

@@ -32,8 +32,10 @@ import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.ui.navigation.transition.VerticalFadeRouteTransition
 import com.ivianuu.essentials.util.isDark
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 
 @Factory
 class SampleUi : AppUi {
@@ -64,7 +66,9 @@ class SampleUiInitializer : UiInitializer {
     }
 }
 
-fun ComponentBuilder.uiBindings() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.uiModule() {
     appUi<SampleUi>()
     bindUiInitializerIntoMap<SampleUiInitializer>()
 }

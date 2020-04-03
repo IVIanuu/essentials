@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.boot
 
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
@@ -39,6 +41,8 @@ inline fun <reified T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
     }
 }
 
-fun ComponentBuilder.esBootInjection() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.esBootInjectionModule() {
     map<String, BootAware>(mapQualifier = BootAwareComponents)
 }

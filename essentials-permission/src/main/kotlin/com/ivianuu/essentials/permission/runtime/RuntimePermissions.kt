@@ -31,8 +31,10 @@ import com.ivianuu.essentials.permission.bindPermissionRequestHandlerIntoSet
 import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -52,7 +54,9 @@ val Metadata.Companion.RuntimePermissionName by lazy {
     )
 }
 
-internal fun ComponentBuilder.runtimePermission() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.runtimePermission() {
     bindPermissionStateProviderIntoSet<RuntimePermissionStateProvider>()
     bindPermissionRequestHandlerIntoSet<RuntimePermissionRequestHandler>()
 }

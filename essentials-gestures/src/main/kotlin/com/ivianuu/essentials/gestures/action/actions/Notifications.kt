@@ -5,9 +5,13 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Notifications
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Module
 
-internal fun ComponentBuilder.notificationsAction() {
+@ApplicationScope
+@Module
+private fun ComponentBuilder.notificationsAction() {
     bindAccessibilityAction(
         key = "notifications",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,
