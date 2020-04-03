@@ -53,8 +53,9 @@ fun BaseDialog(
 ) {
     Surface(
         modifier = Modifier
+            .padding(all = 32.dp)
             .preferredWidthIn(minWidth = 280.dp, maxWidth = 356.dp)
-            .padding(all = 32.dp).plus(style.modifier),
+            .plus(style.modifier),
         color = MaterialTheme.colors.surface,
         elevation = style.elevation,
         shape = style.shape,

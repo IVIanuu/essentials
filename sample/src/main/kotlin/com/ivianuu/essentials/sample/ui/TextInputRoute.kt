@@ -27,6 +27,7 @@ import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
@@ -47,11 +48,11 @@ val TextInputRoute = Route {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {
-        state.inputValue = ""
+        state.inputValue = TextFieldValue()
     }
 
     val items = AllItems.filter {
-        state.inputValue.isEmpty() || state.inputValue in it.toLowerCase().trim()
+        state.inputValue.text.isEmpty() || state.inputValue.text in it.toLowerCase().trim()
     }
 
     val keyboardManager = KeyboardManagerAmbient.current
@@ -67,7 +68,7 @@ val TextInputRoute = Route {
                             gravity = ContentGravity.CenterStart
                         ) {
                             Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
-                                if (state.inputValue.isEmpty()) {
+                                if (state.inputValue.text.isEmpty()) {
                                     Text(
                                         text = "Search..",
                                         textStyle = MaterialTheme.typography.subtitle1,
@@ -103,7 +104,7 @@ val TextInputRoute = Route {
 
                     if (lastScrollPosition.value < scrollPosition.value) {
                         keyboardManager.hideKeyboard()
-                        if (state.searchVisible && state.inputValue.isEmpty()) {
+                        if (state.searchVisible && state.inputValue.text.isEmpty()) {
                             state.searchVisible = false
                         }
                     }
@@ -134,7 +135,7 @@ val TextInputRoute = Route {
 @Model
 private class TextInputState(
     var searchVisible: Boolean = false,
-    var inputValue: String = ""
+    var inputValue: TextFieldValue = TextFieldValue()
 )
 
 private val AllItems = (0..100).map { "Item: $it" }
