@@ -76,7 +76,7 @@ private fun PopupMenuItem(
     onSelected: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Clickable(onClick = onSelected, modifier = ripple()) {
+    Clickable(onClick = onSelected, modifier = Modifier.ripple()) {
         Box(
             modifier = Modifier.preferredWidthIn(minWidth = 200.dp)
                 .preferredHeight(48.dp)

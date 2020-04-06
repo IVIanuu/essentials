@@ -20,17 +20,16 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.PointerEventPass
 import androidx.ui.core.PointerId
-import androidx.ui.core.PointerInput
-import androidx.ui.core.changedToDown
-import androidx.ui.core.consumeDownChange
+import androidx.ui.core.PointerInputNode
 
+// todo convert to modifier
 @Composable
 fun AbsorbPointer(
     absorb: Boolean = true,
     children: @Composable () -> Unit
 ) {
     val consumedIds = remember { mutableSetOf<PointerId>() }
-    PointerInput(
+    PointerInputNode(
         pointerInputHandler = { changes, pass, _ ->
             if (absorb && (pass == PointerEventPass.InitialDown ||
                         pass == PointerEventPass.PreDown ||
@@ -56,7 +55,8 @@ fun AbsorbPointer(
                 }
             }
         },
-        cancelHandler = { consumedIds.clear() },
-        children = children
-    )
+        cancelHandler = { consumedIds.clear() }
+    ) {
+        children()
+    }
 }

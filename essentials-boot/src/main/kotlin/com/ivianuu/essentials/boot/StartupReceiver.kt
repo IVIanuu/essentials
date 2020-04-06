@@ -21,6 +21,7 @@ import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.getLazy
 
 class StartupReceiver : EsBroadcastReceiver() {

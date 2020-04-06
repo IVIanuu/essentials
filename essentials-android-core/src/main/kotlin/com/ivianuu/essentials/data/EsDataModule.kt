@@ -26,6 +26,7 @@ import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus

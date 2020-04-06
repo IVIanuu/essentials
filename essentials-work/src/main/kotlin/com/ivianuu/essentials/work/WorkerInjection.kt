@@ -27,6 +27,8 @@ import com.ivianuu.essentials.app.bindAppInitializerIntoMap
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Qualifier
@@ -34,7 +36,7 @@ import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.common.map
 import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -96,10 +98,11 @@ annotation class WorkersMap {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : ListenableWorker> ComponentBuilder.bindWorkerIntoMap(
-    workerQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : ListenableWorker> ComponentBuilder.bindWorkerIntoMap(
+    workerKey: Key<T>
 ) {
     map<String, ListenableWorker>(mapQualifier = WorkersMap) {
-        put(T::class.java.name, keyOf<T>(qualifier = workerQualifier))
+        put(workerKey.classifier.java.name, workerKey)
     }
 }

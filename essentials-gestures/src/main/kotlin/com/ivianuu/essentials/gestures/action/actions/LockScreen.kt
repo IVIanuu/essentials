@@ -11,6 +11,7 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 @SuppressLint("InlinedApi")

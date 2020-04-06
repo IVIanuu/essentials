@@ -25,6 +25,7 @@ import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.DuplicateStrategy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.single
 
 @ApplicationScope

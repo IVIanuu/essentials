@@ -20,6 +20,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Qualifier
@@ -50,11 +52,12 @@ import com.ivianuu.injekt.eager
  */
 interface AppInitializer
 
-inline fun <reified T : AppInitializer> ComponentBuilder.bindAppInitializerIntoMap(
-    initializerQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : AppInitializer> ComponentBuilder.bindAppInitializerIntoMap(
+    initializerKey: Key<T>
 ) {
     map<String, AppInitializer>(mapQualifier = AppInitializers) {
-        put<T>(entryKey = T::class.java.name, entryValueQualifier = initializerQualifier)
+        put(initializerKey.classifier.java.name, initializerKey)
     }
 }
 

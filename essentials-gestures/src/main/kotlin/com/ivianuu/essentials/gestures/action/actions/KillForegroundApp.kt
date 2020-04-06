@@ -15,6 +15,7 @@ import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.flow.first
 

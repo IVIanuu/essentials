@@ -12,6 +12,7 @@ import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

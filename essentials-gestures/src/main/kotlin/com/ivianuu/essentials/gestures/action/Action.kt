@@ -7,6 +7,8 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.map
 import com.ivianuu.injekt.common.set
@@ -70,8 +72,11 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-inline fun <reified T : ActionFactory> ComponentBuilder.bindActionFactoryIntoSet() {
-    set<ActionFactory> { add<T>() }
+@KeyOverload
+fun <T : ActionFactory> ComponentBuilder.bindActionFactoryIntoSet(
+    factoryKey: Key<T>
+) {
+    set<ActionFactory> { add(factoryKey) }
 }
 
 interface ActionPickerDelegate {
@@ -80,6 +85,9 @@ interface ActionPickerDelegate {
     suspend fun getResult(navigator: NavigatorState): ActionPickerResult?
 }
 
-inline fun <reified T : ActionPickerDelegate> ComponentBuilder.bindActionPickerDelegateIntoSet() {
-    set<ActionPickerDelegate> { add<T>() }
+@KeyOverload
+fun <T : ActionPickerDelegate> ComponentBuilder.bindActionPickerDelegateIntoSet(
+    delegateKey: Key<T>
+) {
+    set<ActionPickerDelegate> { add(delegateKey) }
 }

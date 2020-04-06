@@ -17,22 +17,24 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.common.set
+import com.ivianuu.injekt.keyOf
 
 @QualifierMarker
 annotation class PermissionStateProvidersSet {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : PermissionStateProvider> ComponentBuilder.bindPermissionStateProviderIntoSet(
-    providerQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : PermissionStateProvider> ComponentBuilder.bindPermissionStateProviderIntoSet(
+    providerKey: Key<T>
 ) {
-    set<PermissionStateProvider>(PermissionStateProvidersSet) {
-        add<T>(elementQualifier = providerQualifier)
-    }
+    set<PermissionStateProvider>(PermissionStateProvidersSet) { add(providerKey) }
 }
 
 @QualifierMarker
@@ -40,18 +42,17 @@ annotation class PermissionRequestHandlersSet {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : PermissionRequestHandler> ComponentBuilder.bindPermissionRequestHandlerIntoSet(
-    handlerQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : PermissionRequestHandler> ComponentBuilder.bindPermissionRequestHandlerIntoSet(
+    handlerKey: Key<T>
 ) {
-    set<PermissionRequestHandler>(PermissionRequestHandlersSet) {
-        add<T>(elementQualifier = handlerQualifier)
-    }
+    set<PermissionRequestHandler>(PermissionRequestHandlersSet) { add(handlerKey) }
 }
 
-inline fun <reified T : PermissionRequestUi> ComponentBuilder.permissionRequestUi(
-    uiQualifier: Qualifier = Qualifier.None
-) {
-    alias<T, PermissionRequestUi>(
-        originalQualifier = uiQualifier
+@KeyOverload
+fun <T : PermissionRequestUi> ComponentBuilder.permissionRequestUi(uiKey: Key<T>) {
+    alias(
+        originalKey = uiKey,
+        aliasKey = keyOf<PermissionRequestUi>()
     )
 }

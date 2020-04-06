@@ -19,6 +19,8 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Qualifier
@@ -32,11 +34,12 @@ import com.ivianuu.injekt.eager
  */
 interface AppService
 
-inline fun <reified T : AppService> ComponentBuilder.bindAppServiceIntoMap(
-    serviceQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : AppService> ComponentBuilder.bindAppServiceIntoMap(
+    serviceKey: Key<T>
 ) {
     map<String, AppService>(AppServices) {
-        put<T>(T::class.java.name, entryValueQualifier = serviceQualifier)
+        put(serviceKey.classifier.java.name, serviceKey)
     }
 }
 

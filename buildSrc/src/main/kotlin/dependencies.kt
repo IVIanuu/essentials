@@ -40,11 +40,11 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        private const val composeVersion = "0.0.1-dev95"
+        const val composeVersion = "0.0.1-dev103"
 
         object Compose {
             const val version = composeVersion
-            const val runtime = "androidx.compose:compose-runtime:$version"
+            const val runtime = "androidx.compose:compose-runtime:$composeVersion"
         }
 
         object Lifecycle {
@@ -106,7 +106,7 @@ object Deps {
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev130"
+        private const val version = "0.0.1-dev132"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"

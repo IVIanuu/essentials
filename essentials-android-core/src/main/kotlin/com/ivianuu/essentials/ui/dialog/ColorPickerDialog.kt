@@ -268,7 +268,7 @@ private fun BaseColorGridItem(
     onClick: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Clickable(onClick = onClick, modifier = ripple()) {
+    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
         Box(
             modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth)
                 .padding(all = 4.dp)

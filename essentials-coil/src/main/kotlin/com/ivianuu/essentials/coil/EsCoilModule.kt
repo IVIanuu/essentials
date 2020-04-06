@@ -23,6 +23,7 @@ import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.set
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.single
 
 @ApplicationScope

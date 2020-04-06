@@ -10,6 +10,7 @@ import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 
 @ApplicationScope
 @Module

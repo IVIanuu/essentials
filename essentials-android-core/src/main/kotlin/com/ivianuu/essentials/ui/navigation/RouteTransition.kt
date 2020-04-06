@@ -20,7 +20,9 @@ import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
+import androidx.compose.Composer
 import androidx.compose.Immutable
+import androidx.compose.currentComposer
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
 import androidx.ui.core.Modifier
@@ -140,5 +142,9 @@ private fun RouteTransitionTypes(
         }
         .fold(children) { current, type ->
             { type(current) }
-        }.invoke()
+        }
+        .let {
+            // todo compiler doesn't treat this as a composable
+            (it as (Composer<*>) -> Unit).invoke(currentComposer)
+        }
 }

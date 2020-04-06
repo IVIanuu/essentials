@@ -18,6 +18,8 @@ package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
@@ -33,11 +35,12 @@ annotation class BootAwareComponents {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
-    componentQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
+    componentKey: Key<T>
 ) {
     map<String, BootAware>(BootAwareComponents) {
-        put<T>(entryKey = T::class.java.name, entryValueQualifier = componentQualifier)
+        put(componentKey.classifier.java.name, componentKey)
     }
 }
 

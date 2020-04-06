@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.set
@@ -26,10 +28,11 @@ annotation class NotificationComponents {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : NotificationComponent> ComponentBuilder.bindNotificationComponentIntoSet(
-    componentQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : NotificationComponent> ComponentBuilder.bindNotificationComponentIntoSet(
+    componentKey: Key<T>
 ) {
-    set<NotificationComponent>(NotificationComponents) { add<T>(elementQualifier = componentQualifier) }
+    set<NotificationComponent>(NotificationComponents) { add(componentKey) }
 }
 
 internal fun ComponentBuilder.notificationComponentInjection() {

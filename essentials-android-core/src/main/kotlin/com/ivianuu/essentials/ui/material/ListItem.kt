@@ -166,7 +166,7 @@ fun ListItem(
     Clickable(
         onClick = onClick ?: { },
         enabled = enabled && onClick != null,
-        modifier = if (onClick != null || onLongClick != null) ripple(enabled = enabled) else Modifier.None,
+        modifier = if (onClick != null || onLongClick != null) Modifier.ripple(enabled = enabled) else Modifier.None,
         children = content
     )
 }

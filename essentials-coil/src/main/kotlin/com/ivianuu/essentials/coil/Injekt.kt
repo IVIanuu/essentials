@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.set
 import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
 import kotlin.reflect.KClass
 
 inline fun <reified D : Decoder> ComponentBuilder.bindDecoderIntoSet(

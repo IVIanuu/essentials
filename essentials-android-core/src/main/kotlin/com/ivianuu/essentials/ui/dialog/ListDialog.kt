@@ -40,7 +40,7 @@ fun SimpleDialogListItem(
     leading: @Composable (() -> Unit)? = null,
     title: @Composable () -> Unit
 ) {
-    Clickable(onClick = onClick, modifier = ripple()) {
+    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
         Row(
             modifier = Modifier.fillMaxWidth()
                 .preferredHeightIn(minHeight = 48.dp)

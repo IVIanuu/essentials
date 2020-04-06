@@ -20,6 +20,7 @@ import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.get
 
 @ApplicationScope
 @Single

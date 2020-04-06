@@ -19,7 +19,9 @@ package com.ivianuu.essentials.ui.core
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.Composable
+import androidx.compose.Composer
 import androidx.compose.Providers
+import androidx.compose.currentComposer
 import androidx.compose.remember
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
@@ -32,11 +34,13 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.KeyOverload
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.QualifierMarker
 import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.get
 
 @Composable
 fun Environment(
@@ -73,8 +77,12 @@ fun Environment(
                             function
                         }
                         .fold(children) { current, initializer ->
-                            { initializer(current) }
-                        }.invoke()
+                            @Composable { initializer(current) }
+                        }
+                        .let {
+                            // todo compiler doesn't treat this as a composable
+                            (it as (Composer<*>) -> Unit).invoke(currentComposer)
+                        }
                 }
             }
         }
@@ -91,11 +99,12 @@ annotation class UiInitializers {
     companion object : Qualifier.Element
 }
 
-inline fun <reified T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap(
-    initializerQualifier: Qualifier = Qualifier.None
+@KeyOverload
+fun <T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap(
+    initializerKey: Key<T>
 ) {
     map<String, UiInitializer>(mapQualifier = UiInitializers) {
-        put(T::class.java.name, keyOf<T>(qualifier = initializerQualifier))
+        put(initializerKey.classifier.java.name, initializerKey)
     }
 }
 

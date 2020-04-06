@@ -71,7 +71,7 @@ private fun Chip(@Pivotal name: String) {
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(
-            modifier = ripple(
+            modifier = Modifier.ripple(
                 bounded = false,
                 style = DefaultRippleStyle(color = contentColor().copy(alpha = 0.5f))
             )

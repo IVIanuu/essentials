@@ -33,6 +33,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.android.ForActivity
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.single
 
 /**

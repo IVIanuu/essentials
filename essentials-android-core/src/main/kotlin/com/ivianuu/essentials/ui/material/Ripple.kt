@@ -51,7 +51,7 @@ fun defaultRippleColor() = with(MaterialTheme.colors) {
 }
 
 @Composable
-fun ripple(
+fun Modifier.ripple(
     style: RippleStyle = RippleStyleAmbient.currentOrElse { DefaultRippleStyle() },
     bounded: Boolean = true,
     radius: Dp? = null,

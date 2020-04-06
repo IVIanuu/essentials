@@ -57,6 +57,13 @@ allprojects {
         resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
     }
 
+    // todo remove once compose runtime is up to date
+    configurations.all {
+        resolutionStrategy {
+            force(Deps.AndroidX.Compose.runtime)
+        }
+    }
+
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")

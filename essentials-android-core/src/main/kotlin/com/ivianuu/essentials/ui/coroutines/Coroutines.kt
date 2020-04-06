@@ -27,6 +27,7 @@ import androidx.ui.core.CoroutineContextAmbient
 import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -35,9 +36,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-@Composable
-val CoroutineScopeAmbient =
-    staticAmbientOf<CoroutineScope>()
+val CoroutineScopeAmbient = staticAmbientOf<CoroutineScope>()
 
 @Composable
 fun ProvideCoroutineScope(

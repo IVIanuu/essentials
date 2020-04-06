@@ -11,6 +11,7 @@ import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 
 internal fun ComponentBuilder.bindMediaAction(

@@ -138,7 +138,11 @@ fun Button(
             elevation = style.elevation,
             modifier = style.modifier.plus(modifier)
         ) {
-            Clickable(onClick = onClick, modifier = ripple(enabled = enabled), enabled = enabled) {
+            Clickable(
+                onClick = onClick,
+                modifier = Modifier.ripple(enabled = enabled),
+                enabled = enabled
+            ) {
                 Box(
                     modifier = Modifier.preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp),
                     paddingStart = style.innerPadding.left,
