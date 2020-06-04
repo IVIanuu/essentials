@@ -17,19 +17,17 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.common.RetainedScrollableState
-import com.ivianuu.essentials.ui.common.ScrollableState
-import com.ivianuu.essentials.ui.common.Scroller
-import com.ivianuu.essentials.ui.core.Axis
+import androidx.ui.foundation.HorizontalScroller
+import androidx.ui.foundation.ScrollerPosition
+import androidx.ui.foundation.VerticalScroller
 
 @Composable
-fun ScrollableDialog(
-    scrollableState: ScrollableState = RetainedScrollableState(),
-    direction: Axis = Axis.Vertical,
+fun HorizontalScrollerDialog(
+    scrollerPosition: ScrollerPosition = ScrollerPosition(),
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
-    listContent: @Composable () -> Unit,
+    scrollerContent: @Composable () -> Unit,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null
@@ -42,11 +40,38 @@ fun ScrollableDialog(
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
-            Scroller(
-                scrollableState = scrollableState,
-                direction = direction,
-                children = listContent
-            )
+            HorizontalScroller(scrollerPosition = scrollerPosition) {
+                scrollerContent()
+            }
+        },
+        positiveButton = positiveButton,
+        negativeButton = negativeButton,
+        neutralButton = neutralButton
+    )
+}
+
+@Composable
+fun VerticalScrollerDialog(
+    scrollerPosition: ScrollerPosition = ScrollerPosition(),
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    scrollerContent: @Composable () -> Unit,
+    positiveButton: @Composable (() -> Unit)? = null,
+    negativeButton: @Composable (() -> Unit)? = null,
+    neutralButton: @Composable (() -> Unit)? = null
+) {
+    Dialog(
+        icon = icon,
+        title = title,
+        // showTopDivider = scrollerPosition.value > scrollerPosition.minValue,
+        // showBottomDivider = scrollerPosition.value < scrollerPosition.maxValue,
+        applyContentPadding = false,
+        buttonLayout = buttonLayout,
+        content = {
+            VerticalScroller(scrollerPosition = scrollerPosition) {
+                scrollerContent()
+            }
         },
         positiveButton = positiveButton,
         negativeButton = negativeButton,

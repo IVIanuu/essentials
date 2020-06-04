@@ -38,25 +38,22 @@ fun esCoilModule() {
     scoped { context: @ForApplication Context, decoders: Set<Decoder>,
              fetchers: Set<FetcherBinding<*>>, mappers: Set<MapperBinding<*>>,
              measuredMappers: Set<MeasuredMapperBinding<*>> ->
-        ImageLoader(context) {
-            componentRegistry {
+        ImageLoader.Builder(context)
+            .componentRegistry {
                 decoders.forEach { add(it) }
-
                 fetchers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.fetcher)
                     }
-
                 mappers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
-
                 measuredMappers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
             }
-        }
+            .build()
     }
 }

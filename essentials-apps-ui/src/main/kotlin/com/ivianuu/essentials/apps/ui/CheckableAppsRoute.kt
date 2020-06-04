@@ -90,7 +90,7 @@ fun CheckableAppsScreen(
         body = {
             RenderAsyncList(
                 state = viewModel.state.apps,
-                successItemCallback = { _, app ->
+                successItemCallback = { app ->
                     CheckableApp(
                         app = app,
                         onClick = { viewModel.appClicked(app) }

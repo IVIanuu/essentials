@@ -84,7 +84,7 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val coil = "io.coil-kt:coil:0.9.2"
+    const val coil = "io.coil-kt:coil:0.11.0"
 
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 

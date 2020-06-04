@@ -64,4 +64,3 @@ class BoxWrapper<T> internal constructor(
         value = next
     }
 }
-

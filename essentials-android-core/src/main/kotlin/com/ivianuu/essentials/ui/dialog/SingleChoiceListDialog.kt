@@ -40,11 +40,11 @@ fun <T> SingleChoiceListDialog(
 ) {
     val navigator = NavigatorAmbient.current
 
-    ScrollableDialog(
+    VerticalScrollerDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        listContent = {
+        scrollerContent = {
             items.forEachIndexed { index, item ->
                 key(index) {
                     SingleChoiceDialogListItem(

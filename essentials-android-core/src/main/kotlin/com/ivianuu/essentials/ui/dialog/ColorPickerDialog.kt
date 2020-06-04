@@ -30,6 +30,7 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.TextFieldValue
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -50,7 +51,6 @@ import androidx.ui.material.icons.filled.Check
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
@@ -175,7 +175,7 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        Scroller(modifier = Modifier.padding(all = 4.dp)) {
+        VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
             Column(
                 mainAxisAlignment = MainAxisAlignment.Center,
                 crossAxisAlignment = CrossAxisAlignment.Center

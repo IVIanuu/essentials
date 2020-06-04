@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Icon
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.preferredHeight
@@ -27,7 +28,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -36,9 +36,9 @@ import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
-import com.ivianuu.essentials.ui.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.dialog.VerticalScrollerDialog
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -53,7 +53,7 @@ val DialogsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Dialogs") }) },
         body = {
-            Scroller {
+            VerticalScroller {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     mainAxisAlignment = MainAxisAlignment.Center,
@@ -184,9 +184,9 @@ val DialogsRoute = Route {
                     DialogLauncherButton(
                         text = "List"
                     ) {
-                        ScrollableDialog(
+                        VerticalScrollerDialog(
                             title = { Text("List") },
-                            listContent = {
+                            scrollerContent = {
                                 (1..100).forEach {
                                     ListItem(
                                         title = {

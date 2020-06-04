@@ -35,12 +35,11 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.material.Divider
+import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable
 fun Dialog(
@@ -190,7 +189,7 @@ private fun DialogContentLayout(
 
         if (content != null) {
             if (header != null && showTopDivider) {
-                Divider(Axis.Horizontal, modifier = Modifier.tag(DialogContentSlot.TopDivider))
+                HorizontalDivider(modifier = Modifier.tag(DialogContentSlot.TopDivider))
             }
 
             Box(
@@ -207,7 +206,7 @@ private fun DialogContentLayout(
 
         if (buttons != null) {
             if (content != null && showBottomDivider) {
-                Divider(Axis.Horizontal, modifier = Modifier.tag(DialogContentSlot.BottomDivider))
+                HorizontalDivider(modifier = Modifier.tag(DialogContentSlot.BottomDivider))
             }
 
             if (!showBottomDivider && content != null) {

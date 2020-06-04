@@ -18,22 +18,15 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
-import androidx.ui.core.selection.Selectable
-import androidx.ui.core.selection.Selection
-import androidx.ui.core.selection.SelectionRegistrar
-import androidx.ui.core.selection.SelectionRegistrarAmbient
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.currentTextStyle
-import androidx.ui.geometry.Rect
+import androidx.ui.graphics.Color
 import androidx.ui.res.stringResource
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
 import androidx.ui.text.style.TextOverflow
-import androidx.ui.unit.PxPosition
 
 @Immutable
 data class TextComposableStyle(
@@ -86,16 +79,14 @@ fun Text(
     style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
     textStyle: TextStyle = currentTextStyle()
 ) {
-    ToggleableSelectable(selectable = style.selectable) {
-        androidx.ui.foundation.Text(
-            text = if (style.uppercase) text.toUpperCase() else text,
-            modifier = style.modifier.plus(modifier),
-            style = ensureColor(textStyle),
-            softWrap = style.softWrap,
-            overflow = style.overflow,
-            maxLines = style.maxLines
-        )
-    }
+    androidx.ui.foundation.Text(
+        text = if (style.uppercase) text.toUpperCase() else text,
+        modifier = style.modifier.plus(modifier),
+        style = ensureColor(textStyle),
+        softWrap = style.softWrap,
+        overflow = style.overflow,
+        maxLines = style.maxLines
+    )
 }
 
 @Composable
@@ -105,59 +96,19 @@ fun Text(
     style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
     textStyle: TextStyle = currentTextStyle()
 ) {
-    ToggleableSelectable(selectable = style.selectable) {
-        androidx.ui.foundation.Text(
-            text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
-            modifier = modifier,
-            style = ensureColor(textStyle),
-            softWrap = style.softWrap,
-            overflow = style.overflow,
-            maxLines = style.maxLines
-        )
-    }
-}
-
-@Composable
-private fun ToggleableSelectable(
-    selectable: Boolean,
-    children: @Composable () -> Unit
-) {
-    Providers(
-        SelectionRegistrarAmbient provides if (selectable) SelectionRegistrarAmbient.current else NoopSelectionRegistrar,
-        children = children
+    androidx.ui.foundation.Text(
+        text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
+        modifier = modifier,
+        style = ensureColor(textStyle),
+        softWrap = style.softWrap,
+        overflow = style.overflow,
+        maxLines = style.maxLines
     )
 }
 
 @Composable
 internal fun ensureColor(style: TextStyle): TextStyle =
-    if (style.color != null) style else style.copy(color = contentColor())
-
-private object NoopSelectionRegistrar : SelectionRegistrar {
-    override fun subscribe(selectable: Selectable): Selectable =
-        NoopSelectable
-
-    override fun onPositionChange() {
-    }
-
-    override fun unsubscribe(selectable: Selectable) {
-    }
-
-    private object NoopSelectable : Selectable {
-        override fun getSelection(
-            startPosition: PxPosition,
-            endPosition: PxPosition,
-            containerLayoutCoordinates: LayoutCoordinates,
-            longPress: Boolean,
-            previousSelection: Selection?,
-            isStartHandle: Boolean
-        ): Selection? = null
-
-        override fun getBoundingBox(offset: Int): Rect = Rect.zero
-        override fun getText(): AnnotatedString = AnnotatedString("")
-        override fun getHandlePosition(selection: Selection, isStartHandle: Boolean): PxPosition = PxPosition.Origin
-        override fun getLayoutCoordinates(): LayoutCoordinates? = null
-    }
-}
+    if (style.color != Color.Unset) style else style.copy(color = contentColor())
 
 private const val DefaultSoftWrap: Boolean = true
 private const val DefaultMaxLines = Int.MAX_VALUE

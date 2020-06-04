@@ -17,9 +17,12 @@
 package com.ivianuu.essentials.apps.coil
 
 import com.ivianuu.essentials.coil.coilFetcher
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.composition.installIn
 
 @Module
 private fun esAppsCoilModule() {
+    installIn<ApplicationComponent>()
     coilFetcher<AppIconFetcher, AppIcon>()
 }

@@ -21,7 +21,6 @@ import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.layout.padding
@@ -35,8 +34,8 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
-import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
@@ -45,7 +44,7 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Divider
+import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -110,10 +109,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
                     if (items.indexOf(item) != items.lastIndex) {
-                        Divider(
-                            axis = Axis.Horizontal,
-                            modifier = Modifier.padding(start = 72.dp)
-                        )
+                        HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
                     }
                 }
             }

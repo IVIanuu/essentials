@@ -35,11 +35,11 @@ fun <T> MultiChoiceListDialog(
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null
 ) {
-    ScrollableDialog(
+    VerticalScrollerDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        listContent = {
+        scrollerContent = {
             items.forEachIndexed { index, item ->
                 key(index) {
                     MultiChoiceDialogListItem(

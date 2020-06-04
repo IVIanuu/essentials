@@ -47,6 +47,6 @@ internal class AppIconFetcher(
         options: Options
     ): FetchResult = withContext(dispatchers.io) {
         val drawable = packageManager.getApplicationIcon(data.packageName)
-        return@withContext DrawableResult(drawable, false, DataSource.NETWORK)
+        return@withContext DrawableResult(drawable, false, DataSource.DISK)
     }
 }

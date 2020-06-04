@@ -30,13 +30,13 @@ import androidx.ui.core.TransformOrigin
 import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogRoute
@@ -136,7 +136,7 @@ val ScaffoldRoute = Route {
             }
         }) else null,
         body = {
-            Scroller {
+            VerticalScroller {
                 Subheader { Text("Top bar") }
                 ListItem(
                     title = { Text("Show top bar") },

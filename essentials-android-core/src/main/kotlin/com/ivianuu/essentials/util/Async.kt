@@ -102,7 +102,7 @@ class Fail<T>(error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
 
     override fun hashCode(): Int = error.hashCode()
 
-    override fun toString(): String = "Success(value=$error)"
+    override fun toString(): String = "Error(value=$error)"
 }
 
 fun <T> Flow<T>.executeAsync(): Flow<Async<T>> {

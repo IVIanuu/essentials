@@ -30,9 +30,7 @@ import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
@@ -305,60 +303,6 @@ fun DpSliderPreference(
         valueController = valueController,
         toFloat = { it.value },
         fromFloat = { it.dp },
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        steps = steps
-    )
-}
-
-@Composable
-inline fun IntPxSliderPreference(
-    box: Box<IntPx>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((IntPx) -> Unit)? = null,
-    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int = 0
-) {
-    key(box) {
-        IntPxSliderPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            dependencies = dependencies,
-            title = title,
-            summary = summary,
-            leading = leading,
-            valueText = valueText,
-            valueRange = valueRange,
-            steps = steps
-        )
-    }
-}
-
-@Composable
-fun IntPxSliderPreference(
-    valueController: ValueController<IntPx>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((IntPx) -> Unit)? = null,
-    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int = 0
-) {
-    BaseSliderPreference(
-        valueController = valueController,
-        toFloat = { it.value.toFloat() },
-        fromFloat = { it.toInt().ipx },
         enabled = enabled,
         dependencies = dependencies,
         title = title,

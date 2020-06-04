@@ -12,7 +12,6 @@ import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.preferredHeight
 import androidx.ui.layout.preferredWidth
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -30,17 +29,23 @@ fun DefaultDividerStyle(
 ) = DividerStyle(color = color, modifier = modifier)
 
 @Composable
-fun Divider(
-    axis: Axis,
+fun HorizontalDivider(
     modifier: Modifier = Modifier,
     style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() }
 ) {
-    val sizeModifiers = when (axis) {
-        Axis.Horizontal -> Modifier.fillMaxWidth().preferredHeight(1.dp).plus(style.modifier)
-        Axis.Vertical -> Modifier.fillMaxHeight().preferredWidth(1.dp).plus(style.modifier)
-    }
     Box(
         backgroundColor = style.color,
-        modifier = modifier.plus(sizeModifiers)
+        modifier = Modifier.fillMaxWidth().preferredHeight(1.dp) + style.modifier + modifier
+    )
+}
+
+@Composable
+fun VerticalProvider(
+    modifier: Modifier = Modifier,
+    style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() }
+) {
+    Box(
+        backgroundColor = style.color,
+        modifier = Modifier.fillMaxHeight().preferredWidth(1.dp) + style.modifier + modifier
     )
 }
