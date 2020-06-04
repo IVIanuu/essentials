@@ -19,11 +19,14 @@ package com.ivianuu.essentials.billing
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PurchaseActivity : EsActivity() {
 
     private val manager: PurchaseManager by inject()
@@ -42,6 +45,7 @@ class PurchaseActivity : EsActivity() {
         }
     }
 
+    @Composable
     override fun content() {
     }
 

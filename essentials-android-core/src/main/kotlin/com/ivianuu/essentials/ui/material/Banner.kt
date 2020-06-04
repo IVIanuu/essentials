@@ -18,10 +18,14 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Providers
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
@@ -31,10 +35,6 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.SpacingRow
 
 @Composable
 fun Banner(
@@ -45,7 +45,7 @@ fun Banner(
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.preferredHeight(24.dp))
 
-        Row(crossAxisAlignment = CrossAxisAlignment.Center) {
+        Row(verticalGravity = Alignment.CenterVertically) {
             Spacer(Modifier.preferredWidth(16.dp))
 
             if (leading != null) {
@@ -68,7 +68,7 @@ fun Banner(
             gravity = ContentGravity.CenterEnd
         ) {
             Providers(ButtonStyleAmbient provides TextButtonStyle()) {
-                SpacingRow(spacing = 8.dp, children = actions)
+                Row(horizontalArrangement = Arrangement.SpaceBetween) { actions() }
             }
         }
 

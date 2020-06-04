@@ -20,14 +20,17 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeightIn
@@ -38,9 +41,6 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 
 @Immutable
 data class FloatingActionButtonStyle(
@@ -111,23 +111,23 @@ fun FloatingActionButton(
         contentColor = style.contentColor,
         elevation = style.elevation
     ) {
-        Clickable(onClick, modifier = Modifier.ripple()) {
-            ProvideTextStyle(MaterialTheme.typography.button) {
-                Box(
-                    modifier = style.modifier.plus(modifier),
-                    gravity = ContentGravity.Center
+        ProvideTextStyle(MaterialTheme.typography.button) {
+            Box(
+                modifier = style.modifier
+                    .clickable(onClick = onClick)
+                    .plus(modifier),
+                gravity = ContentGravity.Center
+            ) {
+                Providers(
+                    TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                        uppercase = true,
+                        maxLines = 1
+                    )
                 ) {
-                    Providers(
-                        TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                            uppercase = true,
-                            maxLines = 1
-                        )
-                    ) {
-                        ProvideTextStyle(
-                            MaterialTheme.typography.button,
-                            children = children
-                        )
-                    }
+                    ProvideTextStyle(
+                        MaterialTheme.typography.button,
+                        children = children
+                    )
                 }
             }
         }
@@ -149,8 +149,8 @@ fun FloatingActionButton(
     ) {
         if (icon != null) {
             Row(
-                mainAxisAlignment = MainAxisAlignment.Center,
-                crossAxisAlignment = CrossAxisAlignment.Center,
+                horizontalArrangement = Arrangement.Center,
+                verticalGravity = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 12.dp, end = 20.dp)
             ) {
                 icon()

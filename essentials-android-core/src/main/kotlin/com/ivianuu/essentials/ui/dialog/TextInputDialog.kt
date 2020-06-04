@@ -22,12 +22,12 @@ import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
+import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(

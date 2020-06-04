@@ -20,17 +20,19 @@ import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
+import androidx.ui.foundation.clickable
+import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -53,24 +55,24 @@ val TextInputRoute = Route {
             TopAppBar(
                 title = {
                     if (state.searchVisible) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            gravity = ContentGravity.CenterStart
+                        Stack(
+                            modifier = Modifier.fillMaxSize()
+                                .clickable { /*keyboardManager.showKeyboard("id")*/ }
                         ) {
-                            Clickable(onClick = { /*keyboardManager.showKeyboard("id")*/ }) {
-                                if (state.inputValue.text.isEmpty()) {
-                                    Text(
-                                        text = "Search..",
-                                        textStyle = MaterialTheme.typography.subtitle1,
-                                        modifier = Modifier.drawOpacity(0.5f)
-                                    )
-                                }
-                                TextField(
-                                    value = state.inputValue,
-                                    onValueChange = { state.inputValue = it },
-                                    textStyle = MaterialTheme.typography.subtitle1
+                            if (state.inputValue.text.isEmpty()) {
+                                Text(
+                                    text = "Search..",
+                                    textStyle = MaterialTheme.typography.subtitle1,
+                                    modifier = Modifier.drawOpacity(0.5f)
+                                        .gravity(Alignment.CenterStart)
                                 )
                             }
+                            TextField(
+                                value = state.inputValue,
+                                onValueChange = { state.inputValue = it },
+                                textStyle = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.gravity(Alignment.CenterStart)
+                            )
                         }
 
                         //onActive { keyboardManager.showKeyboard("id") }

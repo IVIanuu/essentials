@@ -17,8 +17,12 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.clickable
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
@@ -27,10 +31,6 @@ import androidx.ui.layout.preferredWidth
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.material.ripple
 
 // todo add list dialog
 
@@ -40,13 +40,15 @@ fun SimpleDialogListItem(
     leading: @Composable (() -> Unit)? = null,
     title: @Composable () -> Unit
 ) {
-    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .preferredHeightIn(minHeight = 48.dp)
+            .clickable(onClick = onClick),
+        gravity = ContentGravity.CenterStart
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
-                .preferredHeightIn(minHeight = 48.dp)
-                .padding(start = 24.dp, end = 24.dp),
-            mainAxisAlignment = MainAxisAlignment.Start,
-            crossAxisAlignment = CrossAxisAlignment.Center
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+            verticalGravity = Alignment.CenterVertically
         ) {
             ProvideEmphasis(emphasis = EmphasisAmbient.current.high) {
                 if (leading != null) {

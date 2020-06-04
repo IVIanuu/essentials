@@ -23,6 +23,7 @@ import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
+import androidx.ui.layout.Column
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSize
 import androidx.ui.unit.dp
@@ -41,7 +42,6 @@ import com.ivianuu.essentials.ui.core.retain
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.HorizontalDivider

@@ -26,21 +26,24 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.clickable
 import androidx.ui.foundation.contentColor
+import androidx.ui.foundation.drawBackground
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Spacer
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.layout.preferredSize
-import androidx.ui.layout.preferredWidth
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
@@ -52,19 +55,13 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TextButtonStyle
-import com.ivianuu.essentials.ui.material.ripple
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.toColor
 import com.ivianuu.essentials.util.toHexString
@@ -176,19 +173,21 @@ private fun ColorGrid(
 
     key(currentPalette) {
         VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
-            Column(
-                mainAxisAlignment = MainAxisAlignment.Center,
-                crossAxisAlignment = CrossAxisAlignment.Center
-            ) {
-                WithConstraints {
-                    items.chunked(4).forEach { rowItems ->
-                        Row(
-                            mainAxisAlignment = MainAxisAlignment.Center,
-                            crossAxisAlignment = CrossAxisAlignment.Center,
-                            modifier = Modifier.size(maxWidth / 4)
-                        ) {
-                            rowItems.forEach { item ->
-                                key(item) {
+            WithConstraints {
+                println("items size ${items.size}")
+                items.chunked(4).forEach { rowItems ->
+                    println("row size ${rowItems.size}")
+
+                    Row(
+                        modifier = Modifier.drawBackground(Color.Red),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalGravity = Alignment.CenterVertically
+                    ) {
+                        rowItems.forEach { item ->
+                            key(item) {
+                                Box(
+                                    modifier = Modifier.size(maxWidth / 4)
+                                ) {
                                     when (item) {
                                         is ColorGridItem.Back -> ColorGridBackButton(
                                             onClick = { setCurrentPalette(null) }
@@ -273,14 +272,13 @@ private fun BaseColorGridItem(
     onClick: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Clickable(onClick = onClick, modifier = Modifier.ripple()) {
-        Box(
-            modifier = Modifier.squared(SquareFit.MatchWidth)
-                .padding(all = 4.dp)
-                .wrapContentSize(Alignment.Center),
-            children = children
-        )
-    }
+    Box(
+        modifier = Modifier.squared(SquareFit.MatchWidth)
+            .padding(all = 4.dp)
+            .wrapContentSize(Alignment.Center)
+            .clickable(onClick = onClick),
+        children = children
+    )
 }
 
 @Composable
@@ -325,8 +323,8 @@ private fun ColorEditorHeader(
                 gravity = ContentGravity.Center
             ) {
                 Row(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalGravity = Alignment.CenterVertically
                 ) {
                     val (hexInput, setHexInput) = stateFor(color) {
                         TextFieldValue(color.toHexString(includeAlpha = showAlphaSelector))
@@ -384,23 +382,20 @@ private fun ColorComponentItem(
 ) {
     Row(
         modifier = Modifier.preferredHeight(48.dp).fillMaxWidth(),
-        crossAxisAlignment = CrossAxisAlignment.Center
+        verticalGravity = Alignment.CenterVertically
     ) {
         Text(
             text = component.title,
             textStyle = MaterialTheme.typography.subtitle1
         )
 
-        Spacer(Modifier.preferredWidth(8.dp))
-
         Slider(
             value = value,
             onValueChange = onValueChanged,
-            modifier = LayoutFlexible(flex = 1f),
-            style = DefaultSliderStyle(color = component.color())
+            style = DefaultSliderStyle(color = component.color()),
+            modifier = Modifier.padding(horizontal = 8.dp)
+                .weight(1f)
         )
-
-        Spacer(Modifier.preferredWidth(8.dp))
 
         Text(
             text = (255 * value).toInt().toString(),

@@ -25,6 +25,7 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidthIn
@@ -35,8 +36,6 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
@@ -421,7 +420,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                         start = listItemStyle.contentPadding.start - 4.dp, // make the slider pretty
                         end = listItemStyle.contentPadding.end
                     ),
-                crossAxisAlignment = CrossAxisAlignment.Center
+                verticalGravity = Alignment.CenterVertically
             ) {
                 val sliderState = state { toFloat(context.currentValue) }
 
@@ -446,8 +445,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                         }
                     },
                     valueRange = floatRange,
-                    steps = steps,
-                    modifier = LayoutFlexible(1f)
+                    steps = steps
                 )
 
                 if (valueText != null) {

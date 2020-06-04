@@ -24,8 +24,8 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.clickable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.InnerPadding
@@ -138,30 +138,26 @@ fun Button(
             elevation = style.elevation,
             modifier = style.modifier.plus(modifier)
         ) {
-            Clickable(
-                onClick = onClick,
-                modifier = Modifier.ripple(enabled = enabled),
-                enabled = enabled
+            Box(
+                modifier = Modifier
+                    .preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp)
+                    .clickable(onClick = onClick, enabled = enabled),
+                paddingStart = style.innerPadding.start,
+                paddingTop = style.innerPadding.top,
+                paddingEnd = style.innerPadding.end,
+                paddingBottom = style.innerPadding.bottom,
+                gravity = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier.preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp),
-                    paddingStart = style.innerPadding.start,
-                    paddingTop = style.innerPadding.top,
-                    paddingEnd = style.innerPadding.end,
-                    paddingBottom = style.innerPadding.bottom,
-                    gravity = Alignment.Center
+                Providers(
+                    TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                        uppercase = true,
+                        maxLines = 1
+                    )
                 ) {
-                    Providers(
-                        TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                            uppercase = true,
-                            maxLines = 1
-                        )
-                    ) {
-                        ProvideTextStyle(
-                            MaterialTheme.typography.button,
-                            children = children
-                        )
-                    }
+                    ProvideTextStyle(
+                        MaterialTheme.typography.button,
+                        children = children
+                    )
                 }
             }
         }

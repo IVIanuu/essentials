@@ -25,6 +25,9 @@ import androidx.ui.core.Placeable
 import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
@@ -35,10 +38,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable
@@ -111,10 +110,7 @@ private fun DialogBody(
             }
 
             if (styledIcon != null && styledTitle != null) {
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.Start,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
+                Row(verticalGravity = Alignment.CenterVertically) {
                     styledIcon()
                     Spacer(Modifier.preferredWidth(16.dp))
                     styledTitle()
@@ -285,7 +281,6 @@ private fun DialogButtons(
     negativeButton: @Composable (() -> Unit)?,
     neutralButton: @Composable (() -> Unit)?
 ) {
-    println()
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
             Box(
@@ -296,11 +291,11 @@ private fun DialogButtons(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    mainAxisAlignment = MainAxisAlignment.Start,
-                    crossAxisAlignment = CrossAxisAlignment.Center
+                    verticalGravity = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
                 ) {
                     neutralButton?.invoke()
-                    Spacer(LayoutFlexible(1f))
+                    Spacer(Modifier.weight(1f))
                     negativeButton?.invoke()
                     positiveButton?.invoke()
                 }
@@ -309,8 +304,8 @@ private fun DialogButtons(
         AlertDialogButtonLayout.Stacked -> {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
-                mainAxisAlignment = MainAxisAlignment.Center,
-                crossAxisAlignment = CrossAxisAlignment.End
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.End
             ) {
                 positiveButton?.invoke()
                 negativeButton?.invoke()

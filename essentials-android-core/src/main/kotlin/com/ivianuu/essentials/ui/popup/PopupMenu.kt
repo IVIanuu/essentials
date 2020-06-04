@@ -21,16 +21,14 @@ import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.padding
+import androidx.ui.foundation.clickable
+import androidx.ui.layout.Column
 import androidx.ui.layout.preferredHeight
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.material.ripple
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 object PopupMenu {
@@ -76,12 +74,16 @@ private fun PopupMenuItem(
     onSelected: () -> Unit,
     children: @Composable () -> Unit
 ) {
-    Clickable(onClick = onSelected, modifier = Modifier.ripple()) {
+    Box(
+        modifier = Modifier.preferredWidthIn(minWidth = 200.dp)
+            .preferredHeight(48.dp)
+            .clickable(onClick = onSelected),
+        gravity = ContentGravity.CenterStart
+    ) {
         Box(
-            modifier = Modifier.preferredWidthIn(minWidth = 200.dp)
-                .preferredHeight(48.dp)
-                .padding(start = 16.dp, end = 16.dp),
             gravity = ContentGravity.CenterStart,
+            paddingStart = 16.dp,
+            paddingEnd = 16.dp,
             children = children
         )
     }

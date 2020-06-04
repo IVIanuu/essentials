@@ -27,6 +27,9 @@ import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
@@ -43,10 +46,6 @@ import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.SpacingRow
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.isLight
@@ -141,10 +140,7 @@ fun TopAppBar(
                     leading = leading,
                     title = title?.let {
                         {
-                            Column(
-                                mainAxisAlignment = MainAxisAlignment.Start,
-                                crossAxisAlignment = CrossAxisAlignment.Start
-                            ) {
+                            Column {
                                 Providers(
                                     TextComposableStyleAmbient provides DefaultTextComposableStyle(
                                         maxLines = 1
@@ -160,7 +156,7 @@ fun TopAppBar(
                     },
                     actions = actions?.let {
                         {
-                            SpacingRow(spacing = 16.dp) {
+                            Row(horizontalArrangement = Arrangement.SpaceBetween) {
                                 actions()
                             }
                         }

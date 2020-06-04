@@ -20,9 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.currentTextStyle
-import androidx.ui.graphics.Color
 import androidx.ui.res.stringResource
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
@@ -82,7 +80,7 @@ fun Text(
     androidx.ui.foundation.Text(
         text = if (style.uppercase) text.toUpperCase() else text,
         modifier = style.modifier.plus(modifier),
-        style = ensureColor(textStyle),
+        style = textStyle,
         softWrap = style.softWrap,
         overflow = style.overflow,
         maxLines = style.maxLines
@@ -99,16 +97,12 @@ fun Text(
     androidx.ui.foundation.Text(
         text = if (style.uppercase) text.copy(text = text.text.toUpperCase()) else text,
         modifier = modifier,
-        style = ensureColor(textStyle),
+        style = textStyle,
         softWrap = style.softWrap,
         overflow = style.overflow,
         maxLines = style.maxLines
     )
 }
-
-@Composable
-internal fun ensureColor(style: TextStyle): TextStyle =
-    if (style.color != Color.Unset) style else style.copy(color = contentColor())
 
 private const val DefaultSoftWrap: Boolean = true
 private const val DefaultMaxLines = Int.MAX_VALUE

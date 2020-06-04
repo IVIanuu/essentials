@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.preferredHeight
@@ -30,9 +33,6 @@ import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -45,8 +45,8 @@ val BillingRoute = Route {
     SimpleScreen(title = "Billing") {
         Column(
             modifier = Modifier.fillMaxSize(),
-            mainAxisAlignment = MainAxisAlignment.Center,
-            crossAxisAlignment = CrossAxisAlignment.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalGravity = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Is purchased ? ${isPurchased.value}",

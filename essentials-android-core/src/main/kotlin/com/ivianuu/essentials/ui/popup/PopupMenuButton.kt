@@ -5,11 +5,17 @@ import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.boundsInRoot
 import androidx.ui.core.onPositioned
-import androidx.ui.foundation.Clickable
-import androidx.ui.layout.Stack
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Indication
+import androidx.ui.foundation.IndicationAmbient
+import androidx.ui.foundation.clickable
+import androidx.ui.layout.preferredSize
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
+import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.IntPxBounds
+import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -19,10 +25,18 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 @Composable
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
+    modifier: Modifier = Modifier,
     onCancel: (() -> Unit)? = null,
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
-    PopupMenuButton(items = items, onCancel = onCancel, popupStyle = popupStyle) {
+    PopupMenuButton(
+        items = items,
+        modifier = Modifier.preferredSize(40.dp)
+            .plus(modifier),
+        onCancel = onCancel,
+        popupStyle = popupStyle,
+        indicationFactory = { RippleIndication(bounded = false) }
+    ) {
         Icon(Icons.Default.MoreVert)
     }
 }
@@ -30,8 +44,10 @@ fun PopupMenuButton(
 @Composable
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
+    modifier: Modifier = Modifier,
     onCancel: (() -> Unit)? = null,
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
+    indicationFactory: @Composable () -> Indication = IndicationAmbient.current,
     children: @Composable () -> Unit
 ) {
     val navigator = NavigatorAmbient.current
@@ -39,26 +55,31 @@ fun PopupMenuButton(
     val coordinatesHolder =
         holder<LayoutCoordinates?> { null }
 
-    Stack(modifier = Modifier.onPositioned { coordinatesHolder.value = it }) {
-        Clickable(onClick = {
-            navigator.push(
-                PopupRoute(
-                    position = coordinatesHolder.value!!.boundsInRoot.let {
-                        IntPxBounds(
-                            left = it.left.toInt().ipx,
-                            top = it.top.toInt().ipx,
-                            right = it.right.toInt().ipx,
-                            bottom = it.bottom.toInt().ipx
+    Box(
+        modifier = Modifier
+            .onPositioned { coordinatesHolder.value = it }
+            .clickable(indication = indicationFactory()) {
+                navigator.push(
+                    PopupRoute(
+                        position = coordinatesHolder.value!!.boundsInRoot.let {
+                            IntPxBounds(
+                                left = it.left.toInt().ipx,
+                                top = it.top.toInt().ipx,
+                                right = it.right.toInt().ipx,
+                                bottom = it.bottom.toInt().ipx
+                            )
+                        },
+                        onCancel = onCancel
+                    ) {
+                        PopupMenu(
+                            items = items,
+                            style = popupStyle
                         )
-                    },
-                    onCancel = onCancel
-                ) {
-                    PopupMenu(
-                        items = items,
-                        style = popupStyle
-                    )
-                }
-            )
-        }, children = children)
-    }
+                    }
+                )
+            }
+            .plus(modifier),
+        gravity = ContentGravity.Center,
+        children = children
+    )
 }
