@@ -19,11 +19,13 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.core.AppUi
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.ui.injekt.inject
 
 class DefaultActivity : EsActivity() {
+
     @Composable
     override fun content() {
-        get<AppUi>().runApp()
+        inject<AppUi>().runApp()
     }
+
 }

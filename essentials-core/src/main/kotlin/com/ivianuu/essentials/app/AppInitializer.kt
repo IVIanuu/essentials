@@ -17,17 +17,16 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.eager
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.BindingAdapter
+import com.ivianuu.injekt.composition.BindingAdapterFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.scoped
+import kotlin.reflect.KClass
 
 /**
  * Will be instantiated on app start up
@@ -52,36 +51,33 @@ import com.ivianuu.injekt.eager
  */
 interface AppInitializer
 
-@KeyOverload
-fun <T : AppInitializer> ComponentBuilder.bindAppInitializerIntoMap(
-    initializerKey: Key<T>
-) {
-    map<String, AppInitializer>(mapQualifier = AppInitializers) {
-        put(initializerKey.classifier.java.name, initializerKey)
+@BindingAdapter(ApplicationComponent::class)
+annotation class BindAppInitializer
+
+@BindingAdapterFunction(BindAppInitializer::class)
+@Module
+inline fun <reified T : AppInitializer> appInitializer() {
+    scoped<T>()
+    map<KClass<out AppInitializer>, AppInitializer> {
+        put<T>(T::class)
     }
 }
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esAppInitializerInjectionModule() {
-    map<String, AppInitializer>(mapQualifier = AppInitializers)
-    eager<AppInitRunner>()
+fun esAppInitializerModule() {
+    installIn<ApplicationComponent>()
+    map<KClass<out AppInitializer>, AppInitializer>()
 }
 
-@QualifierMarker
-annotation class AppInitializers {
-    companion object : Qualifier.Element
-}
-
-@Factory
-private class AppInitRunner(
+@Transient
+class AppInitRunner(
     private val logger: Logger,
-    @AppInitializers private val initializers: Map<String, Provider<AppInitializer>>
+    private val initializers: Map<KClass<out AppInitializer>, @Provider () -> AppInitializer>
 ) {
     init {
         initializers
             .forEach {
-                logger.d(tag = "Init", message = "initialize ${it.key}")
+                logger.d(tag = "Init", message = "initialize ${it.key.java.name}")
                 it.value()
             }
     }

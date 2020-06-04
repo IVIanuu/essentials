@@ -17,16 +17,14 @@
 package com.ivianuu.essentials.app
 
 import android.content.Context
-import com.ivianuu.essentials.util.BoxLoggerAppInitializer
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.transient
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esAppModule() {
-    factory { get<Context>().packageManager!! }
-    bindAppInitializerIntoMap<BoxLoggerAppInitializer>()
+fun esAppModule() {
+    installIn<ApplicationComponent>()
+    transient { context: @ForApplication Context -> context.packageManager!! }
 }

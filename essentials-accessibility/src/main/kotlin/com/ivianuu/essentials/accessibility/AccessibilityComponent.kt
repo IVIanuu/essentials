@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.app.AppComponentHolder
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
-abstract class AccessibilityComponent {
+abstract class AccessibilityComponent(dispatcher: CoroutineDispatcher) {
 
     abstract val config: AccessibilityConfig
 
@@ -33,9 +31,7 @@ abstract class AccessibilityComponent {
         private set
 
     val coroutineScope by unsafeLazy {
-        CoroutineScope(
-            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
-        )
+        CoroutineScope(Job() + dispatcher)
     }
 
     open fun onServiceConnected(service: ComponentAccessibilityService) {

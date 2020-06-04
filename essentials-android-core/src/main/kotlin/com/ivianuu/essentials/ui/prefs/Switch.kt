@@ -17,19 +17,20 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Switch
 
 @Composable
-fun SwitchPreference(
-    @Pivotal box: Box<Boolean>,
+inline fun SwitchPreference(
+    box: Box<Boolean>,
     enabled: Boolean = true,
+    noinline title: @Composable (() -> Unit)? = null,
+    noinline summary: @Composable (() -> Unit)? = null,
+    noinline leading: @Composable (() -> Unit)? = null,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
 ) {
     SwitchPreference(
         valueController = ValueController(box),
@@ -45,10 +46,10 @@ fun SwitchPreference(
 fun SwitchPreference(
     valueController: ValueController<Boolean>,
     enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
+    leading: @Composable (() -> Unit)? = null,
+    dependencies: List<Dependency<*>>? = null
 ) {
     PreferenceWrapper(
         valueController = valueController,
@@ -60,7 +61,7 @@ fun SwitchPreference(
             summary = summary,
             leading = leading,
             trailing = {
-                AbsorbPointer {
+                Box(modifier = Modifier.absorbPointer()) {
                     Switch(
                         checked = context.currentValue,
                         enabled = context.shouldBeEnabled,

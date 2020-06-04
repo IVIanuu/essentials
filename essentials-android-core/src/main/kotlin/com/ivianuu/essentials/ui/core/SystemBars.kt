@@ -30,8 +30,7 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag
@@ -117,19 +116,15 @@ fun ambientSystemBarStyle(): SystemBarStyle =
 
 @Composable
 fun SystemBarManager(children: @Composable () -> Unit) {
-    val activity = ActivityAmbient.current
-    val logger = inject<Logger>()
-    val systemBarManager = remember { SystemBarManager(activity, logger) }
+    val activity = compositionActivity
+    val systemBarManager = remember { SystemBarManager(activity) }
     Providers(SystemBarManagerAmbient provides systemBarManager, children = children)
 }
 
 private val SystemBarStyleAmbient =
     ambientOf(StructurallyEqual) { SystemBarStyle() }
 
-private class SystemBarManager(
-    private val activity: Activity,
-    private val logger: Logger
-) {
+private class SystemBarManager(private val activity: Activity) {
 
     private val styles = mutableListOf<SystemBarStyle>()
 
@@ -154,8 +149,6 @@ private class SystemBarManager(
 
     private fun update() {
         val currentStyle = styles.lastOrNull() ?: SystemBarStyle()
-
-        logger.d("apply system bar style $currentStyle")
 
         activity.window.statusBarColor = currentStyle.statusBarColor.toArgb()
         activity.window.decorView.systemUiVisibility =

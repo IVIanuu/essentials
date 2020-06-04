@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.foundation.ColoredRect
+import androidx.ui.foundation.Box
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.material.icons.Icons
@@ -41,7 +41,7 @@ val BottomNavigationRoute = Route {
             topAppBar = { TopAppBar(title = { Text("Bottom navigation") }) },
             body = {
                 BottomNavigationSwapper<BottomNavItem> { item ->
-                    ColoredRect(item.color)
+                    Box(backgroundColor = item.color)
                 }
             },
             bottomBar = {

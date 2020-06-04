@@ -23,7 +23,7 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
@@ -35,7 +35,8 @@ val TimerRoute = Route {
         topAppBar = { TopAppBar(title = { Text("Timer") }) },
         body = {
             Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                val value = collect(remember { timerFlow() })
+                val value = remember { timerFlow() }
+                    .collectAsState().value
 
                 Text(
                     text = "Value: $value",

@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
 /**
  * Shell
  */
-@Factory
+@Transient
 class Shell(private val dispatchers: AppCoroutineDispatchers) {
 
     suspend fun run(vararg commands: String): List<String> = withContext(dispatchers.io) {

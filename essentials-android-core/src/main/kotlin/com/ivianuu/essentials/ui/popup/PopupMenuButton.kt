@@ -10,7 +10,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.unit.IntPxBounds
-import androidx.ui.unit.round
+import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.image.Icon
@@ -45,10 +45,10 @@ fun PopupMenuButton(
                 PopupRoute(
                     position = coordinatesHolder.value!!.boundsInRoot.let {
                         IntPxBounds(
-                            left = it.left.round(),
-                            top = it.top.round(),
-                            right = it.right.round(),
-                            bottom = it.bottom.round()
+                            left = it.left.toInt().ipx,
+                            top = it.top.toInt().ipx,
+                            right = it.right.toInt().ipx,
+                            bottom = it.bottom.toInt().ipx
                         )
                     },
                     onCancel = onCancel

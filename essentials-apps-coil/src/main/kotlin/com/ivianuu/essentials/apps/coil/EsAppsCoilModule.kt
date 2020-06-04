@@ -16,13 +16,10 @@
 
 package com.ivianuu.essentials.apps.coil
 
-import com.ivianuu.essentials.coil.bindFetcherIntoMap
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.essentials.coil.coilFetcher
 import com.ivianuu.injekt.Module
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esAppsCoilModule() {
-    bindFetcherIntoMap<AppIconFetcher, AppIcon>()
+private fun esAppsCoilModule() {
+    coilFetcher<AppIconFetcher, AppIcon>()
 }

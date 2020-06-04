@@ -5,13 +5,14 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.compose.Composable
 import androidx.core.graphics.drawable.toBitmap
+import androidx.ui.core.ContentScale
+import androidx.ui.geometry.Size
 import androidx.ui.graphics.AndroidImageAssetAccessor
 import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.vector.Group
 import androidx.ui.graphics.vector.Path
 import androidx.ui.graphics.vector.VectorAsset
@@ -21,15 +22,12 @@ import androidx.ui.graphics.vector.VectorPath
 import androidx.ui.graphics.vector.VectorScope
 import androidx.ui.graphics.vector.composeVector
 import androidx.ui.unit.Density
-import androidx.ui.unit.PxSize
-import androidx.ui.unit.px
-import androidx.ui.unit.round
 
 fun Drawable.toImageAsset(): ImageAsset = toBitmap().toImageAsset()
 
 fun Bitmap.toImageAsset(): ImageAsset = AndroidImageAssetAccessor.createAndroidImage(this)
 
-fun ImageAsset.toBitmap(): Bitmap = nativeImage
+fun ImageAsset.toBitmap(): Bitmap = AndroidImageAssetAccessor.getBitmap(this)
 
 fun VectorAsset.toBitmap(
     context: Context,
@@ -38,8 +36,8 @@ fun VectorAsset.toBitmap(
     val density = Density(context)
     val vector = with(density) {
         VectorComponent(
-            defaultWidth.toPx().value,
-            defaultHeight.toPx().value,
+            defaultWidth.toPx(),
+            defaultHeight.toPx(),
             defaultWidth.toPx(),
             defaultHeight.toPx()
         )
@@ -49,14 +47,15 @@ fun VectorAsset.toBitmap(
         RenderVectorGroup(group = root)
     }
 
-    val vectorWidth = vector.defaultWidth.round().value
-    val vectorHeight = vector.defaultHeight.round().value
+    val vectorWidth = vector.defaultWidth
+    val vectorHeight = vector.defaultHeight
 
-    val bitmap = Bitmap.createBitmap(vectorWidth, vectorHeight, Bitmap.Config.ARGB_8888)
+    val bitmap =
+        Bitmap.createBitmap(vectorWidth.toInt(), vectorHeight.toInt(), Bitmap.Config.ARGB_8888)
 
-    val scale = ScaleFit.Fit.scale(
-        srcSize = PxSize(vector.defaultWidth, vector.defaultHeight),
-        dstSize = PxSize(bitmap.width.px, bitmap.height.px)
+    val scale = ContentScale.Fit.scale(
+        srcSize = Size(vector.defaultWidth, vector.defaultHeight),
+        dstSize = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
     )
 
     vector.root.scaleX = (vectorWidth / viewportWidth) * scale

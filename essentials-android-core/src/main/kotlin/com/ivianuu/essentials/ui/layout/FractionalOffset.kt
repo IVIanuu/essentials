@@ -22,34 +22,21 @@ import androidx.ui.core.LayoutModifier
 import androidx.ui.core.Measurable
 import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
-import androidx.ui.core.enforce
-import androidx.ui.unit.ipx
 
-fun Modifier.squared(fit: SquareFit) = this + SquaredModifier(fit)
+fun Modifier.offsetFraction(x: Float = 0f, y: Float = 0f) = this + FractionalOffsetModifier(x, y)
 
-private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
+private data class FractionalOffsetModifier(val x: Float, val y: Float) : LayoutModifier {
     override fun MeasureScope.measure(
         measurable: Measurable,
         constraints: Constraints,
         layoutDirection: LayoutDirection
     ): MeasureScope.MeasureResult {
-        val size = when (fit) {
-            SquareFit.MatchWidth -> constraints.maxWidth
-            SquareFit.MatchHeight -> constraints.maxHeight
-        }
-        val finalConstraints = constraints.copy(
-            maxWidth = size,
-            maxHeight = size
-        ).enforce(constraints)
-
-        val placeable = measurable.measure(finalConstraints, layoutDirection)
-
+        val placeable = measurable.measure(constraints)
         return layout(placeable.width, placeable.height) {
-            placeable.place(0.ipx, 0.ipx)
+            placeable.placeAbsolute(
+                if (layoutDirection == LayoutDirection.Ltr) placeable.width * x else placeable.width * -x,
+                placeable.height * y
+            )
         }
     }
-}
-
-enum class SquareFit {
-    MatchWidth, MatchHeight
 }

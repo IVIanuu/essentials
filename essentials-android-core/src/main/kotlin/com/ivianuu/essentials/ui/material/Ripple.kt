@@ -6,20 +6,25 @@ import androidx.compose.CompositionLifecycleObserver
 import androidx.compose.Immutable
 import androidx.compose.StructurallyEqual
 import androidx.compose.frames.modelListOf
+import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.asDisposableClock
 import androidx.ui.animation.transitionsEnabled
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.Constraints
+import androidx.ui.core.ContentDrawScope
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.DrawModifier
 import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutModifier
+import androidx.ui.core.Measurable
+import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
-import androidx.ui.core.gesture.PressIndicatorGestureDetector
-import androidx.ui.graphics.Canvas
+import androidx.ui.core.composed
+import androidx.ui.core.gesture.pressIndicatorGestureFilter
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.RippleEffect
@@ -29,10 +34,10 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPxSize
 import androidx.ui.unit.PxPosition
-import androidx.ui.unit.PxSize
 import androidx.ui.unit.center
 import androidx.ui.unit.ipx
 import androidx.ui.unit.toPxSize
+import androidx.ui.util.fastForEach
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -57,7 +62,7 @@ fun Modifier.ripple(
     radius: Dp? = null,
     enabled: Boolean = true,
     clock: AnimationClockObservable = AnimationClockAmbient.current
-): Modifier {
+): Modifier = composed {
     @Suppress("NAME_SHADOWING") // don't allow usage of the parameter clock, only the disposable
     val clock = clock.asDisposableClock()
     val density = DensityAmbient.current
@@ -65,7 +70,7 @@ fun Modifier.ripple(
     val theme = RippleThemeAmbient.current
     rippleModifier.color = style.color
 
-    val pressIndicator = PressIndicatorGestureDetector(
+    val pressIndicator = Modifier.pressIndicatorGestureFilter(
         onStart = { position ->
             if (enabled && transitionsEnabled) {
                 rippleModifier.handleStart(position, theme.factory, density, bounded, radius, clock)
@@ -74,7 +79,7 @@ fun Modifier.ripple(
         onStop = { rippleModifier.handleFinish(false) },
         onCancel = { rippleModifier.handleFinish(true) }
     )
-    return pressIndicator.plus(rippleModifier)
+    pressIndicator + rippleModifier
 }
 
 private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycleObserver {
@@ -85,13 +90,16 @@ private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycl
     private var effects = modelListOf<RippleEffect>()
     private var currentEffect: RippleEffect? = null
 
-    override fun Density.modifySize(
+    override fun MeasureScope.measure(
+        measurable: Measurable,
         constraints: Constraints,
-        layoutDirection: LayoutDirection,
-        childSize: IntPxSize
-    ): IntPxSize {
-        size = childSize
-        return childSize
+        layoutDirection: LayoutDirection
+    ): MeasureScope.MeasureResult {
+        val placeable = measurable.measure(constraints)
+        size = IntPxSize(placeable.width, placeable.height)
+        return layout(placeable.width, placeable.height) {
+            placeable.place(0.ipx, 0.ipx)
+        }
     }
 
     fun handleStart(
@@ -110,7 +118,7 @@ private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycl
             }
         }
         val effect = factory.create(
-            size,
+            size.toPxSize(),
             position,
             density,
             radius,
@@ -128,9 +136,13 @@ private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycl
         currentEffect = null
     }
 
-    override fun draw(density: Density, drawContent: () -> Unit, canvas: Canvas, size: PxSize) {
+    override fun ContentDrawScope.draw() {
         drawContent()
-        effects.forEach { it.draw(canvas, this.size, color) }
+        effects.fastForEach {
+            with(it) {
+                draw(color)
+            }
+        }
     }
 
     override fun onEnter() {
@@ -138,8 +150,9 @@ private class RippleModifier : DrawModifier, LayoutModifier, CompositionLifecycl
     }
 
     override fun onLeave() {
-        effects.forEach { it.dispose() }
+        effects.fastForEach { it.dispose() }
         effects.clear()
         currentEffect = null
     }
+
 }

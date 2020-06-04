@@ -1,30 +1,25 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.media.AudioManager
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.VolumeUp
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.volumeAction() {
-    action(
+private fun volumeModule() {
+    installIn<ApplicationComponent>()
+    /*bindAction<@ActionQualifier("volume") Action>(
         key = "volume",
         title = { getStringResource(R.string.es_action_volume) },
         iconProvider = { SingleActionIconProvider(Icons.Default.VolumeUp) },
         executor = { get<VolumeActionExecutor>() }
-    )
+    )*/
 }
 
-@Factory
-private class VolumeActionExecutor(
+@Transient
+internal class VolumeActionExecutor(
     private val audioManager: AudioManager
 ) : ActionExecutor {
     override suspend fun invoke() {

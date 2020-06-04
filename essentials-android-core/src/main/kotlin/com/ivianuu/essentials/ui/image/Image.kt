@@ -5,13 +5,13 @@ import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
+import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.BlendMode
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.DefaultAlpha
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import androidx.ui.graphics.vector.VectorAsset
@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 data class ImageStyle(
     val modifier: Modifier,
     val alignment: Alignment,
-    val scaleFit: ScaleFit,
+    val contentScale: ContentScale,
     val alpha: Float,
     val colorFilter: ColorFilter?
 )
@@ -32,15 +32,15 @@ val ImageStyleAmbient = staticAmbientOf<ImageStyle>()
 
 @Composable
 fun DefaultImageStyle(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
-    scaleFit: ScaleFit = ScaleFit.Fit,
+    contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null
 ) = ImageStyle(
     modifier = modifier,
     alignment = alignment,
-    scaleFit = scaleFit,
+    contentScale = contentScale,
     alpha = alpha,
     colorFilter = colorFilter
 )
@@ -48,14 +48,14 @@ fun DefaultImageStyle(
 @Composable
 fun DefaultImageStyle(
     tint: Color,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
-    scaleFit: ScaleFit = ScaleFit.Fit,
+    contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha
 ) = ImageStyle(
     modifier = modifier,
     alignment = alignment,
-    scaleFit = scaleFit,
+    contentScale = contentScale,
     alpha = alpha,
     colorFilter = ColorFilter(tint, BlendMode.srcIn)
 )
@@ -63,14 +63,14 @@ fun DefaultImageStyle(
 @Composable
 fun Image(
     painter: Painter,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     androidx.ui.foundation.Image(
         painter = painter,
         modifier = modifier,
         alignment = style.alignment,
-        scaleFit = style.scaleFit,
+        contentScale = style.contentScale,
         alpha = style.alpha,
         colorFilter = style.colorFilter
     )
@@ -79,7 +79,7 @@ fun Image(
 @Composable
 fun Image(
     id: Int,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(
@@ -92,7 +92,7 @@ fun Image(
 @Composable
 fun Image(
     image: ImageAsset,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(
@@ -105,7 +105,7 @@ fun Image(
 @Composable
 fun Image(
     image: VectorAsset,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: ImageStyle = ImageStyleAmbient.currentOrElse { DefaultImageStyle() }
 ) {
     Image(

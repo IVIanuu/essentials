@@ -9,7 +9,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.File
@@ -19,7 +19,7 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@Factory
+@Transient
 class BackupUseCase(
     private val application: Application,
     private val buildInfo: BuildInfo,

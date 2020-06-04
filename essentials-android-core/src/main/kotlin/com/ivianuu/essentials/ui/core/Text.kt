@@ -28,6 +28,7 @@ import androidx.ui.core.selection.SelectionRegistrar
 import androidx.ui.core.selection.SelectionRegistrarAmbient
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.currentTextStyle
+import androidx.ui.geometry.Rect
 import androidx.ui.res.stringResource
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.TextStyle
@@ -57,7 +58,7 @@ fun DefaultTextComposableStyle(
     overflow = overflow,
     maxLines = maxLines,
     selectable = selectable,
-    modifier = Modifier.None
+    modifier = Modifier
 )
 
 val TextComposableStyleAmbient =
@@ -66,7 +67,7 @@ val TextComposableStyleAmbient =
 @Composable
 fun Text(
     textRes: Int,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
     textStyle: TextStyle = currentTextStyle()
 ) {
@@ -81,7 +82,7 @@ fun Text(
 @Composable
 fun Text(
     text: String,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
     textStyle: TextStyle = currentTextStyle()
 ) {
@@ -100,7 +101,7 @@ fun Text(
 @Composable
 fun Text(
     text: AnnotatedString,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: TextComposableStyle = TextComposableStyleAmbient.currentOrElse { DefaultTextComposableStyle() },
     textStyle: TextStyle = currentTextStyle()
 ) {
@@ -151,8 +152,8 @@ private object NoopSelectionRegistrar : SelectionRegistrar {
             isStartHandle: Boolean
         ): Selection? = null
 
+        override fun getBoundingBox(offset: Int): Rect = Rect.zero
         override fun getText(): AnnotatedString = AnnotatedString("")
-
         override fun getHandlePosition(selection: Selection, isStartHandle: Boolean): PxPosition = PxPosition.Origin
         override fun getLayoutCoordinates(): LayoutCoordinates? = null
     }

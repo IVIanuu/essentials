@@ -23,6 +23,7 @@ import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
@@ -33,7 +34,6 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Spacer
-import androidx.ui.layout.Table
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
@@ -41,9 +41,9 @@ import androidx.ui.layout.preferredHeight
 import androidx.ui.layout.preferredSize
 import androidx.ui.layout.preferredWidth
 import androidx.ui.layout.preferredWidthIn
+import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.SliderPosition
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
@@ -53,13 +53,13 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.Scroller
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.core.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
+import com.ivianuu.essentials.ui.layout.SquareFit
+import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.Surface
@@ -176,36 +176,41 @@ private fun ColorGrid(
 
     key(currentPalette) {
         Scroller(modifier = Modifier.padding(all = 4.dp)) {
-            Table(
-                columns = 4,
-                alignment = { Alignment.Center }
+            Column(
+                mainAxisAlignment = MainAxisAlignment.Center,
+                crossAxisAlignment = CrossAxisAlignment.Center
             ) {
-                val chunkedItems = items.chunked(4)
-                chunkedItems.forEach { rowItems ->
-                    tableRow {
-                        rowItems.forEach { item ->
-                            key(item) {
-                                when (item) {
-                                    is ColorGridItem.Back -> ColorGridBackButton(
-                                        onClick = { setCurrentPalette(null) }
-                                    )
-                                    is ColorGridItem.Color -> ColorGridItem(
-                                        color = item.color,
-                                        isSelected = item.color == currentColor,
-                                        onClick = {
-                                            if (currentPalette == null) {
-                                                val paletteForItem =
-                                                    colorPalettes.first { it.front == item.color }
-                                                if (paletteForItem.colors.size > 1) {
-                                                    setCurrentPalette(paletteForItem)
+                WithConstraints {
+                    items.chunked(4).forEach { rowItems ->
+                        Row(
+                            mainAxisAlignment = MainAxisAlignment.Center,
+                            crossAxisAlignment = CrossAxisAlignment.Center,
+                            modifier = Modifier.size(maxWidth / 4)
+                        ) {
+                            rowItems.forEach { item ->
+                                key(item) {
+                                    when (item) {
+                                        is ColorGridItem.Back -> ColorGridBackButton(
+                                            onClick = { setCurrentPalette(null) }
+                                        )
+                                        is ColorGridItem.Color -> ColorGridItem(
+                                            color = item.color,
+                                            isSelected = item.color == currentColor,
+                                            onClick = {
+                                                if (currentPalette == null) {
+                                                    val paletteForItem =
+                                                        colorPalettes.first { it.front == item.color }
+                                                    if (paletteForItem.colors.size > 1) {
+                                                        setCurrentPalette(paletteForItem)
+                                                    } else {
+                                                        onColorSelected(item.color)
+                                                    }
                                                 } else {
                                                     onColorSelected(item.color)
                                                 }
-                                            } else {
-                                                onColorSelected(item.color)
                                             }
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -270,7 +275,7 @@ private fun BaseColorGridItem(
 ) {
     Clickable(onClick = onClick, modifier = Modifier.ripple()) {
         Box(
-            modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth)
+            modifier = Modifier.squared(SquareFit.MatchWidth)
                 .padding(all = 4.dp)
                 .wrapContentSize(Alignment.Center),
             children = children
@@ -298,7 +303,7 @@ private fun ColorEditor(
                     ColorComponentItem(
                         component = component,
                         value = component.extract(color),
-                        onChanged = { onColorChanged(component.apply(color, it)) }
+                        onValueChanged = { onColorChanged(component.apply(color, it)) }
                     )
                 }
             }
@@ -326,7 +331,6 @@ private fun ColorEditorHeader(
                     val (hexInput, setHexInput) = stateFor(color) {
                         TextFieldValue(color.toHexString(includeAlpha = showAlphaSelector))
                     }
-                    hideKeyboardOnDispose()
                     Text("#")
                     TextField(
                         value = hexInput,
@@ -376,7 +380,7 @@ private fun ColoredDialogButton(
 private fun ColorComponentItem(
     component: ColorComponent,
     value: Float,
-    onChanged: (Float) -> Unit
+    onValueChanged: (Float) -> Unit
 ) {
     Row(
         modifier = Modifier.preferredHeight(48.dp).fillMaxWidth(),
@@ -389,15 +393,10 @@ private fun ColorComponentItem(
 
         Spacer(Modifier.preferredWidth(8.dp))
 
-        val position = SliderPosition(initial = value)
-
         Slider(
-            position = position,
+            value = value,
+            onValueChange = onValueChanged,
             modifier = LayoutFlexible(flex = 1f),
-            onValueChange = {
-                position.value = it
-                onChanged(it)
-            },
             style = DefaultSliderStyle(color = component.color())
         )
 

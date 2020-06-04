@@ -41,7 +41,7 @@ data class DialogStyle(
 fun DefaultDialogStyle(
     shape: Shape = RoundedCornerShape(size = 4.dp),
     elevation: Dp = 24.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = DialogStyle(shape = shape, elevation = elevation, modifier = modifier)
 
 val DialogStyleAmbient = staticAmbientOf<DialogStyle>()

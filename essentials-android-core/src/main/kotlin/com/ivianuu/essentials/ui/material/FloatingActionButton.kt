@@ -57,7 +57,7 @@ fun DefaultFloatingActionButtonStyle(
     backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = FloatingActionButtonStyle(
     shape = shape,
     backgroundColor = backgroundColor,
@@ -72,7 +72,7 @@ fun MiniFloatingActionButtonStyle(
     backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = FloatingActionButtonStyle(
     shape = shape,
     backgroundColor = backgroundColor,
@@ -87,7 +87,7 @@ fun ExtendedFloatingActionButtonStyle(
     backgroundColor: Color = MaterialTheme.colors.secondary,
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = 6.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = FloatingActionButtonStyle(
     shape = shape,
     backgroundColor = backgroundColor,
@@ -100,7 +100,7 @@ val FloatingActionButtonStyleAmbient = staticAmbientOf<FloatingActionButtonStyle
 
 @Composable
 fun FloatingActionButton(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { DefaultFloatingActionButtonStyle() },
     children: @Composable () -> Unit
@@ -138,7 +138,7 @@ fun FloatingActionButton(
 fun FloatingActionButton(
     text: @Composable () -> Unit,
     icon: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { ExtendedFloatingActionButtonStyle() }
 ) {

@@ -23,7 +23,8 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.ParentData
+import androidx.ui.core.tag
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxWidth
@@ -65,7 +66,7 @@ fun DefaultAppBarStyle(
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = AppBarStyle(
     backgroundColor = backgroundColor,
     contentColor = contentColor,
@@ -78,7 +79,7 @@ fun DefaultAppBarStyle(
 fun PrimaryAppBarStyle(
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = primary,
@@ -93,7 +94,7 @@ fun PrimaryAppBarStyle(
 fun SurfaceAppBarStyle(
     elevation: Dp = 0.dp,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = surface,
@@ -108,7 +109,7 @@ val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
 
 @Composable
 fun TopAppBar(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: AppBarStyle = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() },
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
@@ -180,32 +181,33 @@ private fun TopAppBarLayout(
 ) {
     Layout(modifier = modifier, children = {
         if (leading != null) {
-            ParentData(data = TopAppBarSlot.Leading) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Leading)) {
                 leading()
             }
         }
 
         if (title != null) {
-            ParentData(data = TopAppBarSlot.Title) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Title)) {
                 title()
             }
         }
 
         if (actions != null) {
-            ParentData(data = TopAppBarSlot.Actions) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Actions)) {
                 actions()
             }
         }
     }) { measurables, constraints, _ ->
-        val leadingMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
-        val titleMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Title }
-        val actionsMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
+        val leadingMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Leading }
+        val titleMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Title }
+        val actionsMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Actions }
 
         var childConstraints = constraints.copy(minWidth = 0.ipx, minHeight = 0.ipx)
 
         val leadingPlaceable = leadingMeasureable?.measure(childConstraints)
         if (leadingPlaceable != null) {
-            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - leadingPlaceable.width)
+            childConstraints =
+                childConstraints.copy(maxWidth = childConstraints.maxWidth - leadingPlaceable.width)
         }
 
         val actionsPlaceable = actionsMeasureable?.measure(childConstraints)

@@ -25,14 +25,14 @@ import androidx.compose.remember
 inline fun <T> holder(
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): Holder<T> = remember { holderOf(init(), areEquivalent) }
+): MutableHolder<T> = remember { mutableHolderOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T, V1> holderFor(
     v1: V1,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): Holder<T> = remember(v1) { holderOf(init(), areEquivalent) }
+): MutableHolder<T> = remember(v1) { mutableHolderOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T, V1, V2> holderFor(
@@ -40,28 +40,36 @@ inline fun <T, V1, V2> holderFor(
     v2: V2,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): Holder<T> = remember(v1, v2) { holderOf(init(), areEquivalent) }
+): MutableHolder<T> = remember(v1, v2) { mutableHolderOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T> holderFor(
     vararg inputs: Any?,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): Holder<T> = remember(*inputs) {
-    holderOf(init(), areEquivalent)
+): MutableHolder<T> = remember(*inputs) {
+    mutableHolderOf(init(), areEquivalent)
 }
 
-fun <T> holderOf(
+fun <T> mutableHolderOf(
     value: T,
     areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual
-) = Holder(value, areEquivalent)
+): MutableHolder<T> = MutableHolderImpl(value, areEquivalent)
+
+interface Holder<T> {
+    val value: T
+}
+
+interface MutableHolder<T> : Holder<T> {
+    override var value: T
+}
 
 @Stable
-class Holder<T> internal constructor(
+private class MutableHolderImpl<T> internal constructor(
     value: T,
     val areEquivalent: (old: T, new: T) -> Boolean
-) {
-    var value: T = value
+) : MutableHolder<T> {
+    override var value: T = value
         set(value) {
             if (!areEquivalent(field, value)) {
                 field = value

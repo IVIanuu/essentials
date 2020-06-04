@@ -19,11 +19,11 @@ package com.ivianuu.essentials.analytics
 import android.content.Context
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Factory
 import io.fabric.sdk.android.Fabric
 
-@Factory
+@BindAppInitializer
 internal class AnalyticsAppInitializer(
     buildInfo: BuildInfo,
     context: Context

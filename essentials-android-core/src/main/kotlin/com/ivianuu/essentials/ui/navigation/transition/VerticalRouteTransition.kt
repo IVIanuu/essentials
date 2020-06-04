@@ -3,7 +3,8 @@ package com.ivianuu.essentials.ui.navigation.transition
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.layout.LayoutOffset
+import androidx.ui.core.Modifier
+import com.ivianuu.essentials.ui.layout.offsetFraction
 import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
 import com.ivianuu.essentials.ui.navigation.opsOf
@@ -19,8 +20,8 @@ fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransi
     },
     generateOps = { transitionState, _ ->
         opsOf(
-            ModifierRouteTransitionType.Modifier with LayoutOffset.Fraction(
-                fractionY = transitionState[VerticalOffset]
+            ModifierRouteTransitionType.Modifier with Modifier.offsetFraction(
+                y = transitionState[VerticalOffset]
             )
         )
     }

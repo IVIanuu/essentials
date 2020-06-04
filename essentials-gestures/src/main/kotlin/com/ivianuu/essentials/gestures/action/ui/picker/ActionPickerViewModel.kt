@@ -17,14 +17,14 @@ import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.launch
 
-@Factory
+@Transient
 internal class ActionPickerViewModel(
-    @Param private val showDefaultOption: Boolean,
-    @Param private val showNoneOption: Boolean,
+    @Assisted private val showDefaultOption: Boolean,
+    @Assisted private val showNoneOption: Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
     private val navigator: NavigatorState,
@@ -133,4 +133,4 @@ sealed class ActionPickerItem {
 }
 
 @Immutable
-data class ActionPickerState(val items: Async<List<ActionPickerItem>> = Uninitialized)
+data class ActionPickerState(val items: Async<List<ActionPickerItem>> = Uninitialized())

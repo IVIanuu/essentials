@@ -17,38 +17,42 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 
 @Composable
-fun RadioButtonPreference(
-    @Pivotal box: Box<Boolean>,
+inline fun RadioButtonPreference(
+    box: Box<Boolean>,
     enabled: Boolean = true,
+    noinline title: @Composable (() -> Unit)? = null,
+    noinline summary: @Composable (() -> Unit)? = null,
+    noinline leading: @Composable (() -> Unit)? = null,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
 ) {
-    RadioButtonPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading
-    )
+    key(box) {
+        RadioButtonPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dependencies = dependencies
+        )
+    }
 }
 
 @Composable
 fun RadioButtonPreference(
     valueController: ValueController<Boolean>,
     enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
+    leading: @Composable (() -> Unit)? = null,
+    dependencies: List<Dependency<*>>? = null,
 ) {
     PreferenceWrapper(
         valueController = valueController,
@@ -60,7 +64,7 @@ fun RadioButtonPreference(
             summary = summary,
             leading = leading,
             trailing = {
-                AbsorbPointer {
+                Box(modifier = Modifier.absorbPointer()) {
                     RadioButton(
                         selected = context.currentValue,
                         onSelect = { context.setIfOk(!context.currentValue); Unit },

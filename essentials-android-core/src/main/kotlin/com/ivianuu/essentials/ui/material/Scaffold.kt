@@ -17,15 +17,16 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Model
 import androidx.compose.Providers
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
-import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.ParentData
+import androidx.ui.core.tag
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
@@ -44,12 +45,10 @@ fun Scaffold(
     bottomBar: @Composable (() -> Unit)? = null,
     fab: @Composable (() -> Unit)? = null,
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
-    bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
     applySideSafeArea: Boolean = true
 ) {
     val scaffoldState = remember { ScaffoldState() }
-    remember(fabPosition) { scaffoldState.fabPosition = fabPosition }
-    remember(bodyLayoutMode) { scaffoldState.bodyLayoutMode = bodyLayoutMode }
+    remember(fabPosition) { }
     remember(applySideSafeArea) { scaffoldState.applySideSafeArea = applySideSafeArea }
 
     Scaffold(
@@ -85,41 +84,35 @@ fun Scaffold(
     Providers(ScaffoldAmbient provides scaffoldState) {
         var layout: @Composable () -> Unit = {
             Surface {
-                ScaffoldLayout(
-                    state = scaffoldState,
-                    topAppBar = topAppBar?.let {
-                        {
-                            Stack {
-                                topAppBar()
-                            }
+                ScaffoldLayout(state = scaffoldState) {
+                    if (topAppBar != null) {
+                        Stack(modifier = Modifier.tag(ScaffoldSlot.TopAppBar)) {
+                            topAppBar()
                         }
-                    },
-                    body = body?.let {
-                        {
-                            Stack {
-                                body()
-                            }
+                    }
+
+                    if (body != null) {
+                        Stack(modifier = Modifier.tag(ScaffoldSlot.Body)) {
+                            body()
                         }
-                    },
-                    bottomBar = bottomBar?.let {
-                        {
-                            Stack {
-                                bottomBar()
-                            }
+                    }
+
+                    if (bottomBar != null) {
+                        Stack(modifier = Modifier.tag(ScaffoldSlot.BottomBar)) {
+                            bottomBar()
                         }
-                    },
-                    fab = fab?.let {
-                        {
-                            Stack {
-                                if (bottomBar != null) {
-                                    fab()
-                                } else {
-                                    SafeArea(children = fab)
-                                }
+                    }
+
+                    if (fab != null) {
+                        Stack(modifier = Modifier.tag(ScaffoldSlot.Fab)) {
+                            if (bottomBar != null) {
+                                fab()
+                            } else {
+                                SafeArea(children = fab)
                             }
                         }
                     }
-                )
+                }
             }
         }
 
@@ -151,28 +144,24 @@ fun Scaffold(
     }
 }
 
-@Model
 class ScaffoldState {
 
-    var hasTopAppBar = false
+    var hasTopAppBar by mutableStateOf(false)
         internal set
-    var hasDrawer = false
+    var hasDrawer by mutableStateOf(false)
         internal set
-    var hasBody = false
+    var hasBody by mutableStateOf(false)
         internal set
-    var hasBottomBar = false
+    var hasBottomBar by mutableStateOf(false)
         internal set
-    var hasFab = false
+    var hasFab by mutableStateOf(false)
         internal set
 
-    var isDrawerOpen = false
-    var isDrawerGesturesEnabled = false
+    var isDrawerOpen by mutableStateOf(false)
+    var isDrawerGesturesEnabled by mutableStateOf(false)
 
-    var fabPosition = FabPosition.End
-    var bodyLayoutMode = BodyLayoutMode.Wrap
-    var applySideSafeArea = true
-
-    enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
+    var fabPosition by mutableStateOf(FabPosition.End)
+    var applySideSafeArea by mutableStateOf(true)
 
     enum class FabPosition { Center, End }
 }
@@ -183,54 +172,23 @@ val ScaffoldAmbient =
 @Composable
 private fun ScaffoldLayout(
     state: ScaffoldState,
-    topAppBar: @Composable (() -> Unit)?,
-    body: @Composable (() -> Unit)?,
-    bottomBar: @Composable (() -> Unit)?,
-    fab: @Composable (() -> Unit)?
+    children: @Composable () -> Unit
 ) {
-    val children: @Composable () -> Unit = {
-        if (topAppBar != null) {
-            ParentData(ScaffoldSlot.TopAppBar) {
-                topAppBar()
-            }
-        }
-
-        if (body != null) {
-            ParentData(ScaffoldSlot.Body) {
-                body()
-            }
-        }
-
-        if (bottomBar != null) {
-            ParentData(ScaffoldSlot.BottomBar) {
-                bottomBar()
-            }
-        }
-
-        if (fab != null) {
-            ParentData(ScaffoldSlot.Fab) {
-                fab()
-            }
-        }
-    }
-
-    val fabPadding = with(DensityAmbient.current) { 16.dp.toIntPx() }
-
     Layout(children = children) { measurables, incomingConstraints, _ ->
         val width = incomingConstraints.maxWidth
         val height = incomingConstraints.maxHeight
 
         val topAppBarMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldSlot.TopAppBar
+            it.tag == ScaffoldSlot.TopAppBar
         }
         val bodyMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldSlot.Body
+            it.tag == ScaffoldSlot.Body
         }
         val bottomBarMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldSlot.BottomBar
+            it.tag == ScaffoldSlot.BottomBar
         }
         val fabMeasureable = measurables.firstOrNull {
-            it.parentData == ScaffoldSlot.Fab
+            it.tag == ScaffoldSlot.Fab
         }
 
         var barConstraints = incomingConstraints.copy(
@@ -254,32 +212,8 @@ private fun ScaffoldLayout(
         val bottomBarTop =
             if (bottomBarPlaceable != null) bottomBarBottom!! - bottomBarPlaceable.height else null
 
-        val bodyTop: IntPx?
-        val bodyBottom: IntPx?
-
-        if (bodyMeasureable == null) {
-            bodyTop = null
-            bodyBottom = null
-        } else {
-            when (state.bodyLayoutMode) {
-                ScaffoldState.BodyLayoutMode.ExtendBoth -> {
-                    bodyTop = topAppBarTop!!
-                    bodyBottom = bottomBarBottom!!
-                }
-                ScaffoldState.BodyLayoutMode.ExtendTop -> {
-                    bodyTop = topAppBarTop!!
-                    bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
-                }
-                ScaffoldState.BodyLayoutMode.ExtendBottom -> {
-                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
-                    bodyBottom = bottomBarBottom!!
-                }
-                ScaffoldState.BodyLayoutMode.Wrap -> {
-                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
-                    bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
-                }
-            }
-        }
+        val bodyTop: IntPx? = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
+        val bodyBottom: IntPx? = if (bottomBarMeasureable != null) bottomBarTop!! else height
 
         val bodyHeight = if (bodyMeasureable != null) bodyBottom!! - bodyTop!! else null
 
@@ -296,7 +230,10 @@ private fun ScaffoldLayout(
             bodyMeasureable.measure(bodyConstraints)
         }
 
-        val fabPlaceable = fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0.ipx, minHeight = 0.ipx))
+        val fabPlaceable =
+            fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0.ipx, minHeight = 0.ipx))
+
+        val fabPadding = 16.dp.toIntPx()
 
         val fabTop = if (fabPlaceable != null) {
             if (bottomBarMeasureable != null) bottomBarTop!! - fabPlaceable.height - fabPadding

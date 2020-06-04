@@ -17,24 +17,25 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
-import androidx.compose.Model
-import androidx.compose.Observe
 import androidx.compose.Providers
+import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.onDispose
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.OverlayState
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.common.skippable
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
-import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
@@ -53,12 +54,10 @@ fun InjectedNavigator(
 ) {
     val state = inject<NavigatorState>()
 
-    Observe {
-        state.handleBack = handleBack
-        state.popsLastRoute = popsLastRoute
-        if (!state.hasRoot) {
-            state.setRoot(startRoute)
-        }
+    state.handleBack = handleBack
+    state.popsLastRoute = popsLastRoute
+    if (!state.hasRoot) {
+        state.setRoot(startRoute)
     }
 
     Navigator(state = state)
@@ -70,7 +69,7 @@ fun Navigator(
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
 ) {
-    val coroutineScope = CoroutineScopeAmbient.current
+    val coroutineScope = compositionCoroutineScope()
     val dispatchers = inject<AppCoroutineDispatchers>()
     val logger = inject<Logger>()
     val state = remember {
@@ -93,39 +92,40 @@ fun Navigator(
 fun Navigator(state: NavigatorState) {
     state.defaultRouteTransition = DefaultRouteTransitionAmbient.current
 
-    Providers(NavigatorAmbient provides state) {
-        Overlay(state = state.overlayState)
-    }
-
     val logger = inject<Logger>()
 
-    Observe {
-        val enabled = state.handleBack &&
-                state.backStack.isNotEmpty() &&
-                (state.popsLastRoute || state.backStack.size > 1)
-        logger.d("back press enabled $enabled")
-        onBackPressed(enabled = enabled) {
-            logger.d("on back pressed ${state.runningTransitions}")
-            if (state.runningTransitions == 0) state.popTop()
-        }
+    val enabled = state.handleBack &&
+            state.backStack.isNotEmpty() &&
+            (state.popsLastRoute || state.backStack.size > 1)
+    logger.d("back press enabled $enabled")
+    onBackPressed(enabled = enabled) {
+        logger.d("on back pressed ${state.runningTransitions}")
+        if (state.runningTransitions == 0) state.popTop()
     }
 
     onDispose { state.dispose() }
+
+    Providers(NavigatorAmbient provides state) {
+        Overlay(state = state.overlayState)
+    }
 }
 
 // todo remove main thread requirement
-@Model
+@Stable
 class NavigatorState(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     internal val overlayState: OverlayState = OverlayState(),
     startRoute: Route? = null,
-    var handleBack: Boolean = true,
-    var popsLastRoute: Boolean = false,
+    handleBack: Boolean = true,
+    popsLastRoute: Boolean = false,
     private val logger: Logger
 ) {
 
-    internal var runningTransitions = 0
+    var handleBack by mutableStateOf(handleBack)
+    var popsLastRoute by mutableStateOf(popsLastRoute)
+
+    internal var runningTransitions by mutableStateOf(0)
 
     private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
@@ -133,10 +133,8 @@ class NavigatorState(
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
-    var routeTransitionTypes =
-        listOf(ModifierRouteTransitionType)
-
-    internal var defaultRouteTransition = DefaultRouteTransition
+    var routeTransitionTypes by mutableStateOf(listOf(ModifierRouteTransitionType))
+    internal var defaultRouteTransition by mutableStateOf(DefaultRouteTransition)
 
     init {
         if (startRoute != null && !hasRoot) {
@@ -366,7 +364,6 @@ class NavigatorState(
         return visibleRoutes
     }
 
-    @Model
     private inner class RouteState(val route: Route) {
 
         private val retainedObjects = RetainedObjects()
@@ -380,20 +377,15 @@ class NavigatorState(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
                 ) {
-                    ProvideCoroutineScope(coroutineScope()) {
-                        AbsorbPointer(absorb = transitionRunning) {
-                            RouteTransitionWrapper(
-                                transition = transition ?: defaultRouteTransition,
-                                state = transitionState,
-                                lastState = lastTransitionState,
-                                onTransitionComplete = onTransitionComplete,
-                                types = routeTransitionTypes
-                            ) {
-                                skippable(true) {
-                                    route.content()
-                                }
-                            }
-                        }
+                    Box(modifier = Modifier.absorbPointer(transitionRunning)) {
+                        RouteTransitionWrapper(
+                            transition = transition ?: defaultRouteTransition,
+                            state = transitionState,
+                            lastState = lastTransitionState,
+                            onTransitionComplete = onTransitionComplete,
+                            types = routeTransitionTypes,
+                            children = route.content
+                        )
                     }
                 }
             }
@@ -410,22 +402,19 @@ class NavigatorState(
             }
 
             if ((completedState == RouteTransition.State.ExitFromPush && !route.keepState) ||
-                completedState == RouteTransition.State.ExitFromPop) {
+                completedState == RouteTransition.State.ExitFromPop
+            ) {
                 overlayState.remove(overlayEntry)
             }
         }
 
-        private var transition: RouteTransition? = null // todo direct assign
-        private var transitionState = RouteTransition.State.Init
-        private var lastTransitionState = RouteTransition.State.Init
+        private var transition: RouteTransition? by mutableStateOf(route.enterTransition)
+        private var transitionState by mutableStateOf(RouteTransition.State.Init)
+        private var lastTransitionState by mutableStateOf(RouteTransition.State.Init)
 
-        private var other: RouteState? = null
+        private var other: RouteState? by mutableStateOf(null)
 
-        private var transitionRunning = false
-
-        init {
-            transition = route.enterTransition // todo direct assign
-        }
+        private var transitionRunning by mutableStateOf(false)
 
         private fun onOtherTransitionComplete() {
             overlayEntry.opaque = route.opaque

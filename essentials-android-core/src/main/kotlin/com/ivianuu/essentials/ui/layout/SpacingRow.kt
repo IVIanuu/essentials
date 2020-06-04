@@ -27,7 +27,7 @@ import androidx.ui.unit.ipx
 @Composable
 fun SpacingRow(
     spacing: Dp,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     children: @Composable () -> Unit
 ) {
     Layout(children = children, modifier = modifier) { measurables, constraints, _ ->

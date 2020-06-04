@@ -1,35 +1,33 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.provider.Settings
 import androidx.compose.Composable
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ScreenLockRotation
 import androidx.ui.material.icons.filled.ScreenRotation
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.gestures.action.actionPermission
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.store.android.settings.SettingBox
-import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
-import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.autoRotation() {
-    action(
+private fun AutoRotationModule() {
+    installIn<ApplicationComponent>()
+    /*transient<@ActionQualifier("auto_rotation") Action> {
+        resourceProvider: ResourceProvider ->
+        Action(
+            key = "auto_rotation",
+            title =
+        )
+    }*/
+    //bindAction<@ActionQualifier("auto_rotation") Action>()
+    /*bindAction<@ActionQualifier("auto_rotation") Action>(
         key = "auto_rotation",
         title = { getStringResource(R.string.es_action_auto_rotation) },
         iconProvider = { get<AutoRotationActionIconProvider>() },
@@ -42,25 +40,25 @@ private fun ComponentBuilder.autoRotation() {
                 }
             )
         }
-    )
-    single<Box<Int>>(qualifier = AutoRotationSetting) {
+    )*/
+    /*scoped<@AutoRotationSetting Box<Int>> {
         get<SettingsBoxFactory>()
             .int(Settings.System.ACCELEROMETER_ROTATION, SettingBox.Type.System, 1)
-    }
+    }*/
 }
 
-@Factory
-private class AutoRotationActionExecutor(
-    @AutoRotationSetting private val box: Box<Int>
+@Transient
+internal class AutoRotationActionExecutor(
+    private val box: @AutoRotationSetting Box<Int>
 ) : ActionExecutor {
     override suspend fun invoke() {
         box.updateData { if (it != 1) 1 else 0 }
     }
 }
 
-@Factory
-private class AutoRotationActionIconProvider(
-    @AutoRotationSetting private val box: Box<Int>
+@Transient
+internal class AutoRotationActionIconProvider(
+    private val box: @AutoRotationSetting Box<Int>
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = box.data
@@ -72,7 +70,6 @@ private class AutoRotationActionIconProvider(
             .map { { Icon(it) } }
 }
 
-@QualifierMarker
-private annotation class AutoRotationSetting {
-    companion object : Qualifier.Element
-}
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AutoRotationSetting

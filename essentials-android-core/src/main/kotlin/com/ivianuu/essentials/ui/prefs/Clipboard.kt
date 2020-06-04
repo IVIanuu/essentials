@@ -26,11 +26,11 @@ import com.ivianuu.essentials.util.Toaster
 @Composable
 fun ClipboardPreference(
     clipboardText: () -> String,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    dependencies: List<Dependency<*>>? = null
 ) {
     val clipboardManager = inject<ClipboardManager>()
     val toaster = inject<Toaster>()

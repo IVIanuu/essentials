@@ -1,34 +1,27 @@
 package com.ivianuu.essentials.moshi.android
 
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.ColorAccessor
 import androidx.ui.unit.Dp
 import androidx.ui.unit.IntPx
-import androidx.ui.unit.Px
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import androidx.ui.unit.px
-import com.ivianuu.injekt.Factory
+import com.ivianuu.essentials.moshi.BindJsonAdapter
+import com.ivianuu.injekt.Transient
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
 
-@Factory
+@BindJsonAdapter
+@Transient
 class ColorJsonAdapter {
     @FromJson
-    fun fromJson(value: String) = ColorAccessor.newColor(value.toLong())
+    fun fromJson(value: String) = Color(value.toULong())
+
     @ToJson
     fun toJson(color: Color) = color.value
 }
 
-@Factory
-class PxJsonAdapter {
-    @FromJson
-    fun fromJson(value: String) = value.toFloat().px
-    @ToJson
-    fun toJson(value: Px) = value.value.toString()
-}
-
-@Factory
+@BindJsonAdapter
+@Transient
 class DpJsonAdapter {
     @FromJson
     fun fromJson(value: String) = value.toFloat().dp
@@ -36,7 +29,8 @@ class DpJsonAdapter {
     fun toJson(value: Dp) = value.value.toString()
 }
 
-@Factory
+@BindJsonAdapter
+@Transient
 class IntPxJsonAdapter {
     @FromJson
     fun fromJson(value: String) = value.toInt().ipx

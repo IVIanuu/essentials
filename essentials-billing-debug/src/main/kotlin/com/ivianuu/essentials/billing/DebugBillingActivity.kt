@@ -38,20 +38,21 @@ import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.util.launchAsync
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.getLazy
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class DebugBillingActivity : EsActivity() {
 
-    private val client: DebugBillingClient by getLazy()
+    private val client: DebugBillingClient by inject()
+
+    // just to properly initialize the DebugBillingClient
+    private val purchaseManager: PurchaseManager by inject()
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
 
     @Composable
     override fun content() {
-        get<PurchaseManager>() // just to properly initialize the DebugBillingClient
         val requestId = intent.getStringExtra(KEY_REQUEST_ID)
         if (requestId == null) {
             finish()

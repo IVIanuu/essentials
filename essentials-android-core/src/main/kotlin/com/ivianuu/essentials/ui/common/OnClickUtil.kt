@@ -20,8 +20,7 @@ import android.content.Intent
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.core.net.toUri
-import com.ivianuu.essentials.ui.core.ActivityAmbient
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +36,7 @@ fun navigateOnClick(route: () -> Route): () -> Unit {
 
 @Composable
 fun openUrlOnClick(url: () -> String): () -> Unit {
-    val activity = ActivityAmbient.current
+    val activity = compositionActivity
     return remember(url) {
         {
             val intent = Intent(Intent.ACTION_VIEW).apply { this.data = url().toUri() }
@@ -50,7 +49,7 @@ fun openUrlOnClick(url: () -> String): () -> Unit {
 fun launchOnClick(
     block: suspend CoroutineScope.() -> Unit
 ): () -> Unit {
-    val coroutineScope = CoroutineScopeAmbient.current
+    val coroutineScope = compositionCoroutineScope()
     return remember(block) {
         {
             coroutineScope.launch(block = block)

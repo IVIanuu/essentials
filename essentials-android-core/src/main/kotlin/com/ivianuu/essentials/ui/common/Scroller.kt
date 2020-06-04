@@ -5,16 +5,13 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.clipToBounds
 import androidx.ui.unit.IntPx
-import androidx.ui.unit.Px
 import androidx.ui.unit.ipx
 import androidx.ui.unit.max
-import androidx.ui.unit.px
-import androidx.ui.unit.round
 import com.ivianuu.essentials.ui.core.Axis
 
 @Composable
 fun Scroller(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     direction: Axis = Axis.Vertical,
     scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
@@ -79,22 +76,22 @@ private fun ScrollerLayout(
         }
 
         layout(width, height) {
-            val newMaxValue = when (direction) {
+            val newMaxValue = (when (direction) {
                 Axis.Vertical -> max(
-                    0.px,
-                    placeables.sumBy { it.height.value }.px - height
+                    0.ipx,
+                    placeables.sumBy { it.height.value }.ipx - height
                 )
                 Axis.Horizontal -> max(
-                    Px.Zero,
-                    placeables.sumBy { it.width.value }.px - width
+                    0.ipx,
+                    placeables.sumBy { it.width.value }.ipx - width
                 )
-            }
+            }).value.toFloat()
 
             if (scrollableState.maxValue != newMaxValue) {
-                scrollableState.updateBounds(Px.Zero, newMaxValue)
+                scrollableState.updateBounds(0f, newMaxValue)
             }
 
-            var offset = -scrollableState.value.round()
+            var offset = -scrollableState.value.toInt().ipx
             placeables.forEach { placeable ->
                 @Suppress("LiftReturnOrAssignment")
                 when (direction) {

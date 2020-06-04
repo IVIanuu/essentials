@@ -18,45 +18,65 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.core.PointerEventPass
 import androidx.ui.core.PointerId
-import androidx.ui.core.PointerInputNode
+import androidx.ui.core.PointerInputChange
+import androidx.ui.core.changedToDown
+import androidx.ui.core.composed
+import androidx.ui.core.consumeDownChange
+import androidx.ui.core.pointerinput.PointerInputFilter
+import androidx.ui.core.pointerinput.PointerInputModifier
+import androidx.ui.unit.IntPxSize
 
-// todo convert to modifier
 @Composable
-fun AbsorbPointer(
+fun Modifier.absorbPointer(
     absorb: Boolean = true,
-    children: @Composable () -> Unit
-) {
-    val consumedIds = remember { mutableSetOf<PointerId>() }
-    PointerInputNode(
-        pointerInputHandler = { changes, pass, _ ->
-            if (absorb && (pass == PointerEventPass.InitialDown ||
-                        pass == PointerEventPass.PreDown ||
-                        pass == PointerEventPass.PostDown)
-            ) {
-                changes.map { change ->
-                    if (change.changedToDown()) {
-                        change.consumeDownChange().also { consumedChange ->
-                            consumedIds += consumedChange.id
-                        }
-                    } else {
-                        change
+): Modifier = composed {
+    remember { AbsorbPointerGestureFilter() }
+        .also { it.absorb = absorb }
+}
+
+private class AbsorbPointerGestureFilter : PointerInputFilter(), PointerInputModifier {
+
+    var absorb = true
+
+    override val pointerInputFilter: PointerInputFilter
+        get() = this
+
+    private val consumedIds = mutableSetOf<PointerId>()
+
+    override fun onPointerInput(
+        changes: List<PointerInputChange>,
+        pass: PointerEventPass,
+        bounds: IntPxSize
+    ): List<PointerInputChange> {
+        return if (absorb && (pass == PointerEventPass.InitialDown ||
+                    pass == PointerEventPass.PreDown ||
+                    pass == PointerEventPass.PostDown)
+        ) {
+            changes.map { change ->
+                if (change.changedToDown()) {
+                    change.consumeDownChange().also { consumedChange ->
+                        consumedIds += consumedChange.id
                     }
-                }
-            } else {
-                changes.map { change ->
-                    if (change.id in consumedIds) {
-                        change.copy(consumed = change.consumed.copy(downChange = false))
-                            .also { consumedIds -= change.id }
-                    } else {
-                        change
-                    }
+                } else {
+                    change
                 }
             }
-        },
-        cancelHandler = { consumedIds.clear() }
-    ) {
-        children()
+        } else {
+            changes.map { change ->
+                if (change.id in consumedIds) {
+                    change.copy(consumed = change.consumed.copy(downChange = false))
+                        .also { consumedIds -= change.id }
+                } else {
+                    change
+                }
+            }
+        }
+    }
+
+    override fun onCancel() {
+        consumedIds.clear()
     }
 }

@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Model
-import androidx.compose.Observe
-import androidx.compose.onActive
-import androidx.compose.onDispose
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
@@ -34,7 +33,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.ScrollableList
 import com.ivianuu.essentials.ui.common.ScrollableState
 import com.ivianuu.essentials.ui.common.holderFor
-import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.core.retain
@@ -55,9 +53,6 @@ val TextInputRoute = Route {
         state.inputValue.text.isEmpty() || state.inputValue.text in it.toLowerCase().trim()
     }
 
-    val keyboardManager = KeyboardManagerAmbient.current
-    onDispose { keyboardManager.hideKeyboard() }
-
     Scaffold(
         topAppBar = {
             TopAppBar(
@@ -67,7 +62,7 @@ val TextInputRoute = Route {
                             modifier = Modifier.fillMaxSize(),
                             gravity = ContentGravity.CenterStart
                         ) {
-                            Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
+                            Clickable(onClick = { /*keyboardManager.showKeyboard("id")*/ }) {
                                 if (state.inputValue.text.isEmpty()) {
                                     Text(
                                         text = "Search..",
@@ -78,13 +73,12 @@ val TextInputRoute = Route {
                                 TextField(
                                     value = state.inputValue,
                                     onValueChange = { state.inputValue = it },
-                                    focusIdentifier = "id",
                                     textStyle = MaterialTheme.typography.subtitle1
                                 )
                             }
                         }
 
-                        onActive { keyboardManager.showKeyboard("id") }
+                        //onActive { keyboardManager.showKeyboard("id") }
                     } else {
                         Text("Text input")
                     }
@@ -99,14 +93,12 @@ val TextInputRoute = Route {
                     ScrollableState(animationClock, flingConfig = flingConfig)
                 }
 
-                Observe {
-                    val lastScrollPosition = holderFor(scrollPosition) { scrollPosition.value }
+                val lastScrollPosition = holderFor(scrollPosition) { scrollPosition.value }
 
-                    if (lastScrollPosition.value < scrollPosition.value) {
-                        keyboardManager.hideKeyboard()
-                        if (state.searchVisible && state.inputValue.text.isEmpty()) {
-                            state.searchVisible = false
-                        }
+                if (lastScrollPosition.value < scrollPosition.value) {
+                    //keyboardManager.hideKeyboard()
+                    if (state.searchVisible && state.inputValue.text.isEmpty()) {
+                        state.searchVisible = false
                     }
                 }
 
@@ -132,10 +124,9 @@ val TextInputRoute = Route {
     )
 }
 
-@Model
-private class TextInputState(
-    var searchVisible: Boolean = false,
-    var inputValue: TextFieldValue = TextFieldValue()
-)
+private class TextInputState {
+    var searchVisible by mutableStateOf(false)
+    var inputValue by mutableStateOf(TextFieldValue())
+}
 
 private val AllItems = (0..100).map { "Item: $it" }

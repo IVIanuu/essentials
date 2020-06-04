@@ -20,20 +20,18 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.DuplicateStrategy
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esAndroidUtilModule() {
-    single {
-        val appInfo = get<Application>().applicationInfo
-        val packageInfo = get<PackageManager>()
+fun esAndroidUtilModule() {
+    installIn<ApplicationComponent>()
+    scoped { application: Application, packageManager: PackageManager ->
+        val appInfo = application.applicationInfo
+        val packageInfo = packageManager
             .getPackageInfo(appInfo.packageName, 0)
         BuildInfo(
             isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
@@ -41,18 +39,15 @@ private fun ComponentBuilder.esAndroidUtilModule() {
             versionCode = packageInfo.versionCode
         )
     }
-    single { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
-    single { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
+    scoped { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
+    scoped { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
 
-    // we use on pre build to ensure that we override the DefaultLogger binding
-    onPreBuild {
-        factory(duplicateStrategy = DuplicateStrategy.Override) {
-            if (get<BuildInfo>().isDebug) {
-                get<AndroidLogger>()
-            } else {
-                get<NoopLogger>()
-            }
+    scoped { buildInfo: BuildInfo, androidLoggerProvider: @Provider () -> AndroidLogger,
+             noopLoggerProvider: @Provider () -> NoopLogger ->
+        if (buildInfo.isDebug) {
+            androidLoggerProvider()
+        } else {
+            noopLoggerProvider()
         }
-        false
     }
 }

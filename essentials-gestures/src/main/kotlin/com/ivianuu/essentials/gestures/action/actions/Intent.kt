@@ -6,13 +6,14 @@ import android.content.Intent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 internal class IntentActionExecutor(
-    @Param private val intent: Intent,
-    private val context: Context,
+    @Assisted private val intent: Intent,
+    private val context: @ForApplication Context,
     private val toaster: Toaster
 ) : ActionExecutor {
     override suspend fun invoke() {

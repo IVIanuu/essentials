@@ -30,7 +30,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
@@ -53,7 +53,7 @@ val NavBarRoute = Route {
                 ) {
                     val navBarController = inject<NavBarController>()
 
-                    val coroutineScope = CoroutineScopeAmbient.current
+                    val coroutineScope = compositionCoroutineScope()
                     fun updateNavBarState(navBarHidden: Boolean) {
                         coroutineScope.launch {
                             navBarController.setNavBarConfig(

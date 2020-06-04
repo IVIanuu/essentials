@@ -4,11 +4,9 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.map
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.ApplicationScoped
 
-@ApplicationScope
-@Single
+@ApplicationScoped
 internal class BillingPrefs(factory: PrefBoxFactory) {
     val products = factory.create("billing_products", emptySet<String>())
         .map(

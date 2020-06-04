@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.Composable
 import androidx.ui.material.icons.Icons
@@ -15,44 +16,42 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactoryIntoSet
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
+import com.ivianuu.essentials.gestures.action.actionFactory
+import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 import kotlinx.coroutines.flow.Flow
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.appAction() {
-    bindActionFactoryIntoSet<AppActionFactory>()
-    bindActionPickerDelegateIntoSet<AppActionPickerDelegate>()
+private fun AppActionModule() {
+    installIn<ApplicationComponent>()
+    actionFactory<AppActionFactory>()
+    actionPickerDelegate<AppActionPickerDelegate>()
 }
 
-@Factory
-private class AppActionExecutor(
-    @Param private val packageName: String,
+@Transient
+internal class AppActionExecutor(
+    @Assisted private val packageName: String,
     private val packageManager: PackageManager,
-    private val lazyDelegate: Lazy<IntentActionExecutor>,
+    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor,
     private val toaster: Toaster
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
-            lazyDelegate(parameters = parametersOf({
+            delegateProvider(
                 packageManager.getLaunchIntentForPackage(
                     packageName
-                )
-            }))()
+                )!!
+            )()
         } catch (e: Exception) {
             e.printStackTrace()
             toaster.toast(R.string.es_activity_not_found)
@@ -60,11 +59,11 @@ private class AppActionExecutor(
     }
 }
 
-@Factory
-private class AppActionFactory(
+@Transient
+internal class AppActionFactory(
     private val appStore: AppStore,
-    private val appActionExecutorProvider: Provider<AppActionExecutor>,
-    private val appActionIconProvider: Provider<AppActionIconProvider>
+    private val appActionExecutorProvider: @Provider (String) -> AppActionExecutor,
+    private val appActionIconProvider: @Provider (String) -> AppActionIconProvider
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -73,14 +72,15 @@ private class AppActionFactory(
             key = key,
             title = appStore.getAppInfo(packageName).packageName,
             unlockScreen = true,
-            iconProvider = appActionIconProvider(parameters = parametersOf(packageName)),
-            executor = appActionExecutorProvider(parameters = parametersOf(packageName))
+            iconProvider = appActionIconProvider(packageName),
+            executor = appActionExecutorProvider(packageName),
+            enabled = true
         )
     }
 }
 
-@Factory
-private class AppActionPickerDelegate(
+@Transient
+internal class AppActionPickerDelegate(
     private val launchableAppFilter: LaunchableAppFilter,
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
@@ -97,13 +97,13 @@ private class AppActionPickerDelegate(
     }
 }
 
-@Factory
-private class AppActionIconProvider(
-    private val lazyDelegate: Lazy<CoilActionIconProvider>,
-    @Param private val packageName: String
+@Transient
+internal class AppActionIconProvider(
+    private val delegateProvider: @Provider (Any) -> CoilActionIconProvider,
+    @Assisted private val packageName: String
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
-        get() = lazyDelegate(parameters = parametersOf(AppIcon(packageName))).icon
+        get() = delegateProvider(AppIcon(packageName)).icon
 }
 
 private const val ACTION_KEY_PREFIX = "app=:="

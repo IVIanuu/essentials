@@ -18,21 +18,19 @@ package com.ivianuu.essentials.permission
 
 import android.content.Context
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-@ApplicationScope
-@Single
+@ApplicationScoped
 class PermissionManager(
-    private val context: Context,
-    @ForApplication private val coroutineScope: CoroutineScope,
+    private val context: @ForApplication Context,
+    private val coroutineScope: @ForApplication CoroutineScope,
     private val logger: Logger,
-    @PermissionStateProvidersSet private val permissionStateProviders: Set<PermissionStateProvider>
+    private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()

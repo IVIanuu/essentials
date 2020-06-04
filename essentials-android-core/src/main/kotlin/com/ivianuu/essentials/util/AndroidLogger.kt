@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 class AndroidLogger : Logger {
     override fun v(message: String, tag: String) {
         Log.v(tag, message)

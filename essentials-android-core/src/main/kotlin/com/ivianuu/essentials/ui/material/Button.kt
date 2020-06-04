@@ -28,7 +28,7 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.InnerPadding
 import androidx.ui.layout.preferredSizeIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
@@ -46,10 +46,10 @@ data class ButtonStyle(
     val shape: Shape,
     val border: Border? = null,
     val elevation: Dp = 0.dp,
-    val innerPadding: EdgeInsets = EdgeInsets(
-        left = 16.dp,
+    val innerPadding: InnerPadding = InnerPadding(
+        start = 16.dp,
         top = 8.dp,
-        right = 16.dp,
+        end = 16.dp,
         bottom = 8.dp
     ),
     val modifier: Modifier
@@ -61,7 +61,7 @@ fun ContainedButtonStyle(
     contentColor: Color = contentColorFor(backgroundColor),
     shape: Shape = MaterialTheme.shapes.small,
     elevation: Dp = 2.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
     shape = shape,
@@ -80,7 +80,7 @@ fun OutlinedButtonStyle(
     contentColor: Color = MaterialTheme.colors.primary,
     shape: Shape = MaterialTheme.shapes.small,
     elevation: Dp = 0.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
     shape = shape,
@@ -94,11 +94,11 @@ fun OutlinedButtonStyle(
 fun TextButtonStyle(
     shape: Shape = MaterialTheme.shapes.small,
     contentColor: Color = MaterialTheme.colors.primary,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = ButtonStyle(
     backgroundColor = Color.Transparent,
     shape = shape,
-    innerPadding = EdgeInsets(all = 8.dp),
+    innerPadding = InnerPadding(all = 8.dp),
     contentColor = contentColor,
     modifier = modifier
 )
@@ -108,7 +108,7 @@ val ButtonStyleAmbient = staticAmbientOf<ButtonStyle>()
 @Composable
 fun Button(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
     children: @Composable () -> Unit
@@ -145,9 +145,9 @@ fun Button(
             ) {
                 Box(
                     modifier = Modifier.preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp),
-                    paddingStart = style.innerPadding.left,
+                    paddingStart = style.innerPadding.start,
                     paddingTop = style.innerPadding.top,
-                    paddingEnd = style.innerPadding.right,
+                    paddingEnd = style.innerPadding.end,
                     paddingBottom = style.innerPadding.bottom,
                     gravity = Alignment.Center
                 ) {

@@ -43,6 +43,7 @@ class ProcessRestartActivity : EsActivity() {
             context.startActivity(
                 Intent(context, ProcessRestartActivity::class.java).apply {
                     putExtra(KEY_RESTART_INTENT, restartIntent)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
             )
         }

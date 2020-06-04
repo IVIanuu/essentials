@@ -20,14 +20,14 @@ import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
-import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.collectAsState
+import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
 @Composable
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
-    val coroutineScope = CoroutineScopeAmbient.current
+    val coroutineScope = compositionCoroutineScope()
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->
             coroutineScope.launch {
@@ -37,7 +37,7 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
 
         return@remember BoxWrapper(value = box.defaultValue, setter = setter)
     }
-    wrapper.internalValue = collect(box.data, box.defaultValue)
+    wrapper.internalValue = box.data.collectAsState(box.defaultValue).value
     return wrapper
 }
 
@@ -64,3 +64,4 @@ class BoxWrapper<T> internal constructor(
         value = next
     }
 }
+

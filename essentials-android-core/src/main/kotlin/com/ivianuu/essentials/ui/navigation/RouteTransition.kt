@@ -20,9 +20,7 @@ import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.Composer
 import androidx.compose.Immutable
-import androidx.compose.currentComposer
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.Transition
 import androidx.ui.core.Modifier
@@ -80,7 +78,7 @@ object ModifierRouteTransitionType : RouteTransition.Type {
     @Composable
     override fun apply(ops: RouteTransition.Ops, children: @Composable () -> Unit) {
         Box(
-            modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier.None,
+            modifier = ops[Modifier].singleOrNull() ?: androidx.ui.core.Modifier,
             children = children
         )
     }
@@ -133,18 +131,17 @@ private fun RouteTransitionTypes(
     types: List<RouteTransition.Type>,
     children: @Composable () -> Unit
 ) {
-    types
+    val finalComposable: @Composable () -> Unit = types
         .map { type ->
             val function: @Composable (@Composable () -> Unit) -> Unit = { typeChildren ->
                 type.apply(ops) { typeChildren() }
             }
             function
         }
-        .fold(children) { current, type ->
-            { type(current) }
+        .fold(children) { current: @Composable () -> Unit,
+                          type: @Composable (@Composable () -> Unit) -> Unit ->
+            @Composable { type(current) }
         }
-        .let {
-            // todo compiler doesn't treat this as a composable
-            (it as (Composer<*>) -> Unit).invoke(currentComposer)
-        }
+
+    finalComposable()
 }

@@ -18,18 +18,18 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.widget.Toast
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
  * Shows system toasts
  */
-@Factory
+@Transient
 class Toaster(
-    private val context: Context,
-    @ForApplication private val coroutineScope: CoroutineScope,
+    private val context: @ForApplication Context,
+    private val coroutineScope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val resourceProvider: ResourceProvider
 ) {

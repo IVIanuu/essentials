@@ -40,7 +40,7 @@ fun DefaultCheckboxStyle(color: Color = MaterialTheme.colors.secondary) =
 fun Checkbox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() }
 ) {
@@ -57,7 +57,7 @@ fun Checkbox(
 fun TriStateCheckbox(
     state: ToggleableState,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     style: CheckboxStyle = CheckboxStyleAmbient.currentOrElse { DefaultCheckboxStyle() }
 ) {

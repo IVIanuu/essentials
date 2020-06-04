@@ -17,13 +17,16 @@
 package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esBillingModule() {
-    alias<DebugBillingClient, BillingClient>()
+fun esBillingModule() {
+    installIn<ApplicationComponent>()
+    alias<@Provider (PurchasesUpdatedListener) -> DebugBillingClient,
+            @Provider (PurchasesUpdatedListener) -> BillingClient>()
 }

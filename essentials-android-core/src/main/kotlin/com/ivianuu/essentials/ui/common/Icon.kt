@@ -27,7 +27,7 @@ import androidx.ui.unit.dp
 fun IconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     children: @Composable () -> Unit
 ) {
     Clickable(

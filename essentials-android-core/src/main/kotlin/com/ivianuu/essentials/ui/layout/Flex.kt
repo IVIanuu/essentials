@@ -28,7 +28,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.ParentDataModifier
 import androidx.ui.core.Placeable
 import androidx.ui.core.VerticalAlignmentLine
-import androidx.ui.layout.LayoutGravity
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.LayoutScopeMarker
 import androidx.ui.unit.Density
 import androidx.ui.unit.IntPx
@@ -36,9 +36,6 @@ import androidx.ui.unit.IntPxSize
 import androidx.ui.unit.ipx
 import androidx.ui.unit.isFinite
 import androidx.ui.unit.max
-import androidx.ui.unit.px
-import androidx.ui.unit.round
-import androidx.ui.unit.toPx
 
 // todo remove once we can use a LayoutModifier for crossAxisAlignment
 
@@ -92,7 +89,7 @@ sealed class FlexScope {
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblings
      */
     @Suppress("unused")
-    fun LayoutGravity.RelativeToSiblings(alignmentLineBlock: (Placeable) -> IntPx): Modifier =
+    fun ContentGravity.RelativeToSiblings(alignmentLineBlock: (Placeable) -> IntPx): Modifier =
         SiblingsAlignedModifier.WithAlignmentLineBlock(alignmentLineBlock)
 }
 
@@ -106,17 +103,19 @@ class ColumnScope internal constructor() : FlexScope() {
      * so that its start edge is aligned to the start edge of the horizontal axis.
      */
     // TODO: Consider ltr/rtl.
-    val LayoutGravity.Start: Modifier get() = StartGravityModifier
+    val ContentGravity.Start: Modifier get() = StartGravityModifier
+
     /**
      * A layout modifier within a Column that positions target component in a horizontal direction
      * so that its center is in the middle of the horizontal axis.
      */
-    val LayoutGravity.Center: Modifier get() = CenterGravityModifier
+    val ContentGravity.Center: Modifier get() = CenterGravityModifier
+
     /**
      * A layout modifier within a Column that positions target component in a horizontal direction
      * so that its end edge is aligned to the end edge of the horizontal axis.
      */
-    val LayoutGravity.End: Modifier get() = EndGravityModifier
+    val ContentGravity.End: Modifier get() = EndGravityModifier
 
     /**
      * A layout modifier within a [Column] that positions target component in a perpendicular
@@ -129,7 +128,7 @@ class ColumnScope internal constructor() : FlexScope() {
      *
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblingsInColumn
      */
-    fun LayoutGravity.RelativeToSiblings(alignmentLine: VerticalAlignmentLine): Modifier =
+    fun ContentGravity.RelativeToSiblings(alignmentLine: VerticalAlignmentLine): Modifier =
         SiblingsAlignedModifier.WithAlignmentLine(alignmentLine)
 
     internal companion object {
@@ -148,17 +147,19 @@ class RowScope internal constructor() : FlexScope() {
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its top edge is aligned to the top edge of the vertical axis.
      */
-    val LayoutGravity.Top: Modifier get() = TopGravityModifier
+    val ContentGravity.Top: Modifier get() = TopGravityModifier
+
     /**
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its center is in the middle of the vertical axis.
      */
-    val LayoutGravity.Center: Modifier get() = CenterGravityModifier
+    val ContentGravity.Center: Modifier get() = CenterGravityModifier
+
     /**
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its bottom edge is aligned to the bottom edge of the vertical axis.
      */
-    val LayoutGravity.Bottom: Modifier get() = BottomGravityModifier
+    val ContentGravity.Bottom: Modifier get() = BottomGravityModifier
 
     /**
      * A layout modifier within a [Row] that positions target component in a perpendicular
@@ -170,7 +171,7 @@ class RowScope internal constructor() : FlexScope() {
      * Example usage:
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblingsInRow
      */
-    fun LayoutGravity.RelativeToSiblings(alignmentLine: HorizontalAlignmentLine): Modifier =
+    fun ContentGravity.RelativeToSiblings(alignmentLine: HorizontalAlignmentLine): Modifier =
         SiblingsAlignedModifier.WithAlignmentLine(alignmentLine)
 
     internal companion object {
@@ -198,7 +199,7 @@ class RowScope internal constructor() : FlexScope() {
  */
 @Composable
 fun Row(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     children: @Composable RowScope.() -> Unit
@@ -231,7 +232,7 @@ fun Row(
  */
 @Composable
 fun Column(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     children: @Composable ColumnScope.() -> Unit
@@ -314,9 +315,9 @@ enum class MainAxisAlignment(internal val aligner: Aligner) {
         override fun align(totalSize: IntPx, size: List<IntPx>): List<IntPx> {
             val consumedSize = size.fold(0.ipx) { a, b -> a + b }
             val positions = mutableListOf<IntPx>()
-            var current = (totalSize - consumedSize).toPx() / 2
+            var current = (totalSize - consumedSize) / 2
             size.forEach {
-                positions.add(current.round())
+                positions.add(current)
                 current += it
             }
             return positions
@@ -351,12 +352,12 @@ enum class MainAxisAlignment(internal val aligner: Aligner) {
     private class MainAxisSpaceEvenlyAligner : Aligner {
         override fun align(totalSize: IntPx, size: List<IntPx>): List<IntPx> {
             val consumedSize = size.fold(0.ipx) { a, b -> a + b }
-            val gapSize = (totalSize - consumedSize).toPx() / (size.size + 1)
+            val gapSize = (totalSize - consumedSize) / (size.size + 1)
             val positions = mutableListOf<IntPx>()
             var current = gapSize
             size.forEach {
-                positions.add(current.round())
-                current += it.toPx() + gapSize
+                positions.add(current)
+                current += it + gapSize
             }
             return positions
         }
@@ -366,15 +367,15 @@ enum class MainAxisAlignment(internal val aligner: Aligner) {
         override fun align(totalSize: IntPx, size: List<IntPx>): List<IntPx> {
             val consumedSize = size.fold(0.ipx) { a, b -> a + b }
             val gapSize = if (size.size > 1) {
-                (totalSize - consumedSize).toPx() / (size.size - 1)
+                (totalSize - consumedSize) / (size.size - 1)
             } else {
-                0.px
+                0.ipx
             }
             val positions = mutableListOf<IntPx>()
-            var current = 0.px
+            var current = 0.ipx
             size.forEach {
-                positions.add(current.round())
-                current += it.toPx() + gapSize
+                positions.add(current)
+                current += it + gapSize
             }
             return positions
         }
@@ -384,15 +385,15 @@ enum class MainAxisAlignment(internal val aligner: Aligner) {
         override fun align(totalSize: IntPx, size: List<IntPx>): List<IntPx> {
             val consumedSize = size.fold(0.ipx) { a, b -> a + b }
             val gapSize = if (size.isNotEmpty()) {
-                (totalSize - consumedSize).toPx() / size.size
+                (totalSize - consumedSize) / size.size
             } else {
-                0.px
+                0.ipx
             }
             val positions = mutableListOf<IntPx>()
             var current = gapSize / 2
             size.forEach {
-                positions.add(current.round())
-                current += it.toPx() + gapSize
+                positions.add(current)
+                current += it + gapSize
             }
             return positions
         }
@@ -506,7 +507,7 @@ private val IntrinsicMeasurable.crossAxisAlignment: CrossAxisAlignment?
 @Composable
 private fun FlexLayout(
     orientation: LayoutOrientation,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     mainAxisAlignment: MainAxisAlignment,
     crossAxisSize: LayoutSize,
     crossAxisAlignment: CrossAxisAlignment,

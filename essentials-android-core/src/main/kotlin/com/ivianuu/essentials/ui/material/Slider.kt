@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.annotation.IntRange
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
@@ -23,7 +24,6 @@ import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
-import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
@@ -36,22 +36,26 @@ val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
 
 @Composable
 fun DefaultSliderStyle(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.secondary
 ) = SliderStyle(modifier = modifier, color = color)
 
 @Composable
 fun Slider(
-    position: SliderPosition,
-    onValueChange: (Float) -> Unit = { position.value = it },
-    modifier: Modifier = Modifier.None,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    @IntRange(from = 0) steps: Int = 0,
     onValueChangeEnd: () -> Unit = {},
     style: SliderStyle = SliderStyleAmbient.currentOrElse { DefaultSliderStyle() }
 ) {
     Slider(
-        position = position,
+        value = value,
         onValueChange = onValueChange,
         modifier = style.modifier.plus(modifier),
+        valueRange = valueRange,
+        steps = steps,
         onValueChangeEnd = onValueChangeEnd,
         color = style.color
     )

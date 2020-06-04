@@ -17,20 +17,19 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.billing.BillingStore
 import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Factory
+@BindAppInitializer
 class PurchaseInitializer(
     billingStore: BillingStore,
-    @ForApplication coroutineScope: CoroutineScope
-) :
-    AppInitializer {
+    coroutineScope: @ForApplication CoroutineScope
+) : AppInitializer {
     init {
         coroutineScope.launch {
             billingStore.addProduct(SkuDetails(DummySku))

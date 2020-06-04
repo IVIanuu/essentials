@@ -17,11 +17,13 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Model
 import androidx.compose.Providers
 import androidx.compose.emptyContent
+import androidx.compose.getValue
 import androidx.compose.key
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
@@ -31,12 +33,12 @@ import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.retain
 
-@Model
 class TabController<T>(
-    var items: List<T>,
+    items: List<T>,
     initialIndex: Int = 0
 ) {
-    var selectedIndex = initialIndex
+    var items by mutableStateOf(items)
+    var selectedIndex by mutableStateOf(initialIndex)
     val selectedItem: T get() = items[selectedIndex]
 }
 

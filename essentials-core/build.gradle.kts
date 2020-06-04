@@ -5,7 +5,7 @@ plugins {
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
@@ -15,8 +15,9 @@ dependencies {
     compile(project(":essentials-moshi"))
     compile(project(":essentials-store"))
 
-    compile(Deps.Injekt.injekt)
     compile(Deps.Injekt.common)
+    compile(Deps.Injekt.composition)
+    compile(Deps.Injekt.core)
 
     compile(Deps.Kotlin.stdlib)
 

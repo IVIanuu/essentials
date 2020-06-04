@@ -18,17 +18,20 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Model
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
+import androidx.compose.getValue
 import androidx.compose.key
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
-import androidx.ui.core.ParentData
+import androidx.ui.core.Modifier
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
+import androidx.ui.core.tag
 import androidx.ui.layout.Stack
 import androidx.ui.unit.IntPxPosition
 
@@ -37,23 +40,22 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
     Providers(OverlayAmbient provides state) {
         OverlayLayout {
             val visibleEntries = state.entries.filterVisible()
-
             state.entries
                 .filter { it in visibleEntries || it.keepState }
                 .map {
-                    OverlayEntryParentData(
+                    OverlayEntryTag(
                         isVisible = it in visibleEntries,
                         entry = it
                     )
                 }
-                .forEach { parentData ->
-                    key(parentData.entry) {
-                        ParentData(data = parentData) {
-                            AbsorbPointer(absorb = !parentData.isVisible) {
-                                Stack {
-                                    parentData.entry.content()
-                                }
-                            }
+                .forEach { tag ->
+                    key(tag.entry) {
+                        Stack(
+                            modifier = Modifier
+                                .tag(tag)
+                                .absorbPointer(absorb = !tag.isVisible)
+                        ) {
+                            tag.entry.content()
                         }
                     }
                 }
@@ -98,15 +100,16 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
     }
 }
 
-@Model
 class OverlayEntry(
-    var opaque: Boolean = false,
-    var keepState: Boolean = false,
+    opaque: Boolean = false,
+    keepState: Boolean = false,
     val content: @Composable () -> Unit
-)
+) {
+    var opaque by mutableStateOf(opaque)
+    var keepState by mutableStateOf(keepState)
+}
 
-val OverlayAmbient =
-    staticAmbientOf<OverlayState>()
+val OverlayAmbient = staticAmbientOf<OverlayState>()
 
 @Composable
 private fun OverlayLayout(
@@ -120,7 +123,7 @@ private fun OverlayLayout(
         )
 
         val placeables = measurables
-            .filter { (it.parentData as OverlayEntryParentData).isVisible }
+            .filter { (it.tag as OverlayEntryTag).isVisible }
             .map { it.measure(childConstraints) }
 
         val width = constraints.maxWidth
@@ -135,7 +138,7 @@ private fun OverlayLayout(
 }
 
 @Immutable
-private data class OverlayEntryParentData(
+private data class OverlayEntryTag(
     val isVisible: Boolean,
     val entry: OverlayEntry
 )

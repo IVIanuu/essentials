@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
@@ -25,6 +25,7 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.layout.ExperimentalLayout
 import androidx.ui.layout.FlowRow
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
@@ -41,6 +42,7 @@ import com.ivianuu.essentials.ui.material.ripple
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
+@OptIn(ExperimentalLayout::class)
 val ChipsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Chips") }) },
@@ -63,29 +65,32 @@ val ChipsRoute = Route {
 }
 
 @Composable
-private fun Chip(@Pivotal name: String) {
-    val toaster = inject<Toaster>()
-    val color = remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
-    Surface(
-        color = color,
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Box(
-            modifier = Modifier.ripple(
-                bounded = false,
-                style = DefaultRippleStyle(color = contentColor().copy(alpha = 0.5f))
-            )
+private fun Chip(name: String) {
+    key(name) {
+        val toaster = inject<Toaster>()
+        val color =
+            remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
+        Surface(
+            color = color,
+            shape = RoundedCornerShape(16.dp)
         ) {
             Box(
-                modifier = Modifier.preferredHeight(32.dp)
-                    .padding(start = 12.dp, end = 12.dp),
-                gravity = ContentGravity.Center
+                modifier = Modifier.ripple(
+                    bounded = false,
+                    style = DefaultRippleStyle(color = contentColor().copy(alpha = 0.5f))
+                )
             ) {
-                Clickable(onClick = { toaster.toast("Clicked $name") }) {
-                    Text(
-                        text = name,
-                        textStyle = MaterialTheme.typography.body2
-                    )
+                Box(
+                    modifier = Modifier.preferredHeight(32.dp)
+                        .padding(start = 12.dp, end = 12.dp),
+                    gravity = ContentGravity.Center
+                ) {
+                    Clickable(onClick = { toaster.toast("Clicked $name") }) {
+                        Text(
+                            text = name,
+                            textStyle = MaterialTheme.typography.body2
+                        )
+                    }
                 }
             }
         }

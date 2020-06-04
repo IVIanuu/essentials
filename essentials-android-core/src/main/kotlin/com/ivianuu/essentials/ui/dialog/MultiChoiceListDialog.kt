@@ -18,7 +18,8 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.key
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import androidx.ui.core.Modifier
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
 
 @Composable
@@ -72,12 +73,11 @@ private fun MultiChoiceDialogListItem(
 ) {
     SimpleDialogListItem(
         leading = {
-            AbsorbPointer {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = {}
-                )
-            }
+            Checkbox(
+                modifier = Modifier.absorbPointer(),
+                checked = checked,
+                onCheckedChange = {}
+            )
         },
         title = title,
         onClick = {

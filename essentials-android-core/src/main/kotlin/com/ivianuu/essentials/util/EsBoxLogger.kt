@@ -17,22 +17,23 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.store.Logger
 import com.ivianuu.essentials.store.logger
-import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 class EsBoxLogger(private val esLogger: com.ivianuu.essentials.util.Logger) : Logger {
     override fun log(message: String) {
         esLogger.d(message = message, tag = "Box")
     }
 }
 
-@Factory
+@BindAppInitializer
 class BoxLoggerAppInitializer(
     buildInfo: BuildInfo,
-    esBoxLoggerProvider: Provider<EsBoxLogger>
+    esBoxLoggerProvider: @Provider () -> EsBoxLogger
 ) : AppInitializer {
     init {
         if (buildInfo.isDebug) logger = esBoxLoggerProvider()

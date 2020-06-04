@@ -18,13 +18,9 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -32,19 +28,12 @@ import kotlinx.coroutines.cancel
 /**
  * Base notification listener service
  */
-abstract class EsNotificationListenerService : NotificationListenerService(), ComponentOwner,
-    ComponentBuilderInterceptor {
+abstract class EsNotificationListenerService : NotificationListenerService() {
 
-    override val component by unsafeLazy {
-        ServiceComponent(this) {
-            buildComponent()
-        }
-    }
+    private val dispatchers: AppCoroutineDispatchers by inject()
 
     val coroutineScope by unsafeLazy {
-        CoroutineScope(
-            Job() + get<AppCoroutineDispatchers>().computation
-        )
+        CoroutineScope(Job() + dispatchers.computation)
     }
 
     lateinit var connectedCoroutineScope: CoroutineScope
@@ -58,8 +47,7 @@ abstract class EsNotificationListenerService : NotificationListenerService(), Co
     override fun onListenerConnected() {
         super.onListenerConnected()
         connectedCoroutineScope = CoroutineScope(
-            Job() +
-                    AppComponentHolder.get<AppCoroutineDispatchers>().computation
+            Job() + dispatchers.computation
         )
     }
 

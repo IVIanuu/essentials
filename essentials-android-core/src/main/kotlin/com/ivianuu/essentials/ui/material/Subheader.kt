@@ -18,11 +18,12 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentColorAmbient
 import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxWidth
@@ -42,7 +43,7 @@ data class SubheaderStyle(
 
 @Composable
 fun DefaultSubheaderStyle(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.body2,
     textColor: Color = MaterialTheme.colors.secondary
 ) = SubheaderStyle(
@@ -55,7 +56,7 @@ val SubheaderStyleAmbient = staticAmbientOf<SubheaderStyle>()
 
 @Composable
 fun Subheader(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: SubheaderStyle = SubheaderStyleAmbient.currentOrElse { DefaultSubheaderStyle() },
     text: @Composable () -> Unit
 ) {
@@ -67,7 +68,7 @@ fun Subheader(
             .plus(modifier),
         gravity = ContentGravity.CenterStart
     ) {
-        ProvideContentColor(color = style.textColor) {
+        Providers(ContentColorAmbient provides style.textColor) {
             ProvideTextStyle(value = style.textStyle, children = text)
         }
     }

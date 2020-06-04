@@ -18,11 +18,12 @@ package com.ivianuu.essentials.util
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
-import androidx.compose.state
-import com.ivianuu.essentials.ui.coroutines.collect
-import com.ivianuu.essentials.ui.coroutines.launch
-import com.ivianuu.essentials.ui.injekt.inject
+import androidx.compose.setValue
+import com.ivianuu.essentials.ui.coroutines.collectAsState
+import com.ivianuu.essentials.ui.coroutines.launchWithState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
@@ -30,29 +31,79 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 @Immutable
-sealed class Async<out T>(val complete: Boolean, val shouldLoad: Boolean) {
-    open operator fun invoke(): T? = null
+sealed class Async<T>(
+    complete: Boolean,
+    shouldLoad: Boolean
+) {
+    val complete by mutableStateOf(complete)
+    val shouldLoad by mutableStateOf(shouldLoad)
+    private var readCount by mutableStateOf(0)
+
+    open operator fun invoke(): T? {
+        readCount++
+        return null
+    }
+
 }
 
 @Immutable
-object Uninitialized : Async<Nothing>(complete = false, shouldLoad = true)
+class Uninitialized<T> : Async<T>(complete = false, shouldLoad = true) {
+    override fun toString(): String = "Uninitialized"
+}
 
 @Immutable
-class Loading<out T> : Async<T>(complete = false, shouldLoad = false) {
+class Loading<T> : Async<T>(complete = false, shouldLoad = false) {
     override fun equals(other: Any?) = other is Loading<*>
     override fun hashCode() = "Loading".hashCode()
+    override fun toString(): String = "Loading"
 }
 
 @Immutable
-data class Success<out T>(val value: T) : Async<T>(complete = true, shouldLoad = false) {
+class Success<T>(value: T) : Async<T>(complete = true, shouldLoad = false) {
+
+    val value by mutableStateOf(value)
+
     override operator fun invoke(): T = value
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Success<*>
+
+        if (value != other.value) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
+    override fun toString(): String = "Success(value=$value)"
+
 }
 
 @Immutable
-data class Fail<out T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true)
+class Fail<T>(error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
+
+    val error by mutableStateOf(error)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Fail<*>
+
+        if (error != other.error) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = error.hashCode()
+
+    override fun toString(): String = "Success(value=$error)"
+}
 
 fun <T> Flow<T>.executeAsync(): Flow<Async<T>> {
     return this
@@ -86,38 +137,25 @@ fun <T> executeAsync(block: suspend () -> T): Flow<Async<T>> {
 inline fun <T, R> Async<T>.map(transform: (T) -> R) =
     if (this is Success) Success(transform(value)) else this as Async<R>
 
-fun <T> Async<T>.valueOrThrow(): T {
-    if (this is Success) return value
-    else error("$this has no value")
-}
-
 @Composable
-fun <T> collectAsync(flow: Flow<T>) = collect(
-    flow = remember(flow) { flow.executeAsync() },
-    initial = Uninitialized
-)
+fun <T> Flow<T>.collectAsAsync(): Async<T> {
+    return remember(this) { executeAsync() }
+        .collectAsState(Uninitialized())
+        .value
+}
 
 @Composable
 fun <T> launchAsync(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): Async<T> {
-    val state = state<Async<T>> { Uninitialized }
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    launch(*inputs) {
-        state.value = withContext(dispatchers.main) { // todo remove once safe
-            Loading()
-        }
+    return launchWithState<Async<T>>(*inputs, initial = Uninitialized()) {
+        state.value = Loading()
         try {
             val result = block()
-            withContext(dispatchers.main) { // todo remove once safe
-                state.value = Success(result)
-            }
+            state.value = Success(result)
         } catch (e: Exception) {
-            withContext(dispatchers.main) { // todo remove once safe
-                state.value = Fail(e)
-            }
+            state.value = Fail(e)
         }
-    }
-    return state.value
+    }.value
 }

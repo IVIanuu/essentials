@@ -21,16 +21,15 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
 import androidx.compose.onCommit
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.core.ActivityAmbient
 
 @Composable
 fun onBackPressed(
-    owner: OnBackPressedDispatcherOwner = ActivityAmbient.current,
+    owner: OnBackPressedDispatcherOwner = compositionActivity,
     enabled: Boolean = true,
     callback: () -> Unit
 ) {
     val onBackPressedCallback = remember(callback) {
-        object : OnBackPressedCallback(true) {
+        object : OnBackPressedCallback(enabled) {
             override fun handleOnBackPressed() {
                 callback()
             }

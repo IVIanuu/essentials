@@ -20,19 +20,17 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
@@ -52,24 +50,21 @@ val Metadata.Companion.NotificationListenerClass by lazy {
     )
 }
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.notificationListenerPermission() {
-    bindPermissionStateProviderIntoSet<NotificationListenerPermissionStateProvider>()
-}
-
-@Factory
-private class NotificationListenerPermissionStateProvider(
+@BindPermissionStateProvider
+@Transient
+internal class NotificationListenerPermissionStateProvider(
     private val buildInfo: BuildInfo,
-    private val context: Context
+    private val context: @ForApplication Context
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Metadata.NotificationListenerClass in permission.metadata
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return Settings.Secure.getString(context.contentResolver,
-            "enabled_notification_listeners")
+        return Settings.Secure.getString(
+            context.contentResolver,
+            "enabled_notification_listeners"
+        )
             .split(":")
             .map {
                 val tmp = it.split("/")

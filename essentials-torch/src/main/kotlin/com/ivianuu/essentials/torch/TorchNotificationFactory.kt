@@ -31,11 +31,12 @@ import com.ivianuu.essentials.foreground.AbstractNotificationFactory
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.setSmallIcon
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 internal class TorchNotificationFactory(
-    context: Context,
+    context: @ForApplication Context,
     private val resourceProvider: ResourceProvider
 ) : AbstractNotificationFactory(context) {
 

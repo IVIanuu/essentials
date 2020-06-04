@@ -19,16 +19,13 @@ package com.ivianuu.essentials.permission.intent
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
-import com.ivianuu.essentials.permission.bindPermissionRequestHandlerIntoSet
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.delay
 
 val Metadata.Companion.Intent by lazy {
@@ -37,14 +34,9 @@ val Metadata.Companion.Intent by lazy {
     )
 }
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.intentPermission() {
-    bindPermissionRequestHandlerIntoSet<IntentPermissionRequestHandler>()
-}
-
-@Factory
-private class IntentPermissionRequestHandler : PermissionRequestHandler {
+@BindPermissionRequestHandler
+@Transient
+internal class IntentPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Metadata.Intent in permission.metadata

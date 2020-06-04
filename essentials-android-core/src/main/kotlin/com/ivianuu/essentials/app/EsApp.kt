@@ -17,48 +17,16 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import android.content.pm.ApplicationInfo
-import com.ivianuu.essentials.util.ComponentBuilderInterceptor
-import com.ivianuu.essentials.util.containsFlag
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.Injekt
-import com.ivianuu.injekt.android.AndroidLogger
-import com.ivianuu.injekt.android.ApplicationComponent
+import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.composition.get
 
 /**
  * App
  */
-abstract class EsApp : Application(), ComponentOwner, ComponentBuilderInterceptor {
-
-    override val component: Component
-        get() {
-            if (!AppComponentHolder.isInitialized) {
-                configureInjekt()
-                initializeComponent()
-            }
-
-            return AppComponentHolder.component
-        }
-
-    protected open fun configureInjekt() {
-        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            Injekt {
-                logger = AndroidLogger()
-            }
-        }
-    }
-
+abstract class EsApp : Application() {
     override fun onCreate() {
+        applicationComponent.get<AppServiceRunner>()
+        applicationComponent.get<AppInitRunner>()
         super.onCreate()
-        component
-    }
-
-    protected open fun initializeComponent() {
-        AppComponentHolder.init(
-            ApplicationComponent(this) {
-                buildComponent()
-            }
-        )
     }
 }

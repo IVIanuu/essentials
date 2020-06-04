@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.compose.stateFor
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
@@ -28,30 +28,32 @@ import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 
 @Composable
-fun TextInputPreference(
-    @Pivotal box: Box<String>,
+inline fun TextInputPreference(
+    box: Box<String>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    dialogTitle: @Composable (() -> Unit)? = title,
+    noinline title: @Composable (() -> Unit)? = null,
+    noinline summary: @Composable (() -> Unit)? = null,
+    noinline leading: @Composable (() -> Unit)? = null,
+    noinline dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true
 ) {
-    TextInputPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        dialogTitle = dialogTitle,
-        dialogHint = dialogHint,
-        dialogKeyboardType = dialogKeyboardType,
-        allowEmpty = allowEmpty
-    )
+    key(box) {
+        TextInputPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dialogTitle = dialogTitle,
+            dialogHint = dialogHint,
+            dialogKeyboardType = dialogKeyboardType,
+            allowEmpty = allowEmpty
+        )
+    }
 }
 
 @Composable

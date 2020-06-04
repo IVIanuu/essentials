@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.core
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
@@ -27,14 +26,16 @@ import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
+import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.onCommit
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.state
 import androidx.core.content.getSystemService
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.OwnerAmbient
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.InnerPadding
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.injekt.inject
@@ -47,6 +48,7 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
     val ownerView = OwnerAmbient.current as View
 
     val logger = inject<Logger>()
+
     val density = DensityAmbient.current
     val (windowInsets, setWindowInsets) = state { WindowInsets() }
 
@@ -61,17 +63,17 @@ fun WindowInsetsManager(children: @Composable () -> Unit) {
             else ZeroSides.None
 
             with(density) {
-                val viewPadding = EdgeInsets(
-                    left = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
+                val viewPadding = InnerPadding(
+                    start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
                     top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),
-                    right = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
+                    end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
                     bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.ipx.toDp()
                 )
 
-                val viewInsets = EdgeInsets(
-                    left = 0.dp,
+                val viewInsets = InnerPadding(
+                    start = 0.dp,
                     top = 0.dp,
-                    right = 0.dp,
+                    end = 0.dp,
                     bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
                         ownerView,
                         insets
@@ -140,7 +142,7 @@ private fun calculateZeroSides(
         if (rotation == Surface.ROTATION_90) {
             return ZeroSides.Right
         } else if (rotation == Surface.ROTATION_270) {
-            return if (Build.VERSION.SDK_INT >= 23) ZeroSides.Left else ZeroSides.Right
+            return ZeroSides.Left
         } else if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
             return ZeroSides.Both
         }
@@ -151,18 +153,18 @@ private fun calculateZeroSides(
 
 @Stable
 interface WindowInsets {
-    val viewPadding: EdgeInsets
-    val viewInsets: EdgeInsets
+    val viewPadding: InnerPadding
+    val viewInsets: InnerPadding
 
     fun copy(
-        viewPadding: EdgeInsets = this.viewPadding,
-        viewInsets: EdgeInsets = this.viewInsets
+        viewPadding: InnerPadding = this.viewPadding,
+        viewInsets: InnerPadding = this.viewInsets
     ): WindowInsets
 }
 
 fun WindowInsets(
-    viewPadding: EdgeInsets = EdgeInsets(),
-    viewInsets: EdgeInsets = EdgeInsets()
+    viewPadding: InnerPadding = InnerPadding(),
+    viewInsets: InnerPadding = InnerPadding()
 ): WindowInsets {
     return ObservableWindowInsets(
         viewPadding = viewPadding,
@@ -172,8 +174,8 @@ fun WindowInsets(
 
 @Stable
 private class ObservableWindowInsets(
-    viewPadding: EdgeInsets,
-    viewInsets: EdgeInsets
+    viewPadding: InnerPadding,
+    viewInsets: InnerPadding
 ) : WindowInsets {
 
     override var viewPadding by mutableStateOf(viewPadding, StructurallyEqual)
@@ -186,7 +188,7 @@ private class ObservableWindowInsets(
         viewInsets = other.viewInsets
     )
 
-    override fun copy(viewPadding: EdgeInsets, viewInsets: EdgeInsets): WindowInsets =
+    override fun copy(viewPadding: InnerPadding, viewInsets: InnerPadding): WindowInsets =
         ObservableWindowInsets(
             viewPadding = viewPadding, viewInsets = viewInsets
         )

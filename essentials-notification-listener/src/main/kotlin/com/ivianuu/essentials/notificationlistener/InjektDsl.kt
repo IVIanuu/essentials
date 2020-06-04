@@ -16,25 +16,24 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.set
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.set
 
-@QualifierMarker
-annotation class NotificationComponents {
-    companion object : Qualifier.Element
+@BindingEffect(ServiceComponent::class)
+annotation class BindNotificationComponent
+
+@BindingEffectFunction(BindNotificationComponent::class)
+@Module
+fun <T : NotificationComponent> notificationComponent() {
+    set<NotificationComponent> { add<T>() }
 }
 
-@KeyOverload
-fun <T : NotificationComponent> ComponentBuilder.bindNotificationComponentIntoSet(
-    componentKey: Key<T>
-) {
-    set<NotificationComponent>(NotificationComponents) { add(componentKey) }
-}
-
-internal fun ComponentBuilder.notificationComponentInjection() {
-    set<NotificationComponent>(setQualifier = NotificationComponents)
+@Module
+private fun esNotificationComponentModule() {
+    installIn<ServiceComponent>()
+    set<NotificationComponent>()
 }

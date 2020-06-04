@@ -5,21 +5,20 @@ import androidx.animation.AnimationClockObservable
 import androidx.animation.AnimationClockObserver
 import androidx.animation.AnimationEndReason
 import androidx.compose.Composable
-import androidx.compose.Model
 import androidx.compose.StructurallyEqual
+import androidx.compose.getValue
 import androidx.compose.mutableStateOf
+import androidx.compose.setValue
 import androidx.ui.animation.AnimatedFloatModel
 import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.Direction
+import androidx.ui.core.Modifier
 import androidx.ui.core.PassThroughLayout
-import androidx.ui.core.gesture.DragGestureDetector
 import androidx.ui.core.gesture.DragObserver
+import androidx.ui.core.gesture.dragGestureFilter
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.foundation.animation.fling
-import androidx.ui.unit.Px
 import androidx.ui.unit.PxPosition
-import androidx.ui.unit.coerceIn
-import androidx.ui.unit.px
 import com.ivianuu.essentials.ui.core.Axis
 import com.ivianuu.essentials.ui.core.retain
 
@@ -27,9 +26,9 @@ import com.ivianuu.essentials.ui.core.retain
 
 @Composable
 fun RetainedScrollableState(
-    initial: Px = 0.px,
-    minValue: Px = 0.px,
-    maxValue: Px = Px.Infinity,
+    initial: Float = 0f,
+    minValue: Float = 0f,
+    maxValue: Float = Float.MAX_VALUE,
     animationClock: AnimationClockObservable = AnimationClockAmbient.current
 ): ScrollableState {
     val flingConfig = FlingConfig()
@@ -42,24 +41,23 @@ fun RetainedScrollableState(
     }
 }
 
-@Model
 class ScrollableState(
     animationClock: AnimationClockObservable,
-    initial: Px = 0.px,
-    minValue: Px = 0.px,
-    maxValue: Px = Px.Infinity,
+    initial: Float = 0f,
+    minValue: Float = 0f,
+    maxValue: Float = Float.MAX_VALUE,
     val flingConfig: FlingConfig
 ) {
 
-    val value: Px
-        get() = animatedFloat.value.px
+    val value: Float
+        get() = animatedFloat.value
             .coerceIn(_minValue, _maxValue) // todo remove once fixed
 
-    private var _minValue = minValue
-    val minValue: Px get() = _minValue
+    private var _minValue by mutableStateOf(minValue)
+    val minValue: Float get() = _minValue
 
-    private var _maxValue = maxValue
-    val maxValue: Px get() = _maxValue
+    private var _maxValue by mutableStateOf(maxValue)
+    val maxValue: Float get() = _maxValue
 
     var isAnimating: Boolean by mutableStateOf(false, StructurallyEqual)
         private set
@@ -76,52 +74,52 @@ class ScrollableState(
         }
     }
 
-    private val animatedFloat = AnimatedFloatModel(initial.value, clocksProxy).apply {
-        setBounds(minValue.value, maxValue.value)
+    private val animatedFloat = AnimatedFloatModel(initial, clocksProxy).apply {
+        setBounds(minValue, maxValue)
     }
 
     fun smoothScrollTo(
-        value: Px,
+        value: Float,
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        animatedFloat.animateTo(value.value, anim, onEnd)
+        animatedFloat.animateTo(value, anim, onEnd)
     }
 
     fun smoothScrollBy(
-        value: Px,
+        value: Float,
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
         smoothScrollTo(this.value + value, anim, onEnd)
     }
 
-    fun scrollTo(value: Px) {
-        animatedFloat.snapTo(value.value.coerceIn(_minValue.value, _maxValue.value))
+    fun scrollTo(value: Float) {
+        animatedFloat.snapTo(value.coerceIn(_minValue, _maxValue))
     }
 
-    fun scrollBy(value: Px) {
+    fun scrollBy(value: Float) {
         scrollTo(this.value + value)
     }
 
-    fun correctBy(value: Px) {
+    fun correctBy(value: Float) {
         scrollBy(value)
     }
 
-    fun flingBy(velocity: Px) {
+    fun flingBy(velocity: Float) {
         animatedFloat.fling(
             flingConfig,
-            velocity.value
+            velocity
         )
     }
 
-    fun updateBounds(minValue: Px = _minValue, maxValue: Px = _maxValue) {
+    fun updateBounds(minValue: Float = _minValue, maxValue: Float = _maxValue) {
         check(minValue <= maxValue) {
             "Min value $minValue cannot be greater than max value $maxValue"
         }
         _minValue = minValue
         _maxValue = maxValue
-        animatedFloat.setBounds(minValue.value, maxValue.value)
+        animatedFloat.setBounds(minValue, maxValue)
         scrollTo(value.coerceIn(_minValue, _maxValue))
     }
 }
@@ -133,7 +131,7 @@ fun Scrollable(
     enabled: Boolean = true,
     children: @Composable () -> Unit
 ) {
-    val drag = DragGestureDetector(
+    val drag = Modifier.dragGestureFilter(
         dragObserver = object : DragObserver {
             override fun onDrag(dragDistance: PxPosition): PxPosition {
                 if (!enabled) return PxPosition.Origin
@@ -151,10 +149,10 @@ fun Scrollable(
                 return when (direction) {
                     Axis.Horizontal -> PxPosition(
                         x = consumed,
-                        y = 0.px
+                        y = 0f
                     )
                     Axis.Vertical -> PxPosition(
-                        x = 0.px,
+                        x = 0f,
                         y = consumed
                     )
                 }
@@ -170,8 +168,8 @@ fun Scrollable(
             }
         },
         canDrag = { dragDirection ->
-            if (!enabled) return@DragGestureDetector false
-            return@DragGestureDetector when (direction) {
+            if (!enabled) return@dragGestureFilter false
+            return@dragGestureFilter when (direction) {
                 Axis.Horizontal -> dragDirection == Direction.LEFT || dragDirection == Direction.RIGHT
                 Axis.Vertical -> dragDirection == Direction.UP || dragDirection == Direction.DOWN
             }

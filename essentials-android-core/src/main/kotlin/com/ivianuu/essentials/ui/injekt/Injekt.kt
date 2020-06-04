@@ -18,28 +18,17 @@ package com.ivianuu.essentials.ui.injekt
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.compose.staticAmbientOf
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.Parameters
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.emptyParameters
-import com.ivianuu.injekt.keyOf
-
-val ComponentAmbient =
-    staticAmbientOf<Component>()
+import com.ivianuu.essentials.ui.common.compositionActivity
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.composition.get
 
 @Composable
-inline fun <reified T> inject(
-    qualifier: Qualifier = Qualifier.None,
-    parameters: Parameters = emptyParameters()
-) = inject(key = keyOf<T>(qualifier = qualifier), parameters = parameters)
+val compositionComponent: ActivityComponent
+    get() = compositionActivity.activityComponent
 
 @Composable
-fun <T> inject(
-    key: Key<T>,
-    parameters: Parameters = emptyParameters()
-): T {
-    val component = ComponentAmbient.current
-    return remember(component) { component.get(key = key, parameters = parameters) }
+fun <T> inject(): T {
+    val component = compositionComponent
+    return remember(component) { component.get() }
 }

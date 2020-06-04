@@ -21,19 +21,22 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.core.gesture.LongPressGestureDetector
+import androidx.ui.core.gesture.LongPressDragObserver
+import androidx.ui.core.gesture.longPressDragGestureFilter
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Container
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.InnerPadding
+import androidx.ui.layout.heightIn
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeightIn
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
+import androidx.ui.unit.PxPosition
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.AddPaddingIfNeededLayout
@@ -43,14 +46,14 @@ import com.ivianuu.essentials.ui.layout.Row
 
 @Immutable
 data class ListItemStyle(
-    val contentPadding: EdgeInsets,
+    val contentPadding: InnerPadding,
     val modifier: Modifier
 )
 
 @Composable
 fun DefaultListItemStyle(
-    contentPadding: EdgeInsets = ContentPadding,
-    modifier: Modifier = Modifier.None
+    contentPadding: InnerPadding = ContentPadding,
+    modifier: Modifier = Modifier
 ) = ListItemStyle(
     contentPadding = contentPadding,
     modifier = modifier
@@ -60,7 +63,7 @@ val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
 
 @Composable
 fun ListItem(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -80,22 +83,27 @@ fun ListItem(
     val content: @Composable () -> Unit = {
         Row(
             modifier = Modifier.preferredHeightIn(minHeight = minHeight)
-                .padding(start = style.contentPadding.left, end = style.contentPadding.right)
+                .padding(start = style.contentPadding.start, end = style.contentPadding.end)
                 .drawBackground(color = if (selected) defaultRippleColor() else Color.Transparent)
                 .plus(onLongClick?.let {
-                    LongPressGestureDetector {
-                        if (enabled) onLongClick()
-                    }
-                } ?: Modifier.None)
+                    Modifier.longPressDragGestureFilter(
+                        object : LongPressDragObserver {
+                            override fun onLongPress(pxPosition: PxPosition) {
+                                super.onLongPress(pxPosition)
+                                if (enabled) onLongClick()
+                            }
+                        }
+                    )
+                } ?: Modifier)
                 .plus(style.modifier)
                 .plus(modifier),
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
             // leading
             if (leading != null) {
-                Container(alignment = Alignment.CenterStart) {
+                Box(gravity = ContentGravity.CenterStart) {
                     AddPaddingIfNeededLayout(
-                        padding = EdgeInsets(
+                        padding = InnerPadding(
                             top = style.contentPadding.top,
                             bottom = style.contentPadding.bottom
                         )
@@ -109,16 +117,14 @@ fun ListItem(
             }
 
             // content
-            Container(
+            Box(
                 modifier = LayoutFlexible(1f),
-                padding = EdgeInsets(
-                    left = if (leading != null) HorizontalTextPadding else 0.dp,
-                    right = if (trailing != null) HorizontalTextPadding else 0.dp
-                ),
-                alignment = Alignment.CenterStart
+                paddingStart = if (leading != null) HorizontalTextPadding else 0.dp,
+                paddingEnd = if (trailing != null) HorizontalTextPadding else 0.dp,
+                gravity = ContentGravity.CenterStart
             ) {
                 AddPaddingIfNeededLayout(
-                    padding = EdgeInsets(
+                    padding = InnerPadding(
                         top = style.contentPadding.top,
                         bottom = style.contentPadding.bottom
                     )
@@ -146,9 +152,12 @@ fun ListItem(
 
             // trailing
             if (trailing != null) {
-                Container(constraints = DpConstraints(minHeight = minHeight)) {
+                Box(
+                    modifier = Modifier.heightIn(minHeight = minHeight),
+                    gravity = Alignment.CenterEnd
+                ) {
                     AddPaddingIfNeededLayout(
-                        padding = EdgeInsets(
+                        padding = InnerPadding(
                             top = style.contentPadding.top,
                             bottom = style.contentPadding.bottom
                         )
@@ -166,7 +175,7 @@ fun ListItem(
     Clickable(
         onClick = onClick ?: { },
         enabled = enabled && onClick != null,
-        modifier = if (onClick != null || onLongClick != null) Modifier.ripple(enabled = enabled) else Modifier.None,
+        modifier = if (onClick != null || onLongClick != null) Modifier.ripple(enabled = enabled) else Modifier,
         children = content
     )
 }
@@ -176,9 +185,9 @@ private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp
 private val TitleAndSubtitleMinHeightWithIcon = 72.dp
 private val HorizontalTextPadding = 16.dp
-private val ContentPadding = EdgeInsets(
-    left = 16.dp,
+private val ContentPadding = InnerPadding(
+    start = 16.dp,
     top = 8.dp,
-    right = 16.dp,
+    end = 16.dp,
     bottom = 8.dp
 )

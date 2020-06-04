@@ -1,22 +1,25 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
 import kotlinx.coroutines.Dispatchers
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esUtilModule() {
-    single {
+fun esUtilModule() {
+    installIn<ApplicationComponent>()
+    scoped {
         AppCoroutineDispatchers(
             io = Dispatchers.IO,
             computation = Dispatchers.Default,
             main = Dispatchers.Main
         )
     }
+}
 
+@Module
+fun esLoggerModule() {
     alias<DefaultLogger, Logger>()
 }

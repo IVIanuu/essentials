@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 @Composable
 fun DialogButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     dismissDialogOnClick: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { TextButtonStyle() },

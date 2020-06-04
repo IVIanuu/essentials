@@ -25,7 +25,7 @@ import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.core.EsTheme
-import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.lerp
 
@@ -37,7 +37,7 @@ fun TwilightTheme(
     children: @Composable () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
-    val isDark = collect(helper.isDark, helper.currentIsDark)
+    val isDark = helper.isDark.collectAsState(helper.currentIsDark).value
 
     Transition(
         definition = TwilightTransitionDefinition,
@@ -58,7 +58,7 @@ private val TwilightTransitionDefinition = transitionDefinition {
     state(false) { set(Fraction, 0f) }
 
     transition {
-        Fraction using tween {
+        Fraction using tween<Float> {
             duration = 150
         }
     }

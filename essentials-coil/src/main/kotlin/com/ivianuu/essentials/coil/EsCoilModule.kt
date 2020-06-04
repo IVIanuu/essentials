@@ -16,41 +16,43 @@
 
 package com.ivianuu.essentials.coil
 
+import android.content.Context
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.common.set
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.set
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esCoilModule() {
-    set<Decoder>(setQualifier = Decoders)
-    set<FetcherBinding<*>>(setQualifier = Fetchers)
-    set<MapperBinding<*>>(setQualifier = Mappers)
-    set<MeasuredMapperBinding<*>>(setQualifier = MeasuredMappers)
+fun esCoilModule() {
+    installIn<ApplicationComponent>()
+    set<Decoder>()
+    set<FetcherBinding<*>>()
+    set<MapperBinding<*>>()
+    set<MeasuredMapperBinding<*>>()
 
-    single {
-        ImageLoader(get()) {
+    scoped { context: @ForApplication Context, decoders: Set<Decoder>,
+             fetchers: Set<FetcherBinding<*>>, mappers: Set<MapperBinding<*>>,
+             measuredMappers: Set<MeasuredMapperBinding<*>> ->
+        ImageLoader(context) {
             componentRegistry {
-                get<Set<Decoder>>(qualifier = Decoders)
-                    .forEach { add(it) }
+                decoders.forEach { add(it) }
 
-                get<Set<FetcherBinding<*>>>(qualifier = Fetchers)
+                fetchers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.fetcher)
                     }
 
-                get<Set<MapperBinding<*>>>(qualifier = Mappers)
+                mappers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
 
-                get<Set<MeasuredMapperBinding<*>>>(qualifier = MeasuredMappers)
+                measuredMappers
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }

@@ -16,43 +16,46 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
-import com.ivianuu.injekt.common.set
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.set
+import com.ivianuu.injekt.transient
 
-@QualifierMarker
-annotation class PermissionStateProvidersSet {
-    companion object : Qualifier.Element
+@BindingEffect(ApplicationComponent::class)
+annotation class BindPermissionStateProvider
+
+@BindingEffectFunction(BindPermissionStateProvider::class)
+@Module
+fun <T : PermissionStateProvider> permissionStateProvider() {
+    set<PermissionStateProvider> { add<T>() }
 }
 
-@KeyOverload
-fun <T : PermissionStateProvider> ComponentBuilder.bindPermissionStateProviderIntoSet(
-    providerKey: Key<T>
-) {
-    set<PermissionStateProvider>(PermissionStateProvidersSet) { add(providerKey) }
+@BindingEffect(ApplicationComponent::class)
+annotation class BindPermissionRequestHandler
+
+@BindingEffectFunction(BindPermissionRequestHandler::class)
+@Module
+fun <T : PermissionRequestHandler> permissionRequestProvider() {
+    transient<T>()
+    set<PermissionRequestHandler> { add<T>() }
 }
 
-@QualifierMarker
-annotation class PermissionRequestHandlersSet {
-    companion object : Qualifier.Element
+@BindingEffect(ApplicationComponent::class)
+annotation class BindPermissionRequestUi
+
+@BindingEffectFunction(BindPermissionRequestUi::class)
+@Module
+fun <T : PermissionRequestUi> permissionRequestUi() {
+    alias<T, PermissionRequestUi>()
 }
 
-@KeyOverload
-fun <T : PermissionRequestHandler> ComponentBuilder.bindPermissionRequestHandlerIntoSet(
-    handlerKey: Key<T>
-) {
-    set<PermissionRequestHandler>(PermissionRequestHandlersSet) { add(handlerKey) }
-}
-
-@KeyOverload
-fun <T : PermissionRequestUi> ComponentBuilder.permissionRequestUi(uiKey: Key<T>) {
-    alias(
-        originalKey = uiKey,
-        aliasKey = keyOf<PermissionRequestUi>()
-    )
+@Module
+fun esPermissionsModule() {
+    installIn<ApplicationComponent>()
+    set<PermissionRequestHandler>()
+    set<PermissionStateProvider>()
 }

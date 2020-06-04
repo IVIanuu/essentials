@@ -35,10 +35,9 @@ import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -59,11 +58,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ApplicationScope
-@Single
+@ApplicationScoped
 class PurchaseManager(
-    billingClientProvider: Provider<BillingClient>,
-    private val context: Context,
+    billingClientProvider: @Provider (PurchasesUpdatedListener) -> BillingClient,
+    private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger
 ) {
@@ -74,7 +72,7 @@ class PurchaseManager(
     }
     private val refreshTrigger = EventFlow<Unit>()
 
-    private val billingClient = billingClientProvider(parameters = parametersOf(updateListener))
+    private val billingClient = billingClientProvider(updateListener)
 
     private val requests = ConcurrentHashMap<String, PurchaseRequest>()
 

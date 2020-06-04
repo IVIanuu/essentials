@@ -28,7 +28,7 @@ import androidx.ui.unit.dp
 
 @Composable
 fun Surface(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors.surface,
     contentColor: Color = guessingContentColorFor(color),

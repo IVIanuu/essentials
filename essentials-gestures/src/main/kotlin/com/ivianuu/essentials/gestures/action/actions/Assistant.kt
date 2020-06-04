@@ -4,28 +4,34 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
+import com.ivianuu.essentials.gestures.action.ActionQualifier
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.transient
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.assistantAction() {
-    action(
-        key = "assistant",
-        title = { getStringResource(R.string.es_action_assistant) },
-        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_google) },
-        unlockScreen = { true },
-        executor = { get<AssistantActionExecutor>() }
-    )
+private fun AssistantAction() {
+    installIn<ApplicationComponent>()
+    transient<@ActionQualifier("assistant") Action> { resourcesProvider: ResourceProvider, executor: AssistantActionExecutor ->
+        Action(
+            key = "assistant",
+            title = resourcesProvider.getString(R.string.es_action_assistant),
+            iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
+            unlockScreen = true,
+            executor = executor
+        )
+    }
+    bindAction<@ActionQualifier("assistant") Action>()
 }
 
-@Factory
-private class AssistantActionExecutor(
+@Transient
+internal class AssistantActionExecutor(
     private val searchManager: SearchManager
 ) : ActionExecutor {
     @SuppressLint("DiscouragedPrivateApi")

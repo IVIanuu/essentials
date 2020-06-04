@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.CompositionReference
 import androidx.compose.FrameManager
-import androidx.compose.Observe
 import androidx.compose.compositionReference
+import androidx.compose.currentComposer
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Constraints
@@ -19,12 +19,10 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.Ref
 import androidx.ui.core.clipToBounds
 import androidx.ui.core.subcomposeInto
+import androidx.ui.node.UiComposer
 import androidx.ui.unit.IntPx
-import androidx.ui.unit.Px
 import androidx.ui.unit.ipx
 import androidx.ui.unit.max
-import androidx.ui.unit.px
-import androidx.ui.unit.round
 import com.ivianuu.essentials.ui.core.Axis
 
 // todo remove
@@ -32,7 +30,7 @@ import com.ivianuu.essentials.ui.core.Axis
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     direction: Axis = Axis.Vertical,
     scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
@@ -51,7 +49,7 @@ fun <T> ScrollableList(
 @Composable
 fun ScrollableList(
     itemCount: Int,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     direction: Axis = Axis.Vertical,
     scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
@@ -63,7 +61,7 @@ fun ScrollableList(
         scrollableState = scrollableState,
         enabled = enabled,
         itemCallbackFactory = { index ->
-            if (index in 0 until itemCount) (@Composable { itemCallback(index) })
+            if (index in 0 until itemCount) ({ itemCallback(index) })
             else null
         }
     )
@@ -71,7 +69,7 @@ fun ScrollableList(
 
 @Composable
 fun ScrollableList(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     direction: Axis = Axis.Vertical,
     scrollableState: ScrollableState = RetainedScrollableState(),
     enabled: Boolean = true,
@@ -92,19 +90,29 @@ fun ScrollableList(
         direction = direction,
         enabled = enabled
     ) {
-        LayoutNode(
-            modifier = modifier.clipToBounds(),
-            ref = state.rootNodeRef,
-            measureBlocks = state.measureBlocks
+        (currentComposer as UiComposer).emit<LayoutNode>(
+            key = 1,
+            ctor = { LayoutNode() },
+            update = {
+                set(modifier.clipToBounds()) { this.modifier = it }
+                set(state.rootNodeRef) { this.ref = it }
+                set(state.measureBlocks) { this.measureBlocks = it }
+            }
         )
 
-        Observe {
-            scrollableState.value // force recompose on reads
-            state.onScroll()
-        }
+        scrollListener(scrollableState, state)
     }
 
     state.recomposeIfAttached()
+}
+
+@Composable
+private fun scrollListener(
+    scrollableState: ScrollableState,
+    scrollableListState: ScrollableListState
+) {
+    scrollableState.value // force recompose on reads
+    scrollableListState.onScroll()
 }
 
 private class ScrollableListState {
@@ -126,7 +134,7 @@ private class ScrollableListState {
             if (field == value) return
             field = value
             if (rootNodeRef.value != null) {
-                for (child in rootNode.layoutChildren.toList()) {
+                for (child in rootNode.children.toList()) {
                     val newComposable = composableFactory(child.state.index)
                     if (newComposable != null) {
                         child.state.composable = newComposable
@@ -158,7 +166,7 @@ private class ScrollableListState {
     }
 
     private fun recomposeAllChildren() {
-        rootNode.layoutChildren.forEach {
+        rootNode.children.forEach {
             it.state.compose()
         }
         forceRecompose = false
@@ -180,10 +188,10 @@ private class ScrollableListState {
 
             val cacheSize = 250.ipx
 
-            lateinit var scrollPosition: Px
-            rootNode.ignoreModelReads { scrollPosition = scrollableState.value }
+            var scrollPosition: IntPx = 0.ipx
+            rootNode.ignoreModelReads { scrollPosition = scrollableState.value.toInt().ipx }
 
-            val targetStartScrollPosition = max(scrollPosition - cacheSize, 0.px)
+            val targetStartScrollPosition = max(scrollPosition - cacheSize, 0.ipx)
 
             val viewportMainAxisSize: IntPx
             val viewportCrossAxisSize: IntPx
@@ -208,7 +216,7 @@ private class ScrollableListState {
             var trailingGarbage = 0
             var reachedEnd = false
 
-            if (rootNode.layoutChildren.isEmpty()) {
+            if (rootNode.children.isEmpty()) {
                 if (addChild(0) == null) {
                     // There are no children.
                     return doLayout(
@@ -223,24 +231,24 @@ private class ScrollableListState {
             var leadingChildWithLayout: LayoutNode? = null
             var trailingChildWithLayout: LayoutNode? = null
 
-            var earliestUsefulChild = rootNode.layoutChildren.minBy { it.state.index }
+            var earliestUsefulChild = rootNode.children.minBy { it.state.index }
             var earliestScrollPosition = earliestUsefulChild!!.state.layoutOffset
 
             while (earliestScrollPosition > targetStartScrollPosition) {
-                earliestUsefulChild = insertAndLayoutLeadingChild(childConstraints)
+                earliestUsefulChild = insertAndLayoutLeadingChild(childConstraints, layoutDirection)
 
                 if (earliestUsefulChild == null) {
                     val firstChild = firstChild!!
-                    firstChild.state.layoutOffset = 0.px
+                    firstChild.state.layoutOffset = 0.ipx
 
-                    if (targetStartScrollPosition == 0.px) {
+                    if (targetStartScrollPosition == 0.ipx) {
                         earliestUsefulChild = firstChild
                         leadingChildWithLayout = earliestUsefulChild
                         trailingChildWithLayout = earliestUsefulChild
                         break
                     } else {
                         rootNode.ignoreModelReads {
-                            scrollableState.correctBy(-scrollPosition)
+                            scrollableState.correctBy(-scrollPosition.value.toFloat())
                         }
                         return doLayout(
                             measureScope,
@@ -259,7 +267,7 @@ private class ScrollableListState {
             }
 
             if (leadingChildWithLayout == null) {
-                earliestUsefulChild!!.measure(childConstraints)
+                earliestUsefulChild!!.measure(childConstraints, layoutDirection)
                 leadingChildWithLayout = earliestUsefulChild
                 trailingChildWithLayout = earliestUsefulChild
             }
@@ -277,14 +285,14 @@ private class ScrollableListState {
                     if (child == null || child!!.state.index != index) {
                         // We are missing a child. Insert it (and lay it out) if possible.
                         child = addChild(trailingChildWithLayout!!.state.index + 1)
-                        child?.doMeasure(childConstraints)
+                        child?.doMeasure(childConstraints, layoutDirection)
                         if (child == null) {
                             // We have run out of children.
                             return false
                         }
                     } else {
                         // Lay out the child.
-                        child!!.doMeasure(childConstraints)
+                        child!!.doMeasure(childConstraints, layoutDirection)
                     }
                     trailingChildWithLayout = child
                 }
@@ -326,10 +334,10 @@ private class ScrollableListState {
             rootNode.ignoreModelReads {
                 val estimatedMaxScrollPosition = if (reachedEnd) max(
                     endScrollPosition - viewportMainAxisSize,
-                    0.px
-                ) else Px.Infinity
-                if (estimatedMaxScrollPosition != scrollableState.maxValue) {
-                    scrollableState.updateBounds(maxValue = estimatedMaxScrollPosition)
+                    0.ipx
+                ) else IntPx.Infinity
+                if (estimatedMaxScrollPosition.value.toFloat() != scrollableState.maxValue) {
+                    scrollableState.updateBounds(maxValue = estimatedMaxScrollPosition.value.toFloat())
                 }
             }
 
@@ -342,16 +350,16 @@ private class ScrollableListState {
         }
     }
 
-    private fun LayoutNode.doMeasure(constraints: Constraints) {
+    private fun LayoutNode.doMeasure(constraints: Constraints, layoutDirection: LayoutDirection) {
         try {
-            measure(constraints)
+            measure(constraints, layoutDirection)
         } catch (e: Exception) {
         }
     }
 
     private fun getChild(index: Int): LayoutNode? {
         if (index < 0) return null
-        return rootNode.layoutChildren.singleOrNull { it.state.index == index }
+        return rootNode.children.singleOrNull { it.state.index == index }
     }
 
     private fun addChild(index: Int): LayoutNode? {
@@ -410,7 +418,7 @@ private class ScrollableListState {
         child.state.dispose()
         childStates.remove(child)
         rootNode.removeAt(
-            rootNode.layoutChildren.indexOf(child),
+            rootNode.children.indexOf(child),
             1
         )
     }
@@ -420,23 +428,26 @@ private class ScrollableListState {
 
     fun collectGarbage(leadingGarbage: Int, trailingGarbage: Int) {
         repeat(leadingGarbage) {
-            rootNode.layoutChildren
+            rootNode.children
                 .minBy { it.state.index }
                 ?.let { removeChild(it) }
         }
         repeat(trailingGarbage) {
-            rootNode.layoutChildren
+            rootNode.children
                 .maxBy { it.state.index }
                 ?.let { removeChild(it) }
         }
     }
 
-    private val firstChild get() = rootNode.layoutChildren.minBy { it.state.index }
+    private val firstChild get() = rootNode.children.minBy { it.state.index }
 
-    private fun insertAndLayoutLeadingChild(constraints: Constraints): LayoutNode? {
+    private fun insertAndLayoutLeadingChild(
+        constraints: Constraints,
+        layoutDirection: LayoutDirection
+    ): LayoutNode? {
         val index = firstChild?.let { it.state.index - 1 } ?: 0
         val child = getOrAddChild(index) ?: return null
-        child.measure(constraints)
+        child.measure(constraints, layoutDirection)
         return child
     }
 
@@ -444,7 +455,7 @@ private class ScrollableListState {
         measureScope: MeasureScope,
         viewportMainAxisSize: IntPx,
         viewportCrossAxisSize: IntPx,
-        position: Px
+        position: IntPx
     ): MeasureScope.MeasureResult {
         val width: IntPx
         val height: IntPx
@@ -459,19 +470,19 @@ private class ScrollableListState {
             }
         }
         return measureScope.layout(width = width, height = height) {
-            rootNode.layoutChildren
+            rootNode.children
                 .forEach { child ->
                     when (direction) {
                         Axis.Horizontal -> {
                             child.place(
-                                x = (child.state.layoutOffset - position).round(),
+                                x = child.state.layoutOffset - position,
                                 y = 0.ipx
                             )
                         }
                         Axis.Vertical -> {
                             child.place(
                                 x = 0.ipx,
-                                y = (child.state.layoutOffset - position).round()
+                                y = child.state.layoutOffset - position
                             )
                         }
                     }
@@ -485,7 +496,7 @@ private class ScrollableListState {
         var composable: @Composable () -> Unit
     ) {
 
-        var layoutOffset = 0.px
+        var layoutOffset = 0.ipx
 
         private val composition = subcomposeInto(node, context, compositionRef) {
             composable()

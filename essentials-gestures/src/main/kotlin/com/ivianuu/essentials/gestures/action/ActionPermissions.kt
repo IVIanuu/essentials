@@ -9,7 +9,6 @@ import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
-import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
@@ -17,14 +16,11 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
 
-@ApplicationScope
-@Single
-internal class ActionPermissions(context: Context) {
+@ApplicationScoped
+internal class ActionPermissions(context: @ForApplication Context) {
     val accessibility = AccessibilityServicePermission(
         ComponentAccessibilityService::class,
         Metadata.Title withValue "Accessibility", // todo res
@@ -47,7 +43,3 @@ internal class ActionPermissions(context: Context) {
         Metadata.Icon withValue { Icon(Icons.Default.SettingsApplications) } // todo change icon
     )
 }
-
-internal inline fun Component.actionPermission(
-    choosingBlock: ActionPermissions.() -> Permission
-): Permission = get<ActionPermissions>().choosingBlock()

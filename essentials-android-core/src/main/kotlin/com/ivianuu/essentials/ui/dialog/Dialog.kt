@@ -21,8 +21,8 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.Modifier
-import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
+import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.layout.Spacer
@@ -177,56 +177,50 @@ private fun DialogContentLayout(
 ) {
     val children: @Composable () -> Unit = {
         if (header != null) {
-            ParentData(DialogContentSlot.Header) {
-                Box(
-                    modifier = Modifier.padding(
-                        start = 24.dp,
-                        top = 24.dp,
-                        end = 24.dp,
-                        bottom = if (buttons != null && content == null) 28.dp else 24.dp
-                    ),
-                    children = header
-                )
-            }
+            Box(
+                modifier = Modifier.padding(
+                    start = 24.dp,
+                    top = 24.dp,
+                    end = 24.dp,
+                    bottom = if (buttons != null && content == null) 28.dp else 24.dp
+                ).tag(DialogContentSlot.Header),
+                children = header
+            )
         }
 
         if (content != null) {
             if (header != null && showTopDivider) {
-                ParentData(DialogContentSlot.TopDivider) {
-                    Divider(Axis.Horizontal)
-                }
+                Divider(Axis.Horizontal, modifier = Modifier.tag(DialogContentSlot.TopDivider))
             }
 
-            ParentData(DialogContentSlot.Content) {
-                Box(
-                    modifier = Modifier.padding(
-                        start = if (applyContentPadding) 24.dp else 0.dp,
-                        top = if (header == null) 24.dp else 0.dp,
-                        end = if (applyContentPadding) 24.dp else 0.dp,
-                        bottom = if (buttons == null) 24.dp else 0.dp
-                    ),
-                    gravity = Alignment.TopStart,
-                    children = content
-                )
-            }
+            Box(
+                modifier = Modifier.padding(
+                    start = if (applyContentPadding) 24.dp else 0.dp,
+                    top = if (header == null) 24.dp else 0.dp,
+                    end = if (applyContentPadding) 24.dp else 0.dp,
+                    bottom = if (buttons == null) 24.dp else 0.dp
+                ).tag(DialogContentSlot.Content),
+                gravity = Alignment.TopStart,
+                children = content
+            )
         }
 
         if (buttons != null) {
             if (content != null && showBottomDivider) {
-                ParentData(DialogContentSlot.BottomDivider) {
-                    Divider(Axis.Horizontal)
-                }
+                Divider(Axis.Horizontal, modifier = Modifier.tag(DialogContentSlot.BottomDivider))
             }
 
-            ParentData(DialogContentSlot.Buttons) {
-                if (!showBottomDivider && content != null) {
-                    Box(
-                        modifier = Modifier.padding(top = 28.dp),
-                        children = buttons
-                    )
-                } else {
-                    buttons()
-                }
+            if (!showBottomDivider && content != null) {
+                Box(
+                    modifier = Modifier.padding(top = 28.dp)
+                        .tag(DialogContentSlot.Buttons),
+                    children = buttons
+                )
+            } else {
+                Box(
+                    modifier = Modifier.tag(DialogContentSlot.Buttons),
+                    children = buttons
+                )
             }
         }
     }
@@ -238,15 +232,15 @@ private fun DialogContentLayout(
         )
 
         val headerMeasureable =
-            measurables.firstOrNull { it.parentData == DialogContentSlot.Header }
+            measurables.firstOrNull { it.tag == DialogContentSlot.Header }
         val topDividerMeasureable =
-            measurables.firstOrNull { it.parentData == DialogContentSlot.TopDivider }
+            measurables.firstOrNull { it.tag == DialogContentSlot.TopDivider }
         val contentMeasureable =
-            measurables.firstOrNull { it.parentData == DialogContentSlot.Content }
+            measurables.firstOrNull { it.tag == DialogContentSlot.Content }
         val bottomDividerMeasureable =
-            measurables.firstOrNull { it.parentData == DialogContentSlot.BottomDivider }
+            measurables.firstOrNull { it.tag == DialogContentSlot.BottomDivider }
         val buttonsMeasureable =
-            measurables.firstOrNull { it.parentData == DialogContentSlot.Buttons }
+            measurables.firstOrNull { it.tag == DialogContentSlot.Buttons }
 
         fun measureFixed(measureable: Measurable?): Placeable? {
             return if (measureable != null) {
@@ -292,6 +286,7 @@ private fun DialogButtons(
     negativeButton: @Composable (() -> Unit)?,
     neutralButton: @Composable (() -> Unit)?
 ) {
+    println()
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
             Box(

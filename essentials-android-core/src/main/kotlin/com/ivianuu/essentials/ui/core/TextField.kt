@@ -29,17 +29,15 @@ import androidx.ui.text.TextStyle
 @Composable
 fun TextField(
     value: TextFieldValue,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     onValueChange: (TextFieldValue) -> Unit,
     textStyle: TextStyle = currentTextStyle(),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
-    onFocus: () -> Unit = {},
-    onBlur: () -> Unit = {},
-    focusIdentifier: String? = null,
+    onFocusChange: (Boolean) -> Unit = {},
     onImeActionPerformed: (ImeAction) -> Unit = {},
     onTextLayout: (TextLayoutResult) -> Unit = {},
-    visualTransformation: VisualTransformation? = null
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     androidx.ui.foundation.TextField(
         value = value,
@@ -48,9 +46,7 @@ fun TextField(
         textStyle = ensureColor(textStyle),
         keyboardType = keyboardType,
         imeAction = imeAction,
-        onFocus = onFocus,
-        onBlur = onBlur,
-        focusIdentifier = focusIdentifier,
+        onFocusChange = onFocusChange,
         onImeActionPerformed = onImeActionPerformed,
         visualTransformation = visualTransformation,
         onTextLayout = onTextLayout

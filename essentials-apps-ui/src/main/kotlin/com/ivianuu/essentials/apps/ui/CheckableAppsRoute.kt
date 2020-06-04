@@ -27,25 +27,26 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.coroutines.StateFlow
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -58,8 +59,8 @@ fun CheckableAppsScreen(
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) {
-    val viewModel =
-        injectMvRxViewModel<CheckableAppsViewModel>(parameters = parametersOf(appFilter))
+    val viewModelFactory = inject<@Provider (AppFilter) -> CheckableAppsViewModel>()
+    val viewModel = viewModel { viewModelFactory(appFilter) }
 
     onCommit(checkedAppsFlow, onCheckedAppsChanged) {
         viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)
@@ -88,7 +89,7 @@ fun CheckableAppsScreen(
         },
         body = {
             RenderAsyncList(
-                state = viewModel.getCurrentState().apps,
+                state = viewModel.state.apps,
                 successItemCallback = { _, app ->
                     CheckableApp(
                         app = app,
@@ -123,15 +124,15 @@ private fun CheckableApp(
     )
 }
 
-@Factory
-private class CheckableAppsViewModel(
-    @Param private val appFilter: AppFilter,
+@Transient
+internal class CheckableAppsViewModel(
+    @Assisted private val appFilter: AppFilter,
     private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
     private var checkedAppsJob: Job? = null
-    private val checkedApps = StateFlow<Set<String>>()
+    private val checkedApps = MutableStateFlow(emptySet<String>())
 
     init {
         coroutineScope.launch {
@@ -183,7 +184,7 @@ private class CheckableAppsViewModel(
 
     fun selectAllClicked() {
         coroutineScope.launch {
-            getCurrentState().apps()?.let { allApps ->
+            state.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
                 }
@@ -207,7 +208,7 @@ private class CheckableAppsViewModel(
 
 @Immutable
 internal data class CheckableAppsState(
-    val apps: Async<List<CheckableApp>> = Uninitialized
+    val apps: Async<List<CheckableApp>> = Uninitialized()
 )
 
 @Immutable

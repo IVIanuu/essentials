@@ -34,13 +34,13 @@ import com.ivianuu.essentials.util.launchAsync
 @Composable
 fun CoilImage(
     data: Any,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     builderBlock: (GetRequestBuilder.() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     error: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = inject()
 ) {
-    WithConstraints(modifier = modifier) { constraints, _ ->
+    WithConstraints(modifier = modifier) {
         val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
 

@@ -9,32 +9,31 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactoryIntoSet
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
+import com.ivianuu.essentials.gestures.action.actionFactory
+import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.keycodeAction() {
-    bindActionFactoryIntoSet<KeycodeActionFactory>()
-    bindActionPickerDelegateIntoSet<KeycodeActionPickerDelegate>()
+private fun KeycodeModule() {
+    installIn<ApplicationComponent>()
+    actionFactory<KeycodeActionFactory>()
+    actionPickerDelegate<KeycodeActionPickerDelegate>()
 }
 
-@Factory
-private class KeycodeActionFactory(
+@Transient
+internal class KeycodeActionFactory(
     private val actionPermissions: ActionPermissions,
     private val resourceProvider: ResourceProvider,
-    private val rootActionExecutorProvider: Provider<RootActionExecutor>
+    private val rootActionExecutorProvider: @Provider (String) -> RootActionExecutor
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -44,14 +43,15 @@ private class KeycodeActionFactory(
             title = resourceProvider.getString(R.string.es_action_keycode_suffix, keycode),
             iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
             permissions = listOf(actionPermissions.root),
-            executor = rootActionExecutorProvider(parameters = parametersOf("input keyevent $keycode")),
-            unlockScreen = false
+            executor = rootActionExecutorProvider("input keyevent $keycode"),
+            unlockScreen = false,
+            enabled = true
         )
     }
 }
 
-@Factory
-private class KeycodeActionPickerDelegate(
+@Transient
+internal class KeycodeActionPickerDelegate(
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
     override val title: String

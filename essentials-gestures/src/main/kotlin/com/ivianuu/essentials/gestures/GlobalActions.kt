@@ -18,15 +18,18 @@ package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScoped
 
 /**
  * Simulates device inputs such as back or home
  */
-@ApplicationScope
-@Single
-class GlobalActions : AccessibilityComponent() {
+@BindAccessibilityComponent
+@ApplicationScoped
+class GlobalActions(
+    dispatchers: AppCoroutineDispatchers
+) : AccessibilityComponent(dispatchers.computation) {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig()

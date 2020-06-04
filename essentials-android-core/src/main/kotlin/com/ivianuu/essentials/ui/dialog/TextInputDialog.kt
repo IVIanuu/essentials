@@ -21,11 +21,11 @@ import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
+import androidx.ui.core.focus.FocusModifier
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -91,19 +91,19 @@ fun TextInputDialog(
                     modifier = Modifier.drawOpacity(0.5f)
                 )
             }
+            val focusModifier = FocusModifier()
             TextField(
                 value = TextFieldValue(value),
                 onValueChange = { onValueChange(it.text) },
-                focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
-                textStyle = MaterialTheme.typography.subtitle1
+                textStyle = MaterialTheme.typography.subtitle1,
+                modifier = focusModifier
             )
 
-            val keyboardManager = KeyboardManagerAmbient.current
             onActive {
-                keyboardManager.showKeyboard(TextInputDialogInputId)
+                focusModifier.requestFocus()
                 onDispose {
-                    keyboardManager.hideKeyboard()
+                    focusModifier.freeFocus()
                 }
             }
         },
@@ -112,5 +112,3 @@ fun TextInputDialog(
         neutralButton = neutralButton
     )
 }
-
-private const val TextInputDialogInputId = "TextInputDialogInputFieldId"

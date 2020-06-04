@@ -20,8 +20,10 @@ import androidx.animation.FastOutSlowInEasing
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.Model
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.ui.animation.Transition
 import androidx.ui.core.Modifier
 import androidx.ui.core.TransformOrigin
@@ -33,16 +35,16 @@ import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.Scroller
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.material.DefaultAppBarStyle
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.PrimaryAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.ScaffoldState
 import com.ivianuu.essentials.ui.material.Subheader
@@ -96,19 +98,9 @@ val ScaffoldRoute = Route {
 
     Scaffold(
         topAppBar = if (controls.showTopAppBar) ({
-            val alpha = remember(controls.bodyLayoutMode) {
-                if (controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendTop
-                    || controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBoth
-                ) 0.5f else 1f
-            }
-
-            val color = MaterialTheme.colors.primary.copy(alpha = alpha)
-
             TopAppBar(
                 title = { Text("Scaffold") },
-                style = DefaultAppBarStyle(
-                    backgroundColor = color,
-                    elevation = if (alpha == 1f) 8.dp else 0.dp,
+                style = PrimaryAppBarStyle(
                     centerTitle = controls.centerTitle
                 )
             )
@@ -122,15 +114,7 @@ val ScaffoldRoute = Route {
             }
         },
         bottomBar = if (controls.showBottomBar) ({
-            val alpha = remember(controls.bodyLayoutMode) {
-                if (controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBottom
-                    || controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBoth
-                ) 0.5f else 1f
-            }
-
-            val color = MaterialTheme.colors.primary.copy(alpha = alpha)
-
-            Surface(color = color) {
+            Surface(color = MaterialTheme.colors.primary) {
                 SafeArea(
                     top = false,
                     left = false,
@@ -151,55 +135,42 @@ val ScaffoldRoute = Route {
                 }
             }
         }) else null,
-        bodyLayoutMode = controls.bodyLayoutMode,
         body = {
             Scroller {
                 Subheader { Text("Top bar") }
                 ListItem(
                     title = { Text("Show top bar") },
                     trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
-                        }
+                        Checkbox(
+                            checked = controls.showTopAppBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
+
                     },
                     onClick = { controls.showTopAppBar = !controls.showTopAppBar }
                 )
                 ListItem(
                     title = { Text("Center title") },
                     trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.centerTitle, onCheckedChange = {})
-                        }
+                        Checkbox(
+                            checked = controls.centerTitle,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
                     },
                     onClick = { controls.centerTitle = !controls.centerTitle }
-                )
-
-                Subheader { Text("Body") }
-                ListItem(
-                    title = { Text("Body layout mode") },
-                    onClick = {
-                        navigator.push(
-                            DialogRoute {
-                                SingleChoiceListDialog(
-                                    items = ScaffoldState.BodyLayoutMode.values().toList(),
-                                    selectedItem = controls.bodyLayoutMode,
-                                    onSelect = { controls.bodyLayoutMode = it },
-                                    itemCallback = {
-                                        Text(it.name)
-                                    }
-                                )
-                            }
-                        )
-                    }
                 )
 
                 Subheader { Text("Bottom bar") }
                 ListItem(
                     title = { Text("Show bottom bar") },
                     trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
-                        }
+                        Checkbox(
+                            checked = controls.showBottomBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
                     },
                     onClick = { controls.showBottomBar = !controls.showBottomBar }
                 )
@@ -208,9 +179,11 @@ val ScaffoldRoute = Route {
                 ListItem(
                     title = { Text("Show fab") },
                     trailing = {
-                        AbsorbPointer {
-                            Checkbox(checked = controls.showFab, onCheckedChange = {})
-                        }
+                        Checkbox(
+                            checked = controls.showFab,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
                     },
                     onClick = { controls.showFab = !controls.showFab }
                 )
@@ -236,12 +209,10 @@ val ScaffoldRoute = Route {
     )
 }
 
-@Model
-private class ScaffoldControls(
-    var showTopAppBar: Boolean = true,
-    var centerTitle: Boolean = false,
-    var bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap,
-    var showBottomBar: Boolean = false,
-    var showFab: Boolean = false,
-    var fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End
-)
+private class ScaffoldControls {
+    var showTopAppBar by mutableStateOf(true)
+    var centerTitle by mutableStateOf(false)
+    var showBottomBar by mutableStateOf(false)
+    var showFab by mutableStateOf(false)
+    var fabPosition by mutableStateOf(ScaffoldState.FabPosition.End)
+}

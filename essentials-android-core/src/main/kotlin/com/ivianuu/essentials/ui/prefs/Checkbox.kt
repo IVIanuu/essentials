@@ -17,38 +17,41 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
+import androidx.ui.core.Modifier
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
 
 @Composable
-fun CheckboxPreference(
-    @Pivotal box: Box<Boolean>,
+inline fun CheckboxPreference(
+    box: Box<Boolean>,
     enabled: Boolean = true,
+    noinline title: @Composable (() -> Unit)? = null,
+    noinline summary: @Composable (() -> Unit)? = null,
+    noinline leading: @Composable (() -> Unit)? = null,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
 ) {
-    CheckboxPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading
-    )
+    key(box) {
+        CheckboxPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dependencies = dependencies
+        )
+    }
 }
 
 @Composable
 fun CheckboxPreference(
     valueController: ValueController<Boolean>,
     enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null
+    leading: @Composable (() -> Unit)? = null,
+    dependencies: List<Dependency<*>>? = null
 ) {
     PreferenceWrapper(
         valueController = valueController,
@@ -60,13 +63,12 @@ fun CheckboxPreference(
             summary = summary,
             leading = leading,
             trailing = {
-                AbsorbPointer {
-                    Checkbox(
-                        checked = context.currentValue,
-                        onCheckedChange = { context.setIfOk(!context.currentValue); Unit },
-                        enabled = context.shouldBeEnabled
-                    )
-                }
+                Checkbox(
+                    checked = context.currentValue,
+                    onCheckedChange = { context.setIfOk(!context.currentValue); Unit },
+                    enabled = context.shouldBeEnabled,
+                    modifier = Modifier.absorbPointer()
+                )
             },
             enabled = context.shouldBeEnabled,
             onClick = { context.setIfOk(!context.currentValue); Unit }

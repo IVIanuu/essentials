@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Model
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
@@ -70,11 +72,11 @@ fun <T> PreferenceWrapper(
 fun PreferenceLayout(
     enabled: Boolean,
     onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier.None,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     ListItem(
         modifier = modifier,
@@ -108,22 +110,21 @@ fun <T> ValueController(
     override fun canSetValue(value: T): Boolean = canSetValue.invoke(value)
 }
 
-@Model
 class PreferenceContext<T> {
 
-    internal var valueController: ValueController<T>? = null // todo lateinit
+    internal lateinit var valueController: ValueController<T>
 
-    val currentValue: T get() = valueController!!.currentValue
+    val currentValue: T get() = valueController.currentValue
 
-    var dependenciesOk = false
+    var dependenciesOk by mutableStateOf(false)
         internal set
-    var enabled = false
+    var enabled by mutableStateOf(false)
         internal set
     val shouldBeEnabled: Boolean get() = enabled && dependenciesOk
 
     fun setIfOk(newValue: T): Boolean {
         val isOk = shouldBeEnabled
-        if (isOk) valueController!!.setValue(newValue)
+        if (isOk) valueController.setValue(newValue)
         return isOk
     }
 }

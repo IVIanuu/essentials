@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ScrollableScreen
@@ -43,19 +43,21 @@ val TwilightSettingsRoute = Route {
 
 @Composable
 private fun TwilightModeItem(
-    @Pivotal mode: TwilightMode,
+    mode: TwilightMode,
     onClick: () -> Unit,
     isSelected: Boolean
 ) {
-    ListItem(
-        title = { Text(mode.titleRes) },
-        subtitle = { Text(mode.descRes) },
-        trailing = {
-            RadioButton(
-                selected = isSelected,
-                onSelect = onClick
-            )
-        },
-        onClick = onClick
-    )
+    key(mode) {
+        ListItem(
+            title = { Text(mode.titleRes) },
+            subtitle = { Text(mode.descRes) },
+            trailing = {
+                RadioButton(
+                    selected = isSelected,
+                    onSelect = onClick
+                )
+            },
+            onClick = onClick
+        )
+    }
 }

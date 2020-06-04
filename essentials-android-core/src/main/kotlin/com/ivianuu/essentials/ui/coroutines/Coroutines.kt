@@ -17,99 +17,102 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.onCommit
+import androidx.compose.MutableState
+import androidx.compose.State
+import androidx.compose.launchInComposition
 import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.state
-import androidx.compose.staticAmbientOf
-import androidx.ui.core.CoroutineContextAmbient
-import com.ivianuu.essentials.app.AppComponentHolder
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-val CoroutineScopeAmbient = staticAmbientOf<CoroutineScope>()
-
 @Composable
-fun ProvideCoroutineScope(
-    coroutineScope: CoroutineScope,
-    children: @Composable () -> Unit
-) {
-    Providers(
-        CoroutineContextAmbient provides coroutineScope.coroutineContext,
-        CoroutineScopeAmbient provides coroutineScope,
-        children = children
+fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
+    val coroutineScope = remember(context) { CoroutineScope(context + Job()) }
+    onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
+    return coroutineScope
+}
+
+@BuilderInference
+@Composable
+fun <T> launchForResult(
+    vararg inputs: Any?,
+    block: suspend CoroutineScope.() -> T
+): State<T?> {
+    return launchForResult(
+        initial = null,
+        inputs = *inputs,
+        block = block
     )
 }
 
 @Composable
-fun coroutineScope(context: CoroutineContext = defaultCoroutineContext()): CoroutineScope {
-    val coroutineScope = remember { CoroutineScope(context) }
-    onDispose { context[Job]!!.cancel() }
-    return coroutineScope
+fun <T> launchForResult(
+    vararg inputs: Any?,
+    initial: T,
+    block: suspend CoroutineScope.() -> T
+): State<T> {
+    val state = state { initial }
+    launchWithState(
+        inputs = *inputs,
+        initial = initial
+    ) {
+        state.value = block()
+    }
+    return state
 }
-
-@Composable
-private fun defaultCoroutineContext(): CoroutineContext =
-    remember { Job() + AppComponentHolder.component.get<AppCoroutineDispatchers>().main }
 
 @BuilderInference
 @Composable
-fun <T> launch(
+fun <T> launchWithState(
     vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> T
-): T? = launch(
+    block: suspend StateCoroutineScope<T?>.() -> Unit
+): State<T?> = launchWithState(
     initial = null,
     inputs = *inputs,
     block = block
 )
 
 @Composable
-fun <T> launch(
+fun <T> launchWithState(
     vararg inputs: Any?,
     initial: T,
-    block: suspend CoroutineScope.() -> T
-): T {
+    block: suspend StateCoroutineScope<T>.() -> Unit
+): State<T> {
     val state = state { initial }
-    val coroutineScope = CoroutineScopeAmbient.current
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    onCommit(*inputs) {
-        val job = coroutineScope.launch {
-            val result = block()
-            withContext(dispatchers.main) { // todo remove once safe
-                state.value = result
-            }
+    launchInComposition(*inputs) {
+        with(StateCoroutineScope(this, state)) {
+            block()
         }
-        onDispose { job.cancel() }
     }
-    return state.value
+    return state
 }
 
-@Composable
-fun <T> collect(flow: Flow<T>): T? = collect(flow, null)
+class StateCoroutineScope<T>(
+    private val coroutineScope: CoroutineScope,
+    val state: MutableState<T>
+) : CoroutineScope by coroutineScope
 
 @Composable
-fun <T> collect(
-    flow: Flow<T>,
-    initial: T
-): T {
-    val state = state { initial }
-    val dispatchers = inject<AppCoroutineDispatchers>()
-    launch(flow) {
-        flow
-            .collect { item ->
-                withContext(dispatchers.main) { // todo remove once safe
-                    state.value = item
-                }
+fun <T> StateFlow<T>.collectAsState(): State<T> = collectAsState(value)
+
+@Composable
+fun <T> Flow<T>.collectAsState(): State<T?> = collectAsState(null)
+
+@Composable
+fun <T> Flow<T>.collectAsState(initial: T): State<T> {
+    return launchWithState(
+        initial = initial,
+        inputs = *arrayOf(this),
+        block = {
+            collect {
+                state.value = it
             }
-    }
-    return state.value
+        }
+    )
 }
