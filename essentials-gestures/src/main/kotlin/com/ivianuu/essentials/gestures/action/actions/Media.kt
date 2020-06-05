@@ -7,10 +7,13 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.store.getCurrentData
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
 
 @Module
@@ -20,12 +23,15 @@ internal fun <T : Action> bindMediaAction(
     titleRes: Int,
     icon: @Composable () -> Unit
 ) {
-    /*bindAction<T>(
-        key = key,
-        title = { getStringResource(titleRes) },
-        iconProvider = { SingleActionIconProvider(icon) },
-        executor = { get<@Provider (Int) -> MediaActionExecutor>()(keycode) }
-    )*/
+    action { resourceProvider: ResourceProvider,
+             executorFactory: @Provider (Int) -> MediaActionExecutor ->
+        Action(
+            key = key,
+            title = resourceProvider.getString(titleRes),
+            iconProvider = SingleActionIconProvider(icon),
+            executor = executorFactory(keycode)
+        ) as T
+    }
 }
 
 @Transient
