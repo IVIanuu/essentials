@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.getValue
 import androidx.compose.onActive
+import androidx.compose.setValue
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
@@ -25,7 +27,9 @@ import androidx.ui.core.focus.FocusModifier
 import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.input.KeyboardType
+import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
+import androidx.ui.text.TextRange
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -84,26 +88,46 @@ fun TextInputDialog(
         icon = icon,
         title = title,
         content = {
-            if (value.isEmpty() && hint != null) {
-                Text(
-                    text = hint,
-                    textStyle = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.drawOpacity(0.5f)
-                )
-            }
-            val focusModifier = FocusModifier()
-            TextField(
-                value = TextFieldValue(value),
-                onValueChange = { onValueChange(it.text) },
-                keyboardType = keyboardType,
-                textStyle = MaterialTheme.typography.subtitle1,
-                modifier = focusModifier
-            )
+            Stack {
+                if (value.isEmpty() && hint != null) {
+                    Text(
+                        text = hint,
+                        textStyle = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.drawOpacity(0.5f)
+                    )
+                }
+                val focusModifier = FocusModifier()
 
-            onActive {
-                focusModifier.requestFocus()
-                onDispose {
-                    focusModifier.freeFocus()
+                var textFieldValue by state {
+                    TextFieldValue(value, TextRange(value.length, value.length))
+                }
+                if (textFieldValue.text != value) {
+                    val newSelection = TextRange(
+                        textFieldValue.selection.start.coerceIn(0, value.length),
+                        textFieldValue.selection.end.coerceIn(0, value.length)
+                    )
+                    textFieldValue = TextFieldValue(text = value, selection = newSelection)
+                }
+
+                TextField(
+                    value = textFieldValue,
+                    onValueChange = {
+                        val previousValue = textFieldValue.text
+                        textFieldValue = it
+                        if (previousValue != it.text) {
+                            onValueChange(it.text)
+                        }
+                    },
+                    keyboardType = keyboardType,
+                    textStyle = MaterialTheme.typography.subtitle1,
+                    modifier = focusModifier
+                )
+
+                onActive {
+                    focusModifier.requestFocus()
+                    onDispose {
+                        focusModifier.freeFocus()
+                    }
                 }
             }
         },

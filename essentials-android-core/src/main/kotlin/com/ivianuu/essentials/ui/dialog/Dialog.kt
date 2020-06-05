@@ -29,6 +29,7 @@ import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
@@ -172,15 +173,14 @@ private fun DialogContentLayout(
 ) {
     val children: @Composable () -> Unit = {
         if (header != null) {
-            Box(
+            Stack(
                 modifier = Modifier.padding(
                     start = 24.dp,
                     top = 24.dp,
                     end = 24.dp,
                     bottom = if (buttons != null && content == null) 28.dp else 24.dp
-                ).tag(DialogContentSlot.Header),
-                children = header
-            )
+                ).tag(DialogContentSlot.Header)
+            ) { header() }
         }
 
         if (content != null) {
@@ -188,16 +188,14 @@ private fun DialogContentLayout(
                 HorizontalDivider(modifier = Modifier.tag(DialogContentSlot.TopDivider))
             }
 
-            Box(
+            Stack(
                 modifier = Modifier.padding(
                     start = if (applyContentPadding) 24.dp else 0.dp,
                     top = if (header == null) 24.dp else 0.dp,
                     end = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
-                ).tag(DialogContentSlot.Content),
-                gravity = Alignment.TopStart,
-                children = content
-            )
+                ).tag(DialogContentSlot.Content)
+            ) { content() }
         }
 
         if (buttons != null) {
@@ -283,22 +281,18 @@ private fun DialogButtons(
 ) {
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
-            Box(
-                modifier = Modifier.preferredHeight(52.dp)
+            Row(
+                modifier = Modifier
+                    .preferredHeight(52.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
-                gravity = Alignment.CenterStart
+                verticalGravity = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalGravity = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    neutralButton?.invoke()
-                    Spacer(Modifier.weight(1f))
-                    negativeButton?.invoke()
-                    positiveButton?.invoke()
-                }
+                neutralButton?.invoke()
+                Spacer(Modifier.weight(1f))
+                negativeButton?.invoke()
+                positiveButton?.invoke()
             }
         }
         AlertDialogButtonLayout.Stacked -> {

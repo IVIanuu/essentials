@@ -18,11 +18,13 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
+import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
+import androidx.ui.core.focus.FocusModifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.TextField
@@ -55,9 +57,11 @@ val TextInputRoute = Route {
             TopAppBar(
                 title = {
                     if (state.searchVisible) {
+                        val focusModifier = FocusModifier()
+
                         Stack(
                             modifier = Modifier.fillMaxSize()
-                                .clickable { /*keyboardManager.showKeyboard("id")*/ }
+                                .clickable { focusModifier.requestFocus() }
                         ) {
                             if (state.inputValue.text.isEmpty()) {
                                 Text(
@@ -75,7 +79,7 @@ val TextInputRoute = Route {
                             )
                         }
 
-                        //onActive { keyboardManager.showKeyboard("id") }
+                        onActive { focusModifier.requestFocus() }
                     } else {
                         Text("Text input")
                     }
