@@ -19,14 +19,23 @@ package com.ivianuu.essentials.billing
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.transient
 
 @Module
 fun esBillingModule() {
     installIn<ApplicationComponent>()
-    alias<@Provider (PurchasesUpdatedListener) -> DebugBillingClient,
-            @Provider (PurchasesUpdatedListener) -> BillingClient>()
+
+    var debugBillingClient: DebugBillingClient? = null
+    transient { purchaseManager: PurchaseManager -> debugBillingClient!! }
+
+    transient<BillingClient> { listener: @Assisted PurchasesUpdatedListener,
+                               debugBillingClientFactory: @Provider (PurchasesUpdatedListener) -> DebugBillingClient ->
+        debugBillingClientFactory(listener)
+            .also { debugBillingClient = it }
+    }
 }
+

@@ -20,11 +20,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
@@ -40,16 +40,16 @@ import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.util.launchAsync
+import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 import java.util.Date
 
+@AndroidEntryPoint
 class DebugBillingActivity : EsActivity() {
 
     private val client: DebugBillingClient by inject()
 
-    // just to properly initialize the DebugBillingClient
-    private val purchaseManager: PurchaseManager by inject()
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
 
@@ -70,6 +70,7 @@ class DebugBillingActivity : EsActivity() {
                 } else {
                     this.skuDetails = it
                     InjectedNavigator(startRoute = PurchaseDialogRoute)
+                        .content()
                 }
             }
         )
@@ -97,10 +98,10 @@ class DebugBillingActivity : EsActivity() {
     ) {
         Dialog(
             title = {
-                Row {
+                Row(verticalGravity = Alignment.CenterVertically) {
                     Text(text = skuDetails.title)
 
-                    Spacer(Modifier.fillMaxWidth())
+                    Spacer(Modifier.weight(1f))
 
                     Text(
                         text = skuDetails.price,
