@@ -24,7 +24,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/an
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
@@ -34,24 +34,22 @@ dependencies {
     api(Deps.AndroidX.Lifecycle.extensions)
     api(Deps.AndroidX.Lifecycle.runtime)
 
-    api(Deps.AndroidX.Ui.androidText)
+    api(Deps.AndroidX.Compose.runtime)
     api(Deps.AndroidX.Ui.animation)
     api(Deps.AndroidX.Ui.core)
     api(Deps.AndroidX.Ui.foundation)
-    api(Deps.AndroidX.Ui.framework)
     api(Deps.AndroidX.Ui.layout)
     api(Deps.AndroidX.Ui.material)
     api(Deps.AndroidX.Ui.materialIconsExtended)
-    api(Deps.AndroidX.Ui.platform)
     api(Deps.AndroidX.Ui.text)
     api(Deps.AndroidX.Ui.tooling)
     api(Deps.AndroidX.Ui.vector)
 
     api(Deps.Coroutines.android)
 
+    api(Deps.Injekt.android)
+
     api(project(":essentials-core"))
     api(project(":essentials-moshi-android"))
     api(project(":essentials-store-android"))
-
-    api(Deps.Injekt.android)
 }

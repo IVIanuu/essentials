@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 internal class PermissionRequestHandlers(
-    @PermissionRequestHandlersSet private val requestHandlers: Set<PermissionRequestHandler>
+    private val requestHandlers: Set<PermissionRequestHandler>
 ) {
     fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
         requestHandlers.firstOrNull { it.handles(permission) }

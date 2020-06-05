@@ -18,7 +18,6 @@ plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
     kotlin("android")
-    id("kotlin-android-extensions")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")

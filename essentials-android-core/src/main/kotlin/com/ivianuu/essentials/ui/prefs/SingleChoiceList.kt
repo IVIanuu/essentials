@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.Text
@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    @Pivotal box: Box<T>,
+    box: Box<T>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
@@ -36,16 +36,18 @@ fun <T> SingleChoiceListPreference(
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<SingleChoiceListPreference.Item<T>>
 ) {
-    SingleChoiceListPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        dialogTitle = dialogTitle,
-        items = items
-    )
+    key(box) {
+        SingleChoiceListPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dialogTitle = dialogTitle,
+            items = items
+        )
+    }
 }
 
 @Composable

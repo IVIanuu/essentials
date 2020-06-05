@@ -23,21 +23,19 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.core.BindAppUi
+import com.ivianuu.essentials.ui.core.BindUiInitializer
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.core.UiInitializer
-import com.ivianuu.essentials.ui.core.appUi
-import com.ivianuu.essentials.ui.core.bindUiInitializerIntoMap
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.ui.navigation.transition.VerticalFadeRouteTransition
 import com.ivianuu.essentials.util.isDark
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Transient
 
-@Factory
+@BindAppUi
+@Transient
 class SampleUi : AppUi {
     @Composable
     override fun runApp() {
@@ -50,11 +48,13 @@ class SampleUi : AppUi {
             )
         ) {
             InjectedNavigator(startRoute = HomeRoute)
+                .content()
         }
     }
 }
 
-@Factory
+@BindUiInitializer
+@Transient
 class SampleUiInitializer : UiInitializer {
     @Composable
     override fun apply(children: @Composable () -> Unit) {
@@ -64,11 +64,4 @@ class SampleUiInitializer : UiInitializer {
             TwilightTheme(children = children)
         }
     }
-}
-
-@ApplicationScope
-@Module
-private fun ComponentBuilder.uiModule() {
-    appUi<SampleUi>()
-    bindUiInitializerIntoMap<SampleUiInitializer>()
 }

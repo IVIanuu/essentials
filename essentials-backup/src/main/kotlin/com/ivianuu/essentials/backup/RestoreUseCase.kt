@@ -1,14 +1,14 @@
 package com.ivianuu.essentials.backup
 
-import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -16,11 +16,11 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@Factory
+@Transient
 class RestoreUseCase(
-    private val activity: Activity,
+    private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val processRestarter: ProcessRestarter,
     private val toaster: Toaster
 ) {

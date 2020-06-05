@@ -22,12 +22,12 @@ import android.provider.Settings
 import androidx.compose.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
-import com.ivianuu.essentials.ui.core.ActivityAmbient
+import com.ivianuu.essentials.ui.common.compositionActivity
 
 fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
     opaque = true
 ) {
-    val activity = ActivityAmbient.current
+    val activity = compositionActivity
     val navigator = NavigatorAmbient.current
     onActive {
         activity.startActivity(intentFactory(activity))

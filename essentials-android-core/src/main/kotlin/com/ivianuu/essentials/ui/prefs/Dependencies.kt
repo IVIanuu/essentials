@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.collectAsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -34,8 +34,8 @@ fun Dependencies(
     val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
         dependencies.asDependencyFlow()
     }
-    val dependenciesOk = collect(dependenciesOkFlow, false)
-    children(dependenciesOk)
+    val dependenciesOk = dependenciesOkFlow.collectAsState(false)
+    children(dependenciesOk.value)
 }
 
 @Immutable

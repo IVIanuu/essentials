@@ -3,12 +3,10 @@ package com.ivianuu.essentials.ui.navigation.transition
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
+import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
-import com.ivianuu.essentials.ui.layout.LayoutOffset
-import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
+import com.ivianuu.essentials.ui.layout.offsetFraction
 import com.ivianuu.essentials.ui.navigation.RouteTransition
-import com.ivianuu.essentials.ui.navigation.opsOf
-import com.ivianuu.essentials.ui.navigation.with
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -18,12 +16,10 @@ fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTr
             verticalFadeRouteTransitionDefinition(duration)
         }
     },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            ModifierRouteTransitionType.Modifier with LayoutOffset.Fraction(
-                fractionY = transitionState[VerticalOffset]
-            ).drawOpacity(transitionState[Alpha])
-        )
+    createModifier = { transitionState, _ ->
+        Modifier
+            .offsetFraction(y = transitionState[VerticalOffset])
+            .drawOpacity(transitionState[Alpha])
     }
 )
 

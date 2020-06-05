@@ -20,8 +20,8 @@ import android.app.KeyguardManager
 import android.content.Context
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -30,10 +30,9 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Helper class for unlocking the screen
  */
-@ApplicationScope
-@Single
+@ApplicationScoped
 class ScreenUnlocker(
-    private val context: Context,
+    private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val keyguardManager: KeyguardManager

@@ -5,11 +5,11 @@ import android.app.Application
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.File
@@ -19,12 +19,12 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@Factory
+@Transient
 class BackupUseCase(
     private val application: Application,
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val toaster: Toaster
 ) {
 

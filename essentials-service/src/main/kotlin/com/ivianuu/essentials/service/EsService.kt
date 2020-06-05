@@ -19,13 +19,9 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.app.AppComponentHolder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -33,19 +29,12 @@ import kotlinx.coroutines.cancel
 /**
  * Base service
  */
-abstract class EsService : Service(), ComponentOwner,
-    ComponentBuilderInterceptor {
+abstract class EsService : Service() {
 
-    override val component by unsafeLazy {
-        ServiceComponent(this) {
-            buildComponent()
-        }
-    }
+    private val dispatchers: AppCoroutineDispatchers by inject()
 
     val coroutineScope by unsafeLazy {
-        CoroutineScope(
-            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
-        )
+        CoroutineScope(Job() + dispatchers.computation)
     }
 
     override fun onDestroy() {

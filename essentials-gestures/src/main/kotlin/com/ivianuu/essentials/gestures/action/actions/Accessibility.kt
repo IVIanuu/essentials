@@ -2,35 +2,41 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.gestures.GlobalActions
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.essentials.gestures.action.ActionPermissions
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.transient
 
-internal fun ComponentBuilder.bindAccessibilityAction(
+@Module
+internal fun <T : Action> bindAccessibilityAction(
     key: String,
     accessibilityAction: Int,
     titleRes: Int,
     icon: @Composable () -> Unit
 ) {
-    action(
-        key = key,
-        title = { getStringResource(titleRes) },
-        iconProvider = { SingleActionIconProvider(icon) },
-        permissions = { listOf(actionPermission { accessibility }) },
-        executor = {
-            get<AccessibilityActionExecutor>(parameters = parametersOf(accessibilityAction))
-        }
-    )
+    transient { resourceProvider: ResourceProvider,
+                actionPermissions: ActionPermissions,
+                accessibilityActionExecutorProvider: @Provider (Int) -> AccessibilityActionExecutor ->
+        Action(
+            key = key,
+            title = resourceProvider.getString(titleRes),
+            iconProvider = SingleActionIconProvider(icon),
+            permissions = listOf(actionPermissions.accessibility),
+            executor = accessibilityActionExecutorProvider(accessibilityAction)
+        ) as T
+    }
+    bindAction<T>()
 }
 
-@Factory
+@Transient
 internal class AccessibilityActionExecutor(
-    @Param private val accessibilityAction: Int,
+    @Assisted private val accessibilityAction: Int,
     private val globalActions: GlobalActions
 ) : ActionExecutor {
     override suspend fun invoke() {

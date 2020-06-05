@@ -1,50 +1,40 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.ui.res.vectorResource
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
+private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
+
 @Module
-private fun ComponentBuilder.homeAction() {
-    if (Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913") {
-        bindAccessibilityAction(
-            key = "home",
-            accessibilityAction = AccessibilityService.GLOBAL_ACTION_HOME,
-            titleRes = R.string.es_action_home,
-            icon = { Icon(vectorResource(R.drawable.es_ic_action_home)) }
-        )
-    } else {
-        action(
-            key = "home",
-            title = { getStringResource(R.string.es_action_home) },
-            iconProvider = {
-                SingleActionIconProvider {
-                    Icon(vectorResource(R.drawable.es_ic_action_home))
-                }
-            },
-            executor = { get<IntentHomeActionExecutor>() }
-        )
-    }
+private fun HomeModule() {
+    installIn<ApplicationComponent>()
+    /*bindAction<@ActionQualifier("home") Action>(
+        key = "home",
+        title = { getStringResource(R.string.es_action_home) },
+        iconProvider = { SingleActionIconProvider(R.drawable.es_ic_action_home) },
+        permissions = {
+            if (needsHomeIntentWorkaround) emptyList()
+            else listOf(actionPermission { accessibility })
+        },
+        executor = {
+            if (needsHomeIntentWorkaround) get<IntentHomeActionExecutor>()
+            else get<@Provider (Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_HOME)
+        }
+    )*/
 }
 
-@Factory
-private class IntentHomeActionExecutor(
-    private val context: Context,
-    private val lazyDelegate: Lazy<IntentActionExecutor>
+@Transient
+internal class IntentHomeActionExecutor(
+    private val context: @ForApplication Context,
+    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
@@ -54,6 +44,6 @@ private class IntentHomeActionExecutor(
             e.printStackTrace()
         }
 
-        lazyDelegate(parameters = parametersOf(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) }))()
+        delegateProvider(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) })()
     }
 }

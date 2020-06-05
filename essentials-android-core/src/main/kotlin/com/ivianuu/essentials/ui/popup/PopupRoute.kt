@@ -21,7 +21,7 @@ import androidx.compose.remember
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.gesture.TapGestureDetector
+import androidx.ui.core.gesture.tapGestureFilter
 import androidx.ui.foundation.Box
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxBounds
@@ -62,11 +62,11 @@ fun PopupRoute(
 
     PopupLayout(
         position = position,
-        modifier = TapGestureDetector(
+        modifier = Modifier.tapGestureFilter(
             onTap = { dismiss(true) }
         )
     ) {
-        Box(modifier = TapGestureDetector(onTap = {}), children = popup)
+        Box(modifier = Modifier.tapGestureFilter(onTap = {}), children = popup)
     }
 }
 

@@ -20,18 +20,14 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.essentials.work.bindWorkerIntoMap
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.android.work.BindWorker
 import kotlinx.coroutines.delay
 
-@Factory
+@BindWorker
 class TestWorker(
-    @Param context: Context,
-    @Param workerParams: WorkerParameters,
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
     private val logger: Logger
 ) : EsWorker(context, workerParams) {
 
@@ -41,10 +37,4 @@ class TestWorker(
         logger.d("finish work")
         return Result.success()
     }
-}
-
-@ApplicationScope
-@Module
-private fun ComponentBuilder.workModule() {
-    bindWorkerIntoMap<TestWorker>()
 }

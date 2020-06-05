@@ -18,7 +18,7 @@ package com.ivianuu.essentials.activityresult
 
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.essentials.ui.coroutines.launch
+import androidx.compose.launchInComposition
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
@@ -29,7 +29,7 @@ fun ActivityResultRoute(
 ) = Route(opaque = true) {
     val activityResultController = inject<ActivityResultController>()
     val navigator = NavigatorAmbient.current
-    launch {
+    launchInComposition {
         val result = activityResultController.startForResult(intent, options)
         navigator.popTop(result = result)
     }

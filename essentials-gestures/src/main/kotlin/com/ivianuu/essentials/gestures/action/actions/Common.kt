@@ -8,17 +8,14 @@ import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-@Factory
+@Transient
 internal class CoilActionIconProvider(
-    @Param private val data: Any
+    @Assisted private val data: Any
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {
@@ -40,8 +37,6 @@ internal fun SingleActionIconProvider(
 internal fun SingleActionIconProvider(
     id: Int
 ): ActionIconProvider = SingleActionIconProvider { Icon(vectorResource(id)) }
-
-internal fun Component.getStringResource(id: Int) = get<ResourceProvider>().getString(id)
 
 internal fun ActionExecutor.beforeAction(
     block: suspend () -> Unit

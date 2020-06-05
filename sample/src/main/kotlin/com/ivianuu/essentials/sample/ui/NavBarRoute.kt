@@ -19,9 +19,12 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.state
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
@@ -30,11 +33,8 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.CoroutineScopeAmbient
+import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,12 +48,12 @@ val NavBarRoute = Route {
         body = {
             Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
                 Column(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
+                    verticalArrangement = Arrangement.Center,
+                    horizontalGravity = Alignment.CenterHorizontally
                 ) {
                     val navBarController = inject<NavBarController>()
 
-                    val coroutineScope = CoroutineScopeAmbient.current
+                    val coroutineScope = compositionCoroutineScope()
                     fun updateNavBarState(navBarHidden: Boolean) {
                         coroutineScope.launch {
                             navBarController.setNavBarConfig(

@@ -20,8 +20,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
+import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
@@ -33,25 +36,25 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
 import com.ivianuu.essentials.util.launchAsync
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.getLazy
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class DebugBillingActivity : EsActivity() {
 
-    private val client: DebugBillingClient by getLazy()
+    private val client: DebugBillingClient by inject()
+
+    // just to properly initialize the DebugBillingClient
+    private val purchaseManager: PurchaseManager by inject()
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
 
     @Composable
     override fun content() {
-        get<PurchaseManager>() // just to properly initialize the DebugBillingClient
         val requestId = intent.getStringExtra(KEY_REQUEST_ID)
         if (requestId == null) {
             finish()
@@ -95,16 +98,12 @@ class DebugBillingActivity : EsActivity() {
         Dialog(
             title = {
                 Row {
-                    Text(
-                        text = skuDetails.title,
-                        modifier = LayoutInflexible
-                    )
+                    Text(text = skuDetails.title)
 
-                    Spacer(LayoutFlexible(1f))
+                    Spacer(Modifier.fillMaxWidth())
 
                     Text(
                         text = skuDetails.price,
-                        modifier = LayoutInflexible,
                         textStyle = MaterialTheme.typography.subtitle1.copy(
                             color = GooglePlayGreen
                         )

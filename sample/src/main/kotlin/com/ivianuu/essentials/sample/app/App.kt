@@ -17,11 +17,13 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.Injekt
+import com.ivianuu.injekt.android.AndroidEntryPoint
+import com.ivianuu.injekt.composition.initializeCompositions
 
+@AndroidEntryPoint
 class App : EsApp() {
-    override fun initializeComponent() {
-        Injekt { initializeEndpoint() }
-        super.initializeComponent()
+    override fun onCreate() {
+        initializeCompositions()
+        super.onCreate()
     }
 }

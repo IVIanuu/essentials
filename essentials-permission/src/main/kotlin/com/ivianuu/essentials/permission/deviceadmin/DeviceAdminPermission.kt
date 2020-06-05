@@ -20,18 +20,15 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Transient
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
@@ -57,14 +54,9 @@ val Metadata.Companion.DeviceAdminComponent by lazy {
     Metadata.Key<ComponentName>("DeviceAdminComponent")
 }
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.deviceAdminPermission() {
-    bindPermissionStateProviderIntoSet<DeviceAdminPermissionStateProvider>()
-}
-
-@Factory
-private class DeviceAdminPermissionStateProvider(
+@BindPermissionStateProvider
+@Transient
+internal class DeviceAdminPermissionStateProvider(
     private val devicePolicyManager: DevicePolicyManager
 ) : PermissionStateProvider {
 

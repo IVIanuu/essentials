@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.preferredHeight
@@ -28,10 +30,8 @@ import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -39,11 +39,12 @@ val TorchRoute = Route {
     SimpleScreen(title = "Torch") {
         Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
             val torchManager = inject<TorchManager>()
-            val torchState = collect(torchManager.torchState, false)
+            val torchState = torchManager.torchState
+                .collectAsState()
 
-            Column(crossAxisAlignment = CrossAxisAlignment.Center) {
+            Column(horizontalGravity = Alignment.CenterHorizontally) {
                 Text(
-                    "Torch is ${if (torchState) "enabled" else "disabled"}",
+                    "Torch is ${if (torchState.value) "enabled" else "disabled"}",
                     textStyle = MaterialTheme.typography.h4
                 )
                 Spacer(Modifier.preferredHeight(8.dp))

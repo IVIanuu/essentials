@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun ColorPreference(
-    @Pivotal box: Box<Color>,
+    box: Box<Color>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
@@ -42,18 +42,20 @@ fun ColorPreference(
     showAlphaSelector: Boolean = true,
     allowCustomArgb: Boolean = true
 ) {
-    ColorPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        dialogTitle = dialogTitle,
-        colorPalettes = colorPalettes,
-        showAlphaSelector = showAlphaSelector,
-        allowCustomArgb = allowCustomArgb
-    )
+    key(box) {
+        ColorPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dialogTitle = dialogTitle,
+            colorPalettes = colorPalettes,
+            showAlphaSelector = showAlphaSelector,
+            allowCustomArgb = allowCustomArgb
+        )
+    }
 }
 
 @Composable

@@ -16,30 +16,40 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.Immutable
 import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutModifier
+import androidx.ui.core.Measurable
+import androidx.ui.core.MeasureScope
+import androidx.ui.core.Modifier
 import androidx.ui.core.enforce
-import androidx.ui.unit.Density
+import androidx.ui.unit.ipx
 
-@Immutable
-data class LayoutSquared(
-    val fit: Fit
-) : LayoutModifier {
+fun Modifier.squared(fit: SquareFit) = this + SquaredModifier(fit)
 
-    override fun Density.modifyConstraints(constraints: Constraints, layoutDirection: LayoutDirection): Constraints {
+private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
+    override fun MeasureScope.measure(
+        measurable: Measurable,
+        constraints: Constraints,
+        layoutDirection: LayoutDirection
+    ): MeasureScope.MeasureResult {
         val size = when (fit) {
-            Fit.MatchWidth -> constraints.maxWidth
-            Fit.MatchHeight -> constraints.maxHeight
+            SquareFit.MatchWidth -> constraints.maxWidth
+            SquareFit.MatchHeight -> constraints.maxHeight
         }
-        return constraints.copy(
+        val finalConstraints = constraints.copy(
             maxWidth = size,
             maxHeight = size
         ).enforce(constraints)
-    }
 
-    enum class Fit {
-        MatchWidth, MatchHeight
+        val placeable = measurable.measure(finalConstraints, layoutDirection)
+
+        return layout(placeable.width, placeable.height) {
+            placeable.place(0.ipx, 0.ipx)
+        }
     }
+}
+
+enum class SquareFit {
+    MatchWidth, MatchHeight
 }

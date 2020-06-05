@@ -5,6 +5,7 @@ import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
+import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.BlendMode
@@ -12,7 +13,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.ColorFilter
 import androidx.ui.graphics.DefaultAlpha
 import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.ScaleFit
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import androidx.ui.graphics.vector.VectorAsset
@@ -26,13 +26,13 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 data class IconStyle(
     val modifier: Modifier,
     val alignment: Alignment,
-    val scaleFit: ScaleFit,
+    val contentScale: ContentScale,
     val alpha: Float,
     val tint: Color
 )
 
 fun IconStyle.toImageStyle() = ImageStyle(
-    modifier, alignment, scaleFit, alpha, ColorFilter(tint, BlendMode.srcIn)
+    modifier, alignment, contentScale, alpha, ColorFilter(tint, BlendMode.srcIn)
 )
 
 val IconStyleAmbient = staticAmbientOf<IconStyle>()
@@ -40,14 +40,14 @@ val IconStyleAmbient = staticAmbientOf<IconStyle>()
 @Composable
 fun DefaultIconStyle(
     tint: Color = contentColor(),
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
-    scaleFit: ScaleFit = ScaleFit.Fit,
+    contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha
 ) = IconStyle(
     modifier = modifier,
     alignment = alignment,
-    scaleFit = scaleFit,
+    contentScale = contentScale,
     alpha = alpha,
     tint = tint
 )
@@ -55,7 +55,7 @@ fun DefaultIconStyle(
 @Composable
 fun Icon(
     painter: Painter,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Image(
@@ -68,7 +68,7 @@ fun Icon(
 @Composable
 fun Icon(
     id: Int,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(
@@ -81,7 +81,7 @@ fun Icon(
 @Composable
 fun Icon(
     icon: ImageAsset,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(
@@ -94,7 +94,7 @@ fun Icon(
 @Composable
 fun Icon(
     icon: VectorAsset,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: IconStyle = IconStyleAmbient.currentOrElse { DefaultIconStyle() }
 ) {
     Icon(

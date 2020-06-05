@@ -40,7 +40,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        const val composeVersion = "0.0.1-dev103"
+        const val composeVersion = "0.0.1-dev135"
 
         object Compose {
             const val version = composeVersion
@@ -62,15 +62,12 @@ object Deps {
 
         object Ui {
             private const val version = composeVersion
-            const val androidText = "androidx.ui:ui-android-text:$version"
             const val animation = "androidx.ui:ui-animation:$version"
             const val core = "androidx.ui:ui-core:$version"
             const val foundation = "androidx.ui:ui-foundation:$version"
-            const val framework = "androidx.ui:ui-framework:$version"
             const val layout = "androidx.ui:ui-layout:$version"
             const val material = "androidx.ui:ui-material:$version"
             const val materialIconsExtended = "androidx.ui:ui-material-icons-extended:$version"
-            const val platform = "androidx.ui:ui-platform:$version"
             const val test = "androidx.ui:ui-test:$version"
             const val text = "androidx.ui:ui-text:$version"
             const val tooling = "androidx.ui:ui-tooling:$version"
@@ -87,12 +84,12 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val coil = "io.coil-kt:coil:0.9.2"
+    const val coil = "io.coil-kt:coil:0.11.0"
 
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
-        private const val version = "1.3.4"
+        private const val version = "1.3.7"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -106,17 +103,20 @@ object Deps {
     const val fabric = "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     object Injekt {
-        private const val version = "0.0.1-dev132"
-        const val injekt = "com.ivianuu.injekt:injekt:$version"
-        const val common = "com.ivianuu.injekt:injekt-common:$version"
+        private const val version = "0.0.1-dev169"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
+        const val androidCompose = "com.ivianuu.injekt:injekt-android-compose:$version"
+        const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
+        const val common = "com.ivianuu.injekt:injekt-common:$version"
+        const val core = "com.ivianuu.injekt:injekt-core:$version"
+        const val composition = "com.ivianuu.injekt:injekt-composition:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4-SNAPSHOT"
+        private const val version = "1.4.255-SNAPSHOT"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

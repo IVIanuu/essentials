@@ -23,7 +23,6 @@ buildscript {
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
-        maven("file://home/ivianuu/other-projects/androidx/out/ui/build/support_repo")
         google()
         jcenter()
         mavenCentral()
@@ -57,6 +56,13 @@ allprojects {
         resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
     }
 
+    // todo remove
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+        resolutionStrategy.force("com.squareup:kotlinpoet:1.5.0")
+    }
+
+
     // todo remove once compose runtime is up to date
     configurations.all {
         resolutionStrategy {
@@ -67,7 +73,6 @@ allprojects {
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
-        maven("file://home/ivianuu/other-projects/androidx/out/ui/build/support_repo")
         google()
         jcenter()
         mavenCentral()

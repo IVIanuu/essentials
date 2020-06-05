@@ -16,28 +16,25 @@
 
 package com.ivianuu.essentials.mvrx
 
-import com.ivianuu.essentials.app.AppComponentHolder
-import com.ivianuu.essentials.coroutines.StateFlow
-import com.ivianuu.essentials.coroutines.setIfChanged
+import android.os.Looper
+import androidx.compose.StructurallyEqual
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
+import androidx.compose.setValue
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Success
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -47,33 +44,23 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
-    private val _state = StateFlow(initialState)
-    val state: Flow<S> get() = _state
-
-    fun getCurrentState(): S = _state.value
-
-    protected open val coroutineDispatcher = AppComponentHolder
-        .get<AppCoroutineDispatchers>().computation
-
-    init {
-        subscribe { AppComponentHolder.get<Logger>().d("new state -> $it") }
-    }
+    private var _state by mutableStateOf(initialState, StructurallyEqual)
+    val state: S
+        get() {
+            check(Thread.currentThread() == Looper.getMainLooper().thread)
+            return _state
+        }
 
     protected suspend fun setState(reducer: suspend S.() -> S) {
-        withContext(coroutineDispatcher) {
-            val currentState = _state.value
+        withContext(Dispatchers.Main) {
+            val currentState = _state
             val newState = reducer(currentState)
-            _state.setIfChanged(newState)
+            _state = newState
         }
     }
 
-    protected fun subscribe(consumer: suspend (S) -> Unit): Job =
-        state.onEach(consumer)
-            .flowOn(coroutineDispatcher)
-            .launchIn(coroutineScope)
-
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = coroutineDispatcher,
+        context: CoroutineContext = coroutineScope.coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
     ): Job = coroutineScope.execute(
@@ -88,12 +75,11 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         return this
             .map { Success(it) }
             .catch { Fail<V>(it) }
-            .flowOn(coroutineDispatcher)
             .collect { setState { reducer(it) } }
     }
 
     protected fun <V> Flow<V>.executeIn(scope: CoroutineScope, reducer: S.(Async<V>) -> S): Job {
-        return scope.launch(coroutineDispatcher) {
+        return scope.launch {
             setState { reducer(Loading()) }
             this@executeIn
                 .map { Success(it) }
@@ -103,7 +89,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = coroutineDispatcher,
+        context: CoroutineContext = coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
         reducer: S.(Async<V>) -> S
@@ -117,5 +103,5 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $state"
+    override fun toString() = "${javaClass.simpleName} -> $_state"
 }

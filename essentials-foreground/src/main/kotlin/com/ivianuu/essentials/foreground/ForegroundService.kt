@@ -20,20 +20,23 @@ import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.getLazy
+import com.ivianuu.injekt.android.AndroidEntryPoint
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class ForegroundService : EsService() {
 
-    private val dispatchers: AppCoroutineDispatchers by getLazy()
-    private val foregroundManager: ForegroundManager by getLazy()
-    private val logger: Logger by getLazy()
+    private val dispatchers: AppCoroutineDispatchers by inject()
+    private val foregroundManager: ForegroundManager by inject()
+    private val logger: Logger by inject()
+    private val notificationManager: NotificationManager by inject()
+
     private var lastComponents = listOf<ForegroundComponent>()
     private var foregroundId: Int? = null
-    private val notificationManager: NotificationManager by getLazy()
 
     override fun onCreate() {
         super.onCreate()

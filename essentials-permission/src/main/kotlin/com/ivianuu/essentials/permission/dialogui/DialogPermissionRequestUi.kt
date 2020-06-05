@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.permission.dialogui
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
-import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
+import androidx.compose.key
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.permission.BindPermissionRequestUi
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
@@ -32,97 +32,90 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.permissionRequestUi
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.core.ActivityAmbient
+import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.dialog.ScrollableDialog
+import com.ivianuu.essentials.ui.dialog.VerticalScrollerDialog
+import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.ui.viewmodel.injectViewModel
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.composition.get
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.dialogPermission() {
-    permissionRequestUi<DialogPermissionRequestUi>()
-}
-
-@Factory
-private class DialogPermissionRequestUi(
-    private val navigator: NavigatorState
-) : PermissionRequestUi {
+@BindPermissionRequestUi
+@Transient
+internal class DialogPermissionRequestUi : PermissionRequestUi {
 
     override fun performRequest(
         activity: FragmentActivity,
         manager: PermissionManager,
         request: PermissionRequest
     ) {
-        navigator.push(PermissionRoute(request))
+        activity.activityComponent.get<Navigator>()
+            .push(PermissionRoute(request))
     }
 }
 
 private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
-    dismissHandler = { ActivityAmbient.current.finish() }
+    dismissHandler = { compositionActivity.finish() }
 ) {
-    Recompose { recompose ->
-        ScrollableDialog(
-            title = { Text("Required Permissions") }, // todo customizable
-            listContent = {
-                val viewModel =
-                    injectViewModel<PermissionDialogViewModel>(parameters = parametersOf(request))
-                val activity = ActivityAmbient.current as PermissionActivity
-                viewModel.permissionsToProcess.forEach { permission ->
-                    Permission(
-                        permission = permission,
-                        onClick = { viewModel.permissionClicked(activity, permission) }
-                    )
-                }
-            },
-            negativeButton = {
-                val activity = ActivityAmbient.current
-                DialogButton(onClick = { activity.finish() }) {
-                    Text(R.string.es_cancel)
-                }
+    VerticalScrollerDialog(
+        title = { Text("Required Permissions") }, // todo customizable
+        scrollerContent = {
+            val viewModelFactory =
+                inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
+            val viewModel = viewModel { viewModelFactory(request) }
+            val activity = compositionActivity as PermissionActivity
+            viewModel.permissionsToProcess.forEach { permission ->
+                Permission(
+                    permission = permission,
+                    onClick = { viewModel.permissionClicked(activity, permission) }
+                )
             }
-        )
-    }
+        },
+        negativeButton = {
+            val activity = compositionActivity
+            DialogButton(onClick = { activity.finish() }) {
+                Text(R.string.es_cancel)
+            }
+        }
+    )
 }
 
 @Composable
 private fun Permission(
     onClick: () -> Unit,
-    @Pivotal permission: Permission
+    permission: Permission
 ) {
-    ListItem(
-        title = { Text(permission.metadata[Metadata.Title]) },
-        subtitle = permission.metadata.getOrNull(Metadata.Desc)?.let{
-            {
-                Text(it)
-            }
-        },
-        leading = permission.metadata.getOrNull(Metadata.Icon),
-        onClick = onClick
-    )
+    key(permission) {
+        ListItem(
+            title = { Text(permission.metadata[Metadata.Title]) },
+            subtitle = permission.metadata.getOrNull(Metadata.Desc)?.let {
+                {
+                    Text(it)
+                }
+            },
+            leading = permission.metadata.getOrNull(Metadata.Icon),
+            onClick = onClick
+        )
+    }
 }
 
-@Factory
-private class PermissionDialogViewModel(
+@Transient
+internal class PermissionDialogViewModel(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
-    @Param private val request: PermissionRequest,
+    @Assisted private val request: PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers
 ) : ViewModel() {
 
@@ -136,11 +129,8 @@ private class PermissionDialogViewModel(
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
         coroutineScope.launch {
             logger.d("request $permission")
-            withContext(dispatchers.main) {
-                requestHandlers.requestHandlerFor(permission)
-                    .request(activity, manager, permission)
-            }
-
+            requestHandlers.requestHandlerFor(permission)
+                .request(activity, manager, permission)
             updatePermissionsToProcessOrFinish()
         }
     }
@@ -155,10 +145,8 @@ private class PermissionDialogViewModel(
             if (permissionsToProcess.isEmpty()) {
                 request.onComplete()
             } else {
-                withContext(dispatchers.main) {
-                    _permissionsToProcess.clear()
-                    _permissionsToProcess += permissionsToProcess
-                }
+                _permissionsToProcess.clear()
+                _permissionsToProcess += permissionsToProcess
             }
         }
     }

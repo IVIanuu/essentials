@@ -24,7 +24,7 @@ interface Permission {
 
 fun Permission(metadata: Metadata): Permission = SimplePermission(metadata = metadata)
 
-private class SimplePermission(override val metadata: Metadata) : Permission {
+internal class SimplePermission(override val metadata: Metadata) : Permission {
     override fun toString() = "Permission($metadata)"
 }
 

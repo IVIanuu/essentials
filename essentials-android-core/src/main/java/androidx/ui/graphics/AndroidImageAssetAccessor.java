@@ -12,4 +12,10 @@ public final class AndroidImageAssetAccessor {
         return new AndroidImageAsset(bitmap);
     }
 
+    @NotNull
+    public static Bitmap getBitmap(ImageAsset imageAsset) {
+        //noinspection KotlinInternalInJava
+        return ((AndroidImageAsset) imageAsset).getBitmap$ui_graphics_release();
+    }
+
 }

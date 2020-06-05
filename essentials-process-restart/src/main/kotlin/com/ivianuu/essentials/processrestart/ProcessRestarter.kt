@@ -25,13 +25,14 @@ import android.os.Process
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 class ProcessRestarter(
     private val activityManager: ActivityManager,
     private val buildInfo: BuildInfo,
-    private val context: Context,
+    private val context: @ForApplication Context,
     private val logger: Logger,
     private val packageManager: PackageManager
 ) {

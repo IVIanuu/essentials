@@ -1,24 +1,15 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.SettingsPower
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.composition.installIn
 
 @SuppressLint("InlinedApi")
-@ApplicationScope
 @Module
-private fun ComponentBuilder.lockScreenAction() {
-    action(
+private fun lockScreenModule() {
+    installIn<ApplicationComponent>()
+    /*bindAction<@ActionQualifier("lock_screen") Action>(
         key = "lock_screen",
         title = { getStringResource(R.string.es_action_lock_screen) },
         iconProvider = { SingleActionIconProvider(Icons.Default.SettingsPower) },
@@ -30,10 +21,10 @@ private fun ComponentBuilder.lockScreenAction() {
         },
         executor = {
             if (get<SystemBuildInfo>().sdk >= 28) {
-                get<AccessibilityActionExecutor>(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN))
+                get<@Provider (Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
             } else {
-                get<RootActionExecutor>(parameters = parametersOf("input keyevent 26"))
+                get<@Provider (String) -> RootActionExecutor>()("input keyevent 26")
             }
         }
-    )
+    )*/
 }

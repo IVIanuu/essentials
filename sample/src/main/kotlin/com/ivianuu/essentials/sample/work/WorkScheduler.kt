@@ -19,10 +19,11 @@ package com.ivianuu.essentials.sample.work
 import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
-@Factory
-class WorkScheduler(private val context: Context) {
+@Transient
+class WorkScheduler(private val context: @ForApplication Context) {
 
     fun scheduleWork() {
         with(WorkManager.getInstance(context)) {

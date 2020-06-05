@@ -23,11 +23,10 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.app.BindAppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
-import com.ivianuu.injekt.ApplicationScope
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -41,13 +40,12 @@ import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 import kotlin.time.seconds
 
-@ApplicationScope
-@Single
+@BindAppService
 class TwilightHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    @ForApplication private val coroutineScope: CoroutineScope,
-    private val resources: Resources,
+    private val coroutineScope: @ForApplication CoroutineScope,
+    private val resources: @ForApplication Resources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
 ) : AppService {

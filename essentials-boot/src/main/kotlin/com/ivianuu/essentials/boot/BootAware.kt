@@ -16,36 +16,30 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.map
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.map
+import kotlin.reflect.KClass
 
 /**
  * Marks a component as boot aware
  */
 interface BootAware
 
-@QualifierMarker
-annotation class BootAwareComponents {
-    companion object : Qualifier.Element
-}
+@BindingEffect(ApplicationComponent::class)
+annotation class BindBootAware
 
-@KeyOverload
-fun <T : BootAware> ComponentBuilder.bindBootAwareIntoMap(
-    componentKey: Key<T>
-) {
-    map<String, BootAware>(BootAwareComponents) {
-        put(componentKey.classifier.java.name, componentKey)
+@BindingEffectFunction(BindBootAware::class)
+@Module
+inline fun <reified T : BootAware> bindBootAwareIntoMap() {
+    map<KClass<out BootAware>, BootAware> {
+        put<T>(T::class)
     }
 }
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esBootInjectionModule() {
-    map<String, BootAware>(mapQualifier = BootAwareComponents)
+fun esBootModule() {
+    map<KClass<out BootAware>, BootAware>()
 }

@@ -3,15 +3,17 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionQualifier
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.backAction() {
-    bindAccessibilityAction(
+private fun BackModule() {
+    installIn<ApplicationComponent>()
+    bindAccessibilityAction<@ActionQualifier("back") Action>(
         key = "back",
         accessibilityAction = AccessibilityService.GLOBAL_ACTION_BACK,
         titleRes = R.string.es_action_back,

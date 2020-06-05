@@ -16,74 +16,43 @@
 
 package com.ivianuu.essentials.ui.core
 
-import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.compose.Composable
-import androidx.compose.Composer
 import androidx.compose.Providers
-import androidx.compose.currentComposer
-import androidx.compose.remember
-import androidx.ui.core.CoroutineContextAmbient
-import androidx.ui.core.FocusManagerAmbient
-import androidx.ui.core.OwnerAmbient
-import com.ivianuu.essentials.ui.coroutines.ProvideCoroutineScope
-import com.ivianuu.essentials.ui.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.map
+import kotlin.reflect.KClass
 
 @Composable
 fun Environment(
-    activity: ComponentActivity,
-    component: Component,
     retainedObjects: RetainedObjects,
     children: @Composable () -> Unit
 ) {
-    val ownerView = OwnerAmbient.current as View
-    val focusManager = FocusManagerAmbient.current
-    val coroutineScope = coroutineScope()
-    Providers(
-        ActivityAmbient provides activity,
-        ComponentAmbient provides component,
-        CoroutineContextAmbient provides coroutineScope.coroutineContext,
-        KeyboardManagerAmbient provides remember {
-            KeyboardManager(focusManager, ownerView, component.get())
-        },
-        RetainedObjectsAmbient provides retainedObjects
-    ) {
-        ProvideCoroutineScope(coroutineScope = coroutineScope) {
-            WindowInsetsManager {
-                SystemBarManager {
-                    val uiInitializers =
-                        inject<Map<String, UiInitializer>>(qualifier = UiInitializers)
-                    val logger = inject<Logger>()
-                    uiInitializers.entries
-                        .map { (key, initializer) ->
-                            val function: @Composable (@Composable () -> Unit) -> Unit =
-                                { children ->
-                                    logger.d("apply ui initializer $key")
-                                    initializer.apply(children)
-                                }
-                            function
-                        }
-                        .fold(children) { current, initializer ->
-                            @Composable { initializer(current) }
-                        }
-                        .let {
-                            // todo compiler doesn't treat this as a composable
-                            (it as (Composer<*>) -> Unit).invoke(currentComposer)
-                        }
-                }
+    Providers(RetainedObjectsAmbient provides retainedObjects) {
+        WindowInsetsManager {
+            SystemBarManager {
+                val uiInitializers = inject<Map<KClass<out UiInitializer>, UiInitializer>>()
+                val finalComposable: @Composable () -> Unit = uiInitializers.entries
+                    .map { (key, initializer) ->
+                        val function: @Composable (@Composable () -> Unit) -> Unit =
+                            { children ->
+                                inject<Logger>().d("apply ui initializer $key")
+                                initializer.apply(children)
+                            }
+                        function
+                    }
+                    .fold(children) { current: @Composable () -> Unit,
+                                      initializer: @Composable (@Composable () -> Unit) -> Unit ->
+                        @Composable { initializer(current) }
+                    }
+
+                finalComposable()
             }
         }
     }
@@ -94,22 +63,19 @@ interface UiInitializer {
     fun apply(children: @Composable () -> Unit)
 }
 
-@QualifierMarker
-annotation class UiInitializers {
-    companion object : Qualifier.Element
-}
+@BindingEffect(ActivityComponent::class)
+annotation class BindUiInitializer
 
-@KeyOverload
-fun <T : UiInitializer> ComponentBuilder.bindUiInitializerIntoMap(
-    initializerKey: Key<T>
-) {
-    map<String, UiInitializer>(mapQualifier = UiInitializers) {
-        put(initializerKey.classifier.java.name, initializerKey)
+@BindingEffectFunction(BindUiInitializer::class)
+@Module
+inline fun <reified T : UiInitializer> bindUiInitializer() {
+    map<KClass<out UiInitializer>, UiInitializer> {
+        put<T>(T::class)
     }
 }
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esUiInitializerInjectionModule() {
-    map<String, UiInitializer>(mapQualifier = UiInitializers)
+fun esUiInitializerModule() {
+    installIn<ApplicationComponent>()
+    map<KClass<out UiInitializer>, UiInitializer>()
 }

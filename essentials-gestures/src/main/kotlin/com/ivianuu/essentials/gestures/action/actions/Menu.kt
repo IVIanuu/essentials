@@ -1,24 +1,17 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.MoreVert
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.composition.installIn
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.menuAction() {
-    action(
+private fun MenuModule() {
+    installIn<ApplicationComponent>()
+    /*bindAction<@ActionQualifier("menu") Action>(
         key = "menu",
         title = { getStringResource(R.string.es_action_menu) },
         iconProvider = { SingleActionIconProvider(Icons.Default.MoreVert) },
         permissions = { listOf(actionPermission { root }) },
-        executor = { get<RootActionExecutor>(parameters = parametersOf("input keyevent 82")) }
-    )
+        executor = { get<@Provider (String) -> RootActionExecutor>()("input keyevent 82") }
+    )*/
 }

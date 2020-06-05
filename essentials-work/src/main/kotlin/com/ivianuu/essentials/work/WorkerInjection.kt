@@ -18,70 +18,27 @@ package com.ivianuu.essentials.work
 
 import android.content.Context
 import androidx.work.Configuration
-import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import androidx.work.WorkerParameters
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.bindAppInitializerIntoMap
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.essentials.app.BindAppInitializer
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.alias
-import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.transient
 
-/**
- * Uses injekt to instantiate workers
- */
-@Factory
-class InjektWorkerFactory(
-    @WorkersMap private val workers: Map<String, Provider<ListenableWorker>>
-) : WorkerFactory() {
-
-    override fun createWorker(
-        appContext: Context,
-        workerClassName: String,
-        workerParameters: WorkerParameters
-    ): ListenableWorker? {
-        return workers[workerClassName]?.invoke(
-            parameters = parametersOf(
-                appContext,
-                workerParameters
-            )
-        )
-            ?: error("Could not find a worker for $workerClassName")
+@Module
+fun esWorkModule() {
+    installIn<ApplicationComponent>()
+    transient { context: @ForApplication Context ->
+        WorkManager.getInstance(context)
     }
 }
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.workerInjectionModule() {
-    map<String, ListenableWorker>(mapQualifier = WorkersMap)
-    alias<InjektWorkerFactory, WorkerFactory>()
-}
-
-@ApplicationScope
-@Module
-private fun ComponentBuilder.esWorkModule() {
-    factory { WorkManager.getInstance(get()) }
-    bindAppInitializerIntoMap<WorkerAppInitializer>()
-}
-
-/**
- * Initializes the [WorkManager] with a injected [WorkerFactory]
- */
-@Factory
-internal class WorkerAppInitializer(
-    context: Context,
+@BindAppInitializer
+class WorkerAppInitializer(
+    context: @ForApplication Context,
     workerFactory: WorkerFactory
 ) : AppInitializer {
     init {
@@ -90,19 +47,5 @@ internal class WorkerAppInitializer(
                 .setWorkerFactory(workerFactory)
                 .build()
         )
-    }
-}
-
-@QualifierMarker
-annotation class WorkersMap {
-    companion object : Qualifier.Element
-}
-
-@KeyOverload
-fun <T : ListenableWorker> ComponentBuilder.bindWorkerIntoMap(
-    workerKey: Key<T>
-) {
-    map<String, ListenableWorker>(mapQualifier = WorkersMap) {
-        put(workerKey.classifier.java.name, workerKey)
     }
 }

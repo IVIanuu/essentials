@@ -21,11 +21,11 @@ import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
-import androidx.ui.foundation.TextFieldValue
+import androidx.ui.core.focus.FocusModifier
 import androidx.ui.input.KeyboardType
+import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.core.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -84,26 +84,29 @@ fun TextInputDialog(
         icon = icon,
         title = title,
         content = {
-            if (value.isEmpty() && hint != null) {
-                Text(
-                    text = hint,
-                    textStyle = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.drawOpacity(0.5f)
-                )
-            }
-            TextField(
-                value = TextFieldValue(value),
-                onValueChange = { onValueChange(it.text) },
-                focusIdentifier = TextInputDialogInputId,
-                keyboardType = keyboardType,
-                textStyle = MaterialTheme.typography.subtitle1
-            )
+            Stack {
+                if (value.isEmpty() && hint != null) {
+                    Text(
+                        text = hint,
+                        textStyle = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.drawOpacity(0.5f)
+                    )
+                }
+                val focusModifier = FocusModifier()
 
-            val keyboardManager = KeyboardManagerAmbient.current
-            onActive {
-                keyboardManager.showKeyboard(TextInputDialogInputId)
-                onDispose {
-                    keyboardManager.hideKeyboard()
+                TextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    keyboardType = keyboardType,
+                    textStyle = MaterialTheme.typography.subtitle1,
+                    modifier = focusModifier
+                )
+
+                onActive {
+                    focusModifier.requestFocus()
+                    onDispose {
+                        focusModifier.freeFocus()
+                    }
                 }
             }
         },
@@ -112,5 +115,3 @@ fun TextInputDialog(
         neutralButton = neutralButton
     )
 }
-
-private const val TextInputDialogInputId = "TextInputDialogInputFieldId"

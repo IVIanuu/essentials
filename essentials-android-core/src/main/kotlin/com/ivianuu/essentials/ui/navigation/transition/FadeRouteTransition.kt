@@ -5,10 +5,7 @@ import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
-import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
-import com.ivianuu.essentials.ui.navigation.opsOf
-import com.ivianuu.essentials.ui.navigation.with
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -18,10 +15,8 @@ fun FadeRouteTransition(duration: Duration = 150.milliseconds) = RouteTransition
             fadeRouteTransitionDefinition(duration)
         }
     },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            ModifierRouteTransitionType.Modifier with Modifier.drawOpacity(transitionState[Alpha])
-        )
+    createModifier = { transitionState, _ ->
+        Modifier.drawOpacity(transitionState[Alpha])
     }
 )
 

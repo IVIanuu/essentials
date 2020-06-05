@@ -28,19 +28,20 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Transient
 
 fun AppPickerRoute(
     title: String? = null,
@@ -53,12 +54,12 @@ fun AppPickerRoute(
             )
         },
         body = {
-            val viewModel =
-                injectMvRxViewModel<AppPickerViewModel>(parameters = parametersOf(appFilter))
+            val viewModelFactory = inject<@Provider (AppFilter) -> AppPickerViewModel>()
+            val viewModel = viewModel { viewModelFactory(appFilter) }
 
             RenderAsyncList(
-                state = viewModel.getCurrentState().apps,
-                successItemCallback = { _, app ->
+                state = viewModel.state.apps,
+                successItemCallback = { app ->
                     key(app.packageName) {
                         AppInfo(
                             onClick = { viewModel.appClicked(app) },
@@ -88,11 +89,11 @@ private fun AppInfo(
     )
 }
 
-@Factory
-private class AppPickerViewModel(
-    @Param private val appFilter: AppFilter,
+@Transient
+internal class AppPickerViewModel(
+    @Assisted private val appFilter: AppFilter,
     private val appStore: AppStore,
-    private val navigator: NavigatorState
+    private val navigator: Navigator
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
@@ -111,4 +112,4 @@ private class AppPickerViewModel(
 }
 
 @Immutable
-internal data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized)
+internal data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized())

@@ -22,13 +22,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.getLazy
+import com.ivianuu.injekt.android.AndroidEntryPoint
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -37,14 +39,15 @@ import kotlinx.coroutines.withContext
 /**
  * Requests a screen unlock
  */
+@AndroidEntryPoint
 class UnlockScreenActivity : EsActivity() {
 
-    private val broadcastFactory: BroadcastFactory by getLazy()
-    private val dispatchers: AppCoroutineDispatchers by getLazy()
-    private val keyguardManager: KeyguardManager by getLazy()
-    private val logger: Logger by getLazy()
-    private val screenUnlocker: ScreenUnlocker by getLazy()
-    private val systemBuildInfo: SystemBuildInfo by getLazy()
+    private val broadcastFactory: BroadcastFactory by inject()
+    private val dispatchers: AppCoroutineDispatchers by inject()
+    private val keyguardManager: KeyguardManager by inject()
+    private val logger: Logger by inject()
+    private val screenUnlocker: ScreenUnlocker by inject()
+    private val systemBuildInfo: SystemBuildInfo by inject()
 
     private var hasResult = false
     private var valid = true
@@ -106,6 +109,7 @@ class UnlockScreenActivity : EsActivity() {
         }
     }
 
+    @Composable
     override fun content() {
     }
 

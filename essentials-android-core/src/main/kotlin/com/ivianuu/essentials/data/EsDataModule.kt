@@ -20,39 +20,42 @@ import android.content.Context
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esDataModule() {
-    single(qualifier = PrefsPath) { "${get<Context>().applicationInfo.dataDir}/prefs" }
-
-    single {
+private fun esDataModule() {
+    installIn<ApplicationComponent>()
+    scoped<@PrefsPath String> { context: @ForApplication Context ->
+        "${context.applicationInfo.dataDir}/prefs"
+    }
+    scoped { coroutineScope: @ForApplication CoroutineScope,
+             dispatchers: AppCoroutineDispatchers,
+             prefsPath: @PrefsPath String,
+             moshi: Moshi ->
         PrefBoxFactory(
-            coroutineScope = get<CoroutineScope>(ForApplication) + get<AppCoroutineDispatchers>().io,
-            prefsPath = get(qualifier = PrefsPath),
-            moshi = get()
+            coroutineScope = coroutineScope + dispatchers.io,
+            prefsPath = prefsPath,
+            moshi = moshi
         )
     }
-
-    single {
+    scoped { context: @ForApplication Context,
+             coroutineScope: @ForApplication CoroutineScope,
+             dispatchers: AppCoroutineDispatchers ->
         SettingsBoxFactory(
-            context = get(qualifier = ForApplication),
-            coroutineScope = get<CoroutineScope>(ForApplication) + get<AppCoroutineDispatchers>().io
+            context = context,
+            coroutineScope = coroutineScope + dispatchers.io
         )
     }
 }
 
-@QualifierMarker
-annotation class PrefsPath {
-    companion object : Qualifier.Element
-}
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class PrefsPath

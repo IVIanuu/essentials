@@ -22,13 +22,15 @@ import android.os.Bundle
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.getLazy
+import com.ivianuu.injekt.android.AndroidEntryPoint
+import com.ivianuu.injekt.inject
 
+@AndroidEntryPoint
 class PermissionActivity : EsActivity() {
 
-    private val manager: PermissionManager by getLazy()
-    private val requestUi: PermissionRequestUi by getLazy()
+    private val navigator: Navigator by inject()
+    private val manager: PermissionManager by inject()
+    private val requestUi: PermissionRequestUi by inject()
     private lateinit var finalRequest: PermissionRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +47,10 @@ class PermissionActivity : EsActivity() {
             return
         }
 
-        if (savedInstanceState != null) return
+        if (savedInstanceState != null) {
+            finish()
+            return
+        }
 
         finalRequest = request.copy(
             onComplete = {
@@ -59,7 +64,7 @@ class PermissionActivity : EsActivity() {
 
     @Composable
     override fun content() {
-        Navigator(state = get())
+        navigator.content()
     }
 
     internal companion object {

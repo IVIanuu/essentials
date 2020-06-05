@@ -21,12 +21,12 @@ import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 
 /**
  * Deactivates non sdk interface detection
  */
-@Factory
+@Transient
 internal class NonSdkInterfacesHelper(
     private val logger: Logger,
     private val settings: SettingsBoxFactory,

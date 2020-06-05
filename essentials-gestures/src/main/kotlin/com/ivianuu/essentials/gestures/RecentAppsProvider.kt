@@ -19,20 +19,24 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.coroutines.StateFlow
-import com.ivianuu.essentials.coroutines.setIfChanged
+import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.ApplicationScoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 
 /**
  * Recent apps provider
  */
-@ApplicationScope
-@Single
-class RecentAppsProvider(private val logger: Logger) : AccessibilityComponent() {
+@BindAccessibilityComponent
+@ApplicationScoped
+class RecentAppsProvider(
+    private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger
+) : AccessibilityComponent(dispatchers.computation) {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(
@@ -43,8 +47,8 @@ class RecentAppsProvider(private val logger: Logger) : AccessibilityComponent() 
         get() = recentsApps
             .map { it.firstOrNull() }
 
-    private val _recentApps = StateFlow(emptyList<String>())
-    val recentsApps: Flow<List<String>> get() = _recentApps
+    private val _recentApps = MutableStateFlow(emptyList<String>())
+    val recentsApps: StateFlow<List<String>> get() = _recentApps
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // indicates that its a activity
@@ -91,6 +95,6 @@ class RecentAppsProvider(private val logger: Logger) : AccessibilityComponent() 
         logger.d("recent apps changed $finalRecentApps")
 
         // push
-        _recentApps.setIfChanged(finalRecentApps)
+        _recentApps.value = finalRecentApps
     }
 }

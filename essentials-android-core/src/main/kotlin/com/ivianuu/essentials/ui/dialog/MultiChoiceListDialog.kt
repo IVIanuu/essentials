@@ -18,7 +18,8 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.key
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import androidx.ui.core.Modifier
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
 
 @Composable
@@ -34,11 +35,11 @@ fun <T> MultiChoiceListDialog(
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null
 ) {
-    ScrollableDialog(
+    VerticalScrollerDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        listContent = {
+        scrollerContent = {
             items.forEachIndexed { index, item ->
                 key(index) {
                     MultiChoiceDialogListItem(
@@ -72,12 +73,11 @@ private fun MultiChoiceDialogListItem(
 ) {
     SimpleDialogListItem(
         leading = {
-            AbsorbPointer {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = {}
-                )
-            }
+            Checkbox(
+                modifier = Modifier.absorbPointer(),
+                checked = checked,
+                onCheckedChange = {}
+            )
         },
         title = title,
         onClick = {

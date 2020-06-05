@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.ReferentiallyEqual
 import androidx.compose.Stable
+import androidx.compose.currentComposer
 import androidx.compose.mutableStateOf
 import androidx.compose.staticAmbientOf
 import java.io.Closeable
@@ -35,7 +36,7 @@ class RetainedObjects {
         backing[key] = value
     }
 
-    fun contains(key: Any): Boolean = backing.containsKey(key)
+    operator fun contains(key: Any): Boolean = backing.containsKey(key)
 
     fun remove(key: Any) {
         val value = backing.remove(key)
@@ -97,7 +98,7 @@ val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
 @Composable
 inline fun <T> retain(
     vararg inputs: Any?,
-    key: Any = pointInComposition(),
+    key: Any = currentComposer.currentCompoundKeyHash,
     noinline init: () -> T
 ): T {
     val retainedObjects = RetainedObjectsAmbient.current
@@ -106,7 +107,7 @@ inline fun <T> retain(
 
 @Composable
 inline fun <T> retainedState(
-    key: Any = pointInComposition(),
+    key: Any = currentComposer.currentCompoundKeyHash,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
 ): MutableState<T> = retain(key) { mutableStateOf(init(), areEquivalent) }
@@ -114,7 +115,7 @@ inline fun <T> retainedState(
 @Composable
 inline fun <T> retainedStateFor(
     vararg inputs: Any?,
-    key: Any = pointInComposition(),
+    key: Any = currentComposer.currentCompoundKeyHash,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
 ): MutableState<T> = retain(

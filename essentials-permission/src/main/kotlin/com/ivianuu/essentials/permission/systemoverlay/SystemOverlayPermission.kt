@@ -20,18 +20,16 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.bindPermissionStateProviderIntoSet
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
 fun SystemOverlayPermission(
     context: Context,
@@ -51,15 +49,10 @@ val Metadata.Companion.IsSystemOverlayPermission by lazy {
     Metadata.Key<Unit>("IsSystemOverlayPermission")
 }
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.systemOverlayPermission() {
-    bindPermissionStateProviderIntoSet<SystemOverlayPermissionStateProvider>()
-}
-
-@Factory
-private class SystemOverlayPermissionStateProvider(
-    private val context: Context
+@BindPermissionStateProvider
+@Transient
+internal class SystemOverlayPermissionStateProvider(
+    private val context: @ForApplication Context
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

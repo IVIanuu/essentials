@@ -21,15 +21,16 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 
 /**
  * Provides infos about the secure settings access state
  */
-@Factory
+@Transient
 class SecureSettingsHelper(
     private val buildInfo: BuildInfo,
-    private val context: Context,
+    private val context: @ForApplication Context,
     private val shell: Shell
 ) {
     fun canWriteSecureSettings(): Boolean =

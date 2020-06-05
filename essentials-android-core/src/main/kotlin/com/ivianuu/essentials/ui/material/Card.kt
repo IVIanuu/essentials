@@ -48,7 +48,7 @@ fun DefaultCardStyle(
     contentColor: Color = guessingContentColorFor(color),
     border: Border? = null,
     elevation: Dp = 1.dp,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = CardStyle(
     shape = shape,
     color = color,
@@ -60,7 +60,7 @@ fun DefaultCardStyle(
 
 @Composable
 fun Card(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: CardStyle = CardStyleAmbient.currentOrElse { DefaultCardStyle() },
     content: @Composable () -> Unit
 ) {

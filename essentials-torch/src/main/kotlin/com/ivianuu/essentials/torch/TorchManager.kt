@@ -18,17 +18,15 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.StateFlow
-import com.ivianuu.essentials.coroutines.setIfChanged
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -36,12 +34,11 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-@ApplicationScope
-@Single
+@ApplicationScoped
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    @ForApplication private val coroutineScope: CoroutineScope,
+    private val coroutineScope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val foregroundComponent: TorchForegroundComponent,
@@ -49,8 +46,8 @@ class TorchManager internal constructor(
     private val toaster: Toaster
 ) {
 
-    private val _torchState = StateFlow(false)
-    val torchState: Flow<Boolean> get() = _torchState
+    private val _torchState = MutableStateFlow(false)
+    val torchState: StateFlow<Boolean> get() = _torchState
 
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
@@ -96,7 +93,7 @@ class TorchManager internal constructor(
         } else {
             foregroundManager.stopForeground(foregroundComponent)
         }
-        _torchState.setIfChanged(enabled)
+        _torchState.value = enabled
     }
 
     companion object {

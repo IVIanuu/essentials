@@ -28,9 +28,8 @@ import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -47,12 +46,11 @@ import kotlinx.coroutines.launch
 /**
  * Handles the state of the navigation bar
  */
-@ApplicationScope
-@Single
+@ApplicationScoped
 class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    @ForApplication private val coroutineScope: CoroutineScope,
+    private val coroutineScope: @ForApplication CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,

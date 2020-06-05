@@ -17,31 +17,25 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.state
 import androidx.ui.core.Alignment
-import androidx.ui.core.AnimationClockAmbient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.SliderPosition
 import androidx.ui.unit.Dp
-import androidx.ui.unit.IntPx
-import androidx.ui.unit.Px
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
-import androidx.ui.unit.px
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
@@ -51,27 +45,29 @@ import kotlin.time.Duration
 
 @Composable
 fun DoubleSliderPreference(
-    @Pivotal box: Box<Double>,
+    box: Box<Double>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Double) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int = 0,
-    valueText: @Composable ((Double) -> Unit)? = null
+    steps: Int = 0
 ) {
-    DoubleSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        DoubleSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueRange = valueRange,
+            steps = steps,
+            valueText = valueText
+        )
+    }
 }
 
 @Composable
@@ -82,9 +78,9 @@ fun DoubleSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Double) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int = 0,
-    valueText: @Composable ((Double) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -103,27 +99,29 @@ fun DoubleSliderPreference(
 
 @Composable
 fun FloatSliderPreference(
-    @Pivotal box: Box<Float>,
+    box: Box<Float>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Float) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0,
-    valueText: @Composable ((Float) -> Unit)? = null
+    steps: Int = 0
 ) {
-    FloatSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        FloatSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            steps = steps
+        )
+    }
 }
 
 @Composable
@@ -134,9 +132,9 @@ fun FloatSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Float) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0,
-    valueText: @Composable ((Float) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -155,27 +153,29 @@ fun FloatSliderPreference(
 
 @Composable
 fun IntSliderPreference(
-    @Pivotal box: Box<Int>,
+    box: Box<Int>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int = 0,
-    valueText: @Composable ((Int) -> Unit)? = null
+    steps: Int = 0
 ) {
-    IntSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        IntSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            steps = steps
+        )
+    }
 }
 
 @Composable
@@ -186,9 +186,9 @@ fun IntSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int = 0,
-    valueText: @Composable ((Int) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -199,35 +199,37 @@ fun IntSliderPreference(
         title = title,
         summary = summary,
         leading = leading,
+        valueText = valueText,
         valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
+        steps = steps
     )
 }
 
 @Composable
 fun LongSliderPreference(
-    @Pivotal box: Box<Long>,
+    box: Box<Long>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int = 0,
-    valueText: @Composable ((Long) -> Unit)? = null
+    steps: Int = 0
 ) {
-    LongSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        LongSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            steps = steps
+        )
+    }
 }
 
 @Composable
@@ -238,9 +240,9 @@ fun LongSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int = 0,
-    valueText: @Composable ((Long) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -251,35 +253,37 @@ fun LongSliderPreference(
         title = title,
         summary = summary,
         leading = leading,
+        valueText = valueText,
         valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
+        steps = steps
     )
 }
 
 @Composable
 fun DpSliderPreference(
-    @Pivotal box: Box<Dp>,
+    box: Box<Dp>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int = 0,
-    valueText: @Composable ((Dp) -> Unit)? = null
+    steps: Int = 0
 ) {
-    DpSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        DpSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            steps = steps
+        )
+    }
 }
 
 @Composable
@@ -290,9 +294,9 @@ fun DpSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int = 0,
-    valueText: @Composable ((Dp) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -303,139 +307,37 @@ fun DpSliderPreference(
         title = title,
         summary = summary,
         leading = leading,
+        valueText = valueText,
         valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
-}
-
-@Composable
-fun PxSliderPreference(
-    @Pivotal box: Box<Px>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueRange: ClosedRange<Px> = 0.px..100.px,
-    steps: Int = 0,
-    valueText: @Composable ((Px) -> Unit)? = null
-) {
-    PxSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
-}
-
-@Composable
-fun PxSliderPreference(
-    valueController: ValueController<Px>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueRange: ClosedRange<Px> = 0.px..100.px,
-    steps: Int = 0,
-    valueText: @Composable ((Px) -> Unit)? = null
-) {
-    BaseSliderPreference(
-        valueController = valueController,
-        toFloat = { it.value },
-        fromFloat = { it.px },
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
-}
-
-@Composable
-fun IntPxSliderPreference(
-    @Pivotal box: Box<IntPx>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int = 0,
-    valueText: @Composable ((IntPx) -> Unit)? = null
-) {
-    IntPxSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
-}
-
-@Composable
-fun IntPxSliderPreference(
-    valueController: ValueController<IntPx>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueRange: ClosedRange<IntPx> = 0.ipx..100.ipx,
-    steps: Int = 0,
-    valueText: @Composable ((IntPx) -> Unit)? = null
-) {
-    BaseSliderPreference(
-        valueController = valueController,
-        toFloat = { it.value.toFloat() },
-        fromFloat = { it.toInt().ipx },
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
+        steps = steps
     )
 }
 
 @Composable
 fun DurationSliderPreference(
-    @Pivotal box: Box<Duration>,
+    box: Box<Duration>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int = 0,
-    valueText: @Composable ((Duration) -> Unit)? = null
+    steps: Int = 0
 ) {
-    DurationSliderPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        valueRange = valueRange,
-        steps = steps,
-        valueText = valueText
-    )
+    key(box) {
+        DurationSliderPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            valueRange = valueRange,
+            steps = steps,
+            valueText = valueText
+        )
+    }
 }
 
 @Composable
@@ -446,9 +348,9 @@ fun DurationSliderPreference(
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int = 0,
-    valueText: @Composable ((Duration) -> Unit)? = null
+    steps: Int = 0
 ) {
     BaseSliderPreference(
         valueController = valueController,
@@ -515,41 +417,35 @@ fun <T : Comparable<T>> BaseSliderPreference(
             Row(
                 modifier = Modifier.gravity(Alignment.BottomCenter)
                     .padding(
-                        start = listItemStyle.contentPadding.left - 4.dp, // make the slider pretty
-                        end = listItemStyle.contentPadding.right
+                        start = listItemStyle.contentPadding.start - 4.dp, // make the slider pretty
+                        end = listItemStyle.contentPadding.end
                     ),
-                crossAxisAlignment = CrossAxisAlignment.Center
+                verticalGravity = Alignment.CenterVertically
             ) {
-                val animationClock = AnimationClockAmbient.current
-                val position = remember(valueRange, steps) {
-                    val initial = toFloat(context.currentValue)
-                    val floatRange =
-                        toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
-                    SliderPosition(
-                        initial = initial,
-                        valueRange = floatRange,
-                        steps = steps,
-                        animatedClock = animationClock
-                    )
+                val sliderState = state { toFloat(context.currentValue) }
+
+                val floatRange = remember(toFloat, valueRange) {
+                    toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
                 }
 
-                remember(context.currentValue) { position.value = toFloat(context.currentValue) }
+                remember(context.currentValue) { sliderState.value = toFloat(context.currentValue) }
 
                 Slider(
-                    position = position,
-                    modifier = LayoutFlexible(1f),
+                    value = sliderState.value,
                     onValueChange = { newFloatValue ->
                         if (context.shouldBeEnabled &&
                             valueController.canSetValue(fromFloat(newFloatValue))
                         ) {
-                            position.value = newFloatValue
+                            sliderState.value = newFloatValue
                         }
                     },
                     onValueChangeEnd = {
                         if (context.shouldBeEnabled) {
-                            context.setIfOk(fromFloat(position.value))
+                            context.setIfOk(fromFloat(sliderState.value))
                         }
-                    }
+                    },
+                    valueRange = floatRange,
+                    steps = steps
                 )
 
                 if (valueText != null) {
@@ -557,7 +453,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
                         modifier = Modifier.preferredWidthIn(minWidth = 72.dp),
                         gravity = ContentGravity.Center
                     ) {
-                        valueText(fromFloat(position.value))
+                        valueText(fromFloat(sliderState.value))
                     }
                 }
             }

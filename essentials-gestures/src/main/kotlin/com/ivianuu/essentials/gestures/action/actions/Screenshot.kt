@@ -1,25 +1,15 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.PhotoAlbum
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.gestures.action.actionPermission
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
-import kotlinx.coroutines.delay
+import com.ivianuu.injekt.composition.installIn
 
 @SuppressLint("InlinedApi")
-@ApplicationScope
 @Module
-private fun ComponentBuilder.screenshotAction() {
-    action(
+private fun ScreenshotModule() {
+    installIn<ApplicationComponent>()
+    /*action<@ActionQualifier("screenshot") Action>(
         key = "screenshot",
         title = { getStringResource(R.string.es_action_screenshot) },
         iconProvider = { SingleActionIconProvider(Icons.Default.PhotoAlbum) },
@@ -31,12 +21,12 @@ private fun ComponentBuilder.screenshotAction() {
         },
         executor = {
             val executor = if (get<SystemBuildInfo>().sdk >= 28) {
-                get<AccessibilityActionExecutor>(parameters = parametersOf(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT))
+                get<@Provider (Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
             } else {
-                get<RootActionExecutor>(parameters = parametersOf("input keyevent 26"))
+                get<@Provider (String) -> RootActionExecutor>()("input keyevent 26")
             }
 
             return@action executor.beforeAction { delay(500) }
         }
-    )
+    )*/
 }

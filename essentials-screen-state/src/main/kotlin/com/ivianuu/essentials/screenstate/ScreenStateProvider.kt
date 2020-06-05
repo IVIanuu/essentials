@@ -22,9 +22,8 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -35,11 +34,10 @@ import kotlin.time.seconds
 /**
  * Provides the current screen state
  */
-@ApplicationScope
-@Single
+@ApplicationScoped
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
-    @ForApplication private val coroutineScope: CoroutineScope,
+    private val coroutineScope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager

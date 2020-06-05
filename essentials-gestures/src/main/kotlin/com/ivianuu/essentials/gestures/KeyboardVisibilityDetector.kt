@@ -20,11 +20,12 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.replayShareIn
-import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,12 +38,13 @@ import kotlin.time.seconds
 /**
  * Provides info about the keyboard state
  */
-@ApplicationScope
-@Single
+@BindAccessibilityComponent
+@ApplicationScoped
 class KeyboardVisibilityDetector(
-    @ForApplication private val appCoroutineScope: CoroutineScope,
+    private val appCoroutineScope: @ForApplication CoroutineScope,
+    private val dispatchers: AppCoroutineDispatchers,
     private val inputMethodManager: InputMethodManager
-) : AccessibilityComponent() {
+) : AccessibilityComponent(dispatchers.computation) {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(

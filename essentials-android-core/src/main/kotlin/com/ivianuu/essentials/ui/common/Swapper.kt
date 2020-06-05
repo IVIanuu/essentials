@@ -17,9 +17,11 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.compose.Model
 import androidx.compose.frames.modelListOf
+import androidx.compose.getValue
 import androidx.compose.key
+import androidx.compose.mutableStateOf
+import androidx.compose.setValue
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.layout.Stack
@@ -28,7 +30,7 @@ import androidx.ui.unit.PxPosition
 @Composable
 fun <T> Swapper(
     state: SwapperState<T>,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     itemCallback: @Composable (T) -> Unit
 ) {
     val children: @Composable () -> Unit = {
@@ -58,13 +60,12 @@ private fun SwapperSlot(children: @Composable () -> Unit) {
     }
 }
 
-@Model
 class SwapperState<T>(
     initial: T,
     keepState: Boolean = false
 ) {
 
-    private var _keepState = keepState
+    private var _keepState by mutableStateOf(keepState)
     var keepState: Boolean
         get() = _keepState
         set(value) {
@@ -72,7 +73,7 @@ class SwapperState<T>(
             _keepState = value
         }
 
-    private var _current = initial
+    private var _current by mutableStateOf(initial)
     var current: T
         get() = _current
         set(value) {

@@ -24,7 +24,7 @@ val ActionsRoute = Route {
         val navigator = NavigatorAmbient.current
 
         Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-            val activityCoroutineScope = inject<CoroutineScope>(ForActivity)
+            val activityCoroutineScope = inject<@ForActivity CoroutineScope>()
             Button(
                 onClick = {
                     activityCoroutineScope.launch {

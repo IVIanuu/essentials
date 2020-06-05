@@ -21,40 +21,22 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.Composition
+import androidx.compose.Recomposer
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.core.Environment
 import com.ivianuu.essentials.ui.core.RetainedObjects
-import com.ivianuu.essentials.ui.navigation.NavigatorState
-import com.ivianuu.essentials.util.ComponentBuilderInterceptor
-import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.android.ActivityScope
-import com.ivianuu.injekt.android.ForActivity
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
 
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), ComponentOwner,
-    ComponentBuilderInterceptor {
-
-    override val component by unsafeLazy {
-        ActivityComponent(this) {
-            buildComponent()
-        }
-    }
+abstract class EsActivity : AppCompatActivity() {
 
     protected open val layoutRes: Int get() = 0
 
     protected open val containerId: Int
         get() = android.R.id.content
 
-    private val retainedObjects =
-        RetainedObjects()
+    private val retainedObjects = RetainedObjects()
 
     private lateinit var composition: Composition
 
@@ -65,7 +47,7 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
             setContentView(layoutRes)
         }
 
-        composition = findViewById<ViewGroup>(containerId).setContent {
+        composition = findViewById<ViewGroup>(containerId).setContent(Recomposer.current()) {
             WrapContentWithEnvironment {
                 content()
             }
@@ -81,8 +63,6 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
     @Composable
     protected open fun WrapContentWithEnvironment(children: @Composable () -> Unit) {
         Environment(
-            activity = this,
-            component = component,
             retainedObjects = retainedObjects,
             children = children
         )
@@ -90,16 +70,4 @@ abstract class EsActivity : AppCompatActivity(), ComponentOwner,
 
     @Composable
     protected abstract fun content()
-}
-
-@ActivityScope
-@Module
-private fun ComponentBuilder.esActivityModule() {
-    single {
-        NavigatorState(
-            coroutineScope = get(qualifier = ForActivity),
-            dispatchers = get(),
-            logger = get()
-        )
-    }
 }

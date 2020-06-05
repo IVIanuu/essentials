@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.compose.stateFor
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 
 @Composable
 fun <T> MultiChoiceListPreference(
-    @Pivotal box: Box<Set<T>>,
+    box: Box<Set<T>>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
@@ -38,16 +38,18 @@ fun <T> MultiChoiceListPreference(
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceListPreference.Item<T>>
 ) {
-    MultiChoiceListPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
-        dialogTitle = dialogTitle,
-        items = items
-    )
+    key(box) {
+        MultiChoiceListPreference(
+            valueController = ValueController(box),
+            enabled = enabled,
+            dependencies = dependencies,
+            title = title,
+            summary = summary,
+            leading = leading,
+            dialogTitle = dialogTitle,
+            items = items
+        )
+    }
 }
 
 @Composable

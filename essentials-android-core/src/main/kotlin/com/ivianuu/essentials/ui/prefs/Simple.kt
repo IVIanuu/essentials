@@ -24,11 +24,11 @@ import androidx.ui.foundation.Box
 @Composable
 fun SimplePreference(
     onClick: () -> Unit,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    dependencies: List<Dependency<*>>? = null
 ) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
         Box(modifier = Modifier.drawOpacity(opacity = if (dependenciesOk) 1f else 0.5f)) {

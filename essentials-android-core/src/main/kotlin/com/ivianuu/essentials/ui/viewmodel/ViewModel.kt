@@ -17,45 +17,22 @@
 package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
+import androidx.compose.currentComposer
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.core.pointInComposition
 import com.ivianuu.essentials.ui.core.retain
-import com.ivianuu.essentials.ui.injekt.ComponentAmbient
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.Parameters
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.emptyParameters
-import com.ivianuu.injekt.keyOf
-
-@Composable
-inline fun <T : ViewModel> viewModel(noinline factory: () -> T): T =
-    viewModel(key = pointInComposition(), factory = factory)
+import com.ivianuu.essentials.ui.injekt.compositionComponent
+import com.ivianuu.injekt.composition.get
 
 @Composable
 fun <T : ViewModel> viewModel(
-    key: Any,
+    key: Any = currentComposer.currentCompoundKeyHash,
     factory: () -> T
 ): T = retain(key = key, init = factory)
 
 @Composable
-inline fun <reified T : ViewModel> injectViewModel(
-    qualifier: Qualifier = Qualifier.None,
-    parameters: Parameters = emptyParameters()
-): T = injectViewModel(
-    keyOf(qualifier = qualifier),
-    pointInComposition(),
-    parameters
-)
-
-@Composable
 fun <T : ViewModel> injectViewModel(
-    key: Key<T>,
-    viewModelKey: Any,
-    parameters: Parameters = emptyParameters()
+    key: Any = currentComposer.currentCompoundKeyHash,
 ): T {
-    val component = ComponentAmbient.current
-    return viewModel(
-        key = viewModelKey,
-        factory = { component.get(key = key, parameters = parameters) }
-    )
+    val component = compositionComponent
+    return viewModel(key) { component.get() }
 }

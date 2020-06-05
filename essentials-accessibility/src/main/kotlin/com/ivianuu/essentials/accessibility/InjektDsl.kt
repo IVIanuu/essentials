@@ -16,24 +16,19 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.set
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.set
 
-@QualifierMarker
-annotation class AccessibilityComponents {
-    companion object : Qualifier.Element
-}
+@BindingEffect(ServiceComponent::class)
+annotation class BindAccessibilityComponent
 
-inline fun <reified T : AccessibilityComponent> ComponentBuilder.bindAccessibilityComponentIntoSet(
-    componentQualifier: Qualifier = Qualifier.None
-) {
-    set<AccessibilityComponent>(AccessibilityComponents) {
-        add<T>(elementQualifier = componentQualifier)
+@BindingEffectFunction(BindAccessibilityComponent::class)
+@Module
+inline fun <T : AccessibilityComponent> accessibilityComponent() {
+    set<AccessibilityComponent> {
+        add<T>()
     }
-}
-
-internal fun ComponentBuilder.accessibilityComponentInjection() {
-    set<AccessibilityComponent>(setQualifier = AccessibilityComponents)
 }

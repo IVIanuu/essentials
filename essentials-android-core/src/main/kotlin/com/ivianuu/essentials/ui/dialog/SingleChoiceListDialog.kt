@@ -18,7 +18,9 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.compose.key
-import com.ivianuu.essentials.ui.common.AbsorbPointer
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
+import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -38,11 +40,11 @@ fun <T> SingleChoiceListDialog(
 ) {
     val navigator = NavigatorAmbient.current
 
-    ScrollableDialog(
+    VerticalScrollerDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        listContent = {
+        scrollerContent = {
             items.forEachIndexed { index, item ->
                 key(index) {
                     SingleChoiceDialogListItem(
@@ -70,7 +72,7 @@ private fun SingleChoiceDialogListItem(
 ) {
     SimpleDialogListItem(
         leading = {
-            AbsorbPointer {
+            Box(modifier = Modifier.absorbPointer()) {
                 RadioButton(
                     selected = selected,
                     onSelect = {}

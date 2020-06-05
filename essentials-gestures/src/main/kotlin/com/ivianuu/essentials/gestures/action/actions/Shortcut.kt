@@ -11,35 +11,34 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactoryIntoSet
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegateIntoSet
+import com.ivianuu.essentials.gestures.action.actionFactory
+import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.composition.installIn
 import java.io.ByteArrayOutputStream
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.shortcutAction() {
-    bindActionFactoryIntoSet<ShortcutActionFactory>()
-    bindActionPickerDelegateIntoSet<ShortcutActionPickerDelegate>()
+private fun ShortcutModule() {
+    installIn<ApplicationComponent>()
+    actionFactory<ShortcutActionFactory>()
+    actionPickerDelegate<ShortcutActionPickerDelegate>()
 }
 
-@Factory
-private class ShortcutActionFactory(
-    private val intentActionExecutorProvider: Provider<IntentActionExecutor>,
+@Transient
+internal class ShortcutActionFactory(
+    private val intentActionExecutorProvider: @Provider (Intent) -> IntentActionExecutor,
     private val logger: Logger
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
@@ -55,13 +54,15 @@ private class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             iconProvider = SingleActionIconProvider { Icon(ImagePainter(icon)) },
-            executor = intentActionExecutorProvider(parameters = parametersOf(intent))
+            executor = intentActionExecutorProvider(intent),
+            enabled = true
         )
     }
 }
 
-@Factory
-private class ShortcutActionPickerDelegate(
+
+@Transient
+internal class ShortcutActionPickerDelegate(
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
     override val title: String
@@ -70,7 +71,7 @@ private class ShortcutActionPickerDelegate(
         Icon(vectorResource(R.drawable.es_ic_content_cut))
     }
 
-    override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
+    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(
             ShortcutPickerRoute()
         ) ?: return null
@@ -80,7 +81,11 @@ private class ShortcutActionPickerDelegate(
         val stream = ByteArrayOutputStream()
         icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val iconBytes = stream.toByteArray()
-        val key = "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(iconBytes, 0)}"
+        val key =
+            "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(
+                iconBytes,
+                0
+            )}"
         return ActionPickerResult.Action(key)
     }
 }

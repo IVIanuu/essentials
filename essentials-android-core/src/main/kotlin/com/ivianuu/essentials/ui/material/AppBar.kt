@@ -23,9 +23,13 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.ParentData
+import androidx.ui.core.tag
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
@@ -42,10 +46,6 @@ import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.layout.Column
-import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.layout.SpacingRow
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.isLight
@@ -65,7 +65,7 @@ fun DefaultAppBarStyle(
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = AppBarStyle(
     backgroundColor = backgroundColor,
     contentColor = contentColor,
@@ -78,7 +78,7 @@ fun DefaultAppBarStyle(
 fun PrimaryAppBarStyle(
     elevation: Dp = DefaultAppBarElevation,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = primary,
@@ -93,7 +93,7 @@ fun PrimaryAppBarStyle(
 fun SurfaceAppBarStyle(
     elevation: Dp = 0.dp,
     centerTitle: Boolean = false,
-    modifier: Modifier = Modifier.None
+    modifier: Modifier = Modifier
 ) = with(MaterialTheme.colors) {
     DefaultAppBarStyle(
         backgroundColor = surface,
@@ -108,7 +108,7 @@ val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
 
 @Composable
 fun TopAppBar(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     style: AppBarStyle = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() },
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
@@ -140,10 +140,7 @@ fun TopAppBar(
                     leading = leading,
                     title = title?.let {
                         {
-                            Column(
-                                mainAxisAlignment = MainAxisAlignment.Start,
-                                crossAxisAlignment = CrossAxisAlignment.Start
-                            ) {
+                            Column {
                                 Providers(
                                     TextComposableStyleAmbient provides DefaultTextComposableStyle(
                                         maxLines = 1
@@ -159,7 +156,7 @@ fun TopAppBar(
                     },
                     actions = actions?.let {
                         {
-                            SpacingRow(spacing = 16.dp) {
+                            Row(horizontalArrangement = Arrangement.SpaceBetween) {
                                 actions()
                             }
                         }
@@ -180,32 +177,33 @@ private fun TopAppBarLayout(
 ) {
     Layout(modifier = modifier, children = {
         if (leading != null) {
-            ParentData(data = TopAppBarSlot.Leading) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Leading)) {
                 leading()
             }
         }
 
         if (title != null) {
-            ParentData(data = TopAppBarSlot.Title) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Title)) {
                 title()
             }
         }
 
         if (actions != null) {
-            ParentData(data = TopAppBarSlot.Actions) {
+            Box(modifier = Modifier.tag(TopAppBarSlot.Actions)) {
                 actions()
             }
         }
     }) { measurables, constraints, _ ->
-        val leadingMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Leading }
-        val titleMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Title }
-        val actionsMeasureable = measurables.singleOrNull { it.parentData == TopAppBarSlot.Actions }
+        val leadingMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Leading }
+        val titleMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Title }
+        val actionsMeasureable = measurables.singleOrNull { it.tag == TopAppBarSlot.Actions }
 
         var childConstraints = constraints.copy(minWidth = 0.ipx, minHeight = 0.ipx)
 
         val leadingPlaceable = leadingMeasureable?.measure(childConstraints)
         if (leadingPlaceable != null) {
-            childConstraints = childConstraints.copy(maxWidth = childConstraints.maxWidth - leadingPlaceable.width)
+            childConstraints =
+                childConstraints.copy(maxWidth = childConstraints.maxWidth - leadingPlaceable.width)
         }
 
         val actionsPlaceable = actionsMeasureable?.measure(childConstraints)

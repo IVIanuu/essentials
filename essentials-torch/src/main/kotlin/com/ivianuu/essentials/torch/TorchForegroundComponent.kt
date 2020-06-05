@@ -17,9 +17,11 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.foreground.ForegroundComponent
-import com.ivianuu.injekt.Factory
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 internal class TorchForegroundComponent internal constructor(
+    dispatchers: AppCoroutineDispatchers,
     override val notificationFactory: TorchNotificationFactory
-) : ForegroundComponent()
+) : ForegroundComponent(dispatchers.computation)

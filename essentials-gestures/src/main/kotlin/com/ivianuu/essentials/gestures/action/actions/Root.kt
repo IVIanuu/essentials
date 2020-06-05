@@ -4,12 +4,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Transient
 
-@Factory
+@Transient
 class RootActionExecutor(
-    @Param private val command: String,
+    @Assisted private val command: String,
     private val shell: Shell,
     private val toaster: Toaster
 ) : ActionExecutor {

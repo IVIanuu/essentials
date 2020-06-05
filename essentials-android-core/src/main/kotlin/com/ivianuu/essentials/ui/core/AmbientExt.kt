@@ -19,9 +19,5 @@ val Ambient<*>.hasCurrentValue: Boolean get() {
 }
 
 @Composable
-val <T : Any> Ambient<T>.currentOrThrow: T
-    get() = currentOrNull ?: error("No value provided for $this")
-
-@Composable
-inline fun <T : Any> Ambient<T>.currentOrElse(defaultValue: @Composable () -> T): T =
+fun <T : Any> Ambient<T>.currentOrElse(defaultValue: @Composable () -> T): T =
     currentOrNull ?: defaultValue()

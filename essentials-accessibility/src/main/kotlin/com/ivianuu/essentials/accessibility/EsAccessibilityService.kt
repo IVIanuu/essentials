@@ -19,11 +19,8 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.ComponentBuilderInterceptor
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.ComponentOwner
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -31,18 +28,13 @@ import kotlinx.coroutines.cancel
 /**
  * Base accessibility service
  */
-abstract class EsAccessibilityService : AccessibilityService(), ComponentOwner,
-    ComponentBuilderInterceptor {
+abstract class EsAccessibilityService : AccessibilityService() {
 
-    override val component by unsafeLazy {
-        ServiceComponent(this) {
-            buildComponent()
-        }
-    }
+    private val dispatchers: AppCoroutineDispatchers by inject()
 
     val coroutineScope by unsafeLazy {
         CoroutineScope(
-            Job() + get<AppCoroutineDispatchers>().computation
+            Job() + dispatchers.computation
         )
     }
 

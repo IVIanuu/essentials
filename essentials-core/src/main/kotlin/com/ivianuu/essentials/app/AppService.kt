@@ -17,54 +17,49 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.common.map
-import com.ivianuu.injekt.eager
+import com.ivianuu.injekt.composition.BindingAdapter
+import com.ivianuu.injekt.composition.BindingAdapterFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.scoped
+import kotlin.reflect.KClass
 
 /**
  * Will be started on app start up and lives as long as the app lives
  */
 interface AppService
 
-@KeyOverload
-fun <T : AppService> ComponentBuilder.bindAppServiceIntoMap(
-    serviceKey: Key<T>
-) {
-    map<String, AppService>(AppServices) {
-        put(serviceKey.classifier.java.name, serviceKey)
+@BindingAdapter(ApplicationComponent::class)
+annotation class BindAppService
+
+@BindingAdapterFunction(BindAppService::class)
+@Module
+inline fun <reified T : AppService> appService() {
+    scoped<T>()
+    map<KClass<out AppService>, AppService> {
+        put<T>(T::class)
     }
 }
 
-@ApplicationScope
 @Module
-private fun ComponentBuilder.esAppServiceInjectionModule() {
-    map<String, AppService>(mapQualifier = AppServices)
-    eager<AppServiceRunner>()
+fun esAppServiceInjectionModule() {
+    installIn<ApplicationComponent>()
+    map<KClass<out AppService>, AppService>()
 }
 
-@QualifierMarker
-annotation class AppServices {
-    companion object : Qualifier.Element
-}
-
-@ApplicationScope
-@Single
-private class AppServiceRunner(
+@ApplicationScoped
+class AppServiceRunner(
     private val logger: Logger,
-    @AppServices private val services: Map<String, Provider<AppService>>
+    private val services: Map<KClass<out AppService>, @Lazy () -> AppService>
 ) {
     init {
         services
             .forEach {
-                logger.d(tag = "Services", message = "start service ${it.key}")
+                logger.d(tag = "Services", message = "start service ${it.key.java.name}")
                 it.value()
             }
     }

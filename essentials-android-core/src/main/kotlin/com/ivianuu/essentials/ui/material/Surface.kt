@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
-import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.RectangleShape
 import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
@@ -28,7 +28,7 @@ import androidx.ui.unit.dp
 
 @Composable
 fun Surface(
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors.surface,
     contentColor: Color = guessingContentColorFor(color),

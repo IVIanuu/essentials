@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.app.AppComponentHolder
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.get
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import java.util.concurrent.atomic.AtomicInteger
 
-abstract class ForegroundComponent {
+abstract class ForegroundComponent(dispatcher: CoroutineDispatcher) {
 
     abstract val notificationFactory: NotificationFactory
     val id = ids.incrementAndGet()
@@ -34,9 +32,7 @@ abstract class ForegroundComponent {
         private set
 
     val coroutineScope by unsafeLazy {
-        CoroutineScope(
-            Job() + AppComponentHolder.get<AppCoroutineDispatchers>().computation
-        )
+        CoroutineScope(Job() + dispatcher)
     }
 
     open fun attach(manager: ForegroundManager) {

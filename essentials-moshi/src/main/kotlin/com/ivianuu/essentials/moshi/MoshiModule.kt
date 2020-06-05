@@ -1,38 +1,37 @@
 package com.ivianuu.essentials.moshi
 
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.KeyOverload
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.QualifierMarker
-import com.ivianuu.injekt.common.set
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.set
 import com.squareup.moshi.Moshi
 
-@ApplicationScope
-@Module
-private fun ComponentBuilder.esMoshiModule() {
-    set<Any>(setQualifier = JsonAdapters)
+@BindingEffect(ApplicationComponent::class)
+annotation class BindJsonAdapter
 
-    single {
-        val adapters = get<Set<Any>>(qualifier = JsonAdapters)
+@BindingEffectFunction(BindJsonAdapter::class)
+@Module
+fun <T : Any> jsonAdapter() {
+    set<@JsonAdapters Set<Any>, Any> {
+        add<T>()
+    }
+}
+
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class JsonAdapters
+
+@Module
+fun esMoshiModule() {
+    installIn<ApplicationComponent>()
+    set<@JsonAdapters Set<Any>, Any>()
+    scoped { adapters: @JsonAdapters Set<Any> ->
         Moshi.Builder()
             .apply { adapters.forEach { adapter -> add(adapter) } }
             .build()!!
     }
-}
-
-@KeyOverload
-fun <T : Any> ComponentBuilder.bindJsonAdapterIntoSet(
-    adapterKey: Key<T>
-) {
-    set<Any>(setQualifier = JsonAdapters) { add(adapterKey) }
-}
-
-@QualifierMarker
-annotation class JsonAdapters {
-    companion object : Qualifier.Element
 }

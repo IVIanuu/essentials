@@ -16,23 +16,15 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.boot.BindBootAware
 import com.ivianuu.essentials.boot.BootAware
-import com.ivianuu.essentials.boot.bindBootAwareIntoMap
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.ComponentBuilder
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Transient
 
-@Factory
+@BindBootAware
+@Transient
 class BootLogger(private val logger: Logger) : BootAware {
     init {
         logger.d("booted!")
     }
-}
-
-@ApplicationScope
-@Module
-private fun ComponentBuilder.bootModule() {
-    bindBootAwareIntoMap<BootLogger>()
 }

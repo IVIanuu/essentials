@@ -22,7 +22,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Pivotal
+import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.core.paint
 import androidx.ui.foundation.Box
@@ -35,25 +35,25 @@ import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.launch
 
 fun ShortcutPickerRoute(
     title: String? = null
 ) = Route {
-    val viewModel = injectMvRxViewModel<ShortcutPickerViewModel>()
+    val viewModel = injectViewModel<ShortcutPickerViewModel>()
     SimpleScreen(title = title ?: stringResource(R.string.es_title_shortcut_picker)) {
-        RenderAsyncList(state = viewModel.getCurrentState().shortcuts) { _, info ->
+        RenderAsyncList(state = viewModel.state.shortcuts) { info ->
             ShortcutInfo(info = info, onClick = { viewModel.infoClicked(info) })
         }
     }
@@ -62,27 +62,27 @@ fun ShortcutPickerRoute(
 @Composable
 private fun ShortcutInfo(
     onClick: () -> Unit,
-    @Pivotal info: ShortcutInfo
+    info: ShortcutInfo
 ) {
-    ListItem(
-        leading = {
-            Box(
-                modifier = Modifier.preferredSize(size = 40.dp)
-                    .paint(ImagePainter(info.icon))
-            )
-        },
-        title = { Text(info.name) },
-        onClick = onClick
-    )
+    key(info) {
+        ListItem(
+            leading = {
+                Box(
+                    modifier = Modifier.preferredSize(size = 40.dp)
+                        .paint(ImagePainter(info.icon))
+                )
+            },
+            title = { Text(info.name) },
+            onClick = onClick
+        )
+    }
 }
 
-@Factory
-private class ShortcutPickerViewModel(
-    private val navigator: NavigatorState,
+@Transient
+internal class ShortcutPickerViewModel(
+    private val navigator: Navigator,
     private val packageManager: PackageManager
-) : MvRxViewModel<ShortcutPickerState>(
-    ShortcutPickerState()
-) {
+) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
     init {
         coroutineScope.execute(
             block = {
@@ -156,7 +156,7 @@ private class ShortcutPickerViewModel(
 
 @Immutable
 internal data class ShortcutPickerState(
-    val shortcuts: Async<List<ShortcutInfo>> = Uninitialized
+    val shortcuts: Async<List<ShortcutInfo>> = Uninitialized()
 )
 
 @Immutable

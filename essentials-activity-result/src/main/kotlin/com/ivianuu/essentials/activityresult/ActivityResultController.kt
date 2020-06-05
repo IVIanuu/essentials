@@ -20,16 +20,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-@ApplicationScope
-@Single
+@ApplicationScoped
 class ActivityResultController(
-    private val context: Context,
+    private val context: @ForApplication Context,
     private val logger: Logger
 ) {
 

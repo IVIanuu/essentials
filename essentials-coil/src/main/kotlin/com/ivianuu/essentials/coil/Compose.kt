@@ -18,12 +18,14 @@ package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Box
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
 import coil.ImageLoader
+import coil.request.GetRequest
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.common.RenderAsync
 import com.ivianuu.essentials.ui.image.Image
@@ -34,19 +36,20 @@ import com.ivianuu.essentials.util.launchAsync
 @Composable
 fun CoilImage(
     data: Any,
-    modifier: Modifier = Modifier.None,
+    modifier: Modifier = Modifier,
     builderBlock: (GetRequestBuilder.() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     error: @Composable (() -> Unit)? = null,
     imageLoader: ImageLoader = inject()
 ) {
-    WithConstraints(modifier = modifier) { constraints, _ ->
+    WithConstraints(modifier = modifier) {
         val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
 
+        val context = ContextAmbient.current
         val state = launchAsync(data, builderBlock, imageLoader, width, height) {
-            imageLoader.get(
-                GetRequestBuilder(imageLoader.defaults)
+            imageLoader.execute(
+                GetRequest.Builder(context)
                     .apply {
                         data(data)
                         if (width != null && height != null) {
@@ -55,6 +58,7 @@ fun CoilImage(
                         builderBlock?.invoke(this)
                     }
                     .build())
+                .drawable!!
                 .toImageAsset()
                 .let { ImagePainter(it) }
         }

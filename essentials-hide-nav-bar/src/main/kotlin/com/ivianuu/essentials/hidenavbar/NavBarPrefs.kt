@@ -17,11 +17,9 @@
 package com.ivianuu.essentials.hidenavbar
 
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.ApplicationScoped
 
-@ApplicationScope
-@Single
+@ApplicationScoped
 internal class NavBarPrefs(factory: PrefBoxFactory) {
     val wasNavBarHidden = factory.create("was_nav_bar_hidden_2", false)
 }
