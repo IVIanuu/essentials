@@ -17,21 +17,17 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.compose.getValue
 import androidx.compose.onActive
-import androidx.compose.setValue
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
-import androidx.ui.foundation.TextField
-import androidx.ui.foundation.TextFieldValue
 import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
-import androidx.ui.text.TextRange
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(
@@ -98,26 +94,9 @@ fun TextInputDialog(
                 }
                 val focusModifier = FocusModifier()
 
-                var textFieldValue by state {
-                    TextFieldValue(value, TextRange(value.length, value.length))
-                }
-                if (textFieldValue.text != value) {
-                    val newSelection = TextRange(
-                        textFieldValue.selection.start.coerceIn(0, value.length),
-                        textFieldValue.selection.end.coerceIn(0, value.length)
-                    )
-                    textFieldValue = TextFieldValue(text = value, selection = newSelection)
-                }
-
                 TextField(
-                    value = textFieldValue,
-                    onValueChange = {
-                        val previousValue = textFieldValue.text
-                        textFieldValue = it
-                        if (previousValue != it.text) {
-                            onValueChange(it.text)
-                        }
-                    },
+                    value = value,
+                    onValueChange = onValueChange,
                     keyboardType = keyboardType,
                     textStyle = MaterialTheme.typography.subtitle1,
                     modifier = focusModifier

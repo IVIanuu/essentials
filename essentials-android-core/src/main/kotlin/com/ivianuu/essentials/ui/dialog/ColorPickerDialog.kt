@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.state
 import androidx.compose.stateFor
 import androidx.ui.core.Alignment
@@ -28,8 +30,6 @@ import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.foundation.TextField
-import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.contentColor
@@ -55,6 +55,7 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.squared
@@ -320,25 +321,25 @@ private fun ColorEditorHeader(
                     horizontalArrangement = Arrangement.Center,
                     verticalGravity = Alignment.CenterVertically
                 ) {
-                    val (hexInput, setHexInput) = stateFor(color) {
-                        TextFieldValue(color.toHexString(includeAlpha = showAlphaSelector))
+                    var hexInput by stateFor(color) {
+                        color.toHexString(includeAlpha = showAlphaSelector)
                     }
                     Text("#")
                     TextField(
                         value = hexInput,
                         onValueChange = { newValue ->
-                            if ((showAlphaSelector && newValue.text.length > 8) ||
-                                (!showAlphaSelector && newValue.text.length > 6)
+                            if ((showAlphaSelector && newValue.length > 8) ||
+                                (!showAlphaSelector && newValue.length > 6)
                             ) return@TextField
 
-                            setHexInput(newValue)
+                            hexInput = newValue
 
-                            if ((showAlphaSelector && newValue.text.length < 8) ||
-                                (!showAlphaSelector && newValue.text.length < 6)
+                            if ((showAlphaSelector && newValue.length < 8) ||
+                                (!showAlphaSelector && newValue.length < 6)
                             ) return@TextField
 
                             val newColor = try {
-                                newValue.text.toColor()
+                                newValue.toColor()
                             } catch (e: Exception) {
                                 e.printStackTrace()
                                 null
