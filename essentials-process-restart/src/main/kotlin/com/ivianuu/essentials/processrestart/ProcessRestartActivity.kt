@@ -19,6 +19,7 @@ package com.ivianuu.essentials.processrestart
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 
 class ProcessRestartActivity : EsActivity() {
@@ -34,6 +35,7 @@ class ProcessRestartActivity : EsActivity() {
         Runtime.getRuntime().exit(0)
     }
 
+    @Composable
     override fun content() {
     }
 

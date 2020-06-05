@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
@@ -77,6 +78,7 @@ class ActivityResultActivity : EsActivity() {
         }
     }
 
+    @Composable
     override fun content() {
     }
 

@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
@@ -108,6 +109,7 @@ class UnlockScreenActivity : EsActivity() {
         }
     }
 
+    @Composable
     override fun content() {
     }
 
