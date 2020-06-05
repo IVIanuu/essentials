@@ -33,7 +33,6 @@ import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.contentColor
-import androidx.ui.foundation.drawBackground
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Arrangement
@@ -51,6 +50,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
+import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
@@ -172,21 +172,18 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
-            WithConstraints {
-                println("items size ${items.size}")
+        WithConstraints {
+            VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
                 items.chunked(4).forEach { rowItems ->
-                    println("row size ${rowItems.size}")
-
                     Row(
-                        modifier = Modifier.drawBackground(Color.Red),
                         horizontalArrangement = Arrangement.Center,
                         verticalGravity = Alignment.CenterVertically
                     ) {
                         rowItems.forEach { item ->
                             key(item) {
                                 Box(
-                                    modifier = Modifier.size(maxWidth / 4)
+                                    modifier = Modifier.size(maxWidth / 4),
+                                    gravity = ContentGravity.Center
                                 ) {
                                     when (item) {
                                         is ColorGridItem.Back -> ColorGridBackButton(
@@ -255,10 +252,7 @@ private fun ColorGridItem(
 }
 
 @Composable
-private fun ColorGridBackButton(
-    onClick: () -> Unit,
-    unused: Any? = null
-) {
+private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             icon = Icons.Default.ArrowBack,
@@ -276,7 +270,7 @@ private fun BaseColorGridItem(
         modifier = Modifier.squared(SquareFit.MatchWidth)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick, indication = RippleIndication(bounded = false)),
         children = children
     )
 }
