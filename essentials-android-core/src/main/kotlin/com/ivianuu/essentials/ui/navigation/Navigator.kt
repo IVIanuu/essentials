@@ -30,7 +30,6 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
-import com.ivianuu.essentials.ui.common.OverlayState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
@@ -51,16 +50,16 @@ fun InjectedNavigator(
     startRoute: Route,
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
-) {
-    val state = inject<NavigatorState>()
+): Navigator {
+    val navigator = inject<Navigator>()
 
-    state.handleBack = handleBack
-    state.popsLastRoute = popsLastRoute
-    if (!state.hasRoot) {
-        state.setRoot(startRoute)
+    navigator.handleBack = handleBack
+    navigator.popsLastRoute = popsLastRoute
+    if (!navigator.hasRoot) {
+        navigator.setRoot(startRoute)
     }
 
-    Navigator(state = state)
+    return navigator
 }
 
 @Composable
@@ -68,12 +67,12 @@ fun Navigator(
     startRoute: Route,
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
-) {
+): Navigator {
     val coroutineScope = compositionCoroutineScope()
     val dispatchers = inject<AppCoroutineDispatchers>()
     val logger = inject<Logger>()
-    val state = remember {
-        NavigatorState(
+    val navigator = remember {
+        Navigator(
             startRoute = startRoute,
             handleBack = handleBack,
             coroutineScope = coroutineScope,
@@ -82,40 +81,19 @@ fun Navigator(
         )
     }
 
-    state.handleBack = handleBack
-    state.popsLastRoute = popsLastRoute
+    navigator.handleBack = handleBack
+    navigator.popsLastRoute = popsLastRoute
 
-    Navigator(state = state)
-}
-
-@Composable
-fun Navigator(state: NavigatorState) {
-    state.defaultRouteTransition = DefaultRouteTransitionAmbient.current
-
-    val logger = inject<Logger>()
-
-    val enabled = state.handleBack &&
-            state.backStack.isNotEmpty() &&
-            (state.popsLastRoute || state.backStack.size > 1)
-    logger.d("back press enabled $enabled")
-    onBackPressed(enabled = enabled) {
-        logger.d("on back pressed ${state.runningTransitions}")
-        if (state.runningTransitions == 0) state.popTop()
-    }
-
-    onDispose { state.dispose() }
-
-    Providers(NavigatorAmbient provides state) {
-        Overlay(state = state.overlayState)
-    }
+    return navigator
 }
 
 // todo remove main thread requirement
+// todo main thread requirement comes from compose
 @Stable
-class NavigatorState(
+class Navigator(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
-    internal val overlayState: OverlayState = OverlayState(),
+    internal val overlay: Overlay = Overlay(),
     startRoute: Route? = null,
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false,
@@ -139,6 +117,28 @@ class NavigatorState(
     init {
         if (startRoute != null && !hasRoot) {
             setRoot(startRoute)
+        }
+    }
+
+    @Composable
+    fun content() {
+        defaultRouteTransition = DefaultRouteTransitionAmbient.current
+
+        val logger = inject<Logger>()
+
+        val enabled = handleBack &&
+                backStack.isNotEmpty() &&
+                (popsLastRoute || backStack.size > 1)
+        logger.d("back press enabled $enabled")
+        onBackPressed(enabled = enabled) {
+            logger.d("on back pressed ${runningTransitions}")
+            if (runningTransitions == 0) popTop()
+        }
+
+        onDispose { dispose() }
+
+        Providers(NavigatorAmbient provides this) {
+            overlay.content()
         }
     }
 
@@ -349,7 +349,7 @@ class NavigatorState(
         to?.enter(from = from, isPush = isPush, transition = transition)
     }
 
-    internal fun dispose() {
+    private fun dispose() {
         _backStack.forEach { it.dispose() }
     }
 
@@ -404,7 +404,7 @@ class NavigatorState(
             if ((completedState == RouteTransition.State.ExitFromPush && !route.keepState) ||
                 completedState == RouteTransition.State.ExitFromPop
             ) {
-                overlayState.remove(overlayEntry)
+                overlay.remove(overlayEntry)
             }
         }
 
@@ -433,16 +433,16 @@ class NavigatorState(
 
             logger.d("$name enter -> from ${from?.name} is push $isPush trans $transition running trans $runningTransitions")
 
-            val fromIndex = overlayState.entries.indexOf(from?.overlayEntry)
+            val fromIndex = overlay.entries.indexOf(from?.overlayEntry)
             val toIndex = if (fromIndex != -1) {
                 if (isPush) fromIndex + 1 else fromIndex
-            } else overlayState.entries.size
+            } else overlay.entries.size
 
-            val oldToIndex = overlayState.entries.indexOf(overlayEntry)
+            val oldToIndex = overlay.entries.indexOf(overlayEntry)
             if (oldToIndex == -1) {
-                overlayState.add(toIndex, overlayEntry)
+                overlay.add(toIndex, overlayEntry)
             } else if (oldToIndex != toIndex) {
-                overlayState.move(oldToIndex, toIndex)
+                overlay.move(oldToIndex, toIndex)
             }
 
             lastTransitionState = transitionState
@@ -483,4 +483,4 @@ class NavigatorState(
 }
 
 val NavigatorAmbient =
-    staticAmbientOf<NavigatorState>()
+    staticAmbientOf<Navigator>()

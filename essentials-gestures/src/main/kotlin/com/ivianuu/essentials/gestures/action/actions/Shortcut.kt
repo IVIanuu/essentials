@@ -19,7 +19,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
@@ -71,7 +71,7 @@ internal class ShortcutActionPickerDelegate(
         Icon(vectorResource(R.drawable.es_ic_content_cut))
     }
 
-    override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
+    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(
             ShortcutPickerRoute()
         ) ?: return null
@@ -81,7 +81,11 @@ internal class ShortcutActionPickerDelegate(
         val stream = ByteArrayOutputStream()
         icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val iconBytes = stream.toByteArray()
-        val key = "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(iconBytes, 0)}"
+        val key =
+            "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(
+                iconBytes,
+                0
+            )}"
         return ActionPickerResult.Action(key)
     }
 }

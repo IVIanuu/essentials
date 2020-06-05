@@ -48,6 +48,7 @@ class SampleUi : AppUi {
             )
         ) {
             InjectedNavigator(startRoute = HomeRoute)
+                .content()
         }
     }
 }

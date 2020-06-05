@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.base
 
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Module
@@ -15,7 +15,7 @@ fun esActivityModule() {
     installIn<ActivityComponent>()
     scoped { coroutineScope: @ForActivity CoroutineScope,
              dispatchers: AppCoroutineDispatchers, logger: Logger ->
-        NavigatorState(
+        Navigator(
             coroutineScope = coroutineScope,
             dispatchers = dispatchers,
             logger = logger

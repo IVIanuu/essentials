@@ -20,7 +20,7 @@ import com.ivianuu.essentials.gestures.action.actionFactory
 import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.ApplicationComponent
@@ -89,7 +89,7 @@ internal class AppActionPickerDelegate(
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Apps) }
 
-    override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
+    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val app = navigator.push<AppInfo>(
             AppPickerRoute(appFilter = launchableAppFilter)
         ) ?: return null

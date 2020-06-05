@@ -16,16 +16,28 @@
 
 package com.ivianuu.essentials.ui.common
 
+import android.os.Bundle
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.core.AppUi
-import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.injekt.android.AndroidEntryPoint
+import com.ivianuu.injekt.inject
 
+@AndroidEntryPoint
 class DefaultActivity : EsActivity() {
+
+    private val appUi: AppUi? by inject()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkNotNull(appUi) {
+            "Cannot use DefaultActivity with a AppUi"
+        }
+    }
 
     @Composable
     override fun content() {
-        inject<AppUi>().runApp()
+        appUi!!.runApp()
     }
 
 }

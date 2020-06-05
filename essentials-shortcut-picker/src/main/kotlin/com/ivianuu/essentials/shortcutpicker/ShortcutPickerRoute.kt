@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel
 import com.ivianuu.essentials.util.Async
@@ -80,7 +80,7 @@ private fun ShortcutInfo(
 
 @Transient
 internal class ShortcutPickerViewModel(
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val packageManager: PackageManager
 ) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
     init {

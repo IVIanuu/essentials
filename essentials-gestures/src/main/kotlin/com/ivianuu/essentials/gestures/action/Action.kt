@@ -4,7 +4,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.set
@@ -51,7 +51,7 @@ fun <T : ActionFactory> actionFactory() {
 interface ActionPickerDelegate {
     val title: String
     val icon: @Composable () -> Unit
-    suspend fun getResult(navigator: NavigatorState): ActionPickerResult?
+    suspend fun getResult(navigator: Navigator): ActionPickerResult?
 }
 
 @Module

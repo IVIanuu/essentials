@@ -13,7 +13,7 @@ import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Uninitialized
@@ -27,7 +27,7 @@ internal class ActionPickerViewModel(
     @Assisted private val showNoneOption: Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val resourceProvider: ResourceProvider
 ) : MvRxViewModel<ActionPickerState>(ActionPickerState()) {
@@ -97,7 +97,7 @@ sealed class ActionPickerItem {
     @Immutable
     data class PickerDelegate(
         val delegate: ActionPickerDelegate,
-        val navigator: NavigatorState
+        val navigator: Navigator
     ) : ActionPickerItem() {
         override val title: String
             get() = delegate.title

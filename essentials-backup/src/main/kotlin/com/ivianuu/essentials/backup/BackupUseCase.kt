@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
@@ -24,7 +24,7 @@ class BackupUseCase(
     private val application: Application,
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val toaster: Toaster
 ) {
 

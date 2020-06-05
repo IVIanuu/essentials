@@ -14,7 +14,7 @@ import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
@@ -59,16 +59,16 @@ internal class KeycodeActionPickerDelegate(
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Keyboard) }
 
-    override suspend fun getResult(navigator: NavigatorState): ActionPickerResult? {
+    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val keycode =
             navigator.push<String>(
-            TextInputRoute(
-                title = resourceProvider.getString(R.string.es_keycode_picker_title),
-                hint = resourceProvider.getString(R.string.es_keycode_input_hint),
-                keyboardType = KeyboardType.Number,
-                allowEmpty = false
-            )
-        )?.toIntOrNull() ?: return null
+                TextInputRoute(
+                    title = resourceProvider.getString(R.string.es_keycode_picker_title),
+                    hint = resourceProvider.getString(R.string.es_keycode_input_hint),
+                    keyboardType = KeyboardType.Number,
+                    allowEmpty = false
+                )
+            )?.toIntOrNull() ?: return null
 
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX$keycode")
     }

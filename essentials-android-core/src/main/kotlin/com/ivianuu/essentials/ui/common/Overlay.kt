@@ -24,7 +24,6 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateOf
-import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Layout
@@ -35,36 +34,8 @@ import androidx.ui.core.tag
 import androidx.ui.layout.Stack
 import androidx.ui.unit.IntPxPosition
 
-@Composable
-fun Overlay(state: OverlayState = remember { OverlayState() }) {
-    Providers(OverlayAmbient provides state) {
-        OverlayLayout {
-            val visibleEntries = state.entries.filterVisible()
-            state.entries
-                .filter { it in visibleEntries || it.keepState }
-                .map {
-                    OverlayEntryTag(
-                        isVisible = it in visibleEntries,
-                        entry = it
-                    )
-                }
-                .forEach { tag ->
-                    key(tag.entry) {
-                        Stack(
-                            modifier = Modifier
-                                .tag(tag)
-                                .absorbPointer(absorb = !tag.isVisible)
-                        ) {
-                            tag.entry.content()
-                        }
-                    }
-                }
-        }
-    }
-}
-
 @Stable
-class OverlayState(initialEntries: List<OverlayEntry>? = null) {
+class Overlay(initialEntries: List<OverlayEntry>? = null) {
 
     private val _entries = modelListOf<OverlayEntry>()
     val entries: List<OverlayEntry>
@@ -98,6 +69,40 @@ class OverlayState(initialEntries: List<OverlayEntry>? = null) {
         _entries.clear()
         _entries += entries
     }
+
+    fun set(entries: List<OverlayEntry>) {
+        _entries.clear()
+        _entries += entries
+    }
+
+    @Composable
+    fun content() {
+        Providers(OverlayAmbient provides this) {
+            OverlayLayout {
+                val visibleEntries = entries.filterVisible()
+                entries
+                    .filter { it in visibleEntries || it.keepState }
+                    .map {
+                        OverlayEntryTag(
+                            isVisible = it in visibleEntries,
+                            entry = it
+                        )
+                    }
+                    .forEach { tag ->
+                        key(tag.entry) {
+                            Stack(
+                                modifier = Modifier
+                                    .tag(tag)
+                                    .absorbPointer(absorb = !tag.isVisible)
+                            ) {
+                                tag.entry.content()
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
 }
 
 class OverlayEntry(
@@ -109,7 +114,7 @@ class OverlayEntry(
     var keepState by mutableStateOf(keepState)
 }
 
-val OverlayAmbient = staticAmbientOf<OverlayState>()
+val OverlayAmbient = staticAmbientOf<Overlay>()
 
 @Composable
 private fun OverlayLayout(

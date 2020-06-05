@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Async
@@ -93,7 +93,7 @@ private fun AppInfo(
 internal class AppPickerViewModel(
     @Assisted private val appFilter: AppFilter,
     private val appStore: AppStore,
-    private val navigator: NavigatorState
+    private val navigator: Navigator
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {

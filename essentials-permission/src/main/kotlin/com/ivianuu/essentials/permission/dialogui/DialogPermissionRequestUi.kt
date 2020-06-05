@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.VerticalScrollerDialog
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
@@ -60,7 +60,7 @@ internal class DialogPermissionRequestUi : PermissionRequestUi {
         manager: PermissionManager,
         request: PermissionRequest
     ) {
-        activity.activityComponent.get<NavigatorState>()
+        activity.activityComponent.get<Navigator>()
             .push(PermissionRoute(request))
     }
 }

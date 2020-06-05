@@ -22,14 +22,13 @@ import android.os.Bundle
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 
 @AndroidEntryPoint
 class PermissionActivity : EsActivity() {
 
-    private val navigatorState: NavigatorState by inject()
+    private val navigator: Navigator by inject()
     private val manager: PermissionManager by inject()
     private val requestUi: PermissionRequestUi by inject()
     private lateinit var finalRequest: PermissionRequest
@@ -48,7 +47,10 @@ class PermissionActivity : EsActivity() {
             return
         }
 
-        if (savedInstanceState != null) return
+        if (savedInstanceState != null) {
+            finish()
+            return
+        }
 
         finalRequest = request.copy(
             onComplete = {
@@ -62,7 +64,7 @@ class PermissionActivity : EsActivity() {
 
     @Composable
     override fun content() {
-        Navigator(state = navigatorState)
+        navigator.content()
     }
 
     internal companion object {

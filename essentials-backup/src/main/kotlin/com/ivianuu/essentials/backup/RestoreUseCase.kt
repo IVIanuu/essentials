@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import com.ivianuu.essentials.activityresult.ActivityResult
 import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
@@ -20,7 +20,7 @@ import java.util.zip.ZipInputStream
 class RestoreUseCase(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: NavigatorState,
+    private val navigator: Navigator,
     private val processRestarter: ProcessRestarter,
     private val toaster: Toaster
 ) {
