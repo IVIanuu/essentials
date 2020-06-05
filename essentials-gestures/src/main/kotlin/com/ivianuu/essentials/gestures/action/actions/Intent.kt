@@ -12,7 +12,7 @@ import com.ivianuu.injekt.Transient
 
 @Transient
 internal class IntentActionExecutor(
-    @Assisted private val intent: Intent,
+    private val intent: @Assisted Intent,
     private val context: @ForApplication Context,
     private val toaster: Toaster
 ) : ActionExecutor {

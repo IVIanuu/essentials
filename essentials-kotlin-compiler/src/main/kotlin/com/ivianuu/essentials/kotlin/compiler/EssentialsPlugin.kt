@@ -28,9 +28,5 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         project: MockProject,
         configuration: CompilerConfiguration
     ) {
-        ClassBuilderInterceptorExtension.registerExtension(
-            project,
-            SourceLocationClassBuilderInterceptorExtension()
-        )
     }
 }

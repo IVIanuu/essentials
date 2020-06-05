@@ -23,8 +23,8 @@ import kotlinx.coroutines.launch
 
 @Transient
 internal class ActionPickerViewModel(
-    @Assisted private val showDefaultOption: Boolean,
-    @Assisted private val showNoneOption: Boolean,
+    private val showDefaultOption: @Assisted Boolean,
+    private val showNoneOption: @Assisted Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
     private val navigator: Navigator,

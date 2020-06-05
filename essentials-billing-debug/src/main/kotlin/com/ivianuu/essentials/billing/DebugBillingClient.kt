@@ -54,7 +54,7 @@ import java.util.concurrent.ConcurrentHashMap
 class DebugBillingClient(
     private val context: @ForApplication Context,
     private val coroutineScope: @ForApplication CoroutineScope,
-    @Assisted private val purchasesUpdatedListener: PurchasesUpdatedListener,
+    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore
 ) : BillingClient() {
 

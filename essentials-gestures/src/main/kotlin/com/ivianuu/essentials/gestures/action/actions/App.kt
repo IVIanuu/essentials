@@ -40,7 +40,7 @@ private fun AppActionModule() {
 
 @Transient
 internal class AppActionExecutor(
-    @Assisted private val packageName: String,
+    private val packageName: @Assisted String,
     private val packageManager: PackageManager,
     private val delegateProvider: @Provider (Intent) -> IntentActionExecutor,
     private val toaster: Toaster
@@ -100,7 +100,7 @@ internal class AppActionPickerDelegate(
 @Transient
 internal class AppActionIconProvider(
     private val delegateProvider: @Provider (Any) -> CoilActionIconProvider,
-    @Assisted private val packageName: String
+    private val packageName: @Assisted String
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = delegateProvider(AppIcon(packageName)).icon

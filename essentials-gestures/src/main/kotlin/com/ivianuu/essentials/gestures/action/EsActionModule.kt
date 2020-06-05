@@ -9,7 +9,7 @@ import com.ivianuu.injekt.set
 @Module
 fun esActionModule() {
     installIn<ApplicationComponent>()
-    map<String, Action>()
+    set<Action>()
     set<ActionFactory>()
     set<ActionPickerDelegate>()
 }

@@ -26,8 +26,8 @@ import kotlinx.coroutines.delay
 
 @BindWorker
 class TestWorker(
-    @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters,
+    context: @Assisted Context,
+    workerParams: @Assisted WorkerParameters,
     private val logger: Logger
 ) : EsWorker(context, workerParams) {
 

@@ -91,7 +91,7 @@ private fun AppInfo(
 
 @Transient
 internal class AppPickerViewModel(
-    @Assisted private val appFilter: AppFilter,
+    private val appFilter: @Assisted AppFilter,
     private val appStore: AppStore,
     private val navigator: Navigator
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {

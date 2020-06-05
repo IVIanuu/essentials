@@ -112,10 +112,9 @@ private fun Permission(
 
 @Transient
 internal class PermissionDialogViewModel(
-    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
-    @Assisted private val request: PermissionRequest,
+    private val request: @Assisted PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers
 ) : ViewModel() {
 
