@@ -22,4 +22,5 @@ import com.ivianuu.injekt.ApplicationScoped
 @ApplicationScoped
 class TwilightPrefs(factory: PrefBoxFactory) {
     val twilightMode = factory.create("twilight_mode", TwilightMode.System)
+    val useBlack = factory.create("use_black", false)
 }

@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
+import androidx.compose.Immutable
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.app.BindAppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
@@ -31,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -50,7 +52,7 @@ class TwilightHelper(
     prefs: TwilightPrefs
 ) : AppService {
 
-    val isDark: Flow<Boolean> = prefs.twilightMode.data
+    val state: Flow<TwilightState> = prefs.twilightMode.data
         .flatMapLatest { mode ->
             when (mode) {
                 TwilightMode.System -> system()
@@ -60,11 +62,14 @@ class TwilightHelper(
                 TwilightMode.Time -> time()
             }
         }
+        .combine(prefs.useBlack.data) { isDark, useBlack ->
+            TwilightState(isDark, useBlack)
+        }
         .distinctUntilChanged()
-        .onEach { currentIsDark = it }
+        .onEach { currentState = it }
         .shareIn(scope = coroutineScope, cacheSize = 1, timeout = 1.seconds)
 
-    var currentIsDark = false
+    var currentState = TwilightState(isDark = false, useBlack = false)
         private set
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
@@ -88,10 +93,6 @@ class TwilightHelper(
             hour < 6 || hour >= 22
         }
 
-    init {
-        print("")
-    }
-
     private fun configChanges() = callbackFlow<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
@@ -108,3 +109,9 @@ class TwilightHelper(
         awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 }
+
+@Immutable
+data class TwilightState(
+    val isDark: Boolean,
+    val useBlack: Boolean
+)

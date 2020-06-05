@@ -26,6 +26,8 @@ import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.prefs.CheckboxPreference
+import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
 
 val TwilightSettingsRoute = Route {
     ScrollableScreen(title = stringResource(R.string.es_twilight_title)) {
@@ -38,6 +40,13 @@ val TwilightSettingsRoute = Route {
                 onClick = { twilightMode = mode }
             )
         }
+
+        PreferenceSubheader { Text(R.string.es_twilight_pref_category_more) }
+
+        CheckboxPreference(
+            box = prefs.useBlack,
+            title = { Text(R.string.es_twilight_use_black) }
+        )
     }
 }
 
