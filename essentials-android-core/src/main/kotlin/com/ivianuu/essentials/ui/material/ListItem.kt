@@ -85,7 +85,8 @@ fun ListItem(
             .drawBackground(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
             .clickable(enabled = enabled, onClick = onClick ?: {}, onLongClick = onLongClick)
             .plus(style.modifier)
-            .plus(modifier)
+            .plus(modifier),
+        gravity = Alignment.CenterStart
     ) {
         Row(verticalGravity = Alignment.CenterVertically) {
             // leading
@@ -98,7 +99,8 @@ fun ListItem(
                     Box(
                         paddingStart = style.contentPadding.start,
                         paddingTop = style.contentPadding.top,
-                        paddingBottom = style.contentPadding.bottom
+                        paddingBottom = style.contentPadding.bottom,
+                        gravity = ContentGravity.Center
                     ) {
                         ProvideEmphasis(
                             emphasis = EmphasisAmbient.current.high,
@@ -112,7 +114,8 @@ fun ListItem(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = HorizontalTextPadding)
+                    .padding(horizontal = HorizontalTextPadding),
+                gravity = ContentGravity.CenterStart
             ) {
                 Column(
                     modifier = Modifier
@@ -151,7 +154,8 @@ fun ListItem(
                     Box(
                         paddingTop = style.contentPadding.top,
                         paddingEnd = style.contentPadding.end,
-                        paddingBottom = style.contentPadding.bottom
+                        paddingBottom = style.contentPadding.bottom,
+                        gravity = ContentGravity.Center
                     ) {
                         ProvideEmphasis(
                             emphasis = EmphasisAmbient.current.high,

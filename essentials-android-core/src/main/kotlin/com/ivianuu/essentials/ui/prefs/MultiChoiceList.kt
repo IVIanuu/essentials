@@ -28,14 +28,14 @@ import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 
 @Composable
-inline fun <T> MultiChoiceListPreference(
+fun <T> MultiChoiceListPreference(
     box: Box<Set<T>>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline dialogTitle: @Composable (() -> Unit)? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceListPreference.Item<T>>
 ) {
     key(box) {

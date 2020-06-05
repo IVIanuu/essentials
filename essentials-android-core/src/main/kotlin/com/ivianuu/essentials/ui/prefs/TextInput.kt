@@ -28,14 +28,14 @@ import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 
 @Composable
-inline fun TextInputPreference(
+fun TextInputPreference(
     box: Box<String>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline dialogTitle: @Composable (() -> Unit)? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true

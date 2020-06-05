@@ -25,12 +25,12 @@ import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 
 @Composable
-inline fun RadioButtonPreference(
+fun RadioButtonPreference(
     box: Box<Boolean>,
     enabled: Boolean = true,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
     dependencies: List<Dependency<*>>? = null,
 ) {
     key(box) {

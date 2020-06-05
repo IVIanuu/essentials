@@ -26,14 +26,14 @@ import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 
 @Composable
-inline fun <T> SingleChoiceListPreference(
+fun <T> SingleChoiceListPreference(
     box: Box<T>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline dialogTitle: @Composable (() -> Unit)? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     items: List<SingleChoiceListPreference.Item<T>>
 ) {
     key(box) {

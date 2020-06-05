@@ -30,14 +30,14 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
-inline fun ColorPreference(
+fun ColorPreference(
     box: Box<Color>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline dialogTitle: @Composable (() -> Unit)? = title,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     showAlphaSelector: Boolean = true,
     allowCustomArgb: Boolean = true

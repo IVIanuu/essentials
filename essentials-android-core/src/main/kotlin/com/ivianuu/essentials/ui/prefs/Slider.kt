@@ -44,14 +44,14 @@ import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
 
 @Composable
-inline fun DoubleSliderPreference(
+fun DoubleSliderPreference(
     box: Box<Double>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Double) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Double) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
     steps: Int = 0
 ) {
@@ -98,14 +98,14 @@ fun DoubleSliderPreference(
 }
 
 @Composable
-inline fun FloatSliderPreference(
+fun FloatSliderPreference(
     box: Box<Float>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Float) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Float) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     steps: Int = 0
 ) {
@@ -152,14 +152,14 @@ fun FloatSliderPreference(
 }
 
 @Composable
-inline fun IntSliderPreference(
+fun IntSliderPreference(
     box: Box<Int>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Int) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
     steps: Int = 0
 ) {
@@ -206,14 +206,14 @@ fun IntSliderPreference(
 }
 
 @Composable
-inline fun LongSliderPreference(
+fun LongSliderPreference(
     box: Box<Long>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Long) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
     steps: Int = 0
 ) {
@@ -260,14 +260,14 @@ fun LongSliderPreference(
 }
 
 @Composable
-inline fun DpSliderPreference(
+fun DpSliderPreference(
     box: Box<Dp>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Dp) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
     steps: Int = 0
 ) {
@@ -314,14 +314,14 @@ fun DpSliderPreference(
 }
 
 @Composable
-inline fun DurationSliderPreference(
+fun DurationSliderPreference(
     box: Box<Duration>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    noinline title: @Composable (() -> Unit)? = null,
-    noinline summary: @Composable (() -> Unit)? = null,
-    noinline leading: @Composable (() -> Unit)? = null,
-    noinline valueText: @Composable ((Duration) -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
     steps: Int = 0
 ) {
