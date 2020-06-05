@@ -20,13 +20,13 @@ internal fun <T : Action> bindAccessibilityAction(
     icon: @Composable () -> Unit
 ) {
     action { resourceProvider: ResourceProvider,
-                actionPermissions: ActionPermissions,
-                accessibilityActionExecutorProvider: @Provider (Int) -> AccessibilityActionExecutor ->
+             permissions: ActionPermissions,
+             accessibilityActionExecutorProvider: @Provider (Int) -> AccessibilityActionExecutor ->
         Action(
             key = key,
             title = resourceProvider.getString(titleRes),
             iconProvider = SingleActionIconProvider(icon),
-            permissions = listOf(actionPermissions.accessibility),
+            permissions = listOf(permissions.accessibility),
             executor = accessibilityActionExecutorProvider(accessibilityAction)
         ) as T
     }
