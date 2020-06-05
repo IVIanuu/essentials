@@ -48,7 +48,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
+import com.ivianuu.essentials.ui.navigation.NoOpRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -56,7 +56,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
 
-val HomeRoute = Route(transition = DefaultRouteTransition) {
+val HomeRoute = Route(transition = NoOpRouteTransition) {
     Scaffold(
         topAppBar = {
             TopAppBar(

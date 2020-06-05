@@ -5,10 +5,7 @@ import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.layout.offsetFraction
-import com.ivianuu.essentials.ui.navigation.ModifierRouteTransitionType
 import com.ivianuu.essentials.ui.navigation.RouteTransition
-import com.ivianuu.essentials.ui.navigation.opsOf
-import com.ivianuu.essentials.ui.navigation.with
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -18,12 +15,8 @@ fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransi
             verticalRouteTransitionDefinition(duration)
         }
     },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            ModifierRouteTransitionType.Modifier with Modifier.offsetFraction(
-                y = transitionState[VerticalOffset]
-            )
-        )
+    createModifier = { transitionState, _ ->
+        Modifier.offsetFraction(y = transitionState[VerticalOffset])
     }
 )
 

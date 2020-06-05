@@ -64,7 +64,7 @@ fun InjectedNavigator(
 
 @Composable
 fun Navigator(
-    startRoute: Route,
+    startRoute: Route? = null,
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
 ): Navigator {
@@ -73,16 +73,18 @@ fun Navigator(
     val logger = inject<Logger>()
     val navigator = remember {
         Navigator(
-            startRoute = startRoute,
-            handleBack = handleBack,
             coroutineScope = coroutineScope,
             dispatchers = dispatchers,
             logger = logger
         )
     }
 
-    navigator.handleBack = handleBack
-    navigator.popsLastRoute = popsLastRoute
+    if (navigator.handleBack != handleBack) navigator.handleBack = handleBack
+    if (navigator.popsLastRoute != popsLastRoute) navigator.popsLastRoute = popsLastRoute
+
+    if (startRoute != null && !navigator.hasRoot) {
+        navigator.setRoot(startRoute)
+    }
 
     return navigator
 }
@@ -93,17 +95,15 @@ fun Navigator(
 class Navigator(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
-    internal val overlay: Overlay = Overlay(),
-    startRoute: Route? = null,
-    handleBack: Boolean = true,
-    popsLastRoute: Boolean = false,
     private val logger: Logger
 ) {
 
-    var handleBack by mutableStateOf(handleBack)
-    var popsLastRoute by mutableStateOf(popsLastRoute)
+    private val overlay: Overlay = Overlay()
 
-    internal var runningTransitions by mutableStateOf(0)
+    var handleBack by mutableStateOf(true)
+    var popsLastRoute by mutableStateOf(false)
+
+    private var runningTransitions by mutableStateOf(0)
 
     private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
@@ -111,14 +111,7 @@ class Navigator(
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
-    var routeTransitionTypes by mutableStateOf(listOf(ModifierRouteTransitionType))
-    internal var defaultRouteTransition by mutableStateOf(DefaultRouteTransition)
-
-    init {
-        if (startRoute != null && !hasRoot) {
-            setRoot(startRoute)
-        }
-    }
+    private var defaultRouteTransition by mutableStateOf(NoOpRouteTransition)
 
     @Composable
     fun content() {
@@ -383,7 +376,6 @@ class Navigator(
                             state = transitionState,
                             lastState = lastTransitionState,
                             onTransitionComplete = onTransitionComplete,
-                            types = routeTransitionTypes,
                             children = route.content
                         )
                     }
