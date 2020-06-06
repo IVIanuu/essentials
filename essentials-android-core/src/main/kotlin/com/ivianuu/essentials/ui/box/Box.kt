@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.box
 
 import androidx.compose.Composable
 import androidx.compose.MutableState
+import androidx.compose.key
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
@@ -25,9 +26,9 @@ import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun <T> Box<T>.asState(): MutableState<T> {
+fun <T> Box<T>.asState(): MutableState<T> = key(this) {
     val coroutineScope = compositionCoroutineScope()
-    return remember(this) {
+    remember {
         ObservableState(mutableStateOf(defaultData)) { newData ->
             coroutineScope.launch {
                 updateData { newData }
