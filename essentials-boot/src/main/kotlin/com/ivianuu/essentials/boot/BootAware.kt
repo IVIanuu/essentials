@@ -20,6 +20,7 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.composition.BindingEffect
 import com.ivianuu.injekt.composition.BindingEffectFunction
+import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
 import kotlin.reflect.KClass
 
@@ -33,7 +34,7 @@ annotation class BindBootAware
 
 @BindingEffectFunction(BindBootAware::class)
 @Module
-inline fun <reified T : BootAware> bindBootAwareIntoMap() {
+inline fun <reified T : BootAware> bindBootAware() {
     map<KClass<out BootAware>, BootAware> {
         put<T>(T::class)
     }
@@ -41,5 +42,6 @@ inline fun <reified T : BootAware> bindBootAwareIntoMap() {
 
 @Module
 fun esBootModule() {
+    installIn<ApplicationComponent>()
     map<KClass<out BootAware>, BootAware>()
 }
