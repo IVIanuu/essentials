@@ -68,7 +68,7 @@ val TextInputRoute = Route {
                                     text = "Search..",
                                     textStyle = MaterialTheme.typography.subtitle1,
                                     modifier = Modifier.drawOpacity(0.5f)
-                                        .gravity(Alignment.CenterStart)
+                                        .gravity(Alignment.CenterStart) + focusModifier
                                 )
                             }
                             TextField(
