@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 class SecureScreenDetector(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger
-) : AccessibilityComponent(dispatchers.computation) {
+) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(

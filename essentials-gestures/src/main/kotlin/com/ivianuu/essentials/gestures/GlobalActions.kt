@@ -29,7 +29,7 @@ import com.ivianuu.injekt.ApplicationScoped
 @ApplicationScoped
 class GlobalActions(
     dispatchers: AppCoroutineDispatchers
-) : AccessibilityComponent(dispatchers.computation) {
+) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig()

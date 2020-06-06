@@ -44,7 +44,7 @@ class KeyboardVisibilityDetector(
     private val appCoroutineScope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val inputMethodManager: InputMethodManager
-) : AccessibilityComponent(dispatchers.computation) {
+) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(

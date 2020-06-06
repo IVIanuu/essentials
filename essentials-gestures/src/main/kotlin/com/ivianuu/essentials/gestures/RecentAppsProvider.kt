@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.map
 class RecentAppsProvider(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger
-) : AccessibilityComponent(dispatchers.computation) {
+) : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig(

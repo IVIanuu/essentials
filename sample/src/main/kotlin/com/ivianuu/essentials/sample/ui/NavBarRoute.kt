@@ -29,7 +29,7 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
-import com.ivianuu.essentials.hidenavbar.NavBarController
+import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
@@ -51,7 +51,7 @@ val NavBarRoute = Route {
                     verticalArrangement = Arrangement.Center,
                     horizontalGravity = Alignment.CenterHorizontally
                 ) {
-                    val navBarController = inject<NavBarController>()
+                    val navBarController = inject<NavBarManager>()
 
                     val coroutineScope = compositionCoroutineScope()
                     fun updateNavBarState(navBarHidden: Boolean) {

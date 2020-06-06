@@ -18,14 +18,13 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.ScrollableScreen
+import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
-import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
@@ -50,19 +49,16 @@ fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) = Route {
             onClick = navigateOnClick { SecureSettingsInstructionsRoute }
         )
 
-        val coroutineScope = compositionCoroutineScope()
         val secureSettingsHelper = inject<SecureSettingsHelper>()
         val toaster = inject<Toaster>()
         ListItem(
             title = { Text(R.string.es_pref_use_root) },
             subtitle = { Text(R.string.es_pref_use_root_summary) },
-            onClick = {
-                coroutineScope.launch {
-                    if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
-                        toaster.toast(R.string.es_secure_settings_permission_granted)
-                    } else {
-                        toaster.toast(R.string.es_secure_settings_no_root)
-                    }
+            onClick = launchOnClick {
+                if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                    toaster.toast(R.string.es_secure_settings_permission_granted)
+                } else {
+                    toaster.toast(R.string.es_secure_settings_no_root)
                 }
             }
         )

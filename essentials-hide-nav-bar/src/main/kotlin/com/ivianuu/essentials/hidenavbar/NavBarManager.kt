@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
  * Handles the state of the navigation bar
  */
 @ApplicationScoped
-class NavBarController internal constructor(
+class NavBarManager internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val coroutineScope: @ForApplication CoroutineScope,
