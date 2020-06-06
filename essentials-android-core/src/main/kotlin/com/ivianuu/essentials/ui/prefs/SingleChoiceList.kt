@@ -18,9 +18,10 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.key
+import androidx.ui.core.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -28,51 +29,47 @@ import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 @Composable
 fun <T> SingleChoiceListPreference(
     box: Box<T>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<SingleChoiceListPreference.Item<T>>
+    items: List<SingleChoiceListPreference.Item<T>>,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        SingleChoiceListPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            dependencies = dependencies,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dialogTitle = dialogTitle,
-            items = items
-        )
-    }
+    val state = box.asState()
+    SingleChoiceListPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
+        items = items
+    )
 }
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    valueController: ValueController<T>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
+    value: T,
+    onValueChange: (T) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<SingleChoiceListPreference.Item<T>>
+    items: List<SingleChoiceListPreference.Item<T>>,
+    modifier: Modifier = Modifier
 ) {
     DialogPreference(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies,
+        modifier = modifier,
         title = title?.let { { title() } },
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
-        dialog = { context, dismiss ->
+        dialog = { dismiss ->
             SingleChoiceListDialog(
                 items = items,
-                selectedItem = items.first { it.value == context.currentValue },
-                onSelect = { context.setIfOk(it.value) },
+                selectedItem = items.first { it.value == value },
+                onSelect = { onValueChange(it.value) },
                 itemCallback = { Text(it.title) },
                 title = dialogTitle,
                 negativeButton = {

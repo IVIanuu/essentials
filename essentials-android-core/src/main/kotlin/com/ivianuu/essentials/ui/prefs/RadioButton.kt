@@ -17,63 +17,54 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 
 @Composable
 fun RadioButtonPreference(
     box: Box<Boolean>,
-    enabled: Boolean = true,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        RadioButtonPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dependencies = dependencies
-        )
-    }
+    val state = box.asState()
+    RadioButtonPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading
+    )
 }
 
 @Composable
 fun RadioButtonPreference(
-    valueController: ValueController<Boolean>,
-    enabled: Boolean = true,
+    value: Boolean,
+    onValueChange: (Boolean) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null,
+    modifier: Modifier = Modifier
 ) {
-    PreferenceWrapper(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies
-    ) { context ->
-        PreferenceLayout(
-            title = title,
-            summary = summary,
-            leading = leading,
-            trailing = {
-                Box(modifier = Modifier.absorbPointer()) {
-                    RadioButton(
-                        selected = context.currentValue,
-                        onSelect = { context.setIfOk(!context.currentValue); Unit },
-                        enabled = context.shouldBeEnabled
-                    )
-                }
-            },
-            enabled = context.shouldBeEnabled,
-            onClick = { context.setIfOk(!context.currentValue); Unit }
-        )
-    }
+    BasePreference(
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        trailing = {
+            Box(modifier = Modifier.absorbPointer()) {
+                RadioButton(
+                    selected = value,
+                    onSelect = { onValueChange(!value); Unit }
+                )
+            }
+        },
+        onClick = { onValueChange(!value); Unit }
+    )
 }

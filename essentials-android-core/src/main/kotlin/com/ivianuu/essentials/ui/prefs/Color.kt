@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
@@ -25,6 +24,7 @@ import androidx.ui.layout.preferredSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Surface
@@ -32,66 +32,62 @@ import com.ivianuu.essentials.ui.material.Surface
 @Composable
 fun ColorPreference(
     box: Box<Color>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     showAlphaSelector: Boolean = true,
-    allowCustomArgb: Boolean = true
+    allowCustomArgb: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        ColorPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            dependencies = dependencies,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dialogTitle = dialogTitle,
-            colorPalettes = colorPalettes,
-            showAlphaSelector = showAlphaSelector,
-            allowCustomArgb = allowCustomArgb
-        )
-    }
+    val state = box.asState()
+    ColorPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
+        colorPalettes = colorPalettes,
+        showAlphaSelector = showAlphaSelector,
+        allowCustomArgb = allowCustomArgb
+    )
 }
 
 @Composable
 fun ColorPreference(
-    valueController: ValueController<Color>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
+    value: Color,
+    onValueChange: (Color) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     showAlphaSelector: Boolean = true,
-    allowCustomArgb: Boolean = true
+    allowCustomArgb: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     DialogPreference(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies,
-        title = title?.let { { title() } },
-        summary = summary?.let { { summary() } },
-        leading = leading?.let { { leading() } },
-        trailing = { context ->
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        trailing = {
             Surface(
                 modifier = Modifier.preferredSize(40.dp),
-                color = context.currentValue,
+                color = value,
                 border = Border(
                     size = 1.dp,
                     color = MaterialTheme.colors.onSurface
                 )
             ) {}
         },
-        dialog = { context, _ ->
+        dialog = {
             ColorPickerDialog(
-                initialColor = context.currentValue,
-                onColorSelected = { context.setIfOk(it) },
+                initialColor = value,
+                onColorSelected = onValueChange,
                 colorPalettes = colorPalettes,
                 showAlphaSelector = showAlphaSelector,
                 allowCustomArgb = allowCustomArgb,

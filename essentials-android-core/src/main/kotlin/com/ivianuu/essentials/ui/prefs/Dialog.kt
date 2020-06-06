@@ -17,37 +17,30 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
+import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
-fun <T> DialogPreference(
-    valueController: ValueController<T>,
-    enabled: Boolean = true,
-    title: @Composable ((PreferenceContext<T>) -> Unit)? = null,
-    summary: @Composable ((PreferenceContext<T>) -> Unit)? = null,
-    leading: @Composable ((PreferenceContext<T>) -> Unit)? = null,
-    trailing: @Composable ((PreferenceContext<T>) -> Unit)? = null,
-    dialog: @Composable (PreferenceContext<T>, () -> Unit) -> Unit,
-    dependencies: List<Dependency<*>>? = null,
+fun DialogPreference(
+    title: @Composable (() -> Unit)? = null,
+    summary: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
+    dialog: @Composable (dismiss: () -> Unit) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val navigator = NavigatorAmbient.current
-    PreferenceWrapper(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies
-    ) { context ->
-        PreferenceLayout(
-            title = title?.let { { title(context) } },
-            summary = summary?.let { { summary(context) } },
-            leading = leading?.let { { leading(context) } },
-            trailing = trailing?.let { { trailing(context) } },
-            enabled = context.shouldBeEnabled,
-            onClick = {
-                navigator.push(DialogRoute {
-                    dialog(context) { navigator.popTop() }
-                })
-            }
-        )
-    }
+    BasePreference(
+        modifier = modifier,
+        title = title?.let { { title() } },
+        summary = summary?.let { { summary() } },
+        leading = leading?.let { { leading() } },
+        trailing = trailing?.let { { trailing() } },
+        onClick = {
+            navigator.push(DialogRoute {
+                dialog { navigator.popTop() }
+            })
+        }
+    )
 }

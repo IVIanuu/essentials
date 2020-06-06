@@ -20,22 +20,23 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Switch
 
 @Composable
 fun SwitchPreference(
     box: Box<Boolean>,
-    enabled: Boolean = true,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null,
+    modifier: Modifier = Modifier
 ) {
+    val state = box.asState()
     SwitchPreference(
-        valueController = ValueController(box),
-        enabled = enabled,
-        dependencies = dependencies,
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
         title = title,
         summary = summary,
         leading = leading
@@ -44,33 +45,26 @@ fun SwitchPreference(
 
 @Composable
 fun SwitchPreference(
-    valueController: ValueController<Boolean>,
-    enabled: Boolean = true,
+    value: Boolean,
+    onValueChange: (Boolean) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null
+    modifier: Modifier = Modifier
 ) {
-    PreferenceWrapper(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies
-    ) { context ->
-        PreferenceLayout(
-            title = title,
-            summary = summary,
-            leading = leading,
-            trailing = {
-                Box(modifier = Modifier.absorbPointer()) {
-                    Switch(
-                        checked = context.currentValue,
-                        enabled = context.shouldBeEnabled,
-                        onCheckedChange = { context.setIfOk(!context.currentValue); Unit }
-                    )
-                }
-            },
-            enabled = context.shouldBeEnabled,
-            onClick = { context.setIfOk(!context.currentValue); Unit }
-        )
-    }
+    BasePreference(
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        trailing = {
+            Box(modifier = Modifier.absorbPointer()) {
+                Switch(
+                    checked = value,
+                    onCheckedChange = { onValueChange(!value); Unit }
+                )
+            }
+        },
+        onClick = { onValueChange(!value); Unit }
+    )
 }

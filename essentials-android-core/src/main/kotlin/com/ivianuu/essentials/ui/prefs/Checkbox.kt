@@ -17,61 +17,52 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.key
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
 
 @Composable
 fun CheckboxPreference(
     box: Box<Boolean>,
-    enabled: Boolean = true,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        CheckboxPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dependencies = dependencies
-        )
-    }
+    val state = box.asState()
+    CheckboxPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading
+    )
 }
 
 @Composable
 fun CheckboxPreference(
-    valueController: ValueController<Boolean>,
-    enabled: Boolean = true,
+    value: Boolean,
+    onValueChange: (Boolean) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dependencies: List<Dependency<*>>? = null
+    modifier: Modifier = Modifier
 ) {
-    PreferenceWrapper(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies
-    ) { context ->
-        PreferenceLayout(
-            title = title,
-            summary = summary,
-            leading = leading,
-            trailing = {
-                Checkbox(
-                    checked = context.currentValue,
-                    onCheckedChange = { context.setIfOk(!context.currentValue); Unit },
-                    enabled = context.shouldBeEnabled,
-                    modifier = Modifier.absorbPointer()
-                )
-            },
-            enabled = context.shouldBeEnabled,
-            onClick = { context.setIfOk(!context.currentValue); Unit }
-        )
-    }
+    BasePreference(
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        trailing = {
+            Checkbox(
+                checked = value,
+                onCheckedChange = { onValueChange(!value); Unit },
+                modifier = Modifier.absorbPointer()
+            )
+        },
+        onClick = { onValueChange(!value); Unit }
+    )
 }

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.android.duration
@@ -23,6 +24,7 @@ import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.prefs.CheckboxPreference
@@ -32,11 +34,11 @@ import com.ivianuu.essentials.ui.prefs.Dependency
 import com.ivianuu.essentials.ui.prefs.DurationSliderPreference
 import com.ivianuu.essentials.ui.prefs.IntSliderPreference
 import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
-import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
 import com.ivianuu.essentials.ui.prefs.RadioButtonPreference
 import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.prefs.TextInputPreference
+import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import kotlin.time.hours
 import kotlin.time.minutes
 
@@ -52,34 +54,32 @@ val PrefsRoute = Route {
                     title = { Text("Switch") }
                 )
 
-                val dependencies = listOf(
+                val dependenciesModifier = Modifier.preferenceDependencies(
                     Dependency(
                         box = boxFactory.create("switch", false),
                         value = true
                     )
                 )
 
-                PreferenceSubheader(dependencies = dependencies) {
-                    Text("Category")
-                }
+                Subheader(modifier = dependenciesModifier) { Text("Category") }
 
                 CheckboxPreference(
                     box = boxFactory.create("checkbox", false),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Checkbox") },
                     summary = { Text("This is a checkbox preference") }
                 )
 
                 RadioButtonPreference(
                     box = boxFactory.create("radio_button", false),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Radio Button") },
                     summary = { Text("This is a radio button preference") }
                 )
 
                 IntSliderPreference(
                     box = boxFactory.create("slider", 50),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Slider") },
                     summary = { Text("This is a slider preference") },
                     steps = 10,
@@ -88,20 +88,20 @@ val PrefsRoute = Route {
 
                 DurationSliderPreference(
                     box = boxFactory.duration("slider_dur", 33.minutes),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Slider duration") },
                     summary = { Text("This is a slider preference") },
                     steps = 10,
                     valueRange = 1.minutes..1.hours
                 )
 
-                PreferenceSubheader(dependencies = dependencies) {
+                Subheader(modifier = dependenciesModifier) {
                     Text("Dialogs")
                 }
 
                 TextInputPreference(
                     box = boxFactory.create("text_input", ""),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Text input") },
                     summary = { Text("This is a text input preference") },
                     allowEmpty = false
@@ -109,14 +109,14 @@ val PrefsRoute = Route {
 
                 ColorPreference(
                     box = boxFactory.create("color", Color.Red),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Color") },
                     summary = { Text("This is a color preference") }
                 )
 
                 MultiChoiceListPreference(
                     box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Multi select list") },
                     summary = { Text("This is a multi select list preference") },
                     items = listOf(
@@ -128,7 +128,7 @@ val PrefsRoute = Route {
 
                 SingleChoiceListPreference(
                     box = boxFactory.create("single_item_list", "C"),
-                    dependencies = dependencies,
+                    modifier = dependenciesModifier,
                     title = { Text("Single item list") },
                     summary = { Text("This is a single item list preference") },
                     items = listOf(
@@ -142,7 +142,7 @@ val PrefsRoute = Route {
                     title = { Text("Clipboard") },
                     summary = { Text("This is a clipboard preference") },
                     clipboardText = { "cool clip" },
-                    dependencies = dependencies
+                    modifier = dependenciesModifier
                 )
             }
         }

@@ -16,36 +16,48 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import androidx.compose.Composable
+import androidx.compose.Immutable
+import androidx.compose.key
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.util.Toaster
+import androidx.ui.core.composed
+import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.ui.common.interactive
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
-fun ClipboardPreference(
-    clipboardText: () -> String,
+fun BasePreference(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    trailing: @Composable (() -> Unit)? = null
 ) {
-    val clipboardManager = inject<ClipboardManager>()
-    val toaster = inject<Toaster>()
-    SimplePreference(
+    ListItem(
         modifier = modifier,
+        onClick = onClick,
         title = title,
-        summary = summary,
+        subtitle = summary,
         leading = leading,
-        trailing = trailing,
-        onClick = {
-            clipboardManager.setPrimaryClip(
-                ClipData.newPlainText("", clipboardText())
-            )
-            toaster.toast(R.string.es_copied_to_clipboard)
-        }
+        trailing = trailing
     )
 }
+
+fun Modifier.preferenceDependencies(
+    vararg dependencies: Dependency<*>
+): Modifier = composed {
+    val dependenciesSatisfied = dependencies
+        .map {
+            key(it) {
+                it.box.asState().value == it.value
+            }
+        }
+        .all { it }
+
+    interactive(dependenciesSatisfied)
+}
+
+@Immutable
+data class Dependency<T>(val box: Box<T>, val value: T)

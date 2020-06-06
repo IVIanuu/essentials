@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.key
 import androidx.compose.stateFor
+import androidx.ui.core.Modifier
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
@@ -30,65 +31,61 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 @Composable
 fun TextInputPreference(
     box: Box<String>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
-    allowEmpty: Boolean = true
+    allowEmpty: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        TextInputPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            dependencies = dependencies,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dialogTitle = dialogTitle,
-            dialogHint = dialogHint,
-            dialogKeyboardType = dialogKeyboardType,
-            allowEmpty = allowEmpty
-        )
-    }
+    val state = box.asState()
+    TextInputPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
+        dialogHint = dialogHint,
+        dialogKeyboardType = dialogKeyboardType,
+        allowEmpty = allowEmpty
+    )
 }
 
 @Composable
 fun TextInputPreference(
-    valueController: ValueController<String>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
+    value: String,
+    onValueChange: (String) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
-    allowEmpty: Boolean = true
+    allowEmpty: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     DialogPreference(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies,
+        modifier = modifier,
         title = title?.let { { title() } },
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
-        dialog = { context, dismiss ->
-            val (currentValue, setCurrentValue) = stateFor(context.currentValue) { context.currentValue }
+        dialog = { dismiss ->
+            val currentValue = stateFor(value) { value }
 
             TextInputDialog(
-                value = currentValue,
-                onValueChange = setCurrentValue,
+                value = currentValue.value,
+                onValueChange = { currentValue.value = it },
                 title = dialogTitle,
                 hint = dialogHint,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     DialogButton(
-                        enabled = allowEmpty || currentValue.isNotEmpty(),
-                        onClick = { context.setIfOk(currentValue) }
+                        enabled = allowEmpty || currentValue.value.isNotEmpty(),
+                        onClick = { onValueChange(currentValue.value) }
                     ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {

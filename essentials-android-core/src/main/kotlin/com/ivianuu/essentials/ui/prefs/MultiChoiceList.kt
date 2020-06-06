@@ -18,10 +18,11 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.key
-import androidx.compose.stateFor
+import androidx.compose.state
+import androidx.ui.core.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
@@ -30,63 +31,59 @@ import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 @Composable
 fun <T> MultiChoiceListPreference(
     box: Box<Set<T>>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item<T>>
+    items: List<MultiChoiceListPreference.Item<T>>,
+    modifier: Modifier = Modifier
 ) {
-    key(box) {
-        MultiChoiceListPreference(
-            valueController = ValueController(box),
-            enabled = enabled,
-            dependencies = dependencies,
-            title = title,
-            summary = summary,
-            leading = leading,
-            dialogTitle = dialogTitle,
-            items = items
-        )
-    }
+    val state = box.asState()
+    MultiChoiceListPreference(
+        value = state.value,
+        onValueChange = { state.value = it },
+        modifier = modifier,
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialogTitle = dialogTitle,
+        items = items
+    )
 }
 
 @Composable
 fun <T> MultiChoiceListPreference(
-    valueController: ValueController<Set<T>>,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
+    value: Set<T>,
+    onValueChange: (Set<T>) -> Unit,
     title: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item<T>>
+    items: List<MultiChoiceListPreference.Item<T>>,
+    modifier: Modifier = Modifier
 ) {
     DialogPreference(
-        valueController = valueController,
-        enabled = enabled,
-        dependencies = dependencies,
+        modifier = modifier,
         title = title?.let { { title() } },
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
-        dialog = { context, dismiss ->
-            val (selectedItems, setSelectedItems) = stateFor(context.currentValue) {
-                context.currentValue
+        dialog = { dismiss ->
+            val selectedItems = state {
+                value
                     .map { value -> items.first { it.value == value } }
             }
 
             MultiChoiceListDialog(
                 items = items,
-                selectedItems = selectedItems,
-                onSelectionsChanged = setSelectedItems,
+                selectedItems = selectedItems.value,
+                onSelectionsChanged = { selectedItems.value = it },
                 itemCallback = { Text(it.title) },
                 title = dialogTitle,
                 positiveButton = {
                     DialogButton(
                         onClick = {
-                            val newValue = selectedItems.map { it.value }.toSet()
-                            context.setIfOk(newValue)
+                            val newValue = selectedItems.value.map { it.value }.toSet()
+                            onValueChange(newValue)
                         }
                     ) { Text(R.string.es_ok) }
                 },
