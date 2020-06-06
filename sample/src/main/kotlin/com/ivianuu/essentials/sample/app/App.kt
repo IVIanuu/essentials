@@ -17,13 +17,7 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.android.AndroidEntryPoint
-import com.ivianuu.injekt.composition.initializeCompositions
+import com.ivianuu.injekt.android.CompositionAndroidApp
 
-@AndroidEntryPoint
-class App : EsApp() {
-    override fun onCreate() {
-        initializeCompositions()
-        super.onCreate()
-    }
-}
+@CompositionAndroidApp
+class App : EsApp()
