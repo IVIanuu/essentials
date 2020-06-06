@@ -17,50 +17,33 @@
 package com.ivianuu.essentials.ui.box
 
 import androidx.compose.Composable
-import androidx.compose.Stable
+import androidx.compose.MutableState
+import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.reflect.KProperty
 
 @Composable
-fun <T> boxState(box: Box<T>): BoxState<T> {
+fun <T> Box<T>.asState(): MutableState<T> {
     val coroutineScope = compositionCoroutineScope()
-    val wrapper = remember {
-        val setter: (T) -> Unit = { newValue ->
+    return remember(this) {
+        ObservableState(mutableStateOf(defaultData)) { newData ->
             coroutineScope.launch {
-                box.updateData { newValue }
+                updateData { newData }
             }
         }
-
-        BoxState(data = box.defaultData, setter = setter)
     }
-    wrapper.internalData = box.data.collectAsState(box.defaultData).value
-    return wrapper
 }
 
-@Stable
-class BoxState<T> internal constructor(
-    data: T,
-    private val setter: (T) -> Unit
-) {
-
-    internal var internalData = data
-
-    var data: T
-        get() = internalData
+private class ObservableState<T>(
+    val delegate: MutableState<T>,
+    val onWrite: (T) -> Unit
+) : MutableState<T> by delegate {
+    override var value: T
+        get() = delegate.value
         set(value) {
-            setter(value)
+            delegate.value = value
+            onWrite(value)
         }
-
-    operator fun component1(): T = data
-    operator fun component2(): (T) -> Unit = { data = it }
-
-    operator fun getValue(thisObj: Any?, property: KProperty<*>): T = data
-
-    operator fun setValue(thisObj: Any?, property: KProperty<*>, next: T) {
-        data = next
-    }
 }

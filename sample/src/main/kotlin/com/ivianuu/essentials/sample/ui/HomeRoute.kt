@@ -19,7 +19,9 @@ package com.ivianuu.essentials.sample.ui
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
+import androidx.compose.getValue
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
@@ -34,7 +36,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.box.boxState
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
@@ -81,7 +83,9 @@ val HomeRoute = Route(transition = NoOpRouteTransition) {
         },
         body = {
             Column {
-                var showBanner by boxState(inject<PrefBoxFactory>().create("show_banner", false))
+                var showBanner by inject<PrefBoxFactory>()
+                    .create("show_banner", false)
+                    .asState()
                 if (showBanner) {
                     Banner(
                         leading = { Icon(R.mipmap.ic_launcher) },

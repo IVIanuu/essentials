@@ -25,7 +25,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.boxState
+import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
@@ -33,14 +33,14 @@ fun <T> ValueController(
     box: Box<T>,
     onRequestValueChange: (T) -> Boolean = { true }
 ): ValueController<T> {
-    val wrapper = boxState(box)
+    val state = box.asState()
     return remember<ValueController<T>> {
         object : ValueController<T> {
             override val currentValue: T
-                get() = wrapper.data
+                get() = state.value
 
             override fun setValue(value: T) {
-                if (onRequestValueChange(value)) wrapper.data = value
+                if (onRequestValueChange(value)) state.value = value
             }
 
             override fun canSetValue(value: T): Boolean = onRequestValueChange.invoke(value)
