@@ -23,7 +23,6 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.replayShareIn
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +41,6 @@ import kotlin.time.seconds
 @ApplicationScoped
 class KeyboardVisibilityDetector(
     private val appCoroutineScope: @ForApplication CoroutineScope,
-    private val dispatchers: AppCoroutineDispatchers,
     private val inputMethodManager: InputMethodManager
 ) : AccessibilityComponent() {
 

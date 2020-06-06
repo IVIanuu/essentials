@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationScoped
 
 /**
@@ -27,9 +26,7 @@ import com.ivianuu.injekt.ApplicationScoped
  */
 @BindAccessibilityComponent
 @ApplicationScoped
-class GlobalActions(
-    dispatchers: AppCoroutineDispatchers
-) : AccessibilityComponent() {
+class GlobalActions : AccessibilityComponent() {
 
     override val config: AccessibilityConfig
         get() = AccessibilityConfig()

@@ -20,7 +20,6 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +28,6 @@ import kotlinx.coroutines.flow.StateFlow
 @BindAccessibilityComponent
 @ApplicationScoped
 class SecureScreenDetector(
-    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger
 ) : AccessibilityComponent() {
 
