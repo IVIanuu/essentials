@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
-abstract class AccessibilityComponen {
+abstract class AccessibilityComponent {
 
     abstract val config: AccessibilityConfig
 
