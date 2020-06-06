@@ -21,12 +21,13 @@ import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.ForApplication
 import io.fabric.sdk.android.Fabric
 
 @BindAppInitializer
 internal class AnalyticsAppInitializer(
     buildInfo: BuildInfo,
-    context: Context
+    context: @ForApplication Context
 ) : AppInitializer {
     init {
         if (!buildInfo.isDebug) {
