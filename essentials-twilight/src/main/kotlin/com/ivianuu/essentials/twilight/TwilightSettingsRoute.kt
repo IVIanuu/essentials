@@ -19,7 +19,7 @@ package com.ivianuu.essentials.twilight
 import androidx.compose.Composable
 import androidx.compose.key
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.box.boxState
 import com.ivianuu.essentials.ui.common.ScrollableScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
 val TwilightSettingsRoute = Route {
     ScrollableScreen(title = stringResource(R.string.es_twilight_title)) {
         val prefs = inject<TwilightPrefs>()
-        var twilightMode by unfoldBox(prefs.twilightMode)
+        var twilightMode by boxState(prefs.twilightMode)
         TwilightMode.values().toList().forEach { mode ->
             TwilightModeItem(
                 mode = mode,

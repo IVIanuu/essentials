@@ -20,6 +20,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 class PrefBoxFactory(
@@ -32,24 +33,24 @@ class PrefBoxFactory(
 
     inline fun <reified T> create(
         name: String,
-        defaultValue: T
+        defaultData: T
     ): Box<T> = create(
         name = name,
-        defaultValue = defaultValue,
+        defaultData = defaultData,
         serializer = MoshiSerializer(moshi.adapter(javaTypeOf<T>()))
     )
 
     fun <T> create(
         name: String,
-        defaultValue: T,
+        defaultData: T,
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
         var box = boxes[name]
         if (box == null) {
             box = DiskBox(
-                path = "$prefsPath/$name",
+                createFile = { File("$prefsPath/$name") },
                 serializer = serializer,
-                defaultValue = defaultValue,
+                defaultData = defaultData,
                 coroutineScope = coroutineScope
             )
             boxes[name] = box

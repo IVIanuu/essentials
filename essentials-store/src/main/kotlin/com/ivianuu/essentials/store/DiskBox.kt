@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
@@ -33,36 +32,35 @@ import java.io.IOException
 interface DiskBox<T> : Box<T> {
     interface Serializer<T> {
         fun deserialize(serialized: String): T
-        fun serialize(value: T): String
+        fun serialize(data: T): String
     }
 }
 
 fun <T> DiskBox(
-    path: String,
+    createFile: () -> File,
     serializer: DiskBox.Serializer<T>,
-    defaultValue: T,
+    defaultData: T,
     coroutineScope: CoroutineScope
-): DiskBox<T> =
-    DiskBoxImpl(
-        path = path,
-        defaultValue = defaultValue,
-        serializer = serializer,
-        coroutineScope = coroutineScope
-    )
+): DiskBox<T> = DiskBoxImpl(
+    createFile = createFile,
+    defaultData = defaultData,
+    serializer = serializer,
+    coroutineScope = coroutineScope
+)
 
 internal class DiskBoxImpl<T>(
-    private val path: String,
-    override val defaultValue: T,
+    createFile: () -> File,
+    override val defaultData: T,
     private val serializer: DiskBox.Serializer<T>,
     coroutineScope: CoroutineScope
 ) : DiskBox<T> {
 
     private val changeNotifier = EventFlow<Unit>()
-    private var cachedValue: Any? = this
-    private val cachedValueMutex = Mutex()
+    private var cachedData: Any? = this
+    private val cachedDataMutex = Mutex()
     private val writeLock = WriteLock()
 
-    private val file by lazy { File(path) }
+    private val file by lazy(createFile)
 
     override val data: Flow<T> = changeNotifier
         .map { get() }
@@ -73,14 +71,10 @@ internal class DiskBoxImpl<T>(
             cacheSize = 1
         )
 
-    init {
-        coroutineScope.launch { check(!file.isDirectory) }
-    }
-
-    override suspend fun updateData(transform: suspend (T) -> T) {
-        val currentValue = get()
-        val newValue = transform(currentValue)
-        if (newValue === currentValue) return
+    override suspend fun updateData(transform: suspend (T) -> T): T {
+        val currentData = get()
+        val newData = transform(currentData)
+        if (newData == currentData) return newData
 
         try {
             writeLock.beginWrite()
@@ -89,20 +83,18 @@ internal class DiskBoxImpl<T>(
                 file.parentFile?.mkdirs()
 
                 if (!file.createNewFile()) {
-                    throw IOException("Couldn't create $path")
+                    throw IOException("Couldn't create '$file'")
                 }
             }
 
             val serialized = try {
-                serializer.serialize(newValue)
+                serializer.serialize(newData)
             } catch (e: Exception) {
                 throw RuntimeException(
-                    "Couldn't serialize value '$newValue' for file $path",
+                    "Couldn't serialize data '$newData' for file '$file'",
                     e
                 )
             }
-
-            log { "$path -> set '$newValue serialized '$serialized'" }
 
             val tmpFile = File.createTempFile(
                 "new", "tmp", file.parentFile
@@ -112,24 +104,26 @@ internal class DiskBoxImpl<T>(
                     it.write(serialized)
                 }
                 if (!tmpFile.renameTo(file)) {
-                    throw IOException("Couldn't move tmp file to file $path")
+                    throw IOException("Couldn't move tmp file to file '$file'")
                 }
             } catch (e: Exception) {
-                throw IOException("Couldn't write to file $path '$serialized'", e)
+                throw IOException("Couldn't write to file '$file' '$serialized'", e)
             } finally {
                 tmpFile.delete()
             }
 
-            cachedValueMutex.withLock { cachedValue = newValue }
+            cachedDataMutex.withLock { cachedData = newData }
             changeNotifier.offer(Unit)
         } finally {
             writeLock.endWrite()
         }
+
+        return newData
     }
 
     private suspend fun get(): T {
         writeLock.awaitWrite()
-        val cached = cachedValueMutex.withLock { cachedValue }
+        val cached = cachedDataMutex.withLock { cachedData }
         if (cached != this) return cached as T
 
         return if (file.exists()) {
@@ -138,19 +132,18 @@ internal class DiskBoxImpl<T>(
                     it.readText()
                 }
             } catch (e: Exception) {
-                throw IOException("Couldn't read file at $path", e)
+                throw IOException("Couldn't read file at '$file'", e)
             }
 
             try {
                 val deserialized = serializer.deserialize(serialized)
-                log { "$path -> fetch '$serialized' deserialized '$deserialized'" }
-                cachedValueMutex.withLock { cachedValue = deserialized }
+                cachedDataMutex.withLock { cachedData = deserialized }
                 deserialized
             } catch (e: Exception) {
-                throw RuntimeException("Couldn't deserialize '$serialized' for file $path", e)
+                throw RuntimeException("Couldn't deserialize '$serialized' for file '$file'", e)
             }
         } else {
-            defaultValue
+            defaultData
         }
     }
 }

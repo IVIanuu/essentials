@@ -42,14 +42,14 @@ interface SettingBox<T> : Box<T> {
 
         fun get(
             name: String,
-            defaultValue: T,
+            defaultData: T,
             contentResolver: ContentResolver,
             type: Type
         ): T
 
         fun set(
             name: String,
-            value: T,
+            data: T,
             contentResolver: ContentResolver,
             type: Type
         )
@@ -61,7 +61,7 @@ private val MainHandler = Handler()
 class SettingBoxImpl<T>(
     private val type: SettingBox.Type,
     val name: String,
-    override val defaultValue: T,
+    override val defaultData: T,
     private val adapter: SettingBox.Adapter<T>,
     private val contentResolver: ContentResolver,
     private val coroutineScope: CoroutineScope
@@ -92,19 +92,25 @@ class SettingBoxImpl<T>(
         .distinctUntilChanged()
         .shareIn(scope = coroutineScope, cacheSize = 1)
 
-    override suspend fun updateData(transform: suspend (T) -> T) {
-        try {
-            adapter.set(name, transform(get()), contentResolver, type)
+    override suspend fun updateData(transform: suspend (T) -> T): T {
+        return try {
+            val currentData = get()
+            val newData = transform(currentData)
+            if (currentData == newData) currentData
+            else {
+                adapter.set(name, newData, contentResolver, type)
+                newData
+            }
         } catch (e: Exception) {
-            throw RuntimeException("couldn't write value for name: $name", e)
+            throw RuntimeException("couldn't write data for name: $name", e)
         }
     }
 
     private fun get(): T {
         return try {
-            adapter.get(name, defaultValue, contentResolver, type)
+            adapter.get(name, defaultData, contentResolver, type)
         } catch (e: Exception) {
-            throw RuntimeException("couldn't read value for name: $name", e)
+            throw RuntimeException("couldn't read data for name: $name", e)
         }
     }
 }

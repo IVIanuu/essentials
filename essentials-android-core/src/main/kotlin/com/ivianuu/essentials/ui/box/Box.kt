@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
 @Composable
-fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
+fun <T> boxState(box: Box<T>): BoxState<T> {
     val coroutineScope = compositionCoroutineScope()
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->
@@ -35,32 +35,32 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> {
             }
         }
 
-        return@remember BoxWrapper(value = box.defaultValue, setter = setter)
+        BoxState(data = box.defaultData, setter = setter)
     }
-    wrapper.internalValue = box.data.collectAsState(box.defaultValue).value
+    wrapper.internalData = box.data.collectAsState(box.defaultData).value
     return wrapper
 }
 
 @Stable
-class BoxWrapper<T> internal constructor(
-    value: T,
+class BoxState<T> internal constructor(
+    data: T,
     private val setter: (T) -> Unit
 ) {
 
-    internal var internalValue = value
+    internal var internalData = data
 
-    var value: T
-        get() = internalValue
+    var data: T
+        get() = internalData
         set(value) {
             setter(value)
         }
 
-    operator fun component1(): T = value
-    operator fun component2(): (T) -> Unit = { value = it }
+    operator fun component1(): T = data
+    operator fun component2(): (T) -> Unit = { data = it }
 
-    operator fun getValue(thisObj: Any?, property: KProperty<*>): T = value
+    operator fun getValue(thisObj: Any?, property: KProperty<*>): T = data
 
     operator fun setValue(thisObj: Any?, property: KProperty<*>, next: T) {
-        value = next
+        data = next
     }
 }

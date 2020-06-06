@@ -22,7 +22,6 @@ import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
-import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
@@ -124,11 +123,9 @@ class Navigator(
                 (popsLastRoute || backStack.size > 1)
         logger.d("back press enabled $enabled")
         onBackPressed(enabled = enabled) {
-            logger.d("on back pressed ${runningTransitions}")
+            logger.d("on back pressed $runningTransitions")
             if (runningTransitions == 0) popTop()
         }
-
-        onDispose { dispose() }
 
         Providers(NavigatorAmbient provides this) {
             overlay.content()

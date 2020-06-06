@@ -9,9 +9,9 @@ import kotlin.time.Duration
 
 fun PrefBoxFactory.duration(
     name: String,
-    defaultValue: Duration
+    defaultData: Duration
 ): Box<Duration> {
-    return create(name = name, defaultValue = defaultValue.toDouble())
+    return create(name = name, defaultData = defaultData.toDouble())
         .map(
             fromRaw = { it.toDuration() },
             toRaw = { it.toDouble() }

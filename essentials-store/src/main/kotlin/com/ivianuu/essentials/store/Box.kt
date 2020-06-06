@@ -20,24 +20,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 /**
- * A lightweight reactive persistence model which is thread safe
+ * A lightweight reactive thread safe persistence model
  */
 interface Box<T> {
     /**
-     * The default value
+     * The default data
      */
-    val defaultValue: T
+    val defaultData: T
 
     /**
-     * A flow which always emits the current value
+     * A flow which always emits the current data
      */
     val data: Flow<T>
 
     /**
      * Updates the data with the result of the [transform] block
-     * The f
+     * And returns the result of [transform]
      */
-    suspend fun updateData(transform: suspend (T) -> T)
+    suspend fun updateData(transform: suspend (T) -> T): T
 }
 
 /**

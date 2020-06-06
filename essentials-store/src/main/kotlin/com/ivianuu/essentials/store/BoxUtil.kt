@@ -25,16 +25,15 @@ fun <T, S> Box<T>.map(
 ): Box<S> {
     val wrapped = this
     return object : Box<S> {
-        override val defaultValue: S
-            get() = fromRaw(wrapped.defaultValue)
+        override val defaultData: S
+            get() = fromRaw(wrapped.defaultData)
         override val data: Flow<S>
             get() = wrapped.data
                 .map { fromRaw(it) }
 
-        override suspend fun updateData(transform: suspend (S) -> S) {
-            wrapped.updateData { toRaw(transform(fromRaw(it))) }
-        }
+        override suspend fun updateData(transform: suspend (S) -> S): S =
+            fromRaw(wrapped.updateData { toRaw(transform(fromRaw(it))) })
     }
 }
 
-suspend fun <T> Box<T>.setDefaultData() = updateData { defaultValue }
+suspend fun <T> Box<T>.resetData() = updateData { defaultData }

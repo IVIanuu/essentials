@@ -29,13 +29,13 @@ class SettingsBoxFactory(
     fun <T> create(
         name: String,
         type: SettingBox.Type,
-        defaultValue: T,
+        defaultData: T,
         adapter: SettingBox.Adapter<T>
     ): SettingBox<T> =
         SettingBoxImpl(
             type = type,
             name = name,
-            defaultValue = defaultValue,
+            defaultData = defaultData,
             adapter = adapter,
             contentResolver = context.contentResolver,
             coroutineScope = coroutineScope
@@ -45,43 +45,43 @@ class SettingsBoxFactory(
 fun SettingsBoxFactory.float(
     name: String,
     type: SettingBox.Type,
-    defaultValue: Float = 0f
-) = create(name = name, type = type, defaultValue = defaultValue, adapter = FloatAdapter)
+    defaultData: Float = 0f
+) = create(name = name, type = type, defaultData = defaultData, adapter = FloatAdapter)
 
 private object FloatAdapter :
     SettingBox.Adapter<Float> {
 
     override fun get(
         name: String,
-        defaultValue: Float,
+        defaultData: Float,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ): Float =
         when (type) {
             SettingBox.Type.Global -> Settings.Global.getFloat(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
             SettingBox.Type.Secure -> Settings.Secure.getFloat(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
             SettingBox.Type.System -> Settings.System.getFloat(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
         }
 
     override fun set(
         name: String,
-        value: Float,
+        data: Float,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ) {
         when (type) {
-            SettingBox.Type.Global -> Settings.Global.putFloat(contentResolver, name, value)
-            SettingBox.Type.Secure -> Settings.Secure.putFloat(contentResolver, name, value)
-            SettingBox.Type.System -> Settings.System.putFloat(contentResolver, name, value)
+            SettingBox.Type.Global -> Settings.Global.putFloat(contentResolver, name, data)
+            SettingBox.Type.Secure -> Settings.Secure.putFloat(contentResolver, name, data)
+            SettingBox.Type.System -> Settings.System.putFloat(contentResolver, name, data)
         }
     }
 }
@@ -89,43 +89,43 @@ private object FloatAdapter :
 fun SettingsBoxFactory.int(
     name: String,
     type: SettingBox.Type,
-    defaultValue: Int = 0
-) = create(name = name, type = type, defaultValue = defaultValue, adapter = IntAdapter)
+    defaultData: Int = 0
+) = create(name = name, type = type, defaultData = defaultData, adapter = IntAdapter)
 
 private object IntAdapter :
     SettingBox.Adapter<Int> {
 
     override fun get(
         name: String,
-        defaultValue: Int,
+        defaultData: Int,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ): Int =
         when (type) {
             SettingBox.Type.Global -> Settings.Global.getInt(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
             SettingBox.Type.Secure -> Settings.Secure.getInt(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
             SettingBox.Type.System -> Settings.System.getInt(
                 contentResolver, name,
-                defaultValue
+                defaultData
             )
         }
 
     override fun set(
         name: String,
-        value: Int,
+        data: Int,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ) {
         when (type) {
-            SettingBox.Type.Global -> Settings.Global.putInt(contentResolver, name, value)
-            SettingBox.Type.Secure -> Settings.Secure.putInt(contentResolver, name, value)
-            SettingBox.Type.System -> Settings.System.putInt(contentResolver, name, value)
+            SettingBox.Type.Global -> Settings.Global.putInt(contentResolver, name, data)
+            SettingBox.Type.Secure -> Settings.Secure.putInt(contentResolver, name, data)
+            SettingBox.Type.System -> Settings.System.putInt(contentResolver, name, data)
         }
     }
 }
@@ -133,42 +133,42 @@ private object IntAdapter :
 fun SettingsBoxFactory.long(
     name: String,
     type: SettingBox.Type,
-    defaultValue: Long = 0L
-) = create(name = name, type = type, defaultValue = defaultValue, adapter = LongAdapter)
+    defaultData: Long = 0L
+) = create(name = name, type = type, defaultData = defaultData, adapter = LongAdapter)
 
 private object LongAdapter :
     SettingBox.Adapter<Long> {
 
     override fun get(
         name: String,
-        defaultValue: Long,
+        defaultData: Long,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ): Long = when (type) {
         SettingBox.Type.Global -> Settings.Global.getLong(
             contentResolver, name,
-            defaultValue
+            defaultData
         )
         SettingBox.Type.Secure -> Settings.Secure.getLong(
             contentResolver, name,
-            defaultValue
+            defaultData
         )
         SettingBox.Type.System -> Settings.System.getLong(
             contentResolver, name,
-            defaultValue
+            defaultData
         )
     }
 
     override fun set(
         name: String,
-        value: Long,
+        data: Long,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ) {
         when (type) {
-            SettingBox.Type.Global -> Settings.Global.putLong(contentResolver, name, value)
-            SettingBox.Type.Secure -> Settings.Secure.putLong(contentResolver, name, value)
-            SettingBox.Type.System -> Settings.System.putLong(contentResolver, name, value)
+            SettingBox.Type.Global -> Settings.Global.putLong(contentResolver, name, data)
+            SettingBox.Type.Secure -> Settings.Secure.putLong(contentResolver, name, data)
+            SettingBox.Type.System -> Settings.System.putLong(contentResolver, name, data)
         }
     }
 }
@@ -176,15 +176,15 @@ private object LongAdapter :
 fun SettingsBoxFactory.string(
     name: String,
     type: SettingBox.Type,
-    defaultValue: String = ""
-) = create(name = name, type = type, defaultValue = defaultValue, adapter = StringAdapter)
+    defaultData: String = ""
+) = create(name = name, type = type, defaultData = defaultData, adapter = StringAdapter)
 
 private object StringAdapter :
     SettingBox.Adapter<String> {
 
     override fun get(
         name: String,
-        defaultValue: String,
+        defaultData: String,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ): String {
@@ -192,19 +192,19 @@ private object StringAdapter :
             SettingBox.Type.Global -> Settings.Global.getString(contentResolver, name)
             SettingBox.Type.Secure -> Settings.Secure.getString(contentResolver, name)
             SettingBox.Type.System -> Settings.System.getString(contentResolver, name)
-        } ?: defaultValue
+        } ?: defaultData
     }
 
     override fun set(
         name: String,
-        value: String,
+        data: String,
         contentResolver: ContentResolver,
         type: SettingBox.Type
     ) {
         when (type) {
-            SettingBox.Type.Global -> Settings.Global.putString(contentResolver, name, value)
-            SettingBox.Type.Secure -> Settings.Secure.putString(contentResolver, name, value)
-            SettingBox.Type.System -> Settings.System.putString(contentResolver, name, value)
+            SettingBox.Type.Global -> Settings.Global.putString(contentResolver, name, data)
+            SettingBox.Type.Secure -> Settings.Secure.putString(contentResolver, name, data)
+            SettingBox.Type.System -> Settings.System.putString(contentResolver, name, data)
         }
     }
 }

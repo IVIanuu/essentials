@@ -34,7 +34,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.box.boxState
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
@@ -81,7 +81,7 @@ val HomeRoute = Route(transition = NoOpRouteTransition) {
         },
         body = {
             Column {
-                var showBanner by unfoldBox(inject<PrefBoxFactory>().create("show_banner", false))
+                var showBanner by boxState(inject<PrefBoxFactory>().create("show_banner", false))
                 if (showBanner) {
                     Banner(
                         leading = { Icon(R.mipmap.ic_launcher) },
