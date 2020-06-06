@@ -521,23 +521,23 @@ fun <T> AdapterList(
     state.compositionRef = compositionReference()
     state.forceRecompose = true
 
+    val modifier = currentComposer.materialize(
+        modifier
+            .scrollable(
+                dragDirection = DragDirection.Vertical,
+                scrollableState = ScrollableState(
+                    onScrollDeltaConsumptionRequested =
+                    state.onScrollDeltaConsumptionRequestedListener
+                )
+            )
+            .clipToBounds()
+    )
+
     (currentComposer as UiComposer).emit(
         1,
         ctor = { LayoutNode() } as () -> LayoutNode,
         update = {
-            set(
-                currentComposer.materialize(
-                    modifier
-                        .scrollable(
-                            dragDirection = DragDirection.Vertical,
-                            scrollableState = ScrollableState(
-                                onScrollDeltaConsumptionRequested =
-                                state.onScrollDeltaConsumptionRequestedListener
-                            )
-                        )
-                        .clipToBounds()
-                )
-            ) { this.modifier = it }
+            set(modifier) { this.modifier = it }
             set(state.rootNodeRef) { this.ref = it }
             set(state.measureBlocks) { this.measureBlocks = it }
         }

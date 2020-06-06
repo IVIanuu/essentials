@@ -1,50 +1,55 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.provider.Settings
 import androidx.compose.Composable
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ScreenLockRotation
 import androidx.ui.material.icons.filled.ScreenRotation
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.gestures.action.ActionPermissions
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.store.android.settings.SettingBox
+import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
+import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.transient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Module
 private fun AutoRotationModule() {
     installIn<ApplicationComponent>()
-    /*transient<@ActionQualifier("auto_rotation") Action> {
-        resourceProvider: ResourceProvider ->
+    action {
+            resourceProvider: ResourceProvider,
+            permissions: ActionPermissions,
+            iconProvider: AutoRotationActionIconProvider,
+            executor: AutoRotationActionExecutor ->
         Action(
             key = "auto_rotation",
-            title =
-        )
-    }*/
-    //bindAction<@ActionQualifier("auto_rotation") Action>()
-    /*bindAction<@ActionQualifier("auto_rotation") Action>(
-        key = "auto_rotation",
-        title = { getStringResource(R.string.es_action_auto_rotation) },
-        iconProvider = { get<AutoRotationActionIconProvider>() },
-        unlockScreen = { true },
-        executor = { get<AutoRotationActionExecutor>() },
-        permissions = {
-            listOf(
-                actionPermission {
-                    writeSettings
-                }
-            )
-        }
-    )*/
-    /*scoped<@AutoRotationSetting Box<Int>> {
-        get<SettingsBoxFactory>()
-            .int(Settings.System.ACCELEROMETER_ROTATION, SettingBox.Type.System, 1)
-    }*/
+            title = resourceProvider.getString(R.string.es_action_auto_rotation),
+            permissions = listOf(permissions.writeSettings),
+            unlockScreen = true,
+            iconProvider = iconProvider,
+            executor = executor
+        ) as @StringKey("auto_rotation") Action
+    }
+
+    scoped<@AutoRotationSetting Box<Int>> { factory: SettingsBoxFactory ->
+        factory.int(Settings.System.ACCELEROMETER_ROTATION, SettingBox.Type.System, 1)
+    }
 }
 
 @Transient

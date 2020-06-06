@@ -31,7 +31,7 @@ private fun KeycodeModule() {
 
 @Transient
 internal class KeycodeActionFactory(
-    private val actionPermissions: ActionPermissions,
+    private val permissions: ActionPermissions,
     private val resourceProvider: ResourceProvider,
     private val rootActionExecutorProvider: @Provider (String) -> RootActionExecutor
 ) : ActionFactory {
@@ -42,7 +42,7 @@ internal class KeycodeActionFactory(
             key = key,
             title = resourceProvider.getString(R.string.es_action_keycode_suffix, keycode),
             iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
-            permissions = listOf(actionPermissions.root),
+            permissions = listOf(permissions.root),
             executor = rootActionExecutorProvider("input keyevent $keycode"),
             unlockScreen = false,
             enabled = true

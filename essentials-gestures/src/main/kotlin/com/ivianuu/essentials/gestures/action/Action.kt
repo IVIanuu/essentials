@@ -8,11 +8,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.set
+import com.ivianuu.injekt.transient
 import kotlinx.coroutines.flow.Flow
-
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class ActionQualifier(val key: String)
 
 @Immutable
 data class Action(
@@ -34,7 +31,8 @@ interface ActionExecutor {
 }
 
 @Module
-fun <T : Action> bindAction() {
+fun <T : Action, F : Function<T>> action(provider: F) {
+    transient(provider)
     set<Action> { add<T>() }
 }
 

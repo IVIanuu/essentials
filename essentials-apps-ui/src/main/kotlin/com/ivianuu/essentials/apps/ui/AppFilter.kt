@@ -46,7 +46,7 @@ class LaunchableAppFilter(
 
 @Transient
 class IntentAppFilter(
-    @Assisted private val intent: Intent,
+    private val intent: @Assisted Intent,
     private val packageManager: PackageManager
 ) : AppFilter {
     private val apps by lazy {

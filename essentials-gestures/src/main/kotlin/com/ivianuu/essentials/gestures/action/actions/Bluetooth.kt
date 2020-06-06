@@ -6,11 +6,16 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Bluetooth
 import androidx.ui.material.icons.filled.BluetoothDisabled
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.ui.image.Icon
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.composition.installIn
 import kotlinx.coroutines.flow.Flow
@@ -20,13 +25,18 @@ import kotlinx.coroutines.flow.onStart
 @Module
 private fun BluetoothModule() {
     installIn<ApplicationComponent>()
-    /*bindAction<@ActionQualifier("bluetooth") Action>(
-        key = "bluetooth",
-        title = { getStringResource(R.string.es_action_bluetooth) },
-        iconProvider = { get<BluetoothActionIconProvider>() },
-        executor = { get<BluetoothActionExecutor>() },
-        enabled = { BluetoothAdapter.getDefaultAdapter() != null }
-    )*/
+    action {
+            resourceProvider: ResourceProvider,
+            iconProvider: BluetoothActionIconProvider,
+            executor: BluetoothActionExecutor ->
+        Action(
+            key = "bluetooth",
+            title = resourceProvider.getString(R.string.es_action_bluetooth),
+            iconProvider = iconProvider,
+            executor = executor,
+            enabled = BluetoothAdapter.getDefaultAdapter() != null
+        ) as @StringKey("bluetooth") Action
+    }
 }
 
 @Transient

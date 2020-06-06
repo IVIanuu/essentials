@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Transient
 internal class CoilActionIconProvider(
-    @Assisted private val data: Any
+    private val data: @Assisted Any
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {

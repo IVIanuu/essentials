@@ -5,13 +5,12 @@ import com.ivianuu.essentials.gestures.GlobalActions
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPermissions
-import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
-import com.ivianuu.injekt.transient
 
 @Module
 internal fun <T : Action> bindAccessibilityAction(
@@ -20,23 +19,22 @@ internal fun <T : Action> bindAccessibilityAction(
     titleRes: Int,
     icon: @Composable () -> Unit
 ) {
-    transient { resourceProvider: ResourceProvider,
-                actionPermissions: ActionPermissions,
-                accessibilityActionExecutorProvider: @Provider (Int) -> AccessibilityActionExecutor ->
+    action { resourceProvider: ResourceProvider,
+             permissions: ActionPermissions,
+             accessibilityActionExecutorProvider: @Provider (Int) -> AccessibilityActionExecutor ->
         Action(
             key = key,
             title = resourceProvider.getString(titleRes),
             iconProvider = SingleActionIconProvider(icon),
-            permissions = listOf(actionPermissions.accessibility),
+            permissions = listOf(permissions.accessibility),
             executor = accessibilityActionExecutorProvider(accessibilityAction)
         ) as T
     }
-    bindAction<T>()
 }
 
 @Transient
 internal class AccessibilityActionExecutor(
-    @Assisted private val accessibilityAction: Int,
+    private val accessibilityAction: @Assisted Int,
     private val globalActions: GlobalActions
 ) : ActionExecutor {
     override suspend fun invoke() {

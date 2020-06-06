@@ -28,4 +28,7 @@
     <string name="es_twilight_mode_system">System</string>
     <string name="es_twilight_mode_system_desc">Use the system default dark mode setting</string>
 
+    <string name="es_twilight_pref_category_more">More</string>
+    <string name="es_twilight_use_black">Use black</string>
+
 </resources>

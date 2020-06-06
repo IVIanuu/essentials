@@ -9,7 +9,7 @@ import com.ivianuu.injekt.Transient
 
 @Transient
 class RootActionExecutor(
-    @Assisted private val command: String,
+    private val command: @Assisted String,
     private val shell: Shell,
     private val toaster: Toaster
 ) : ActionExecutor {

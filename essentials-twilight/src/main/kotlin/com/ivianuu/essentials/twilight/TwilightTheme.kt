@@ -16,50 +16,64 @@
 
 package com.ivianuu.essentials.twilight
 
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
+import androidx.animation.TweenBuilder
 import androidx.compose.Composable
-import androidx.ui.animation.Transition
+import androidx.compose.key
+import androidx.compose.onCommit
+import androidx.compose.remember
+import androidx.ui.animation.animatedFloat
+import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
+import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.core.EsTheme
 import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
 
 @Composable
 fun TwilightTheme(
     lightColors: ColorPalette = lightColorPalette(),
     darkColors: ColorPalette = darkColorPalette(),
+    blackColors: ColorPalette = darkColors.copy(
+        background = Color.Black,
+        surface = Color.Black
+    ),
     typography: Typography = Typography(),
     children: @Composable () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
-    val isDark = helper.isDark.collectAsState(helper.currentIsDark).value
+    val twilightState = helper.state.collectAsState(helper.currentState).value
 
-    Transition(
-        definition = TwilightTransitionDefinition,
-        toState = isDark
-    ) { state ->
-        val colors = lerp(lightColors, darkColors, state[Fraction])
-        EsTheme(
-            colors = colors,
-            typography = typography,
-            children = children
+    fun colorsForTwilightState() = if (twilightState.isDark) {
+        if (twilightState.useBlack) blackColors else darkColors
+    } else lightColors
+
+    val lastColors = holder { colorsForTwilightState() }
+    val targetColors = colorsForTwilightState()
+
+    val animation = key(twilightState) { animatedFloat(0f) }
+    onCommit(animation) {
+        animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
+            duration = 150
+        })
+    }
+
+    val currentColors = remember(animation.value) {
+        lerp(
+            lastColors.value,
+            targetColors,
+            animation.value
         )
     }
-}
+    lastColors.value = currentColors
 
-private val Fraction = FloatPropKey()
-private val TwilightTransitionDefinition = transitionDefinition {
-    state(true) { set(Fraction, 1f) }
-    state(false) { set(Fraction, 0f) }
-
-    transition {
-        Fraction using tween<Float> {
-            duration = 150
-        }
-    }
+    EsTheme(
+        colors = currentColors,
+        typography = typography,
+        children = children
+    )
 }

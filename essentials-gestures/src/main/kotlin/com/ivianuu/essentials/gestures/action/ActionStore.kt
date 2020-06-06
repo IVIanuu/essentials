@@ -10,17 +10,19 @@ import kotlinx.coroutines.withContext
  */
 @Transient
 class ActionStore(
-    private val actions: Map<String, @Provider () -> Action>,
+    private val actions: Set<@Provider () -> Action>,
     private val actionFactories: Set<@Provider () -> ActionFactory>,
     private val dispatchers: AppCoroutineDispatchers
 ) {
 
     suspend fun getActions(): List<Action> = withContext(dispatchers.computation) {
-        actions.map { it.value() }
+        actions.map { it() }
     }
 
     suspend fun getAction(key: String): Action = withContext(dispatchers.computation) {
-        actions[key]?.invoke()
+        actions
+            .map { it() }
+            .firstOrNull { it.key == key }
             ?: actionFactories
                 .map { it() }
                 .firstOrNull { it.handles(key) }

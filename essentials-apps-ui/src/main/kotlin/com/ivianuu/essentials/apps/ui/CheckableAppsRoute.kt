@@ -126,7 +126,7 @@ private fun CheckableApp(
 
 @Transient
 internal class CheckableAppsViewModel(
-    @Assisted private val appFilter: AppFilter,
+    private val appFilter: @Assisted AppFilter,
     private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
