@@ -44,13 +44,7 @@ abstract class EsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         composition = findViewById<ViewGroup>(containerId).setContent(Recomposer.current()) {
-            WindowInsetsManager {
-                SystemBarManager {
-                    UiInitializers {
-                        content()
-                    }
-                }
-            }
+            wrappedContent()
         }
     }
 
@@ -58,6 +52,17 @@ abstract class EsActivity : AppCompatActivity() {
         retainedObjects.dispose()
         composition.dispose()
         super.onDestroy()
+    }
+
+    @Composable
+    protected open fun wrappedContent() {
+        WindowInsetsManager {
+            SystemBarManager {
+                UiInitializers {
+                    content()
+                }
+            }
+        }
     }
 
     @Composable

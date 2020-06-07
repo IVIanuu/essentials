@@ -29,7 +29,7 @@ interface Box<T> {
     val defaultData: T
 
     /**
-     * A flow which always emits the current data
+     * A flow of the current data
      */
     val data: Flow<T>
 

@@ -42,6 +42,7 @@ fun <T> MultiChoiceListDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
+        applyContentPadding = false,
         content = {
             VerticalScroller {
                 items.forEachIndexed { index, item ->

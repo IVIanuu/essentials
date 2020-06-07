@@ -201,6 +201,7 @@ val DialogsRoute = Route {
                                     }
                                 }
                             },
+                            applyContentPadding = false,
                             negativeButton = {
                                 DialogCloseButton { Text("Close") }
                             }

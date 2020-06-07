@@ -243,12 +243,13 @@ private fun ColorGridItem(
             elevation = 0.dp
         ) {
             if (isSelected) {
-                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                    Icon(
-                        icon = Icons.Default.Check,
-                        modifier = Modifier.preferredSize(size = 36.dp)
-                    )
-                }
+                Icon(
+                    icon = Icons.Default.Check,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(align = ContentGravity.Center)
+                        .preferredSize(size = 36.dp)
+                )
             }
         }
     }

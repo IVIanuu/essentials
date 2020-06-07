@@ -17,6 +17,11 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.wrapContentSize
+import com.ivianuu.essentials.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -27,7 +32,13 @@ import com.ivianuu.essentials.util.Uninitialized
 fun <T> RenderAsyncList(
     state: Async<List<T>>,
     fail: @Composable (Throwable) -> Unit = { throw it },
-    loading: @Composable () -> Unit = { FullScreenLoading() },
+    loading: @Composable () -> Unit = {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center)
+        )
+    },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
     successItemCallback: @Composable (T) -> Unit
@@ -51,7 +62,13 @@ fun <T> RenderAsyncList(
 fun <T> RenderAsync(
     state: Async<T>,
     fail: @Composable (Throwable) -> Unit = { throw it },
-    loading: @Composable () -> Unit = { FullScreenLoading() },
+    loading: @Composable () -> Unit = {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center)
+        )
+    },
     uninitialized: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {

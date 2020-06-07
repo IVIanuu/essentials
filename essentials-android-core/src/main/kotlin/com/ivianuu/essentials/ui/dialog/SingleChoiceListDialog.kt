@@ -43,9 +43,11 @@ fun <T> SingleChoiceListDialog(
     val navigator = NavigatorAmbient.current
 
     Dialog(
+        modifier = modifier,
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
+        applyContentPadding = false,
         content = {
             VerticalScroller {
                 items.forEachIndexed { index, item ->

@@ -26,7 +26,6 @@ import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
 import com.ivianuu.essentials.ui.common.Overlay
 import com.ivianuu.essentials.ui.common.OverlayEntry
 import com.ivianuu.essentials.ui.common.absorbPointer
@@ -367,15 +366,14 @@ class Navigator(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
                 ) {
-                    Box(modifier = Modifier.absorbPointer(transitionRunning)) {
-                        RouteTransitionWrapper(
-                            transition = transition ?: defaultRouteTransition,
-                            state = transitionState,
-                            lastState = lastTransitionState,
-                            onTransitionComplete = onTransitionComplete,
-                            children = route.content
-                        )
-                    }
+                    RouteTransitionWrapper(
+                        modifier = Modifier.absorbPointer(transitionRunning),
+                        transition = transition ?: defaultRouteTransition,
+                        state = transitionState,
+                        lastState = lastTransitionState,
+                        onTransitionComplete = onTransitionComplete,
+                        children = route.content
+                    )
                 }
             }
         )

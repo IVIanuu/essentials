@@ -27,6 +27,8 @@ import com.ivianuu.essentials.ui.core.WindowInsets
 import com.ivianuu.essentials.ui.core.WindowInsetsProvider
 import com.ivianuu.essentials.ui.core.ambientWindowInsets
 
+// todo ideally this should be a modifier
+
 @Composable
 fun SafeArea(
     modifier: Modifier = Modifier,

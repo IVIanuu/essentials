@@ -60,6 +60,7 @@ private val defaultTransitionDefinition = transitionDefinition {
 
 @Composable
 internal fun RouteTransitionWrapper(
+    modifier: Modifier = Modifier,
     transition: RouteTransition,
     state: RouteTransition.State,
     lastState: RouteTransition.State,
@@ -73,7 +74,7 @@ internal fun RouteTransitionWrapper(
         initState = lastState,
         children = { transitionState ->
             Box(
-                modifier = transition.createModifier(transitionState, state),
+                modifier = modifier + transition.createModifier(transitionState, state),
                 children = children
             )
         }

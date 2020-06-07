@@ -84,6 +84,7 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
                 }
             }
         },
+        applyContentPadding = false,
         negativeButton = {
             val activity = compositionActivity
             DialogButton(onClick = { activity.finish() }) {
