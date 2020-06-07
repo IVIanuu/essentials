@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.injekt.inject
@@ -129,7 +129,7 @@ private fun HomeItem(
     ListItem(
         title = { Text(item.title) },
         leading = {
-            val color = retain(item) {
+            val color = rememberRetained(item) {
                 ColorPickerPalette.values()
                     .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
                     .shuffled()

@@ -34,6 +34,7 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -71,7 +72,9 @@ private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
     Dialog(
         title = { Text("Required Permissions") }, // todo customizable
         content = {
-            VerticalScroller {
+            VerticalScroller(
+                scrollerPosition = RetainedScrollerPosition()
+            ) {
                 val viewModelFactory =
                     inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
                 val viewModel = viewModel { viewModelFactory(request) }

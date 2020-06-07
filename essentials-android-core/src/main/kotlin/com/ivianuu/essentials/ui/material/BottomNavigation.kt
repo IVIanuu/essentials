@@ -37,7 +37,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
 import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.core.rememberRetained
 
 @Immutable
 data class BottomNavigationStyle(
@@ -121,7 +121,7 @@ fun <T> ProvideBottomNavigationController(
     initial: T = items.first(),
     children: @Composable () -> Unit
 ) {
-    val controller = retain(items, initial) {
+    val controller = rememberRetained(items, initial) {
         BottomNavigationController(items = items, initial = initial)
     }
 
@@ -197,7 +197,7 @@ fun <T> BottomNavigationSwapper(
     modifier: Modifier = Modifier,
     contentCallback: @Composable (T) -> Unit
 ) {
-    val swapperController = retain {
+    val swapperController = rememberRetained {
         SwapperState(
             initial = bottomNavigationController.selectedItem,
             keepState = keepState

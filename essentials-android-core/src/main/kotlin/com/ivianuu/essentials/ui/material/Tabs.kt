@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.common.Swapper
 import com.ivianuu.essentials.ui.common.SwapperState
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
-import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.core.rememberRetained
 
 class TabController<T>(
     items: List<T>,
@@ -54,7 +54,7 @@ fun <T> ProvideTabController(
     initialIndex: Int = 0,
     children: @Composable () -> Unit
 ) {
-    val controller = retain(items, initialIndex) {
+    val controller = rememberRetained(items, initialIndex) {
         TabController(items = items, initialIndex = initialIndex)
     }
 

@@ -9,7 +9,6 @@ import androidx.compose.Recomposer
 import androidx.compose.Untracked
 import androidx.compose.compositionReference
 import androidx.compose.currentComposer
-import androidx.compose.remember
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutDirection
@@ -28,6 +27,7 @@ import androidx.ui.foundation.gestures.scrollable
 import androidx.ui.node.UiComposer
 import androidx.ui.unit.IntPx
 import androidx.ui.unit.ipx
+import com.ivianuu.essentials.ui.core.rememberRetained
 import kotlin.math.abs
 import kotlin.math.round
 
@@ -513,7 +513,7 @@ fun <T> AdapterList(
     modifier: Modifier = Modifier,
     itemCallback: @Composable (T) -> Unit
 ) {
-    val state = remember { ListState<T>() }
+    val state = rememberRetained { ListState<T>() }
     state.recomposer = currentComposer.recomposer
     state.itemCallback = itemCallback
     state.data = data

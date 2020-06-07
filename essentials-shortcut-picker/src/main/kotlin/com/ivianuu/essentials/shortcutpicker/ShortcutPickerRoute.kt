@@ -20,8 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
-import androidx.ui.core.paint
-import androidx.ui.foundation.Box
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.preferredSize
 import androidx.ui.res.stringResource
@@ -32,6 +30,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
@@ -60,9 +59,9 @@ private fun Shortcut(
     key(info) {
         ListItem(
             leading = {
-                Box(
-                    modifier = Modifier.preferredSize(size = 40.dp)
-                        .paint(ImagePainter(info.icon))
+                Image(
+                    modifier = Modifier.preferredSize(40.dp),
+                    painter = ImagePainter(info.icon)
                 )
             },
             title = { Text(info.name) },

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.viewmodel
 import androidx.compose.Composable
 import androidx.compose.currentComposer
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.core.retain
+import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.injekt.compositionComponent
 import com.ivianuu.injekt.composition.get
 
@@ -27,7 +27,7 @@ import com.ivianuu.injekt.composition.get
 fun <T : ViewModel> viewModel(
     key: Any = currentComposer.currentCompoundKeyHash,
     factory: () -> T
-): T = retain(key = key, init = factory)
+): T = rememberRetained(key = key, init = factory)
 
 @Composable
 fun <T : ViewModel> injectViewModel(

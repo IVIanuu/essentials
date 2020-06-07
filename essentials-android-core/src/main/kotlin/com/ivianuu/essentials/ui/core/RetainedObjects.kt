@@ -96,7 +96,7 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
 
 @Composable
-inline fun <T> retain(
+inline fun <T> rememberRetained(
     vararg inputs: Any?,
     key: Any = currentComposer.currentCompoundKeyHash,
     noinline init: () -> T
@@ -110,7 +110,7 @@ inline fun <T> retainedState(
     key: Any = currentComposer.currentCompoundKeyHash,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
-): MutableState<T> = retain(key) { mutableStateOf(init(), areEquivalent) }
+): MutableState<T> = rememberRetained(key) { mutableStateOf(init(), areEquivalent) }
 
 @Composable
 inline fun <T> retainedStateFor(
@@ -118,7 +118,7 @@ inline fun <T> retainedStateFor(
     key: Any = currentComposer.currentCompoundKeyHash,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     noinline init: () -> T
-): MutableState<T> = retain(
+): MutableState<T> = rememberRetained(
     key,
     *inputs
 ) { mutableStateOf(init(), areEquivalent) }

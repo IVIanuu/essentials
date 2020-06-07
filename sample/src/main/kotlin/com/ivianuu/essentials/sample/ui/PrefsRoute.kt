@@ -21,6 +21,7 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.android.duration
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -46,7 +47,9 @@ val PrefsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Prefs") }) },
         body = {
-            VerticalScroller {
+            VerticalScroller(
+                scrollerPosition = RetainedScrollerPosition()
+            ) {
                 val boxFactory = inject<PrefBoxFactory>()
 
                 SwitchPreference(

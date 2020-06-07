@@ -41,7 +41,7 @@ fun ScrollableScreen(
     Scaffold(
         topAppBar = { TopAppBar(title = { Text(title) }) },
         body = {
-            VerticalScroller {
+            VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
                 content()
             }
         }

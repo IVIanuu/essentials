@@ -36,6 +36,7 @@ import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.core.Text
@@ -136,7 +137,9 @@ val ScaffoldRoute = Route {
             }
         }) else null,
         body = {
-            VerticalScroller {
+            VerticalScroller(
+                scrollerPosition = RetainedScrollerPosition()
+            ) {
                 Subheader { Text("Top bar") }
                 ListItem(
                     title = { Text("Show top bar") },

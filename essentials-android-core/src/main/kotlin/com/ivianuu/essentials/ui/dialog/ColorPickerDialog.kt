@@ -54,6 +54,7 @@ import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
@@ -176,7 +177,10 @@ private fun ColorGrid(
 
     key(currentPalette) {
         WithConstraints {
-            VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
+            VerticalScroller(
+                modifier = Modifier.padding(all = 4.dp),
+                scrollerPosition = RetainedScrollerPosition()
+            ) {
                 items.chunked(4).forEach { rowItems ->
                     Row(
                         horizontalArrangement = Arrangement.Center,

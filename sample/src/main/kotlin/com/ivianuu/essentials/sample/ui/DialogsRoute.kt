@@ -31,6 +31,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -52,7 +53,9 @@ val DialogsRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Dialogs") }) },
         body = {
-            VerticalScroller {
+            VerticalScroller(
+                scrollerPosition = RetainedScrollerPosition()
+            ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -186,7 +189,9 @@ val DialogsRoute = Route {
                         Dialog(
                             title = { Text("List") },
                             content = {
-                                VerticalScroller {
+                                VerticalScroller(
+                                    scrollerPosition = RetainedScrollerPosition()
+                                ) {
                                     (1..100).forEach {
                                         ListItem(
                                             title = {
