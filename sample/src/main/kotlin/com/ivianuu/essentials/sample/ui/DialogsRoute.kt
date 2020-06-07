@@ -26,7 +26,7 @@ import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.height
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
@@ -307,12 +307,12 @@ private fun DialogLauncherButton(
     dismissible: Boolean = true,
     dialog: @Composable () -> Unit
 ) {
+    Spacer(Modifier.height(8.dp))
+
     val navigator = NavigatorAmbient.current
     Button(
         onClick = {
             navigator.push(DialogRoute(dismissible = dismissible, dialog = dialog))
         }
     ) { Text(text) }
-
-    Spacer(Modifier.preferredHeight(8.dp))
 }
