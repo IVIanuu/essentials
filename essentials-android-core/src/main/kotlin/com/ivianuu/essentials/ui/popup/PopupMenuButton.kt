@@ -4,6 +4,7 @@ import androidx.compose.Composable
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.Modifier
 import androidx.ui.core.boundsInRoot
+import androidx.ui.core.composed
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
@@ -29,57 +30,52 @@ fun PopupMenuButton(
     onCancel: (() -> Unit)? = null,
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
-    PopupMenuButton(
-        items = items,
-        modifier = Modifier.preferredSize(40.dp)
+    Box(
+        modifier = Modifier.preferredSize(size = 40.dp)
+            .popupClickable(
+                items = items,
+                onCancel = onCancel,
+                popupStyle = popupStyle,
+                indicationFactory = { RippleIndication(bounded = false) }
+            )
             .plus(modifier),
-        onCancel = onCancel,
-        popupStyle = popupStyle,
-        indicationFactory = { RippleIndication(bounded = false) }
+        gravity = ContentGravity.Center
     ) {
         Icon(Icons.Default.MoreVert)
     }
 }
 
 @Composable
-fun PopupMenuButton(
+fun Modifier.popupClickable(
     items: List<PopupMenu.Item>,
-    modifier: Modifier = Modifier,
     onCancel: (() -> Unit)? = null,
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
     indicationFactory: @Composable () -> Indication = IndicationAmbient.current,
-    children: @Composable () -> Unit
-) {
+) = composed {
     val navigator = NavigatorAmbient.current
 
     val coordinatesHolder =
         holder<LayoutCoordinates?> { null }
 
-    Box(
-        modifier = Modifier
-            .onPositioned { coordinatesHolder.value = it }
-            .clickable(indication = indicationFactory()) {
-                navigator.push(
-                    PopupRoute(
-                        position = coordinatesHolder.value!!.boundsInRoot.let {
-                            IntPxBounds(
-                                left = it.left.toInt().ipx,
-                                top = it.top.toInt().ipx,
-                                right = it.right.toInt().ipx,
-                                bottom = it.bottom.toInt().ipx
-                            )
-                        },
-                        onCancel = onCancel
-                    ) {
-                        PopupMenu(
-                            items = items,
-                            style = popupStyle
+    onPositioned { coordinatesHolder.value = it }
+        .clickable(indication = indicationFactory()) {
+            navigator.push(
+                PopupRoute(
+                    position = coordinatesHolder.value!!.boundsInRoot.let {
+                        IntPxBounds(
+                            left = it.left.toInt().ipx,
+                            top = it.top.toInt().ipx,
+                            right = it.right.toInt().ipx,
+                            bottom = it.bottom.toInt().ipx
                         )
-                    }
-                )
-            }
-            .plus(modifier),
-        gravity = ContentGravity.Center,
-        children = children
-    )
+                    },
+                    onCancel = onCancel
+                ) {
+                    PopupMenu(
+                        items = items,
+                        style = popupStyle
+                    )
+                }
+            )
+        }
 }
