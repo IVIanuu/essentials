@@ -19,9 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import android.Manifest
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
@@ -43,6 +40,7 @@ import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -98,22 +96,21 @@ val PermissionRoute = Route {
             Metadata.Icon withValue { Icon(Icons.Default.Menu) }
         )
 
-        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-            Button(
-                onClick = launchOnClick {
-                    manager.request(
-                        camera,
-                        phone,
-                        accessibility,
-                        notificationListener,
-                        systemOverlay,
-                        writeSecureSettings,
-                        writeSettings
-                    )
-                }
-            ) {
-                Text("Request")
+        Button(
+            modifier = Modifier.center(),
+            onClick = launchOnClick {
+                manager.request(
+                    camera,
+                    phone,
+                    accessibility,
+                    notificationListener,
+                    systemOverlay,
+                    writeSecureSettings,
+                    writeSettings
+                )
             }
+        ) {
+            Text("Request")
         }
     }
 }

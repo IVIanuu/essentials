@@ -17,39 +17,35 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
 import androidx.ui.graphics.Color
-import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.transition.FadeRouteTransition
+import com.ivianuu.essentials.ui.navigation.transition.VerticalRouteTransition
 
-val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
+val DrawerRoute = Route(enterTransition = VerticalRouteTransition()) {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {
             Surface(color = Color.Blue) {
-                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                    Text(
-                        text = "Drawer",
-                        textStyle = MaterialTheme.typography.h4
-                    )
-                }
+                Text(
+                    text = "Drawer",
+                    textStyle = MaterialTheme.typography.h4,
+                    modifier = Modifier.center()
+                )
             }
         },
         body = {
             Surface(color = Color.Red) {
-                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                    Text(
-                        text = "Body",
-                        textStyle = MaterialTheme.typography.h4
-                    )
-                }
+                Text(
+                    text = "Body",
+                    textStyle = MaterialTheme.typography.h4,
+                    modifier = Modifier.center()
+                )
             }
         }
     )

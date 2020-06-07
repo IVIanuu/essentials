@@ -18,12 +18,10 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collectAsState
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
@@ -34,15 +32,14 @@ val TimerRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Timer") }) },
         body = {
-            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                val value = remember { timerFlow() }
-                    .collectAsState().value
+            val value = remember { timerFlow() }
+                .collectAsState().value
 
-                Text(
-                    text = "Value: $value",
-                    textStyle = MaterialTheme.typography.h1
-                )
-            }
+            Text(
+                text = "Value: $value",
+                textStyle = MaterialTheme.typography.h1,
+                modifier = Modifier.center()
+            )
         }
     )
 }

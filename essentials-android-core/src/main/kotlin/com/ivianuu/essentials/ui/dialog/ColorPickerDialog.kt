@@ -59,6 +59,7 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
@@ -250,8 +251,7 @@ private fun ColorGridItem(
                 Icon(
                     icon = Icons.Default.Check,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize(align = ContentGravity.Center)
+                        .center()
                         .preferredSize(size = 36.dp)
                 )
             }

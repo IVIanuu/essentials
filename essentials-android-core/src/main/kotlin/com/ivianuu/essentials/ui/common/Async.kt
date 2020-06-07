@@ -17,10 +17,8 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.wrapContentSize
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
@@ -34,9 +32,7 @@ fun <T> RenderAsyncList(
     fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center)
+            modifier = Modifier.center()
         )
     },
     uninitialized: @Composable () -> Unit = loading,
@@ -64,9 +60,7 @@ fun <T> RenderAsync(
     fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center)
+            modifier = Modifier.center()
         )
     },
     uninitialized: @Composable () -> Unit = loading,

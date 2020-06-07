@@ -1,15 +1,13 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.wrapContentSize
 import com.ivianuu.essentials.gestures.action.ActionExecutors
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerRoute
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
@@ -26,8 +24,7 @@ val ActionsRoute = Route {
         val activityCoroutineScope = inject<@ForActivity CoroutineScope>()
 
         Button(
-            modifier = Modifier.fillMaxSize()
-                .wrapContentSize(align = Alignment.Center),
+            modifier = Modifier.center(),
             onClick = {
                 activityCoroutineScope.launch {
                     val action = navigator.push<ActionPickerResult>(

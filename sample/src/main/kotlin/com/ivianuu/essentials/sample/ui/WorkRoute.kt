@@ -17,23 +17,22 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 
 val WorkRoute = Route {
     SimpleScreen(title = "Work") {
-        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-            val workScheduler = inject<WorkScheduler>()
-            Button(onClick = { workScheduler.scheduleWork() }) {
-                Text("Perform work")
-            }
+        val workScheduler = inject<WorkScheduler>()
+        Button(
+            modifier = Modifier.center(),
+            onClick = { workScheduler.scheduleWork() }
+        ) {
+            Text("Perform work")
         }
     }
 }

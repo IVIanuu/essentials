@@ -19,16 +19,14 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -38,32 +36,31 @@ val CounterRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Counter") }) },
         body = {
-            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    val (count, setCount) = state { 0 }
+            Column(
+                modifier = Modifier.center(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                val (count, setCount) = state { 0 }
 
-                    Text(
-                        text = "Count: $count",
-                        textStyle = MaterialTheme.typography.h3
-                    )
+                Text(
+                    text = "Count: $count",
+                    textStyle = MaterialTheme.typography.h3
+                )
 
-                    Spacer(Modifier.preferredHeight(8.dp))
+                Spacer(Modifier.preferredHeight(8.dp))
 
-                    FloatingActionButton(
-                        text = { Text("Inc") },
-                        onClick = { setCount(count + 1) }
-                    )
+                FloatingActionButton(
+                    text = { Text("Inc") },
+                    onClick = { setCount(count + 1) }
+                )
 
-                    Spacer(Modifier.preferredHeight(8.dp))
+                Spacer(Modifier.preferredHeight(8.dp))
 
-                    FloatingActionButton(
-                        text = { Text("dec") },
-                        onClick = { setCount(count - 1) }
-                    )
-                }
+                FloatingActionButton(
+                    text = { Text("dec") },
+                    onClick = { setCount(count - 1) }
+                )
             }
         }
     )

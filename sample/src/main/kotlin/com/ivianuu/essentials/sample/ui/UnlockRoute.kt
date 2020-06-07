@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.layout.fillMaxSize
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.ui.common.SimpleScreen
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -35,22 +33,21 @@ import kotlinx.coroutines.flow.first
 
 val UnlockRoute = Route {
     SimpleScreen(title = "Unlock") {
-        Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-            val screenStateProvider = inject<ScreenStateProvider>()
-            val screenUnlocker = inject<ScreenUnlocker>()
-            val toaster = inject<Toaster>()
-            Button(
-                onClick = launchOnClick {
-                    toaster.toast("Turn the screen off and on")
+        val screenStateProvider = inject<ScreenStateProvider>()
+        val screenUnlocker = inject<ScreenUnlocker>()
+        val toaster = inject<Toaster>()
+        Button(
+            modifier = Modifier.center(),
+            onClick = launchOnClick {
+                toaster.toast("Turn the screen off and on")
 
-                    screenStateProvider.screenState
-                        .filter { it == ScreenState.Locked }
-                        .first()
+                screenStateProvider.screenState
+                    .filter { it == ScreenState.Locked }
+                    .first()
 
-                    val unlocked = screenUnlocker.unlockScreen()
-                    toaster.toast("Screen unlocked $unlocked")
-                }
-            ) { Text("Unlock") }
-        }
+                val unlocked = screenUnlocker.unlockScreen()
+                toaster.toast("Screen unlocked $unlocked")
+            }
+        ) { Text("Unlock") }
     }
 }

@@ -25,7 +25,6 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
-import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -46,62 +46,61 @@ val NavBarRoute = Route {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Nav bar settings") }) },
         body = {
-            Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    val navBarController = inject<NavBarManager>()
+            Column(
+                modifier = Modifier.center(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                val navBarController = inject<NavBarManager>()
 
-                    val coroutineScope = compositionCoroutineScope()
-                    fun updateNavBarState(navBarHidden: Boolean) {
-                        coroutineScope.launch {
-                            navBarController.setNavBarConfig(
-                                NavBarConfig(navBarHidden)
-                            )
-                        }
-                    }
-
-                    val hideNavBar = state { false }
-
-                    onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
-
-                    // reshow nav bar when exiting the screen
-                    onDispose { updateNavBarState(false) }
-
-                    val secureSettingsHelper = inject<SecureSettingsHelper>()
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        gravity = ContentGravity.Center
-                    ) {
-                        Text(
-                            text = if (secureSettingsHelper.canWriteSecureSettings()) {
-                                if (hideNavBar.value) {
-                                    "Nav bar hidden"
-                                } else {
-                                    "Nav bar shown"
-                                }
-                            } else {
-                                "Unknown nav bar state"
-                            },
-                            textStyle = MaterialTheme.typography.h3
+                val coroutineScope = compositionCoroutineScope()
+                fun updateNavBarState(navBarHidden: Boolean) {
+                    coroutineScope.launch {
+                        navBarController.setNavBarConfig(
+                            NavBarConfig(navBarHidden)
                         )
                     }
+                }
 
-                    val navigator = NavigatorAmbient.current
+                val hideNavBar = state { false }
 
-                    Button(
-                        onClick = {
-                            if (secureSettingsHelper.canWriteSecureSettings()) {
-                                hideNavBar.value = !hideNavBar.value
+                onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+
+                // reshow nav bar when exiting the screen
+                onDispose { updateNavBarState(false) }
+
+                val secureSettingsHelper = inject<SecureSettingsHelper>()
+
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    gravity = ContentGravity.Center
+                ) {
+                    Text(
+                        text = if (secureSettingsHelper.canWriteSecureSettings()) {
+                            if (hideNavBar.value) {
+                                "Nav bar hidden"
                             } else {
-                                navigator.push(SecureSettingsRoute(true))
+                                "Nav bar shown"
                             }
+                        } else {
+                            "Unknown nav bar state"
+                        },
+                        textStyle = MaterialTheme.typography.h3
+                    )
+                }
+
+                val navigator = NavigatorAmbient.current
+
+                Button(
+                    onClick = {
+                        if (secureSettingsHelper.canWriteSecureSettings()) {
+                            hideNavBar.value = !hideNavBar.value
+                        } else {
+                            navigator.push(SecureSettingsRoute(true))
                         }
-                    ) {
-                        Text("Toggle nav bar")
                     }
+                ) {
+                    Text("Toggle nav bar")
                 }
             }
         }

@@ -25,8 +25,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.clickable
@@ -35,6 +33,7 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -107,9 +106,10 @@ val TextInputRoute = Route {
                     )
                 }
             } else {
-                Box(modifier = Modifier.fillMaxSize(), gravity = ContentGravity.Center) {
-                    Text("No results")
-                }
+                Text(
+                    text = "No results",
+                    modifier = Modifier.center()
+                )
             }
         },
         fab = {
