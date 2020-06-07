@@ -21,10 +21,13 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.gesture.tapGestureFilter
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.wrapContentSize
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed
@@ -58,10 +61,13 @@ fun DialogWrapper(
             .fillMaxSize()
             .drawBackground(Color.Black.copy(alpha = 0.6f))
     ) {
-        SafeArea(
-            modifier = Modifier.tapGestureFilter(onTap = {})
-                .gravity(align = Alignment.Center),
-            children = dialog
-        )
+        SafeArea(modifier = Modifier.gravity(align = Alignment.Center)) {
+            Box(
+                modifier = Modifier.tapGestureFilter(onTap = {})
+                    .wrapContentSize(align = Alignment.Center),
+                gravity = ContentGravity.Center,
+                children = dialog
+            )
+        }
     }
 }
