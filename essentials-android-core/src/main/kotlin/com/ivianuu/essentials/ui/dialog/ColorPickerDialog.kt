@@ -318,40 +318,40 @@ private fun ColorEditorHeader(
 ) {
     ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
         Surface(color = color) {
-            Box(
+            Row(
                 modifier = Modifier.preferredHeight(72.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
-                gravity = ContentGravity.Center
+                horizontalArrangement = Arrangement.Center,
+                verticalGravity = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalGravity = Alignment.CenterVertically
-                ) {
-                    var hexInput by stateFor(color) {
-                        color.toHexString(includeAlpha = showAlphaSelector)
-                    }
-                    Text("#")
-                    TextField(
-                        value = hexInput,
-                        onValueChange = { newValue ->
-                            hexInput = newValue
-
-                            if ((showAlphaSelector && newValue.length < 8) ||
-                                (!showAlphaSelector && newValue.length < 6)
-                            ) return@TextField
-
-                            val newColor = try {
-                                newValue.toColor()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                null
-                            }
-
-                            if (newColor != null) onColorChanged(newColor)
-                        }
-                    )
+                var hexInput by stateFor(color) {
+                    color.toHexString(includeAlpha = showAlphaSelector)
                 }
+                Text("#")
+                TextField(
+                    value = hexInput,
+                    onValueChange = { newValue ->
+                        if ((showAlphaSelector && newValue.length > 8) ||
+                            (!showAlphaSelector && newValue.length > 6)
+                        ) return@TextField
+
+                        hexInput = newValue
+
+                        if ((showAlphaSelector && newValue.length < 8) ||
+                            (!showAlphaSelector && newValue.length < 6)
+                        ) return@TextField
+
+                        val newColor = try {
+                            newValue.toColor()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            null
+                        }
+
+                        if (newColor != null) onColorChanged(newColor)
+                    }
+                )
             }
         }
     }
