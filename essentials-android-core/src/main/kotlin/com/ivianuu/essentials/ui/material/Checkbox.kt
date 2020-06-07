@@ -26,7 +26,10 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
-data class CheckboxStyle(val color: Color)
+data class CheckboxStyle(
+    val color: Color,
+    val modifier: Modifier = Modifier
+)
 
 val CheckboxStyleAmbient = staticAmbientOf<CheckboxStyle>()
 
@@ -48,7 +51,7 @@ fun Checkbox(
         state = ToggleableState(checked),
         onClick = { onCheckedChange(!checked) },
         color = style.color,
-        modifier = modifier,
+        modifier = style.modifier + modifier,
         enabled = enabled
     )
 }
@@ -66,6 +69,6 @@ fun TriStateCheckbox(
         onClick = onClick,
         color = style.color,
         enabled = enabled,
-        modifier = modifier
+        modifier = style.modifier + modifier
     )
 }

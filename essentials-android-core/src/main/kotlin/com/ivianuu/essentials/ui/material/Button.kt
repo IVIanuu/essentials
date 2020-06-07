@@ -20,19 +20,13 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
-import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.foundation.clickable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.InnerPadding
-import androidx.ui.layout.preferredSizeIn
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.contentColorFor
-import androidx.ui.semantics.Semantics
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
@@ -42,31 +36,39 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 @Immutable
 data class ButtonStyle(
     val backgroundColor: Color,
+    val disabledBackgroundColor: Color,
     val contentColor: Color,
+    val disabledContentColor: Color,
     val shape: Shape,
     val border: Border? = null,
     val elevation: Dp = 0.dp,
-    val innerPadding: InnerPadding = InnerPadding(
-        start = 16.dp,
-        top = 8.dp,
-        end = 16.dp,
-        bottom = 8.dp
-    ),
-    val modifier: Modifier
+    val disabledElevation: Dp = 0.dp,
+    val padding: InnerPadding = androidx.ui.material.Button.DefaultInnerPadding,
+    val modifier: Modifier = Modifier
 )
 
 @Composable
 fun ContainedButtonStyle(
     backgroundColor: Color = MaterialTheme.colors.primary,
-    contentColor: Color = contentColorFor(backgroundColor),
+    disabledBackgroundColor: Color = androidx.ui.material.Button.defaultDisabledBackgroundColor,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    disabledContentColor: Color = androidx.ui.material.Button.defaultDisabledContentColor,
     shape: Shape = MaterialTheme.shapes.small,
+    border: Border? = null,
     elevation: Dp = 2.dp,
+    disabledElevation: Dp = 0.dp,
+    padding: InnerPadding = androidx.ui.material.Button.DefaultInnerPadding,
     modifier: Modifier = Modifier
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
+    disabledBackgroundColor = disabledBackgroundColor,
     shape = shape,
+    border = border,
     elevation = elevation,
+    disabledElevation = disabledElevation,
     contentColor = contentColor,
+    disabledContentColor = disabledContentColor,
+    padding = padding,
     modifier = modifier
 )
 
@@ -77,29 +79,43 @@ fun OutlinedButtonStyle(
         color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
     ),
     backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = MaterialTheme.colors.primary,
+    disabledBackgroundColor: Color = androidx.ui.material.Button.defaultDisabledBackgroundColor,
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    disabledContentColor: Color = androidx.ui.material.Button.defaultDisabledContentColor,
     shape: Shape = MaterialTheme.shapes.small,
     elevation: Dp = 0.dp,
     modifier: Modifier = Modifier
 ) = ButtonStyle(
     backgroundColor = backgroundColor,
+    disabledBackgroundColor = disabledBackgroundColor,
     shape = shape,
     border = border,
     elevation = elevation,
     contentColor = contentColor,
+    disabledContentColor = disabledContentColor,
     modifier = modifier
 )
 
 @Composable
 fun TextButtonStyle(
+    elevation: Dp = 0.dp,
     shape: Shape = MaterialTheme.shapes.small,
+    border: Border? = null,
+    backgroundColor: Color = Color.Transparent,
+    disabledBackgroundColor: Color = androidx.ui.material.Button.defaultDisabledBackgroundColor,
     contentColor: Color = MaterialTheme.colors.primary,
+    disabledContentColor: Color = androidx.ui.material.Button.defaultDisabledContentColor,
+    padding: InnerPadding = androidx.ui.material.TextButton.DefaultInnerPadding,
     modifier: Modifier = Modifier
 ) = ButtonStyle(
-    backgroundColor = Color.Transparent,
+    elevation = elevation,
+    backgroundColor = backgroundColor,
+    disabledBackgroundColor = disabledBackgroundColor,
     shape = shape,
-    innerPadding = InnerPadding(all = 8.dp),
+    border = border,
     contentColor = contentColor,
+    disabledContentColor = disabledContentColor,
+    padding = padding,
     modifier = modifier
 )
 
@@ -111,10 +127,10 @@ fun Button(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     style: ButtonStyle = ButtonStyleAmbient.currentOrElse { ContainedButtonStyle() },
-    children: @Composable () -> Unit
+    text: @Composable () -> Unit
 ) {
-    /*androidx.ui.material.Button(
-        modifier = modifier + drawOpacity(opacity = if (enabled) 1f else 0.5f),
+    androidx.ui.material.Button(
+        modifier = style.modifier + modifier,
         onClick = onClick,
         enabled = enabled,
         backgroundColor = style.backgroundColor,
@@ -122,44 +138,18 @@ fun Button(
         shape = style.shape,
         border = style.border,
         elevation = style.elevation,
-        innerPadding = style.innerPadding,
-        children = children
-    )*/
-
-    // todo remove once content gravity is fixed
-    // Since we're adding layouts in between the clickable layer and the content, we need to
-    // merge all descendants, or we'll get multiple nodes
-    Semantics(container = true, mergeAllDescendants = true) {
-        androidx.ui.material.Surface(
-            shape = style.shape,
-            color = style.backgroundColor,
-            contentColor = style.contentColor,
-            border = style.border,
-            elevation = style.elevation,
-            modifier = style.modifier.plus(modifier)
+        padding = style.padding
+    ) {
+        Providers(
+            TextComposableStyleAmbient provides DefaultTextComposableStyle(
+                uppercase = true,
+                maxLines = 1
+            )
         ) {
-            Box(
-                modifier = Modifier
-                    .preferredSizeIn(minWidth = 64.dp, minHeight = 36.dp)
-                    .clickable(onClick = onClick, enabled = enabled),
-                paddingStart = style.innerPadding.start,
-                paddingTop = style.innerPadding.top,
-                paddingEnd = style.innerPadding.end,
-                paddingBottom = style.innerPadding.bottom,
-                gravity = Alignment.Center
-            ) {
-                Providers(
-                    TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                        uppercase = true,
-                        maxLines = 1
-                    )
-                ) {
-                    ProvideTextStyle(
-                        MaterialTheme.typography.button,
-                        children = children
-                    )
-                }
-            }
+            ProvideTextStyle(
+                MaterialTheme.typography.button,
+                children = text
+            )
         }
     }
 }

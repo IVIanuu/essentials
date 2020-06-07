@@ -21,8 +21,8 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
-import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.RectangleShape
 import androidx.ui.graphics.Shape
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
@@ -36,7 +36,7 @@ data class CardStyle(
     val contentColor: Color,
     val border: Border? = null,
     val elevation: Dp = 1.dp,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 val CardStyleAmbient = staticAmbientOf<CardStyle>()
@@ -65,7 +65,7 @@ fun Card(
     content: @Composable () -> Unit
 ) {
     androidx.ui.material.Card(
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         shape = style.shape,
         color = style.color,
         contentColor = style.contentColor,

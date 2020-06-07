@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class ProgressIndicatorStyle(
-    val modifier: Modifier,
-    val color: Color
+    val color: Color,
+    val modifier: Modifier = Modifier
 )
 
 val ProgressIndicatorStyleAmbient = staticAmbientOf<ProgressIndicatorStyle>()
@@ -46,7 +46,7 @@ fun LinearProgressIndicator(
 ) {
     androidx.ui.material.LinearProgressIndicator(
         progress = progress,
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }
@@ -57,7 +57,7 @@ fun LinearProgressIndicator(
     style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
     androidx.ui.material.LinearProgressIndicator(
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }
@@ -70,7 +70,7 @@ fun CircularProgressIndicator(
 ) {
     androidx.ui.material.CircularProgressIndicator(
         progress = progress,
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }
@@ -81,7 +81,7 @@ fun CircularProgressIndicator(
     style: ProgressIndicatorStyle = ProgressIndicatorStyleAmbient.currentOrElse { DefaultProgressIndicatorStyle() }
 ) {
     androidx.ui.material.CircularProgressIndicator(
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         color = style.color
     )
 }

@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 @Immutable
 data class ListItemStyle(
     val contentPadding: InnerPadding,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 @Composable

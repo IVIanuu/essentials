@@ -56,7 +56,7 @@ data class AppBarStyle(
     val contentColor: Color,
     val elevation: Dp,
     val centerTitle: Boolean,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 @Composable

@@ -36,17 +36,15 @@ fun SafeArea(
     top: Boolean = true,
     right: Boolean = true,
     bottom: Boolean = true,
-    minimum: InnerPadding? = null,
     children: @Composable () -> Unit
 ) {
     fun safeAreaValue(
         enabled: Boolean,
         insetsValue: Dp,
-        paddingValue: Dp,
-        min: Dp?
+        paddingValue: Dp
     ): Dp {
         if (!enabled) return 0.dp
-        return max(max(insetsValue, paddingValue), min ?: 0.dp)
+        return max(insetsValue, paddingValue)
     }
 
     val windowInsets = ambientWindowInsets()
@@ -67,26 +65,22 @@ fun SafeArea(
             paddingStart = safeAreaValue(
                 left,
                 windowInsets.viewInsets.start,
-                windowInsets.viewPadding.start,
-                minimum?.start
+                windowInsets.viewPadding.start
             ),
             paddingTop = safeAreaValue(
                 top,
                 windowInsets.viewInsets.top,
-                windowInsets.viewPadding.top,
-                minimum?.top
+                windowInsets.viewPadding.top
             ),
             paddingEnd = safeAreaValue(
                 right,
                 windowInsets.viewInsets.end,
-                windowInsets.viewPadding.end,
-                minimum?.end
+                windowInsets.viewPadding.end
             ),
             paddingBottom = safeAreaValue(
                 bottom,
                 windowInsets.viewInsets.bottom,
-                windowInsets.viewPadding.bottom,
-                minimum?.bottom
+                windowInsets.viewPadding.bottom
             ),
             children = children
         )

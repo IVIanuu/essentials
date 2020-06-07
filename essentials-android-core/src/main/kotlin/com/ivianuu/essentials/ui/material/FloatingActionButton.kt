@@ -48,7 +48,7 @@ data class FloatingActionButtonStyle(
     val backgroundColor: Color,
     val contentColor: Color,
     val elevation: Dp,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 @Composable
@@ -143,7 +143,7 @@ fun FloatingActionButton(
     style: FloatingActionButtonStyle = FloatingActionButtonStyleAmbient.currentOrElse { ExtendedFloatingActionButtonStyle() }
 ) {
     FloatingActionButton(
-        modifier = modifier,
+        modifier = style.modifier + modifier,
         onClick = onClick,
         style = style
     ) {

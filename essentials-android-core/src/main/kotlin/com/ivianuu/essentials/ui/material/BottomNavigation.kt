@@ -46,7 +46,7 @@ data class BottomNavigationStyle(
     val inactiveColor: Color,
     val alwaysShowLabels: Boolean,
     val elevation: Dp,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 val BottomNavigationStyleAmbient = staticAmbientOf<BottomNavigationStyle>()
@@ -75,7 +75,7 @@ fun BottomNavigation(
     children: @Composable RowScope.() -> Unit
 ) {
     BottomNavigation(
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         backgroundColor = style.backgroundColor,
         contentColor = style.activeColor,
         elevation = style.elevation

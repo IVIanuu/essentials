@@ -36,9 +36,9 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class SubheaderStyle(
-    val modifier: Modifier,
     val textStyle: TextStyle,
-    val textColor: Color
+    val textColor: Color,
+    val modifier: Modifier = Modifier
 )
 
 @Composable

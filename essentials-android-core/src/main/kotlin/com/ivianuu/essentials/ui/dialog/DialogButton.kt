@@ -43,7 +43,7 @@ fun DialogButton(
         },
         enabled = enabled,
         style = style,
-        children = children
+        text = children
     )
 }
 

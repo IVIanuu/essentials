@@ -79,7 +79,7 @@ fun Text(
 ) {
     androidx.ui.foundation.Text(
         text = if (style.uppercase) text.toUpperCase() else text,
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         style = textStyle,
         softWrap = style.softWrap,
         overflow = style.overflow,

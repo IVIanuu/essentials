@@ -28,8 +28,8 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 
 @Immutable
 data class SliderStyle(
-    val modifier: Modifier,
-    val color: Color
+    val color: Color,
+    val modifier: Modifier = Modifier
 )
 
 val SliderStyleAmbient = staticAmbientOf<SliderStyle>()
@@ -53,7 +53,7 @@ fun Slider(
     Slider(
         value = value,
         onValueChange = onValueChange,
-        modifier = style.modifier.plus(modifier),
+        modifier = style.modifier + modifier,
         valueRange = valueRange,
         steps = steps,
         onValueChangeEnd = onValueChangeEnd,

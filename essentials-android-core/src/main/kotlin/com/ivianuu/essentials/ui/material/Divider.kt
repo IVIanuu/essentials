@@ -17,7 +17,7 @@ import com.ivianuu.essentials.ui.core.currentOrElse
 @Immutable
 data class DividerStyle(
     val color: Color,
-    val modifier: Modifier
+    val modifier: Modifier = Modifier
 )
 
 val DividerStyleAmbient = staticAmbientOf<DividerStyle>()
