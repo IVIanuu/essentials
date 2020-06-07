@@ -77,9 +77,11 @@ fun TextInputDialog(
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null
+    neutralButton: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     Dialog(
+        modifier = modifier,
         buttonLayout = buttonLayout,
         icon = icon,
         title = title,

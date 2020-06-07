@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -36,25 +37,28 @@ fun <T> SingleChoiceListDialog(
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null
+    neutralButton: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     val navigator = NavigatorAmbient.current
 
-    VerticalScrollerDialog(
+    Dialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        scrollerContent = {
-            items.forEachIndexed { index, item ->
-                key(index) {
-                    SingleChoiceDialogListItem(
-                        title = { itemCallback(item) },
-                        selected = item == selectedItem,
-                        onSelect = {
-                            onSelect(item)
-                            if (dismissOnSelection) navigator.popTop()
-                        }
-                    )
+        content = {
+            VerticalScroller {
+                items.forEachIndexed { index, item ->
+                    key(index) {
+                        SingleChoiceDialogListItem(
+                            title = { itemCallback(item) },
+                            selected = item == selectedItem,
+                            onSelect = {
+                                onSelect(item)
+                                if (dismissOnSelection) navigator.popTop()
+                            }
+                        )
+                    }
                 }
             }
         },

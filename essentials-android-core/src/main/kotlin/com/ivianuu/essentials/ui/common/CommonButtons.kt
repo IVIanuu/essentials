@@ -51,11 +51,7 @@ fun NavigationButton() {
     val route = RouteAmbient.current
     val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
     when {
-        scaffold.hasDrawer -> {
-            DrawerButton()
-        }
-        canGoBack -> {
-            BackButton()
-        }
+        scaffold.hasDrawer -> DrawerButton()
+        canGoBack -> BackButton()
     }
 }

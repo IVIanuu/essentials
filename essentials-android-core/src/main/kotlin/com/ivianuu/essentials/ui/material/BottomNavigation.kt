@@ -217,4 +217,3 @@ fun <T> BottomNavigationSwapper(
         }
     }
 }
-

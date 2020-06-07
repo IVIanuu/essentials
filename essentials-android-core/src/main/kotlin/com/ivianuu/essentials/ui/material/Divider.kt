@@ -40,7 +40,7 @@ fun HorizontalDivider(
 }
 
 @Composable
-fun VerticalProvider(
+fun VerticalDivider(
     modifier: Modifier = Modifier,
     style: DividerStyle = DividerStyleAmbient.currentOrElse { DefaultDividerStyle() }
 ) {

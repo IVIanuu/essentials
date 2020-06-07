@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit {
     val navigator = NavigatorAmbient.current
-    return remember(route) {
+    return remember(navigator, route) {
         { navigator.push(route()) }
     }
 }
@@ -37,7 +37,7 @@ fun navigateOnClick(route: () -> Route): () -> Unit {
 @Composable
 fun openUrlOnClick(url: () -> String): () -> Unit {
     val activity = compositionActivity
-    return remember(url) {
+    return remember(activity, url) {
         {
             val intent = Intent(Intent.ACTION_VIEW).apply { this.data = url().toUri() }
             activity.startActivity(intent)
@@ -50,7 +50,7 @@ fun launchOnClick(
     block: suspend CoroutineScope.() -> Unit
 ): () -> Unit {
     val coroutineScope = compositionCoroutineScope()
-    return remember(block) {
+    return remember(coroutineScope, block) {
         {
             coroutineScope.launch(block = block)
         }

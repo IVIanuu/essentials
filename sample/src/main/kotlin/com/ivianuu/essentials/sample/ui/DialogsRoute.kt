@@ -41,7 +41,6 @@ import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
-import com.ivianuu.essentials.ui.dialog.VerticalScrollerDialog
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -184,20 +183,22 @@ val DialogsRoute = Route {
                     DialogLauncherButton(
                         text = "List"
                     ) {
-                        VerticalScrollerDialog(
+                        Dialog(
                             title = { Text("List") },
-                            scrollerContent = {
-                                (1..100).forEach {
-                                    ListItem(
-                                        title = {
-                                            Text(
-                                                "Item: $it"
-                                            )
-                                        },
-                                        onClick = {
+                            content = {
+                                VerticalScroller {
+                                    (1..100).forEach {
+                                        ListItem(
+                                            title = {
+                                                Text(
+                                                    "Item: $it"
+                                                )
+                                            },
+                                            onClick = {
 
-                                        }
-                                    )
+                                            }
+                                        )
+                                    }
                                 }
                             },
                             negativeButton = {

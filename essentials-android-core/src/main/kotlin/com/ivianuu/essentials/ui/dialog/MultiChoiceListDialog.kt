@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.Composable
 import androidx.compose.key
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
 
@@ -33,29 +34,33 @@ fun <T> MultiChoiceListDialog(
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null
+    neutralButton: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
-    VerticalScrollerDialog(
+    Dialog(
+        modifier = modifier,
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
-        scrollerContent = {
-            items.forEachIndexed { index, item ->
-                key(index) {
-                    MultiChoiceDialogListItem(
-                        title = { itemCallback(item) },
-                        checked = item in selectedItems,
-                        onCheckedChange = {
-                            val newSelectedItems = selectedItems.toMutableList()
-                            if (it) {
-                                newSelectedItems += item
-                            } else {
-                                newSelectedItems -= item
-                            }
+        content = {
+            VerticalScroller {
+                items.forEachIndexed { index, item ->
+                    key(index) {
+                        MultiChoiceDialogListItem(
+                            title = { itemCallback(item) },
+                            checked = item in selectedItems,
+                            onCheckedChange = {
+                                val newSelectedItems = selectedItems.toMutableList()
+                                if (it) {
+                                    newSelectedItems += item
+                                } else {
+                                    newSelectedItems -= item
+                                }
 
-                            onSelectionsChanged(newSelectedItems)
-                        }
-                    )
+                                onSelectionsChanged(newSelectedItems)
+                            }
+                        )
+                    }
                 }
             }
         },

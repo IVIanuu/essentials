@@ -32,13 +32,11 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 
-// todo add list dialog
-
 @Composable
 fun SimpleDialogListItem(
-    onClick: () -> Unit,
     leading: @Composable (() -> Unit)? = null,
-    title: @Composable () -> Unit
+    title: @Composable () -> Unit,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()

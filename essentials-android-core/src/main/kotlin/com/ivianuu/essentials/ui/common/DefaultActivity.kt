@@ -31,7 +31,7 @@ class DefaultActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkNotNull(appUi) {
-            "Cannot use DefaultActivity with a AppUi"
+            "Cannot use DefaultActivity without a AppUi"
         }
     }
 

@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.fragment.app.FragmentActivity
+import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.permission.BindPermissionRequestUi
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -35,14 +36,13 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.dialog.VerticalScrollerDialog
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
@@ -68,18 +68,20 @@ internal class DialogPermissionRequestUi : PermissionRequestUi {
 private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
     dismissHandler = { compositionActivity.finish() }
 ) {
-    VerticalScrollerDialog(
+    Dialog(
         title = { Text("Required Permissions") }, // todo customizable
-        scrollerContent = {
-            val viewModelFactory =
-                inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
-            val viewModel = viewModel { viewModelFactory(request) }
-            val activity = compositionActivity as PermissionActivity
-            viewModel.permissionsToProcess.forEach { permission ->
-                Permission(
-                    permission = permission,
-                    onClick = { viewModel.permissionClicked(activity, permission) }
-                )
+        content = {
+            VerticalScroller {
+                val viewModelFactory =
+                    inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
+                val viewModel = viewModel { viewModelFactory(request) }
+                val activity = compositionActivity as PermissionActivity
+                viewModel.permissionsToProcess.forEach { permission ->
+                    Permission(
+                        permission = permission,
+                        onClick = { viewModel.permissionClicked(activity, permission) }
+                    )
+                }
             }
         },
         negativeButton = {

@@ -97,7 +97,8 @@ fun ColorPickerDialog(
     showAlphaSelector: Boolean = false,
     dismissOnSelection: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null
+    title: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     val (currentColor, setCurrentColor) = state { initialColor }
     val (currentPage, setCurrentPage) = state { ColorPickerPage.Colors }
@@ -111,6 +112,7 @@ fun ColorPickerDialog(
     }
 
     Dialog(
+        modifier = modifier,
         icon = icon,
         title = title,
         applyContentPadding = false,

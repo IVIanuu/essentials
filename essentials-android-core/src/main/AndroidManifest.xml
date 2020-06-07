@@ -22,7 +22,7 @@
         <activity
             android:name="com.ivianuu.essentials.ui.common.DefaultActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

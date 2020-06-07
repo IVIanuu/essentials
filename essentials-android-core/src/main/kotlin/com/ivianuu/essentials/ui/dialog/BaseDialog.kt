@@ -49,13 +49,15 @@ val DialogStyleAmbient = staticAmbientOf<DialogStyle>()
 @Composable
 fun BaseDialog(
     style: DialogStyle = DialogStyleAmbient.currentOrElse { DefaultDialogStyle() },
+    modifier: Modifier = Modifier,
     children: @Composable () -> Unit
 ) {
     Surface(
         modifier = Modifier
             .padding(all = 32.dp)
             .preferredWidthIn(minWidth = 280.dp, maxWidth = 356.dp)
-            .plus(style.modifier),
+            .plus(style.modifier)
+            .plus(modifier),
         color = MaterialTheme.colors.surface,
         elevation = style.elevation,
         shape = style.shape,

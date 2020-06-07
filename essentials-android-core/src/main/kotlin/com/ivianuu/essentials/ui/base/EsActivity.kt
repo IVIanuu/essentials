@@ -31,8 +31,6 @@ import com.ivianuu.essentials.ui.core.RetainedObjects
  */
 abstract class EsActivity : AppCompatActivity() {
 
-    protected open val layoutRes: Int get() = 0
-
     protected open val containerId: Int
         get() = android.R.id.content
 
@@ -42,10 +40,6 @@ abstract class EsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (layoutRes != 0) {
-            setContentView(layoutRes)
-        }
 
         composition = findViewById<ViewGroup>(containerId).setContent(Recomposer.current()) {
             WrapContentWithEnvironment {

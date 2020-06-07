@@ -52,9 +52,10 @@ fun Dialog(
     content: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null
+    neutralButton: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
-    BaseDialog {
+    BaseDialog(modifier = modifier) {
         DialogBody(
             showTopDivider = showTopDivider,
             showBottomDivider = showBottomDivider,
