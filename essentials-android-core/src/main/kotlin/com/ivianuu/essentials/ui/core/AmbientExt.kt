@@ -19,5 +19,5 @@ val Ambient<*>.hasCurrentValue: Boolean get() {
 }
 
 @Composable
-fun <T : Any> Ambient<T>.currentOrElse(defaultValue: @Composable () -> T): T =
+inline fun <T : Any> Ambient<T>.currentOrElse(defaultValue: () -> T): T =
     currentOrNull ?: defaultValue()

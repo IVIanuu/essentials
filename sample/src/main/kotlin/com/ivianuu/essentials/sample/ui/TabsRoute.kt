@@ -17,14 +17,15 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Modifier
-import androidx.ui.core.drawShadow
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
+import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.material.AppBarStyleAmbient
+import com.ivianuu.essentials.ui.material.PrimaryAppBarStyle
 import com.ivianuu.essentials.ui.material.ProvideTabController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
@@ -40,11 +41,16 @@ val TabsRoute = Route {
     ProvideTabController(items = items) {
         Scaffold(
             topAppBar = {
-                Column {
-                    TopAppBar(title = { Text("Tabs") })
-                    Box(
-                        modifier = Modifier.drawShadow(shape = RectangleShape, elevation = 8.dp)
-                    ) {
+                Surface(
+                    color = MaterialTheme.colors.primary,
+                    elevation = 8.dp
+                ) {
+                    Column {
+                        TopAppBar(
+                            title = { Text("Tabs") },
+                            style = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() }
+                                .copy(elevation = 0.dp)
+                        )
                         TabRow<Color> { index, item ->
                             Tab(text = { Text("Item: $index") })
                         }

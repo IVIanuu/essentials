@@ -335,10 +335,6 @@ private fun ColorEditorHeader(
                     TextField(
                         value = hexInput,
                         onValueChange = { newValue ->
-                            if ((showAlphaSelector && newValue.length > 8) ||
-                                (!showAlphaSelector && newValue.length > 6)
-                            ) return@TextField
-
                             hexInput = newValue
 
                             if ((showAlphaSelector && newValue.length < 8) ||
