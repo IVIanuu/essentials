@@ -23,8 +23,10 @@ import androidx.compose.Composable
 import androidx.compose.Composition
 import androidx.compose.Recomposer
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.ui.core.Environment
 import com.ivianuu.essentials.ui.core.RetainedObjects
+import com.ivianuu.essentials.ui.core.SystemBarManager
+import com.ivianuu.essentials.ui.core.UiInitializers
+import com.ivianuu.essentials.ui.core.WindowInsetsManager
 
 /**
  * Base activity
@@ -42,8 +44,12 @@ abstract class EsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         composition = findViewById<ViewGroup>(containerId).setContent(Recomposer.current()) {
-            WrapContentWithEnvironment {
-                content()
+            WindowInsetsManager {
+                SystemBarManager {
+                    UiInitializers {
+                        content()
+                    }
+                }
             }
         }
     }
@@ -52,14 +58,6 @@ abstract class EsActivity : AppCompatActivity() {
         retainedObjects.dispose()
         composition.dispose()
         super.onDestroy()
-    }
-
-    @Composable
-    protected open fun WrapContentWithEnvironment(children: @Composable () -> Unit) {
-        Environment(
-            retainedObjects = retainedObjects,
-            children = children
-        )
     }
 
     @Composable
