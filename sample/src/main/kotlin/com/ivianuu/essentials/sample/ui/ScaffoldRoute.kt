@@ -45,7 +45,6 @@ import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.PrimaryAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.ScaffoldState
 import com.ivianuu.essentials.ui.material.Subheader
@@ -99,12 +98,7 @@ val ScaffoldRoute = Route {
 
     Scaffold(
         topAppBar = if (controls.showTopAppBar) ({
-            TopAppBar(
-                title = { Text("Scaffold") },
-                style = PrimaryAppBarStyle(
-                    centerTitle = controls.centerTitle
-                )
-            )
+            TopAppBar(title = { Text("Scaffold") })
         }) else null,
         fabPosition = controls.fabPosition,
         fab = {
@@ -152,17 +146,6 @@ val ScaffoldRoute = Route {
 
                     },
                     onClick = { controls.showTopAppBar = !controls.showTopAppBar }
-                )
-                ListItem(
-                    title = { Text("Center title") },
-                    trailing = {
-                        Checkbox(
-                            checked = controls.centerTitle,
-                            modifier = Modifier.absorbPointer(),
-                            onCheckedChange = {}
-                        )
-                    },
-                    onClick = { controls.centerTitle = !controls.centerTitle }
                 )
 
                 Subheader { Text("Bottom bar") }
@@ -214,7 +197,6 @@ val ScaffoldRoute = Route {
 
 private class ScaffoldControls {
     var showTopAppBar by mutableStateOf(true)
-    var centerTitle by mutableStateOf(false)
     var showBottomBar by mutableStateOf(false)
     var showFab by mutableStateOf(false)
     var fabPosition by mutableStateOf(ScaffoldState.FabPosition.End)
