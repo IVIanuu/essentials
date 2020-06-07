@@ -30,11 +30,11 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev504"
+    const val version = "${Build.versionName}-dev505"
 }
 
 object Deps {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.1"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0"
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
