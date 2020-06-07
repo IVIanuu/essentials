@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Transient
 @Transient
 class SampleUi : AppUi {
     @Composable
-    override fun runApp() {
+    override fun content() {
         ProvideSystemBarStyle(
             SystemBarStyle(
                 statusBarColor = Color.Black.copy(alpha = 0.2f),
