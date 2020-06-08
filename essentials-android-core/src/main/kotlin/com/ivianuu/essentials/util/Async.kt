@@ -105,14 +105,14 @@ class Fail<T>(error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
     override fun toString(): String = "Error(value=$error)"
 }
 
-fun <T> Flow<T>.executeAsync(): Flow<Async<T>> {
+fun <T> Flow<T>.async(): Flow<Async<T>> {
     return this
         .map { Success(it) as Async<T> }
         .onStart { emit(Loading()) }
         .catch { Fail<T>(it) }
 }
 
-fun <T> Deferred<T>.executeAsync(): Flow<Async<T>> {
+fun <T> Deferred<T>.asAsyncFlow(): Flow<Async<T>> {
     return flow {
         emit(Loading<T>())
         try {
@@ -123,7 +123,7 @@ fun <T> Deferred<T>.executeAsync(): Flow<Async<T>> {
     }
 }
 
-fun <T> executeAsync(block: suspend () -> T): Flow<Async<T>> {
+fun <T> asyncFlow(block: suspend () -> T): Flow<Async<T>> {
     return flow {
         emit(Loading<T>())
         try {
@@ -139,7 +139,7 @@ inline fun <T, R> Async<T>.map(transform: (T) -> R) =
 
 @Composable
 fun <T> Flow<T>.collectAsAsync(): Async<T> {
-    return remember(this) { executeAsync() }
+    return remember(this) { async() }
         .collectAsState(Uninitialized())
         .value
 }
