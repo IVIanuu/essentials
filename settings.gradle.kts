@@ -23,7 +23,6 @@ include(
     ":essentials-hide-nav-bar",
     ":essentials-kotlin-compiler",
     ":essentials-moshi",
-    ":essentials-moshi-android",
     ":essentials-mvrx",
     ":essentials-notification-listener",
     ":essentials-permission",

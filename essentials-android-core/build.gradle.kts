@@ -50,6 +50,6 @@ dependencies {
     api(Deps.Injekt.android)
 
     api(project(":essentials-core"))
-    api(project(":essentials-moshi-android"))
+    api(project(":essentials-moshi"))
     api(project(":essentials-store-android"))
 }

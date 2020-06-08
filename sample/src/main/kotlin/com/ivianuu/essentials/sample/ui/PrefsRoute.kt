@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.graphics.Color
+import com.ivianuu.essentials.store.android.color
 import com.ivianuu.essentials.store.android.duration
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
@@ -111,7 +112,7 @@ val PrefsRoute = Route {
                 )
 
                 ColorPreference(
-                    box = boxFactory.create("color", Color.Red),
+                    box = boxFactory.color("color", Color.Red),
                     modifier = dependenciesModifier,
                     title = { Text("Color") },
                     summary = { Text("This is a color preference") }
