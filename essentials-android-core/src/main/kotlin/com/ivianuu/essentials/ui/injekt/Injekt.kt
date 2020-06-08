@@ -16,19 +16,30 @@
 
 package com.ivianuu.essentials.ui.injekt
 
+import android.app.Application
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.ContextAmbient
 import com.ivianuu.essentials.ui.common.compositionActivity
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.android.applicationComponent
 import com.ivianuu.injekt.composition.get
 
 @Composable
-val compositionComponent: ActivityComponent
+val activityComponent: ActivityComponent
     get() = compositionActivity.activityComponent
 
 @Composable
-fun <T> inject(): T {
-    val component = compositionComponent
+val appComponent: ApplicationComponent
+    get() = (ContextAmbient.current.applicationContext as Application).applicationComponent
+
+@Composable
+inline fun <T> inject(): T = inject { activityComponent }
+
+@Composable
+inline fun <C : Any, T> inject(componentProvider: () -> C): T {
+    val component = componentProvider()
     return remember(component) { component.get() }
 }

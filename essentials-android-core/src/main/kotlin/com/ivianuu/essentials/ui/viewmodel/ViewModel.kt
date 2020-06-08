@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.currentComposer
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.core.rememberRetained
-import com.ivianuu.essentials.ui.injekt.compositionComponent
+import com.ivianuu.essentials.ui.injekt.activityComponent
 import com.ivianuu.injekt.composition.get
 
 @Composable
@@ -32,7 +32,13 @@ fun <T : ViewModel> viewModel(
 @Composable
 fun <T : ViewModel> injectViewModel(
     key: Any = currentComposer.currentCompoundKeyHash,
+): T = injectViewModel(key = key) { activityComponent }
+
+@Composable
+inline fun <C : Any, T : ViewModel> injectViewModel(
+    key: Any = currentComposer.currentCompoundKeyHash,
+    componentProvider: () -> C
 ): T {
-    val component = compositionComponent
+    val component = componentProvider()
     return viewModel(key) { component.get() }
 }
