@@ -95,6 +95,16 @@ fun <T> RetainedObjects.getOrSetIfChanged(
 
 val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
 
+// todo remove once compose is fixed
+@Composable
+inline fun <T> rememberRetained(
+    key: Any = currentComposer.currentCompoundKeyHash,
+    noinline init: () -> T
+): T {
+    val retainedObjects = RetainedObjectsAmbient.current
+    return retainedObjects.getOrSetIfChanged(key, *emptyArray(), defaultValue = init)
+}
+
 @Composable
 inline fun <T> rememberRetained(
     vararg inputs: Any?,
