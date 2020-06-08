@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
 import androidx.compose.onCommit
 import androidx.compose.remember
 
 @Composable
 fun onBackPressed(
-    owner: OnBackPressedDispatcherOwner = compositionActivity,
     enabled: Boolean = true,
     callback: () -> Unit
 ) {
@@ -35,10 +33,14 @@ fun onBackPressed(
             }
         }
     }
-    onBackPressedCallback.isEnabled = enabled
+    onCommit(enabled) {
+        onBackPressedCallback.isEnabled = enabled
+    }
 
-    onCommit(owner, onBackPressedCallback) {
-        owner.onBackPressedDispatcher.addCallback(onBackPressedCallback)
+    val onBackPressedDispatcher = onBackPressedDispatcherOwner
+        .onBackPressedDispatcher
+    onCommit(onBackPressedCallback) {
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
         onDispose { onBackPressedCallback.remove() }
     }
 }
