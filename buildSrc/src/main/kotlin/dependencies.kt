@@ -106,7 +106,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev172"
+        private const val version = "0.0.1-dev173"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidCompose = "com.ivianuu.injekt:injekt-android-compose:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
