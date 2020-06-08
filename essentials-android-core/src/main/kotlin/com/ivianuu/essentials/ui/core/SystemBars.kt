@@ -19,14 +19,17 @@ package com.ivianuu.essentials.ui.core
 import android.app.Activity
 import android.os.Build
 import android.view.View
+import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
-import androidx.compose.onPreCommit
+import androidx.compose.frames.modelListOf
+import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
+import androidx.ui.animation.animatedColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
@@ -100,10 +103,12 @@ fun ProvideSystemBarStyle(
     children: @Composable () -> Unit
 ) {
     val systemBarManager = SystemBarManagerAmbient.current
-    onPreCommit(value) {
+
+    onCommit(value) {
         systemBarManager.registerStyle(value)
         onDispose { systemBarManager.unregisterStyle(value) }
     }
+
     Providers(
         SystemBarStyleAmbient provides value,
         children = children
@@ -118,6 +123,7 @@ fun ambientSystemBarStyle(): SystemBarStyle =
 fun SystemBarManager(children: @Composable () -> Unit) {
     val activity = compositionActivity
     val systemBarManager = remember { SystemBarManager(activity) }
+    systemBarManager.compose()
     Providers(SystemBarManagerAmbient provides systemBarManager, children = children)
 }
 
@@ -126,7 +132,7 @@ private val SystemBarStyleAmbient =
 
 private class SystemBarManager(private val activity: Activity) {
 
-    private val styles = mutableListOf<SystemBarStyle>()
+    private val styles = modelListOf<SystemBarStyle>()
 
     init {
         activity.window.decorView.systemUiVisibility =
@@ -139,24 +145,30 @@ private class SystemBarManager(private val activity: Activity) {
 
     fun registerStyle(style: SystemBarStyle) {
         styles += style
-        update()
     }
 
     fun unregisterStyle(style: SystemBarStyle) {
         styles.removeAt(styles.lastIndexOf(style))
-        update()
     }
 
-    private fun update() {
+    @Composable
+    fun compose() {
         val currentStyle = styles.lastOrNull() ?: SystemBarStyle()
 
-        activity.window.statusBarColor = currentStyle.statusBarColor.toArgb()
+        systemBarColorAnimation(currentStyle.statusBarColor) {
+            activity.window.statusBarColor = it.toArgb()
+        }
+
         activity.window.decorView.systemUiVisibility =
             activity.window.decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
                 currentStyle.lightStatusBar
             )
-        activity.window.navigationBarColor = currentStyle.navigationBarColor.toArgb()
+
+        systemBarColorAnimation(currentStyle.navigationBarColor) {
+            activity.window.navigationBarColor = it.toArgb()
+        }
+
         if (Build.VERSION.SDK_INT >= 26) {
             activity.window.decorView.systemUiVisibility =
                 activity.window.decorView.systemUiVisibility.setFlag(
@@ -166,8 +178,29 @@ private class SystemBarManager(private val activity: Activity) {
         }
 
         if (Build.VERSION.SDK_INT >= 28) {
-            activity.window.navigationBarDividerColor = currentStyle.navigationBarDividerColor.toArgb()
+            systemBarColorAnimation(currentStyle.navigationBarColor) {
+                activity.window.navigationBarDividerColor = it.toArgb()
+            }
         }
+    }
+
+}
+
+@Composable
+private fun systemBarColorAnimation(
+    color: Color,
+    applyColor: (Color) -> Unit
+) {
+    val animation = animatedColor(color)
+
+    onCommit(color) {
+        animation.animateTo(color, anim = TweenBuilder<Color>().apply {
+            duration = 150
+        })
+    }
+
+    onCommit(animation.value) {
+        applyColor(animation.value)
     }
 }
 
