@@ -42,11 +42,13 @@ fun DefaultRadioButtonStyle(color: Color = MaterialTheme.colors.secondary) =
 fun RadioButton(
     selected: Boolean,
     onSelect: () -> Unit,
-    style: RadioButtonStyle = RadioButtonStyleAmbient.currentOrElse { DefaultRadioButtonStyle() }
+    style: RadioButtonStyle = RadioButtonStyleAmbient.currentOrElse { DefaultRadioButtonStyle() },
+    modifier: Modifier = Modifier
 ) {
     androidx.ui.material.RadioButton(
         selected = selected,
         onSelect = onSelect,
-        color = style.color
+        color = style.color,
+        modifier = style.modifier + modifier
     )
 }
