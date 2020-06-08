@@ -18,6 +18,7 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.layout.preferredSize
@@ -58,7 +59,7 @@ fun AppPickerRoute(
             val viewModel = viewModel { viewModelFactory(appFilter) }
 
             RenderAsyncList(
-                state = viewModel.state.apps,
+                state = viewModel.state.collectAsState().value.apps,
                 successItemCallback = { app ->
                     key(app.packageName) {
                         AppInfo(

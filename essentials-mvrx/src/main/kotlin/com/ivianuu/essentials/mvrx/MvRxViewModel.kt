@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.mvrx
 
-import android.os.Looper
-import androidx.compose.StructurallyEqual
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.setValue
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
@@ -29,14 +24,16 @@ import com.ivianuu.essentials.util.Success
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -44,20 +41,18 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
-    private var _state by mutableStateOf(initialState, StructurallyEqual)
-    val state: S
-        get() {
-            check(Thread.currentThread() == Looper.getMainLooper().thread)
-            return _state
-        }
+    private val _state = MutableStateFlow(initialState)
+    val state: StateFlow<S> get() = _state
 
     protected suspend fun setState(reducer: suspend S.() -> S) {
-        withContext(Dispatchers.Main) {
-            val currentState = _state
-            val newState = reducer(currentState)
-            _state = newState
-        }
+        val currentState = _state.value
+        val newState = reducer(currentState)
+        _state.value = newState
     }
+
+    protected fun subscribe(consumer: suspend (S) -> Unit): Job =
+        state.onEach(consumer)
+            .launchIn(coroutineScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = coroutineScope.coroutineContext,
@@ -103,5 +98,5 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $_state"
+    override fun toString() = "${javaClass.simpleName} -> $state"
 }

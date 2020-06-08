@@ -18,6 +18,7 @@ package com.ivianuu.essentials.shortcutpicker
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.painter.ImagePainter
@@ -45,7 +46,7 @@ fun ShortcutPickerRoute(
 ) = Route {
     val viewModel = injectViewModel<ShortcutPickerViewModel>()
     SimpleScreen(title = title ?: stringResource(R.string.es_title_shortcut_picker)) {
-        RenderAsyncList(state = viewModel.state.shortcuts) { shortcut ->
+        RenderAsyncList(state = viewModel.state.collectAsState().value.shortcuts) { shortcut ->
             Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
         }
     }

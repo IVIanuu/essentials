@@ -21,7 +21,7 @@ fun ActionPickerRoute(
         val viewModel = viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
 
         RenderAsyncList(
-            state = viewModel.state.items,
+            state = viewModel.state.value.items,
             successItemCallback = { item ->
                 ActionPickerItem(
                     item = item,

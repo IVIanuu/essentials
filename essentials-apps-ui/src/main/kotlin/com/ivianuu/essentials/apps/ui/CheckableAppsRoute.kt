@@ -18,6 +18,7 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.collectAsState
 import androidx.compose.onCommit
 import androidx.ui.core.Modifier
 import androidx.ui.layout.preferredSize
@@ -89,7 +90,7 @@ fun CheckableAppsScreen(
         },
         body = {
             RenderAsyncList(
-                state = viewModel.state.apps,
+                state = viewModel.state.collectAsState().value.apps,
                 successItemCallback = { app ->
                     CheckableApp(
                         app = app,
@@ -184,7 +185,7 @@ internal class CheckableAppsViewModel(
 
     fun selectAllClicked() {
         coroutineScope.launch {
-            state.apps()?.let { allApps ->
+            state.value.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
                 }
