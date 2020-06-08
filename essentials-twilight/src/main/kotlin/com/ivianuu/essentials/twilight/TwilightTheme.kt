@@ -27,7 +27,7 @@ import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
-import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.core.EsTheme
 import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.injekt.inject
@@ -52,7 +52,7 @@ fun TwilightTheme(
         if (twilightState.useBlack) blackColors else darkColors
     } else lightColors
 
-    val lastColors = holder { colorsForTwilightState() }
+    val lastColors = untrackedState { colorsForTwilightState() }
     val targetColors = colorsForTwilightState()
 
     val animation = key(twilightState) { animatedFloat(0f) }

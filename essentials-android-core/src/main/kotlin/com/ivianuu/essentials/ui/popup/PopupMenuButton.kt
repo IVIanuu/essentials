@@ -18,7 +18,7 @@ import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.common.holder
+import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -54,14 +54,14 @@ fun Modifier.popupClickable(
 ) = composed {
     val navigator = NavigatorAmbient.current
 
-    val coordinatesHolder =
-        holder<LayoutCoordinates?> { null }
+    val coordinates =
+        untrackedState<LayoutCoordinates?> { null }
 
-    onPositioned { coordinatesHolder.value = it }
+    onPositioned { coordinates.value = it }
         .clickable(indication = indicationFactory()) {
             navigator.push(
                 PopupRoute(
-                    position = coordinatesHolder.value!!.boundsInRoot.let {
+                    position = coordinates.value!!.boundsInRoot.let {
                         IntPxBounds(
                             left = it.left.toInt().ipx,
                             top = it.top.toInt().ipx,

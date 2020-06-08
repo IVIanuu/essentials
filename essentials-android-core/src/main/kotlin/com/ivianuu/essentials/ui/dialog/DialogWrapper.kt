@@ -29,8 +29,8 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.wrapContentSize
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.common.holder
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.common.untrackedState
 
 @Composable
 fun DialogWrapper(
@@ -43,7 +43,7 @@ fun DialogWrapper(
     }
 
     val dismissed = state { false }
-    val dismissCalled = holder { false }
+    val dismissCalled = untrackedState { false }
     if (dismissed.value) {
         if (!dismissCalled.value) {
             dismissCalled.value = true

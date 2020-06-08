@@ -17,62 +17,43 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.compose.MutableState
 import androidx.compose.ReferentiallyEqual
-import androidx.compose.Stable
 import androidx.compose.remember
 
 @Composable
-inline fun <T> holder(
+inline fun <T> untrackedState(
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): MutableHolder<T> = remember { mutableHolderOf(init(), areEquivalent) }
+): MutableState<T> = remember { untrackedStateOf(init(), areEquivalent) }
 
 @Composable
-inline fun <T, V1> holderFor(
-    v1: V1,
-    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
-    crossinline init: () -> T
-): MutableHolder<T> = remember(v1) { mutableHolderOf(init(), areEquivalent) }
-
-@Composable
-inline fun <T, V1, V2> holderFor(
-    v1: V1,
-    v2: V2,
-    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
-    crossinline init: () -> T
-): MutableHolder<T> = remember(v1, v2) { mutableHolderOf(init(), areEquivalent) }
-
-@Composable
-inline fun <T> holderFor(
+inline fun <T> untrackedStateFor(
     vararg inputs: Any?,
     noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
     crossinline init: () -> T
-): MutableHolder<T> = remember(*inputs) {
-    mutableHolderOf(init(), areEquivalent)
+): MutableState<T> = remember(*inputs) {
+    untrackedStateOf(init(), areEquivalent)
 }
 
-fun <T> mutableHolderOf(
+fun <T> untrackedStateOf(
     value: T,
     areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual
-): MutableHolder<T> = MutableHolderImpl(value, areEquivalent)
+): MutableState<T> = UntrackedState(value, areEquivalent)
 
-interface Holder<T> {
-    val value: T
-}
-
-interface MutableHolder<T> : Holder<T> {
-    override var value: T
-}
-
-@Stable
-private class MutableHolderImpl<T> internal constructor(
+private class UntrackedState<T>(
     value: T,
     val areEquivalent: (old: T, new: T) -> Boolean
-) : MutableHolder<T> {
+) : MutableState<T> {
     override var value: T = value
+        get() = synchronized(this) { field }
         set(value) {
-            if (!areEquivalent(field, value)) {
-                field = value
+            val oldValue = synchronized(this) { field }
+            if (!areEquivalent(oldValue, value)) {
+                synchronized(this) { field = value }
             }
         }
+
+    override fun component1(): T = value
+    override fun component2(): (T) -> Unit = { value = it }
 }
