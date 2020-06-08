@@ -30,9 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -49,10 +47,6 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         val newState = reducer(currentState)
         _state.value = newState
     }
-
-    protected fun subscribe(consumer: suspend (S) -> Unit): Job =
-        state.onEach(consumer)
-            .launchIn(coroutineScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = coroutineScope.coroutineContext,
