@@ -229,10 +229,6 @@ enum class HomeItem(
         title = "Shortcut picker",
         route = { ShortcutPickerRoute() }
     ),
-    SystemBars(
-        title = "System bars",
-        route = { SystemBarsRoute }
-    ),
     Tabs(
         title = "Tabs",
         route = { TabsRoute }

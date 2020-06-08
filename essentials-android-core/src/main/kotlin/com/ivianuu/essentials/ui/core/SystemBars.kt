@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.core
 import android.app.Activity
 import android.os.Build
 import android.view.View
-import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
@@ -29,9 +28,7 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.animation.animatedColor
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.isSet
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.compositionActivity
@@ -156,9 +153,7 @@ private class SystemBarManager(private val activity: Activity) {
     fun compose() {
         val currentStyle = styles.lastOrNull() ?: SystemBarStyle()
 
-        systemBarColorAnimation(currentStyle.statusBarColor) {
-            activity.window.statusBarColor = it.toArgb()
-        }
+        activity.window.statusBarColor = currentStyle.statusBarColor.toArgb()
 
         activity.window.decorView.systemUiVisibility =
             activity.window.decorView.systemUiVisibility.setFlag(
@@ -166,9 +161,7 @@ private class SystemBarManager(private val activity: Activity) {
                 currentStyle.lightStatusBar
             )
 
-        systemBarColorAnimation(currentStyle.navigationBarColor) {
-            activity.window.navigationBarColor = it.toArgb()
-        }
+        activity.window.navigationBarColor = currentStyle.navigationBarColor.toArgb()
 
         if (Build.VERSION.SDK_INT >= 26) {
             activity.window.decorView.systemUiVisibility =
@@ -179,34 +172,11 @@ private class SystemBarManager(private val activity: Activity) {
         }
 
         if (Build.VERSION.SDK_INT >= 28) {
-            systemBarColorAnimation(currentStyle.navigationBarColor) {
-                activity.window.navigationBarDividerColor = it.toArgb()
-            }
+            activity.window.navigationBarDividerColor = currentStyle.navigationBarDividerColor
+                .toArgb()
         }
     }
 
-}
-
-@Composable
-private fun systemBarColorAnimation(
-    color: Color,
-    applyColor: (Color) -> Unit
-) {
-    val animation = animatedColor(Color.Unset)
-
-    onCommit(color) {
-        if (animation.value.isSet) {
-            animation.animateTo(color, anim = TweenBuilder<Color>().apply {
-                duration = 250
-            })
-        } else {
-            animation.snapTo(color)
-        }
-    }
-
-    onCommit(animation.value) {
-        applyColor(animation.value)
-    }
 }
 
 private val SystemBarManagerAmbient =
