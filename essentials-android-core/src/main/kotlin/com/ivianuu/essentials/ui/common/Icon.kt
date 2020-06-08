@@ -21,7 +21,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.clickable
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.dp
 
@@ -33,7 +33,7 @@ fun IconButton(
     children: @Composable () -> Unit
 ) {
     Box(
-        modifier = Modifier.preferredSize(size = 40.dp)
+        modifier = Modifier.size(size = 40.dp)
             .clickable(
                 onClick = onClick,
                 enabled = enabled,

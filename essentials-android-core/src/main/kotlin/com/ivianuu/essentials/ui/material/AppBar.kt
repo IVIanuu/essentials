@@ -116,8 +116,8 @@ fun TopAppBar(
         ) {
             SafeArea(
                 top = primary,
-                left = false,
-                right = false,
+                start = false,
+                end = false,
                 bottom = false
             ) {
                 Row(

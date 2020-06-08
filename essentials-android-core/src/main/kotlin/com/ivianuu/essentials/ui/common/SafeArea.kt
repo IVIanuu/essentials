@@ -32,9 +32,9 @@ import com.ivianuu.essentials.ui.core.ambientWindowInsets
 @Composable
 fun SafeArea(
     modifier: Modifier = Modifier,
-    left: Boolean = true,
+    start: Boolean = true,
     top: Boolean = true,
-    right: Boolean = true,
+    end: Boolean = true,
     bottom: Boolean = true,
     children: @Composable () -> Unit
 ) {
@@ -52,9 +52,9 @@ fun SafeArea(
     WindowInsetsProvider(
         value = WindowInsets(
             viewPadding = InnerPadding(
-                start = if (left) 0.dp else windowInsets.viewPadding.start,
+                start = if (start) 0.dp else windowInsets.viewPadding.start,
                 top = if (top) 0.dp else windowInsets.viewPadding.top,
-                end = if (right) 0.dp else windowInsets.viewPadding.end,
+                end = if (end) 0.dp else windowInsets.viewPadding.end,
                 bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
             ),
             viewInsets = windowInsets.viewInsets
@@ -63,7 +63,7 @@ fun SafeArea(
         Box(
             modifier = modifier,
             paddingStart = safeAreaValue(
-                left,
+                start,
                 windowInsets.viewInsets.start,
                 windowInsets.viewPadding.start
             ),
@@ -73,7 +73,7 @@ fun SafeArea(
                 windowInsets.viewPadding.top
             ),
             paddingEnd = safeAreaValue(
-                right,
+                end,
                 windowInsets.viewInsets.end,
                 windowInsets.viewPadding.end
             ),

@@ -40,9 +40,9 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.height
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredSize
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
@@ -252,7 +252,7 @@ private fun ColorGridItem(
                     icon = Icons.Default.Check,
                     modifier = Modifier
                         .center()
-                        .preferredSize(size = 36.dp)
+                        .size(size = 36.dp)
                 )
             }
         }
@@ -264,7 +264,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             icon = Icons.Default.ArrowBack,
-            modifier = Modifier.preferredSize(size = 36.dp)
+            modifier = Modifier.size(size = 36.dp)
         )
     }
 }
@@ -279,6 +279,7 @@ private fun BaseColorGridItem(
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
             .clickable(onClick = onClick, indication = RippleIndication(bounded = false)),
+        gravity = ContentGravity.Center,
         children = children
     )
 }
@@ -319,7 +320,7 @@ private fun ColorEditorHeader(
     ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
         Surface(color = color) {
             Row(
-                modifier = Modifier.preferredHeight(72.dp)
+                modifier = Modifier.height(72.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 horizontalArrangement = Arrangement.Center,
@@ -379,7 +380,7 @@ private fun ColorComponentItem(
     onValueChanged: (Float) -> Unit
 ) {
     Row(
-        modifier = Modifier.preferredHeight(48.dp).fillMaxWidth(),
+        modifier = Modifier.height(48.dp).fillMaxWidth(),
         verticalGravity = Alignment.CenterVertically
     ) {
         Text(

@@ -23,7 +23,7 @@ import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.height
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
@@ -53,7 +53,7 @@ val BillingRoute = Route {
                 textStyle = MaterialTheme.typography.h6
             )
 
-            Spacer(Modifier.preferredHeight(8.dp))
+            Spacer(Modifier.height(8.dp))
 
             if (!isPurchased.value) {
                 Button(

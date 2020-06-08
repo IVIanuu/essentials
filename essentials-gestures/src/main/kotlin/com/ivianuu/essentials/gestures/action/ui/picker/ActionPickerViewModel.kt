@@ -4,7 +4,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.core.Modifier
 import androidx.ui.layout.Spacer
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -118,7 +118,7 @@ sealed class ActionPickerItem {
 
         @Composable
         override fun icon() {
-            Spacer(Modifier.preferredSize(24.dp))
+            Spacer(Modifier.size(24.dp))
         }
 
         override suspend fun getResult() = getResult.invoke()

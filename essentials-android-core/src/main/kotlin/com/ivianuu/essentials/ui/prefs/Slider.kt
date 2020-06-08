@@ -27,7 +27,7 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredWidthIn
+import androidx.ui.layout.widthIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -422,7 +422,7 @@ fun <T : Comparable<T>> BaseSliderPreference(
 
             if (valueText != null) {
                 Box(
-                    modifier = Modifier.preferredWidthIn(minWidth = 72.dp),
+                    modifier = Modifier.widthIn(minWidth = 72.dp),
                     gravity = ContentGravity.Center
                 ) {
                     valueText(fromFloat(sliderState.value))

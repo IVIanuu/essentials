@@ -135,9 +135,9 @@ fun Scaffold(
 
         SafeArea(
             modifier = Modifier.fillMaxSize(),
-            left = scaffoldState.applySideSafeArea,
+            start = scaffoldState.applySideSafeArea,
             top = false,
-            right = scaffoldState.applySideSafeArea,
+            end = scaffoldState.applySideSafeArea,
             bottom = false,
             children = layout
         )

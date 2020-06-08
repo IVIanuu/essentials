@@ -28,9 +28,9 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.height
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.width
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -43,24 +43,24 @@ fun Banner(
     actions: @Composable () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(Modifier.preferredHeight(24.dp))
+        Spacer(Modifier.height(24.dp))
 
         Row(verticalGravity = Alignment.CenterVertically) {
-            Spacer(Modifier.preferredWidth(16.dp))
+            Spacer(Modifier.width(16.dp))
 
             if (leading != null) {
                 leading()
-                Spacer(Modifier.preferredWidth(16.dp))
+                Spacer(Modifier.width(16.dp))
             }
 
             ProvideTextStyle(value = MaterialTheme.typography.body2) {
                 ProvideEmphasis(emphasis = EmphasisAmbient.current.high, content = content)
             }
 
-            Spacer(Modifier.preferredWidth(16.dp))
+            Spacer(Modifier.width(16.dp))
         }
 
-        Spacer(Modifier.preferredHeight(20.dp))
+        Spacer(Modifier.height(20.dp))
 
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -72,6 +72,6 @@ fun Banner(
             }
         }
 
-        Spacer(Modifier.preferredHeight(8.dp))
+        Spacer(Modifier.height(8.dp))
     }
 }

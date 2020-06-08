@@ -11,7 +11,7 @@ import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.Indication
 import androidx.ui.foundation.IndicationAmbient
 import androidx.ui.foundation.clickable
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.material.ripple.RippleIndication
@@ -31,7 +31,8 @@ fun PopupMenuButton(
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
     Box(
-        modifier = Modifier.preferredSize(size = 40.dp)
+        modifier = Modifier
+            .size(size = 40.dp)
             .popupClickable(
                 items = items,
                 onCancel = onCancel,

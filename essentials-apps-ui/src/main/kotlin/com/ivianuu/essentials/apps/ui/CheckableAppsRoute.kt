@@ -21,7 +21,7 @@ import androidx.compose.Immutable
 import androidx.compose.collectAsState
 import androidx.compose.onCommit
 import androidx.ui.core.Modifier
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
@@ -112,7 +112,7 @@ private fun CheckableApp(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.info.packageName),
-                modifier = Modifier.preferredSize(40.dp)
+                modifier = Modifier.size(40.dp)
             )
         },
         trailing = {

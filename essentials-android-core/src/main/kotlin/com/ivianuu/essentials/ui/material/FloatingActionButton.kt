@@ -34,7 +34,7 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeightIn
-import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.width
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
@@ -154,7 +154,7 @@ fun FloatingActionButton(
                 modifier = Modifier.padding(start = 12.dp, end = 20.dp)
             ) {
                 icon()
-                Spacer(Modifier.preferredWidth(12.dp))
+                Spacer(Modifier.width(12.dp))
                 text()
             }
         }

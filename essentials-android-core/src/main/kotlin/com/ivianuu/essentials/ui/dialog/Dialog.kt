@@ -33,7 +33,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.width
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -114,7 +114,7 @@ private fun DialogBody(
             if (styledIcon != null && styledTitle != null) {
                 Row(verticalGravity = Alignment.CenterVertically) {
                     styledIcon()
-                    Spacer(Modifier.preferredWidth(16.dp))
+                    Spacer(Modifier.width(16.dp))
                     styledTitle()
                 }
             } else if (styledIcon != null) {

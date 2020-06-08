@@ -27,7 +27,7 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.layout.Column
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
@@ -137,7 +137,7 @@ private fun HomeItem(
                     .front
             }
             Box(
-                modifier = Modifier.preferredSize(40.dp),
+                modifier = Modifier.size(40.dp),
                 backgroundColor = color,
                 shape = CircleShape
             ) {}
@@ -228,6 +228,10 @@ enum class HomeItem(
     ShortcutPicker(
         title = "Shortcut picker",
         route = { ShortcutPickerRoute() }
+    ),
+    SystemBars(
+        title = "System bars",
+        route = { SystemBarsRoute }
     ),
     Tabs(
         title = "Tabs",

@@ -25,9 +25,9 @@ import androidx.ui.foundation.clickable
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.heightIn
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeightIn
-import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.width
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
@@ -40,7 +40,7 @@ fun SimpleDialogListItem(
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
-            .preferredHeightIn(minHeight = 48.dp)
+            .heightIn(minHeight = 48.dp)
             .clickable(onClick = onClick),
         gravity = ContentGravity.CenterStart
     ) {
@@ -51,7 +51,7 @@ fun SimpleDialogListItem(
             ProvideEmphasis(emphasis = EmphasisAmbient.current.high) {
                 if (leading != null) {
                     leading()
-                    Spacer(Modifier.preferredWidth(24.dp))
+                    Spacer(Modifier.width(24.dp))
                 }
 
                 title()

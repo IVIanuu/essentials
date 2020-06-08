@@ -17,7 +17,7 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.graphics.painter.Painter
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.graphics.vector.VectorPainter
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.res.imageResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
@@ -60,7 +60,7 @@ fun Icon(
 ) {
     Image(
         painter = painter,
-        modifier = Modifier.preferredSize(24.dp).plus(modifier),
+        modifier = Modifier.size(24.dp).plus(modifier),
         style = remember(style) { style.toImageStyle() }
     )
 }

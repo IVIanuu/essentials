@@ -31,6 +31,7 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.animation.animatedColor
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.isSet
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.compositionActivity
@@ -191,12 +192,16 @@ private fun systemBarColorAnimation(
     color: Color,
     applyColor: (Color) -> Unit
 ) {
-    val animation = animatedColor(color)
+    val animation = animatedColor(Color.Unset)
 
     onCommit(color) {
-        animation.animateTo(color, anim = TweenBuilder<Color>().apply {
-            duration = 150
-        })
+        if (animation.value.isSet) {
+            animation.animateTo(color, anim = TweenBuilder<Color>().apply {
+                duration = 250
+            })
+        } else {
+            animation.snapTo(color)
+        }
     }
 
     onCommit(animation.value) {

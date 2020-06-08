@@ -9,8 +9,8 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxHeight
 import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredWidth
+import androidx.ui.layout.height
+import androidx.ui.layout.width
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.currentOrElse
 
@@ -35,7 +35,7 @@ fun HorizontalDivider(
 ) {
     Box(
         backgroundColor = style.color,
-        modifier = Modifier.fillMaxWidth().preferredHeight(1.dp) + style.modifier + modifier
+        modifier = Modifier.fillMaxWidth().height(1.dp) + style.modifier + modifier
     )
 }
 
@@ -46,6 +46,6 @@ fun VerticalDivider(
 ) {
     Box(
         backgroundColor = style.color,
-        modifier = Modifier.fillMaxHeight().preferredWidth(1.dp) + style.modifier + modifier
+        modifier = Modifier.fillMaxHeight().width(1.dp) + style.modifier + modifier
     )
 }

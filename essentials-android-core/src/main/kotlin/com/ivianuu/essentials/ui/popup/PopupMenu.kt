@@ -24,7 +24,7 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.Column
-import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.height
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
@@ -76,7 +76,7 @@ private fun PopupMenuItem(
 ) {
     Box(
         modifier = Modifier.preferredWidthIn(minWidth = 200.dp)
-            .preferredHeight(48.dp)
+            .height(48.dp)
             .clickable(onClick = onSelected),
         gravity = ContentGravity.CenterStart
     ) {

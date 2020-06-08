@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
-import androidx.ui.layout.preferredSize
+import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
@@ -76,7 +76,7 @@ fun ColorPreference(
         leading = leading,
         trailing = {
             Surface(
-                modifier = Modifier.preferredSize(40.dp),
+                modifier = Modifier.size(40.dp),
                 color = value,
                 border = Border(
                     size = 1.dp,

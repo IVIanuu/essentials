@@ -32,8 +32,8 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.height
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
@@ -112,12 +112,12 @@ val ScaffoldRoute = Route {
             Surface(color = MaterialTheme.colors.primary) {
                 SafeArea(
                     top = false,
-                    left = false,
-                    right = false,
+                    start = false,
+                    end = false,
                     bottom = true
                 ) {
                     Box(
-                        modifier = Modifier.preferredHeight(56.dp)
+                        modifier = Modifier.height(56.dp)
                             .fillMaxWidth()
                             .padding(16.dp),
                         gravity = ContentGravity.CenterStart
