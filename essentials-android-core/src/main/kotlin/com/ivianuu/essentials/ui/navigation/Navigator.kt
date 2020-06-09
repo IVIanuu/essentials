@@ -230,10 +230,9 @@ class Navigator(
             content = {
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,
-                    RouteAmbient provides route
-                ) {
-                    route.content()
-                }
+                    RouteAmbient provides route,
+                    children = route.content
+                )
             }
         )
 

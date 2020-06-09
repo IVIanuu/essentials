@@ -18,7 +18,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.animatedstack.animation.FadeRouteTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackAnimation
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -28,8 +28,8 @@ fun DialogRoute(
     dialog: @Composable () -> Unit
 ) = Route(
     opaque = true,
-    enterAnimation = FadeRouteTransition(),
-    exitAnimation = FadeRouteTransition()
+    enterAnimation = FadeStackAnimation(),
+    exitAnimation = FadeStackAnimation()
 ) {
     DialogWrapper(
         dismissible = dismissible,

@@ -27,7 +27,7 @@ import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.animatedstack.animation.FadeRouteTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackAnimation
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
@@ -38,8 +38,8 @@ fun PopupRoute(
     popup: @Composable () -> Unit
 ) = Route(
     opaque = true,
-    enterAnimation = FadeRouteTransition(),
-    exitAnimation = FadeRouteTransition()
+    enterAnimation = FadeStackAnimation(),
+    exitAnimation = FadeStackAnimation()
 ) {
     val navigator = NavigatorAmbient.current
 

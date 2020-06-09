@@ -4,11 +4,14 @@ import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
+import androidx.compose.key
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.ui.common.absorbPointer
+import androidx.ui.foundation.Box
+import com.ivianuu.essentials.ui.common.untrackedState
+import java.util.UUID
 
 @Composable
 fun AnimatedStack(
@@ -18,6 +21,7 @@ fun AnimatedStack(
     val state = remember { AnimatedStackState() }
     state.defaultAnimation = DefaultStackAnimationAmbient.current
     state.setEntries(entries)
+    state.activeAnimations.forEach { it() }
     StatefulStack(
         modifier = modifier,
         entries = state.statefulStackEntries
@@ -30,6 +34,8 @@ private class AnimatedStackState {
     val statefulStackEntries = modelListOf<StatefulStackEntry>()
 
     var defaultAnimation = NoOpStackAnimation
+
+    val activeAnimations = modelListOf<@Composable () -> Unit>()
 
     fun setEntries(newEntries: List<AnimatedStackEntry>) {
         setEntriesInternal(
@@ -129,11 +135,43 @@ private class AnimatedStackState {
         from: AnimatedStackEntryState?,
         to: AnimatedStackEntryState?,
         isPush: Boolean,
-        animation: StackAnimation?
+        animation: StackAnimation
     ) {
         val exitFrom = from != null && (!isPush || !to!!.entry.opaque)
-        if (exitFrom) from!!.exit(to = to, isPush = isPush, animation = animation)
-        to?.enter(from = from, isPush = isPush, animation = animation)
+
+        val transactionId = UUID.randomUUID()
+
+        lateinit var animationComposable: @Composable () -> Unit
+        animationComposable = {
+            key(transactionId) {
+                val completed = untrackedState { false }
+
+                val onComplete: () -> Unit = remember {
+                    {
+                        check(!completed.value) {
+                            "onComplete() must be called only once"
+                        }
+                        completed.value = true
+                        activeAnimations -= animationComposable
+                        from?.onAnimationComplete()
+                        to?.onAnimationComplete()
+                    }
+                }
+
+                val animationModifiers = animation(
+                    from != null,
+                    to != null,
+                    isPush,
+                    onComplete
+                )
+                from?.currentAnimationModifierBuilder = animationModifiers.from
+                to?.currentAnimationModifierBuilder = animationModifiers.to
+            }
+        }
+        activeAnimations += animationComposable
+
+        if (exitFrom) from!!.exit(to = to, isPush = isPush)
+        to?.enter(from = from, isPush = isPush)
     }
 
     private inner class AnimatedStackEntryState(val entry: AnimatedStackEntry) {
@@ -142,45 +180,19 @@ private class AnimatedStackState {
             entry.opaque,
             entry.keepState
         ) {
-            StackAnimation(
-                modifier = Modifier.absorbPointer(entry.isAnimating),
-                animation = currentAnimation ?: defaultAnimation,
-                state = animationState,
-                lastState = lastAnimationState,
-                onComplete = onAnimationComplete,
+            Box(
+                modifier = currentAnimationModifierBuilder?.invoke() ?: Modifier,
                 children = entry.content
             )
         }
 
-        private val onAnimationComplete: (StackAnimation.State) -> Unit = { completedState ->
-            entry.isAnimating = false
-            lastAnimationState = completedState
-            if (completedState == StackAnimation.State.ExitFromPush) {
-                other?.onOtherAnimationComplete()
-                other = null
-            }
+        var currentAnimationModifierBuilder: (@Composable () -> Modifier)? by mutableStateOf(null)
 
-            if ((completedState == StackAnimation.State.ExitFromPush && !entry.keepState) ||
-                completedState == StackAnimation.State.ExitFromPop
-            ) {
-                statefulStackEntries -= statefulStackEntry
-            }
-        }
-
-        private var currentAnimation: StackAnimation? by mutableStateOf(entry.enterAnimation)
-        private var animationState by mutableStateOf(StackAnimation.State.Init)
-        private var lastAnimationState by mutableStateOf(StackAnimation.State.Init)
-
-        private var other: AnimatedStackEntryState? by mutableStateOf(null)
-
-        private fun onOtherAnimationComplete() {
-            statefulStackEntry.opaque = entry.opaque
-        }
+        private var removeOnComplete = false
 
         fun enter(
             from: AnimatedStackEntryState?,
-            isPush: Boolean,
-            animation: StackAnimation?
+            isPush: Boolean
         ) {
             statefulStackEntry.opaque = entry.opaque || isPush
             entry.isAnimating = true
@@ -191,6 +203,7 @@ private class AnimatedStackState {
             } else statefulStackEntries.size
 
             val oldToIndex = statefulStackEntries.indexOf(statefulStackEntry)
+
             if (oldToIndex == -1) {
                 statefulStackEntries.add(toIndex, statefulStackEntry)
             } else if (oldToIndex != toIndex) {
@@ -198,24 +211,25 @@ private class AnimatedStackState {
                 statefulStackEntries.add(toIndex, statefulStackEntry)
             }
 
-            lastAnimationState = animationState
-            animationState = if (isPush) StackAnimation.State.EnterFromPush
-            else StackAnimation.State.EnterFromPop
-            this.currentAnimation = animation
+            removeOnComplete = false
         }
 
         fun exit(
             to: AnimatedStackEntryState?,
-            isPush: Boolean,
-            animation: StackAnimation?
+            isPush: Boolean
         ) {
             entry.isAnimating = true
             statefulStackEntry.opaque = entry.opaque || !isPush
-            if (isPush) other = to
-            lastAnimationState = animationState
-            animationState = if (isPush) StackAnimation.State.ExitFromPush
-            else StackAnimation.State.ExitFromPop
-            this.currentAnimation = animation
+            removeOnComplete = true
+        }
+
+        fun onAnimationComplete() {
+            entry.isAnimating = false
+            currentAnimationModifierBuilder = null
+            if (removeOnComplete) {
+                removeOnComplete = false
+                statefulStackEntries.remove(statefulStackEntry)
+            }
         }
 
     }

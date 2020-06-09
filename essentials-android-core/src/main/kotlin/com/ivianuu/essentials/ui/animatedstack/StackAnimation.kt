@@ -16,68 +16,66 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.animation.TransitionDefinition
-import androidx.animation.TransitionState
-import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.Immutable
+import androidx.compose.onCommit
+import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.animation.Transition
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
 
-@Immutable
-class StackAnimation(
-    val definition: @Composable () -> TransitionDefinition<State>,
-    val createModifier: @Composable (TransitionState, State) -> Modifier
-) {
+typealias StackAnimation = @Composable (
+    hasFrom: Boolean,
+    hasTo: Boolean,
+    isPush: Boolean,
+    onComplete: () -> Unit
+) -> StackAnimationModifiers
 
-    enum class State {
-        Init,
-        EnterFromPush,
-        ExitFromPush,
-        ExitFromPop,
-        EnterFromPop
-    }
-
+val NoOpStackAnimation: StackAnimation = { _, _, _, onComplete ->
+    onCommit { onComplete() }
+    NoOpStackAnimationModifiers
 }
+
+private val NoOpStackAnimationModifiers = StackAnimationModifiers(
+    to = { Modifier },
+    from = { Modifier }
+)
+
+data class StackAnimationModifiers(
+    val to: @Composable (() -> Modifier)?,
+    val from: @Composable (() -> Modifier)?
+)
 
 val DefaultStackAnimationAmbient =
     staticAmbientOf { NoOpStackAnimation }
 
-val NoOpStackAnimation =
-    StackAnimation(
-        definition = { defaultStackAnimationDefinition },
-        createModifier = { _, _ -> Modifier }
-    )
+operator fun StackAnimation.plus(other: StackAnimation): StackAnimation =
+    { hasFrom, hasTo, isPush, onComplete ->
+        val thisAnimation = this
 
-private val defaultStackAnimationDefinition = transitionDefinition {
-    state(StackAnimation.State.Init) {}
-    state(StackAnimation.State.EnterFromPush) {}
-    state(StackAnimation.State.ExitFromPush) {}
-    state(StackAnimation.State.ExitFromPop) {}
-    state(StackAnimation.State.EnterFromPop) {}
-}
+        val completedAnimations = remember { mutableSetOf<StackAnimation>() }
 
-@Composable
-internal fun StackAnimation(
-    modifier: Modifier = Modifier,
-    animation: StackAnimation,
-    state: StackAnimation.State,
-    lastState: StackAnimation.State,
-    onComplete: (StackAnimation.State) -> Unit,
-    children: @Composable () -> Unit
-) {
-    Transition(
-        definition = animation.definition(),
-        toState = state,
-        onStateChangeFinished = onComplete,
-        initState = lastState,
-        children = { transitionState ->
-            Box(
-                modifier = modifier + animation.createModifier(transitionState, state),
-                children = children
-            )
+        fun completeIfPossible() {
+            if (thisAnimation in completedAnimations && other in completedAnimations) {
+                onComplete()
+            }
         }
-    )
+
+        val thisModifiers = thisAnimation(hasFrom, hasTo, isPush) {
+            completedAnimations += thisAnimation
+            completeIfPossible()
+        }
+
+        val otherModifiers = other(hasFrom, hasTo, isPush) {
+            completedAnimations += other
+            completeIfPossible()
+        }
+
+        StackAnimationModifiers(
+            to = if (thisModifiers.to != null || otherModifiers.to != null) ({
+                (thisModifiers.to?.invoke() ?: Modifier) + (otherModifiers.to?.invoke() ?: Modifier)
+            }) else null,
+            from = if (thisModifiers.from != null || otherModifiers.from != null) ({
+                (thisModifiers.from?.invoke() ?: Modifier) + (otherModifiers.from?.invoke()
+                    ?: Modifier)
+            }) else null,
+        )
 }
