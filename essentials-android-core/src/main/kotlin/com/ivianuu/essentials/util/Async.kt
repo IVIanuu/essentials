@@ -144,6 +144,12 @@ fun <T> Flow<T>.collectAsAsync(): Async<T> {
         .value
 }
 
+// todo remove overload once compose is fixed
+@Composable
+fun <T> launchAsync(
+    block: suspend CoroutineScope.() -> T
+): Async<T> = launchAsync(inputs = *emptyArray(), block = block)
+
 @Composable
 fun <T> launchAsync(
     vararg inputs: Any?,
