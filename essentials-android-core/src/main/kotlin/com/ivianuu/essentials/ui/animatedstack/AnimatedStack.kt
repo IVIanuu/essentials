@@ -15,7 +15,6 @@ fun AnimatedStack(
     modifier: Modifier = Modifier,
     entries: List<AnimatedStackEntry>
 ) {
-    println("animated stack with $entries")
     val state = remember { AnimatedStackState() }
     state.defaultAnimation = DefaultStackAnimationAmbient.current
     state.setEntries(entries)

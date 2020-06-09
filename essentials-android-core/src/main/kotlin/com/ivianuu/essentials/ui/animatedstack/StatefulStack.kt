@@ -37,7 +37,6 @@ fun StatefulStack(
     modifier: Modifier = Modifier,
     entries: List<StatefulStackEntry>
 ) {
-    println("stateful stack with ${entries.toList()}")
     Layout(children = {
         val visibleEntries = entries.filterVisible()
         entries

@@ -208,7 +208,6 @@ class Navigator(
             val removedRoutes = newBackStack.filterNot { it in oldBackStack }
             _backStack.clear()
             _backStack += newBackStack
-            println("new backstack ${newBackStack.map { it.route }}")
             removedRoutes.forEach {
                 it.setResult(null)
                 it.dispose()
