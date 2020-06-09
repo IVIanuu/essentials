@@ -19,15 +19,15 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.animatedstack.animation.VerticalRouteTransition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.transition.VerticalRouteTransition
 
-val DrawerRoute = Route(enterTransition = VerticalRouteTransition()) {
+val DrawerRoute = Route(enterAnimation = VerticalRouteTransition()) {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {

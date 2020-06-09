@@ -69,8 +69,7 @@ class DebugBillingActivity : EsActivity() {
                     finish()
                 } else {
                     this.skuDetails = it
-                    InjectedNavigator(startRoute = PurchaseDialogRoute)
-                        .content()
+                    InjectedNavigator(startRoute = PurchaseDialogRoute)()
                 }
             }
         )

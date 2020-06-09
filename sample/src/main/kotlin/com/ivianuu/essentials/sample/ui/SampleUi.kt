@@ -22,15 +22,15 @@ import androidx.compose.remember
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
+import com.ivianuu.essentials.ui.animatedstack.DefaultStackAnimationAmbient
+import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeRouteTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
 import com.ivianuu.essentials.ui.core.BindUiInitializer
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.core.UiInitializer
-import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.navigation.InjectedNavigator
-import com.ivianuu.essentials.ui.navigation.transition.VerticalFadeRouteTransition
 import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Transient
 
@@ -47,8 +47,7 @@ class SampleUi : AppUi {
                 lightNavigationBar = MaterialTheme.colors.onSurface.isDark
             )
         ) {
-            InjectedNavigator(startRoute = HomeRoute)
-                .content()
+            InjectedNavigator(startRoute = HomeRoute)()
         }
     }
 }
@@ -59,7 +58,7 @@ class SampleUiInitializer : UiInitializer {
     @Composable
     override fun apply(children: @Composable () -> Unit) {
         Providers(
-            DefaultRouteTransitionAmbient provides remember { VerticalFadeRouteTransition() }
+            DefaultStackAnimationAmbient provides remember { VerticalFadeRouteTransition() }
         ) {
             TwilightTheme(children = children)
         }

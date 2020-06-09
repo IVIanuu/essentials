@@ -64,7 +64,7 @@ class PermissionActivity : EsActivity() {
 
     @Composable
     override fun content() {
-        navigator.content()
+        navigator()
     }
 
     internal companion object {

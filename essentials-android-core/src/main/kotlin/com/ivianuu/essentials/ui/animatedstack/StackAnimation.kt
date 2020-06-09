@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
@@ -27,7 +27,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 
 @Immutable
-class RouteTransition(
+class StackAnimation(
     val definition: @Composable () -> TransitionDefinition<State>,
     val createModifier: @Composable (TransitionState, State) -> Modifier
 ) {
@@ -42,39 +42,40 @@ class RouteTransition(
 
 }
 
-val DefaultRouteTransitionAmbient =
-    staticAmbientOf { NoOpRouteTransition }
+val DefaultStackAnimationAmbient =
+    staticAmbientOf { NoOpStackAnimation }
 
-val NoOpRouteTransition = RouteTransition(
-    definition = { defaultTransitionDefinition },
-    createModifier = { _, _ -> Modifier }
-)
+val NoOpStackAnimation =
+    StackAnimation(
+        definition = { defaultStackAnimationDefinition },
+        createModifier = { _, _ -> Modifier }
+    )
 
-private val defaultTransitionDefinition = transitionDefinition {
-    state(RouteTransition.State.Init) {}
-    state(RouteTransition.State.EnterFromPush) {}
-    state(RouteTransition.State.ExitFromPush) {}
-    state(RouteTransition.State.ExitFromPop) {}
-    state(RouteTransition.State.EnterFromPop) {}
+private val defaultStackAnimationDefinition = transitionDefinition {
+    state(StackAnimation.State.Init) {}
+    state(StackAnimation.State.EnterFromPush) {}
+    state(StackAnimation.State.ExitFromPush) {}
+    state(StackAnimation.State.ExitFromPop) {}
+    state(StackAnimation.State.EnterFromPop) {}
 }
 
 @Composable
-internal fun RouteTransitionWrapper(
+internal fun StackAnimation(
     modifier: Modifier = Modifier,
-    transition: RouteTransition,
-    state: RouteTransition.State,
-    lastState: RouteTransition.State,
-    onTransitionComplete: (RouteTransition.State) -> Unit,
+    animation: StackAnimation,
+    state: StackAnimation.State,
+    lastState: StackAnimation.State,
+    onComplete: (StackAnimation.State) -> Unit,
     children: @Composable () -> Unit
 ) {
     Transition(
-        definition = transition.definition(),
+        definition = animation.definition(),
         toState = state,
-        onStateChangeFinished = onTransitionComplete,
+        onStateChangeFinished = onComplete,
         initState = lastState,
         children = { transitionState ->
             Box(
-                modifier = modifier + transition.createModifier(transitionState, state),
+                modifier = modifier + animation.createModifier(transitionState, state),
                 children = children
             )
         }

@@ -17,8 +17,7 @@ fun esActivityModule() {
              dispatchers: AppCoroutineDispatchers, logger: Logger ->
         Navigator(
             coroutineScope = coroutineScope,
-            dispatchers = dispatchers,
-            logger = logger
+            dispatchers = dispatchers
         )
     }
 }

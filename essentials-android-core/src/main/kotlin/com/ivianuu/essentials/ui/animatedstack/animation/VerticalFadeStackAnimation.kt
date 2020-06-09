@@ -1,48 +1,49 @@
-package com.ivianuu.essentials.ui.navigation.transition
+package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
+import com.ivianuu.essentials.ui.animatedstack.StackAnimation
 import com.ivianuu.essentials.ui.layout.offsetFraction
-import com.ivianuu.essentials.ui.navigation.RouteTransition
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    definition = {
-        remember(duration) {
-            verticalFadeRouteTransitionDefinition(duration)
+fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) =
+    StackAnimation(
+        definition = {
+            remember(duration) {
+                verticalFadeRouteTransitionDefinition(duration)
+            }
+        },
+        createModifier = { transitionState, _ ->
+            Modifier
+                .offsetFraction(y = transitionState[VerticalOffset])
+                .drawOpacity(transitionState[Alpha])
         }
-    },
-    createModifier = { transitionState, _ ->
-        Modifier
-            .offsetFraction(y = transitionState[VerticalOffset])
-            .drawOpacity(transitionState[Alpha])
-    }
-)
+    )
 
 private fun verticalFadeRouteTransitionDefinition(
     duration: Duration
 ) = transitionDefinition {
-    state(RouteTransition.State.Init) {
+    state(StackAnimation.State.Init) {
         set(Alpha, 0f)
         set(VerticalOffset, 0.3f)
     }
-    state(RouteTransition.State.EnterFromPush) {
+    state(StackAnimation.State.EnterFromPush) {
         set(Alpha, 1f)
         set(VerticalOffset, 0f)
     }
-    state(RouteTransition.State.ExitFromPush) {
+    state(StackAnimation.State.ExitFromPush) {
         set(Alpha, 1f)
         set(VerticalOffset, 0f)
     }
-    state(RouteTransition.State.EnterFromPop) {
+    state(StackAnimation.State.EnterFromPop) {
         set(Alpha, 1f)
         set(VerticalOffset, 0f)
     }
-    state(RouteTransition.State.ExitFromPop) {
+    state(StackAnimation.State.ExitFromPop) {
         set(Alpha, 0f)
         set(VerticalOffset, 0.3f)
     }

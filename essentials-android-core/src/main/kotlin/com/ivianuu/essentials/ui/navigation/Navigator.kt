@@ -25,17 +25,14 @@ import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.Modifier
-import com.ivianuu.essentials.ui.common.Overlay
-import com.ivianuu.essentials.ui.common.OverlayEntry
-import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStackEntry
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -68,12 +65,10 @@ fun Navigator(
 ): Navigator {
     val coroutineScope = compositionCoroutineScope()
     val dispatchers = inject<AppCoroutineDispatchers>()
-    val logger = inject<Logger>()
     val navigator = remember {
         Navigator(
             coroutineScope = coroutineScope,
-            dispatchers = dispatchers,
-            logger = logger
+            dispatchers = dispatchers
         )
     }
 
@@ -92,16 +87,11 @@ fun Navigator(
 @Stable
 class Navigator(
     private val coroutineScope: CoroutineScope,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger
+    private val dispatchers: AppCoroutineDispatchers
 ) {
-
-    private val overlay: Overlay = Overlay()
 
     var handleBack by mutableStateOf(true)
     var popsLastRoute by mutableStateOf(false)
-
-    private var runningTransitions by mutableStateOf(0)
 
     private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
@@ -109,30 +99,22 @@ class Navigator(
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
-    private var defaultRouteTransition by mutableStateOf(NoOpRouteTransition)
-
     @Composable
-    fun content() {
-        defaultRouteTransition = DefaultRouteTransitionAmbient.current
-
-        val logger = inject<Logger>()
-
-        val enabled = handleBack &&
+    operator fun invoke() {
+        val backPressEnabled = handleBack &&
                 backStack.isNotEmpty() &&
                 (popsLastRoute || backStack.size > 1)
-        logger.d("back press enabled $enabled")
-        onBackPressed(enabled = enabled) {
-            logger.d("on back pressed $runningTransitions")
-            if (runningTransitions == 0) popTop()
+        onBackPressed(enabled = backPressEnabled) {
+            if (_backStack.none { it.stackEntry.isAnimating }) popTop()
         }
 
         Providers(NavigatorAmbient provides this) {
-            overlay.content()
+            AnimatedStack(entries = _backStack.map { it.stackEntry })
         }
     }
 
     fun setRoot(route: Route) {
-        setBackStack(listOf(route), true)
+        setBackStack(listOf(route))
     }
 
     @JvmName("pushWithoutResult")
@@ -142,13 +124,11 @@ class Navigator(
     }
 
     suspend fun <T> push(route: Route): T? = withContext(dispatchers.main) {
-        logger.d("push $route")
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
-        setBackStackInternal(newBackStack, true, null)
+        setBackStackInternal(newBackStack)
         return@withContext routeState.awaitResult<T>()
-            .also { logger.d("on push result for $route -> $it") }
     }
 
     @JvmName("replaceWithoutResult")
@@ -158,12 +138,10 @@ class Navigator(
     }
 
     suspend fun <T> replace(route: Route): T? = withContext(dispatchers.main) {
-        logger.d("replace $route")
-
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
-        setBackStackInternal(newBackStack, true, null)
+        setBackStackInternal(newBackStack)
         return@withContext routeState.awaitResult()
     }
 
@@ -184,7 +162,7 @@ class Navigator(
     fun popToRoot() {
         coroutineScope.launch(dispatchers.main) {
             val newTopRoute = _backStack.first()
-            setBackStackInternal(listOf(newTopRoute), false, null)
+            setBackStackInternal(listOf(newTopRoute))
         }
     }
 
@@ -192,7 +170,7 @@ class Navigator(
         coroutineScope.launch(dispatchers.main) {
             val index = _backStack.indexOfFirst { it.route == route }
             val newBackStack = _backStack.subList(0, index)
-            setBackStackInternal(newBackStack, false, null)
+            setBackStackInternal(newBackStack)
         }
     }
 
@@ -200,260 +178,65 @@ class Navigator(
         route: RouteState,
         result: Any?
     ) = withContext(dispatchers.main) {
-        logger.d("pop route ${route.route} with result $result")
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
         route.setResult(result)
-        setBackStackInternal(newBackStack, false, null)
+        setBackStackInternal(newBackStack)
     }
 
     fun clear() {
-        coroutineScope.launch(dispatchers.main) { setBackStack(emptyList(), false, null) }
+        coroutineScope.launch(dispatchers.main) { setBackStack(emptyList()) }
     }
 
-    fun setBackStack(
-        newBackStack: List<Route>,
-        isPush: Boolean,
-        transition: RouteTransition? = null
-    ) {
+    fun setBackStack(newBackStack: List<Route>) {
         coroutineScope.launch(dispatchers.main) {
-            setBackStackSuspend(newBackStack, isPush, transition)
+            setBackStackSuspend(newBackStack)
         }
     }
 
-    suspend fun setBackStackSuspend(
-        newBackStack: List<Route>,
-        isPush: Boolean,
-        transition: RouteTransition? = null
-    ) = withContext(dispatchers.main) {
+    suspend fun setBackStackSuspend(newBackStack: List<Route>) {
         setBackStackInternal(
             newBackStack.map { route ->
                 _backStack.firstOrNull { it.route == route } ?: RouteState(route)
-            },
-            isPush,
-            transition
+            }
         )
     }
 
+    private suspend fun setBackStackInternal(newBackStack: List<RouteState>) =
+        withContext(dispatchers.main) {
+            val oldBackStack = _backStack.toList()
+            val removedRoutes = newBackStack.filterNot { it in oldBackStack }
+            _backStack.clear()
+            _backStack += newBackStack
+            println("new backstack ${newBackStack.map { it.route }}")
+            removedRoutes.forEach {
+                it.setResult(null)
+                it.dispose()
+            }
+        }
+
     suspend fun <T> awaitResult(route: Route): T? =
         _backStack.first { it.route == route }.awaitResult()
-
-    private suspend fun setBackStackInternal(
-        newBackStack: List<RouteState>,
-        isPush: Boolean,
-        transition: RouteTransition?
-    ) = withContext(dispatchers.main) {
-        if (newBackStack == _backStack) return@withContext
-
-        logger.d("set back stack ${newBackStack.map { it.route }}")
-
-        // do not allow pushing the same route twice
-        newBackStack
-            .groupBy { it }
-            .forEach {
-                check(it.value.size == 1) {
-                    "Trying to push the same route to the backStack more than once. $it"
-                }
-            }
-
-        val oldBackStack = _backStack.toList()
-        val oldVisibleRoutes = oldBackStack.filterVisible()
-
-        val removedRoutes = oldBackStack.filterNot { it in newBackStack }
-
-        _backStack.clear()
-        _backStack += newBackStack
-
-        val newVisibleRoutes = newBackStack.filterVisible()
-
-        if (oldVisibleRoutes != newVisibleRoutes) {
-            val oldTopRoute = oldVisibleRoutes.lastOrNull()
-            val newTopRoute = newVisibleRoutes.lastOrNull()
-
-            // check if we should animate the top routes
-            val replacingTopRoutes = newTopRoute != null && oldTopRoute != newTopRoute
-
-            // Remove all visible routes which shouldn't be visible anymore
-            // from top to bottom
-            oldVisibleRoutes
-                .dropLast(if (replacingTopRoutes) 1 else 0)
-                .reversed()
-                .filterNot { it in newVisibleRoutes }
-                .forEach { route ->
-                    val localTransition = transition
-                        ?: route.route.exitTransition ?: defaultRouteTransition
-
-                    performChange(
-                        from = route,
-                        to = null,
-                        isPush = false,
-                        transition = localTransition
-                    )
-                }
-
-            // Add any new routes to the backStack from bottom to top
-            newVisibleRoutes
-                .dropLast(if (replacingTopRoutes) 1 else 0)
-                .filterNot { it in oldVisibleRoutes }
-                .forEachIndexed { i, route ->
-                    val localTransition =
-                        transition ?: route.route.enterTransition ?: defaultRouteTransition
-                    performChange(
-                        from = newVisibleRoutes.getOrNull(i - 1),
-                        to = route,
-                        isPush = true,
-                        transition = localTransition
-                    )
-                }
-
-            // Replace the old visible top with the new one
-            if (replacingTopRoutes) {
-                val localTransition = transition
-                    ?: (if (isPush) newTopRoute?.route?.enterTransition ?: defaultRouteTransition
-                    else oldTopRoute?.route?.exitTransition ?: defaultRouteTransition)
-                performChange(
-                    from = oldTopRoute,
-                    to = newTopRoute,
-                    isPush = isPush,
-                    transition = localTransition
-                )
-            }
-        }
-
-        removedRoutes.forEach {
-            it.setResult(null)
-            it.dispose()
-        }
-    }
-
-    private fun performChange(
-        from: RouteState?,
-        to: RouteState?,
-        isPush: Boolean,
-        transition: RouteTransition?
-    ) {
-        val exitFrom = from != null && (!isPush || !to!!.route.opaque)
-        logger.d("perform change from ${from?.route} to ${to?.route} is push $isPush exit from $exitFrom")
-        if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
-        to?.enter(from = from, isPush = isPush, transition = transition)
-    }
-
-    private fun dispose() {
-        _backStack.forEach { it.dispose() }
-    }
-
-    private fun List<RouteState>.filterVisible(): List<RouteState> {
-        val visibleRoutes = mutableListOf<RouteState>()
-
-        for (routeState in reversed()) {
-            visibleRoutes += routeState
-            if (!routeState.route.opaque) break
-        }
-
-        return visibleRoutes
-    }
 
     private inner class RouteState(val route: Route) {
 
         private val retainedObjects = RetainedObjects()
         private val result = CompletableDeferred<Any?>()
 
-        private val overlayEntry = OverlayEntry(
+        val stackEntry = AnimatedStackEntry(
             opaque = route.opaque,
             keepState = route.keepState,
+            enterAnimation = route.enterAnimation,
+            exitAnimation = route.exitAnimation,
             content = {
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,
                     RouteAmbient provides route
                 ) {
-                    RouteTransitionWrapper(
-                        modifier = Modifier.absorbPointer(transitionRunning),
-                        transition = transition ?: defaultRouteTransition,
-                        state = transitionState,
-                        lastState = lastTransitionState,
-                        onTransitionComplete = onTransitionComplete,
-                        children = route.content
-                    )
+                    route.content()
                 }
             }
         )
-
-        private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            transitionRunning = false
-            runningTransitions--
-            lastTransitionState = completedState
-            logger.d("$name on transition complete $completedState")
-            if (completedState == RouteTransition.State.ExitFromPush) {
-                other?.onOtherTransitionComplete()
-                other = null
-            }
-
-            if ((completedState == RouteTransition.State.ExitFromPush && !route.keepState) ||
-                completedState == RouteTransition.State.ExitFromPop
-            ) {
-                overlay.remove(overlayEntry)
-            }
-        }
-
-        private var transition: RouteTransition? by mutableStateOf(route.enterTransition)
-        private var transitionState by mutableStateOf(RouteTransition.State.Init)
-        private var lastTransitionState by mutableStateOf(RouteTransition.State.Init)
-
-        private var other: RouteState? by mutableStateOf(null)
-
-        private var transitionRunning by mutableStateOf(false)
-
-        private fun onOtherTransitionComplete() {
-            overlayEntry.opaque = route.opaque
-        }
-
-        private val name: Any get() = route
-
-        fun enter(
-            from: RouteState?,
-            isPush: Boolean,
-            transition: RouteTransition?
-        ) {
-            overlayEntry.opaque = route.opaque || isPush
-            transitionRunning = true
-            runningTransitions++
-
-            logger.d("$name enter -> from ${from?.name} is push $isPush trans $transition running trans $runningTransitions")
-
-            val fromIndex = overlay.entries.indexOf(from?.overlayEntry)
-            val toIndex = if (fromIndex != -1) {
-                if (isPush) fromIndex + 1 else fromIndex
-            } else overlay.entries.size
-
-            val oldToIndex = overlay.entries.indexOf(overlayEntry)
-            if (oldToIndex == -1) {
-                overlay.add(toIndex, overlayEntry)
-            } else if (oldToIndex != toIndex) {
-                overlay.move(oldToIndex, toIndex)
-            }
-
-            lastTransitionState = transitionState
-            transitionState = if (isPush) RouteTransition.State.EnterFromPush
-            else RouteTransition.State.EnterFromPop
-            this.transition = transition
-        }
-
-        fun exit(
-            to: RouteState?,
-            isPush: Boolean,
-            transition: RouteTransition?
-        ) {
-            transitionRunning = true
-            runningTransitions++
-            logger.d("$name exit -> to ${to?.name} is push $isPush trans $transition running trans $runningTransitions")
-
-            overlayEntry.opaque = route.opaque || !isPush
-            if (isPush) other = to
-            lastTransitionState = transitionState
-            transitionState = if (isPush) RouteTransition.State.ExitFromPush
-            else RouteTransition.State.ExitFromPop
-            this.transition = transition
-        }
 
         fun dispose() {
             retainedObjects.dispose()

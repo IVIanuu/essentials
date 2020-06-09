@@ -36,6 +36,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
+import com.ivianuu.essentials.ui.animatedstack.NoOpStackAnimation
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
@@ -50,7 +51,6 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.NoOpRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -58,7 +58,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
 
-val HomeRoute = Route(transition = NoOpRouteTransition) {
+val HomeRoute = Route(animation = NoOpStackAnimation) {
     Scaffold(
         topAppBar = {
             TopAppBar(
