@@ -32,7 +32,7 @@ val ActionsRoute = Route {
                             showDefaultOption = false,
                             showNoneOption = false
                         )
-                    ).safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+                    ).await().safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
                     actionExecutors.execute(action)
                 }
             }

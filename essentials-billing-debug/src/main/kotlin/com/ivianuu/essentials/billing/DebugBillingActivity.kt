@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
-import com.ivianuu.essentials.ui.navigation.InjectedNavigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.launchAsync
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
@@ -49,6 +49,7 @@ import java.util.Date
 class DebugBillingActivity : EsActivity() {
 
     private val client: DebugBillingClient by inject()
+    private val navigator: Navigator by inject()
 
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
@@ -69,7 +70,9 @@ class DebugBillingActivity : EsActivity() {
                     finish()
                 } else {
                     this.skuDetails = it
-                    InjectedNavigator(startRoute = PurchaseDialogRoute)()
+                    if (!navigator.hasRoot)
+                        navigator.setRoot(PurchaseDialogRoute)
+                    navigator()
                 }
             }
         )

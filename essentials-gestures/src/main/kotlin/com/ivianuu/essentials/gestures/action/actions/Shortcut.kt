@@ -74,7 +74,7 @@ internal class ShortcutActionPickerDelegate(
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val shortcut = navigator.push<Shortcut>(
             ShortcutPickerRoute()
-        ) ?: return null
+        ).await() ?: return null
 
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()

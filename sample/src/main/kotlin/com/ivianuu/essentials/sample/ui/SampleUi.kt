@@ -30,13 +30,14 @@ import com.ivianuu.essentials.ui.core.BindUiInitializer
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.core.UiInitializer
-import com.ivianuu.essentials.ui.navigation.InjectedNavigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Transient
 
 @BindAppUi
 @Transient
-class SampleUi : AppUi {
+class SampleUi(private val navigator: Navigator) : AppUi {
+
     @Composable
     override fun content() {
         ProvideSystemBarStyle(
@@ -47,7 +48,8 @@ class SampleUi : AppUi {
                 lightNavigationBar = MaterialTheme.colors.onSurface.isDark
             )
         ) {
-            InjectedNavigator(startRoute = HomeRoute)()
+            if (!navigator.hasRoot) navigator.setRoot(HomeRoute)
+            navigator()
         }
     }
 }

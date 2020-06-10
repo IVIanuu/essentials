@@ -34,7 +34,7 @@ class RestoreUseCase(
                     }, ""
                 )
             )
-        )?.data?.data ?: return@withContext
+        ).await()?.data?.data ?: return@withContext
 
         try {
             val buffer = ByteArray(8192)

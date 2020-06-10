@@ -68,7 +68,7 @@ internal class KeycodeActionPickerDelegate(
                     keyboardType = KeyboardType.Number,
                     allowEmpty = false
                 )
-            )?.toIntOrNull() ?: return null
+            ).await()?.toIntOrNull() ?: return null
 
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX$keycode")
     }

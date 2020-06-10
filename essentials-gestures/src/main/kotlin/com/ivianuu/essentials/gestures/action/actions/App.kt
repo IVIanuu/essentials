@@ -92,7 +92,7 @@ internal class AppActionPickerDelegate(
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val app = navigator.push<AppInfo>(
             AppPickerRoute(appFilter = launchableAppFilter)
-        ) ?: return null
+        ).await() ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

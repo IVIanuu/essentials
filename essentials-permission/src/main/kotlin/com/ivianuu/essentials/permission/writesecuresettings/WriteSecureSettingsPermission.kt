@@ -54,6 +54,6 @@ internal class WriteSecureSettingsPermissionRequestHandler(
         manager: PermissionManager,
         permission: Permission
     ): PermissionResult {
-        return PermissionResult(navigator.push<Boolean>(SecureSettingsRoute()) ?: false)
+        return PermissionResult(navigator.push<Boolean>(SecureSettingsRoute()).await() ?: false)
     }
 }

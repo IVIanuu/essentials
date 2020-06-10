@@ -90,7 +90,7 @@ internal class ShortcutPickerViewModel(
                     ActivityResultRoute(
                         intent = info.intent
                     )
-                )?.data ?: return@launch
+                ).await()?.data ?: return@launch
 
                 val shortcut = shortcutStore.getShortcut(shortcutRequestResult)
 
