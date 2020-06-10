@@ -166,11 +166,11 @@ private val PopupTransitionDefinition = transitionDefinition {
     }
     transition(false, true) {
         ScaleX using tween {
-            duration = 120
+            duration = 100
             easing = LinearOutSlowInEasing
         }
         ScaleY using tween {
-            duration = 180
+            duration = 120
             easing = LinearOutSlowInEasing
             delay = 60
         }
