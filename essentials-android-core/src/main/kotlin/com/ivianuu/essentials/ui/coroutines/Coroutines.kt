@@ -19,9 +19,11 @@ package com.ivianuu.essentials.ui.coroutines
 import androidx.compose.Composable
 import androidx.compose.MutableState
 import androidx.compose.State
+import androidx.compose.getValue
 import androidx.compose.launchInComposition
 import androidx.compose.onDispose
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,23 +40,16 @@ fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): Cor
     return coroutineScope
 }
 
-@BuilderInference
 @Composable
 fun <T> launchForResult(
-    vararg inputs: Any?,
+    initial: T,
     block: suspend CoroutineScope.() -> T
-): State<T?> {
-    return launchForResult(
-        initial = null,
-        inputs = *inputs,
-        block = block
-    )
-}
+): State<T> = launchForResult(initial = initial, inputs = *emptyArray(), block = block)
 
 @Composable
 fun <T> launchForResult(
-    vararg inputs: Any?,
     initial: T,
+    vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): State<T> {
     val state = state { initial }
@@ -67,21 +62,17 @@ fun <T> launchForResult(
     return state
 }
 
-@BuilderInference
+// todo remove once compiler is fixed
 @Composable
 fun <T> launchWithState(
-    vararg inputs: Any?,
-    block: suspend StateCoroutineScope<T?>.() -> Unit
-): State<T?> = launchWithState(
-    initial = null,
-    inputs = *inputs,
-    block = block
-)
+    initial: T,
+    block: suspend StateCoroutineScope<T>.() -> Unit
+): State<T> = launchWithState(initial = initial, inputs = *emptyArray(), block = block)
 
 @Composable
 fun <T> launchWithState(
-    vararg inputs: Any?,
     initial: T,
+    vararg inputs: Any?,
     block: suspend StateCoroutineScope<T>.() -> Unit
 ): State<T> {
     val state = state { initial }
@@ -96,7 +87,9 @@ fun <T> launchWithState(
 class StateCoroutineScope<T>(
     private val coroutineScope: CoroutineScope,
     val state: MutableState<T>
-) : CoroutineScope by coroutineScope
+) : CoroutineScope by coroutineScope {
+    var value by state
+}
 
 @Composable
 fun <T> StateFlow<T>.collectAsState(): State<T> = collectAsState(value)

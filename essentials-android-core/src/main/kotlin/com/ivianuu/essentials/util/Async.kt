@@ -155,7 +155,7 @@ fun <T> launchAsync(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): Async<T> {
-    return launchWithState<Async<T>>(*inputs, initial = Uninitialized()) {
+    return launchWithState<Async<T>>(initial = Uninitialized(), inputs = *inputs) {
         state.value = Loading()
         try {
             val result = block()
