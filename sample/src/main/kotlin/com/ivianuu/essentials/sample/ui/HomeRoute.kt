@@ -37,10 +37,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.animatable.animatableElement
-import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
-import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementKey
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.AdapterList
@@ -152,20 +149,14 @@ private fun HomeItem(
     ListItem(
         title = { Text(item.title) },
         leading = {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .animatableElement(item, SharedElementKey withValue {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp),
-                            backgroundColor = color,
-                            shape = CircleShape
-                        )
-                    }),
-                backgroundColor = color,
-                shape = CircleShape
-            )
+            SharedElement(item) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp),
+                    backgroundColor = color,
+                    shape = CircleShape
+                )
+            }
         },
         trailing = {
             PopupMenuButton(
