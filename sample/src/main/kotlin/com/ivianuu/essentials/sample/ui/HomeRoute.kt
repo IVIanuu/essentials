@@ -25,6 +25,7 @@ import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.CircleShape
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.padding
 import androidx.ui.layout.size
@@ -36,7 +37,11 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
+import com.ivianuu.essentials.ui.animatable.animatableElement
+import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementKey
+import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.AdapterList
 import com.ivianuu.essentials.ui.common.navigateOnClick
@@ -110,8 +115,25 @@ val HomeRoute = Route(transition = NoOpStackTransition) {
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
                 AdapterList(data = items) { item ->
-                    val route = item.route()
-                    HomeItem(item = item, onClick = navigateOnClick { route })
+                    val color = rememberRetained(item) {
+                        ColorPickerPalette.values()
+                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                            .shuffled()
+                            .first()
+                            .front
+                    }
+                    val route = if (item == HomeItem.SharedElement) {
+                        SharedElementRoute(color)
+                            .copy(
+                                enterTransition = SharedElementStackTransition(item, "b"),
+                                exitTransition = SharedElementStackTransition(item, "b")
+                            )
+                    } else item.route()
+                    HomeItem(
+                        item = item,
+                        color = color,
+                        onClick = navigateOnClick { route }
+                    )
                     if (items.indexOf(item) != items.lastIndex) {
                         HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
                     }
@@ -123,24 +145,27 @@ val HomeRoute = Route(transition = NoOpStackTransition) {
 
 @Composable
 private fun HomeItem(
+    color: Color,
     onClick: () -> Unit,
     item: HomeItem
 ) {
     ListItem(
         title = { Text(item.title) },
         leading = {
-            val color = rememberRetained(item) {
-                ColorPickerPalette.values()
-                    .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                    .shuffled()
-                    .first()
-                    .front
-            }
             Box(
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier
+                    .size(40.dp)
+                    .animatableElement(item, SharedElementKey withValue {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp),
+                            backgroundColor = color,
+                            shape = CircleShape
+                        )
+                    }),
                 backgroundColor = color,
                 shape = CircleShape
-            ) {}
+            )
         },
         trailing = {
             PopupMenuButton(
@@ -224,6 +249,10 @@ enum class HomeItem(
     Scaffold(
         title = "Scaffold",
         route = { ScaffoldRoute }
+    ),
+    SharedElement(
+        title = "Shared element",
+        route = { kotlin.error("") }
     ),
     ShortcutPicker(
         title = "Shortcut picker",

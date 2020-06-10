@@ -4,6 +4,8 @@ import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.State
+import androidx.compose.frames.modelListOf
+import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.onPreCommit
@@ -60,7 +62,7 @@ val AnimatableElementsAmbient = staticAmbientOf<AnimatableElements> {
 @Stable
 class AnimatableElements {
 
-    internal val animationOverlayEntries = mutableListOf<StatefulStackEntry>()
+    internal val animationOverlayEntries = modelListOf<StatefulStackEntry>()
 
     private val elements = mutableMapOf<Any, AnimatableElementState>()
 
@@ -89,17 +91,43 @@ class AnimatableElements {
     }
 }
 
+class AnimatableElementPropKey<T>
+
+data class AnimatableElementPropWithValue<T>(
+    val key: AnimatableElementPropKey<T>,
+    val value: T
+)
+
+class AnimatedElementProps {
+    private val backing = modelMapOf<AnimatableElementPropKey<*>, Any?>()
+    internal fun update(entries: Array<out AnimatableElementPropWithValue<*>>) {
+        backing.clear()
+        entries.forEach { backing[it.key] = it.value }
+    }
+
+    operator fun <T> get(key: AnimatableElementPropKey<T>): T = backing.getValue(key) as T
+    fun <T> getOrNull(key: AnimatableElementPropKey<T>): T? = backing[key] as? T
+}
+
+infix fun <T> AnimatableElementPropKey<T>.withValue(value: T): AnimatableElementPropWithValue<T> =
+    AnimatableElementPropWithValue(this, value)
+
 class AnimatableElement(val tag: Any) {
+    val properties = AnimatedElementProps()
     var layoutCoordinates: LayoutCoordinates? by mutableStateOf(null)
         internal set
-    val bounds get() = layoutCoordinates?.boundsInRoot
+    val bounds get() = layoutCoordinates?.takeIf { it.isAttached }?.boundsInRoot
     val drawLayerModifier = MutableDrawLayerModifier()
     var animationModifier: Modifier by mutableStateOf(Modifier)
 }
 
-fun Modifier.animatableElement(tag: Any): Modifier = composed {
+fun Modifier.animatableElement(
+    tag: Any,
+    vararg properties: AnimatableElementPropWithValue<*>
+): Modifier = composed {
     val elementsRoot = AnimatableElementsAmbient.current
     val element = elementsRoot.getElement(tag).value
+    element.properties.update(properties)
     onPositioned { element.layoutCoordinates = it } +
             element.drawLayerModifier +
             element.animationModifier
