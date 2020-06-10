@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
+import androidx.compose.collectAsState
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.common.RenderAsyncList
@@ -21,7 +22,7 @@ fun ActionPickerRoute(
         val viewModel = viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
 
         RenderAsyncList(
-            state = viewModel.state.value.items,
+            state = viewModel.state.collectAsState().value.items,
             successItemCallback = { item ->
                 ActionPickerItem(
                     item = item,

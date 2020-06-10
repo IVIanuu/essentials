@@ -92,5 +92,5 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $state"
+    override fun toString() = "${javaClass.simpleName} -> ${state.value}"
 }

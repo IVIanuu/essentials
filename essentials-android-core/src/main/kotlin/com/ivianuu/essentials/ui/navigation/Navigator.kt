@@ -205,7 +205,7 @@ class Navigator(
     private suspend fun setBackStackInternal(newBackStack: List<RouteState>) =
         withContext(dispatchers.main) {
             val oldBackStack = _backStack.toList()
-            val removedRoutes = newBackStack.filterNot { it in oldBackStack }
+            val removedRoutes = oldBackStack.filterNot { it in newBackStack }
             _backStack.clear()
             _backStack += newBackStack
             removedRoutes.forEach {
