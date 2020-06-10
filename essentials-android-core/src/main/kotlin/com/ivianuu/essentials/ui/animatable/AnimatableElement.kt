@@ -30,9 +30,9 @@ fun AnimatableElementsRoot(
 ) {
     val state = remember { AnimatableElements() }
     Providers(AnimatableElementsAmbient provides state) {
-        val allEntries = listOf(remember(children) {
-            StatefulStackEntry(content = children)
-        }) + state.animationOverlayEntries
+        val contentStackEntry = remember { StatefulStackEntry(content = children) }
+        contentStackEntry.content = children
+        val allEntries = listOf(contentStackEntry) + state.animationOverlayEntries
         StatefulStack(
             modifier = modifier + Modifier.animatableElement(Root),
             entries = allEntries
