@@ -31,6 +31,8 @@ import com.ivianuu.essentials.ui.core.rememberRetained
 import kotlin.math.abs
 import kotlin.math.round
 
+// todo remove
+
 private inline class ScrollDirection(val isForward: Boolean)
 
 @Suppress("NOTHING_TO_INLINE")
