@@ -63,7 +63,6 @@ fun SharedElementStackTransition(
             animation.animateTo(
                 targetValue = 1f,
                 onEnd = { _, _ ->
-                    println("shared element complete complete")
                     context.removeFrom()
                     startElement.drawLayerModifier.alpha = 1f
                     endElement.drawLayerModifier.alpha = 1f
