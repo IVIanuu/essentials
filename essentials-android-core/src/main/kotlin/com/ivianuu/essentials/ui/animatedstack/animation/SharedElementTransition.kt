@@ -3,7 +3,6 @@ package com.ivianuu.essentials.ui.animatedstack.animation
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.onActive
-import androidx.compose.state
 import androidx.ui.animation.animatedFloat
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
@@ -11,7 +10,6 @@ import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.layout.offset
 import androidx.ui.layout.preferredSize
-import androidx.ui.unit.PxBounds
 import androidx.ui.unit.PxPosition
 import androidx.ui.unit.height
 import androidx.ui.unit.lerp
@@ -37,16 +35,8 @@ fun SharedElementStackTransition(
         if (context.isPush) toTag else fromTag
     ).value
 
-    val capturedStartBoundsState = state<PxBounds?> { null }
-    if (capturedStartBoundsState.value == null && startElement.bounds != null) {
-        capturedStartBoundsState.value = startElement.bounds
-    }
-    val capturedStartBounds = capturedStartBoundsState.value
-    val capturedEndBoundsState = state<PxBounds?> { null }
-    if (capturedEndBoundsState.value == null && endElement.bounds != null) {
-        capturedEndBoundsState.value = endElement.bounds
-    }
-    val capturedEndBounds = capturedEndBoundsState.value
+    val capturedStartBounds = startElement.capturedBounds()
+    val capturedEndBounds = endElement.capturedBounds()
 
     val animation = animatedFloat(0f)
 

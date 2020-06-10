@@ -41,11 +41,11 @@ fun AnimatableElementsRoot(
 }
 
 @Composable
-fun animationOverlay(children: @Composable () -> Unit) {
+fun animationOverlay(overlayContent: @Composable () -> Unit) {
     val stackEntry = remember {
-        StatefulStackEntry(opaque = true, content = children)
+        StatefulStackEntry(opaque = true, content = overlayContent)
     }
-    stackEntry.content = children
+    stackEntry.content = overlayContent
     val animatableElements = AnimatableElementsAmbient.current
     onPreCommit(true) {
         animatableElements.animationOverlayEntries += stackEntry
