@@ -23,7 +23,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackAnimationAmbient
-import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeStackAnimation
+import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
 import com.ivianuu.essentials.ui.core.BindUiInitializer
@@ -58,7 +58,7 @@ class SampleUiInitializer : UiInitializer {
     @Composable
     override fun apply(children: @Composable () -> Unit) {
         Providers(
-            DefaultStackAnimationAmbient provides remember { VerticalFadeStackAnimation() }
+            DefaultStackAnimationAmbient provides remember { VerticalFadeStackTransition() }
         ) {
             TwilightTheme(children = children)
         }

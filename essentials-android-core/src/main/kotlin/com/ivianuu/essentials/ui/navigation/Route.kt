@@ -19,41 +19,41 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
-import com.ivianuu.essentials.ui.animatedstack.StackAnimation
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 @Immutable
 class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val enterAnimation: StackAnimation? = null,
-    val exitAnimation: StackAnimation? = null,
+    val enterTransition: StackTransition? = null,
+    val exitTransition: StackTransition? = null,
     val content: @Composable () -> Unit
 ) {
 
     constructor(
         opaque: Boolean = false,
         keepState: Boolean = false,
-        animation: StackAnimation? = null,
+        transition: StackTransition? = null,
         content: @Composable () -> Unit
     ) : this(
         opaque = opaque,
         keepState = keepState,
-        enterAnimation = animation,
-        exitAnimation = animation,
+        enterTransition = transition,
+        exitTransition = transition,
         content = content
     )
 
     fun copy(
         opaque: Boolean = this.opaque,
         keepState: Boolean = this.keepState,
-        enterAnimation: StackAnimation? = this.enterAnimation,
-        exitAnimation: StackAnimation? = this.exitAnimation,
+        enterTransition: StackTransition? = this.enterTransition,
+        exitTransition: StackTransition? = this.exitTransition,
         content: @Composable () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
         keepState = keepState,
-        enterAnimation = enterAnimation,
-        exitAnimation = exitAnimation,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
         content = content
     )
 

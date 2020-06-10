@@ -26,9 +26,9 @@ fun AnimatedStack(
 ) {
     AnimatableElementsRoot {
         val state = remember { AnimatedStackState() }
-        state.defaultAnimation = DefaultStackAnimationAmbient.current
+        state.defaultTransition = DefaultStackAnimationAmbient.current
         state.setEntries(entries)
-        state.activeAnimations.forEach { it() }
+        state.activeTransitions.forEach { it() }
         StatefulStack(
             modifier = modifier
                 .onPositioned { state.containerBounds = it.boundsInRoot },
@@ -42,10 +42,10 @@ private class AnimatedStackState {
     private var _entries = emptyList<AnimatedStackEntryState>()
     val statefulStackEntries = modelListOf<StatefulStackEntry>()
 
-    var defaultAnimation = NoOpStackAnimation
+    var defaultTransition = NoOpStackTransition
     var containerBounds: PxBounds? = null
 
-    val activeAnimations = modelListOf<@Composable () -> Unit>()
+    val activeTransitions = modelListOf<@Composable () -> Unit>()
 
     fun setEntries(newEntries: List<AnimatedStackEntry>) {
         setEntriesInternal(
@@ -88,13 +88,13 @@ private class AnimatedStackState {
                 .reversed()
                 .filterNot { it in newVisibleEntries }
                 .forEach { entry ->
-                    val localAnimation = entry.entry.exitAnimation
-                        ?: defaultAnimation
+                    val localTransition = entry.entry.exitTransition
+                        ?: defaultTransition
                     performChange(
                         from = entry,
                         to = null,
                         isPush = false,
-                        animation = localAnimation
+                        transition = localTransition
                     )
                 }
 
@@ -103,13 +103,13 @@ private class AnimatedStackState {
                 .dropLast(if (replacingTopEntries) 1 else 0)
                 .filterNot { it in oldVisibleEntries }
                 .forEachIndexed { i, entry ->
-                    val localAnimation =
-                        entry.entry.enterAnimation ?: defaultAnimation
+                    val localTransition =
+                        entry.entry.enterTransition ?: defaultTransition
                     performChange(
                         from = newVisibleEntries.getOrNull(i - 1),
                         to = entry,
                         isPush = true,
-                        animation = localAnimation
+                        transition = localTransition
                     )
                 }
 
@@ -117,14 +117,14 @@ private class AnimatedStackState {
 
             // Replace the old visible top with the new one
             if (replacingTopEntries) {
-                val localAnimation =
-                    if (isPush) newTopEntry?.entry?.enterAnimation ?: defaultAnimation
-                    else oldTopEntry?.entry?.exitAnimation ?: defaultAnimation
+                val localTransition =
+                    if (isPush) newTopEntry?.entry?.enterTransition ?: defaultTransition
+                    else oldTopEntry?.entry?.exitTransition ?: defaultTransition
                 performChange(
                     from = oldTopEntry,
                     to = newTopEntry,
                     isPush = isPush,
-                    animation = localAnimation
+                    transition = localTransition
                 )
             }
         }
@@ -145,14 +145,14 @@ private class AnimatedStackState {
         from: AnimatedStackEntryState?,
         to: AnimatedStackEntryState?,
         isPush: Boolean,
-        animation: StackAnimation
+        transition: StackTransition
     ) {
         val exitFrom = from != null && (!isPush || !to!!.entry.opaque)
 
         val transactionId = UUID.randomUUID()
 
-        lateinit var animationComposable: @Composable () -> Unit
-        animationComposable = {
+        lateinit var transitionComposable: @Composable () -> Unit
+        transitionComposable = {
             key(transactionId) {
                 val completed = untrackedState { false }
 
@@ -176,9 +176,9 @@ private class AnimatedStackState {
                             "onComplete() must be called only once"
                         }
                         completed.value = true
-                        activeAnimations -= animationComposable
-                        from?.onAnimationComplete()
-                        to?.onAnimationComplete()
+                        activeTransitions -= transitionComposable
+                        from?.onTransitionComplete()
+                        to?.onTransitionComplete()
                     }
                 }
 
@@ -189,7 +189,7 @@ private class AnimatedStackState {
                 val toElement = to?.entry?.let { elements.getElement(it) }?.value
 
                 val context = remember(containerBounds) {
-                    StackAnimationContext(
+                    StackTransitionContext(
                         fromElement,
                         toElement,
                         containerBounds,
@@ -200,10 +200,10 @@ private class AnimatedStackState {
                     )
                 }
 
-                animation(context)
+                transition(context)
             }
         }
-        activeAnimations += animationComposable
+        activeTransitions += transitionComposable
     }
 
     private inner class AnimatedStackEntryState(val entry: AnimatedStackEntry) {
@@ -253,7 +253,7 @@ private class AnimatedStackState {
             removeOnComplete = true
         }
 
-        fun onAnimationComplete() {
+        fun onTransitionComplete() {
             entry.isAnimating = false
             if (removeOnComplete) {
                 removeOnComplete = false
@@ -269,8 +269,8 @@ private class AnimatedStackState {
 class AnimatedStackEntry(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val enterAnimation: StackAnimation? = null,
-    val exitAnimation: StackAnimation? = null,
+    val enterTransition: StackTransition? = null,
+    val exitTransition: StackTransition? = null,
     val content: @Composable () -> Unit
 ) {
     var isAnimating by mutableStateOf(false)

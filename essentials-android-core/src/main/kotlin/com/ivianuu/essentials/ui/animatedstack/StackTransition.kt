@@ -23,7 +23,7 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.unit.PxBounds
 import com.ivianuu.essentials.ui.animatable.AnimatableElement
 
-data class StackAnimationContext(
+data class StackTransitionContext(
     val fromElement: AnimatableElement?,
     val toElement: AnimatableElement?,
     val containerBounds: PxBounds?,
@@ -45,21 +45,21 @@ data class StackAnimationContext(
     }
 }
 
-typealias StackAnimation = @Composable (StackAnimationContext) -> Unit
+typealias StackTransition = @Composable (StackTransitionContext) -> Unit
 
-val NoOpStackAnimation: StackAnimation = { context ->
+val NoOpStackTransition: StackTransition = { context ->
     if (context.toElement != null) context.addTo()
     if (context.fromElement != null) context.removeFrom()
     onActive { context.onComplete() }
 }
 
 val DefaultStackAnimationAmbient =
-    staticAmbientOf { NoOpStackAnimation }
+    staticAmbientOf { NoOpStackTransition }
 
-operator fun StackAnimation.plus(other: StackAnimation): StackAnimation = { context ->
+operator fun StackTransition.plus(other: StackTransition): StackTransition = { context ->
     val thisAnimation = this@plus
 
-    val completedAnimations = remember { mutableSetOf<StackAnimation>() }
+    val completedAnimations = remember { mutableSetOf<StackTransition>() }
 
     fun completeIfPossible() {
         if (thisAnimation in completedAnimations && other in completedAnimations) {

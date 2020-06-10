@@ -225,8 +225,8 @@ class Navigator(
         val stackEntry = AnimatedStackEntry(
             opaque = route.opaque,
             keepState = route.keepState,
-            enterAnimation = route.enterAnimation,
-            exitAnimation = route.exitAnimation,
+            enterTransition = route.enterTransition,
+            exitTransition = route.exitTransition,
             content = {
                 Providers(
                     RetainedObjectsAmbient provides retainedObjects,

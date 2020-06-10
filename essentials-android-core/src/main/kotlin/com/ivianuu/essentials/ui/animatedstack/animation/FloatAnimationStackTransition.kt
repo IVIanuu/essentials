@@ -7,11 +7,11 @@ import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.ui.animation.animatedFloat
 import com.ivianuu.essentials.ui.animatable.AnimatableElement
-import com.ivianuu.essentials.ui.animatedstack.StackAnimation
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-fun FloatStackAnimation(
+fun FloatAnimationStackTransition(
     duration: Duration = 300.milliseconds,
     delay: Duration = 0.milliseconds,
     easing: Easing = FastOutSlowInEasing,
@@ -21,7 +21,7 @@ fun FloatStackAnimation(
         isPush: Boolean,
         progress: Float
     ) -> Unit
-): StackAnimation = { context ->
+): StackTransition = { context ->
     val animation = animatedFloat(0f)
 
     onActive {

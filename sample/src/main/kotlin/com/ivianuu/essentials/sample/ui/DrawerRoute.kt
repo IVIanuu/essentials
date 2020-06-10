@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Modifier
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackAnimation
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 
-val DrawerRoute = Route(enterAnimation = FadeStackAnimation()) {
+val DrawerRoute = Route(enterTransition = FadeStackTransition()) {
     Scaffold(
         topAppBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {
