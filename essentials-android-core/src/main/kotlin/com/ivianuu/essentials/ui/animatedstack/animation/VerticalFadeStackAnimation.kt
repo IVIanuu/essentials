@@ -9,7 +9,7 @@ import kotlin.time.Duration
 import kotlin.time.milliseconds
 
 fun VerticalFadeStackAnimation(duration: Duration = 300.milliseconds): StackAnimation {
-    return FloatStackAnimation(duration = duration) { _, _, isPush, progress ->
+    return FloatStackAnimation(duration = duration) { progress ->
         StackAnimationModifiers(
             to = {
                 if (isPush) Modifier

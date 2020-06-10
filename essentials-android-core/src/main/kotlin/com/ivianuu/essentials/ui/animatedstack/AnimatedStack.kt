@@ -9,7 +9,11 @@ import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.ui.core.Modifier
+import androidx.ui.core.boundsInRoot
+import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
+import androidx.ui.unit.PxBounds
+import com.ivianuu.essentials.ui.animatable.AnimatableElementsRoot
 import com.ivianuu.essentials.ui.common.untrackedState
 import java.util.UUID
 
@@ -22,10 +26,13 @@ fun AnimatedStack(
     state.defaultAnimation = DefaultStackAnimationAmbient.current
     state.setEntries(entries)
     state.activeAnimations.forEach { it() }
-    StatefulStack(
-        modifier = modifier,
-        entries = state.statefulStackEntries
-    )
+    AnimatableElementsRoot {
+        StatefulStack(
+            modifier = modifier
+                .onPositioned { state.containerBounds = it.boundsInRoot },
+            entries = state.statefulStackEntries
+        )
+    }
 }
 
 private class AnimatedStackState {
@@ -34,6 +41,7 @@ private class AnimatedStackState {
     val statefulStackEntries = modelListOf<StatefulStackEntry>()
 
     var defaultAnimation = NoOpStackAnimation
+    var containerBounds: PxBounds? = null
 
     val activeAnimations = modelListOf<@Composable () -> Unit>()
 
@@ -158,12 +166,17 @@ private class AnimatedStackState {
                     }
                 }
 
-                val animationModifiers = animation(
-                    from != null,
-                    to != null,
-                    isPush,
-                    onComplete
-                )
+                val context = remember(containerBounds) {
+                    StackAnimationContext(
+                        from?.entry,
+                        to?.entry,
+                        containerBounds,
+                        isPush,
+                        onComplete
+                    )
+                }
+
+                val animationModifiers = animation(context)
                 from?.currentAnimationModifierBuilder = animationModifiers.from
                 to?.currentAnimationModifierBuilder = animationModifiers.to
             }

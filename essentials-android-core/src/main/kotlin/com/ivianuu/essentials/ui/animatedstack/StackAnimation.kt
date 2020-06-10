@@ -17,20 +17,24 @@
 package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.Composable
-import androidx.compose.onCommit
+import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
+import androidx.ui.unit.PxBounds
 
-typealias StackAnimation = @Composable (
-    hasFrom: Boolean,
-    hasTo: Boolean,
-    isPush: Boolean,
-    onComplete: () -> Unit
-) -> StackAnimationModifiers
+data class StackAnimationContext(
+    val fromTag: Any?,
+    val toTag: Any?,
+    val containerBounds: PxBounds?,
+    val isPush: Boolean,
+    val onComplete: () -> Unit
+)
 
-val NoOpStackAnimation: StackAnimation = { _, _, _, onComplete ->
-    onCommit { onComplete() }
+typealias StackAnimation = @Composable StackAnimationContext.() -> StackAnimationModifiers
+
+val NoOpStackAnimation: StackAnimation = {
+    onActive { onComplete() }
     NoOpStackAnimationModifiers
 }
 
@@ -47,35 +51,42 @@ data class StackAnimationModifiers(
 val DefaultStackAnimationAmbient =
     staticAmbientOf { NoOpStackAnimation }
 
-operator fun StackAnimation.plus(other: StackAnimation): StackAnimation =
-    { hasFrom, hasTo, isPush, onComplete ->
-        val thisAnimation = this
+operator fun StackAnimation.plus(other: StackAnimation): StackAnimation = {
+    val thisAnimation = this@plus
 
-        val completedAnimations = remember { mutableSetOf<StackAnimation>() }
+    val completedAnimations = remember { mutableSetOf<StackAnimation>() }
 
-        fun completeIfPossible() {
-            if (thisAnimation in completedAnimations && other in completedAnimations) {
-                onComplete()
+    fun completeIfPossible() {
+        if (thisAnimation in completedAnimations && other in completedAnimations) {
+            onComplete()
+        }
+    }
+
+    val thisModifiers = thisAnimation(
+        copy(
+            onComplete = {
+                completedAnimations += thisAnimation
+                completeIfPossible()
             }
-        }
-
-        val thisModifiers = thisAnimation(hasFrom, hasTo, isPush) {
-            completedAnimations += thisAnimation
-            completeIfPossible()
-        }
-
-        val otherModifiers = other(hasFrom, hasTo, isPush) {
-            completedAnimations += other
-            completeIfPossible()
-        }
-
-        StackAnimationModifiers(
-            to = if (thisModifiers.to != null || otherModifiers.to != null) ({
-                (thisModifiers.to?.invoke() ?: Modifier) + (otherModifiers.to?.invoke() ?: Modifier)
-            }) else null,
-            from = if (thisModifiers.from != null || otherModifiers.from != null) ({
-                (thisModifiers.from?.invoke() ?: Modifier) + (otherModifiers.from?.invoke()
-                    ?: Modifier)
-            }) else null,
         )
+    )
+
+    val otherModifiers = other(
+        copy(
+            onComplete = {
+                completedAnimations += other
+                completeIfPossible()
+            }
+        )
+    )
+
+    StackAnimationModifiers(
+        to = if (thisModifiers.to != null || otherModifiers.to != null) ({
+            (thisModifiers.to?.invoke() ?: Modifier) + (otherModifiers.to?.invoke() ?: Modifier)
+        }) else null,
+        from = if (thisModifiers.from != null || otherModifiers.from != null) ({
+            (thisModifiers.from?.invoke() ?: Modifier) + (otherModifiers.from?.invoke()
+                ?: Modifier)
+        }) else null,
+    )
 }

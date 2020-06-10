@@ -8,7 +8,7 @@ import kotlin.time.milliseconds
 
 fun FadeStackAnimation(
     duration: Duration = 150.milliseconds
-) = FloatStackAnimation(duration = duration) { _, _, _, progress ->
+) = FloatStackAnimation(duration = duration) { progress ->
     StackAnimationModifiers(
         to = { Modifier.drawOpacity(opacity = progress) },
         from = { Modifier.drawOpacity(opacity = 1f - progress) }
