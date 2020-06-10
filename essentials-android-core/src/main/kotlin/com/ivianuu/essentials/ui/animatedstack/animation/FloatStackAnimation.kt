@@ -6,9 +6,8 @@ import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.ui.animation.animatedFloat
+import com.ivianuu.essentials.ui.animatable.AnimatableElement
 import com.ivianuu.essentials.ui.animatedstack.StackAnimation
-import com.ivianuu.essentials.ui.animatedstack.StackAnimationContext
-import com.ivianuu.essentials.ui.animatedstack.StackAnimationModifiers
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -16,10 +15,17 @@ fun FloatStackAnimation(
     duration: Duration = 300.milliseconds,
     delay: Duration = 0.milliseconds,
     easing: Easing = FastOutSlowInEasing,
-    createModifiers: @Composable StackAnimationContext.(progress: Float) -> StackAnimationModifiers
-): StackAnimation = {
+    apply: @Composable (
+        fromElement: AnimatableElement?,
+        toElement: AnimatableElement?,
+        isPush: Boolean,
+        progress: Float
+    ) -> Unit
+): StackAnimation = { context ->
     val animation = animatedFloat(0f)
+
     onActive {
+        if (context.toElement != null) context.addTo()
         animation.animateTo(
             targetValue = 1f,
             anim = TweenBuilder<Float>().apply {
@@ -27,9 +33,12 @@ fun FloatStackAnimation(
                 this.easing = easing
                 this.delay = delay.toLongMilliseconds().toInt()
             },
-            onEnd = { _, _ -> onComplete() }
+            onEnd = { _, _ ->
+                if (context.fromElement != null) context.removeFrom()
+                context.onComplete()
+            }
         )
     }
 
-    createModifiers(this, animation.value)
+    apply(context.fromElement, context.toElement, context.isPush, animation.value)
 }

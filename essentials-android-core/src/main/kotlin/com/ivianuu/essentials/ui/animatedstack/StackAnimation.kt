@@ -20,73 +20,69 @@ import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.core.Modifier
 import androidx.ui.unit.PxBounds
+import com.ivianuu.essentials.ui.animatable.AnimatableElement
 
 data class StackAnimationContext(
-    val fromTag: Any?,
-    val toTag: Any?,
+    val fromElement: AnimatableElement?,
+    val toElement: AnimatableElement?,
     val containerBounds: PxBounds?,
     val isPush: Boolean,
-    val onComplete: () -> Unit
-)
+    private val addToBlock: () -> Unit,
+    private val removeFromBlock: () -> Unit,
+    private val onCompleteBlock: () -> Unit
+) {
+    fun addTo() {
+        addToBlock()
+    }
 
-typealias StackAnimation = @Composable StackAnimationContext.() -> StackAnimationModifiers
+    fun removeFrom() {
+        removeFromBlock()
+    }
 
-val NoOpStackAnimation: StackAnimation = {
-    onActive { onComplete() }
-    NoOpStackAnimationModifiers
+    fun onComplete() {
+        onCompleteBlock()
+    }
 }
 
-private val NoOpStackAnimationModifiers = StackAnimationModifiers(
-    to = { Modifier },
-    from = { Modifier }
-)
+typealias StackAnimation = @Composable (StackAnimationContext) -> Unit
 
-data class StackAnimationModifiers(
-    val to: @Composable (() -> Modifier)?,
-    val from: @Composable (() -> Modifier)?
-)
+val NoOpStackAnimation: StackAnimation = { context ->
+    if (context.toElement != null) context.addTo()
+    if (context.fromElement != null) context.removeFrom()
+    onActive { context.onComplete() }
+}
 
 val DefaultStackAnimationAmbient =
     staticAmbientOf { NoOpStackAnimation }
 
-operator fun StackAnimation.plus(other: StackAnimation): StackAnimation = {
+operator fun StackAnimation.plus(other: StackAnimation): StackAnimation = { context ->
     val thisAnimation = this@plus
 
     val completedAnimations = remember { mutableSetOf<StackAnimation>() }
 
     fun completeIfPossible() {
         if (thisAnimation in completedAnimations && other in completedAnimations) {
-            onComplete()
+            context.onComplete()
         }
     }
 
-    val thisModifiers = thisAnimation(
-        copy(
-            onComplete = {
+    thisAnimation(
+        context.copy(
+            onCompleteBlock = {
                 completedAnimations += thisAnimation
                 completeIfPossible()
             }
         )
     )
 
-    val otherModifiers = other(
-        copy(
-            onComplete = {
+    other(
+        context.copy(
+            onCompleteBlock = {
                 completedAnimations += other
                 completeIfPossible()
             }
         )
     )
 
-    StackAnimationModifiers(
-        to = if (thisModifiers.to != null || otherModifiers.to != null) ({
-            (thisModifiers.to?.invoke() ?: Modifier) + (otherModifiers.to?.invoke() ?: Modifier)
-        }) else null,
-        from = if (thisModifiers.from != null || otherModifiers.from != null) ({
-            (thisModifiers.from?.invoke() ?: Modifier) + (otherModifiers.from?.invoke()
-                ?: Modifier)
-        }) else null,
-    )
 }

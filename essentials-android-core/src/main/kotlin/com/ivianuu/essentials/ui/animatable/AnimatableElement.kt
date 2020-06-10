@@ -18,22 +18,54 @@ import androidx.ui.core.boundsInRoot
 import androidx.ui.core.composed
 import androidx.ui.core.onPositioned
 import androidx.ui.graphics.RectangleShape
+import com.ivianuu.essentials.ui.animatedstack.StatefulStack
+import com.ivianuu.essentials.ui.animatedstack.StatefulStackEntry
 
 @Composable
-fun AnimatableElementsRoot(children: @Composable () -> Unit) {
+fun AnimatableElementsRoot(
+    modifier: Modifier = Modifier,
+    children: @Composable () -> Unit
+) {
     val state = remember { AnimatableElements() }
-    Providers(AnimatableElementsAmbient provides state, children = children)
+    Providers(AnimatableElementsAmbient provides state) {
+        val allEntries = listOf(remember(children) {
+            StatefulStackEntry(content = children)
+        }) + state.animationOverlayEntries
+        StatefulStack(
+            modifier = modifier + Modifier.animatableElement(Root),
+            entries = allEntries
+        )
+    }
 }
 
-val AnimatableElementsAmbient = staticAmbientOf<AnimatableElements>()
+@Composable
+fun animationOverlay(children: @Composable () -> Unit) {
+    val stackEntry = remember {
+        StatefulStackEntry(opaque = true, content = children)
+    }
+    stackEntry.content = children
+    val animatableElements = AnimatableElementsAmbient.current
+    onPreCommit(true) {
+        animatableElements.animationOverlayEntries += stackEntry
+        onDispose { animatableElements.animationOverlayEntries -= stackEntry }
+    }
+}
+
+val Root = Any()
+
+val AnimatableElementsAmbient = staticAmbientOf<AnimatableElements> {
+    error("No AnimatableElements found")
+}
 
 @Stable
 class AnimatableElements {
 
+    internal val animationOverlayEntries = mutableListOf<StatefulStackEntry>()
+
     private val elements = mutableMapOf<Any, AnimatableElementState>()
 
     @Composable
-    fun get(tag: Any): State<AnimatableElement> {
+    fun getElement(tag: Any): State<AnimatableElement> {
         val state = elements.getOrPut(tag) {
             AnimatableElementState(tag)
         }
@@ -67,10 +99,10 @@ class AnimatableElement(val tag: Any) {
 
 fun Modifier.animatableElement(tag: Any): Modifier = composed {
     val elementsRoot = AnimatableElementsAmbient.current
-    val element = elementsRoot.get(tag).value
-    onPositioned {
-        element.layoutCoordinates = it
-    } + element.drawLayerModifier + element.animationModifier
+    val element = elementsRoot.getElement(tag).value
+    onPositioned { element.layoutCoordinates = it } +
+            element.drawLayerModifier +
+            element.animationModifier
 }
 
 class MutableDrawLayerModifier : DrawLayerModifier {

@@ -13,7 +13,9 @@ import androidx.ui.core.boundsInRoot
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
 import androidx.ui.unit.PxBounds
+import com.ivianuu.essentials.ui.animatable.AnimatableElementsAmbient
 import com.ivianuu.essentials.ui.animatable.AnimatableElementsRoot
+import com.ivianuu.essentials.ui.animatable.animatableElement
 import com.ivianuu.essentials.ui.common.untrackedState
 import java.util.UUID
 
@@ -22,11 +24,11 @@ fun AnimatedStack(
     modifier: Modifier = Modifier,
     entries: List<AnimatedStackEntry>
 ) {
-    val state = remember { AnimatedStackState() }
-    state.defaultAnimation = DefaultStackAnimationAmbient.current
-    state.setEntries(entries)
-    state.activeAnimations.forEach { it() }
     AnimatableElementsRoot {
+        val state = remember { AnimatedStackState() }
+        state.defaultAnimation = DefaultStackAnimationAmbient.current
+        state.setEntries(entries)
+        state.activeAnimations.forEach { it() }
         StatefulStack(
             modifier = modifier
                 .onPositioned { state.containerBounds = it.boundsInRoot },
@@ -154,6 +156,20 @@ private class AnimatedStackState {
             key(transactionId) {
                 val completed = untrackedState { false }
 
+                val addTo: () -> Unit = remember {
+                    {
+                        checkNotNull(to)
+                        to.enter(from = from, isPush = isPush)
+                    }
+                }
+
+                val removeFrom: () -> Unit = remember {
+                    {
+                        checkNotNull(from)
+                        if (exitFrom) from.exit(to = to, isPush = isPush)
+                    }
+                }
+
                 val onComplete: () -> Unit = remember {
                     {
                         check(!completed.value) {
@@ -166,25 +182,28 @@ private class AnimatedStackState {
                     }
                 }
 
+                val elements = AnimatableElementsAmbient.current
+
+
+                val fromElement = from?.entry?.let { elements.getElement(it) }?.value
+                val toElement = to?.entry?.let { elements.getElement(it) }?.value
+
                 val context = remember(containerBounds) {
                     StackAnimationContext(
-                        from?.entry,
-                        to?.entry,
+                        fromElement,
+                        toElement,
                         containerBounds,
                         isPush,
+                        addTo,
+                        removeFrom,
                         onComplete
                     )
                 }
 
-                val animationModifiers = animation(context)
-                from?.currentAnimationModifierBuilder = animationModifiers.from
-                to?.currentAnimationModifierBuilder = animationModifiers.to
+                animation(context)
             }
         }
         activeAnimations += animationComposable
-
-        if (exitFrom) from!!.exit(to = to, isPush = isPush)
-        to?.enter(from = from, isPush = isPush)
     }
 
     private inner class AnimatedStackEntryState(val entry: AnimatedStackEntry) {
@@ -194,12 +213,10 @@ private class AnimatedStackState {
             entry.keepState
         ) {
             Box(
-                modifier = currentAnimationModifierBuilder?.invoke() ?: Modifier,
+                modifier = Modifier.animatableElement(entry),
                 children = entry.content
             )
         }
-
-        var currentAnimationModifierBuilder: (@Composable () -> Modifier)? by mutableStateOf(null)
 
         private var removeOnComplete = false
 
@@ -238,7 +255,6 @@ private class AnimatedStackState {
 
         fun onAnimationComplete() {
             entry.isAnimating = false
-            currentAnimationModifierBuilder = null
             if (removeOnComplete) {
                 removeOnComplete = false
                 statefulStackEntries.remove(statefulStackEntry)
