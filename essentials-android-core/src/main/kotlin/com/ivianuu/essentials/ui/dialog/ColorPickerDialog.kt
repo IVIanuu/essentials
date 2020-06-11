@@ -142,7 +142,7 @@ fun ColorPickerDialog(
                 modifier = Modifier.height(300.dp)
                     .padding(start = 24.dp, end = 24.dp),
                 item = currentPage,
-                transitionCallback = { FadeStackTransition() }
+                transition = FadeStackTransition()
             ) { currentPage ->
                 when (currentPage) {
                     ColorPickerPage.Colors -> {

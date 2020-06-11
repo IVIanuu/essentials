@@ -16,6 +16,7 @@ import androidx.ui.unit.PxBounds
 import com.ivianuu.essentials.ui.animatable.AnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
 import java.util.UUID
 
@@ -23,13 +24,13 @@ import java.util.UUID
 fun <T> AnimatedBox(
     modifier: Modifier = Modifier,
     item: T,
-    transitionCallback: (T) -> StackTransition? = { null },
+    transition: StackTransition = FadeStackTransition(),
     itemCallback: @Composable (T) -> Unit
 ) {
     AnimatedStack(
         modifier = modifier,
         items = listOf(item),
-        transitionCallback = transitionCallback,
+        transition = transition,
         itemCallback = itemCallback
     )
 }
@@ -39,17 +40,23 @@ fun <T> AnimatedBox(
 fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
     items: List<T>,
-    transitionCallback: (T) -> StackTransition? = { null },
+    transition: StackTransition = FadeStackTransition(),
+    keepState: Boolean = false,
     itemCallback: @Composable (T) -> Unit
 ) {
     var entries by untrackedState { listOf<AnimatedStackEntryWithItem<T>>() }
-    remember(items, itemCallback, transitionCallback) {
+    remember(items, (itemCallback as Any?), (transition as Any?), keepState) {
         entries = items
             .map { item ->
                 entries.firstOrNull { entry -> item == entry.item } ?: AnimatedStackEntryWithItem(
                     item = item,
-                    transition = transitionCallback(item),
-                    content = { itemCallback(item) }
+                    stackEntry = AnimatedStackEntry(
+                        opaque = false,
+                        keepState = keepState,
+                        enterTransition = transition,
+                        exitTransition = transition,
+                        content = { itemCallback(item) }
+                    )
                 )
             }
     }
@@ -61,15 +68,8 @@ fun <T> AnimatedStack(
 
 private class AnimatedStackEntryWithItem<T>(
     val item: T,
-    val transition: StackTransition?,
-    val content: @Composable () -> Unit
-) {
-    val stackEntry = AnimatedStackEntry(
-        enterTransition = transition,
-        exitTransition = transition,
-        content = content
-    )
-}
+    val stackEntry: AnimatedStackEntry
+)
 
 @Composable
 fun AnimatedStack(

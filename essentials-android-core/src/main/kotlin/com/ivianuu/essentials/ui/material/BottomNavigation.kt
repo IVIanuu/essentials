@@ -23,7 +23,6 @@ import androidx.compose.emptyContent
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateOf
-import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
@@ -34,8 +33,9 @@ import androidx.ui.material.BottomNavigationItem
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.Swapper
-import com.ivianuu.essentials.ui.common.SwapperState
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.rememberRetained
 
@@ -191,27 +191,17 @@ fun RowScope.BottomNavigationItem(
 }
 
 @Composable
-fun <T> BottomNavigationSwapper(
+fun <T> BottomNavigationContent(
     bottomNavigationController: BottomNavigationController<T> = ambientBottomNavigationController(),
-    keepState: Boolean = false,
     modifier: Modifier = Modifier,
+    transition: StackTransition = FadeStackTransition(),
     contentCallback: @Composable (T) -> Unit
 ) {
-    val swapperController = rememberRetained {
-        SwapperState(
-            initial = bottomNavigationController.selectedItem,
-            keepState = keepState
-        )
-    }
-    remember(keepState) {
-        swapperController.keepState = keepState
-    }
-
-    remember(bottomNavigationController.selectedItem) {
-        swapperController.current = bottomNavigationController.selectedItem
-    }
-
-    Swapper(state = swapperController, modifier = modifier) {
+    AnimatedBox(
+        modifier = modifier,
+        item = bottomNavigationController.selectedItem,
+        transition = transition
+    ) {
         Providers(BottomNavigationItemAmbient provides bottomNavigationController.selectedItem) {
             contentCallback(bottomNavigationController.selectedItem)
         }

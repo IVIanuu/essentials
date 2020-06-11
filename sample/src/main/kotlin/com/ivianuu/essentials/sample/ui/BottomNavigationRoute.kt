@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
+import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Email
 import androidx.ui.material.icons.filled.Home
@@ -28,8 +30,8 @@ import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.BottomNavigation
+import com.ivianuu.essentials.ui.material.BottomNavigationContent
 import com.ivianuu.essentials.ui.material.BottomNavigationItem
-import com.ivianuu.essentials.ui.material.BottomNavigationSwapper
 import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -40,8 +42,11 @@ val BottomNavigationRoute = Route {
         Scaffold(
             topAppBar = { TopAppBar(title = { Text("Bottom navigation") }) },
             body = {
-                BottomNavigationSwapper<BottomNavItem> { item ->
-                    Box(backgroundColor = item.color)
+                BottomNavigationContent<BottomNavItem> { item ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        backgroundColor = item.color
+                    )
                 }
             },
             bottomBar = {

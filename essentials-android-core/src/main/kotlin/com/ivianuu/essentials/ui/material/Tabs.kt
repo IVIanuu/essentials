@@ -22,13 +22,14 @@ import androidx.compose.emptyContent
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateOf
-import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
+import androidx.ui.core.Modifier
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
-import com.ivianuu.essentials.ui.common.Swapper
-import com.ivianuu.essentials.ui.common.SwapperState
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.rememberRetained
@@ -123,18 +124,16 @@ fun Tab(
 
 @Composable
 fun <T> TabContent(
+    modifier: Modifier = Modifier,
     tabController: TabController<T> = ambientTabController(),
-    keepState: Boolean = false,
-    item: @Composable (Int, T) -> Unit
+    transition: StackTransition = FadeStackTransition(),
+    itemCallback: @Composable (Int, T) -> Unit
 ) {
-    val swapperController = remember {
-        SwapperState(
-            tabController.selectedItem
-        )
+    AnimatedBox(
+        modifier = modifier,
+        item = tabController.selectedItem,
+        transition = transition
+    ) {
+        itemCallback(tabController.selectedIndex, tabController.selectedItem)
     }
-    remember(keepState) { swapperController.keepState = keepState }
-    remember(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
-    Swapper(
-        state = swapperController
-    ) { item(tabController.selectedIndex, tabController.selectedItem) }
 }
