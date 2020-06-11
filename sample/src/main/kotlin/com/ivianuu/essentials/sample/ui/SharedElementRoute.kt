@@ -8,9 +8,9 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Stack
 import androidx.ui.layout.size
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.animatable.animatableElement
+import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.withValue
-import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementKey
+import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementComposable
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -25,7 +25,7 @@ fun SharedElement(
 ) {
     Box(
         modifier = Modifier
-            .animatableElement(tag, SharedElementKey withValue children) + modifier,
+            .animatable(tag, SharedElementComposable withValue children) + modifier,
         children = children
     )
 }

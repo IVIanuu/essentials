@@ -1,22 +1,24 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.ui.core.TransformOrigin
+import androidx.animation.AnimationBuilder
+import com.ivianuu.essentials.ui.animatable.ScaleX
+import com.ivianuu.essentials.ui.animatable.ScaleY
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 
-fun ScaleStackTransition(duration: Duration = 300.milliseconds): StackTransition {
-    return FloatAnimationStackTransition(duration = duration) { fromElement, toElement, isPush, progress ->
-        if (toElement != null && isPush) {
-            toElement.drawLayerModifier.scaleX = progress
-            toElement.drawLayerModifier.scaleY = progress
-            toElement.drawLayerModifier.transformOrigin = TransformOrigin(0.5f, 0.5f)
+fun ScaleStackTransition(
+    anim: AnimationBuilder<Float> = defaultAnimationBuilder()
+): StackTransition {
+    return FloatAnimationStackTransition(anim = anim) { from, to, isPush, progress ->
+        if (to != null && isPush) {
+            to
+                .set(ScaleX, progress)
+                .set(ScaleY, progress)
         }
 
-        if (fromElement != null && !isPush) {
-            fromElement.drawLayerModifier.scaleX = 1f - progress
-            fromElement.drawLayerModifier.scaleY = 1f - progress
-            fromElement.drawLayerModifier.transformOrigin = TransformOrigin(0.5f, 0.5f)
+        if (from != null && !isPush) {
+            from
+                .set(ScaleX, 1f - progress)
+                .set(ScaleY, 1f - progress)
         }
     }
 }

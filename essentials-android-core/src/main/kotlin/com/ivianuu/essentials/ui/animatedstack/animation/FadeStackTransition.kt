@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import kotlin.time.Duration
-import kotlin.time.milliseconds
+import androidx.animation.AnimationBuilder
+import com.ivianuu.essentials.ui.animatable.Alpha
 
 fun FadeStackTransition(
-    duration: Duration = 150.milliseconds
-) = FloatAnimationStackTransition(duration = duration) { fromElement, toElement, _, progress ->
-    toElement?.drawLayerModifier?.alpha = progress
-    fromElement?.drawLayerModifier?.alpha = 1f - progress
+    anim: AnimationBuilder<Float> = defaultAnimationBuilder()
+) = FloatAnimationStackTransition(anim = anim) { from, to, _, progress ->
+    to?.set(Alpha, progress)
+    from?.set(Alpha, 1f - progress)
 }

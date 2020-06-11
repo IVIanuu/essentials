@@ -13,9 +13,9 @@ import androidx.ui.core.boundsInRoot
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
 import androidx.ui.unit.PxBounds
-import com.ivianuu.essentials.ui.animatable.AnimatableElementsAmbient
-import com.ivianuu.essentials.ui.animatable.AnimatableElementsRoot
-import com.ivianuu.essentials.ui.animatable.animatableElement
+import com.ivianuu.essentials.ui.animatable.AnimatableRoot
+import com.ivianuu.essentials.ui.animatable.animatable
+import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.common.untrackedState
 import java.util.UUID
 
@@ -24,7 +24,7 @@ fun AnimatedStack(
     modifier: Modifier = Modifier,
     entries: List<AnimatedStackEntry>
 ) {
-    AnimatableElementsRoot {
+    AnimatableRoot {
         val state = remember { AnimatedStackState() }
         state.defaultTransition = DefaultStackAnimationAmbient.current
         state.setEntries(entries)
@@ -154,8 +154,6 @@ private class AnimatedStackState {
         lateinit var transitionComposable: @Composable () -> Unit
         transitionComposable = {
             key(transactionId) {
-                val completed = untrackedState { false }
-
                 val addTo: () -> Unit = remember {
                     {
                         checkNotNull(to)
@@ -170,6 +168,7 @@ private class AnimatedStackState {
                     }
                 }
 
+                val completed = untrackedState { false }
                 val onComplete: () -> Unit = remember {
                     {
                         check(!completed.value) {
@@ -182,16 +181,13 @@ private class AnimatedStackState {
                     }
                 }
 
-                val elements = AnimatableElementsAmbient.current
-
-
-                val fromElement = from?.entry?.let { elements.getElement(it) }?.value
-                val toElement = to?.entry?.let { elements.getElement(it) }?.value
+                val fromAnimatable = from?.entry?.let { animatableFor(it) }
+                val toAnimatable = to?.entry?.let { animatableFor(it) }
 
                 val context = remember(containerBounds) {
                     StackTransitionContext(
-                        fromElement,
-                        toElement,
+                        fromAnimatable,
+                        toAnimatable,
                         containerBounds,
                         isPush,
                         addTo,
@@ -213,7 +209,7 @@ private class AnimatedStackState {
             entry.keepState
         ) {
             Box(
-                modifier = Modifier.animatableElement(entry),
+                modifier = Modifier.animatable(entry),
                 children = entry.content
             )
         }

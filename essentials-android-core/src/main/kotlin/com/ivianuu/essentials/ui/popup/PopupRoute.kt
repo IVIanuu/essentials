@@ -27,7 +27,7 @@ import androidx.ui.unit.IntPx
 import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.animatable.animatableElement
+import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -68,7 +68,7 @@ fun PopupRoute(
     ) {
         Box(
             modifier = Modifier.tapGestureFilter(onTap = {})
-                .animatableElement(PopupTag),
+                .animatable(PopupTag),
             children = popup
         )
     }

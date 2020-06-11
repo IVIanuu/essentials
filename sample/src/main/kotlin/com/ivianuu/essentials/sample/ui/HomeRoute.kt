@@ -122,8 +122,8 @@ val HomeRoute = Route(transition = NoOpStackTransition) {
                     val route = if (item == HomeItem.SharedElement) {
                         SharedElementRoute(color)
                             .copy(
-                                enterTransition = SharedElementStackTransition(item, "b"),
-                                exitTransition = SharedElementStackTransition(item, "b")
+                                enterTransition = SharedElementStackTransition(item to "b"),
+                                exitTransition = SharedElementStackTransition(item to "b")
                             )
                     } else item.route()
                     HomeItem(

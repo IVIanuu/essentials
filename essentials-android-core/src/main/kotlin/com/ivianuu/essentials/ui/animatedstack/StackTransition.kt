@@ -21,11 +21,11 @@ import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import androidx.ui.unit.PxBounds
-import com.ivianuu.essentials.ui.animatable.AnimatableElement
+import com.ivianuu.essentials.ui.animatable.Animatable
 
 data class StackTransitionContext(
-    val fromElement: AnimatableElement?,
-    val toElement: AnimatableElement?,
+    val fromAnimatable: Animatable?,
+    val toAnimatable: Animatable?,
     val containerBounds: PxBounds?,
     val isPush: Boolean,
     private val addToBlock: () -> Unit,
@@ -48,8 +48,8 @@ data class StackTransitionContext(
 typealias StackTransition = @Composable (StackTransitionContext) -> Unit
 
 val NoOpStackTransition: StackTransition = { context ->
-    if (context.toElement != null) context.addTo()
-    if (context.fromElement != null) context.removeFrom()
+    if (context.toAnimatable != null) context.addTo()
+    if (context.fromAnimatable != null) context.removeFrom()
     onActive { context.onComplete() }
 }
 

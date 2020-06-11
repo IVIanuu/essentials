@@ -1,20 +1,7 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.TweenBuilder
-import androidx.compose.onActive
-import androidx.ui.animation.animatedFloat
-import androidx.ui.core.Modifier
-import androidx.ui.core.drawWithContent
-import androidx.ui.geometry.Offset
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.useOrElse
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.center
-import androidx.ui.unit.toOffset
-import androidx.ui.util.lerp
-import com.ivianuu.essentials.ui.animatable.AnimatableElementsAmbient
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import kotlin.math.hypot
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -23,9 +10,9 @@ fun CircularRevealStackTransition(
     color: Color = Color.Unset,
     duration: Duration = 300.milliseconds
 ): StackTransition = { context ->
-    if (context.toElement != null) onActive { context.addTo() }
+    /*if (context.toAnimatable != null) onActive { context.addTo() }
 
-    val originElement = AnimatableElementsAmbient.current.getElement(origin).value
+    val originElement = AnimatableRootAmbient.current.getAnimatable(origin)
     val capturedOriginBounds = originElement.capturedBounds()
 
     val centerPosition = capturedOriginBounds?.center()
@@ -34,8 +21,8 @@ fun CircularRevealStackTransition(
 
     val animation = animatedFloat(0f)
 
-    context.toElement?.drawLayerModifier?.alpha = animation.value
-    context.fromElement?.drawLayerModifier?.alpha = 1f - animation.value
+    context.toAnimatable?.drawLayerModifier?.alpha = animation.value
+    context.fromAnimatable?.drawLayerModifier?.alpha = 1f - animation.value
 
     if (capturedOriginBounds != null) {
         onActive {
@@ -45,9 +32,9 @@ fun CircularRevealStackTransition(
                     this.duration = duration.toLongMilliseconds().toInt()
                 },
                 onEnd = { _, _ ->
-                    if (context.fromElement != null) context.removeFrom()
-                    context.fromElement?.animationModifier = Modifier
-                    context.toElement?.animationModifier = Modifier
+                    if (context.fromAnimatable != null) context.removeFrom()
+                    context.fromAnimatable?.animationModifier = Modifier
+                    context.toAnimatable?.animationModifier = Modifier
                     context.onComplete()
                 }
             )
@@ -71,8 +58,8 @@ fun CircularRevealStackTransition(
         }
 
     if (context.isPush) {
-        context.fromElement?.animationModifier = drawModifier
+        context.fromAnimatable?.animationModifier = drawModifier
     } else {
-        context.toElement?.animationModifier = drawModifier
-    }
+        context.toAnimatable?.animationModifier = drawModifier
+    }*/
 }

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
-import androidx.compose.onActive
+import androidx.compose.onPreCommit
 import androidx.compose.remember
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.common.transition
@@ -10,10 +10,11 @@ import com.ivianuu.essentials.ui.common.transition
 fun OpenCloseStackTransition(
 
 ): StackTransition = { context ->
-    onActive { context.addTo() }
+    onPreCommit(true) { context.addTo() }
 
-    val fromPropsKeys = if (context.fromElement != null) remember { OpenClosePropKeys() } else null
-    val toPropKeys = if (context.toElement != null) remember { OpenClosePropKeys() } else null
+    val fromPropsKeys =
+        if (context.fromAnimatable != null) remember { OpenClosePropKeys() } else null
+    val toPropKeys = if (context.toAnimatable != null) remember { OpenClosePropKeys() } else null
 
     val transitionState = transition(
         definition = remember {

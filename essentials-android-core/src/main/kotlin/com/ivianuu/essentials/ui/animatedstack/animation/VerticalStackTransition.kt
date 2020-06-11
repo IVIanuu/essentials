@@ -1,16 +1,14 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.ui.core.Modifier
+import androidx.animation.AnimationBuilder
+import com.ivianuu.essentials.ui.animatable.FractionOffsetY
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.essentials.ui.layout.offsetFraction
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 
-fun VerticalStackTransition(duration: Duration = 300.milliseconds): StackTransition {
-    return FloatAnimationStackTransition(duration = duration) { fromElement, toElement, isPush, progress ->
-        toElement?.animationModifier = if (isPush) Modifier.offsetFraction(y = 1f - progress)
-        else Modifier
-        fromElement?.animationModifier = if (!isPush) Modifier.offsetFraction(y = progress)
-        else Modifier
+fun VerticalStackTransition(
+    anim: AnimationBuilder<Float> = defaultAnimationBuilder()
+): StackTransition {
+    return FloatAnimationStackTransition(anim = anim) { from, to, isPush, progress ->
+        if (isPush) to?.set(FractionOffsetY, 1f - progress)
+        else from?.set(FractionOffsetY, progress)
     }
 }

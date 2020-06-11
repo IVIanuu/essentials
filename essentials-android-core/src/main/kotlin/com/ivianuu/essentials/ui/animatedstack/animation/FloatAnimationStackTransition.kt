@@ -1,44 +1,47 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
+import androidx.animation.AnimationBuilder
 import androidx.animation.Easing
 import androidx.animation.FastOutSlowInEasing
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
-import androidx.compose.onActive
+import androidx.compose.remember
 import androidx.ui.animation.animatedFloat
-import com.ivianuu.essentials.ui.animatable.AnimatableElement
+import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-fun FloatAnimationStackTransition(
+fun defaultAnimationBuilder(
     duration: Duration = 300.milliseconds,
-    delay: Duration = 0.milliseconds,
     easing: Easing = FastOutSlowInEasing,
+    delay: Duration = 0.milliseconds
+): AnimationBuilder<Float> = TweenBuilder<Float>().apply {
+    this.duration = duration.toLongMilliseconds().toInt()
+    this.easing = easing
+    this.delay = delay.toLongMilliseconds().toInt()
+}
+
+fun FloatAnimationStackTransition(
+    anim: AnimationBuilder<Float> = defaultAnimationBuilder(),
     apply: @Composable (
-        fromElement: AnimatableElement?,
-        toElement: AnimatableElement?,
+        fromAnimatable: Animatable?,
+        toAnimatable: Animatable?,
         isPush: Boolean,
         progress: Float
     ) -> Unit
 ): StackTransition = { context ->
     val animation = animatedFloat(0f)
-
-    onActive {
-        if (context.toElement != null) context.addTo()
+    remember {
+        if (context.toAnimatable != null) context.addTo()
         animation.animateTo(
             targetValue = 1f,
-            anim = TweenBuilder<Float>().apply {
-                this.duration = duration.toLongMilliseconds().toInt()
-                this.easing = easing
-                this.delay = delay.toLongMilliseconds().toInt()
-            },
+            anim = anim,
             onEnd = { _, _ ->
-                if (context.fromElement != null) context.removeFrom()
+                if (context.fromAnimatable != null) context.removeFrom()
                 context.onComplete()
             }
         )
     }
-
-    apply(context.fromElement, context.toElement, context.isPush, animation.value)
+    apply(context.fromAnimatable, context.toAnimatable, context.isPush, animation.value)
 }

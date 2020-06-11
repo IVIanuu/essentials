@@ -1,8 +1,11 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.TweenBuilder
+import androidx.animation.AnimationBuilder
 import androidx.compose.Composable
-import androidx.compose.onActive
+import androidx.compose.getValue
+import androidx.compose.key
+import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.ui.animation.animatedFloat
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
@@ -15,100 +18,141 @@ import androidx.ui.unit.height
 import androidx.ui.unit.lerp
 import androidx.ui.unit.width
 import androidx.ui.util.lerp
-import com.ivianuu.essentials.ui.animatable.AnimatableElementPropKey
-import com.ivianuu.essentials.ui.animatable.AnimatableElementsAmbient
+import com.ivianuu.essentials.ui.animatable.Alpha
+import com.ivianuu.essentials.ui.animatable.MetaProp
+import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatable.animationOverlay
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.common.untrackedState
 
-val SharedElementKey = AnimatableElementPropKey<@Composable () -> Unit>()
+val SharedElementComposable = MetaProp<@Composable () -> Unit>()
 
 fun SharedElementStackTransition(
-    fromTag: Any,
-    toTag: Any
+    vararg sharedElements: Pair<Any, Any>,
+    anim: AnimationBuilder<Float> = defaultAnimationBuilder(),
+    contentTransition: StackTransition = FadeStackTransition(anim)
 ): StackTransition = { context ->
-    onActive { context.addTo() }
+    remember { context.addTo() }
 
-    val startElement = AnimatableElementsAmbient.current.getElement(
-        if (context.isPush) fromTag else toTag
-    ).value
-    val endElement = AnimatableElementsAmbient.current.getElement(
-        if (context.isPush) toTag else fromTag
-    ).value
+    val animatables = sharedElements
+        .mapIndexed { index, (from, to) ->
+            key(index) {
+                if (context.isPush) animatableFor(from) to animatableFor(to)
+                else animatableFor(to) to animatableFor(from)
+            }
+        }
 
-    val capturedStartBounds = startElement.capturedBounds()
-    val capturedEndBounds = endElement.capturedBounds()
+    val bounds = animatables
+        .mapIndexed { index, (start, end) ->
+            key(index) {
+                start.rememberFirstNonNullBounds() to end.rememberFirstNonNullBounds()
+            }
+        }
 
     val animation = animatedFloat(0f)
 
-    // animate the root elements
-    context.toElement?.drawLayerModifier?.alpha = animation.value
-    context.fromElement?.drawLayerModifier?.alpha = 1f - animation.value
+    if (bounds.all { it.first != null && it.second != null }) {
+        var otherComplete by untrackedState { false }
+        var sharedElementComplete by untrackedState { false }
 
-    if (capturedStartBounds != null && capturedEndBounds != null) {
-        onActive {
-            // hide the "real" elements
-            startElement.drawLayerModifier.alpha = 0f
-            endElement.drawLayerModifier.alpha = 0f
+        fun completeIfPossible() {
+            if (otherComplete && sharedElementComplete) {
+                context.removeFrom()
+                context.onComplete()
+            }
+        }
+
+        remember {
+            context.toAnimatable?.set(Alpha, 1f)
+
+            animatables.forEach { (start, end) ->
+                // hide the "real" elements
+                start[Alpha] = 0f
+                end[Alpha] = 0f
+            }
 
             animation.animateTo(
                 targetValue = 1f,
+                anim = anim,
                 onEnd = { _, _ ->
-                    context.removeFrom()
-                    startElement.drawLayerModifier.alpha = 1f
-                    endElement.drawLayerModifier.alpha = 1f
-                    context.onComplete()
-                },
-                anim = TweenBuilder<Float>().apply {
-                    duration = 300
+                    sharedElementComplete = true
+                    animatables.forEach { (start, end) ->
+                        // show the "real" elements
+                        start[Alpha] = 1f
+                        end[Alpha] = 1f
+                    }
+                    completeIfPossible()
                 }
             )
         }
+
+        contentTransition(
+            context.copy(
+                addToBlock = {},
+                removeFromBlock = {},
+                onCompleteBlock = {
+                    otherComplete = true
+                    completeIfPossible()
+                }
+            )
+        )
+    } else {
+        context.toAnimatable?.set(Alpha, 0f)
     }
 
-    val startProps = if (capturedStartBounds != null && capturedEndBounds != null) {
-        SharedElementProps(
-            position = PxPosition(
-                x = capturedStartBounds.left + (capturedStartBounds.width - capturedEndBounds.width) / 2,
-                y = capturedStartBounds.top + (capturedStartBounds.height - capturedEndBounds.height) / 2
-            ),
-            scaleX = capturedStartBounds.width / capturedEndBounds.width,
-            scaleY = capturedStartBounds.height / capturedEndBounds.height
-        )
-    } else null
-
-    val endProps = if (capturedEndBounds != null) {
-        SharedElementProps(
-            position = PxPosition(capturedEndBounds.left, capturedEndBounds.top),
-            scaleX = 1f,
-            scaleY = 1f
-        )
-    } else null
-
-    val currentProps = if (startProps != null && endProps != null) {
-        SharedElementProps(
-            position = lerp(startProps.position, endProps.position, animation.value),
-            scaleX = lerp(startProps.scaleX, endProps.scaleX, animation.value),
-            scaleY = lerp(startProps.scaleY, endProps.scaleY, animation.value)
-        )
-    } else null
-
-    if (currentProps != null) {
-        animationOverlay {
-            val sharedElementComposable = endElement.properties.getOrNull(SharedElementKey)
-            with(DensityAmbient.current) {
-                Box(
-                    modifier = Modifier
-                        .preferredSize(
-                            width = capturedEndBounds!!.width.toDp(),
-                            height = capturedEndBounds.height.toDp()
-                        )
-                        .offset(
-                            x = currentProps.position.x.toDp(),
-                            y = currentProps.position.y.toDp()
-                        )
-                        .drawLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY),
-                    children = sharedElementComposable ?: {}
+    val propPairs = if (animation.isRunning) {
+        bounds
+            .map { (capturedStartBounds, capturedEndBounds) ->
+                checkNotNull(capturedStartBounds)
+                checkNotNull(capturedEndBounds)
+                val start = SharedElementProps(
+                    position = PxPosition(
+                        x = capturedStartBounds.left + (capturedStartBounds.width - capturedEndBounds.width) / 2,
+                        y = capturedStartBounds.top + (capturedStartBounds.height - capturedEndBounds.height) / 2
+                    ),
+                    scaleX = capturedStartBounds.width / capturedEndBounds.width,
+                    scaleY = capturedStartBounds.height / capturedEndBounds.height
                 )
+                val end = SharedElementProps(
+                    position = PxPosition(capturedEndBounds.left, capturedEndBounds.top),
+                    scaleX = 1f,
+                    scaleY = 1f
+                )
+                start to end
+            }
+    } else emptyList()
+
+    val animatedProps = propPairs
+        .map { (startProps, endProps) ->
+            SharedElementProps(
+                position = lerp(startProps.position, endProps.position, animation.value),
+                scaleX = lerp(startProps.scaleX, endProps.scaleX, animation.value),
+                scaleY = lerp(startProps.scaleY, endProps.scaleY, animation.value)
+            )
+        }
+
+    if (animatedProps.isNotEmpty()) {
+        animationOverlay {
+            animatables.forEachIndexed { index, (_, endAnimatable) ->
+                val (_, endBounds) = bounds[index]
+                val currentProps = animatedProps[index]
+                val sharedElementComposable =
+                    endAnimatable.getOrElse(SharedElementComposable) { {} }
+                with(DensityAmbient.current) {
+                    Box(
+                        modifier = Modifier
+                            .preferredSize(
+                                width = endBounds!!.width.toDp(),
+                                height = endBounds.height.toDp()
+                            )
+                            .offset(
+                                x = currentProps.position.x.toDp(),
+                                y = currentProps.position.y.toDp()
+                            )
+                            .drawLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY),
+                        children = sharedElementComposable
+                    )
+                }
             }
         }
     }
