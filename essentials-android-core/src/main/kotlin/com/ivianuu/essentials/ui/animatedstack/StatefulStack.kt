@@ -25,11 +25,10 @@ import androidx.compose.mutableStateOf
 import androidx.compose.setValue
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.hasBoundedHeight
-import androidx.ui.core.hasBoundedWidth
 import androidx.ui.core.tag
 import androidx.ui.layout.Stack
 import androidx.ui.unit.IntPxPosition
+import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.absorbPointer
 
 @Composable
@@ -59,20 +58,16 @@ fun StatefulStack(
                 }
             }
     }, modifier = modifier) { measurables, constraints, _ ->
-        // force children to fill the whole space
-        val childConstraints = constraints.copy(
-            minWidth = if (constraints.hasBoundedWidth) constraints.maxWidth else constraints.minWidth,
-            minHeight = if (constraints.hasBoundedHeight) constraints.maxHeight else constraints.minHeight
-        )
+        val childConstraints = constraints.copy(minWidth = 0.ipx, minHeight = 0.ipx)
 
         val placeables = measurables
             .filter { (it.tag as StackfulStackEntryTag).isVisible }
             .map { it.measure(childConstraints) }
 
-        val width = constraints.maxWidth
-        val height = constraints.maxHeight
-
-        layout(width, height) {
+        layout(
+            width = placeables.maxBy { it.width }?.width ?: 0.ipx,
+            height = placeables.maxBy { it.height }?.height ?: 0.ipx
+        ) {
             placeables.forEach { placeable ->
                 placeable.place(IntPxPosition.Origin)
             }

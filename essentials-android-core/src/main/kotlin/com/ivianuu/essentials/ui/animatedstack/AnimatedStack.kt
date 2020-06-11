@@ -20,6 +20,58 @@ import com.ivianuu.essentials.ui.common.untrackedState
 import java.util.UUID
 
 @Composable
+fun <T> AnimatedBox(
+    modifier: Modifier = Modifier,
+    item: T,
+    transitionCallback: (T) -> StackTransition? = { null },
+    itemCallback: @Composable (T) -> Unit
+) {
+    AnimatedStack(
+        modifier = modifier,
+        items = listOf(item),
+        transitionCallback = transitionCallback,
+        itemCallback = itemCallback
+    )
+}
+
+@JvmName("AnimatedStackT")
+@Composable
+fun <T> AnimatedStack(
+    modifier: Modifier = Modifier,
+    items: List<T>,
+    transitionCallback: (T) -> StackTransition? = { null },
+    itemCallback: @Composable (T) -> Unit
+) {
+    var entries by untrackedState { listOf<AnimatedStackEntryWithItem<T>>() }
+    remember(items, itemCallback, transitionCallback) {
+        entries = items
+            .map { item ->
+                entries.firstOrNull { entry -> item == entry.item } ?: AnimatedStackEntryWithItem(
+                    item = item,
+                    transition = transitionCallback(item),
+                    content = { itemCallback(item) }
+                )
+            }
+    }
+    AnimatedStack(
+        modifier = modifier,
+        entries = entries.map { it.stackEntry }
+    )
+}
+
+private class AnimatedStackEntryWithItem<T>(
+    val item: T,
+    val transition: StackTransition?,
+    val content: @Composable () -> Unit
+) {
+    val stackEntry = AnimatedStackEntry(
+        enterTransition = transition,
+        exitTransition = transition,
+        content = content
+    )
+}
+
+@Composable
 fun AnimatedStack(
     modifier: Modifier = Modifier,
     entries: List<AnimatedStackEntry>
@@ -229,6 +281,8 @@ private class AnimatedStackState {
             } else statefulStackEntries.size
 
             val oldToIndex = statefulStackEntries.indexOf(statefulStackEntry)
+
+            println("enter from $from from index $fromIndex to index $toIndex old to index $oldToIndex")
 
             if (oldToIndex == -1) {
                 statefulStackEntries.add(toIndex, statefulStackEntry)
