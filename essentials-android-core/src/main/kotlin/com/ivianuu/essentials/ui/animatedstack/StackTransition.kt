@@ -53,7 +53,7 @@ val NoOpStackTransition: StackTransition = { context ->
     onActive { context.onComplete() }
 }
 
-val DefaultStackAnimationAmbient =
+val DefaultStackTransitionAmbient =
     staticAmbientOf { NoOpStackTransition }
 
 operator fun StackTransition.plus(other: StackTransition): StackTransition = { context ->

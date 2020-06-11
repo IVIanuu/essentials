@@ -66,6 +66,7 @@ import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TextButtonStyle
+import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.toColor
 import com.ivianuu.essentials.util.toHexString

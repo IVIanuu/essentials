@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.dialog
+package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
 
 fun DialogRoute(
     dismissible: Boolean = true,

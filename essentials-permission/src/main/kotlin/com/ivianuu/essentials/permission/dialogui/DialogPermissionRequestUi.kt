@@ -39,9 +39,9 @@ import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
-import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Logger
@@ -66,36 +66,37 @@ internal class DialogPermissionRequestUi : PermissionRequestUi {
     }
 }
 
-private fun PermissionRoute(request: PermissionRequest) = DialogRoute(
-    dismissHandler = { compositionActivity.finish() }
-) {
-    Dialog(
-        title = { Text("Required Permissions") }, // todo customizable
-        content = {
-            VerticalScroller(
-                scrollerPosition = RetainedScrollerPosition()
-            ) {
-                val viewModelFactory =
-                    inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
-                val viewModel = viewModel { viewModelFactory(request) }
-                val activity = compositionActivity as PermissionActivity
-                viewModel.permissionsToProcess.forEach { permission ->
-                    Permission(
-                        permission = permission,
-                        onClick = { viewModel.permissionClicked(activity, permission) }
-                    )
+private fun PermissionRoute(request: PermissionRequest) =
+    DialogRoute(
+        dismissHandler = { compositionActivity.finish() }
+    ) {
+        Dialog(
+            title = { Text("Required Permissions") }, // todo customizable
+            content = {
+                VerticalScroller(
+                    scrollerPosition = RetainedScrollerPosition()
+                ) {
+                    val viewModelFactory =
+                        inject<@Provider (PermissionRequest) -> PermissionDialogViewModel>()
+                    val viewModel = viewModel { viewModelFactory(request) }
+                    val activity = compositionActivity as PermissionActivity
+                    viewModel.permissionsToProcess.forEach { permission ->
+                        Permission(
+                            permission = permission,
+                            onClick = { viewModel.permissionClicked(activity, permission) }
+                        )
+                    }
+                }
+            },
+            applyContentPadding = false,
+            negativeButton = {
+                val activity = compositionActivity
+                DialogButton(onClick = { activity.finish() }) {
+                    Text(R.string.es_cancel)
                 }
             }
-        },
-        applyContentPadding = false,
-        negativeButton = {
-            val activity = compositionActivity
-            DialogButton(onClick = { activity.finish() }) {
-                Text(R.string.es_cancel)
-            }
-        }
-    )
-}
+        )
+    }
 
 @Composable
 private fun Permission(

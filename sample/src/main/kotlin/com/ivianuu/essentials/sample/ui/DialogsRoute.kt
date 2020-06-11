@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
@@ -46,6 +45,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -312,7 +312,12 @@ private fun DialogLauncherButton(
     val navigator = NavigatorAmbient.current
     Button(
         onClick = {
-            navigator.push(DialogRoute(dismissible = dismissible, dialog = dialog))
+            navigator.push(
+                DialogRoute(
+                    dismissible = dismissible,
+                    dialog = dialog
+                )
+            )
         }
     ) { Text(text) }
 }

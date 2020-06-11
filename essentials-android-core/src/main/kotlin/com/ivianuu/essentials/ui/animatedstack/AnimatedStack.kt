@@ -78,7 +78,7 @@ fun AnimatedStack(
 ) {
     AnimatableRoot {
         val state = remember { AnimatedStackState() }
-        state.defaultTransition = DefaultStackAnimationAmbient.current
+        state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setEntries(entries)
         state.activeTransitions.forEach { it() }
         StatefulStack(
@@ -275,19 +275,15 @@ private class AnimatedStackState {
             statefulStackEntry.opaque = entry.opaque || isPush
             entry.isAnimating = true
 
+            val oldToIndex = statefulStackEntries.indexOf(statefulStackEntry)
+
             val fromIndex = statefulStackEntries.indexOf(from?.statefulStackEntry)
             val toIndex = if (fromIndex != -1) {
                 if (isPush) fromIndex + 1 else fromIndex
-            } else statefulStackEntries.size
+            } else if (oldToIndex != -1) oldToIndex else statefulStackEntries.size
 
-            val oldToIndex = statefulStackEntries.indexOf(statefulStackEntry)
-
-            println("enter from $from from index $fromIndex to index $toIndex old to index $oldToIndex")
-
-            if (oldToIndex == -1) {
-                statefulStackEntries.add(toIndex, statefulStackEntry)
-            } else if (oldToIndex != toIndex) {
-                statefulStackEntries.removeAt(oldToIndex)
+            if (oldToIndex != toIndex) {
+                if (oldToIndex != -1) statefulStackEntries.removeAt(oldToIndex)
                 statefulStackEntries.add(toIndex, statefulStackEntry)
             }
 

@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.getValue
+import androidx.compose.setValue
 import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
@@ -25,12 +27,10 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.wrapContentSize
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.common.untrackedState
 
 @Composable
 fun DialogWrapper(
@@ -42,26 +42,27 @@ fun DialogWrapper(
         onBackPressed { }
     }
 
-    val dismissed = state { false }
-    val dismissCalled = untrackedState { false }
-    if (dismissed.value) {
-        if (!dismissCalled.value) {
-            dismissCalled.value = true
+    var dismissed by state { false }
+    var dismissCalled by state { false }
+    if (dismissed) {
+        if (!dismissCalled) {
+            dismissCalled = true
             dismissHandler()
         }
     }
 
-    Stack(
+    Box(
         modifier = Modifier.tapGestureFilter(
             onTap = {
                 if (dismissible) {
-                    dismissed.value = true
+                    dismissed = true
                 }
             })
             .fillMaxSize()
-            .drawBackground(Color.Black.copy(alpha = 0.6f))
+            .drawBackground(Color.Black.copy(alpha = 0.6f)),
+        gravity = ContentGravity.Center
     ) {
-        SafeArea(modifier = Modifier.gravity(align = Alignment.Center)) {
+        SafeArea {
             Box(
                 modifier = Modifier.tapGestureFilter(onTap = {})
                     .wrapContentSize(align = Alignment.Center),
