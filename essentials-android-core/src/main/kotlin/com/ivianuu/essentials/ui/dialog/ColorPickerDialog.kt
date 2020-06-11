@@ -42,7 +42,6 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
@@ -54,6 +53,8 @@ import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -137,13 +138,16 @@ fun ColorPickerDialog(
             }
         },
         content = {
-            Box(
-                modifier = Modifier.preferredHeight(300.dp)
-                    .padding(start = 24.dp, end = 24.dp)
-            ) {
+            AnimatedBox(
+                modifier = Modifier.height(300.dp)
+                    .padding(start = 24.dp, end = 24.dp),
+                item = currentPage,
+                transitionCallback = { FadeStackTransition() }
+            ) { currentPage ->
                 when (currentPage) {
                     ColorPickerPage.Colors -> {
                         ColorGrid(
+                            modifier = Modifier.fillMaxSize(),
                             currentColor = currentColor,
                             colorPalettes = colorPalettes,
                             onColorSelected = setCurrentColor
@@ -151,6 +155,7 @@ fun ColorPickerDialog(
                     }
                     ColorPickerPage.Editor -> {
                         ColorEditor(
+                            modifier = Modifier.fillMaxSize(),
                             color = currentColor,
                             onColorChanged = setCurrentColor,
                             showAlphaSelector = showAlphaSelector
@@ -164,6 +169,7 @@ fun ColorPickerDialog(
 
 @Composable
 private fun ColorGrid(
+    modifier: Modifier = Modifier,
     currentColor: Color,
     colorPalettes: List<ColorPickerPalette>,
     onColorSelected: (Color) -> Unit
@@ -177,7 +183,7 @@ private fun ColorGrid(
     }
 
     key(currentPalette) {
-        WithConstraints {
+        WithConstraints(modifier = modifier) {
             VerticalScroller(
                 modifier = Modifier.padding(all = 4.dp),
                 scrollerPosition = RetainedScrollerPosition()
@@ -286,11 +292,12 @@ private fun BaseColorGridItem(
 
 @Composable
 private fun ColorEditor(
+    modifier: Modifier = Modifier,
     color: Color,
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
 ) {
-    Column {
+    Column(modifier = modifier) {
         ColorEditorHeader(
             color = color,
             showAlphaSelector = showAlphaSelector,
