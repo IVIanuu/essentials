@@ -202,8 +202,8 @@ fun <T> BottomNavigationContent(
         item = bottomNavigationController.selectedItem,
         transition = transition
     ) {
-        Providers(BottomNavigationItemAmbient provides bottomNavigationController.selectedItem) {
-            contentCallback(bottomNavigationController.selectedItem)
+        Providers(BottomNavigationItemAmbient provides it) {
+            contentCallback(it)
         }
     }
 }

@@ -127,13 +127,15 @@ fun <T> TabContent(
     modifier: Modifier = Modifier,
     tabController: TabController<T> = ambientTabController(),
     transition: StackTransition = FadeStackTransition(),
-    itemCallback: @Composable (Int, T) -> Unit
+    itemCallback: @Composable (T) -> Unit
 ) {
     AnimatedBox(
         modifier = modifier,
         item = tabController.selectedItem,
         transition = transition
-    ) {
-        itemCallback(tabController.selectedIndex, tabController.selectedItem)
+    ) { item ->
+        Providers(TabIndexAmbient provides tabController.items.indexOf(item)) {
+            itemCallback(item)
+        }
     }
 }

@@ -58,10 +58,10 @@ val TabsRoute = Route {
                 }
             },
             body = {
-                TabContent<Color> { index, item ->
+                TabContent<Color> { item ->
                     Surface(color = item) {
                         Text(
-                            text = "Index: $index",
+                            text = "Index: ${items.indexOf(item)}",
                             modifier = Modifier.center()
                         )
                     }
