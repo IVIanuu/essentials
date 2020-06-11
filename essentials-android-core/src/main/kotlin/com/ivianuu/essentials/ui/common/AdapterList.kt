@@ -9,6 +9,7 @@ import androidx.compose.Recomposer
 import androidx.compose.Untracked
 import androidx.compose.compositionReference
 import androidx.compose.currentComposer
+import androidx.compose.onDispose
 import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutDirection
@@ -123,6 +124,10 @@ private class ListState<T> {
      * they can be disposed later
      */
     private val compositionsForLayoutNodes = mutableMapOf<LayoutNode, Composition>()
+
+    fun disposeAllChildren() {
+        removeAndDisposeChildren(LayoutIndex(0), rootNode.children.size)
+    }
 
     // TODO: really want an Int here
     private fun onScroll(distance: Float): Float {
@@ -546,4 +551,6 @@ fun <T> AdapterList(
     )
 
     state.recomposeIfAttached()
+
+    onDispose { state.disposeAllChildren() }
 }
