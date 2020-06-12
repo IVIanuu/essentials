@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.compose.remember
 import androidx.compose.staticAmbientOf
-import androidx.ui.unit.PxBounds
 import com.ivianuu.essentials.ui.animatable.Animatable
 
 data class StackTransitionContext(

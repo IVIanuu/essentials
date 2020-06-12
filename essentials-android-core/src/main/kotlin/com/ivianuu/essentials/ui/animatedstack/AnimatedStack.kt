@@ -9,10 +9,7 @@ import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.ui.core.Modifier
-import androidx.ui.core.boundsInRoot
-import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
-import androidx.ui.unit.PxBounds
 import com.ivianuu.essentials.ui.animatable.AnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
