@@ -26,7 +26,7 @@ import androidx.compose.mutableStateOf
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
-import com.ivianuu.essentials.ui.animatedstack.AnimatedStackEntry
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
@@ -51,11 +51,11 @@ class Navigator {
                 backStack.isNotEmpty() &&
                 (popsLastRoute || backStack.size > 1)
         onBackPressed(enabled = backPressEnabled) {
-            if (_backStack.none { it.stackEntry.isAnimating }) popTop()
+            if (_backStack.none { it.stackChild.isAnimating }) popTop()
         }
 
         Providers(NavigatorAmbient provides this) {
-            AnimatedStack(entries = _backStack.map { it.stackEntry })
+            AnimatedStack(children = _backStack.map { it.stackChild })
         }
     }
 
@@ -154,7 +154,7 @@ class Navigator {
         private val _result = CompletableDeferred<Any?>()
         val result: Deferred<Any?> = _result
 
-        val stackEntry = AnimatedStackEntry(
+        val stackChild = AnimatedStackChild(
             key = route,
             opaque = route.opaque,
             enterTransition = route.enterTransition,

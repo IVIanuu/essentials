@@ -21,20 +21,6 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
-/*
-abstract class Route {
-
-    val opaque get() = false
-
-    protected open fun onAttach() {
-    }
-
-    protected open fun onDetach() {
-    }
-
-
-}*/
-
 @Immutable
 class Route(
     val opaque: Boolean = false,
