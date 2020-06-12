@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.animatable.Animatable
 data class StackTransitionContext(
     val fromAnimatable: Animatable?,
     val toAnimatable: Animatable?,
-    val containerBounds: PxBounds?,
     val isPush: Boolean,
     private val addToBlock: () -> Unit,
     private val removeFromBlock: () -> Unit,

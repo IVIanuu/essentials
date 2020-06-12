@@ -82,8 +82,7 @@ fun AnimatedStack(
         state.setEntries(entries)
         state.activeTransitions.forEach { it() }
         StatefulStack(
-            modifier = modifier
-                .onPositioned { state.containerBounds = it.boundsInRoot },
+            modifier = modifier,
             entries = state.statefulStackEntries
         )
     }
@@ -95,7 +94,6 @@ private class AnimatedStackState {
     val statefulStackEntries = modelListOf<StatefulStackEntry>()
 
     var defaultTransition = NoOpStackTransition
-    var containerBounds: PxBounds? = null
 
     val activeTransitions = modelListOf<@Composable () -> Unit>()
 
@@ -206,45 +204,32 @@ private class AnimatedStackState {
         lateinit var transitionComposable: @Composable () -> Unit
         transitionComposable = {
             key(transactionId) {
-                val addTo: () -> Unit = remember {
-                    {
-                        checkNotNull(to)
-                        to.enter(from = from, isPush = isPush)
-                    }
-                }
-
-                val removeFrom: () -> Unit = remember {
-                    {
-                        checkNotNull(from)
-                        if (exitFrom) from.exit(to = to, isPush = isPush)
-                    }
-                }
-
-                val completed = untrackedState { false }
-                val onComplete: () -> Unit = remember {
-                    {
-                        check(!completed.value) {
-                            "onComplete() must be called only once"
-                        }
-                        completed.value = true
-                        activeTransitions -= transitionComposable
-                        from?.onTransitionComplete()
-                        to?.onTransitionComplete()
-                    }
-                }
-
                 val fromAnimatable = from?.entry?.let { animatableFor(it) }
                 val toAnimatable = to?.entry?.let { animatableFor(it) }
 
-                val context = remember(containerBounds) {
+                val context = remember {
+                    val completed = untrackedState { false }
                     StackTransitionContext(
-                        fromAnimatable,
-                        toAnimatable,
-                        containerBounds,
-                        isPush,
-                        addTo,
-                        removeFrom,
-                        onComplete
+                        fromAnimatable = fromAnimatable,
+                        toAnimatable = toAnimatable,
+                        isPush = isPush,
+                        addToBlock = {
+                            checkNotNull(to)
+                            to.enter(from = from, isPush = isPush)
+                        },
+                        removeFromBlock = {
+                            checkNotNull(from)
+                            if (exitFrom) from.exit(to = to, isPush = isPush)
+                        },
+                        onCompleteBlock = {
+                            check(!completed.value) {
+                                "onComplete() must be called only once"
+                            }
+                            completed.value = true
+                            activeTransitions -= transitionComposable
+                            from?.onTransitionComplete()
+                            to?.onTransitionComplete()
+                        }
                     )
                 }
 

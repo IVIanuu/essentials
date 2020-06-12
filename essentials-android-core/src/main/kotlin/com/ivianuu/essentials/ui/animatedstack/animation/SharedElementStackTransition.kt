@@ -29,8 +29,8 @@ val SharedElementComposable = MetaProp<@Composable () -> Unit>()
 
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
-    anim: AnimationBuilder<Float> = defaultAnimationBuilder(),
-    contentTransition: StackTransition = FadeStackTransition(anim)
+    sharedElementAnim: AnimationBuilder<Float> = defaultAnimationBuilder(),
+    contentTransition: StackTransition = FadeStackTransition(sharedElementAnim)
 ): StackTransition = { context ->
     remember { context.addTo() }
 
@@ -73,7 +73,7 @@ fun SharedElementStackTransition(
 
             animation.animateTo(
                 targetValue = 1f,
-                anim = anim,
+                anim = sharedElementAnim,
                 onEnd = { _, _ ->
                     sharedElementComplete = true
                     animatables.forEach { (start, end) ->
