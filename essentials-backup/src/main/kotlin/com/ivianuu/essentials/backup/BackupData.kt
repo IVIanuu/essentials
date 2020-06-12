@@ -20,7 +20,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 @Transient
-class BackupUseCase(
+internal class BackupData(
     private val application: Application,
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
@@ -29,7 +29,7 @@ class BackupUseCase(
 ) {
 
     @SuppressLint("SimpleDateFormat")
-    suspend fun backup() = withContext(dispatchers.io) {
+    suspend operator fun invoke() = withContext(dispatchers.io) {
         try {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName = "backup_${dateFormat.format(Date())}"

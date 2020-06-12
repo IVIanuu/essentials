@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
 @Transient
-class RestoreUseCase(
+internal class RestoreData(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
@@ -25,7 +25,7 @@ class RestoreUseCase(
     private val toaster: Toaster
 ) {
 
-    suspend fun restore() = withContext(dispatchers.io) {
+    suspend operator fun invoke() = withContext(dispatchers.io) {
         val uri = navigator.push<ActivityResult>(
             ActivityResultRoute(
                 Intent.createChooser(

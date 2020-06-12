@@ -10,18 +10,18 @@ import com.ivianuu.essentials.ui.prefs.SimplePreference
 
 val BackupRoute = Route {
     ScrollableScreen(title = stringResource(R.string.es_backup_title)) {
-        val backupUseCase = inject<BackupUseCase>()
+        val backupData = inject<BackupData>()
         SimplePreference(
             title = { Text(R.string.es_pref_backup) },
             summary = { Text(R.string.es_pref_backup_summary) },
-            onClick = launchOnClick { backupUseCase.backup() }
+            onClick = launchOnClick { backupData.invoke() }
         )
 
-        val restoreUseCase = inject<RestoreUseCase>()
+        val restoreData = inject<RestoreData>()
         SimplePreference(
             title = { Text(R.string.es_pref_restore) },
             summary = { Text(R.string.es_pref_restore_summary) },
-            onClick = launchOnClick { restoreUseCase.restore() }
+            onClick = launchOnClick { restoreData.invoke() }
         )
     }
 }
