@@ -2,14 +2,17 @@ package com.ivianuu.essentials.ui.animatable
 
 import androidx.compose.Composable
 import androidx.compose.Providers
+import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
+import androidx.compose.getValue
+import androidx.compose.key
 import androidx.compose.mutableStateOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
+import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.ui.animatedstack.StatefulStack
-import com.ivianuu.essentials.ui.animatedstack.StatefulStackEntry
+import androidx.ui.layout.Stack
 
 @Composable
 fun AnimatableRoot(
@@ -18,13 +21,14 @@ fun AnimatableRoot(
 ) {
     val state = remember { AnimatableRoot() }
     Providers(AnimatableRootAmbient provides state) {
-        val contentStackEntry = remember { StatefulStackEntry(content = children) }
-        contentStackEntry.content = children
-        val allEntries = listOf(contentStackEntry) + state.animationOverlayEntries
-        StatefulStack(
-            modifier = modifier + Modifier.animatable(Root),
-            entries = allEntries
-        )
+        Stack(modifier = modifier + Modifier.animatable(Root)) {
+            children()
+            state.animationOverlayEntries.forEach { overlay ->
+                key(overlay) {
+                    overlay.content()
+                }
+            }
+        }
     }
 }
 
@@ -33,7 +37,7 @@ fun animatableFor(tag: Any): Animatable = AnimatableRootAmbient.current.animatab
 
 class AnimatableRoot {
 
-    internal val animationOverlayEntries = modelListOf<StatefulStackEntry>()
+    internal val animationOverlayEntries = modelListOf<AnimationOverlayEntry>()
 
     private val animatables = mutableMapOf<Any, AnimatableState>()
 
@@ -44,6 +48,7 @@ class AnimatableRoot {
         return state.state.value
     }
 
+    @Stable
     private inner class AnimatableState(private val tag: Any) {
 
         val state = mutableStateOf(Animatable(tag))
@@ -65,16 +70,21 @@ class AnimatableRoot {
     }
 }
 
+@Stable
+internal class AnimationOverlayEntry(
+    content: @Composable () -> Unit
+) {
+    var content by mutableStateOf(content)
+}
+
 @Composable
 fun animationOverlay(overlayContent: @Composable () -> Unit) {
-    val stackEntry = remember {
-        StatefulStackEntry(opaque = true, content = overlayContent)
-    }
-    stackEntry.content = overlayContent
+    val entry = remember { AnimationOverlayEntry(overlayContent) }
+    entry.content = overlayContent
     val root = AnimatableRootAmbient.current
     onPreCommit(true) {
-        root.animationOverlayEntries += stackEntry
-        onDispose { root.animationOverlayEntries -= stackEntry }
+        root.animationOverlayEntries += entry
+        onDispose { root.animationOverlayEntries -= entry }
     }
 }
 

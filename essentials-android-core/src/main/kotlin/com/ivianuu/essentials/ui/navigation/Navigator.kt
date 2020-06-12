@@ -155,8 +155,8 @@ class Navigator {
         val result: Deferred<Any?> = _result
 
         val stackEntry = AnimatedStackEntry(
+            key = route,
             opaque = route.opaque,
-            keepState = route.keepState,
             enterTransition = route.enterTransition,
             exitTransition = route.exitTransition,
             content = {

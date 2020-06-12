@@ -10,6 +10,7 @@ import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.layout.Stack
 import com.ivianuu.essentials.ui.animatable.AnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
@@ -38,35 +39,23 @@ fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
     items: List<T>,
     transition: StackTransition = FadeStackTransition(),
-    keepState: Boolean = false,
     itemCallback: @Composable (T) -> Unit
 ) {
-    var entries by untrackedState { listOf<AnimatedStackEntryWithItem<T>>() }
-    remember(items, (itemCallback as Any?), (transition as Any?), keepState) {
-        entries = items
-            .map { item ->
-                entries.firstOrNull { entry -> item == entry.item } ?: AnimatedStackEntryWithItem(
-                    item = item,
-                    stackEntry = AnimatedStackEntry(
-                        opaque = false,
-                        keepState = keepState,
-                        enterTransition = transition,
-                        exitTransition = transition,
-                        content = { itemCallback(item) }
-                    )
-                )
-            }
-    }
-    AnimatedStack(
-        modifier = modifier,
-        entries = entries.map { it.stackEntry }
-    )
-}
+    var lastEntries by untrackedState { listOf<AnimatedStackEntry>() }
 
-private class AnimatedStackEntryWithItem<T>(
-    val item: T,
-    val stackEntry: AnimatedStackEntry
-)
+    val entries = items.map { item ->
+        lastEntries.firstOrNull { entry -> entry.key == item } ?: AnimatedStackEntry(
+            key = item,
+            opaque = false,
+            enterTransition = transition,
+            exitTransition = transition,
+            content = { itemCallback(item) }
+        )
+    }
+    lastEntries = entries
+
+    AnimatedStack(modifier = modifier, entries = entries)
+}
 
 @Composable
 fun AnimatedStack(
@@ -78,17 +67,20 @@ fun AnimatedStack(
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setEntries(entries)
         state.activeTransitions.forEach { it() }
-        StatefulStack(
-            modifier = modifier,
-            entries = state.statefulStackEntries
-        )
+        Stack(modifier = modifier) {
+            state.visibleEntries.forEach {
+                key(it.entry.key) {
+                    it.content()
+                }
+            }
+        }
     }
 }
 
 private class AnimatedStackState {
 
     private var _entries = emptyList<AnimatedStackEntryState>()
-    val statefulStackEntries = modelListOf<StatefulStackEntry>()
+    val visibleEntries = modelListOf<AnimatedStackEntryState>()
 
     var defaultTransition = NoOpStackTransition
 
@@ -236,37 +228,35 @@ private class AnimatedStackState {
         activeTransitions += transitionComposable
     }
 
-    private inner class AnimatedStackEntryState(val entry: AnimatedStackEntry) {
+    @Stable
+    internal inner class AnimatedStackEntryState(val entry: AnimatedStackEntry) {
 
-        val statefulStackEntry = StatefulStackEntry(
-            entry.opaque,
-            entry.keepState
-        ) {
+        private var removeOnComplete = false
+
+        @Composable
+        fun content() {
             Box(
                 modifier = Modifier.animatable(entry),
                 children = entry.content
             )
         }
 
-        private var removeOnComplete = false
-
         fun enter(
             from: AnimatedStackEntryState?,
             isPush: Boolean
         ) {
-            statefulStackEntry.opaque = entry.opaque || isPush
             entry.isAnimating = true
 
-            val oldToIndex = statefulStackEntries.indexOf(statefulStackEntry)
+            val oldToIndex = visibleEntries.indexOf(this)
 
-            val fromIndex = statefulStackEntries.indexOf(from?.statefulStackEntry)
+            val fromIndex = visibleEntries.indexOf(from)
             val toIndex = if (fromIndex != -1) {
                 if (isPush) fromIndex + 1 else fromIndex
-            } else if (oldToIndex != -1) oldToIndex else statefulStackEntries.size
+            } else if (oldToIndex != -1) oldToIndex else visibleEntries.size
 
             if (oldToIndex != toIndex) {
-                if (oldToIndex != -1) statefulStackEntries.removeAt(oldToIndex)
-                statefulStackEntries.add(toIndex, statefulStackEntry)
+                if (oldToIndex != -1) visibleEntries.removeAt(oldToIndex)
+                visibleEntries.add(toIndex, this)
             }
 
             removeOnComplete = false
@@ -277,7 +267,6 @@ private class AnimatedStackState {
             isPush: Boolean
         ) {
             entry.isAnimating = true
-            statefulStackEntry.opaque = entry.opaque || !isPush
             removeOnComplete = true
         }
 
@@ -285,7 +274,7 @@ private class AnimatedStackState {
             entry.isAnimating = false
             if (removeOnComplete) {
                 removeOnComplete = false
-                statefulStackEntries.remove(statefulStackEntry)
+                visibleEntries.remove(this)
             }
         }
 
@@ -295,8 +284,8 @@ private class AnimatedStackState {
 
 @Stable
 class AnimatedStackEntry(
+    val key: Any?,
     val opaque: Boolean = false,
-    val keepState: Boolean = false,
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,
     val content: @Composable () -> Unit

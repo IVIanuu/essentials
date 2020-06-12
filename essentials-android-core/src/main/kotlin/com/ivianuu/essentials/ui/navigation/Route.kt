@@ -21,10 +21,23 @@ import androidx.compose.Immutable
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
+/*
+abstract class Route {
+
+    val opaque get() = false
+
+    protected open fun onAttach() {
+    }
+
+    protected open fun onDetach() {
+    }
+
+
+}*/
+
 @Immutable
 class Route(
     val opaque: Boolean = false,
-    val keepState: Boolean = false,
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,
     val content: @Composable () -> Unit
@@ -32,12 +45,10 @@ class Route(
 
     constructor(
         opaque: Boolean = false,
-        keepState: Boolean = false,
         transition: StackTransition? = null,
         content: @Composable () -> Unit
     ) : this(
         opaque = opaque,
-        keepState = keepState,
         enterTransition = transition,
         exitTransition = transition,
         content = content
@@ -45,13 +56,11 @@ class Route(
 
     fun copy(
         opaque: Boolean = this.opaque,
-        keepState: Boolean = this.keepState,
         enterTransition: StackTransition? = this.enterTransition,
         exitTransition: StackTransition? = this.exitTransition,
         content: @Composable () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
-        keepState = keepState,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
         content = content
