@@ -33,7 +33,7 @@ internal class ActionPickerViewModel(
 ) : MvRxViewModel<ActionPickerState>(ActionPickerState()) {
 
     init {
-        coroutineScope.execute(
+        scope.execute(
             block = {
                 val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
@@ -67,7 +67,7 @@ internal class ActionPickerViewModel(
     }
 
     fun itemClicked(selectedItem: ActionPickerItem) {
-        coroutineScope.launch {
+        scope.launch {
             val result = selectedItem.getResult()
             if (result is ActionPickerResult.Action) {
                 val action = actionStore.getAction(result.actionKey)

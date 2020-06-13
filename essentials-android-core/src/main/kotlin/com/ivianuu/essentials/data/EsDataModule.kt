@@ -36,12 +36,12 @@ private fun esDataModule() {
     scoped<@PrefsPath String> { context: @ForApplication Context ->
         "${context.applicationInfo.dataDir}/prefs"
     }
-    scoped { coroutineScope: @ForApplication CoroutineScope,
+    scoped { scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers,
              prefsPath: @PrefsPath String,
              moshi: Moshi ->
         PrefBoxFactory(
-            coroutineScope = coroutineScope + dispatchers.io,
+            scope = scope + dispatchers.io,
             prefsPath = prefsPath,
             moshi = moshi
         )
@@ -51,7 +51,7 @@ private fun esDataModule() {
              dispatchers: AppCoroutineDispatchers ->
         SettingsBoxFactory(
             context = context,
-            coroutineScope = coroutineScope + dispatchers.io
+            scope = coroutineScope + dispatchers.io
         )
     }
 }

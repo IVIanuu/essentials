@@ -49,10 +49,10 @@ fun openUrlOnClick(url: () -> String): () -> Unit {
 fun launchOnClick(
     block: suspend CoroutineScope.() -> Unit
 ): () -> Unit {
-    val coroutineScope = compositionCoroutineScope()
-    return remember(coroutineScope, block) {
+    val scope = compositionCoroutineScope()
+    return remember(scope, block) {
         {
-            coroutineScope.launch(block = block)
+            scope.launch(block = block)
         }
     }
 }

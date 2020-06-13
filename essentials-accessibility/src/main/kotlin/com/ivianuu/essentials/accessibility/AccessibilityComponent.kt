@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,9 +29,7 @@ abstract class AccessibilityComponent {
     var service: ComponentAccessibilityService? = null
         private set
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     open fun onServiceConnected(service: ComponentAccessibilityService) {
         this.service = service
@@ -42,7 +39,7 @@ abstract class AccessibilityComponent {
     }
 
     open fun onServiceDisconnected() {
-        coroutineScope.cancel()
+        scope.cancel()
         service = null
     }
 

@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
     override fun onClick() {
         super.onClick()
-        coroutineScope.launch {
+        scope.launch {
             val newValue = !box.getCurrentData()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

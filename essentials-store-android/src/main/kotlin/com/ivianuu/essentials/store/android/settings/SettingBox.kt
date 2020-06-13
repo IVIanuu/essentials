@@ -64,7 +64,7 @@ class SettingBoxImpl<T>(
     override val defaultData: T,
     private val adapter: SettingBox.Adapter<T>,
     private val contentResolver: ContentResolver,
-    private val coroutineScope: CoroutineScope
+    private val scope: CoroutineScope
 ) : SettingBox<T> {
 
     private val uri: Uri by lazy {
@@ -90,7 +90,7 @@ class SettingBoxImpl<T>(
         .onStart { emit(Unit) }
         .map { get() }
         .distinctUntilChanged()
-        .shareIn(scope = coroutineScope, cacheSize = 1)
+        .shareIn(scope = scope, cacheSize = 1)
 
     override suspend fun updateData(transform: suspend (T) -> T): T {
         return try {

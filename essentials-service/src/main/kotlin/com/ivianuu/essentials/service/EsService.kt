@@ -30,12 +30,12 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsService : Service() {
 
-    val coroutineScope by unsafeLazy {
+    val scope by unsafeLazy {
         CoroutineScope(Job() + Dispatchers.Main)
     }
 
     override fun onDestroy() {
-        coroutineScope.cancel()
+        scope.cancel()
         super.onDestroy()
     }
 

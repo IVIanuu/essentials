@@ -18,7 +18,6 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,27 +28,23 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsNotificationListenerService : NotificationListenerService() {
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
-    lateinit var connectedCoroutineScope: CoroutineScope
+    lateinit var connectedScope: CoroutineScope
         private set
 
     override fun onDestroy() {
-        coroutineScope.cancel()
+        scope.cancel()
         super.onDestroy()
     }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        connectedCoroutineScope = CoroutineScope(
-            Job() + Dispatchers.Main
-        )
+        connectedScope = CoroutineScope(Job() + Dispatchers.Main)
     }
 
     override fun onListenerDisconnected() {
-        connectedCoroutineScope.cancel()
+        connectedScope.cancel()
         super.onListenerDisconnected()
     }
 

@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val foregroundComponent: TorchForegroundComponent,
@@ -52,7 +52,7 @@ class TorchManager internal constructor(
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
-            .launchIn(coroutineScope)
+            .launchIn(scope)
     }
 
     suspend fun toggleTorch() = withContext(dispatchers.main) {

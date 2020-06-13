@@ -35,9 +35,9 @@ import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
-    val coroutineScope = remember(context) { CoroutineScope(context + Job()) }
-    onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
-    return coroutineScope
+    val scope = remember(context) { CoroutineScope(context + Job()) }
+    onDispose { scope.coroutineContext[Job]!!.cancel() }
+    return scope
 }
 
 @Composable
@@ -85,9 +85,9 @@ fun <T> launchWithState(
 }
 
 class StateCoroutineScope<T>(
-    private val coroutineScope: CoroutineScope,
+    private val scope: CoroutineScope,
     val state: MutableState<T>
-) : CoroutineScope by coroutineScope {
+) : CoroutineScope by scope {
     var value by state
 }
 

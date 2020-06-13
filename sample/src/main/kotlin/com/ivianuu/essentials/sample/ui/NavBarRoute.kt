@@ -53,9 +53,9 @@ val NavBarRoute = Route {
             ) {
                 val navBarController = inject<NavBarManager>()
 
-                val coroutineScope = compositionCoroutineScope()
+                val scope = compositionCoroutineScope()
                 fun updateNavBarState(navBarHidden: Boolean) {
-                    coroutineScope.launch {
+                    scope.launch {
                         navBarController.setNavBarConfig(
                             NavBarConfig(navBarHidden)
                         )

@@ -46,7 +46,7 @@ import kotlin.time.seconds
 class TwilightHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val resources: @ForApplication Resources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
@@ -67,7 +67,7 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
         .onEach { currentState = it }
-        .shareIn(scope = coroutineScope, cacheSize = 1, timeout = 1.seconds)
+        .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
 
     var currentState = TwilightState(isDark = false, useBlack = false)
         private set

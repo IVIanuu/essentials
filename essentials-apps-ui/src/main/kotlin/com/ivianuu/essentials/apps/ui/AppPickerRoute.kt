@@ -98,7 +98,7 @@ internal class AppPickerViewModel(
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
-        coroutineScope.execute(
+        scope.execute(
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)

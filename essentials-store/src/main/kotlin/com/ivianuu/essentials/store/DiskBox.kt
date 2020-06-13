@@ -40,19 +40,19 @@ fun <T> DiskBox(
     createFile: () -> File,
     serializer: DiskBox.Serializer<T>,
     defaultData: T,
-    coroutineScope: CoroutineScope
+    scope: CoroutineScope
 ): DiskBox<T> = DiskBoxImpl(
     createFile = createFile,
     defaultData = defaultData,
     serializer = serializer,
-    coroutineScope = coroutineScope
+    scope = scope
 )
 
 internal class DiskBoxImpl<T>(
     createFile: () -> File,
     override val defaultData: T,
     private val serializer: DiskBox.Serializer<T>,
-    coroutineScope: CoroutineScope
+    scope: CoroutineScope
 ) : DiskBox<T> {
 
     private val changeNotifier = EventFlow<Unit>()
@@ -67,7 +67,7 @@ internal class DiskBoxImpl<T>(
         .onStart { emit(get()) }
         .distinctUntilChanged()
         .shareIn(
-            scope = coroutineScope,
+            scope = scope,
             cacheSize = 1
         )
 

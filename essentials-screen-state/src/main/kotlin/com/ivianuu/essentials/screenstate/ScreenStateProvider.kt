@@ -37,7 +37,7 @@ import kotlin.time.seconds
 @ApplicationScoped
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
@@ -52,7 +52,7 @@ class ScreenStateProvider(
         .onStart { emit(Unit) }
         .map { getScreenState() }
         .distinctUntilChanged()
-        .shareIn(scope = coroutineScope, cacheSize = 1, timeout = 1.seconds)
+        .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
 
     suspend fun getScreenState() = withContext(dispatchers.computation) {
         if (powerManager.isInteractive) {

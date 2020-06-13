@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 abstract class CycleBoxTileService<T> : BoxTileService<T>() {
     override fun onClick() {
         super.onClick()
-        coroutineScope.launch {
+        scope.launch {
             val newValue = box.getCurrentData().next()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

@@ -70,7 +70,7 @@ class Route(
     }
 
     internal fun setResult(result: Any?) {
-        if (_result.isCompleted) {
+        if (!_result.isCompleted) {
             _result.complete(result)
         }
     }

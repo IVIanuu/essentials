@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,16 +30,14 @@ abstract class ForegroundComponent {
     var manager: ForegroundManager? = null
         private set
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     open fun attach(manager: ForegroundManager) {
         this.manager = manager
     }
 
     open fun detach() {
-        coroutineScope.cancel()
+        scope.cancel()
         this.manager = null
     }
 

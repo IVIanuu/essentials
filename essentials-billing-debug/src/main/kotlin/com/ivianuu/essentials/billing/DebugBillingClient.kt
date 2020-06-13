@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap
 @ApplicationScoped
 class DebugBillingClient(
     private val context: @ForApplication Context,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore
 ) : BillingClient() {
@@ -118,7 +118,7 @@ class DebugBillingClient(
             return
         }
 
-        coroutineScope.launch {
+        scope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 billingStore.removePurchase(purchase.purchaseToken)
@@ -160,9 +160,10 @@ class DebugBillingClient(
             )
             return
         }
-        coroutineScope.launch {
+        scope.launch {
             val history = queryPurchases(skuType)
-            listener.onPurchaseHistoryResponse(BillingResult.newBuilder().setResponseCode(history.responseCode).build(),
+            listener.onPurchaseHistoryResponse(BillingResult.newBuilder()
+                .setResponseCode(history.responseCode).build(),
                 history.purchasesList.map { PurchaseHistoryRecord(it.originalJson, it.signature) })
         }
     }
@@ -179,7 +180,7 @@ class DebugBillingClient(
             )
             return
         }
-        coroutineScope.launch {
+        scope.launch {
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
@@ -232,7 +233,7 @@ class DebugBillingClient(
             return
         }
 
-        coroutineScope.launch {
+        scope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 val updated = Purchase(

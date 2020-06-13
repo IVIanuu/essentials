@@ -28,7 +28,7 @@ import java.util.UUID
 @ApplicationScoped
 class PermissionManager(
     private val context: @ForApplication Context,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val logger: Logger,
     private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
@@ -54,7 +54,7 @@ class PermissionManager(
             id = id,
             permissions = permissions.toList(),
             onComplete = {
-                coroutineScope.launch {
+                scope.launch {
                     finished.complete(Unit)
                     requests.remove(id)
                 }

@@ -133,7 +133,7 @@ internal class PermissionDialogViewModel(
     }
 
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
-        coroutineScope.launch {
+        scope.launch {
             logger.d("request $permission")
             requestHandlers.requestHandlerFor(permission)
                 .request(activity, manager, permission)
@@ -142,7 +142,7 @@ internal class PermissionDialogViewModel(
     }
 
     private fun updatePermissionsToProcessOrFinish() {
-        coroutineScope.launch {
+        scope.launch {
             val permissionsToProcess = request.permissions
                 .filterNot { manager.hasPermissions(it) }
 

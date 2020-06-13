@@ -136,7 +136,7 @@ internal class CheckableAppsViewModel(
     private val checkedApps = MutableStateFlow(emptySet<String>())
 
     init {
-        coroutineScope.launch {
+        scope.launch {
             val appsFlow = flowOf {
                 appStore.getInstalledApps().filter(appFilter)
             }
@@ -162,7 +162,7 @@ internal class CheckableAppsViewModel(
 
         checkedAppsJob = checkedAppsFlow
             .onEach { checkedApps.value = it }
-            .launchIn(coroutineScope)
+            .launchIn(scope)
     }
 
     fun detach() {
@@ -171,7 +171,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun appClicked(app: CheckableApp) {
-        coroutineScope.launch {
+        scope.launch {
             pushNewCheckedApps {
 
                 if (!app.isChecked) {
@@ -184,7 +184,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun selectAllClicked() {
-        coroutineScope.launch {
+        scope.launch {
             state.value.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
@@ -194,7 +194,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun deselectAllClicked() {
-        coroutineScope.launch {
+        scope.launch {
             pushNewCheckedApps { it.clear() }
         }
     }

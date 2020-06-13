@@ -49,10 +49,10 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = coroutineScope.coroutineContext,
+        context: CoroutineContext = scope.coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
-    ): Job = coroutineScope.execute(
+    ): Job = scope.execute(
         context = context,
         start = start,
         block = { await() },

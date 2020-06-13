@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,11 +27,9 @@ import java.io.Closeable
  */
 abstract class ViewModel : Closeable {
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     override fun close() {
-        coroutineScope.cancel()
+        scope.cancel()
     }
 }

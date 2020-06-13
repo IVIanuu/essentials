@@ -46,11 +46,11 @@ class ForegroundService : EsService() {
         foregroundManager.updates
             .onStart { emit(Unit) }
             .onEach { update() }
-            .launchIn(coroutineScope)
+            .launchIn(scope)
 
         foregroundManager.stopServiceRequests
             .onEach { stop() }
-            .launchIn(coroutineScope)
+            .launchIn(scope)
     }
 
     override fun onDestroy() {

@@ -28,10 +28,10 @@ import kotlinx.coroutines.launch
 @BindAppInitializer
 class PurchaseInitializer(
     billingStore: BillingStore,
-    coroutineScope: @ForApplication CoroutineScope
+    scope: @ForApplication CoroutineScope
 ) : AppInitializer {
     init {
-        coroutineScope.launch {
+        scope.launch {
             billingStore.addProduct(SkuDetails(DummySku))
         }
     }

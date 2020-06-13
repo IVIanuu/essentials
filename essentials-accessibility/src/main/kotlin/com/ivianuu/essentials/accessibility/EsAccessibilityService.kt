@@ -18,7 +18,6 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,12 +28,10 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsAccessibilityService : AccessibilityService() {
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     override fun onDestroy() {
-        coroutineScope.cancel()
+        scope.cancel()
         super.onDestroy()
     }
 

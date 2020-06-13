@@ -27,11 +27,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun <T> Box<T>.asState(): MutableState<T> = key(this) {
-    val coroutineScope = compositionCoroutineScope()
+    val scope = compositionCoroutineScope()
     val state = data.collectAsState(defaultData) as MutableState<T>
     remember {
         ObservableState(state) { newData ->
-            coroutineScope.launch {
+            scope.launch {
                 updateData { newData }
             }
         }

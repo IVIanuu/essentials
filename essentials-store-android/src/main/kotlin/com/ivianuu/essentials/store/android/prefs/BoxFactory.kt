@@ -24,7 +24,7 @@ import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 class PrefBoxFactory(
-    private val coroutineScope: CoroutineScope,
+    private val scope: CoroutineScope,
     @PublishedApi internal val moshi: Moshi,
     private val prefsPath: String
 ) {
@@ -51,7 +51,7 @@ class PrefBoxFactory(
                 createFile = { File("$prefsPath/$name") },
                 serializer = serializer,
                 defaultData = defaultData,
-                coroutineScope = coroutineScope
+                scope = scope
             )
             boxes[name] = box
         }

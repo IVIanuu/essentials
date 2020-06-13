@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,9 +27,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsTileService : TileService() {
 
-    val coroutineScope by unsafeLazy {
-        CoroutineScope(Job() + Dispatchers.Main)
-    }
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
 
     lateinit var listeningCoroutineScope: CoroutineScope
         private set

@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 class NavBarManager internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    private val coroutineScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
@@ -84,7 +84,7 @@ class NavBarManager internal constructor(
             }
         }
 
-        job = coroutineScope.launch {
+        job = scope.launch {
             awaitAll(
                 async {
                     // apply config

@@ -77,14 +77,14 @@ internal class ShortcutPickerViewModel(
     private val shortcutStore: ShortcutStore
 ) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
     init {
-        coroutineScope.execute(
+        scope.execute(
             block = { shortcutStore.getShortcuts() },
             reducer = { copy(shortcuts = it) }
         )
     }
 
     fun shortcutClicked(info: Shortcut) {
-        coroutineScope.launch {
+        scope.launch {
             try {
                 val shortcutRequestResult = navigator.push<ActivityResult>(
                     ActivityResultRoute(

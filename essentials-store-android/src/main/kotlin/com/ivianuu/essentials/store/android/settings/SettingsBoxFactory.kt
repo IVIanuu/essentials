@@ -23,7 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 
 class SettingsBoxFactory(
     private val context: Context,
-    private val coroutineScope: CoroutineScope
+    private val scope: CoroutineScope
 ) {
 
     fun <T> create(
@@ -38,7 +38,7 @@ class SettingsBoxFactory(
             defaultData = defaultData,
             adapter = adapter,
             contentResolver = context.contentResolver,
-            coroutineScope = coroutineScope
+            scope = scope
         )
 }
 
