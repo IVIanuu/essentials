@@ -41,7 +41,10 @@ class Route(
         enterTransition = enterTransition,
         exitTransition = exitTransition
     ) {
-        Providers(RetainedObjectsAmbient provides retainedObjects) {
+        Providers(
+            RetainedObjectsAmbient provides retainedObjects,
+            RouteAmbient provides this
+        ) {
             content()
         }
     }

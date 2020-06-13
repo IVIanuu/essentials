@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
+import androidx.compose.FrameManager
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
@@ -110,8 +111,16 @@ class Navigator {
     }
 
     fun setBackStack(newBackStack: List<Route>) {
-        _backStack.clear()
-        _backStack += newBackStack
+        FrameManager.framed {
+            synchronized(this) {
+                val oldBackStack = _backStack.toList()
+                _backStack.clear()
+                _backStack += newBackStack
+                oldBackStack
+                    .filterNot { it in newBackStack }
+                    .forEach { it.dispose() }
+            }
+        }
     }
 
 }
