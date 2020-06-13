@@ -40,7 +40,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        const val composeVersion = "0.0.1-dev136"
+        const val composeVersion = "0.0.1-dev137"
 
         object Compose {
             const val version = composeVersion
@@ -98,7 +98,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev511"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev517"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
@@ -106,7 +106,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev175"
+        private const val version = "0.0.1-dev176"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidCompose = "com.ivianuu.injekt:injekt-android-compose:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
