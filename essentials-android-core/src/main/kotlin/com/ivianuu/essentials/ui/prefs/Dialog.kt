@@ -18,23 +18,24 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
-fun DialogPreference(
+fun DialogListItem(
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     dialog: @Composable (dismiss: () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val navigator = NavigatorAmbient.current
-    BasePreference(
+    ListItem(
         modifier = modifier,
         title = title?.let { { title() } },
-        summary = summary?.let { { summary() } },
+        subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         onClick = {

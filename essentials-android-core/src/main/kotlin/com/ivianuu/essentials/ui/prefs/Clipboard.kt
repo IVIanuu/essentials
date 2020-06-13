@@ -22,23 +22,24 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.Toaster
 
 @Composable
-fun ClipboardPreference(
+fun ClipboardListItem(
     clipboardText: () -> String,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val clipboardManager = inject<ClipboardManager>()
     val toaster = inject<Toaster>()
-    SimplePreference(
+    ListItem(
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         trailing = trailing,
         onClick = {

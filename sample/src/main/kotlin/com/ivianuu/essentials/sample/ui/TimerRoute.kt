@@ -33,7 +33,7 @@ val TimerRoute = Route {
         topAppBar = { TopAppBar(title = { Text("Timer") }) },
         body = {
             val value = remember { timerFlow() }
-                .collectAsState().value
+                .collectAsState(0).value
 
             Text(
                 text = "Value: $value",

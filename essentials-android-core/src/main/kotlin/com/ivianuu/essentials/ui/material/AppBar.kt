@@ -44,7 +44,6 @@ import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.isLight
 
 @Immutable
@@ -170,15 +169,16 @@ private val DefaultAppBarElevation = 8.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val scaffold = ScaffoldAmbient.currentOrNull
     val navigator = NavigatorAmbient.currentOrNull
-    val route = RouteAmbient.currentOrNull
-    val canGoBack = remember { navigator?.backStack?.indexOf(route)?.let { it > 0 } }
+    val canGoBack = remember {
+        (navigator?.backStack?.size ?: 0) > 1 ||
+                (navigator?.popsLastRoute ?: false && navigator?.backStack?.isNotEmpty() ?: false)
+    }
     return when {
-        scaffold?.hasDrawer ?: false -> {
+        ScaffoldAmbient.currentOrNull?.hasDrawer ?: false -> {
             { DrawerButton() }
         }
-        canGoBack ?: false -> {
+        canGoBack -> {
             { BackButton() }
         }
         else -> null

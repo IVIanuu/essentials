@@ -29,7 +29,7 @@ fun <T> MultiChoiceListDialog(
     items: List<T>,
     selectedItems: List<T>,
     onSelectionsChanged: (List<T>) -> Unit,
-    itemCallback: @Composable (T) -> Unit,
+    item: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
@@ -51,7 +51,7 @@ fun <T> MultiChoiceListDialog(
                 items.forEachIndexed { index, item ->
                     key(index) {
                         MultiChoiceDialogListItem(
-                            title = { itemCallback(item) },
+                            title = { item(item) },
                             checked = item in selectedItems,
                             onCheckedChange = {
                                 val newSelectedItems = selectedItems.toMutableList()

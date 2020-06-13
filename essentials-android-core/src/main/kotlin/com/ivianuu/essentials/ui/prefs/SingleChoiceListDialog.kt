@@ -18,33 +18,31 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.state
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 
 @Composable
-fun <T> MultiChoiceListPreference(
-    box: Box<Set<T>>,
+fun <T> SingleChoiceDialogListItem(
+    box: Box<T>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item<T>>,
+    items: List<SingleChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    MultiChoiceListPreference(
+    SingleChoiceDialogListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         dialogTitle = dialogTitle,
         items = items
@@ -52,41 +50,28 @@ fun <T> MultiChoiceListPreference(
 }
 
 @Composable
-fun <T> MultiChoiceListPreference(
-    value: Set<T>,
-    onValueChange: (Set<T>) -> Unit,
+fun <T> SingleChoiceDialogListItem(
+    value: T,
+    onValueChange: (T) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item<T>>,
+    items: List<SingleChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
 ) {
-    DialogPreference(
+    DialogListItem(
         modifier = modifier,
         title = title?.let { { title() } },
-        summary = summary?.let { { summary() } },
+        subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
         dialog = { dismiss ->
-            val selectedItems = state {
-                value
-                    .map { value -> items.first { it.value == value } }
-            }
-
-            MultiChoiceListDialog(
+            SingleChoiceListDialog(
                 items = items,
-                selectedItems = selectedItems.value,
-                onSelectionsChanged = { selectedItems.value = it },
-                itemCallback = { Text(it.title) },
+                selectedItem = items.first { it.value == value },
+                onSelect = { onValueChange(it.value) },
+                item = { Text(it.title) },
                 title = dialogTitle,
-                positiveButton = {
-                    DialogButton(
-                        onClick = {
-                            val newValue = selectedItems.value.map { it.value }.toSet()
-                            onValueChange(newValue)
-                        }
-                    ) { Text(R.string.es_ok) }
-                },
                 negativeButton = {
                     DialogCloseButton {
                         Text(R.string.es_cancel)
@@ -97,7 +82,7 @@ fun <T> MultiChoiceListPreference(
     )
 }
 
-object MultiChoiceListPreference {
+object SingleChoiceDialogListItem {
     @Immutable
     data class Item<T>(
         val title: String,

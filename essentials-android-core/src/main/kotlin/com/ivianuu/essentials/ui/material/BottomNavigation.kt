@@ -155,7 +155,7 @@ fun <T> BottomNavigation(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     modifier: Modifier = Modifier,
     style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
-    itemCallback: @Composable RowScope.(T) -> Unit
+    item: @Composable RowScope.(T) -> Unit
 ) {
     BottomNavigation(
         modifier = modifier,
@@ -164,7 +164,7 @@ fun <T> BottomNavigation(
         controller.items.forEach { item ->
             key(item) {
                 Providers(BottomNavigationItemAmbient provides item) {
-                    itemCallback(item)
+                    item(item)
                 }
             }
         }
@@ -195,15 +195,15 @@ fun <T> BottomNavigationContent(
     bottomNavigationController: BottomNavigationController<T> = ambientBottomNavigationController(),
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
-    contentCallback: @Composable (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     AnimatedBox(
         modifier = modifier,
-        item = bottomNavigationController.selectedItem,
+        current = bottomNavigationController.selectedItem,
         transition = transition
     ) {
         Providers(BottomNavigationItemAmbient provides it) {
-            contentCallback(it)
+            item(it)
         }
     }
 }

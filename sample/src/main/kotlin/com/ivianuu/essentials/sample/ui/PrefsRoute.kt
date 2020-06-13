@@ -29,17 +29,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.prefs.CheckboxPreference
-import com.ivianuu.essentials.ui.prefs.ClipboardPreference
-import com.ivianuu.essentials.ui.prefs.ColorPreference
+import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.prefs.ClipboardListItem
+import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
 import com.ivianuu.essentials.ui.prefs.Dependency
-import com.ivianuu.essentials.ui.prefs.DurationSliderPreference
-import com.ivianuu.essentials.ui.prefs.IntSliderPreference
-import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
-import com.ivianuu.essentials.ui.prefs.RadioButtonPreference
-import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
-import com.ivianuu.essentials.ui.prefs.SwitchPreference
-import com.ivianuu.essentials.ui.prefs.TextInputPreference
+import com.ivianuu.essentials.ui.prefs.DurationSliderListItem
+import com.ivianuu.essentials.ui.prefs.IntSliderListItem
+import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
+import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import kotlin.time.hours
 import kotlin.time.minutes
@@ -53,7 +53,7 @@ val PrefsRoute = Route {
             ) {
                 val boxFactory = inject<PrefBoxFactory>()
 
-                SwitchPreference(
+                SwitchListItem(
                     box = boxFactory.create("switch", false),
                     title = { Text("Switch") }
                 )
@@ -67,34 +67,34 @@ val PrefsRoute = Route {
 
                 Subheader(modifier = dependenciesModifier) { Text("Category") }
 
-                CheckboxPreference(
+                CheckboxListItem(
                     box = boxFactory.create("checkbox", false),
                     modifier = dependenciesModifier,
                     title = { Text("Checkbox") },
-                    summary = { Text("This is a checkbox preference") }
+                    subtitle = { Text("This is a checkbox preference") }
                 )
 
-                RadioButtonPreference(
+                RadioButtonListItem(
                     box = boxFactory.create("radio_button", false),
                     modifier = dependenciesModifier,
                     title = { Text("Radio Button") },
-                    summary = { Text("This is a radio button preference") }
+                    subtitle = { Text("This is a radio button preference") }
                 )
 
-                IntSliderPreference(
+                IntSliderListItem(
                     box = boxFactory.create("slider", 50),
                     modifier = dependenciesModifier,
                     title = { Text("Slider") },
-                    summary = { Text("This is a slider preference") },
+                    subtitle = { Text("This is a slider preference") },
                     steps = 10,
                     valueRange = 0..100
                 )
 
-                DurationSliderPreference(
+                DurationSliderListItem(
                     box = boxFactory.duration("slider_dur", 33.minutes),
                     modifier = dependenciesModifier,
                     title = { Text("Slider duration") },
-                    summary = { Text("This is a slider preference") },
+                    subtitle = { Text("This is a slider preference") },
                     steps = 10,
                     valueRange = 1.minutes..1.hours
                 )
@@ -103,48 +103,48 @@ val PrefsRoute = Route {
                     Text("Dialogs")
                 }
 
-                TextInputPreference(
+                TextInputDialogListItem(
                     box = boxFactory.create("text_input", ""),
                     modifier = dependenciesModifier,
                     title = { Text("Text input") },
-                    summary = { Text("This is a text input preference") },
+                    subtitle = { Text("This is a text input preference") },
                     allowEmpty = false
                 )
 
-                ColorPreference(
+                ColorDialogListItem(
                     box = boxFactory.color("color", Color.Red),
                     modifier = dependenciesModifier,
                     title = { Text("Color") },
-                    summary = { Text("This is a color preference") }
+                    subtitle = { Text("This is a color preference") }
                 )
 
-                MultiChoiceListPreference(
+                MultiChoiceDialogListItem(
                     box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
                     modifier = dependenciesModifier,
                     title = { Text("Multi select list") },
-                    summary = { Text("This is a multi select list preference") },
+                    subtitle = { Text("This is a multi select list preference") },
                     items = listOf(
-                        MultiChoiceListPreference.Item("A", "A"),
-                        MultiChoiceListPreference.Item("B", "B"),
-                        MultiChoiceListPreference.Item("C", "C")
+                        MultiChoiceDialogListItem.Item("A", "A"),
+                        MultiChoiceDialogListItem.Item("B", "B"),
+                        MultiChoiceDialogListItem.Item("C", "C")
                     )
                 )
 
-                SingleChoiceListPreference(
+                SingleChoiceDialogListItem(
                     box = boxFactory.create("single_item_list", "C"),
                     modifier = dependenciesModifier,
                     title = { Text("Single item list") },
-                    summary = { Text("This is a single item list preference") },
+                    subtitle = { Text("This is a single item list preference") },
                     items = listOf(
-                        SingleChoiceListPreference.Item("A", "A"),
-                        SingleChoiceListPreference.Item("B", "B"),
-                        SingleChoiceListPreference.Item("C", "C")
+                        SingleChoiceDialogListItem.Item("A", "A"),
+                        SingleChoiceDialogListItem.Item("B", "B"),
+                        SingleChoiceDialogListItem.Item("C", "C")
                     )
                 )
 
-                ClipboardPreference(
+                ClipboardListItem(
                     title = { Text("Clipboard") },
-                    summary = { Text("This is a clipboard preference") },
+                    subtitle = { Text("This is a clipboard preference") },
                     clipboardText = { "cool clip" },
                     modifier = dependenciesModifier
                 )

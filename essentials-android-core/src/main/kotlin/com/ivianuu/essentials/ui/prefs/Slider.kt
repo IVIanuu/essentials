@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.material.DefaultListItemStyle
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.util.UnitValueTextProvider
@@ -44,10 +45,10 @@ import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
 
 @Composable
-fun DoubleSliderPreference(
+fun DoubleSliderListItem(
     box: Box<Double>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Double) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
@@ -55,12 +56,12 @@ fun DoubleSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    DoubleSliderPreference(
+    DoubleSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
         steps = steps,
@@ -69,25 +70,25 @@ fun DoubleSliderPreference(
 }
 
 @Composable
-fun DoubleSliderPreference(
+fun DoubleSliderListItem(
     value: Double,
     onValueChange: (Double) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Double) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDouble() },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
         steps = steps,
@@ -96,10 +97,10 @@ fun DoubleSliderPreference(
 }
 
 @Composable
-fun FloatSliderPreference(
+fun FloatSliderListItem(
     box: Box<Float>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Float) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
@@ -107,12 +108,12 @@ fun FloatSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    FloatSliderPreference(
+    FloatSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -121,25 +122,25 @@ fun FloatSliderPreference(
 }
 
 @Composable
-fun FloatSliderPreference(
+fun FloatSliderListItem(
     value: Float,
     onValueChange: (Float) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Float) -> Unit)? = null,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it },
         fromFloat = { it },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
         steps = steps,
@@ -148,10 +149,10 @@ fun FloatSliderPreference(
 }
 
 @Composable
-fun IntSliderPreference(
+fun IntSliderListItem(
     box: Box<Int>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
@@ -159,12 +160,12 @@ fun IntSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    IntSliderPreference(
+    IntSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -173,25 +174,25 @@ fun IntSliderPreference(
 }
 
 @Composable
-fun IntSliderPreference(
+fun IntSliderListItem(
     value: Int,
     onValueChange: (Int) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it.toFloat() },
         fromFloat = { it.toInt() },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -200,10 +201,10 @@ fun IntSliderPreference(
 }
 
 @Composable
-fun LongSliderPreference(
+fun LongSliderListItem(
     box: Box<Long>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
@@ -211,12 +212,12 @@ fun LongSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    LongSliderPreference(
+    LongSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -225,25 +226,25 @@ fun LongSliderPreference(
 }
 
 @Composable
-fun LongSliderPreference(
+fun LongSliderListItem(
     value: Long,
     onValueChange: (Long) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it.toFloat() },
         fromFloat = { it.toLong() },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -252,10 +253,10 @@ fun LongSliderPreference(
 }
 
 @Composable
-fun DpSliderPreference(
+fun DpSliderListItem(
     box: Box<Dp>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
@@ -263,12 +264,12 @@ fun DpSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    DpSliderPreference(
+    DpSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -277,25 +278,25 @@ fun DpSliderPreference(
 }
 
 @Composable
-fun DpSliderPreference(
+fun DpSliderListItem(
     value: Dp,
     onValueChange: (Dp) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it.value },
         fromFloat = { it.dp },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
@@ -304,10 +305,10 @@ fun DpSliderPreference(
 }
 
 @Composable
-fun DurationSliderPreference(
+fun DurationSliderListItem(
     box: Box<Duration>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
@@ -315,12 +316,12 @@ fun DurationSliderPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    DurationSliderPreference(
+    DurationSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
         steps = steps,
@@ -329,25 +330,25 @@ fun DurationSliderPreference(
 }
 
 @Composable
-fun DurationSliderPreference(
+fun DurationSliderListItem(
     value: Duration,
     onValueChange: (Duration) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    BaseSliderPreference(
+    BaseSliderListItem(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDuration() },
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
         steps = steps,
@@ -371,13 +372,13 @@ private fun Duration.toFloat(): Float {
 }
 
 @Composable
-fun <T : Comparable<T>> BaseSliderPreference(
+fun <T : Comparable<T>> BaseSliderListItem(
     value: T,
     onValueChange: (T) -> Unit,
     toFloat: (T) -> Float,
     fromFloat: (Float) -> T,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<T>,
     steps: Int = 0,
@@ -385,11 +386,11 @@ fun <T : Comparable<T>> BaseSliderPreference(
     modifier: Modifier = Modifier
 ) {
     Stack(modifier = modifier) {
-        BasePreference(
+        ListItem(
             modifier = Modifier.gravity(Alignment.BottomCenter)
                 .padding(bottom = 32.dp),
             title = title,
-            summary = summary,
+            subtitle = subtitle,
             leading = leading,
             onClick = {}
         )

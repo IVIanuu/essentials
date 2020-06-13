@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
@@ -24,26 +23,6 @@ import androidx.ui.core.composed
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.material.ListItem
-
-@Composable
-fun BasePreference(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null
-) {
-    ListItem(
-        modifier = modifier,
-        onClick = onClick,
-        title = title,
-        subtitle = summary,
-        leading = leading,
-        trailing = trailing
-    )
-}
 
 fun Modifier.preferenceDependencies(
     vararg dependencies: Dependency<*>

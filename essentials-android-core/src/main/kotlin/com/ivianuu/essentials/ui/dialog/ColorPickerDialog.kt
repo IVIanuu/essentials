@@ -142,7 +142,7 @@ fun ColorPickerDialog(
             AnimatedBox(
                 modifier = Modifier.height(300.dp)
                     .padding(start = 24.dp, end = 24.dp),
-                item = currentPage,
+                current = currentPage,
                 transition = FadeStackTransition()
             ) { currentPage ->
                 when (currentPage) {
@@ -170,10 +170,10 @@ fun ColorPickerDialog(
 
 @Composable
 private fun ColorGrid(
-    modifier: Modifier = Modifier,
     currentColor: Color,
     colorPalettes: List<ColorPickerPalette>,
-    onColorSelected: (Color) -> Unit
+    onColorSelected: (Color) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val (currentPalette, setCurrentPalette) = state<ColorPickerPalette?> { null }
     val items = remember(currentPalette) {
@@ -293,8 +293,8 @@ private fun BaseColorGridItem(
 
 @Composable
 private fun ColorEditor(
-    modifier: Modifier = Modifier,
     color: Color,
+    modifier: Modifier = Modifier,
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
 ) {

@@ -30,7 +30,7 @@ fun IconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
-    children: @Composable () -> Unit
+    icon: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier.size(size = 40.dp)
@@ -41,6 +41,6 @@ fun IconButton(
             )
             .plus(modifier),
         gravity = ContentGravity.Center,
-        children = children
+        children = icon
     )
 }

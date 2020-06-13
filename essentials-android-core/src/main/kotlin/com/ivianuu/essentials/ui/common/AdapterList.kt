@@ -50,7 +50,7 @@ private inline class LayoutIndex(val value: Int)
 
 private class ListState<T> {
     lateinit var recomposer: Recomposer
-    lateinit var itemCallback: @Composable (T) -> Unit
+    lateinit var item: @Composable (T) -> Unit
     lateinit var data: List<T>
 
     var forceRecompose = false
@@ -474,7 +474,7 @@ private class ListState<T> {
         }
         // TODO(b/150390669): Review use of @Untracked
         val composition = subcomposeInto(context!!, node, recomposer, compositionRef) @Untracked {
-            itemCallback(data[dataIndex.value])
+            item(data[dataIndex.value])
         }
         compositionsForLayoutNodes[node] = composition
         return node
@@ -511,18 +511,18 @@ private val ListItemMeasureBlocks = MeasuringIntrinsicsMeasureBlocks { measurabl
  *
  * @param data the backing list of data to display
  * @param modifier the modifier to apply to this `AdapterList`
- * @param itemCallback a callback that takes an item from [data] and emits the UI for that item.
+ * @param item a callback that takes an item from [data] and emits the UI for that item.
  * May emit any number of components, which will be stacked vertically
  */
 @Composable
 fun <T> AdapterList(
     data: List<T>,
     modifier: Modifier = Modifier,
-    itemCallback: @Composable (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     val state = rememberRetained { ListState<T>() }
     state.recomposer = currentComposer.recomposer
-    state.itemCallback = itemCallback
+    state.item = item
     state.data = data
     state.context = ContextAmbient.current
     state.compositionRef = compositionReference()

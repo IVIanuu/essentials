@@ -22,40 +22,41 @@ import androidx.ui.foundation.Box
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.RadioButton
 
 @Composable
-fun RadioButtonPreference(
+fun RadioButtonListItem(
     box: Box<Boolean>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    RadioButtonPreference(
+    RadioButtonListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading
     )
 }
 
 @Composable
-fun RadioButtonPreference(
+fun RadioButtonListItem(
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    BasePreference(
+    ListItem(
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         trailing = {
             Box(modifier = Modifier.absorbPointer()) {

@@ -20,30 +20,30 @@ import java.util.UUID
 
 @Composable
 fun <T> AnimatedBox(
+    current: T,
     modifier: Modifier = Modifier,
-    item: T,
     transition: StackTransition = FadeStackTransition(),
-    itemCallback: @Composable (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     AnimatedStack(
         modifier = modifier,
-        items = listOf(item),
+        items = listOf(current),
         transition = transition,
-        itemCallback = itemCallback
+        item = item
     )
 }
 
 @Composable
 fun <T> AnimatedStack(
-    modifier: Modifier = Modifier,
     items: List<T>,
+    modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
-    itemCallback: @Composable (T) -> Unit
+    item: @Composable (T) -> Unit
 ) {
     val lastChildren = untrackedState {
         emptyList<AnimatedStackChild<T>>()
     }
-    val children = remember(items, itemCallback) {
+    val children = remember(items, item) {
         items
             .map { item ->
                 AnimatedStackChild(
@@ -51,7 +51,7 @@ fun <T> AnimatedStack(
                     enterTransition = transition,
                     exitTransition = transition
                 ) {
-                    itemCallback(item)
+                    item(item)
                 }
             }
     }

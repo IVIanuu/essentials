@@ -23,7 +23,7 @@ fun ActionPickerRoute(
 
         RenderAsyncList(
             state = viewModel.state.collectAsState().value.items,
-            successItemCallback = { item ->
+            successItem = { item ->
                 ActionPickerItem(
                     item = item,
                     onClick = { viewModel.itemClicked(item) }

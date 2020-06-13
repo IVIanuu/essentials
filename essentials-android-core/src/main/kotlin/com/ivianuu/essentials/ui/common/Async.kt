@@ -37,7 +37,7 @@ fun <T> RenderAsyncList(
     },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItemCallback: @Composable (T) -> Unit
+    successItem: @Composable (T) -> Unit
 ) {
     RenderAsync(
         state = state,
@@ -46,7 +46,7 @@ fun <T> RenderAsyncList(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                AdapterList(data = items, itemCallback = successItemCallback)
+                AdapterList(data = items, item = successItem)
             } else {
                 successEmpty()
             }

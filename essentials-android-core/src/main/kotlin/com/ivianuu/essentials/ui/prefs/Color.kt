@@ -30,10 +30,10 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
-fun ColorPreference(
+fun ColorDialogListItem(
     box: Box<Color>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
@@ -42,12 +42,12 @@ fun ColorPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    ColorPreference(
+    ColorDialogListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         dialogTitle = dialogTitle,
         colorPalettes = colorPalettes,
@@ -57,11 +57,11 @@ fun ColorPreference(
 }
 
 @Composable
-fun ColorPreference(
+fun ColorDialogListItem(
     value: Color,
     onValueChange: (Color) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
@@ -69,10 +69,10 @@ fun ColorPreference(
     allowCustomArgb: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    DialogPreference(
+    DialogListItem(
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         trailing = {
             Surface(

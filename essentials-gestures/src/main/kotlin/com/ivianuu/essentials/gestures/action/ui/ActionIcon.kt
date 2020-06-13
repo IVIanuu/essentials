@@ -6,5 +6,5 @@ import com.ivianuu.essentials.ui.coroutines.collectAsState
 
 @Composable
 fun ActionIcon(action: Action) {
-    action.iconProvider.icon.collectAsState().value?.invoke()
+    action.iconProvider.icon.collectAsState(null).value?.invoke()
 }

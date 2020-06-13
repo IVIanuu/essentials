@@ -24,23 +24,23 @@ import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.ScaffoldAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 @Composable
-fun DrawerButton(children: @Composable () -> Unit = { Icon(Icons.Default.Menu) }) {
+fun DrawerButton(icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }) {
     val scaffold = ScaffoldAmbient.current
     IconButton(
         onClick = { scaffold.isDrawerOpen = !scaffold.isDrawerOpen },
-        children = children
+        icon = icon
     )
 }
 
 @Composable
-fun BackButton(children: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
-    val navigator = NavigatorAmbient.current
+fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
+    val onBackPressedDispatcher = onBackPressedDispatcherOwner
+        .onBackPressedDispatcher
     IconButton(
-        onClick = { navigator.popTop() },
-        children = children
+        onClick = { onBackPressedDispatcher.onBackPressed() },
+        icon = icon
     )
 }
 
@@ -48,8 +48,10 @@ fun BackButton(children: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack
 fun NavigationButton() {
     val scaffold = ScaffoldAmbient.current
     val navigator = NavigatorAmbient.current
-    val route = RouteAmbient.current
-    val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
+    val canGoBack = remember {
+        navigator.backStack.size > 1 ||
+                (navigator.popsLastRoute && navigator.backStack.isNotEmpty())
+    }
     when {
         scaffold.hasDrawer -> DrawerButton()
         canGoBack -> BackButton()

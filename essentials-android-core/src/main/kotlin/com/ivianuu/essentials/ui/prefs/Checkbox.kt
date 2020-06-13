@@ -22,39 +22,40 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.Checkbox
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
-fun CheckboxPreference(
+fun CheckboxListItem(
     box: Box<Boolean>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    CheckboxPreference(
+    CheckboxListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading
     )
 }
 
 @Composable
-fun CheckboxPreference(
+fun CheckboxListItem(
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    BasePreference(
+    ListItem(
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         trailing = {
             Checkbox(

@@ -29,10 +29,10 @@ import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 
 @Composable
-fun TextInputPreference(
+fun TextInputDialogListItem(
     box: Box<String>,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
@@ -41,12 +41,12 @@ fun TextInputPreference(
     modifier: Modifier = Modifier
 ) {
     val state = box.asState()
-    TextInputPreference(
+    TextInputDialogListItem(
         value = state.value,
         onValueChange = { state.value = it },
         modifier = modifier,
         title = title,
-        summary = summary,
+        subtitle = subtitle,
         leading = leading,
         dialogTitle = dialogTitle,
         dialogHint = dialogHint,
@@ -56,11 +56,11 @@ fun TextInputPreference(
 }
 
 @Composable
-fun TextInputPreference(
+fun TextInputDialogListItem(
     value: String,
     onValueChange: (String) -> Unit,
     title: @Composable (() -> Unit)? = null,
-    summary: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
@@ -68,10 +68,10 @@ fun TextInputPreference(
     allowEmpty: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    DialogPreference(
+    DialogListItem(
         modifier = modifier,
         title = title?.let { { title() } },
-        summary = summary?.let { { summary() } },
+        subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
         dialog = { dismiss ->
             val currentValue = stateFor(value) { value }

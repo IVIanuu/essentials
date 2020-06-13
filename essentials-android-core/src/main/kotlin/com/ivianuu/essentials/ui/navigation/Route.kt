@@ -18,8 +18,14 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.core.RetainedObjects
+import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 
 @Immutable
 class Route(
@@ -29,28 +35,45 @@ class Route(
     val content: @Composable () -> Unit
 ) {
 
+    internal val stackChild = AnimatedStackChild(
+        key = this,
+        opaque = opaque,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition
+    ) {
+        Providers(RetainedObjectsAmbient provides retainedObjects) {
+            content()
+        }
+    }
+
+    private val retainedObjects = RetainedObjects()
+
+    private val _result = CompletableDeferred<Any?>()
+    val result: Deferred<Any?> = _result
+
     constructor(
         opaque: Boolean = false,
         transition: StackTransition? = null,
         content: @Composable () -> Unit
-    ) : this(
-        opaque = opaque,
-        enterTransition = transition,
-        exitTransition = transition,
-        content = content
-    )
+    ) : this(opaque, transition, transition, content)
 
     fun copy(
         opaque: Boolean = this.opaque,
         enterTransition: StackTransition? = this.enterTransition,
         exitTransition: StackTransition? = this.exitTransition,
-        content: @Composable () -> Unit = this.content
-    ): Route = Route(
-        opaque = opaque,
-        enterTransition = enterTransition,
-        exitTransition = exitTransition,
-        content = content
-    )
+        content: @Composable() () -> Unit = this.content
+    ): Route = Route(opaque, enterTransition, exitTransition, content)
+
+    internal fun dispose() {
+        setResult(null)
+        retainedObjects.dispose()
+    }
+
+    internal fun setResult(result: Any?) {
+        if (_result.isCompleted) {
+            _result.complete(result)
+        }
+    }
 
 }
 

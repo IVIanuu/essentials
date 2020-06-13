@@ -95,9 +95,6 @@ class StateCoroutineScope<T>(
 fun <T> StateFlow<T>.collectAsState(): State<T> = collectAsState(value)
 
 @Composable
-fun <T> Flow<T>.collectAsState(): State<T?> = collectAsState(null)
-
-@Composable
 fun <T> Flow<T>.collectAsState(initial: T): State<T> {
     return launchWithState(
         initial = initial,

@@ -226,7 +226,7 @@ val DialogsRoute = Route {
                             selectedItem = tmpSelectedItem,
                             onSelect = setTmpSelectedItem,
                             dismissOnSelection = false,
-                            itemCallback = { Text("Item: $it") },
+                            item = { Text("Item: $it") },
                             positiveButton = {
                                 DialogButton(
                                     onClick = {
@@ -251,7 +251,7 @@ val DialogsRoute = Route {
                             items = multiChoiceItems,
                             selectedItems = tmpSelectedItems,
                             onSelectionsChanged = setTmpSelectedItems,
-                            itemCallback = { Text(it) },
+                            item = { Text(it) },
                             positiveButton = {
                                 DialogButton(
                                     onClick = {

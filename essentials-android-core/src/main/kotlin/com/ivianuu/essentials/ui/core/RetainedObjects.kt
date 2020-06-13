@@ -93,7 +93,9 @@ fun <T> RetainedObjects.getOrSetIfChanged(
     return value.value
 }
 
-val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>()
+val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>() {
+    error("No RetainedObjects specified")
+}
 
 // todo remove once compose is fixed
 @Composable

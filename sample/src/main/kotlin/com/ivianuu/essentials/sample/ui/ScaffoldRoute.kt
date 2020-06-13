@@ -182,9 +182,7 @@ val ScaffoldRoute = Route {
                                     items = ScaffoldState.FabPosition.values().toList(),
                                     selectedItem = controls.fabPosition,
                                     onSelect = { controls.fabPosition = it },
-                                    itemCallback = {
-                                        Text(it.name)
-                                    }
+                                    item = { Text(it.name) }
                                 )
                             }
                         )

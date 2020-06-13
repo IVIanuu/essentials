@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 @Composable
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
-    modifier: Modifier = Modifier,
     onCancel: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
     popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
 ) {
     Box(
