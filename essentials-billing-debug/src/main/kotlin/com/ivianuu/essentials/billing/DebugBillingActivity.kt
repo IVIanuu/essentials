@@ -71,7 +71,7 @@ class DebugBillingActivity : EsActivity() {
                 } else {
                     this.skuDetails = it
                     if (!navigator.hasRoot)
-                        navigator.setRoot(PurchaseDialogRoute)
+                        navigator.setRoot(PurchaseDialogRoute())
                     navigator()
                 }
             }
@@ -85,20 +85,10 @@ class DebugBillingActivity : EsActivity() {
         return Purchase(json, "debug-signature-$sku-${skuDetails.type}")
     }
 
-    private val PurchaseDialogRoute =
-        DialogRoute(
-            dismissHandler = {
-                lifecycleScope.launch {
-                    client.onPurchaseResult(
-                        requestId = requestId,
-                        responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
-                        purchases = null
-                    )
+    private inner class PurchaseDialogRoute : DialogRoute() {
 
-                    finish()
-                }
-            }
-        ) {
+        @Composable
+        override fun dialog() {
             Dialog(
                 title = {
                     Row(verticalGravity = Alignment.CenterVertically) {
@@ -136,6 +126,21 @@ class DebugBillingActivity : EsActivity() {
                 }
             )
         }
+
+        @Composable
+        override fun onDismiss() {
+            lifecycleScope.launch {
+                client.onPurchaseResult(
+                    requestId = requestId,
+                    responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
+                    purchases = null
+                )
+
+                finish()
+            }
+        }
+
+    }
 
     internal companion object {
         private val GooglePlayGreen = Color(0xFF00A273)

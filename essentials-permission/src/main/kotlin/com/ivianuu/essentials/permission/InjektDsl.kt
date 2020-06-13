@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.composition.BindingEffect
 import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
@@ -44,7 +45,7 @@ fun <T : PermissionRequestHandler> permissionRequestProvider() {
     set<PermissionRequestHandler> { add<T>() }
 }
 
-@BindingEffect(ApplicationComponent::class)
+@BindingEffect(ActivityComponent::class)
 annotation class BindPermissionRequestUi
 
 @BindingEffectFunction(BindPermissionRequestUi::class)

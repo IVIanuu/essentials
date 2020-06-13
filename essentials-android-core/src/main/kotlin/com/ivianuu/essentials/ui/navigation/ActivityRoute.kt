@@ -19,19 +19,23 @@ package com.ivianuu.essentials.ui.navigation
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.Composable
 import androidx.compose.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.common.compositionActivity
 
-fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
-    opaque = true
-) {
-    val activity = compositionActivity
-    val navigator = NavigatorAmbient.current
-    onActive {
-        activity.startActivity(intentFactory(activity))
-        navigator.popTop()
+class ActivityRoute(
+    private val intentFactory: (Activity) -> Intent
+) : Route() {
+    @Composable
+    override fun invoke() {
+        val activity = compositionActivity
+        val navigator = NavigatorAmbient.current
+        onActive {
+            activity.startActivity(intentFactory(activity))
+            navigator.popTop()
+        }
     }
 }
 

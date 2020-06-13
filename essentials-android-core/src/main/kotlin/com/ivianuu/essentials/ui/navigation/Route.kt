@@ -18,67 +18,47 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Providers
 import androidx.compose.staticAmbientOf
-import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.essentials.ui.core.RetainedObjects
-import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 
 @Immutable
-class Route(
-    val opaque: Boolean = false,
+abstract class Route(
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,
-    val content: @Composable () -> Unit
+    val opaque: Boolean = false
 ) {
 
-    internal val stackChild = AnimatedStackChild(
-        key = this,
-        opaque = opaque,
-        enterTransition = enterTransition,
-        exitTransition = exitTransition
-    ) {
-        Providers(
-            RetainedObjectsAmbient provides retainedObjects,
-            RouteAmbient provides this
-        ) {
-            content()
-        }
-    }
-
-    private val retainedObjects = RetainedObjects()
-
-    private val _result = CompletableDeferred<Any?>()
-    val result: Deferred<Any?> = _result
-
-    constructor(
-        opaque: Boolean = false,
-        transition: StackTransition? = null,
-        content: @Composable () -> Unit
-    ) : this(opaque, transition, transition, content)
-
-    fun copy(
-        opaque: Boolean = this.opaque,
-        enterTransition: StackTransition? = this.enterTransition,
-        exitTransition: StackTransition? = this.exitTransition,
-        content: @Composable() () -> Unit = this.content
-    ): Route = Route(opaque, enterTransition, exitTransition, content)
-
-    internal fun dispose() {
-        setResult(null)
-        retainedObjects.dispose()
-    }
-
-    internal fun setResult(result: Any?) {
-        if (!_result.isCompleted) {
-            _result.complete(result)
-        }
-    }
+    @Composable
+    abstract operator fun invoke()
 
 }
 
-val RouteAmbient =
-    staticAmbientOf<Route>()
+fun Route(
+    transition: StackTransition? = null,
+    opaque: Boolean = false,
+    content: @Composable () -> Unit
+) = Route(transition, transition, opaque, content)
+
+fun Route(
+    enterTransition: StackTransition? = null,
+    exitTransition: StackTransition? = null,
+    opaque: Boolean = false,
+    content: @Composable () -> Unit
+): Route = object : Route(enterTransition, exitTransition, opaque) {
+    @Composable
+    override fun invoke() {
+        content()
+    }
+}
+
+val RouteAmbient = staticAmbientOf<Route>()
+
+fun Route.copy(
+    opaque: Boolean = this.opaque,
+    enterTransition: StackTransition? = this.enterTransition,
+    exitTransition: StackTransition? = this.exitTransition
+): Route = object : Route(enterTransition, exitTransition, opaque) {
+    override fun invoke() {
+        this@copy.invoke()
+    }
+}

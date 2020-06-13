@@ -18,21 +18,53 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 
+abstract class DialogRoute(
+    opaque: Boolean = false,
+    enterTransition: StackTransition? = null,
+    exitTransition: StackTransition? = null,
+    val dismissible: Boolean = true
+) : Route(enterTransition, exitTransition, opaque) {
+
+    @Composable
+    override fun invoke() {
+        DialogWrapper(
+            dismissible = dismissible,
+            dismissHandler = { onDismiss() }
+        ) {
+            dialog()
+        }
+    }
+
+    @Composable
+    protected open fun onDismiss() {
+        NavigatorAmbient.current.pop(this)
+    }
+
+    @Composable
+    protected abstract fun dialog()
+
+}
+
 fun DialogRoute(
-    dismissible: Boolean = true,
-    dismissHandler: @Composable () -> Unit = { NavigatorAmbient.current.popTop() },
+    opaque: Boolean = true,
+    transition: StackTransition? = FadeStackTransition(),
+    dismissible: Boolean = false,
     dialog: @Composable () -> Unit
-) = Route(
-    opaque = true,
-    enterTransition = FadeStackTransition(),
-    exitTransition = FadeStackTransition()
-) {
-    DialogWrapper(
-        dismissible = dismissible,
-        dismissHandler = dismissHandler,
-        dialog = dialog
-    )
+): DialogRoute = DialogRoute(opaque, transition, transition, dismissible, dialog)
+
+fun DialogRoute(
+    opaque: Boolean = true,
+    enterTransition: StackTransition? = FadeStackTransition(),
+    exitTransition: StackTransition? = FadeStackTransition(),
+    dismissible: Boolean = false,
+    dialog: @Composable () -> Unit
+): DialogRoute = object : DialogRoute(opaque, enterTransition, exitTransition, dismissible) {
+    @Composable
+    override fun dialog() {
+        dialog.invoke()
+    }
 }

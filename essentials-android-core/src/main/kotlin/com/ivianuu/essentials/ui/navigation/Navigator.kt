@@ -26,7 +26,11 @@ import androidx.compose.mutableStateOf
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.core.RetainedObjects
+import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
 @Stable
@@ -35,8 +39,8 @@ class Navigator {
     var handleBack by mutableStateOf(true)
     var popsLastRoute by mutableStateOf(false)
 
-    private val _backStack = modelListOf<Route>()
-    val backStack: List<Route> get() = _backStack
+    private val _backStack = modelListOf<RouteState>()
+    val backStack: List<Route> get() = _backStack.map { it.route }
 
     val hasRoot: Boolean get() = _backStack.isNotEmpty()
 
@@ -55,7 +59,7 @@ class Navigator {
     }
 
     fun setRoot(route: Route) {
-        setBackStack(listOf(route))
+        setBackStackInternal(listOf(RouteState(route)))
     }
 
     fun push(route: Route) {
@@ -64,10 +68,11 @@ class Navigator {
 
     @JvmName("pushForResult")
     fun <T : Any> push(route: Route): Deferred<T?> {
+        val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
-        newBackStack += route
-        setBackStack(newBackStack)
-        return route.result as Deferred<T?>
+        newBackStack += routeState
+        setBackStackInternal(newBackStack)
+        return routeState.result as Deferred<T?>
     }
 
     fun replace(route: Route) {
@@ -76,41 +81,49 @@ class Navigator {
 
     @JvmName("replaceForResult")
     fun <T : Any> replace(route: Route): Deferred<T?> {
+        val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
             .also { it.removeAt(it.lastIndex) }
-        newBackStack += route
-        setBackStack(newBackStack)
-        return route.result as Deferred<T?>
-    }
-
-    fun pop(route: Route, result: Any? = null) {
-        popInternal(route = route, result = result)
+        newBackStack += routeState
+        setBackStackInternal(newBackStack)
+        return routeState.result as Deferred<T?>
     }
 
     fun popTop(result: Any? = null) {
-        val topRoute = _backStack.last()
-        popInternal(route = topRoute, result = result)
+        popInternal(route = _backStack.last(), result = result)
     }
 
     fun popToRoot() {
         val newTopRoute = _backStack.first()
-        setBackStack(listOf(newTopRoute))
+        setBackStackInternal(listOf(newTopRoute))
     }
 
     fun popTo(route: Route) {
-        val index = _backStack.indexOf(route)
+        val index = _backStack.indexOfFirst { it.route == route }
         val newBackStack = _backStack.subList(0, index)
-        setBackStack(newBackStack)
+        setBackStackInternal(newBackStack)
     }
 
-    private fun popInternal(route: Route, result: Any? = null) {
+    fun pop(route: Route, result: Any? = null) {
+        popInternal(route = _backStack.first { it.route == route }, result = result)
+    }
+
+    private fun popInternal(route: RouteState, result: Any? = null) {
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
-        setBackStack(newBackStack)
+        setBackStackInternal(newBackStack)
         route.setResult(result)
     }
 
     fun setBackStack(newBackStack: List<Route>) {
+        setBackStackInternal(
+            newBackStack.map { route ->
+                _backStack.firstOrNull { it.route == route } ?: RouteState(route)
+            }
+        )
+    }
+
+    private fun setBackStackInternal(newBackStack: List<RouteState>) {
         FrameManager.framed {
             synchronized(this) {
                 val oldBackStack = _backStack.toList()
@@ -121,6 +134,40 @@ class Navigator {
                     .forEach { it.dispose() }
             }
         }
+    }
+
+    private class RouteState(val route: Route) {
+
+        val stackChild = AnimatedStackChild(
+            key = this,
+            opaque = route.opaque,
+            enterTransition = route.enterTransition,
+            exitTransition = route.exitTransition
+        ) {
+            Providers(
+                RetainedObjectsAmbient provides retainedObjects,
+                RouteAmbient provides route
+            ) {
+                route()
+            }
+        }
+
+        private val retainedObjects = RetainedObjects()
+
+        private val _result = CompletableDeferred<Any?>()
+        val result: Deferred<Any?> = _result
+
+        fun dispose() {
+            setResult(null)
+            retainedObjects.dispose()
+        }
+
+        fun setResult(result: Any?) {
+            if (!_result.isCompleted) {
+                _result.complete(result)
+            }
+        }
+
     }
 
 }
