@@ -28,6 +28,11 @@ abstract class Route(
     val opaque: Boolean = false
 ) {
 
+    constructor(
+        transition: StackTransition? = null,
+        opaque: Boolean = false
+    ) : this(transition, transition, opaque)
+
     @Composable
     abstract operator fun invoke()
 
