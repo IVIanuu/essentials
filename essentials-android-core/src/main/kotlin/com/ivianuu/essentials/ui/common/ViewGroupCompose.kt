@@ -7,7 +7,7 @@ import androidx.compose.Composition
 import androidx.compose.Recomposer
 import androidx.ui.core.setContent
 
-fun ViewGroup.compose(content: @Composable () -> Unit) {
+fun ViewGroup.setContentWhileAttached(content: @Composable () -> Unit) {
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
         private var composition: Composition? = null
         override fun onViewAttachedToWindow(v: View?) {
