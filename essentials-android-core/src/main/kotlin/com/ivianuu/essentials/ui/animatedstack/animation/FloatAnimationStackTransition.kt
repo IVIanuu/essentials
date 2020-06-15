@@ -38,6 +38,7 @@ fun FloatAnimationStackTransition(
             targetValue = 1f,
             anim = anim,
             onEnd = { _, _ ->
+                apply(context.fromAnimatable, context.toAnimatable, context.isPush, 1f)
                 if (context.fromAnimatable != null) context.removeFrom()
                 context.onComplete()
             }
