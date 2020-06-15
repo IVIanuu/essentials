@@ -32,8 +32,7 @@ fun DialogRoute(
 ) = Route(enterTransition, exitTransition, opaque) {
     DialogWrapper(
         dismissible = dismissible,
-        dismissHandler = { onDismiss() }
-    ) {
-        dialog()
-    }
+        onDismiss = onDismiss,
+        dialog = dialog
+    )
 }

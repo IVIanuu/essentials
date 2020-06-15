@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.common.onBackPressed
 @Composable
 fun DialogWrapper(
     dismissible: Boolean = true,
-    dismissHandler: @Composable () -> Unit,
+    onDismiss: @Composable () -> Unit,
     dialog: @Composable () -> Unit
 ) {
     if (!dismissible) {
@@ -47,7 +47,7 @@ fun DialogWrapper(
     if (dismissed) {
         if (!dismissCalled) {
             dismissCalled = true
-            dismissHandler()
+            onDismiss()
         }
     }
 
