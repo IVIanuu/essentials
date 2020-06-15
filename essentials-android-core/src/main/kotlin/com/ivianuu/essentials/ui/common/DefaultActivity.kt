@@ -37,7 +37,7 @@ class DefaultActivity : EsActivity() {
 
     @Composable
     override fun content() {
-        appUi!!.content()
+        appUi!!.invoke()
     }
 
 }

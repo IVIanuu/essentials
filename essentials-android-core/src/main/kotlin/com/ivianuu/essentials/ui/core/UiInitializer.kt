@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
@@ -20,8 +19,7 @@ interface UiInitializer {
 
 @Transient
 class UiInitializers(
-    private val logger: Logger,
-    private val uiInitializers: Map<KClass<out UiInitializer>, @Provider () -> UiInitializer>
+    private val uiInitializers: Map<KClass<out UiInitializer>, @Provider() () -> UiInitializer>
 ) {
 
     @Composable

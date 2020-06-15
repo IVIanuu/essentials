@@ -44,7 +44,7 @@ class SampleUi(
 ) : AppUi {
 
     @Composable
-    override fun content() {
+    override fun invoke() {
         ProvideSystemBarStyle(
             SystemBarStyle(
                 statusBarColor = Color.Black.copy(alpha = 0.2f),

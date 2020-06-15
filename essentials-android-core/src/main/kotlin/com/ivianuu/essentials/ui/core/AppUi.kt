@@ -25,7 +25,7 @@ import com.ivianuu.injekt.composition.BindingEffectFunction
 
 interface AppUi {
     @Composable
-    fun content()
+    operator fun invoke()
 }
 
 @BindingEffect(ActivityComponent::class)
