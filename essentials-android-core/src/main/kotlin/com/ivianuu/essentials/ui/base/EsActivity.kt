@@ -21,9 +21,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.Composition
+import androidx.compose.Providers
 import androidx.compose.Recomposer
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.core.RetainedObjects
+import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.SystemBarManager
 import com.ivianuu.essentials.ui.core.UiInitializers
 import com.ivianuu.essentials.ui.core.WindowInsetsManager
@@ -59,10 +61,12 @@ abstract class EsActivity : AppCompatActivity() {
 
     @Composable
     protected open fun wrappedContent() {
-        windowInsetsManager {
-            SystemBarManager {
-                uiInitializers {
-                    content()
+        Providers(RetainedObjectsAmbient provides retainedObjects) {
+            windowInsetsManager {
+                SystemBarManager {
+                    uiInitializers {
+                        content()
+                    }
                 }
             }
         }
