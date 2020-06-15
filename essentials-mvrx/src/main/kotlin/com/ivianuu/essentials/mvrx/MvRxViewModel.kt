@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,10 +43,16 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state
 
-    protected suspend fun setState(reducer: suspend S.() -> S) {
-        val currentState = _state.value
-        val newState = reducer(currentState)
-        _state.value = newState
+    private val actor = scope.actor<suspend S.() -> S> {
+        for (reducer in this) {
+            val currentState = _state.value
+            val newState = reducer(currentState)
+            _state.value = newState
+        }
+    }
+
+    protected fun setState(reducer: suspend S.() -> S) {
+        actor.offer(reducer)
     }
 
     protected fun <V> Deferred<V>.execute(
