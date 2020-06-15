@@ -15,7 +15,7 @@ import com.ivianuu.essentials.gestures.action.actionFactory
 import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -63,7 +63,8 @@ internal class ShortcutActionFactory(
 
 @Transient
 internal class ShortcutActionPickerDelegate(
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val shortcutPickerPage: ShortcutPickerPage
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.getString(R.string.es_action_shortcut)
@@ -72,9 +73,9 @@ internal class ShortcutActionPickerDelegate(
     }
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
-        val shortcut = navigator.push<Shortcut>(
-            ShortcutPickerRoute()
-        ).await() ?: return null
+        val shortcut = navigator.push<Shortcut> {
+            shortcutPickerPage()
+        }.await() ?: return null
 
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()

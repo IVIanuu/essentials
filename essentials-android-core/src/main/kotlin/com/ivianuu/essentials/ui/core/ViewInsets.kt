@@ -38,86 +38,89 @@ import androidx.ui.core.OwnerAmbient
 import androidx.ui.layout.InnerPadding
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
+import com.ivianuu.injekt.Transient
 import android.view.WindowInsets as AndroidWindowInsets
 
-@Composable
-fun WindowInsetsManager(children: @Composable () -> Unit) {
-    val ownerView = OwnerAmbient.current as View
+@Transient
+class WindowInsetsManager(
+    private val logger: Logger
+) {
+    @Composable
+    operator fun invoke(children: @Composable () -> Unit) {
+        val ownerView = OwnerAmbient.current as View
 
-    val logger = inject<Logger>()
+        val density = DensityAmbient.current
+        val (windowInsets, setWindowInsets) = state { WindowInsets() }
 
-    val density = DensityAmbient.current
-    val (windowInsets, setWindowInsets) = state { WindowInsets() }
+        val insetsListener = remember {
+            View.OnApplyWindowInsetsListener { _, insets ->
+                val statusBarHidden =
+                    ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
+                val navigationBarHidden =
+                    ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
-    val insetsListener = remember {
-        View.OnApplyWindowInsetsListener { _, insets ->
-            val statusBarHidden =
-                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
-            val navigationBarHidden =
-                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                val zeroSides = if (navigationBarHidden) calculateZeroSides(ownerView.context)
+                else ZeroSides.None
 
-            val zeroSides = if (navigationBarHidden) calculateZeroSides(ownerView.context)
-            else ZeroSides.None
+                with(density) {
+                    val viewPadding = InnerPadding(
+                        start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
+                        top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),
+                        end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
+                        bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.ipx.toDp()
+                    )
 
-            with(density) {
-                val viewPadding = InnerPadding(
-                    start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
-                    top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),
-                    end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
-                    bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.ipx.toDp()
-                )
+                    val viewInsets = InnerPadding(
+                        start = 0.dp,
+                        top = 0.dp,
+                        end = 0.dp,
+                        bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
+                            ownerView,
+                            insets
+                        ).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
+                    )
 
-                val viewInsets = InnerPadding(
-                    start = 0.dp,
-                    top = 0.dp,
-                    end = 0.dp,
-                    bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
-                        ownerView,
-                        insets
-                    ).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
-                )
+                    val newWindowInsets = WindowInsets(viewPadding, viewInsets)
 
-                val newWindowInsets = WindowInsets(viewPadding, viewInsets)
+                    if (windowInsets != newWindowInsets) {
+                        logger.d("windows insets changed $newWindowInsets")
+                        setWindowInsets(newWindowInsets)
+                    }
+                }
 
-                if (windowInsets != newWindowInsets) {
-                    logger.d("windows insets changed $newWindowInsets")
-                    setWindowInsets(newWindowInsets)
+                return@OnApplyWindowInsetsListener insets
+            }
+        }
+
+        val attachListener = remember {
+            object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(v: View) {
+                    ownerView.requestApplyInsets()
+                }
+
+                override fun onViewDetachedFromWindow(v: View?) {
                 }
             }
-
-            return@OnApplyWindowInsetsListener insets
         }
-    }
 
-    val attachListener = remember {
-        object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) {
+        onCommit(ownerView) {
+            ownerView.setOnApplyWindowInsetsListener(insetsListener)
+            ownerView.addOnAttachStateChangeListener(attachListener)
+
+            if (ownerView.isAttachedToWindow) {
                 ownerView.requestApplyInsets()
             }
 
-            override fun onViewDetachedFromWindow(v: View?) {
+            onDispose {
+                ownerView.setOnApplyWindowInsetsListener(null)
+                ownerView.removeOnAttachStateChangeListener(attachListener)
             }
         }
+
+        WindowInsetsProvider(value = windowInsets, children = children)
     }
-
-    onCommit(ownerView) {
-        ownerView.setOnApplyWindowInsetsListener(insetsListener)
-        ownerView.addOnAttachStateChangeListener(attachListener)
-
-        if (ownerView.isAttachedToWindow) {
-            ownerView.requestApplyInsets()
-        }
-
-        onDispose {
-            ownerView.setOnApplyWindowInsetsListener(null)
-            ownerView.removeOnAttachStateChangeListener(attachListener)
-        }
-    }
-
-    WindowInsetsProvider(value = windowInsets, children = children)
 }
 
 private fun calculateBottomKeyboardInset(

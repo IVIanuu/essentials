@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.launchAsync
+import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
@@ -50,6 +51,7 @@ class DebugBillingActivity : EsActivity() {
 
     private val client: DebugBillingClient by inject()
     private val navigator: Navigator by inject()
+    private val purchaseDialog: PurchaseDialog by inject()
 
     private lateinit var requestId: String
     private lateinit var skuDetails: SkuDetails
@@ -70,8 +72,38 @@ class DebugBillingActivity : EsActivity() {
                     finish()
                 } else {
                     this.skuDetails = it
-                    if (!navigator.hasRoot)
-                        navigator.setRoot(PurchaseDialogRoute())
+                    if (!navigator.hasRoot) {
+                        navigator.setRoot(
+                            DialogRoute(
+                                onDismiss = {
+                                    lifecycleScope.launch {
+                                        client.onPurchaseResult(
+                                            requestId = requestId,
+                                            responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
+                                            purchases = null
+                                        )
+
+                                        finish()
+                                    }
+                                }
+                            ) {
+                                purchaseDialog(
+                                    onPurchaseClick = {
+                                        lifecycleScope.launch {
+                                            client.onPurchaseResult(
+                                                requestId = requestId,
+                                                responseCode = BillingClient.BillingResponseCode.OK,
+                                                purchases = listOf(skuDetails.toPurchaseData())
+                                            )
+
+                                            finish()
+                                        }
+                                    },
+                                    skuDetails = skuDetails
+                                )
+                            }
+                        )
+                    }
                     navigator()
                 }
             }
@@ -85,65 +117,7 @@ class DebugBillingActivity : EsActivity() {
         return Purchase(json, "debug-signature-$sku-${skuDetails.type}")
     }
 
-    private inner class PurchaseDialogRoute : DialogRoute() {
-
-        @Composable
-        override fun dialog() {
-            Dialog(
-                title = {
-                    Row(verticalGravity = Alignment.CenterVertically) {
-                        Text(text = skuDetails.title)
-
-                        Spacer(Modifier.weight(1f))
-
-                        Text(
-                            text = skuDetails.price,
-                            textStyle = MaterialTheme.typography.subtitle1.copy(
-                                color = GooglePlayGreen
-                            )
-                        )
-                    }
-                },
-                content = { Text(skuDetails.description) },
-                positiveButton = {
-                    DialogButton(
-                        style = ContainedButtonStyle(
-                            backgroundColor = GooglePlayGreen,
-                            contentColor = guessingContentColorFor(GooglePlayGreen)
-                        ),
-                        onClick = {
-                            lifecycleScope.launch {
-                                client.onPurchaseResult(
-                                    requestId = requestId,
-                                    responseCode = BillingClient.BillingResponseCode.OK,
-                                    purchases = listOf(skuDetails.toPurchaseData())
-                                )
-
-                                finish()
-                            }
-                        }
-                    ) { Text(R.string.purchase) }
-                }
-            )
-        }
-
-        @Composable
-        override fun onDismiss() {
-            lifecycleScope.launch {
-                client.onPurchaseResult(
-                    requestId = requestId,
-                    responseCode = BillingClient.BillingResponseCode.USER_CANCELED,
-                    purchases = null
-                )
-
-                finish()
-            }
-        }
-
-    }
-
     internal companion object {
-        private val GooglePlayGreen = Color(0xFF00A273)
 
         private const val KEY_REQUEST_ID = "request_id"
 
@@ -163,3 +137,43 @@ class DebugBillingActivity : EsActivity() {
         }
     }
 }
+
+@Transient
+internal class PurchaseDialog {
+
+    @Composable
+    operator fun invoke(
+        onPurchaseClick: () -> Unit,
+        skuDetails: SkuDetails
+    ) {
+        Dialog(
+            title = {
+                Row(verticalGravity = Alignment.CenterVertically) {
+                    Text(text = skuDetails.title)
+
+                    Spacer(Modifier.weight(1f))
+
+                    Text(
+                        text = skuDetails.price,
+                        textStyle = MaterialTheme.typography.subtitle1.copy(
+                            color = GooglePlayGreen
+                        )
+                    )
+                }
+            },
+            content = { Text(skuDetails.description) },
+            positiveButton = {
+                DialogButton(
+                    style = ContainedButtonStyle(
+                        backgroundColor = GooglePlayGreen,
+                        contentColor = guessingContentColorFor(GooglePlayGreen)
+                    ),
+                    onClick = onPurchaseClick
+                ) { Text(R.string.purchase) }
+            }
+        )
+    }
+
+}
+
+private val GooglePlayGreen = Color(0xFF00A273)

@@ -58,12 +58,25 @@ class Navigator {
         }
     }
 
+    fun setRoot(content: @Composable () -> Unit) {
+        setRoot(Route(content = content))
+    }
+
     fun setRoot(route: Route) {
         setBackStackInternal(listOf(RouteState(route)))
     }
 
+    fun push(content: @Composable () -> Unit) {
+        push<Unit>(Route(content = content))
+    }
+
     fun push(route: Route) {
         push<Unit>(route)
+    }
+
+    @JvmName("pushForResult")
+    fun <T : Any> push(content: @Composable () -> Unit): Deferred<T?> {
+        return push<T>(Route(content = content))
     }
 
     @JvmName("pushForResult")
@@ -75,8 +88,17 @@ class Navigator {
         return routeState.result as Deferred<T?>
     }
 
+    fun replace(content: @Composable () -> Unit) {
+        replace<Unit>(Route(content = content))
+    }
+
     fun replace(route: Route) {
         replace<Unit>(route)
+    }
+
+    @JvmName("replaceForResult")
+    fun <T : Any> replace(content: @Composable () -> Unit): Deferred<T?> {
+        return replace<T>(Route(content = content))
     }
 
     @JvmName("replaceForResult")
@@ -109,10 +131,10 @@ class Navigator {
     }
 
     private fun popInternal(route: RouteState, result: Any? = null) {
+        route.setResult(result)
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
         setBackStackInternal(newBackStack)
-        route.setResult(result)
     }
 
     fun setBackStack(newBackStack: List<Route>) {
@@ -131,7 +153,7 @@ class Navigator {
                 _backStack += newBackStack
                 oldBackStack
                     .filterNot { it in newBackStack }
-                    .forEach { it.dispose() }
+                    .forEach { it.detach() }
             }
         }
     }
@@ -155,17 +177,15 @@ class Navigator {
         private val retainedObjects = RetainedObjects()
 
         private val _result = CompletableDeferred<Any?>()
-        val result: Deferred<Any?> = _result
+        val result: Deferred<Any?> get() = _result
 
-        fun dispose() {
-            setResult(null)
+        fun detach() {
+            if (!_result.isCompleted) setResult(null)
             retainedObjects.dispose()
         }
 
         fun setResult(result: Any?) {
-            if (!_result.isCompleted) {
-                _result.complete(result)
-            }
+            _result.complete(result)
         }
 
     }

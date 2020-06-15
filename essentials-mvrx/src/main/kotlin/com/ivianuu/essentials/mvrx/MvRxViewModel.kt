@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.mvrx
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -34,6 +36,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+
+@Composable
+val <S> MvRxViewModel<S>.currentState: S
+    get() = state.collectAsState().value
 
 /**
  * State view model

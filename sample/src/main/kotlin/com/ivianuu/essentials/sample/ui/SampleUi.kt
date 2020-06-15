@@ -23,6 +23,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
+import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
@@ -31,12 +32,16 @@ import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
 import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.core.UiInitializer
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Transient
 
 @BindAppUi
 @Transient
-class SampleUi(private val navigator: Navigator) : AppUi {
+class SampleUi(
+    private val homePage: HomePage,
+    private val navigator: Navigator
+) : AppUi {
 
     @Composable
     override fun content() {
@@ -48,7 +53,9 @@ class SampleUi(private val navigator: Navigator) : AppUi {
                 lightNavigationBar = MaterialTheme.colors.onSurface.isDark
             )
         ) {
-            if (!navigator.hasRoot) navigator.setRoot(HomeRoute)
+            if (!navigator.hasRoot) {
+                navigator.setRoot(Route(transition = NoOpStackTransition) { homePage() })
+            }
             navigator()
         }
     }
@@ -56,13 +63,15 @@ class SampleUi(private val navigator: Navigator) : AppUi {
 
 @BindUiInitializer
 @Transient
-class SampleUiInitializer : UiInitializer {
+class SampleUiInitializer(
+    private val twilightTheme: TwilightTheme
+) : UiInitializer {
     @Composable
     override fun apply(children: @Composable () -> Unit) {
         Providers(
             DefaultStackTransitionAmbient provides remember { VerticalFadeStackTransition() }
         ) {
-            TwilightTheme(children = children)
+            twilightTheme(children = children)
         }
     }
 }

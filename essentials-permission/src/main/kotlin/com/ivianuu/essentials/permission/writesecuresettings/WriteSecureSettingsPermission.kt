@@ -13,7 +13,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
-import com.ivianuu.essentials.securesettings.SecureSettingsRoute
+import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Transient
 
@@ -44,7 +44,8 @@ internal class WriteSecureSettingsPermissionStateProvider(
 @BindPermissionRequestHandler
 @Transient
 internal class WriteSecureSettingsPermissionRequestHandler(
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val secureSettingsPage: SecureSettingsPage
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Metadata.IsWriteSecureSettingsPermission in permission.metadata
@@ -54,6 +55,6 @@ internal class WriteSecureSettingsPermissionRequestHandler(
         manager: PermissionManager,
         permission: Permission
     ): PermissionResult {
-        return PermissionResult(navigator.push<Boolean>(SecureSettingsRoute()).await() ?: false)
+        return PermissionResult(navigator.push<Boolean> { secureSettingsPage() }.await() ?: false)
     }
 }

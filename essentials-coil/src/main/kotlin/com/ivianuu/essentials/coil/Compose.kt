@@ -24,13 +24,12 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Box
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
-import coil.ImageLoader
+import coil.Coil
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.common.RenderAsync
 import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.util.launchAsync
 
 @Composable
@@ -39,16 +38,15 @@ fun CoilImage(
     modifier: Modifier = Modifier,
     builderBlock: (GetRequestBuilder.() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
-    error: @Composable (() -> Unit)? = null,
-    imageLoader: ImageLoader = inject()
+    error: @Composable (() -> Unit)? = null
 ) {
     WithConstraints(modifier = modifier) {
         val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
 
         val context = ContextAmbient.current
-        val state = launchAsync(data, builderBlock, imageLoader, width, height) {
-            imageLoader.execute(
+        val state = launchAsync(data, builderBlock, width, height) {
+            Coil.imageLoader(context).execute(
                 GetRequest.Builder(context)
                     .apply {
                         data(data)

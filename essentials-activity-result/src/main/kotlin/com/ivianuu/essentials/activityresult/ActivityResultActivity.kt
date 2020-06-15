@@ -28,7 +28,7 @@ import com.ivianuu.injekt.inject
 @AndroidEntryPoint
 class ActivityResultActivity : EsActivity() {
 
-    private val activityResultController: ActivityResultController by inject()
+    private val activityResultManager: ActivityResultManager by inject()
 
     private var isValid = true
     private var hasResult = false
@@ -56,11 +56,13 @@ class ActivityResultActivity : EsActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         hasResult = true
 
-        activityResultController.onActivityResult(ActivityResult(
-            requestCode = requestCode,
-            resultCode = resultCode,
-            data = data
-        ))
+        activityResultManager.onActivityResult(
+            ActivityResult(
+                requestCode = requestCode,
+                resultCode = resultCode,
+                data = data
+            )
+        )
 
         finish()
     }
@@ -68,7 +70,7 @@ class ActivityResultActivity : EsActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (isValid && !hasResult) {
-            activityResultController.onActivityResult(
+            activityResultManager.onActivityResult(
                 ActivityResult(
                     requestCode = requestCode,
                     resultCode = Activity.RESULT_CANCELED,

@@ -37,12 +37,12 @@ import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
 @BindPermissionRequestUi
 @Transient
 internal class DialogPermissionRequestUi(
-    private val dialogRouteFactory: @Provider (PermissionRequest) -> PermissionDialogRoute,
+    private val dialog: PermissionDialog,
     private val navigator: Navigator
 ) : PermissionRequestUi {
 
@@ -61,25 +61,28 @@ internal class DialogPermissionRequestUi(
         manager: PermissionManager,
         request: PermissionRequest
     ) {
-        navigator.push(dialogRouteFactory(request))
+        navigator.push(
+            DialogRoute(onDismiss = { compositionActivity.finish() }) {
+                dialog(request)
+            }
+        )
     }
 }
 
 @Transient
-internal class PermissionDialogRoute(
-    private val request: @Assisted PermissionRequest,
+internal class PermissionDialog(
     private val viewModelFactory: @Provider (PermissionRequest) -> PermissionDialogViewModel
-) : DialogRoute() {
+) {
 
     @Composable
-    override fun dialog() {
+    operator fun invoke(request: PermissionRequest) {
         Dialog(
             title = { Text("Required Permissions") }, // todo customizable
             content = {
                 VerticalScroller(
                     scrollerPosition = RetainedScrollerPosition()
                 ) {
-                    val viewModel = viewModel { viewModelFactory(request) }
+                    val viewModel = rememberRetained { viewModelFactory(request) }
                     val activity = compositionActivity as PermissionActivity
                     viewModel.permissionsToProcess.forEach { permission ->
                         Permission(
@@ -97,11 +100,6 @@ internal class PermissionDialogRoute(
                 }
             }
         )
-    }
-
-    @Composable
-    override fun onDismiss() {
-        compositionActivity.finish()
     }
 
     @Composable

@@ -20,8 +20,10 @@ import androidx.ui.unit.width
 import androidx.ui.util.lerp
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.MetaProp
+import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatable.animationOverlay
+import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
 
@@ -163,3 +165,16 @@ data class SharedElementProps(
     val scaleX: Float,
     val scaleY: Float
 )
+
+@Composable
+fun SharedElement(
+    tag: Any,
+    modifier: Modifier = Modifier,
+    children: @Composable () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .animatable(tag, SharedElementComposable withValue children) + modifier,
+        children = children
+    )
+}

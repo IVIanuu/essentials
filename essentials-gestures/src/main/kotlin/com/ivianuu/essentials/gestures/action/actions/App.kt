@@ -8,7 +8,7 @@ import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppPickerRoute
+import com.ivianuu.essentials.apps.ui.AppPickerPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -81,6 +81,7 @@ internal class AppActionFactory(
 
 @Transient
 internal class AppActionPickerDelegate(
+    private val appPickerPage: AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
@@ -90,9 +91,9 @@ internal class AppActionPickerDelegate(
         get() = { Icon(Icons.Default.Apps) }
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
-        val app = navigator.push<AppInfo>(
-            AppPickerRoute(appFilter = launchableAppFilter)
-        ).await() ?: return null
+        val app = navigator.push<AppInfo> {
+            appPickerPage(appFilter = launchableAppFilter)
+        }.await() ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

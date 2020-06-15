@@ -21,32 +21,37 @@ import android.content.ClipboardManager
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Transient
 
-@Composable
-fun ClipboardListItem(
-    clipboardText: () -> String,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+@Transient
+class ClipboardListItem(
+    private val clipboardManager: ClipboardManager,
+    private val toaster: Toaster
 ) {
-    val clipboardManager = inject<ClipboardManager>()
-    val toaster = inject<Toaster>()
-    ListItem(
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        trailing = trailing,
-        onClick = {
-            clipboardManager.setPrimaryClip(
-                ClipData.newPlainText("", clipboardText())
-            )
-            toaster.toast(R.string.es_copied_to_clipboard)
-        }
-    )
+    @Composable
+    operator fun invoke(
+        clipboardText: () -> String,
+        title: @Composable (() -> Unit)? = null,
+        subtitle: @Composable (() -> Unit)? = null,
+        leading: @Composable (() -> Unit)? = null,
+        trailing: @Composable (() -> Unit)? = null,
+        modifier: Modifier = Modifier
+    ) {
+        ListItem(
+            modifier = modifier,
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            trailing = trailing,
+            onClick = {
+                clipboardManager.setPrimaryClip(
+                    ClipData.newPlainText("", clipboardText())
+                )
+                toaster.toast(R.string.es_copied_to_clipboard)
+            }
+        )
+    }
+
 }

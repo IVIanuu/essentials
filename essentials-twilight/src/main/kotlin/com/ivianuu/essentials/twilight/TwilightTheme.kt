@@ -30,50 +30,54 @@ import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.core.EsTheme
 import com.ivianuu.essentials.ui.coroutines.collectAsState
-import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
+import com.ivianuu.injekt.Transient
 
-@Composable
-fun TwilightTheme(
-    lightColors: ColorPalette = lightColorPalette(),
-    darkColors: ColorPalette = darkColorPalette(),
-    blackColors: ColorPalette = darkColors.copy(
-        background = Color.Black,
-        surface = Color.Black
-    ),
-    typography: Typography = Typography(),
-    children: @Composable () -> Unit
-) {
-    val helper = inject<TwilightHelper>()
-    val twilightState = helper.state.collectAsState(helper.currentState).value
+@Transient
+class TwilightTheme(private val helper: TwilightHelper) {
 
-    fun colorsForTwilightState() = if (twilightState.isDark) {
-        if (twilightState.useBlack) blackColors else darkColors
-    } else lightColors
+    @Composable
+    operator fun invoke(
+        lightColors: ColorPalette = lightColorPalette(),
+        darkColors: ColorPalette = darkColorPalette(),
+        blackColors: ColorPalette = darkColors.copy(
+            background = Color.Black,
+            surface = Color.Black
+        ),
+        typography: Typography = Typography(),
+        children: @Composable () -> Unit
+    ) {
+        val twilightState = helper.state.collectAsState(helper.currentState).value
 
-    val lastColors = untrackedState { colorsForTwilightState() }
-    val targetColors = colorsForTwilightState()
+        fun colorsForTwilightState() = if (twilightState.isDark) {
+            if (twilightState.useBlack) blackColors else darkColors
+        } else lightColors
 
-    val animation = key(twilightState) { animatedFloat(0f) }
-    onCommit(animation) {
-        animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
-            duration = 150
-        })
-    }
+        val lastColors = untrackedState { colorsForTwilightState() }
+        val targetColors = colorsForTwilightState()
 
-    val currentColors = remember(animation.value) {
-        lerp(
-            lastColors.value,
-            targetColors,
-            animation.value
+        val animation = key(twilightState) { animatedFloat(0f) }
+        onCommit(animation) {
+            animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
+                duration = 150
+            })
+        }
+
+        val currentColors = remember(animation.value) {
+            lerp(
+                lastColors.value,
+                targetColors,
+                animation.value
+            )
+        }
+        lastColors.value = currentColors
+
+        EsTheme(
+            colors = currentColors,
+            typography = typography,
+            children = children
         )
     }
-    lastColors.value = currentColors
 
-    EsTheme(
-        colors = currentColors,
-        typography = typography,
-        children = children
-    )
 }

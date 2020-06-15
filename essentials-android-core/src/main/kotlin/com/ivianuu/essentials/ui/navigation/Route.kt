@@ -22,48 +22,31 @@ import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 @Immutable
-abstract class Route(
+class Route(
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,
-    val opaque: Boolean = false
+    val opaque: Boolean = false,
+    private val content: @Composable () -> Unit
 ) {
 
     constructor(
         transition: StackTransition? = null,
-        opaque: Boolean = false
-    ) : this(transition, transition, opaque)
+        opaque: Boolean = false,
+        content: @Composable () -> Unit
+    ) : this(transition, transition, opaque, content)
 
     @Composable
-    abstract operator fun invoke()
-
-}
-
-fun Route(
-    transition: StackTransition? = null,
-    opaque: Boolean = false,
-    content: @Composable () -> Unit
-) = Route(transition, transition, opaque, content)
-
-fun Route(
-    enterTransition: StackTransition? = null,
-    exitTransition: StackTransition? = null,
-    opaque: Boolean = false,
-    content: @Composable () -> Unit
-): Route = object : Route(enterTransition, exitTransition, opaque) {
-    @Composable
-    override fun invoke() {
+    operator fun invoke() {
         content()
     }
+
+    fun copy(
+        enterTransition: StackTransition? = this.enterTransition,
+        exitTransition: StackTransition? = this.exitTransition,
+        opaque: Boolean = this.opaque,
+        content: @Composable () -> Unit = this.content
+    ): Route = Route(enterTransition, exitTransition, opaque, content)
+
 }
 
 val RouteAmbient = staticAmbientOf<Route>()
-
-fun Route.copy(
-    opaque: Boolean = this.opaque,
-    enterTransition: StackTransition? = this.enterTransition,
-    exitTransition: StackTransition? = this.exitTransition
-): Route = object : Route(enterTransition, exitTransition, opaque) {
-    override fun invoke() {
-        this@copy.invoke()
-    }
-}
