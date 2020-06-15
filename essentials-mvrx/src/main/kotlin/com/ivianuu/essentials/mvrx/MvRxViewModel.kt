@@ -58,7 +58,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = scope.coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ): Job = scope.execute(
         context = context,
         start = start,
@@ -66,7 +66,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         reducer = reducer
     )
 
-    protected suspend fun <V> Flow<V>.execute(reducer: S.(Async<V>) -> S) {
+    protected suspend fun <V> Flow<V>.execute(reducer: suspend S.(Async<V>) -> S) {
         setState { reducer(Loading()) }
         return this
             .map { Success(it) }
@@ -74,7 +74,10 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
             .collect { setState { reducer(it) } }
     }
 
-    protected fun <V> Flow<V>.executeIn(scope: CoroutineScope, reducer: S.(Async<V>) -> S): Job {
+    protected fun <V> Flow<V>.executeIn(
+        scope: CoroutineScope,
+        reducer: suspend S.(Async<V>) -> S
+    ): Job {
         return scope.launch {
             setState { reducer(Loading()) }
             this@executeIn
@@ -88,7 +91,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
         context: CoroutineContext = coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ): Job = launch(context, start) {
         setState { reducer(Loading()) }
         try {
