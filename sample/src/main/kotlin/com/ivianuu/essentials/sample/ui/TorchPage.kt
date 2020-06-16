@@ -19,17 +19,17 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.preferredHeight
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.common.launchOnClick
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
@@ -51,7 +51,7 @@ class TorchPage(
                 ) {
                     Text(
                         "Torch is ${if (torchState.value) "enabled" else "disabled"}",
-                        textStyle = MaterialTheme.typography.h4
+                        style = MaterialTheme.typography.h4
                     )
                     Spacer(Modifier.preferredHeight(8.dp))
                     Button(

@@ -18,15 +18,12 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.AppBarStyleAmbient
-import com.ivianuu.essentials.ui.material.PrimaryAppBarStyle
 import com.ivianuu.essentials.ui.material.ProvideTabController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
@@ -53,8 +50,7 @@ class TabsPage {
                         Column {
                             TopAppBar(
                                 title = { Text("Tabs") },
-                                style = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() }
-                                    .copy(elevation = 0.dp)
+                                elevation = 0.dp
                             )
                             TabRow<Color> { index, item ->
                                 Tab(text = { Text("Item: $index") })

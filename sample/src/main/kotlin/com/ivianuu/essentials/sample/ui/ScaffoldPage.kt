@@ -30,19 +30,19 @@ import androidx.ui.core.TransformOrigin
 import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.layout.padding
+import androidx.ui.material.Checkbox
+import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.material.Checkbox
-import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.ScaffoldState
@@ -71,7 +71,7 @@ class ScaffoldPage(
                 FabAnimation(
                     visible = controls.showFab
                 ) {
-                    FloatingActionButton(text = { Text("Click me") }, onClick = {})
+                    ExtendedFloatingActionButton(text = { Text("Click me") }, onClick = {})
                 }
             },
             bottomBar = if (controls.showBottomBar) ({
@@ -90,7 +90,7 @@ class ScaffoldPage(
                         ) {
                             Text(
                                 text = "Bottom bar",
-                                textStyle = MaterialTheme.typography.h6
+                                style = MaterialTheme.typography.h6
                             )
                         }
                     }

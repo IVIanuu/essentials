@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
@@ -40,24 +38,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.RippleThemeAmbient
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.currentOrElse
-
-@Immutable
-data class ListItemStyle(
-    val contentPadding: InnerPadding,
-    val modifier: Modifier = Modifier
-)
-
-@Composable
-fun DefaultListItemStyle(
-    contentPadding: InnerPadding = ContentPadding,
-    modifier: Modifier = Modifier
-) = ListItemStyle(
-    contentPadding = contentPadding,
-    modifier = modifier
-)
-
-val ListItemStyleAmbient = staticAmbientOf<ListItemStyle>()
 
 @Composable
 fun ListItem(
@@ -69,8 +49,7 @@ fun ListItem(
     enabled: Boolean = true,
     selected: Boolean = false,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null,
-    style: ListItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() }
+    onLongClick: (() -> Unit)? = null
 ) {
     val minHeight = if (subtitle != null) {
         if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
@@ -84,7 +63,6 @@ fun ListItem(
             .fillMaxWidth()
             .drawBackground(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
             .clickable(enabled = enabled, onClick = onClick ?: {}, onLongClick = onLongClick)
-            .plus(style.modifier)
             .plus(modifier),
         gravity = Alignment.CenterStart
     ) {
@@ -97,9 +75,9 @@ fun ListItem(
                     gravity = ContentGravity.CenterStart
                 ) {
                     Box(
-                        paddingStart = style.contentPadding.start,
-                        paddingTop = style.contentPadding.top,
-                        paddingBottom = style.contentPadding.bottom,
+                        paddingStart = 16.dp,
+                        paddingTop = 8.dp,
+                        paddingBottom = 8.dp,
                         gravity = ContentGravity.Center
                     ) {
                         ProvideEmphasis(
@@ -120,8 +98,8 @@ fun ListItem(
                 Column(
                     modifier = Modifier
                         .padding(
-                            top = style.contentPadding.top,
-                            bottom = style.contentPadding.bottom
+                            top = 8.dp,
+                            bottom = 8.dp
                         ),
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -152,9 +130,9 @@ fun ListItem(
                     gravity = ContentGravity.CenterEnd
                 ) {
                     Box(
-                        paddingTop = style.contentPadding.top,
-                        paddingEnd = style.contentPadding.end,
-                        paddingBottom = style.contentPadding.bottom,
+                        paddingTop = 8.dp,
+                        paddingEnd = 16.dp,
+                        paddingBottom = 8.dp,
                         gravity = ContentGravity.Center
                     ) {
                         ProvideEmphasis(

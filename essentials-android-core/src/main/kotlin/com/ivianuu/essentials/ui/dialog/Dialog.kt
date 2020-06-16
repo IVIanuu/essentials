@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import androidx.compose.Providers
 import androidx.ui.core.Alignment
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
@@ -40,9 +39,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
-import com.ivianuu.essentials.ui.material.ButtonStyleAmbient
 import com.ivianuu.essentials.ui.material.HorizontalDivider
-import com.ivianuu.essentials.ui.material.TextButtonStyle
 
 @Composable
 fun Dialog(
@@ -145,14 +142,12 @@ private fun DialogBody(
 
     val buttons: @Composable (() -> Unit)? = if (positiveButton != null || negativeButton != null || neutralButton != null) {
         {
-            Providers(ButtonStyleAmbient provides TextButtonStyle()) {
-                DialogButtons(
-                    layout = buttonLayout,
-                    positiveButton = positiveButton,
-                    negativeButton = negativeButton,
-                    neutralButton = neutralButton
-                )
-            }
+            DialogButtons(
+                layout = buttonLayout,
+                positiveButton = positiveButton,
+                negativeButton = negativeButton,
+                neutralButton = neutralButton
+            )
         }
     } else {
         null

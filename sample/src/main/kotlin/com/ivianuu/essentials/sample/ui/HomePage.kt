@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.twilight.TwilightSettingsPage
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.common.AdapterList
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -88,11 +88,10 @@ class HomePage(
                                 "Option 1",
                                 "Option 2",
                                 "Option 3"
-                            ).map {
-                                PopupMenu.Item(
-                                    title = it,
-                                    onSelected = { toaster.toast("Selected $it") }
-                                )
+                            ).map { title ->
+                                PopupMenu.Item(onSelected = { toaster.toast("Selected $title") }) {
+                                    Text(title)
+                                }
                             }
                         )
                     }
@@ -182,11 +181,10 @@ private fun HomeItem(
         trailing = {
             PopupMenuButton(
                 items = listOf(1, 2, 3)
-                    .map {
-                        PopupMenu.Item(
-                            onSelected = {},
-                            title = it.toString()
-                        )
+                    .map { index ->
+                        PopupMenu.Item(onSelected = {}) {
+                            Text(index.toString())
+                        }
                     }
             )
         },

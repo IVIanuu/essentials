@@ -20,15 +20,15 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.height
+import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
@@ -49,19 +49,19 @@ class CounterPage {
 
                     Text(
                         text = "Count: $count",
-                        textStyle = MaterialTheme.typography.h3
+                        style = MaterialTheme.typography.h3
                     )
 
                     Spacer(Modifier.height(8.dp))
 
-                    FloatingActionButton(
+                    ExtendedFloatingActionButton(
                         text = { Text("Inc") },
                         onClick = { setCount(count + 1) }
                     )
 
                     Spacer(Modifier.height(8.dp))
 
-                    FloatingActionButton(
+                    ExtendedFloatingActionButton(
                         text = { Text("dec") },
                         onClick = { setCount(count - 1) }
                     )

@@ -21,9 +21,9 @@ import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 

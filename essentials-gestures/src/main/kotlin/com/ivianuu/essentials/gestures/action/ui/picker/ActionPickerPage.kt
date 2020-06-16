@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Text
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.common.RenderAsyncList

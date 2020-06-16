@@ -30,6 +30,7 @@ import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.ProvideTextStyle
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.contentColor
@@ -46,6 +47,8 @@ import androidx.ui.layout.preferredWidthIn
 import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Slider
+import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.Check
@@ -56,17 +59,12 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.DefaultSliderStyle
-import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.Surface
-import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.toColor
@@ -87,9 +85,7 @@ fun ColorPickerRoute(
         onCancel = { navigator.popTop() },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
-        title = {
-            Text(title ?: stringResource(R.string.es_color_picker_title))
-        }
+        title = { Text(title ?: stringResource(R.string.es_color_picker_title)) }
     )
 }
 
@@ -122,23 +118,23 @@ fun ColorPickerDialog(
         title = title,
         applyContentPadding = false,
         positiveButton = {
-            Button(
+            TextButton(
                 onClick = { onColorSelected(currentColor) },
-                style = TextButtonStyle(contentColor = currentColor)
+                contentColor = currentColor
             ) {
                 Text("OK")
             }
         },
         negativeButton = {
-            Button(onClick = onCancel) { Text("Cancel") }
+            TextButton(onClick = onCancel) { Text("Cancel") }
         },
         neutralButton = {
             if (allowCustomArgb) {
-                Button(
+                TextButton(
                     onClick = {
                         setCurrentPage(otherPage)
                     },
-                    style = TextButtonStyle(contentColor = currentColor)
+                    contentColor = currentColor
                 ) {
                     Text(otherPage.title)
                 }
@@ -384,13 +380,13 @@ private fun ColorComponentItem(
     ) {
         Text(
             text = component.title,
-            textStyle = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.subtitle1
         )
 
         Slider(
             value = value,
             onValueChange = onValueChanged,
-            style = DefaultSliderStyle(color = component.color()),
+            color = component.color(),
             modifier = Modifier.padding(horizontal = 8.dp)
                 .weight(1f)
         )
@@ -398,7 +394,7 @@ private fun ColorComponentItem(
         Text(
             text = (255 * value).toInt().toString(),
             modifier = Modifier.preferredWidthIn(minWidth = 56.dp),
-            textStyle = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.subtitle1
         )
     }
 }

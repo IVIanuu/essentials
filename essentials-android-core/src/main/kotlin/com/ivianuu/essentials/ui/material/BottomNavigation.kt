@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.emptyContent
 import androidx.compose.getValue
@@ -26,86 +25,21 @@ import androidx.compose.mutableStateOf
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.layout.RowScope
 import androidx.ui.material.BottomNavigation
 import androidx.ui.material.BottomNavigationItem
+import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.contentColorFor
+import androidx.ui.material.primarySurface
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.rememberRetained
-
-@Immutable
-data class BottomNavigationStyle(
-    val backgroundColor: Color,
-    val activeColor: Color,
-    val inactiveColor: Color,
-    val alwaysShowLabels: Boolean,
-    val elevation: Dp,
-    val modifier: Modifier = Modifier
-)
-
-val BottomNavigationStyleAmbient = staticAmbientOf<BottomNavigationStyle>()
-
-@Composable
-fun DefaultBottomNavigationStyle(
-    color: Color = MaterialTheme.colors.primary,
-    activeColor: Color = MaterialTheme.colors.onPrimary,
-    inactiveColor: Color = MaterialTheme.colors.onPrimary.copy(alpha = 0.6f),
-    alwaysShowLabels: Boolean = false,
-    elevation: Dp = 8.dp,
-    modifier: Modifier = Modifier
-) = BottomNavigationStyle(
-    backgroundColor = color,
-    activeColor = activeColor,
-    inactiveColor = inactiveColor,
-    alwaysShowLabels = alwaysShowLabels,
-    elevation = elevation,
-    modifier = modifier
-)
-
-@Composable
-fun BottomNavigation(
-    modifier: Modifier = Modifier,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
-    children: @Composable RowScope.() -> Unit
-) {
-    BottomNavigation(
-        modifier = style.modifier + modifier,
-        backgroundColor = style.backgroundColor,
-        contentColor = style.activeColor,
-        elevation = style.elevation
-    ) {
-        Providers(BottomNavigationStyleAmbient provides style) {
-            children()
-        }
-    }
-}
-
-@Composable
-fun RowScope.BottomNavigationItem(
-    icon: @Composable () -> Unit,
-    text: @Composable () -> Unit = emptyContent(),
-    selected: Boolean,
-    onSelected: () -> Unit,
-    modifier: Modifier = Modifier,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() }
-) {
-    BottomNavigationItem(
-        icon = icon,
-        text = text,
-        selected = selected,
-        onSelected = onSelected,
-        modifier = modifier,
-        alwaysShowLabels = style.alwaysShowLabels,
-        activeColor = style.activeColor,
-        inactiveColor = style.inactiveColor
-    )
-}
 
 class BottomNavigationController<T>(
     items: List<T>,
@@ -154,12 +88,16 @@ fun <T> ambientBottomNavigationItem(): T = BottomNavigationItemAmbient.current a
 fun <T> BottomNavigation(
     controller: BottomNavigationController<T> = ambientBottomNavigationController(),
     modifier: Modifier = Modifier,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() },
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = 8.dp,
     item: @Composable RowScope.(T) -> Unit
 ) {
     BottomNavigation(
         modifier = modifier,
-        style = style
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation
     ) {
         controller.items.forEach { item ->
             key(item) {
@@ -176,7 +114,9 @@ fun RowScope.BottomNavigationItem(
     icon: @Composable () -> Unit,
     text: @Composable () -> Unit = emptyContent(),
     modifier: Modifier = Modifier,
-    style: BottomNavigationStyle = BottomNavigationStyleAmbient.currentOrElse { DefaultBottomNavigationStyle() }
+    alwaysShowLabels: Boolean = true,
+    activeColor: Color = contentColor(),
+    inactiveColor: Color = EmphasisAmbient.current.medium.applyEmphasis(activeColor)
 ) {
     val controller = ambientBottomNavigationController<Any?>()
     val item = ambientBottomNavigationItem<Any?>()
@@ -184,7 +124,9 @@ fun RowScope.BottomNavigationItem(
         icon = icon,
         text = text,
         modifier = modifier,
-        style = style,
+        alwaysShowLabels = alwaysShowLabels,
+        activeColor = activeColor,
+        inactiveColor = inactiveColor,
         selected = controller.selectedItem == item,
         onSelected = { controller.selectedItem = item }
     )

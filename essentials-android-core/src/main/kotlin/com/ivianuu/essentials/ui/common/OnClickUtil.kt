@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.common
 
-import android.content.Intent
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
@@ -31,17 +29,6 @@ fun navigateOnClick(route: () -> Route): () -> Unit {
     val navigator = NavigatorAmbient.current
     return remember(navigator, route) {
         { navigator.push(route()) }
-    }
-}
-
-@Composable
-fun openUrlOnClick(url: () -> String): () -> Unit {
-    val activity = compositionActivity
-    return remember(activity, url) {
-        {
-            val intent = Intent(Intent.ACTION_VIEW).apply { this.data = url().toUri() }
-            activity.startActivity(intent)
-        }
     }
 }
 

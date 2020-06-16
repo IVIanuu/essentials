@@ -22,6 +22,7 @@ import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
+import androidx.ui.foundation.Text
 import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
 import androidx.ui.material.Button
@@ -91,7 +92,7 @@ fun TextInputDialog(
                 if (value.isEmpty() && hint != null) {
                     Text(
                         text = hint,
-                        textStyle = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.drawOpacity(0.5f)
                     )
                 }

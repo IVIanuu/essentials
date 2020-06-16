@@ -17,10 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.Providers
 import androidx.compose.remember
-import androidx.compose.staticAmbientOf
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.ProvideTextStyle
@@ -32,73 +29,25 @@ import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.contentColorFor
+import androidx.ui.material.primarySurface
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.common.DrawerButton
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
 import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
-import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.isLight
 
-@Immutable
-data class AppBarStyle(
-    val backgroundColor: Color,
-    val contentColor: Color,
-    val elevation: Dp,
-    val modifier: Modifier = Modifier
-)
-
-@Composable
-fun DefaultAppBarStyle(
-    backgroundColor: Color,
-    contentColor: Color = guessingContentColorFor(backgroundColor),
-    elevation: Dp = DefaultAppBarElevation,
-    modifier: Modifier = Modifier
-) = AppBarStyle(
-    backgroundColor = backgroundColor,
-    contentColor = contentColor,
-    elevation = elevation,
-    modifier = modifier
-)
-
-@Composable
-fun PrimaryAppBarStyle(
-    elevation: Dp = DefaultAppBarElevation,
-    modifier: Modifier = Modifier
-) = with(MaterialTheme.colors) {
-    DefaultAppBarStyle(
-        backgroundColor = primary,
-        contentColor = onPrimary,
-        elevation = elevation,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun SurfaceAppBarStyle(
-    elevation: Dp = 0.dp,
-    modifier: Modifier = Modifier
-) = with(MaterialTheme.colors) {
-    DefaultAppBarStyle(
-        backgroundColor = surface,
-        contentColor = onSurface,
-        elevation = elevation,
-        modifier = modifier
-    )
-}
-
-val AppBarStyleAmbient = staticAmbientOf<AppBarStyle>()
-
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    style: AppBarStyle = AppBarStyleAmbient.currentOrElse { PrimaryAppBarStyle() },
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = DefaultAppBarElevation,
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
@@ -106,12 +55,13 @@ fun TopAppBar(
 ) {
     ProvideSystemBarStyle(
         value = ambientSystemBarStyle().let {
-            if (primary) it.copy(lightStatusBar = style.backgroundColor.isLight) else it
+            if (primary) it.copy(lightStatusBar = backgroundColor.isLight) else it
         }
     ) {
         Surface(
-            color = style.backgroundColor,
-            elevation = style.elevation
+            color = backgroundColor,
+            contentColor = contentColor,
+            elevation = elevation
         ) {
             SafeArea(
                 top = primary,
@@ -123,7 +73,6 @@ fun TopAppBar(
                     modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp)
-                        .plus(style.modifier)
                         .plus(modifier),
                     verticalGravity = Alignment.CenterVertically
                 ) {
@@ -137,16 +86,10 @@ fun TopAppBar(
                                 .weight(1f),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Providers(
-                                TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                                    maxLines = 1
-                                )
-                            ) {
-                                ProvideTextStyle(
-                                    MaterialTheme.typography.h6,
-                                    children = title
-                                )
-                            }
+                            ProvideTextStyle(
+                                MaterialTheme.typography.h6,
+                                children = title
+                            )
                         }
                     }
 
@@ -165,7 +108,7 @@ fun TopAppBar(
 }
 
 private val DefaultAppBarHeight = 56.dp
-private val DefaultAppBarElevation = 8.dp
+private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {

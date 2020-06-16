@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.fillMaxSize
@@ -28,7 +29,6 @@ import androidx.ui.material.icons.filled.Home
 import androidx.ui.material.icons.filled.Search
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.BottomNavigation
 import com.ivianuu.essentials.ui.material.BottomNavigationContent

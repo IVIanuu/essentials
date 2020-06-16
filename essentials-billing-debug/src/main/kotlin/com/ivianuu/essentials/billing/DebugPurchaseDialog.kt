@@ -19,16 +19,16 @@ package com.ivianuu.essentials.billing
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.billing.debug.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.ContainedButtonStyle
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
 @Composable
@@ -45,7 +45,7 @@ internal fun DebugPurchaseDialog(
 
                 Text(
                     text = skuDetails.price,
-                    textStyle = MaterialTheme.typography.subtitle1.copy(
+                    style = MaterialTheme.typography.subtitle1.copy(
                         color = GooglePlayGreen
                     )
                 )
@@ -54,10 +54,8 @@ internal fun DebugPurchaseDialog(
         content = { Text(skuDetails.description) },
         positiveButton = {
             Button(
-                style = ContainedButtonStyle(
-                    backgroundColor = GooglePlayGreen,
-                    contentColor = guessingContentColorFor(GooglePlayGreen)
-                ),
+                backgroundColor = GooglePlayGreen,
+                contentColor = guessingContentColorFor(GooglePlayGreen),
                 onClick = onPurchaseClick
             ) { Text(R.string.purchase) }
         }

@@ -26,16 +26,16 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
+import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.common.AdapterList
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.FloatingActionButton
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -70,7 +70,7 @@ class TextInputPage {
                                 if (state.inputValue.text.isEmpty()) {
                                     Text(
                                         text = "Search..",
-                                        textStyle = MaterialTheme.typography.subtitle1,
+                                        style = MaterialTheme.typography.subtitle1,
                                         modifier = Modifier.drawOpacity(0.5f)
                                             .gravity(Alignment.CenterStart) + focusModifier
                                     )
@@ -119,7 +119,7 @@ class TextInputPage {
             },
             fab = {
                 if (!state.searchVisible) {
-                    FloatingActionButton(
+                    ExtendedFloatingActionButton(
                         text = { Text("Search") },
                         onClick = { state.searchVisible = true }
                     )

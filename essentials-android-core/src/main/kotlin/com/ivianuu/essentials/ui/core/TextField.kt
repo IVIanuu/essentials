@@ -5,6 +5,7 @@ import androidx.compose.getValue
 import androidx.compose.setValue
 import androidx.compose.state
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.currentTextStyle
@@ -44,7 +45,7 @@ fun TextField(
         textFieldValue = TextFieldValue(text = value, selection = newSelection)
     }
 
-    androidx.ui.foundation.TextField(
+    TextField(
         value = textFieldValue,
         onValueChange = {
             val previousValue = textFieldValue.text

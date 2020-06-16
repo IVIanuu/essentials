@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -31,9 +31,7 @@ fun <T> RenderAsyncList(
     state: Async<List<T>>,
     fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
-        CircularProgressIndicator(
-            modifier = Modifier.center()
-        )
+        CircularProgressIndicator(modifier = Modifier.center())
     },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},

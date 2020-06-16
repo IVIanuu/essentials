@@ -27,7 +27,6 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.height
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
@@ -37,14 +36,7 @@ object PopupMenu {
     data class Item(
         val onSelected: () -> Unit,
         val content: @Composable () -> Unit
-    ) {
-        constructor(
-            onSelected: () -> Unit,
-            title: String
-        ) : this(onSelected = onSelected, content = {
-            Text(title)
-        })
-    }
+    )
 }
 
 @Composable

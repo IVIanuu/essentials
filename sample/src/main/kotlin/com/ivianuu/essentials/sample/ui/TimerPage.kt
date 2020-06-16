@@ -19,8 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -41,7 +41,7 @@ class TimerPage {
 
                 Text(
                     text = "Value: $value",
-                    textStyle = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h1,
                     modifier = Modifier.center()
                 )
             }

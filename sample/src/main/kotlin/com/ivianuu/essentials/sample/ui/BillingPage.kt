@@ -20,19 +20,19 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.height
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.common.launchOnClick
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.collectAsState
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
@@ -56,7 +56,7 @@ class BillingPage(
                 ) {
                     Text(
                         text = "Is purchased ? ${isPurchased.value}",
-                        textStyle = MaterialTheme.typography.h6
+                        style = MaterialTheme.typography.h6
                     )
 
                     Spacer(Modifier.height(8.dp))

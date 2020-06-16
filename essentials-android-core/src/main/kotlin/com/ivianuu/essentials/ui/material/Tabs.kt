@@ -25,13 +25,19 @@ import androidx.compose.mutableStateOf
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.contentColor
+import androidx.ui.graphics.Color
+import androidx.ui.material.Divider
+import androidx.ui.material.EmphasisAmbient
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
+import androidx.ui.material.contentColorFor
+import androidx.ui.material.primarySurface
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
-import com.ivianuu.essentials.ui.core.TextComposableStyleAmbient
 import com.ivianuu.essentials.ui.core.rememberRetained
 
 class TabController<T>(
@@ -73,27 +79,36 @@ fun <T> ProvideTabController(
 @Composable
 fun <T> TabRow(
     tabController: TabController<T> = ambientTabController(),
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
     scrollable: Boolean = false,
     indicatorContainer: @Composable (tabPositions: List<TabRow.TabPosition>) -> Unit = { tabPositions ->
         TabRow.IndicatorContainer(tabPositions, tabController.selectedIndex) {
             TabRow.Indicator()
         }
     },
+    divider: @Composable () -> Unit = {
+        Divider(thickness = 1.dp, color = contentColor().copy(alpha = 0.12f))
+    },
     tab: @Composable (Int, T) -> Unit
 ) {
     TabRow(
         items = tabController.items,
         selectedIndex = tabController.selectedIndex,
+        modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
         scrollable = scrollable,
         indicatorContainer = indicatorContainer,
-        tab = { index, item ->
-            key(item as Any) {
-                Providers(TabIndexAmbient provides index) {
-                    tab(index, item)
-                }
+        divider = divider
+    ) { index, item ->
+        key(item as Any) {
+            Providers(TabIndexAmbient provides index) {
+                tab(index, item)
             }
         }
-    )
+    }
 }
 
 val TabIndexAmbient =
@@ -102,23 +117,21 @@ val TabIndexAmbient =
 @Composable
 fun Tab(
     text: @Composable () -> Unit = emptyContent(),
-    icon: @Composable () -> Unit = emptyContent()
+    icon: @Composable () -> Unit = emptyContent(),
+    modifier: Modifier = Modifier,
+    activeColor: Color = contentColor(),
+    inactiveColor: Color = EmphasisAmbient.current.medium.applyEmphasis(activeColor)
 ) {
     val tabController = ambientTabController<Any?>()
     val tabIndex = TabIndexAmbient.current
     Tab(
-        text = {
-            Providers(
-                TextComposableStyleAmbient provides DefaultTextComposableStyle(
-                    uppercase = true,
-                    maxLines = 1
-                ),
-                children = text
-            )
-        },
+        text = text,
         icon = icon,
         selected = tabController.selectedIndex == tabIndex,
-        onSelected = { tabController.selectedIndex = tabIndex }
+        onSelected = { tabController.selectedIndex = tabIndex },
+        modifier = modifier,
+        activeColor = activeColor,
+        inactiveColor = inactiveColor
     )
 }
 

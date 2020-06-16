@@ -19,11 +19,11 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.Composable
 import androidx.compose.launchInComposition
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
@@ -33,7 +33,7 @@ import kotlinx.coroutines.delay
 internal fun SecureSettingsHeader(text: String) {
     Text(
         text = text,
-        textStyle = MaterialTheme.typography.body2.copy(color = contentColor().copy(alpha = 0.6f)),
+        style = MaterialTheme.typography.body2.copy(color = contentColor().copy(alpha = 0.6f)),
         modifier = Modifier.padding(all = 16.dp)
     )
 }

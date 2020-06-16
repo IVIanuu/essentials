@@ -24,22 +24,18 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Text
 import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.layout.padding
 import androidx.ui.layout.widthIn
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Slider
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
-import com.ivianuu.essentials.ui.core.DefaultTextComposableStyle
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.currentOrElse
-import com.ivianuu.essentials.ui.material.DefaultListItemStyle
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ListItemStyleAmbient
-import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
@@ -395,13 +391,11 @@ fun <T : Comparable<T>> BaseSliderListItem(
             onClick = {}
         )
 
-        val listItemStyle = ListItemStyleAmbient.currentOrElse { DefaultListItemStyle() }
-
         Row(
             modifier = Modifier.gravity(Alignment.BottomCenter)
                 .padding(
-                    start = listItemStyle.contentPadding.start - 4.dp, // make the slider pretty
-                    end = listItemStyle.contentPadding.end
+                    start = 12.dp, // make the slider pretty
+                    end = 16.dp
                 ),
             verticalGravity = Alignment.CenterVertically
         ) {
@@ -437,8 +431,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
 fun <T> SimpleSliderValueText(value: T) {
     Text(
         text = value.toString(),
-        textStyle = MaterialTheme.typography.body2,
-        style = DefaultTextComposableStyle(maxLines = 1)
+        style = MaterialTheme.typography.body2
     )
 }
 

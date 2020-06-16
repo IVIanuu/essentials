@@ -19,7 +19,9 @@ package com.ivianuu.essentials.permission.dialogui
 import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.material.TextButton
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -36,9 +38,7 @@ import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
@@ -92,10 +92,7 @@ internal class PermissionDialog(
             },
             applyContentPadding = false,
             negativeButton = {
-                Button(
-                    style = TextButtonStyle(),
-                    onClick = { viewModel.cancelClicked() }
-                ) {
+                TextButton(onClick = { viewModel.cancelClicked() }) {
                     Text(R.string.es_cancel)
                 }
             }

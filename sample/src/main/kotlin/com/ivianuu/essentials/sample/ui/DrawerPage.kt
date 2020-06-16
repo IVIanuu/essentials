@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
@@ -37,7 +37,7 @@ class DrawerPage {
                 Surface(color = Color.Blue) {
                     Text(
                         text = "Drawer",
-                        textStyle = MaterialTheme.typography.h4,
+                        style = MaterialTheme.typography.h4,
                         modifier = Modifier.center()
                     )
                 }
@@ -46,7 +46,7 @@ class DrawerPage {
                 Surface(color = Color.Red) {
                     Text(
                         text = "Body",
-                        textStyle = MaterialTheme.typography.h4,
+                        style = MaterialTheme.typography.h4,
                         modifier = Modifier.center()
                     )
                 }

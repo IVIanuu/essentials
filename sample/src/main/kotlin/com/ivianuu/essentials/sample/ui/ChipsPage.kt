@@ -23,6 +23,7 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.ExperimentalLayout
@@ -32,7 +33,6 @@ import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Surface
@@ -95,7 +95,7 @@ private fun Chip(
             ) {
                 Text(
                     text = name,
-                    textStyle = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(
                         horizontal = 12.dp,
                         vertical = 4.dp

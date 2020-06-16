@@ -20,8 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.onCommit
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Text
 import androidx.ui.layout.size
-import androidx.ui.res.stringResource
+import androidx.ui.material.Checkbox
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
-import com.ivianuu.essentials.ui.material.Checkbox
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -78,14 +78,12 @@ class CheckableAppsPage internal constructor(
                     actions = {
                         PopupMenuButton(
                             items = listOf(
-                                PopupMenu.Item(
-                                    title = stringResource(R.string.es_select_all),
-                                    onSelected = { viewModel.selectAllClicked() }
-                                ),
-                                PopupMenu.Item(
-                                    title = stringResource(R.string.es_deselect_all),
-                                    onSelected = { viewModel.deselectAllClicked() }
-                                )
+                                PopupMenu.Item(onSelected = { viewModel.selectAllClicked() }) {
+                                    Text(R.string.es_select_all)
+                                },
+                                PopupMenu.Item(onSelected = { viewModel.deselectAllClicked() }) {
+                                    Text(R.string.es_deselect_all)
+                                }
                             )
                         )
                     }

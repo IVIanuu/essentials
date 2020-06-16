@@ -19,12 +19,13 @@ package com.ivianuu.essentials.about
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
-import com.ivianuu.essentials.ui.common.openUrlOnClick
+import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Transient
@@ -120,6 +121,6 @@ private fun AboutItem(
                 Text(it)
             }
         },
-        onClick = openUrlOnClick(url)
+        onClick = navigateOnClick { UrlRoute(url()) }
     )
 }

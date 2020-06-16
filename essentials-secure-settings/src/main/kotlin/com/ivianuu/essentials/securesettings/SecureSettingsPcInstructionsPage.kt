@@ -17,17 +17,19 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
-import com.ivianuu.essentials.ui.common.openUrlOnClick
+import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
@@ -73,22 +75,22 @@ class SecureSettingsPcInstructionsPage internal constructor(
                     ListItem(
                         leading = { Icon(Icons.Default.Link) },
                         title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                        onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
+                        onClick = navigateOnClick { UrlRoute("https://youtu.be/CDuxcrrWLnY") }
                     )
 
                     ListItem(
                         leading = { Icon(Icons.Default.Link) },
                         title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                        onClick = openUrlOnClick {
-                            "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
+                        onClick = navigateOnClick {
+                            UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
                         }
                     )
 
                     ListItem(
                         leading = { Icon(Icons.Default.Link) },
                         title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                        onClick = openUrlOnClick {
-                            "https://www.xda-developers.com/install-adb-windows-macos-linux/"
+                        onClick = navigateOnClick {
+                            UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
                         }
                     )
 

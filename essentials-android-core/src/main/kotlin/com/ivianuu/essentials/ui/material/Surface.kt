@@ -32,6 +32,7 @@ import androidx.ui.graphics.RectangleShape
 import androidx.ui.graphics.Shape
 import androidx.ui.graphics.compositeOver
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.contentColorFor
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import androidx.ui.unit.ipx
@@ -42,7 +43,7 @@ fun Surface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colors.surface,
-    contentColor: Color = guessingContentColorFor(color),
+    contentColor: Color = contentColorFor(color),
     border: Border? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
