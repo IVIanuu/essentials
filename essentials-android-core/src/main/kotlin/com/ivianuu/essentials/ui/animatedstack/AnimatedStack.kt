@@ -67,7 +67,7 @@ fun <T> AnimatedStack(
     children: List<AnimatedStackChild<T>>
 ) {
     AnimatableRoot {
-        val state = remember { AnimatedStackState<T>() }
+        val state = remember { AnimatedStackState<T>(children) }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)
         state.activeTransitions.values.toList().forEach { it() }
@@ -82,14 +82,29 @@ fun <T> AnimatedStack(
 }
 
 @Stable
-internal class AnimatedStackState<T> {
+internal class AnimatedStackState<T>(
+    initialChildren: List<AnimatedStackChild<T>>
+) {
 
-    private var _children = emptyList<AnimatedStackChild<T>>()
+    private var _children = initialChildren
     val visibleChildren = modelListOf<AnimatedStackChild<T>>()
 
     var defaultTransition = NoOpStackTransition
 
     val activeTransitions = modelMapOf<T, @Composable () -> Unit>()
+
+    init {
+        _children
+            .filterVisible()
+            .forEach {
+                performChange(
+                    from = null,
+                    to = it,
+                    isPush = true,
+                    transition = NoOpStackTransition
+                )
+            }
+    }
 
     fun setChildren(newChildren: List<AnimatedStackChild<T>>) {
         if (newChildren == _children) return
