@@ -22,25 +22,14 @@ import androidx.compose.remember
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatable.Animatable
 
-data class StackTransitionContext(
+abstract class StackTransitionContext(
     val fromAnimatable: Animatable?,
     val toAnimatable: Animatable?,
-    val isPush: Boolean,
-    private val addToBlock: () -> Unit,
-    private val removeFromBlock: () -> Unit,
-    private val onCompleteBlock: () -> Unit
+    val isPush: Boolean
 ) {
-    fun addTo() {
-        addToBlock()
-    }
-
-    fun removeFrom() {
-        removeFromBlock()
-    }
-
-    fun onComplete() {
-        onCompleteBlock()
-    }
+    abstract fun addTo()
+    abstract fun removeFrom()
+    abstract fun onComplete()
 }
 
 typealias StackTransition = @Composable (StackTransitionContext) -> Unit
@@ -66,21 +55,49 @@ operator fun StackTransition.plus(other: StackTransition): StackTransition = { c
     }
 
     thisAnimation(
-        context.copy(
-            onCompleteBlock = {
-                completedAnimations += thisAnimation
-                completeIfPossible()
+        remember {
+            object : StackTransitionContext(
+                context.fromAnimatable,
+                context.toAnimatable,
+                context.isPush
+            ) {
+                override fun addTo() {
+                    context.addTo()
+                }
+
+                override fun removeFrom() {
+                    context.removeFrom()
+                }
+
+                override fun onComplete() {
+                    completedAnimations += thisAnimation
+                    completeIfPossible()
+                }
             }
-        )
+        }
     )
 
     other(
-        context.copy(
-            onCompleteBlock = {
-                completedAnimations += other
-                completeIfPossible()
+        remember {
+            object : StackTransitionContext(
+                context.fromAnimatable,
+                context.toAnimatable,
+                context.isPush
+            ) {
+                override fun addTo() {
+                    context.addTo()
+                }
+
+                override fun removeFrom() {
+                    context.removeFrom()
+                }
+
+                override fun onComplete() {
+                    completedAnimations += other
+                    completeIfPossible()
+                }
             }
-        )
+        }
     )
 
 }

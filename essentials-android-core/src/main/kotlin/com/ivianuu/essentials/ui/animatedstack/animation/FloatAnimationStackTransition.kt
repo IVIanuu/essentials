@@ -5,10 +5,7 @@ import androidx.animation.Easing
 import androidx.animation.FastOutSlowInEasing
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
-import androidx.compose.getValue
 import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.state
 import androidx.ui.animation.animatedFloat
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
@@ -35,14 +32,12 @@ fun FloatAnimationStackTransition(
     ) -> Unit
 ): StackTransition = { context ->
     val animation = animatedFloat(0f)
-    var finalFrame by state { false }
     remember {
         if (context.toAnimatable != null) context.addTo()
         animation.animateTo(
             targetValue = 1f,
             anim = anim,
             onEnd = { _, _ ->
-                finalFrame = true
                 if (context.fromAnimatable != null) context.removeFrom()
                 context.onComplete()
             }
@@ -52,6 +47,6 @@ fun FloatAnimationStackTransition(
         context.fromAnimatable,
         context.toAnimatable,
         context.isPush,
-        if (finalFrame) 1f else animation.value
+        animation.value
     )
 }

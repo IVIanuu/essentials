@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatable.animationOverlay
 import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.untrackedState
 
 val SharedElementComposable = MetaProp<@Composable () -> Unit>()
@@ -89,14 +90,24 @@ fun SharedElementStackTransition(
         }
 
         contentTransition(
-            context.copy(
-                addToBlock = {},
-                removeFromBlock = {},
-                onCompleteBlock = {
-                    otherComplete = true
-                    completeIfPossible()
+            remember {
+                object : StackTransitionContext(
+                    context.fromAnimatable,
+                    context.toAnimatable,
+                    context.isPush
+                ) {
+                    override fun addTo() {
+                    }
+
+                    override fun removeFrom() {
+                    }
+
+                    override fun onComplete() {
+                        otherComplete = true
+                        completeIfPossible()
+                    }
                 }
-            )
+            }
         )
     } else {
         context.toAnimatable?.set(Alpha, 0f)

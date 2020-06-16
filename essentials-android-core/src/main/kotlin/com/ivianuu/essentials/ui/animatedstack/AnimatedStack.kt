@@ -69,9 +69,9 @@ fun <T> AnimatedStack(
         val state = remember { AnimatedStackState<T>() }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)
-        state.activeTransitions.forEach { it() }
+        state.activeTransitions.toList().forEach { it() }
         Stack(modifier = modifier) {
-            state.visibleChildren.forEach {
+            state.visibleChildren.toList().forEach {
                 key(it.key) {
                     it.content()
                 }
@@ -202,25 +202,32 @@ internal class AnimatedStackState<T> {
                 }
 
                 val context = remember {
-                    StackTransitionContext(
+                    object : StackTransitionContext(
                         fromAnimatable = fromAnimatable,
                         toAnimatable = toAnimatable,
-                        isPush = isPush,
-                        addToBlock = {
+                        isPush = isPush
+                    ) {
+                        override fun addTo() {
                             checkNotNull(to)
-                            to.enter(state = this, from = from, isPush = isPush)
-                        },
-                        removeFromBlock = {
+                            to.enter(state = this@AnimatedStackState, from = from, isPush = isPush)
+                        }
+
+                        override fun removeFrom() {
                             checkNotNull(from)
-                            if (exitFrom) from.exit(state = this, to = to, isPush = isPush)
-                        },
-                        onCompleteBlock = {
+                            if (exitFrom) from.exit(
+                                state = this@AnimatedStackState,
+                                to = to,
+                                isPush = isPush
+                            )
+                        }
+
+                        override fun onComplete() {
                             check(!completed) {
                                 "onComplete() must be called only once"
                             }
                             completed = true
                         }
-                    )
+                    }
                 }
 
                 transition(context)
