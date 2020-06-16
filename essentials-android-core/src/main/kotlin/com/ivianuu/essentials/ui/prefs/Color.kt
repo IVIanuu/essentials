@@ -87,7 +87,10 @@ fun ColorDialogListItem(
         dialog = { dismiss ->
             ColorPickerDialog(
                 initialColor = value,
-                onColorSelected = onValueChange,
+                onColorSelected = {
+                    onValueChange(it)
+                    dismiss()
+                },
                 onCancel = dismiss,
                 colorPalettes = colorPalettes,
                 showAlphaSelector = showAlphaSelector,

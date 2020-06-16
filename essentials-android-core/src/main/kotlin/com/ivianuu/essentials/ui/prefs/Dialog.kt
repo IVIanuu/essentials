@@ -33,7 +33,6 @@ fun DialogListItem(
     modifier: Modifier = Modifier
 ) {
     val navigator = NavigatorAmbient.current
-    val route = RouteAmbient.current
     ListItem(
         modifier = modifier,
         title = title?.let { { title() } },
@@ -42,6 +41,7 @@ fun DialogListItem(
         trailing = trailing?.let { { trailing() } },
         onClick = {
             navigator.push(DialogRoute {
+                val route = RouteAmbient.current
                 dialog { navigator.pop(route = route) }
             })
         }
