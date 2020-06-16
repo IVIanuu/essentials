@@ -17,14 +17,10 @@
 package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.Composable
-import androidx.compose.getValue
-import androidx.compose.onActive
-import androidx.compose.onDispose
+import androidx.compose.onPreCommit
 import androidx.compose.remember
-import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
 import com.ivianuu.essentials.ui.animatable.Animatable
-import com.ivianuu.essentials.ui.common.untrackedState
 
 abstract class StackTransitionContext(
     val fromAnimatable: Animatable?,
@@ -43,18 +39,8 @@ val NoOpStackTransition: StackTransition = { context ->
         if (context.toAnimatable != null) context.addTo()
         if (context.fromAnimatable != null) context.removeFrom()
     }
-    var completed by untrackedState { false }
-    onActive {
-        if (!completed) {
-            completed = true
-            context.onComplete()
-        }
-    }
-    onDispose {
-        if (!completed) {
-            completed = true
-            context.onComplete()
-        }
+    onPreCommit(true) {
+        context.onComplete()
     }
 }
 
