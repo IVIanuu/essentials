@@ -30,19 +30,15 @@ class StartActivityForResultUseCase(
             startUiUseCase()
             navigator.push(
                 Route(opaque = true) {
-                    navigator.push(
-                        Route(opaque = true) {
-                            val route = RouteAmbient.current
-                            val launcher = registerActivityResultCallback(
-                                contract
-                            ) {
-                                navigator.pop(route = route)
-                                continuation.resume(it)
-                            }
+                    val route = RouteAmbient.current
+                    val launcher = registerActivityResultCallback(
+                        contract
+                    ) {
+                        navigator.pop(route = route)
+                        continuation.resume(it)
+                    }
 
-                            onActive { launcher.launch(input) }
-                        }
-                    )
+                    onActive { launcher.launch(input) }
                 }
             )
         }
