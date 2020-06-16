@@ -18,11 +18,11 @@ package com.ivianuu.essentials.util
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.collectAsState
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.coroutines.launchWithState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

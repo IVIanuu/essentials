@@ -18,6 +18,7 @@ package com.ivianuu.essentials.twilight
 
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
+import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.onCommit
 import androidx.compose.remember
@@ -29,7 +30,6 @@ import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.core.EsTheme
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.injekt.Transient

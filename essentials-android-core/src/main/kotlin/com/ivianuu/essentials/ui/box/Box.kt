@@ -18,10 +18,10 @@ package com.ivianuu.essentials.ui.box
 
 import androidx.compose.Composable
 import androidx.compose.MutableState
+import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
 import kotlinx.coroutines.launch
 

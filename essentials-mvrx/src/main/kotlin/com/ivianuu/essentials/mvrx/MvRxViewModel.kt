@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
+import androidx.compose.collectAsState
 import com.ivianuu.essentials.ui.base.ViewModel
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading

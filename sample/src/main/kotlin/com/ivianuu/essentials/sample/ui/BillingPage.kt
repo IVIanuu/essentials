@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.collectAsState
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
@@ -32,7 +33,6 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.common.launchOnClick
-import com.ivianuu.essentials.ui.coroutines.collectAsState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient

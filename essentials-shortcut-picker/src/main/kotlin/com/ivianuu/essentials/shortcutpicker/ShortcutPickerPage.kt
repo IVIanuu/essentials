@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
@@ -29,7 +30,6 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.common.RenderAsyncList
 import com.ivianuu.essentials.ui.core.rememberRetained
-import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

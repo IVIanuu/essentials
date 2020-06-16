@@ -28,9 +28,6 @@ import androidx.compose.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlin.coroutines.CoroutineContext
 
 @Composable
@@ -89,20 +86,4 @@ class StateCoroutineScope<T>(
     val state: MutableState<T>
 ) : CoroutineScope by scope {
     var value by state
-}
-
-@Composable
-fun <T> StateFlow<T>.collectAsState(): State<T> = collectAsState(value)
-
-@Composable
-fun <T> Flow<T>.collectAsState(initial: T): State<T> {
-    return launchWithState(
-        initial = initial,
-        inputs = *arrayOf(this),
-        block = {
-            collect {
-                state.value = it
-            }
-        }
-    )
 }

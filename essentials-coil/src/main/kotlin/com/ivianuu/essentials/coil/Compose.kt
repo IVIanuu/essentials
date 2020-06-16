@@ -22,13 +22,13 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Image
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
 import coil.Coil
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.common.RenderAsync
-import com.ivianuu.essentials.ui.image.Image
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.launchAsync
 

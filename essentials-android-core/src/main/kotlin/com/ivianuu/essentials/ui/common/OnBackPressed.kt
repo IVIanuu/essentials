@@ -37,7 +37,8 @@ fun onBackPressed(
         onBackPressedCallback.isEnabled = enabled
     }
 
-    val onBackPressedDispatcher = onBackPressedDispatcherOwner
+    // todo use OnBackPressedDispatcherOwnerAmbient once available
+    val onBackPressedDispatcher = compositionActivity
         .onBackPressedDispatcher
     onCommit(onBackPressedCallback) {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
