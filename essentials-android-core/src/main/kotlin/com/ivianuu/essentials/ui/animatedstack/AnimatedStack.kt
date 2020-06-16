@@ -8,6 +8,7 @@ import androidx.compose.key
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
+import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
@@ -191,8 +192,16 @@ internal class AnimatedStackState<T> {
                 val fromAnimatable = from?.let { animatableFor(it) }
                 val toAnimatable = to?.let { animatableFor(it) }
 
+                var completed by state { false }
+                if (completed) {
+                    remember {
+                        activeTransitions -= transitionComposable
+                        to?.onTransitionComplete(this)
+                        from?.onTransitionComplete(this)
+                    }
+                }
+
                 val context = remember {
-                    val completed = untrackedState { false }
                     StackTransitionContext(
                         fromAnimatable = fromAnimatable,
                         toAnimatable = toAnimatable,
@@ -206,13 +215,10 @@ internal class AnimatedStackState<T> {
                             if (exitFrom) from.exit(state = this, to = to, isPush = isPush)
                         },
                         onCompleteBlock = {
-                            check(!completed.value) {
+                            check(!completed) {
                                 "onComplete() must be called only once"
                             }
-                            completed.value = true
-                            activeTransitions -= transitionComposable
-                            to?.onTransitionComplete(this)
-                            from?.onTransitionComplete(this)
+                            completed = true
                         }
                     )
                 }
