@@ -9,7 +9,6 @@ import androidx.compose.key
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
-import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
@@ -67,10 +66,10 @@ fun <T> AnimatedStack(
     children: List<AnimatedStackChild<T>>
 ) {
     AnimatableRoot {
-        val state = remember { AnimatedStackState<T>(children) }
+        val state = remember { AnimatedStackState(children) }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)
-        state.activeTransitions.values.toList().forEach { it() }
+        state.runningTransactions.values.toList().forEach { it.run() }
         Stack(modifier = modifier) {
             state.visibleChildren.toList().forEach {
                 key(it.key) {
@@ -91,7 +90,7 @@ internal class AnimatedStackState<T>(
 
     var defaultTransition = NoOpStackTransition
 
-    val activeTransitions = modelMapOf<T, @Composable () -> Unit>()
+    val runningTransactions = modelMapOf<T, AnimatedStackTransaction<T>>()
 
     init {
         _children
@@ -198,63 +197,9 @@ internal class AnimatedStackState<T>(
         isPush: Boolean,
         transition: StackTransition
     ) {
-        val exitFrom = from != null && (!isPush || !to!!.opaque)
-
-        from?.let { activeTransitions -= it.key }
-
-        val transactionId = UUID.randomUUID()
-        val transactionKey = when {
-            to != null -> to.key
-            from != null -> from.key
-            else -> error("No transition needed")
-        }
-
-        activeTransitions[transactionKey] = {
-            key(transactionId) {
-                val fromAnimatable = from?.let { animatableFor(it) }
-                val toAnimatable = to?.let { animatableFor(it) }
-
-                var completed by state { false }
-                if (completed) {
-                    remember {
-                        activeTransitions -= transactionKey
-                        to?.onTransitionComplete(this)
-                        from?.onTransitionComplete(this)
-                    }
-                }
-
-                val context = remember {
-                    object : StackTransitionContext(
-                        fromAnimatable = fromAnimatable,
-                        toAnimatable = toAnimatable,
-                        isPush = isPush
-                    ) {
-                        override fun addTo() {
-                            checkNotNull(to)
-                            to.enter(state = this@AnimatedStackState, from = from, isPush = isPush)
-                        }
-
-                        override fun removeFrom() {
-                            checkNotNull(from)
-                            if (exitFrom) from.exit(
-                                state = this@AnimatedStackState,
-                                to = to,
-                                isPush = isPush
-                            )
-                        }
-
-                        override fun onComplete() {
-                            check(!completed) {
-                                "onComplete() must be called only once"
-                            }
-                            completed = true
-                        }
-                    }
-                }
-
-                transition(context)
-            }
-        }
+        from?.let { runningTransactions[it.key]?.cancel() }
+        val transaction = AnimatedStackTransaction(from, to, isPush, transition, this)
+        runningTransactions[transaction.transactionKey] = transaction
     }
 
 }
@@ -269,9 +214,7 @@ class AnimatedStackChild<T>(
 ) {
 
     var isAnimating by mutableStateOf(false)
-        private set
-
-    private var removeOnComplete = false
+        internal set
 
     @Composable
     internal fun content() {
@@ -281,15 +224,89 @@ class AnimatedStackChild<T>(
         )
     }
 
-    internal fun enter(
-        state: AnimatedStackState<T>,
-        from: AnimatedStackChild<T>?,
-        isPush: Boolean
-    ) {
-        isAnimating = true
+}
 
-        val oldToIndex = state.visibleChildren.indexOf(this)
+@Stable
+internal class AnimatedStackTransaction<T>(
+    val from: AnimatedStackChild<T>?,
+    val to: AnimatedStackChild<T>?,
+    val isPush: Boolean,
+    val transition: StackTransition,
+    private val state: AnimatedStackState<T>
+) {
 
+    private val transactionId = UUID.randomUUID()
+    val transactionKey = when {
+        to != null -> to.key
+        from != null -> from.key
+        else -> error("No transition needed")
+    }
+
+    private val removesFrom = from != null && (!isPush || !to!!.opaque)
+
+    private var needsCompletion by mutableStateOf(false)
+    private var completed by mutableStateOf(false)
+
+    @Composable
+    fun run() {
+        key(transactionId) {
+            remember { from?.isAnimating = true }
+
+            val fromAnimatable = from?.let { animatableFor(it) }
+            val toAnimatable = to?.let { animatableFor(it) }
+
+            val context = remember {
+                object : StackTransitionContext(
+                    fromAnimatable = fromAnimatable,
+                    toAnimatable = toAnimatable,
+                    isPush = isPush
+                ) {
+                    override fun addTo() {
+                        checkNotNull(to)
+                        if (to !in state.visibleChildren)
+                            this@AnimatedStackTransaction.addTo()
+                    }
+
+                    override fun removeFrom() {
+                        checkNotNull(from)
+                        if (from in state.visibleChildren)
+                            this@AnimatedStackTransaction.removeFrom()
+                    }
+
+                    override fun onComplete() {
+                        check(!needsCompletion) {
+                            "onComplete() must be called only once"
+                        }
+                        if (!completed) needsCompletion = true
+                    }
+                }
+            }
+
+            transition(context)
+
+            if (needsCompletion && !completed) {
+                complete()
+            }
+        }
+    }
+
+    fun cancel() {
+        complete()
+    }
+
+    fun complete() {
+        if (to != null && to !in state.visibleChildren) addTo()
+        if (removesFrom && from in state.visibleChildren) removeFrom()
+        to?.isAnimating = false
+        from?.isAnimating = false
+        state.runningTransactions -= transactionKey
+    }
+
+    private fun addTo() {
+        val to = to!!
+        to.isAnimating = true
+
+        val oldToIndex = state.visibleChildren.indexOf(to)
         val fromIndex = state.visibleChildren.indexOf(from)
         val toIndex = if (fromIndex != -1) {
             if (isPush) fromIndex + 1 else fromIndex
@@ -297,29 +314,13 @@ class AnimatedStackChild<T>(
 
         if (oldToIndex != toIndex) {
             if (oldToIndex != -1) state.visibleChildren.removeAt(oldToIndex)
-            state.visibleChildren.add(toIndex, this)
-        }
-
-        removeOnComplete = false
-    }
-
-    internal fun exit(
-        state: AnimatedStackState<T>,
-        to: AnimatedStackChild<T>?,
-        isPush: Boolean
-    ) {
-        isAnimating = true
-        removeOnComplete = true
-    }
-
-    internal fun onTransitionComplete(
-        state: AnimatedStackState<T>
-    ) {
-        isAnimating = false
-        if (removeOnComplete) {
-            removeOnComplete = false
-            state.visibleChildren.remove(this)
+            state.visibleChildren.add(toIndex, to)
         }
     }
 
+    private fun removeFrom() {
+        val from = from!!
+        from.isAnimating = false
+        state.visibleChildren -= from
+    }
 }
