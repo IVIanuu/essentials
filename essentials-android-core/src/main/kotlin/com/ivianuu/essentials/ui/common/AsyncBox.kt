@@ -76,7 +76,7 @@ fun <T> AsyncBox(
     uninitialized: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {
-    val asyncState = remember(loading) { mutableStateOf(state, StructurallyEqual) }
+    val asyncState = remember(state::class) { mutableStateOf(state, StructurallyEqual) }
     asyncState.value = state
 
     AnimatedBox(
