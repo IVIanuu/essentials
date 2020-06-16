@@ -19,7 +19,6 @@ package com.ivianuu.essentials.tile
 import android.service.quicksettings.TileService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
 /**
@@ -27,7 +26,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsTileService : TileService() {
 
-    val scope = CoroutineScope(Job() + Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.Main)
 
     lateinit var listeningCoroutineScope: CoroutineScope
         private set
@@ -39,9 +38,7 @@ abstract class EsTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        listeningCoroutineScope = CoroutineScope(
-            Job() + Dispatchers.Main
-        )
+        listeningCoroutineScope = CoroutineScope(Dispatchers.Main)
     }
 
     override fun onStopListening() {

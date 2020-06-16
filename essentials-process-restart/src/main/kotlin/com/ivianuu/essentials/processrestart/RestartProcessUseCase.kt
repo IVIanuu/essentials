@@ -16,35 +16,28 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
-import android.os.Process
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.withContext
 
 @Transient
-class ProcessRestarter(
-    private val activityManager: ActivityManager,
+class RestartProcessUseCase(
     private val buildInfo: BuildInfo,
     private val context: @ForApplication Context,
+    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val packageManager: PackageManager
 ) {
 
-    val isRestartProcess by unsafeLazy {
-        val currentPid = Process.myPid()
-        return@unsafeLazy activityManager.runningAppProcesses?.any {
-            it.pid == currentPid && it.processName == ":restartprocess"
-        }
-    }
-
-    fun restartProcess(intent: Intent = getMainIntent()) {
+    suspend operator fun invoke() = withContext(dispatchers.main) {
+        val intent = getMainIntent()
         logger.d("restart process %$intent")
         ProcessRestartActivity.launch(context, intent)
         Runtime.getRuntime().exit(0)

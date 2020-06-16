@@ -20,7 +20,6 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
 abstract class NotificationComponent {
@@ -28,7 +27,7 @@ abstract class NotificationComponent {
     var service: ComponentNotificationListenerService? = null
         private set
 
-    val coroutineScope = CoroutineScope(Job() + Dispatchers.Main)
+    val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     open fun onServiceConnected(service: ComponentNotificationListenerService) {
         this.service = service

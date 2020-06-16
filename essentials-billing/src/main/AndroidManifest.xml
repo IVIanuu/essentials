@@ -14,14 +14,4 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials.billing">
-
-    <application>
-        <activity
-            android:name=".PurchaseActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:theme="@style/Theme.Es.Translucent" />
-    </application>
-
-</manifest>
+<manifest package="com.ivianuu.essentials.billing" />

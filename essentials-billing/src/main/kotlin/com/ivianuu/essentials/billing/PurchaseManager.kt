@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.billing
 
-import android.content.Context
+import android.app.Activity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -33,10 +33,12 @@ import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.StartUiUseCase
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Provider
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
@@ -61,9 +63,11 @@ import kotlin.coroutines.suspendCoroutine
 @ApplicationScoped
 class PurchaseManager(
     billingClientProvider: @Provider (PurchasesUpdatedListener) -> BillingClient,
-    private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger
+    private val logger: Logger,
+    private val navigator: Navigator,
+    private val purchasePage: @Provider () -> PurchasePage,
+    private val startUiUseCase: StartUiUseCase
 ) {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->
@@ -101,8 +105,13 @@ class PurchaseManager(
             }
         }
 
+        startUiUseCase()
         withContext(dispatchers.main) {
-            PurchaseActivity.purchase(context, requestId)
+            navigator.push(
+                Route(opaque = true) {
+                    purchasePage()(requestId)
+                }
+            )
         }
 
         val success = merge(
@@ -161,7 +170,7 @@ class PurchaseManager(
 
     internal suspend fun purchaseInternal(
         requestId: String,
-        activity: PurchaseActivity
+        activity: Activity
     ) = withContext(dispatchers.computation) {
         logger.d("purchase internal $requests")
         val request = requests[requestId] ?: return@withContext

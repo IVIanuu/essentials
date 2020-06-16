@@ -30,6 +30,7 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 object PopupMenu {
     @Immutable
@@ -54,11 +55,12 @@ fun PopupMenu(
     Popup(style = style) {
         Column {
             val navigator = NavigatorAmbient.current
+            val route = RouteAmbient.current
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            navigator.popTop()
+                            navigator.pop(route = route)
                             item.onSelected()
                         },
                         children = item.content

@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Helper class for unlocking the screen
  */
 @ApplicationScoped
-class ScreenUnlocker(
+class UnlockScreenUseCase(
     private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
@@ -40,7 +40,7 @@ class ScreenUnlocker(
 
     private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
-    suspend fun unlockScreen(): Boolean = withContext(dispatchers.computation) {
+    suspend operator fun invoke(): Boolean = withContext(dispatchers.computation) {
         if (!keyguardManager.isKeyguardLocked) return@withContext true
 
         val result = CompletableDeferred<Boolean>()

@@ -62,6 +62,7 @@ import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.DefaultSliderStyle
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.Surface
@@ -83,9 +84,9 @@ fun ColorPickerRoute(
         initialColor = initialColor,
         colorPalettes = colorPalettes,
         onColorSelected = { navigator.popTop(result = it) },
+        onCancel = { navigator.popTop() },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
-        dismissOnSelection = false,
         title = {
             Text(title ?: stringResource(R.string.es_color_picker_title))
         }
@@ -97,9 +98,9 @@ fun ColorPickerDialog(
     initialColor: Color,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     onColorSelected: (Color) -> Unit,
+    onCancel: () -> Unit,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
-    dismissOnSelection: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -121,18 +122,23 @@ fun ColorPickerDialog(
         title = title,
         applyContentPadding = false,
         positiveButton = {
-            ColoredDialogButton(
-                color = currentColor,
-                dismissOnSelection = dismissOnSelection,
-                onClick = { onColorSelected(currentColor) }
-            ) { Text("OK") }
+            Button(
+                onClick = { onColorSelected(currentColor) },
+                style = TextButtonStyle(contentColor = currentColor)
+            ) {
+                Text("OK")
+            }
         },
-        negativeButton = { DialogCloseButton { Text("Cancel") } },
+        negativeButton = {
+            Button(onClick = onCancel) { Text("Cancel") }
+        },
         neutralButton = {
             if (allowCustomArgb) {
-                DialogButton(
-                    dismissDialogOnClick = false,
-                    onClick = { setCurrentPage(otherPage) }
+                Button(
+                    onClick = {
+                        setCurrentPage(otherPage)
+                    },
+                    style = TextButtonStyle(contentColor = currentColor)
                 ) {
                     Text(otherPage.title)
                 }
@@ -364,21 +370,6 @@ private fun ColorEditorHeader(
             }
         }
     }
-}
-
-@Composable
-private fun ColoredDialogButton(
-    onClick: () -> Unit,
-    color: Color,
-    dismissOnSelection: Boolean,
-    children: @Composable () -> Unit
-) {
-    DialogButton(
-        onClick = onClick,
-        dismissDialogOnClick = dismissOnSelection,
-        style = TextButtonStyle(contentColor = color),
-        children = children
-    )
 }
 
 @Composable

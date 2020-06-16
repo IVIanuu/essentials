@@ -24,9 +24,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.DialogButton
-import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.material.Button
 
 @Composable
 fun TextInputDialogListItem(
@@ -83,13 +82,16 @@ fun TextInputDialogListItem(
                 hint = dialogHint,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
-                    DialogButton(
+                    Button(
                         enabled = allowEmpty || currentValue.value.isNotEmpty(),
-                        onClick = { onValueChange(currentValue.value) }
+                        onClick = {
+                            onValueChange(currentValue.value)
+                            dismiss()
+                        }
                     ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
-                    DialogCloseButton {
+                    Button(onClick = dismiss) {
                         Text(R.string.es_cancel)
                     }
                 }

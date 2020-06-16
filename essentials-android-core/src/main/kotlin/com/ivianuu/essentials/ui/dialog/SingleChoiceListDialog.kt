@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.RadioButton
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 @Composable
 fun <T> SingleChoiceListDialog(
@@ -42,6 +43,7 @@ fun <T> SingleChoiceListDialog(
     modifier: Modifier = Modifier
 ) {
     val navigator = NavigatorAmbient.current
+    val route = RouteAmbient.current
 
     Dialog(
         modifier = modifier,
@@ -60,7 +62,7 @@ fun <T> SingleChoiceListDialog(
                             selected = item == selectedItem,
                             onSelect = {
                                 onSelect(item)
-                                if (dismissOnSelection) navigator.popTop()
+                                if (dismissOnSelection) navigator.pop(route = route)
                             }
                         )
                     }

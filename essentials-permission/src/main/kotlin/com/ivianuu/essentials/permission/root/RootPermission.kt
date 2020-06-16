@@ -1,14 +1,11 @@
 package com.ivianuu.essentials.permission.root
 
-import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.metadataOf
@@ -47,13 +44,8 @@ internal class RootPermissionRequestHandler(
     override fun handles(permission: Permission): Boolean =
         Metadata.IsRootPermission in permission.metadata
 
-    override suspend fun request(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        permission: Permission
-    ): PermissionResult {
+    override suspend fun request(permission: Permission) {
         val isOk = shell.isAvailable()
         if (!isOk) toaster.toast(R.string.es_no_root)
-        return PermissionResult(isOk)
     }
 }

@@ -16,19 +16,17 @@
 
 package com.ivianuu.essentials.sample.work
 
-import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
 @Transient
-class WorkScheduler(private val context: @ForApplication Context) {
+class ScheduleWorkUseCase(
+    private val workManager: WorkManager
+) {
 
-    fun scheduleWork() {
-        with(WorkManager.getInstance(context)) {
-            enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
-        }
+    operator fun invoke() {
+        workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
     }
 
 }

@@ -14,15 +14,4 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials.billing.debug">
-
-    <application>
-        <activity
-            android:name="com.ivianuu.essentials.billing.DebugBillingActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Es.Translucent"
-            android:windowSoftInputMode="adjustResize" />
-    </application>
-</manifest>
+<manifest package="com.ivianuu.essentials.billing.debug" />

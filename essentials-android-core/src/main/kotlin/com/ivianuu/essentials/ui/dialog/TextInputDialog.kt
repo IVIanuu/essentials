@@ -24,6 +24,7 @@ import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
 import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
@@ -53,16 +54,15 @@ fun TextInputRoute(
             }
         },
         positiveButton = {
-            DialogButton(
-                dismissDialogOnClick = false,
+            Button(
                 enabled = allowEmpty || currentValue.isNotEmpty(),
-                onClick = {
-                    navigator.popTop(result = currentValue)
-                }
+                onClick = { navigator.popTop(result = currentValue) }
             ) { Text(R.string.es_ok) }
         },
         negativeButton = {
-            DialogCloseButton { Text(R.string.es_cancel) }
+            Button(
+                onClick = { navigator.popTop() }
+            ) { Text(R.string.es_cancel) }
         }
     )
 }

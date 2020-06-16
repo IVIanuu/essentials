@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.permission
 
-import android.content.Context
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.StartUiUseCase
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Lazy
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,10 +29,12 @@ import java.util.UUID
 
 @ApplicationScoped
 class PermissionManager(
-    private val context: @ForApplication Context,
     private val scope: @ForApplication CoroutineScope,
     private val logger: Logger,
-    private val permissionStateProviders: Set<PermissionStateProvider>
+    private val navigator: Navigator,
+    private val permissionRequestRouteFactory: @Lazy () -> PermissionRequestRouteFactory,
+    private val permissionStateProviders: Set<PermissionStateProvider>,
+    private val startUiUseCase: StartUiUseCase
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()
@@ -62,14 +66,13 @@ class PermissionManager(
         )
         requests[id] = request
 
-        PermissionActivity.request(context, id)
+        startUiUseCase()
+        navigator.push(permissionRequestRouteFactory().createRoute(request))
 
         finished.await()
 
         return hasPermissions(permissions)
     }
-
-    internal fun getRequest(id: String): PermissionRequest? = requests[id]
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =
         permissionStateProviders.firstOrNull { it.handles(permission) }

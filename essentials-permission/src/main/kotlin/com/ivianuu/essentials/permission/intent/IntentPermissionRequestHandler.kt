@@ -17,16 +17,18 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionResult
+import com.ivianuu.essentials.util.StartActivityForResultUseCase
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.selects.select
 
 val Metadata.Companion.Intent by lazy {
     Metadata.Key<Intent>(
@@ -36,49 +38,27 @@ val Metadata.Companion.Intent by lazy {
 
 @BindPermissionRequestHandler
 @Transient
-internal class IntentPermissionRequestHandler : PermissionRequestHandler {
+internal class IntentPermissionRequestHandler(
+    private val permissionManager: PermissionManager,
+    private val startActivityForResultUseCase: StartActivityForResultUseCase
+) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Metadata.Intent in permission.metadata
 
-    override suspend fun request(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        permission: Permission
-    ): PermissionResult {
-        val fragment = RequestFragment()
-        fragment.permissionManager = manager
-
-        activity.supportFragmentManager.beginTransaction()
-            .add(fragment, RequestFragment.TAG)
-            .commitNow()
-
-        val granted = fragment.request(permission.metadata[Metadata.Intent], permission)
-        return PermissionResult(isOk = granted)
-    }
-
-    class RequestFragment : Fragment() {
-
-        lateinit var permissionManager: PermissionManager
-
-        init {
-            retainInstance = true
-        }
-
-        suspend fun request(intent: Intent, permission: Permission): Boolean {
-            startActivity(intent)
-
-            while (!permissionManager.hasPermissions(permission)) {
-                delay(100)
-            }
-
-            startActivity(requireActivity().intent)
-
-            return true
-        }
-
-        companion object {
-            const val TAG = "RequestFragment"
+    override suspend fun request(permission: Permission) {
+        coroutineScope {
+            select<Unit> {
+                async {
+                    startActivityForResultUseCase(permission.metadata[Metadata.Intent])
+                }.onAwait {}
+                async {
+                    while (!permissionManager.hasPermissions(permission)) {
+                        delay(100)
+                    }
+                }.onAwait {}
+            }.also { coroutineContext.cancelChildren() }
         }
     }
+
 }

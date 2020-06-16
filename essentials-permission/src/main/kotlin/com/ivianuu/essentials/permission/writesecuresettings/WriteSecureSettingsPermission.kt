@@ -1,14 +1,11 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
@@ -47,14 +44,12 @@ internal class WriteSecureSettingsPermissionRequestHandler(
     private val navigator: Navigator,
     private val secureSettingsPage: SecureSettingsPage
 ) : PermissionRequestHandler {
+
     override fun handles(permission: Permission): Boolean =
         Metadata.IsWriteSecureSettingsPermission in permission.metadata
 
-    override suspend fun request(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        permission: Permission
-    ): PermissionResult {
-        return PermissionResult(navigator.push<Boolean> { secureSettingsPage() }.await() ?: false)
+    override suspend fun request(permission: Permission) {
+        navigator.push<Boolean> { secureSettingsPage() }.await()
     }
+
 }

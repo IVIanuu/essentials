@@ -18,23 +18,24 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.onActive
+import androidx.compose.remember
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.MetaDataKeyWithValue
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionResult
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.ui.common.registerActivityResultCallback
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
-import kotlinx.coroutines.CompletableDeferred
-import java.util.concurrent.atomic.AtomicInteger
 
 fun RuntimePermission(
     name: String,
@@ -47,9 +48,7 @@ fun RuntimePermission(
 )
 
 val Metadata.Companion.RuntimePermissionName by lazy {
-    Metadata.Key<String>(
-        "RuntimePermissionName"
-    )
+    Metadata.Key<String>("RuntimePermissionName")
 }
 
 @BindPermissionStateProvider
@@ -68,56 +67,27 @@ internal class RuntimePermissionStateProvider(
 
 @BindPermissionRequestHandler
 @Transient
-internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
+internal class RuntimePermissionRequestHandler(
+    private val navigator: Navigator
+) : PermissionRequestHandler {
+
     override fun handles(permission: Permission): Boolean =
         Metadata.RuntimePermissionName in permission.metadata
 
-    override suspend fun request(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        permission: Permission
-    ): PermissionResult {
-        val fragment = RequestFragment()
+    override suspend fun request(permission: Permission) {
+        navigator.push<Unit>(
+            Route(opaque = true) {
+                val route = RouteAmbient.current
+                val launcher = registerActivityResultCallback(
+                    remember { ActivityResultContracts.RequestPermission() }
+                ) {
+                    navigator.pop(route = route)
+                }
 
-        activity.supportFragmentManager.beginTransaction()
-            .add(
-                fragment,
-                RequestFragment.TAG
-            )
-            .commitNow()
-
-        val granted = fragment.request(permission.metadata[Metadata.RuntimePermissionName])
-        return PermissionResult(isOk = granted)
-    }
-
-    class RequestFragment : Fragment() {
-
-        private val permissionResult = CompletableDeferred<Boolean>()
-
-        init {
-            retainInstance = true
-        }
-
-        override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-        ) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            permissionResult.complete(
-                grantResults.first() == PackageManager.PERMISSION_GRANTED
-            )
-        }
-
-        suspend fun request(name: String): Boolean {
-            requestPermissions(arrayOf(name), requestCodes.getAndIncrement())
-            return permissionResult.await()
-        }
-
-        internal companion object {
-            const val TAG = "RequestFragment"
-        }
+                onActive {
+                    launcher.launch(permission.metadata[Metadata.RuntimePermissionName])
+                }
+            }
+        ).await()
     }
 }
-
-private val requestCodes = AtomicInteger(0)

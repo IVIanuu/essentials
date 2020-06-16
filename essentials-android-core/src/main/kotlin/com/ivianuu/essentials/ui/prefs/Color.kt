@@ -84,10 +84,11 @@ fun ColorDialogListItem(
                 )
             ) {}
         },
-        dialog = {
+        dialog = { dismiss ->
             ColorPickerDialog(
                 initialColor = value,
                 onColorSelected = onValueChange,
+                onCancel = dismiss,
                 colorPalettes = colorPalettes,
                 showAlphaSelector = showAlphaSelector,
                 allowCustomArgb = allowCustomArgb,

@@ -20,7 +20,6 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
 /**
@@ -28,7 +27,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsNotificationListenerService : NotificationListenerService() {
 
-    val scope = CoroutineScope(Job() + Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.Main)
 
     lateinit var connectedScope: CoroutineScope
         private set
@@ -40,7 +39,7 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        connectedScope = CoroutineScope(Job() + Dispatchers.Main)
+        connectedScope = CoroutineScope(Dispatchers.Main)
     }
 
     override fun onListenerDisconnected() {

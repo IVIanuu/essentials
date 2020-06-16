@@ -2,9 +2,9 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.activityresult.ActivityResultManager
-import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.processrestart.RestartProcessUseCase
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.StartActivityForResultUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
@@ -17,14 +17,14 @@ import java.util.zip.ZipInputStream
 @Transient
 internal class RestoreDataUseCase(
     private val activity: ComponentActivity,
-    private val activityResultManager: ActivityResultManager,
     private val dispatchers: AppCoroutineDispatchers,
-    private val processRestarter: ProcessRestarter,
+    private val restartProcessUseCase: RestartProcessUseCase,
+    private val startActivityForResultUseCase: StartActivityForResultUseCase,
     private val toaster: Toaster
 ) {
 
     suspend operator fun invoke() = withContext(dispatchers.io) {
-        val uri = activityResultManager.startForResult(
+        val uri = startActivityForResultUseCase(
             Intent.createChooser(
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     type = "application/zip"
@@ -60,7 +60,7 @@ internal class RestoreDataUseCase(
                 entry = zipInputStream.nextEntry
             }
 
-            withContext(dispatchers.main) { processRestarter.restartProcess() }
+            restartProcessUseCase()
         } catch (e: Exception) {
             e.printStackTrace()
             toaster.toast(R.string.es_share_backup)

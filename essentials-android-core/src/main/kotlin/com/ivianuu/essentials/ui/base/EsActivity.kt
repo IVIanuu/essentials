@@ -27,7 +27,6 @@ import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.SystemBarManager
-import com.ivianuu.essentials.ui.core.UiInitializers
 import com.ivianuu.essentials.ui.core.WindowInsetsManager
 import com.ivianuu.injekt.inject
 
@@ -40,7 +39,6 @@ abstract class EsActivity : AppCompatActivity() {
         get() = android.R.id.content
 
     private val retainedObjects = RetainedObjects()
-    private val uiInitializers: UiInitializers by inject()
     private val windowInsetsManager: WindowInsetsManager by inject()
 
     private lateinit var composition: Composition
@@ -64,9 +62,7 @@ abstract class EsActivity : AppCompatActivity() {
         Providers(RetainedObjectsAmbient provides retainedObjects) {
             windowInsetsManager {
                 SystemBarManager {
-                    uiInitializers {
-                        content()
-                    }
+                    content()
                 }
             }
         }

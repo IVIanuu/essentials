@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.billing
 
 import android.app.Activity
-import android.content.Context
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
@@ -41,21 +40,31 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
+import com.ivianuu.essentials.ui.common.RenderAsync
+import com.ivianuu.essentials.ui.navigation.DialogRoute
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.StartUiUseCase
+import com.ivianuu.essentials.util.launchAsync
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.Date
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @ApplicationScoped
-class DebugBillingClient(
-    private val context: @ForApplication Context,
+class DebugBillingClient internal constructor(
+    private val buildInfo: BuildInfo,
     private val scope: @ForApplication CoroutineScope,
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
-    private val billingStore: BillingStore
+    private val billingStore: BillingStore,
+    private val navigator: Navigator,
+    private val startUiUseCase: StartUiUseCase
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -138,12 +147,58 @@ class DebugBillingClient(
     }
 
     override fun launchBillingFlow(activity: Activity?, params: BillingFlowParams?): BillingResult {
-        if (params == null) return BillingResult.newBuilder().setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
+        if (params == null) return BillingResult.newBuilder()
+            .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
         val requestId = UUID.randomUUID().toString()
         val request = PurchaseRequest(params.sku, params.skuType!!)
         requests[requestId] = request
-        DebugBillingActivity.purchase(context, requestId)
+
+        startUiUseCase()
+
+        scope.launch {
+            navigator.push(
+                DialogRoute(
+                    onDismiss = {
+                        val route = RouteAmbient.current
+                        scope.launch {
+                            onPurchaseResult(
+                                requestId = requestId,
+                                responseCode = BillingResponseCode.USER_CANCELED,
+                                purchases = null
+                            )
+
+                            navigator.pop(route = route)
+                        }
+                    }
+                ) {
+                    val route = RouteAmbient.current
+                    RenderAsync(
+                        state = launchAsync(requestId) { getSkuDetailsForRequest(requestId) },
+                        success = { skuDetails ->
+                            if (skuDetails == null) {
+                                navigator.pop(route = route)
+                            } else {
+                                DebugPurchaseDialog(
+                                    skuDetails = skuDetails,
+                                    onPurchaseClick = {
+                                        scope.launch {
+                                            onPurchaseResult(
+                                                requestId = requestId,
+                                                responseCode = BillingResponseCode.OK,
+                                                purchases = listOf(skuDetails.toPurchaseData())
+                                            )
+
+                                            navigator.pop(route = route)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    )
+                }
+            )
+        }
 
         return BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build()
     }
@@ -290,4 +345,12 @@ class DebugBillingClient(
             ).build(), purchases
         )
     }
+
+    private fun SkuDetails.toPurchaseData(): Purchase {
+        val json = """{"orderId":"$sku..0","packageName":"${buildInfo.packageName}","productId":
+      |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
+      |"0987654321", "purchaseState":1}""".trimMargin()
+        return Purchase(json, "debug-signature-$sku-$type")
+    }
+
 }

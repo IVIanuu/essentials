@@ -39,7 +39,6 @@ dependencies {
     implementation(project(":essentials-android-core"))
     implementation(project(":essentials-about"))
     api(project(":essentials-accessibility"))
-    api(project(":essentials-activity-result"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))

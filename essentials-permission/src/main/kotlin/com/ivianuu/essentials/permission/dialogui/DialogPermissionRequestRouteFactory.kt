@@ -19,83 +19,83 @@ package com.ivianuu.essentials.permission.dialogui
 import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
-import androidx.fragment.app.FragmentActivity
 import androidx.ui.foundation.VerticalScroller
-import com.ivianuu.essentials.permission.BindPermissionRequestUi
+import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionActivity
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestHandlers
-import com.ivianuu.essentials.permission.PermissionRequestUi
+import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
-import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogButton
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.StartUiUseCase
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.launch
 
-@BindPermissionRequestUi
+@BindPermissionRequestRouteFactory
 @Transient
-internal class DialogPermissionRequestUi(
-    private val dialog: PermissionDialog,
-    private val navigator: Navigator
-) : PermissionRequestUi {
+internal class DialogPermissionRequestRouteFactory(
+    private val dialog: PermissionDialog
+) : PermissionRequestRouteFactory {
 
-    override fun performRequest(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        request: PermissionRequest
-    ) {
-        navigator.push(
-            DialogRoute(onDismiss = { compositionActivity.finish() }) {
-                dialog(request)
-            }
-        )
+    override fun createRoute(request: PermissionRequest): Route {
+        return DialogRoute {
+            dialog(request)
+        }
     }
+
 }
 
 @Transient
 internal class PermissionDialog(
-    private val viewModelFactory: @Provider (PermissionRequest) -> PermissionDialogViewModel
+    private val viewModelFactory: @Provider (PermissionRequest, Route) -> PermissionDialogViewModel
 ) {
 
     @Composable
     operator fun invoke(request: PermissionRequest) {
+        val route = RouteAmbient.current
+        val viewModel = rememberRetained {
+            viewModelFactory(request, route)
+        }
+
         Dialog(
             title = { Text("Required Permissions") }, // todo customizable
             content = {
                 VerticalScroller(
                     scrollerPosition = RetainedScrollerPosition()
                 ) {
-                    val viewModel = rememberRetained { viewModelFactory(request) }
-                    val activity = compositionActivity as PermissionActivity
                     viewModel.permissionsToProcess.forEach { permission ->
                         Permission(
                             permission = permission,
-                            onClick = { viewModel.permissionClicked(activity, permission) }
+                            onClick = { viewModel.permissionClicked(permission) }
                         )
                     }
                 }
             },
             applyContentPadding = false,
             negativeButton = {
-                val activity = compositionActivity
-                DialogButton(onClick = { activity.finish() }) {
+                Button(
+                    style = TextButtonStyle(),
+                    onClick = { viewModel.cancelClicked() }
+                ) {
                     Text(R.string.es_cancel)
                 }
             }
@@ -127,8 +127,11 @@ internal class PermissionDialog(
 internal class PermissionDialogViewModel(
     private val logger: Logger,
     private val manager: PermissionManager,
+    private val navigator: Navigator,
     private val request: @Assisted PermissionRequest,
-    private val requestHandlers: PermissionRequestHandlers
+    private val requestHandlers: PermissionRequestHandlers,
+    private val route: @Assisted Route,
+    private val startUiUseCase: StartUiUseCase
 ) : ViewModel() {
 
     private val _permissionsToProcess = modelListOf<Permission>()
@@ -138,13 +141,17 @@ internal class PermissionDialogViewModel(
         updatePermissionsToProcessOrFinish()
     }
 
-    fun permissionClicked(activity: PermissionActivity, permission: Permission) {
+    fun permissionClicked(permission: Permission) {
         scope.launch {
-            logger.d("request $permission")
-            requestHandlers.requestHandlerFor(permission)
-                .request(activity, manager, permission)
+            requestHandlers.requestHandlerFor(permission).request(permission)
+            startUiUseCase()
             updatePermissionsToProcessOrFinish()
         }
+    }
+
+    fun cancelClicked() {
+        navigator.pop(route = route)
+        request.onComplete()
     }
 
     private fun updatePermissionsToProcessOrFinish() {
@@ -155,6 +162,7 @@ internal class PermissionDialogViewModel(
             logger.d("update permissions to process or finish not granted $permissionsToProcess")
 
             if (permissionsToProcess.isEmpty()) {
+                navigator.pop(route = route)
                 request.onComplete()
             } else {
                 _permissionsToProcess.clear()
@@ -162,4 +170,5 @@ internal class PermissionDialogViewModel(
             }
         }
     }
+
 }

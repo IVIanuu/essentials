@@ -18,7 +18,6 @@ package com.ivianuu.essentials.foreground
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -30,7 +29,7 @@ abstract class ForegroundComponent {
     var manager: ForegroundManager? = null
         private set
 
-    val scope = CoroutineScope(Job() + Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.Main)
 
     open fun attach(manager: ForegroundManager) {
         this.manager = manager

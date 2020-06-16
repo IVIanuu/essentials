@@ -36,8 +36,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogButton
-import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
@@ -70,11 +68,9 @@ class DialogsPage {
                             Dialog(
                                 title = { Text("Simple") },
                                 content = { Text("This is a message") },
-                                positiveButton = {
-                                    DialogCloseButton { Text("OK") }
-                                },
+                                positiveButton = { DialogCloseButton(text = "OK") },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
@@ -86,13 +82,13 @@ class DialogsPage {
                                 title = { Text("Simple") },
                                 content = { Text("This is a message") },
                                 positiveButton = {
-                                    DialogCloseButton { Text("Positive") }
+                                    DialogCloseButton(text = "Positive")
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Negative") }
+                                    DialogCloseButton(text = "Negative")
                                 },
                                 neutralButton = {
-                                    DialogCloseButton { Text("Neutral") }
+                                    DialogCloseButton(text = "Neutral")
                                 }
                             )
                         }
@@ -113,7 +109,7 @@ class DialogsPage {
                                 title = { Text("With icon") },
                                 icon = { Icon(Icons.Default.Settings) },
                                 positiveButton = {
-                                    DialogCloseButton { Text("OK") }
+                                    DialogCloseButton(text = "OK")
                                 }
                             )
                         }
@@ -131,10 +127,10 @@ class DialogsPage {
                         ) {
                             Dialog(
                                 positiveButton = {
-                                    DialogCloseButton { Text("OK") }
+                                    DialogCloseButton(text = "OK")
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
@@ -147,10 +143,10 @@ class DialogsPage {
                                 content = { Text("Shows stacked buttons") },
                                 buttonLayout = AlertDialogButtonLayout.Stacked,
                                 positiveButton = {
-                                    DialogCloseButton { Text("OK") }
+                                    DialogCloseButton(text = "OK")
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
@@ -163,13 +159,13 @@ class DialogsPage {
                                 content = { Text("Shows stacked buttons") },
                                 buttonLayout = AlertDialogButtonLayout.Stacked,
                                 positiveButton = {
-                                    DialogCloseButton { Text("Positive") }
+                                    DialogCloseButton(text = "Positive")
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Negative") }
+                                    DialogCloseButton(text = "Negative")
                                 },
                                 neutralButton = {
-                                    DialogCloseButton { Text("Neutral") }
+                                    DialogCloseButton(text = "Neutral")
                                 }
                             )
                         }
@@ -181,7 +177,7 @@ class DialogsPage {
                             Dialog(
                                 title = { Text("Not cancelable") },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Close") }
+                                    DialogCloseButton(text = "Close")
                                 }
                             )
                         }
@@ -211,7 +207,7 @@ class DialogsPage {
                                 },
                                 applyContentPadding = false,
                                 negativeButton = {
-                                    DialogCloseButton { Text("Close") }
+                                    DialogCloseButton(text = "Close")
                                 }
                             )
                         }
@@ -231,13 +227,13 @@ class DialogsPage {
                                 dismissOnSelection = false,
                                 item = { Text("Item: $it") },
                                 positiveButton = {
-                                    DialogButton(
+                                    Button(
                                         onClick = {
                                             setSelectedSingleChoiceItem(tmpSelectedItem)
                                         }) { Text("OK") }
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
@@ -256,24 +252,27 @@ class DialogsPage {
                                 onSelectionsChanged = setTmpSelectedItems,
                                 item = { Text(it) },
                                 positiveButton = {
-                                    DialogButton(
+                                    DialogCloseButton(
+                                        text = "OK",
                                         onClick = {
                                             setSelectedMultiChoiceItems(tmpSelectedItems)
-                                        }) { Text("OK") }
+                                        }
+                                    )
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
 
                         val primaryColor = MaterialTheme.colors.primary
                         val (currentColor, setCurrentColor) = state { primaryColor }
-                        DialogLauncherButton(text = "Color Picker") {
+                        DialogLauncherButton(text = "Color Picker") { dismiss ->
                             ColorPickerDialog(
                                 title = { Text("Color Picker") },
                                 showAlphaSelector = true,
                                 initialColor = currentColor,
+                                onCancel = dismiss,
                                 onColorSelected = setCurrentColor
                             )
                         }
@@ -287,14 +286,16 @@ class DialogsPage {
                                 onValueChange = setTmpTextInputValue,
                                 hint = "Hint..",
                                 positiveButton = {
-                                    DialogButton(
-                                        enabled = tmpTextInputValue.isNotEmpty(),
+                                    DialogCloseButton(
+                                        text = "OK",
                                         onClick = {
                                             setTextInputValue(tmpTextInputValue)
-                                        }) { Text("OK") }
+                                        },
+                                        enabled = tmpTextInputValue.isNotEmpty()
+                                    )
                                 },
                                 negativeButton = {
-                                    DialogCloseButton { Text("Cancel") }
+                                    DialogCloseButton(text = "Cancel")
                                 }
                             )
                         }
@@ -306,10 +307,28 @@ class DialogsPage {
 }
 
 @Composable
+private fun DialogCloseButton(
+    enabled: Boolean = true,
+    onClick: () -> Unit = {},
+    text: String
+) {
+    val navigator = NavigatorAmbient.current
+    Button(
+        enabled = enabled,
+        onClick = {
+            onClick()
+            navigator.popTop()
+        }
+    ) {
+        Text(text)
+    }
+}
+
+@Composable
 private fun DialogLauncherButton(
     text: String,
     dismissible: Boolean = true,
-    dialog: @Composable () -> Unit
+    dialog: @Composable (() -> Unit) -> Unit
 ) {
     Spacer(Modifier.height(8.dp))
 
@@ -317,10 +336,11 @@ private fun DialogLauncherButton(
     Button(
         onClick = {
             navigator.push(
-                DialogRoute(
-                    dismissible = dismissible,
-                    dialog = dialog
-                )
+                DialogRoute(dismissible = dismissible) {
+                    dialog {
+                        navigator.popTop()
+                    }
+                }
             )
         }
     ) { Text(text) }

@@ -27,7 +27,6 @@ import androidx.compose.setValue
 import androidx.compose.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +35,7 @@ import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
-    val scope = remember(context) { CoroutineScope(context + Job()) }
+    val scope = remember(context) { CoroutineScope(context) }
     onDispose { scope.cancel() }
     return scope
 }

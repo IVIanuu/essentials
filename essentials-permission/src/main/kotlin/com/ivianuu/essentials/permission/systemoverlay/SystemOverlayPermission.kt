@@ -60,4 +60,5 @@ internal class SystemOverlayPermissionStateProvider(
 
     override suspend fun isGranted(permission: Permission): Boolean =
         Settings.canDrawOverlays(context)
+
 }

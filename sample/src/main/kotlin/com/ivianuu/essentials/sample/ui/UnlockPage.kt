@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.unlock.UnlockScreenUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.flow.filter
@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.first
 @Transient
 class UnlockPage(
     private val screenStateProvider: ScreenStateProvider,
-    private val screenUnlocker: ScreenUnlocker,
+    private val unlockScreenUseCase: UnlockScreenUseCase,
     private val toaster: Toaster
 ) {
     @Composable
@@ -52,7 +52,7 @@ class UnlockPage(
                             .filter { it == ScreenState.Locked }
                             .first()
 
-                        val unlocked = screenUnlocker.unlockScreen()
+                        val unlocked = unlockScreenUseCase()
                         toaster.toast("Screen unlocked $unlocked")
                     }
                 ) { Text("Unlock") }

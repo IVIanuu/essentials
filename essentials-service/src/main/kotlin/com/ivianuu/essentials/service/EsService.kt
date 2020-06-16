@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.IBinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
 /**
@@ -29,7 +28,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsService : Service() {
 
-    val scope = CoroutineScope(Job() + Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onDestroy() {
         scope.cancel()

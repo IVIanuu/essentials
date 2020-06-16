@@ -18,7 +18,8 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.processrestart.RestartProcessUseCase
+import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -28,7 +29,7 @@ import com.ivianuu.injekt.Transient
 
 @Transient
 class RestartProcessPage(
-    private val processRestarter: ProcessRestarter
+    private val restartProcessUseCase: RestartProcessUseCase
 ) {
     @Composable
     operator fun invoke() {
@@ -37,7 +38,7 @@ class RestartProcessPage(
             body = {
                 Button(
                     modifier = Modifier.center(),
-                    onClick = { processRestarter.restartProcess() }
+                    onClick = launchOnClick { restartProcessUseCase() }
                 ) {
                     Text("Restart process")
                 }

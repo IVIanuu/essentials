@@ -46,7 +46,7 @@ class UnlockScreenActivity : EsActivity() {
     private val dispatchers: AppCoroutineDispatchers by inject()
     private val keyguardManager: KeyguardManager by inject()
     private val logger: Logger by inject()
-    private val screenUnlocker: ScreenUnlocker by inject()
+    private val unlockScreenUseCase: UnlockScreenUseCase by inject()
     private val systemBuildInfo: SystemBuildInfo by inject()
 
     private var hasResult = false
@@ -70,7 +70,7 @@ class UnlockScreenActivity : EsActivity() {
         fun finishWithResult(success: Boolean) {
             logger.d("finish with result $success")
             hasResult = true
-            screenUnlocker.onUnlockScreenResult(requestId, success)
+            unlockScreenUseCase.onUnlockScreenResult(requestId, success)
             finish()
         }
 
@@ -116,7 +116,7 @@ class UnlockScreenActivity : EsActivity() {
     override fun onDestroy() {
         // just in case we didn't respond yet
         if (valid && !hasResult) {
-            screenUnlocker.onUnlockScreenResult(requestId, false)
+            unlockScreenUseCase.onUnlockScreenResult(requestId, false)
         }
         super.onDestroy()
     }

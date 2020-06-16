@@ -24,7 +24,6 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.activityresult.ActivityResultManager
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.common.RenderAsyncList
@@ -36,6 +35,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.StartActivityForResultUseCase
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -86,9 +86,9 @@ private fun Shortcut(
 
 @Transient
 internal class ShortcutPickerViewModel(
-    private val activityResultManager: ActivityResultManager,
     private val navigator: Navigator,
-    private val shortcutStore: ShortcutStore
+    private val shortcutStore: ShortcutStore,
+    private val startActivityForResultUseCase: StartActivityForResultUseCase
 ) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
     init {
         scope.execute(
@@ -100,9 +100,8 @@ internal class ShortcutPickerViewModel(
     fun shortcutClicked(info: Shortcut) {
         scope.launch {
             try {
-                val shortcutRequestResult = activityResultManager.startForResult(
-                    info.intent
-                ).data ?: return@launch
+                val shortcutRequestResult = startActivityForResultUseCase(info.intent)
+                    .data ?: return@launch
 
                 val shortcut = shortcutStore.getShortcut(shortcutRequestResult)
 

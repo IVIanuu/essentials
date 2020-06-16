@@ -20,7 +20,6 @@ import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 
 /**
@@ -28,7 +27,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsAccessibilityService : AccessibilityService() {
 
-    val scope = CoroutineScope(Job() + Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onDestroy() {
         scope.cancel()

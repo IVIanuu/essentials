@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.ui.navigation.Route
 
 interface Permission {
     val metadata: Metadata
@@ -35,21 +35,15 @@ interface PermissionStateProvider {
 
 interface PermissionRequestHandler {
     fun handles(permission: Permission): Boolean
-    suspend fun request(
-        activity: FragmentActivity,
-        manager: PermissionManager,
-        permission: Permission
-    ): PermissionResult
+    suspend fun request(permission: Permission)
 }
 
-data class PermissionResult(val isOk: Boolean)
+interface PermissionRequestRouteFactory {
 
-interface PermissionRequestUi {
-    fun performRequest(
-        activity: FragmentActivity,
-        manager: PermissionManager,
+    fun createRoute(
         request: PermissionRequest
-    )
+    ): Route
+
 }
 
 data class PermissionRequest(

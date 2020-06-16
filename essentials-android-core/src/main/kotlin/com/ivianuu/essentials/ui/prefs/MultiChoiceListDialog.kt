@@ -24,9 +24,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.DialogButton
-import com.ivianuu.essentials.ui.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.material.Button
 
 @Composable
 fun <T> MultiChoiceDialogListItem(
@@ -80,15 +79,16 @@ fun <T> MultiChoiceDialogListItem(
                 item = { Text(it.title) },
                 title = dialogTitle,
                 positiveButton = {
-                    DialogButton(
+                    Button(
                         onClick = {
                             val newValue = selectedItems.value.map { it.value }.toSet()
                             onValueChange(newValue)
+                            dismiss()
                         }
                     ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
-                    DialogCloseButton {
+                    Button(onClick = dismiss) {
                         Text(R.string.es_cancel)
                     }
                 }
