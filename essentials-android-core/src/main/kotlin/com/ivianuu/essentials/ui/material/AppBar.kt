@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
@@ -42,10 +43,19 @@ import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.isLight
 
+enum class TopAppBarStyle {
+    Primary, Surface
+}
+
+val TopAppBarStyleAmbient = ambientOf { TopAppBarStyle.Primary }
+
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    backgroundColor: Color = when (TopAppBarStyleAmbient.current) {
+        TopAppBarStyle.Primary -> MaterialTheme.colors.primary
+        TopAppBarStyle.Surface -> MaterialTheme.colors.surface
+    },
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
     title: @Composable (() -> Unit)? = null,
