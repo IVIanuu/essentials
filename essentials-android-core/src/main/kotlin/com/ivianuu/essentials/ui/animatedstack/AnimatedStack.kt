@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.animatedstack
 import androidx.compose.Composable
 import androidx.compose.Stable
 import androidx.compose.frames.modelListOf
+import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateOf
@@ -69,7 +70,7 @@ fun <T> AnimatedStack(
         val state = remember { AnimatedStackState<T>() }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)
-        state.activeTransitions.toList().forEach { it() }
+        state.activeTransitions.values.toList().forEach { it() }
         Stack(modifier = modifier) {
             state.visibleChildren.toList().forEach {
                 key(it.key) {
@@ -88,7 +89,7 @@ internal class AnimatedStackState<T> {
 
     var defaultTransition = NoOpStackTransition
 
-    val activeTransitions = modelListOf<@Composable () -> Unit>()
+    val activeTransitions = modelMapOf<T, @Composable () -> Unit>()
 
     fun setChildren(newChildren: List<AnimatedStackChild<T>>) {
         if (newChildren == _children) return
@@ -184,10 +185,12 @@ internal class AnimatedStackState<T> {
     ) {
         val exitFrom = from != null && (!isPush || !to!!.opaque)
 
-        val transactionId = UUID.randomUUID()
+        from?.key?.let { activeTransitions -= it }
 
-        lateinit var transitionComposable: @Composable () -> Unit
-        transitionComposable = {
+        val transactionId = UUID.randomUUID()
+        val transactionKey = to?.key ?: from?.key ?: error("No transition needed")
+
+        activeTransitions[transactionKey] = {
             key(transactionId) {
                 val fromAnimatable = from?.let { animatableFor(it) }
                 val toAnimatable = to?.let { animatableFor(it) }
@@ -195,7 +198,7 @@ internal class AnimatedStackState<T> {
                 var completed by state { false }
                 if (completed) {
                     remember {
-                        activeTransitions -= transitionComposable
+                        activeTransitions -= transactionKey
                         to?.onTransitionComplete(this)
                         from?.onTransitionComplete(this)
                     }
@@ -233,7 +236,6 @@ internal class AnimatedStackState<T> {
                 transition(context)
             }
         }
-        activeTransitions += transitionComposable
     }
 
 }
