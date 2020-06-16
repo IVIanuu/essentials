@@ -31,7 +31,7 @@ import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
-import com.ivianuu.essentials.ui.common.RenderAsyncList
+import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
@@ -90,7 +90,7 @@ class CheckableAppsPage internal constructor(
                 )
             },
             body = {
-                RenderAsyncList(
+                AsyncList(
                     state = viewModel.currentState.apps,
                     successItem = { app ->
                         CheckableApp(

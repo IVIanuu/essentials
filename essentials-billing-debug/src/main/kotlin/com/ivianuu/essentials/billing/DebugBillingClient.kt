@@ -40,7 +40,7 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
-import com.ivianuu.essentials.ui.common.RenderAsync
+import com.ivianuu.essentials.ui.common.AsyncBox
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
@@ -173,7 +173,7 @@ class DebugBillingClient internal constructor(
                     }
                 ) {
                     val route = RouteAmbient.current
-                    RenderAsync(
+                    AsyncBox(
                         state = launchAsync(requestId) { getSkuDetailsForRequest(requestId) },
                         success = { skuDetails ->
                             if (skuDetails == null) {

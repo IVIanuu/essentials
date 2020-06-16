@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
-import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.unit.isFinite
 import coil.Coil
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
-import com.ivianuu.essentials.ui.common.RenderAsync
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import com.ivianuu.essentials.ui.common.AsyncBox
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.launchAsync
 
@@ -36,6 +36,7 @@ import com.ivianuu.essentials.util.launchAsync
 fun CoilImage(
     data: Any,
     modifier: Modifier = Modifier,
+    transition: StackTransition = FadeStackTransition(),
     builderBlock: (GetRequestBuilder.() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     error: @Composable (() -> Unit)? = null
@@ -43,8 +44,8 @@ fun CoilImage(
     WithConstraints(modifier = modifier) {
         val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
-
         val context = ContextAmbient.current
+
         val state = launchAsync(data, builderBlock, width, height) {
             Coil.imageLoader(context).execute(
                 GetRequest.Builder(context)
@@ -61,13 +62,14 @@ fun CoilImage(
                 .let { ImagePainter(it) }
         }
 
-        Box(modifier = modifier, gravity = Alignment.Center) {
-            RenderAsync(
-                state = state,
-                fail = { error?.invoke() },
-                loading = { placeholder?.invoke() },
-                success = { Image(it) }
-            )
-        }
+        println("state for $data -> $state")
+
+        AsyncBox(
+            state = state,
+            transition = transition,
+            fail = { error?.invoke() },
+            loading = { placeholder?.invoke() },
+            success = { Image(it) }
+        )
     }
 }

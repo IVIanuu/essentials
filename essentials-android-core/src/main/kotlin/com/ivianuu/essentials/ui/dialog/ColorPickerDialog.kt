@@ -177,15 +177,16 @@ private fun ColorGrid(
     onColorSelected: (Color) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (currentPalette, setCurrentPalette) = state<ColorPickerPalette?> { null }
-    val items = remember(currentPalette) {
-        currentPalette?.colors
-            ?.map { ColorGridItem.Color(it) }
-            ?.let { listOf(ColorGridItem.Back) + it }
-            ?: colorPalettes.map { ColorGridItem.Color(it.front) }
-    }
+    val currentPaletteState = state<ColorPickerPalette?> { null }
+    AnimatedBox(current = currentPaletteState.value) { palette ->
+        val items = remember {
+            palette
+                ?.colors
+                ?.map { ColorGridItem.Color(it) }
+                ?.let { listOf(ColorGridItem.Back) + it }
+                ?: colorPalettes.map { ColorGridItem.Color(it.front) }
+        }
 
-    key(currentPalette) {
         WithConstraints(modifier = modifier) {
             VerticalScroller(
                 modifier = Modifier.padding(all = 4.dp),
@@ -204,17 +205,17 @@ private fun ColorGrid(
                                 ) {
                                     when (item) {
                                         is ColorGridItem.Back -> ColorGridBackButton(
-                                            onClick = { setCurrentPalette(null) }
+                                            onClick = { currentPaletteState.value = null }
                                         )
                                         is ColorGridItem.Color -> ColorGridItem(
                                             color = item.color,
                                             isSelected = item.color == currentColor,
                                             onClick = {
-                                                if (currentPalette == null) {
+                                                if (palette == null) {
                                                     val paletteForItem =
                                                         colorPalettes.first { it.front == item.color }
                                                     if (paletteForItem.colors.size > 1) {
-                                                        setCurrentPalette(paletteForItem)
+                                                        currentPaletteState.value = paletteForItem
                                                     } else {
                                                         onColorSelected(item.color)
                                                     }

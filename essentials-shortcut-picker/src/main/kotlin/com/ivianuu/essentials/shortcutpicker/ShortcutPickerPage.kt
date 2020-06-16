@@ -28,7 +28,7 @@ import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
-import com.ivianuu.essentials.ui.common.RenderAsyncList
+import com.ivianuu.essentials.ui.common.AsyncList
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -57,7 +57,7 @@ class ShortcutPickerPage internal constructor(
                 })
             },
             body = {
-                RenderAsyncList(state = viewModel.currentState.shortcuts) { shortcut ->
+                AsyncList(state = viewModel.currentState.shortcuts) { shortcut ->
                     Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
                 }
             }

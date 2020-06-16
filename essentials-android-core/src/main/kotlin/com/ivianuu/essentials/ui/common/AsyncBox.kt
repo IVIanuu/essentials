@@ -17,8 +17,14 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.compose.StructurallyEqual
+import androidx.compose.mutableStateOf
+import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.material.CircularProgressIndicator
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
@@ -27,8 +33,10 @@ import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 
 @Composable
-fun <T> RenderAsyncList(
+fun <T> AsyncList(
     state: Async<List<T>>,
+    modifier: Modifier = Modifier,
+    transition: StackTransition = FadeStackTransition(),
     fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(modifier = Modifier.center())
@@ -37,8 +45,10 @@ fun <T> RenderAsyncList(
     successEmpty: @Composable () -> Unit = {},
     successItem: @Composable (T) -> Unit
 ) {
-    RenderAsync(
+    AsyncBox(
         state = state,
+        modifier = modifier,
+        transition = transition,
         fail = fail,
         loading = loading,
         uninitialized = uninitialized,
@@ -53,9 +63,11 @@ fun <T> RenderAsyncList(
 }
 
 @Composable
-fun <T> RenderAsync(
+fun <T> AsyncBox(
     state: Async<T>,
-    fail: @Composable (Throwable) -> Unit = { throw it },
+    modifier: Modifier = Modifier,
+    transition: StackTransition = FadeStackTransition(),
+    fail: @Composable (Throwable) -> Unit = {},
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(
             modifier = Modifier.center()
@@ -64,10 +76,19 @@ fun <T> RenderAsync(
     uninitialized: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {
-    when (state) {
-        is Uninitialized -> uninitialized()
-        is Loading -> loading()
-        is Success -> success(state.value)
-        is Fail -> fail(state.error)
+    val asyncState = remember(loading) { mutableStateOf(state, StructurallyEqual) }
+    asyncState.value = state
+
+    AnimatedBox(
+        current = asyncState,
+        modifier = modifier,
+        transition = transition
+    ) { currentState ->
+        when (val currentAsyncState = currentState.value) {
+            is Uninitialized -> uninitialized()
+            is Loading -> loading()
+            is Success -> success(currentAsyncState.value)
+            is Fail -> fail(currentAsyncState.error)
+        }
     }
 }
