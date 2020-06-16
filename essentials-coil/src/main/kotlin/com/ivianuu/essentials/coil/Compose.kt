@@ -62,8 +62,6 @@ fun CoilImage(
                 .let { ImagePainter(it) }
         }
 
-        println("state for $data -> $state")
-
         AsyncBox(
             state = state,
             transition = transition,
