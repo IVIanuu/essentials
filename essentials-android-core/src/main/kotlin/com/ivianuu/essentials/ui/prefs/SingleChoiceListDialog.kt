@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
-import androidx.ui.material.Button
+import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
@@ -74,7 +74,7 @@ fun <T> SingleChoiceDialogListItem(
                 item = { Text(it.title) },
                 title = dialogTitle,
                 negativeButton = {
-                    Button(onClick = dismiss) {
+                    TextButton(onClick = dismiss) {
                         Text(R.string.es_cancel)
                     }
                 }

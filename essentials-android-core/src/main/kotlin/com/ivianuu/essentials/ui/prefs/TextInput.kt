@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.stateFor
 import androidx.ui.core.Modifier
 import androidx.ui.input.KeyboardType
-import androidx.ui.material.Button
+import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
@@ -82,7 +82,7 @@ fun TextInputDialogListItem(
                 hint = dialogHint,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
-                    Button(
+                    TextButton(
                         enabled = allowEmpty || currentValue.value.isNotEmpty(),
                         onClick = {
                             onValueChange(currentValue.value)
@@ -91,7 +91,7 @@ fun TextInputDialogListItem(
                     ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
-                    Button(onClick = dismiss) {
+                    TextButton(onClick = dismiss) {
                         Text(R.string.es_cancel)
                     }
                 }

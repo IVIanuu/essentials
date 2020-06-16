@@ -25,8 +25,8 @@ import androidx.ui.core.focus.FocusModifier
 import androidx.ui.foundation.Text
 import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
-import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.TextField
@@ -55,13 +55,13 @@ fun TextInputRoute(
             }
         },
         positiveButton = {
-            Button(
+            TextButton(
                 enabled = allowEmpty || currentValue.isNotEmpty(),
                 onClick = { navigator.popTop(result = currentValue) }
             ) { Text(R.string.es_ok) }
         },
         negativeButton = {
-            Button(
+            TextButton(
                 onClick = { navigator.popTop() }
             ) { Text(R.string.es_cancel) }
         }

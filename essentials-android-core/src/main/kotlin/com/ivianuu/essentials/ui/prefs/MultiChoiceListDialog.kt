@@ -21,7 +21,7 @@ import androidx.compose.Immutable
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
-import androidx.ui.material.Button
+import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
@@ -80,7 +80,7 @@ fun <T> MultiChoiceDialogListItem(
                 item = { Text(it.title) },
                 title = dialogTitle,
                 positiveButton = {
-                    Button(
+                    TextButton(
                         onClick = {
                             val newValue = selectedItems.value.map { it.value }.toSet()
                             onValueChange(newValue)
@@ -89,7 +89,7 @@ fun <T> MultiChoiceDialogListItem(
                     ) { Text(R.string.es_ok) }
                 },
                 negativeButton = {
-                    Button(onClick = dismiss) {
+                    TextButton(onClick = dismiss) {
                         Text(R.string.es_cancel)
                     }
                 }

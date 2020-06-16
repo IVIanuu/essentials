@@ -30,6 +30,7 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.height
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
@@ -316,7 +317,7 @@ private fun DialogCloseButton(
     text: String
 ) {
     val navigator = NavigatorAmbient.current
-    Button(
+    TextButton(
         enabled = enabled,
         onClick = {
             onClick()
