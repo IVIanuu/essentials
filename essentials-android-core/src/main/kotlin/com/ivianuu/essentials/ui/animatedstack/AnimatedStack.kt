@@ -200,7 +200,7 @@ internal class AnimatedStackState<T>(
     ) {
         val exitFrom = from != null && (!isPush || !to!!.opaque)
 
-        from?.key?.let { activeTransitions -= it }
+        from?.let { activeTransitions -= it.key }
 
         val transactionId = UUID.randomUUID()
         val transactionKey = when {
