@@ -23,12 +23,10 @@ import androidx.compose.onActive
 import androidx.compose.remember
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -39,16 +37,14 @@ import com.ivianuu.injekt.Transient
 
 fun RuntimePermission(
     name: String,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.RuntimePermissionName withValue name,
-        *metadata
-    )
+    Permission.RuntimePermissionName withValue name,
+    *metadata
 )
 
-val Metadata.Companion.RuntimePermissionName by lazy {
-    Metadata.Key<String>("RuntimePermissionName")
+val Permission.Companion.RuntimePermissionName by lazy {
+    Permission.Key<String>("RuntimePermissionName")
 }
 
 @BindPermissionStateProvider
@@ -58,10 +54,10 @@ internal class RuntimePermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.RuntimePermissionName in permission.metadata
+        Permission.RuntimePermissionName in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        context.checkSelfPermission(permission.metadata[Metadata.RuntimePermissionName]) ==
+        context.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
 }
 
@@ -72,7 +68,7 @@ internal class RuntimePermissionRequestHandler(
 ) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.RuntimePermissionName in permission.metadata
+        Permission.RuntimePermissionName in permission
 
     override suspend fun request(permission: Permission) {
         navigator.push<Unit>(
@@ -85,7 +81,7 @@ internal class RuntimePermissionRequestHandler(
                 }
 
                 onActive {
-                    launcher.launch(permission.metadata[Metadata.RuntimePermissionName])
+                    launcher.launch(permission[Permission.RuntimePermissionName])
                 }
             }
         ).await()

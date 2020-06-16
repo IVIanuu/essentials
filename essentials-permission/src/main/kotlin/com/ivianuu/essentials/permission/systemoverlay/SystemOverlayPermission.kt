@@ -21,32 +21,28 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
 fun SystemOverlayPermission(
     context: Context,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.IsSystemOverlayPermission withValue Unit,
-        Metadata.Intent withValue Intent(
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            "package:${context.packageName}".toUri()
-        ),
-        *metadata
-    )
+    Permission.IsSystemOverlayPermission withValue Unit,
+    Permission.Intent withValue Intent(
+        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+        "package:${context.packageName}".toUri()
+    ),
+    *metadata
 )
 
-val Metadata.Companion.IsSystemOverlayPermission by lazy {
-    Metadata.Key<Unit>("IsSystemOverlayPermission")
+val Permission.Companion.IsSystemOverlayPermission by lazy {
+    Permission.Key<Unit>("IsSystemOverlayPermission")
 }
 
 @BindPermissionStateProvider
@@ -56,7 +52,7 @@ internal class SystemOverlayPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.IsSystemOverlayPermission in permission.metadata
+        Permission.IsSystemOverlayPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
         Settings.canDrawOverlays(context)

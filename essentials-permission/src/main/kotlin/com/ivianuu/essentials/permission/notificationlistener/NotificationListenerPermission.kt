@@ -21,12 +21,10 @@ import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.ForApplication
@@ -35,17 +33,15 @@ import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
     serviceClass: KClass<out NotificationListenerService>,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.NotificationListenerClass withValue serviceClass,
-        Metadata.Intent withValue Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
-        *metadata
-    )
+    Permission.NotificationListenerClass withValue serviceClass,
+    Permission.Intent withValue Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
+    *metadata
 )
 
-val Metadata.Companion.NotificationListenerClass by lazy {
-    Metadata.Key<KClass<out NotificationListenerService>>(
+val Permission.Companion.NotificationListenerClass by lazy {
+    Permission.Key<KClass<out NotificationListenerService>>(
         "NotificationListenerClass"
     )
 }
@@ -58,7 +54,7 @@ internal class NotificationListenerPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.NotificationListenerClass in permission.metadata
+        Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
         return Settings.Secure.getString(
@@ -72,7 +68,7 @@ internal class NotificationListenerPermissionStateProvider(
             }
             .any { (packageName, listenerName) ->
                 packageName == buildInfo.packageName &&
-                        listenerName == permission.metadata[Metadata.NotificationListenerClass].java.canonicalName
+                        listenerName == permission[Permission.NotificationListenerClass].java.canonicalName
             }
     }
 }

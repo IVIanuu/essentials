@@ -16,17 +16,43 @@
 
 package com.ivianuu.essentials.permission
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.navigation.Route
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
-interface Permission {
-    val metadata: Metadata
+class Permission(private val metadata: Map<Key<*>, Any?>) {
+
+    constructor(vararg metadata: KeyWithValue<*>) : this(metadata.associate {
+        it.key to it.value
+    })
+
+    operator fun <T> get(key: Key<T>): T =
+        metadata[key] as? T ?: error("missing value for $key")
+
+    fun <T> getOrNull(key: Key<T>): T? = metadata[key] as? T
+
+    operator fun <T> contains(key: Key<T>): Boolean = metadata.containsKey(key)
+
+    class Key<T>(val name: String) : ReadOnlyProperty<Permission, T> {
+        override fun getValue(thisRef: Permission, property: KProperty<*>): T = thisRef[this]
+        override fun toString() = name
+    }
+
+    companion object
 }
 
-fun Permission(metadata: Metadata): Permission = SimplePermission(metadata = metadata)
+data class KeyWithValue<T>(
+    val key: Permission.Key<T>,
+    val value: T
+)
 
-internal class SimplePermission(override val metadata: Metadata) : Permission {
-    override fun toString() = "Permission($metadata)"
-}
+infix fun <T> Permission.Key<T>.withValue(value: T): KeyWithValue<T> =
+    KeyWithValue(this, value)
+
+val Permission.Companion.Title by lazy { Permission.Key<String>("Title") }
+val Permission.Companion.Desc by lazy { Permission.Key<String>("Desc") }
+val Permission.Companion.Icon by lazy { Permission.Key<@Composable () -> Unit>("Icon") }
 
 interface PermissionStateProvider {
     fun handles(permission: Permission): Boolean

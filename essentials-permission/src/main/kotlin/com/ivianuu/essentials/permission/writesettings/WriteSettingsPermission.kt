@@ -21,32 +21,28 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
 fun WriteSettingsPermission(
     context: Context,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.IsWriteSettingsPermission withValue Unit,
-        Metadata.Intent withValue Intent(
-            Settings.ACTION_MANAGE_WRITE_SETTINGS,
-            "package:${context.packageName}".toUri()
-        ),
-        *metadata
-    )
+    Permission.IsWriteSettingsPermission withValue Unit,
+    Permission.Intent withValue Intent(
+        Settings.ACTION_MANAGE_WRITE_SETTINGS,
+        "package:${context.packageName}".toUri()
+    ),
+    *metadata
 )
 
-val Metadata.Companion.IsWriteSettingsPermission by lazy {
-    Metadata.Key<Unit>("IsWriteSettingsPermission")
+val Permission.Companion.IsWriteSettingsPermission by lazy {
+    Permission.Key<Unit>("IsWriteSettingsPermission")
 }
 
 @BindPermissionStateProvider
@@ -56,7 +52,7 @@ internal class WriteSettingsPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.IsWriteSettingsPermission in permission.metadata
+        Permission.IsWriteSettingsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
         Settings.System.canWrite(context)

@@ -21,12 +21,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.Transient
 import kotlin.reflect.KClass
@@ -35,23 +33,21 @@ fun DeviceAdminPermission(
     context: Context,
     deviceAdminClass: KClass<*>,
     explanation: String,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ): Permission {
     val component = ComponentName(context, deviceAdminClass.java)
     return Permission(
-        metadata = metadataOf(
-            Metadata.DeviceAdminComponent withValue component,
-            Metadata.Intent withValue Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-                putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-                putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, explanation)
-            },
-            *metadata
-        )
+        Permission.DeviceAdminComponent withValue component,
+        Permission.Intent withValue Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, explanation)
+        },
+        *metadata
     )
 }
 
-val Metadata.Companion.DeviceAdminComponent by lazy {
-    Metadata.Key<ComponentName>("DeviceAdminComponent")
+val Permission.Companion.DeviceAdminComponent by lazy {
+    Permission.Key<ComponentName>("DeviceAdminComponent")
 }
 
 @BindPermissionStateProvider
@@ -61,8 +57,8 @@ internal class DeviceAdminPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.DeviceAdminComponent in permission.metadata
+        Permission.DeviceAdminComponent in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        devicePolicyManager.isAdminActive(permission.metadata[Metadata.DeviceAdminComponent])
+        devicePolicyManager.isAdminActive(permission[Permission.DeviceAdminComponent])
 }

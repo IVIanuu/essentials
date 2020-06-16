@@ -28,7 +28,7 @@ import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -56,50 +56,50 @@ class PermissionsPage(
             body = {
                 val camera = RuntimePermission(
                     Manifest.permission.CAMERA,
-                    Metadata.Title withValue "Camera",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Camera",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val phone = RuntimePermission(
                     Manifest.permission.CALL_PHONE,
-                    Metadata.Title withValue "Call phone",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Call phone",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val accessibility = AccessibilityServicePermission(
                     ComponentAccessibilityService::class,
-                    Metadata.Title withValue "Accessibility",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Accessibility",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val notificationListener = NotificationListenerPermission(
                     ComponentNotificationListenerService::class,
-                    Metadata.Title withValue "Notification listener",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Notification listener",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val systemOverlay = SystemOverlayPermission(
                     ContextAmbient.current,
-                    Metadata.Title withValue "System overlay",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "System overlay",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val writeSecureSettings = WriteSecureSettingsPermission(
-                    Metadata.Title withValue "Write secure settings",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Write secure settings",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 val writeSettings = WriteSettingsPermission(
                     ContextAmbient.current,
-                    Metadata.Title withValue "Write settings",
-                    Metadata.Desc withValue "This is a desc",
-                    Metadata.Icon withValue { Icon(Icons.Default.Menu) }
+                    Permission.Title withValue "Write settings",
+                    Permission.Desc withValue "This is a desc",
+                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
                 )
 
                 Button(

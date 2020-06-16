@@ -25,7 +25,6 @@ import androidx.ui.material.TextButton
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
@@ -106,13 +105,13 @@ internal class PermissionDialog(
     ) {
         key(permission) {
             ListItem(
-                title = { Text(permission.metadata[Metadata.Title]) },
-                subtitle = permission.metadata.getOrNull(Metadata.Desc)?.let {
+                title = { Text(permission[Permission.Title]) },
+                subtitle = permission.getOrNull(Permission.Desc)?.let {
                     {
                         Text(it)
                     }
                 },
-                leading = permission.metadata.getOrNull(Metadata.Icon),
+                leading = permission.getOrNull(Permission.Icon),
                 onClick = onClick
             )
         }

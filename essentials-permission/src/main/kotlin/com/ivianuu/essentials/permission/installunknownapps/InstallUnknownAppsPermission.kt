@@ -20,28 +20,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
 fun InstallUnknownAppsPermission(
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.IsUnknownAppsPermission withValue Unit,
-        Metadata.Intent withValue Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"), // todo Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
-        *metadata
-    )
+    Permission.IsUnknownAppsPermission withValue Unit,
+    Permission.Intent withValue Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"), // todo Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+    *metadata
 )
 
-val Metadata.Companion.IsUnknownAppsPermission by lazy {
-    Metadata.Key<Unit>("IsUnknownAppsPermission")
+val Permission.Companion.IsUnknownAppsPermission by lazy {
+    Permission.Key<Unit>("IsUnknownAppsPermission")
 }
 
 @BindPermissionStateProvider
@@ -51,7 +47,7 @@ internal class InstallUnknownAppsPermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.IsUnknownAppsPermission in permission.metadata
+        Permission.IsUnknownAppsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
         Build.VERSION.SDK_INT < 26 || context.packageManager.canRequestPackageInstalls()

@@ -22,12 +22,10 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
-import com.ivianuu.essentials.permission.MetaDataKeyWithValue
-import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Transient
@@ -35,17 +33,15 @@ import kotlin.reflect.KClass
 
 fun AccessibilityServicePermission(
     serviceClass: KClass<out AccessibilityService>,
-    vararg metadata: MetaDataKeyWithValue<*>
+    vararg metadata: KeyWithValue<*>
 ) = Permission(
-    metadata = metadataOf(
-        Metadata.AccessibilityServiceClass withValue serviceClass,
-        Metadata.Intent withValue Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),
-        *metadata
-    )
+    Permission.AccessibilityServiceClass withValue serviceClass,
+    Permission.Intent withValue Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),
+    *metadata
 )
 
-val Metadata.Companion.AccessibilityServiceClass by lazy {
-    Metadata.Key<KClass<out AccessibilityService>>(
+val Permission.Companion.AccessibilityServiceClass by lazy {
+    Permission.Key<KClass<out AccessibilityService>>(
         "AccessibilityServiceClass"
     )
 }
@@ -58,13 +54,13 @@ internal class AccessibilityServicePermissionStateProvider(
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.AccessibilityServiceClass in permission.metadata
+        Permission.AccessibilityServiceClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
         return accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             .any {
                 it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
-                        it.resolveInfo.serviceInfo.name == permission.metadata[Metadata.AccessibilityServiceClass].java.canonicalName
+                        it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
             }
     }
 }

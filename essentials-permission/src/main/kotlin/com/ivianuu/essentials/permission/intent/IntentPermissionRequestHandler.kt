@@ -18,7 +18,6 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
-import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -30,8 +29,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.selects.select
 
-val Metadata.Companion.Intent by lazy {
-    Metadata.Key<Intent>(
+val Permission.Companion.Intent by lazy {
+    Permission.Key<Intent>(
         "Intent"
     )
 }
@@ -44,13 +43,13 @@ internal class IntentPermissionRequestHandler(
 ) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
-        Metadata.Intent in permission.metadata
+        Permission.Intent in permission
 
     override suspend fun request(permission: Permission) {
         coroutineScope {
             select<Unit> {
                 async {
-                    startActivityForResultUseCase(permission.metadata[Metadata.Intent])
+                    startActivityForResultUseCase(permission[Permission.Intent])
                 }.onAwait {}
                 async {
                     while (!permissionManager.hasPermissions(permission)) {
