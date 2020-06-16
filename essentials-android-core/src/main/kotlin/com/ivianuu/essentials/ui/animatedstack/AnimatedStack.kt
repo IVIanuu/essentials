@@ -203,7 +203,11 @@ internal class AnimatedStackState<T>(
         from?.key?.let { activeTransitions -= it }
 
         val transactionId = UUID.randomUUID()
-        val transactionKey = to?.key ?: from?.key ?: error("No transition needed")
+        val transactionKey = when {
+            to != null -> to.key
+            from != null -> from.key
+            else -> error("No transition needed")
+        }
 
         activeTransitions[transactionKey] = {
             key(transactionId) {
