@@ -35,5 +35,3 @@ fun <T, S> Box<T>.map(
             fromRaw(wrapped.updateData { toRaw(transform(fromRaw(it))) })
     }
 }
-
-suspend fun <T> Box<T>.resetData() = updateData { defaultData }

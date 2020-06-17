@@ -47,11 +47,11 @@ private fun esDataModule() {
         )
     }
     scoped { context: @ForApplication Context,
-             coroutineScope: @ForApplication CoroutineScope,
+             scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers ->
         SettingsBoxFactory(
             context = context,
-            scope = coroutineScope + dispatchers.io
+            scope = scope + dispatchers.io
         )
     }
 }
