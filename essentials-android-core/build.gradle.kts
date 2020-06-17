@@ -42,8 +42,6 @@ dependencies {
     api(Deps.AndroidX.Ui.material)
     api(Deps.AndroidX.Ui.materialIconsExtended)
     api(Deps.AndroidX.Ui.text)
-    api(Deps.AndroidX.Ui.tooling)
-    api(Deps.AndroidX.Ui.vector)
 
     api(Deps.Coroutines.android)
 

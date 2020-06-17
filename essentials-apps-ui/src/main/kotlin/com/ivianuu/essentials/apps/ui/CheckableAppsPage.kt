@@ -33,7 +33,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
-import com.ivianuu.essentials.ui.common.AsyncLazyColumn
+import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
@@ -91,9 +91,9 @@ class CheckableAppsPage internal constructor(
                 )
             },
             body = {
-                AsyncLazyColumn(
+                AsyncLazyColumnItems(
                     state = viewModel.currentState.apps,
-                    successItem = { app ->
+                    successItemContent = { app ->
                         CheckableApp(
                             app = app,
                             onClick = { viewModel.appClicked(app) }

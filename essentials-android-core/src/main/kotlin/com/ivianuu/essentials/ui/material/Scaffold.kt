@@ -31,9 +31,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
-import androidx.ui.unit.IntPx
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
 
@@ -194,7 +192,7 @@ private fun ScaffoldLayout(
         var barConstraints = incomingConstraints.copy(
             minWidth = width,
             maxWidth = width,
-            minHeight = 0.ipx
+            minHeight = 0
         )
 
         val topAppBarPlaceable = topAppBarMeasureable
@@ -203,7 +201,7 @@ private fun ScaffoldLayout(
                 barConstraints =
                     barConstraints.copy(maxHeight = barConstraints.maxHeight - placeable.height)
             }
-        val topAppBarTop = if (topAppBarPlaceable != null) 0.ipx else null
+        val topAppBarTop = if (topAppBarPlaceable != null) 0 else null
         val topAppBarBottom =
             if (topAppBarPlaceable != null) topAppBarTop!! + topAppBarPlaceable.height else null
 
@@ -212,10 +210,10 @@ private fun ScaffoldLayout(
         val bottomBarTop =
             if (bottomBarPlaceable != null) bottomBarBottom!! - bottomBarPlaceable.height else null
 
-        val bodyTop: IntPx? = if (topAppBarMeasureable != null) topAppBarBottom!! else 0.ipx
-        val bodyBottom: IntPx? = if (bottomBarMeasureable != null) bottomBarTop!! else height
+        val bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0
+        val bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
 
-        val bodyHeight = if (bodyMeasureable != null) bodyBottom!! - bodyTop!! else null
+        val bodyHeight = if (bodyMeasureable != null) bodyBottom - bodyTop else null
 
         val bodyPlaceable = if (bodyMeasureable == null) {
             null
@@ -231,7 +229,7 @@ private fun ScaffoldLayout(
         }
 
         val fabPlaceable =
-            fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0.ipx, minHeight = 0.ipx))
+            fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0, minHeight = 0))
 
         val fabPadding = 16.dp.toIntPx()
 
@@ -247,10 +245,10 @@ private fun ScaffoldLayout(
         } else null
 
         layout(width, height) {
-            bodyPlaceable?.place(0.ipx, bodyTop!!)
+            bodyPlaceable?.place(0, bodyTop)
             fabPlaceable?.place(fabLeft!!, fabTop!!)
-            bottomBarPlaceable?.place(0.ipx, bottomBarTop!!)
-            topAppBarPlaceable?.place(0.ipx, topAppBarTop!!)
+            bottomBarPlaceable?.place(0, bottomBarTop!!)
+            topAppBarPlaceable?.place(0, topAppBarTop!!)
         }
     }
 }

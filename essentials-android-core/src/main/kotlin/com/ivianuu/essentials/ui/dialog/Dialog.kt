@@ -38,7 +38,6 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable
@@ -222,7 +221,7 @@ private fun DialogContentLayout(
     Layout(children = children) { measurables, constraints, _ ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
-            minHeight = 0.ipx
+            minHeight = 0
         )
 
         val headerMeasureable =
@@ -261,12 +260,12 @@ private fun DialogContentLayout(
             bottomDividerPlaceable,
             buttonsPlaceable
         )
-        val height = placeables.map { it.height }.sumBy { it.value }.ipx
+        val height = placeables.map { it.height }.sum()
 
         layout(width = constraints.maxWidth, height = height) {
-            var offsetY = 0.ipx
+            var offsetY = 0
             placeables.forEach { placeable ->
-                placeable.place(0.ipx, offsetY)
+                placeable.place(0, offsetY)
                 offsetY += placeable.height
             }
         }

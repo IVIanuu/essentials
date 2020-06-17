@@ -15,9 +15,7 @@ import androidx.ui.layout.size
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.material.ripple.RippleIndication
-import androidx.ui.unit.IntPxBounds
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.image.Icon
@@ -62,14 +60,7 @@ fun Modifier.popupClickable(
         .clickable(indication = indicationFactory()) {
             navigator.push(
                 PopupRoute(
-                    position = coordinates.value!!.boundsInRoot.let {
-                        IntPxBounds(
-                            left = it.left.toInt().ipx,
-                            top = it.top.toInt().ipx,
-                            right = it.right.toInt().ipx,
-                            bottom = it.bottom.toInt().ipx
-                        )
-                    },
+                    position = coordinates.value!!.boundsInRoot,
                     onCancel = onCancel
                 ) {
                     PopupMenu(

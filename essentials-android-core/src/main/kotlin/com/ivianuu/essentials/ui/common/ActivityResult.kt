@@ -19,7 +19,7 @@ fun <I, O> registerActivityResultCallback(
     val registry = compositionActivity.activityResultRegistry
 
     val launcher = remember(contract, callback, registry) {
-        registry.registerActivityResultCallback(
+        registry.register(
             key.toString(),
             contract,
             callback
@@ -28,7 +28,7 @@ fun <I, O> registerActivityResultCallback(
 
     key(launcher) {
         onDispose {
-            launcher.dispose()
+            launcher.unregister()
         }
     }
 

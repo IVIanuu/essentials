@@ -39,7 +39,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        const val composeVersion = "0.0.1-dev143"
+        const val composeVersion = "0.0.1-dev145"
 
         object Compose {
             const val version = composeVersion
@@ -69,8 +69,6 @@ object Deps {
             const val materialIconsExtended = "androidx.ui:ui-material-icons-extended:$version"
             const val test = "androidx.ui:ui-test:$version"
             const val text = "androidx.ui:ui-text:$version"
-            const val tooling = "androidx.ui:ui-tooling:$version"
-            const val vector = "androidx.ui:ui-vector:$version"
         }
 
         const val work = "androidx.work:work-runtime-ktx:2.1.0"

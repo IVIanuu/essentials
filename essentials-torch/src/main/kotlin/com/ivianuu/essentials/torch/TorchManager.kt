@@ -26,6 +26,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -52,6 +53,19 @@ class TorchManager internal constructor(
 
     private var foregroundJob: ForegroundJob? = null
 
+    private val stateActor = scope.actor<Boolean>(dispatchers.computation) {
+        for (enabled in this) {
+            logger.d("update state $enabled")
+            foregroundJob = if (enabled) {
+                foregroundManager.startJob(notificationFactory.create())
+            } else {
+                foregroundJob?.stop()
+                null
+            }
+            _torchState.value = enabled
+        }
+    }
+
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
@@ -65,7 +79,7 @@ class TorchManager internal constructor(
                     tryOrToast {
                         cameraManager.unregisterTorchCallback(this)
                         cameraManager.setTorchMode(cameraId, !enabled)
-                        updateState(!enabled)
+                        stateActor.offer(!enabled)
                     }
                 }
 
@@ -73,7 +87,7 @@ class TorchManager internal constructor(
                     tryOrToast {
                         cameraManager.unregisterTorchCallback(this)
                         toaster.toast(R.string.es_failed_to_toggle_torch)
-                        updateState(false)
+                        stateActor.offer(false)
                     }
                 }
             }, null)
@@ -87,17 +101,6 @@ class TorchManager internal constructor(
             e.printStackTrace()
             toaster.toast(R.string.es_failed_to_toggle_torch)
         }
-    }
-
-    private fun updateState(enabled: Boolean) {
-        logger.d("update state $enabled")
-        foregroundJob = if (enabled) {
-            foregroundManager.startJob(notificationFactory.create())
-        } else {
-            foregroundJob?.stop()
-            null
-        }
-        _torchState.value = enabled
     }
 
     companion object {

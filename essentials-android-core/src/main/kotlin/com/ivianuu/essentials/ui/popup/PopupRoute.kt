@@ -23,10 +23,8 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.gesture.tapGestureFilter
 import androidx.ui.foundation.Box
-import androidx.ui.unit.IntPx
-import androidx.ui.unit.IntPxBounds
+import androidx.ui.unit.PxBounds
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
@@ -35,7 +33,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 fun PopupRoute(
-    position: IntPxBounds,
+    position: PxBounds,
     onCancel: (() -> Unit)? = null,
     popup: @Composable () -> Unit
 ) = Route(
@@ -80,28 +78,28 @@ private val PopupTag = Any()
 
 @Composable
 private fun PopupLayout(
-    position: IntPxBounds,
+    position: PxBounds,
     modifier: Modifier,
     children: @Composable () -> Unit
 ) {
     Layout(children = children, modifier = modifier) { measureables, constraints, _ ->
         val childConstraints = constraints.copy(
-            minWidth = 0.ipx,
-            minHeight = 0.ipx
+            minWidth = 0,
+            minHeight = 0
         )
 
         val placeable = measureables.single().measure(childConstraints)
 
-        var y = position.top
-        var x: IntPx
+        var y = position.top.toInt()
+        var x: Int
 
         // Find the ideal horizontal position.
         if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
-            x = position.left
+            x = position.left.toInt()
         } else if (position.left < position.right) {
-            x = position.right - placeable.width
+            x = (position.right - placeable.width).toInt()
         } else {
-            x = position.right - placeable.width // todo based on ltr/rtl
+            x = (position.right - placeable.width).toInt() // todo based on ltr/rtl
         }
 
         x = x.coerceIn(8.dp.toIntPx(), constraints.maxWidth - placeable.width - 8.dp.toIntPx())

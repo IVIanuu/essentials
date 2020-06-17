@@ -23,7 +23,6 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
 import androidx.ui.layout.padding
 import androidx.ui.layout.size
 import androidx.ui.unit.dp
@@ -33,7 +32,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.twilight.TwilightSettingsPage
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
-import com.ivianuu.essentials.ui.common.AdapterList
+import com.ivianuu.essentials.ui.common.LazyColumnItems
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -100,63 +99,61 @@ class HomePage(
                 )
             },
             body = {
-                Column {
-                    val items = remember { HomeItem.values().toList().sortedBy { it.name } }
+                val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
-                    AdapterList(data = items) { item ->
-                        val color = rememberRetained(item) {
-                            ColorPickerPalette.values()
-                                .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                                .shuffled()
-                                .first()
-                                .front
-                        }
+                LazyColumnItems(items = items) { item ->
+                    val color = rememberRetained(item) {
+                        ColorPickerPalette.values()
+                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                            .shuffled()
+                            .first()
+                            .front
+                    }
 
-                        HomeItem(
-                            item = item,
-                            color = color,
-                            onClick = {
-                                val route = when (item) {
-                                    HomeItem.About -> Route { aboutPage() }
-                                    HomeItem.Actions -> Route { actionsPage() }
-                                    HomeItem.AppPicker -> Route { appPickerPage() }
-                                    HomeItem.Billing -> Route { billingPage() }
-                                    HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
-                                    HomeItem.CheckApps -> Route { checkAppsPage() }
-                                    HomeItem.Chips -> Route { chipsPage() }
-                                    HomeItem.Counter -> Route { counterPage() }
-                                    HomeItem.Dialogs -> Route { dialogsPage() }
-                                    HomeItem.Drawer -> Route { drawerPage() }
-                                    HomeItem.ForegroundJob -> Route { foregroundJobPage() }
-                                    HomeItem.NavBar -> Route { navBarPage() }
-                                    HomeItem.Notifications -> Route { notificationsPage() }
-                                    HomeItem.Permission -> Route { permissionsPage() }
-                                    HomeItem.Prefs -> Route { prefsPage() }
-                                    HomeItem.RestartProcess -> Route { restartProcessPage() }
-                                    HomeItem.Scaffold -> Route { scaffoldPage() }
-                                    HomeItem.SharedElement -> Route(
-                                        enterTransition = SharedElementStackTransition(item to "b"),
-                                        exitTransition = SharedElementStackTransition(item to "b")
-                                    ) {
-                                        sharedElementPage(color)
-                                    }
-                                    HomeItem.ShortcutPicker -> Route { shortcutPickerPage() }
-                                    HomeItem.Tabs -> Route { tabsPage() }
-                                    HomeItem.TextInput -> Route { textInputPage() }
-                                    HomeItem.Timer -> Route { timerPage() }
-                                    HomeItem.Torch -> Route { torchPage() }
-                                    HomeItem.Twilight -> Route { twilightSettingsPage() }
-                                    HomeItem.Unlock -> Route { unlockPage() }
-                                    HomeItem.Work -> Route { workPage() }
+                    HomeItem(
+                        item = item,
+                        color = color,
+                        onClick = {
+                            val route = when (item) {
+                                HomeItem.About -> Route { aboutPage() }
+                                HomeItem.Actions -> Route { actionsPage() }
+                                HomeItem.AppPicker -> Route { appPickerPage() }
+                                HomeItem.Billing -> Route { billingPage() }
+                                HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
+                                HomeItem.CheckApps -> Route { checkAppsPage() }
+                                HomeItem.Chips -> Route { chipsPage() }
+                                HomeItem.Counter -> Route { counterPage() }
+                                HomeItem.Dialogs -> Route { dialogsPage() }
+                                HomeItem.Drawer -> Route { drawerPage() }
+                                HomeItem.ForegroundJob -> Route { foregroundJobPage() }
+                                HomeItem.NavBar -> Route { navBarPage() }
+                                HomeItem.Notifications -> Route { notificationsPage() }
+                                HomeItem.Permission -> Route { permissionsPage() }
+                                HomeItem.Prefs -> Route { prefsPage() }
+                                HomeItem.RestartProcess -> Route { restartProcessPage() }
+                                HomeItem.Scaffold -> Route { scaffoldPage() }
+                                HomeItem.SharedElement -> Route(
+                                    enterTransition = SharedElementStackTransition(item to "b"),
+                                    exitTransition = SharedElementStackTransition(item to "b")
+                                ) {
+                                    sharedElementPage(color)
                                 }
-
-                                navigator.push(route)
+                                HomeItem.ShortcutPicker -> Route { shortcutPickerPage() }
+                                HomeItem.Tabs -> Route { tabsPage() }
+                                HomeItem.TextInput -> Route { textInputPage() }
+                                HomeItem.Timer -> Route { timerPage() }
+                                HomeItem.Torch -> Route { torchPage() }
+                                HomeItem.Twilight -> Route { twilightSettingsPage() }
+                                HomeItem.Unlock -> Route { unlockPage() }
+                                HomeItem.Work -> Route { workPage() }
                             }
-                        )
 
-                        if (items.indexOf(item) != items.lastIndex) {
-                            HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+                            navigator.push(route)
                         }
+                    )
+
+                    if (items.indexOf(item) != items.lastIndex) {
+                        HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
                     }
                 }
             }

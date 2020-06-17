@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
-fun <T> AsyncLazyColumn(
+fun <T> AsyncLazyColumnItems(
     state: Async<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
@@ -43,7 +43,7 @@ fun <T> AsyncLazyColumn(
     },
     uninitialized: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItem: @Composable (T) -> Unit
+    successItemContent: @Composable (T) -> Unit
 ) {
     AsyncBox(
         state = state,
@@ -54,7 +54,43 @@ fun <T> AsyncLazyColumn(
         uninitialized = uninitialized,
         success = { items ->
             if (items.isNotEmpty()) {
-                AdapterList(data = items, item = successItem)
+                LazyColumnItems(
+                    items = items,
+                    itemContent = successItemContent
+                )
+            } else {
+                successEmpty()
+            }
+        }
+    )
+}
+
+@Composable
+fun <T> AsyncLazyRowItems(
+    state: Async<List<T>>,
+    modifier: Modifier = Modifier,
+    transition: StackTransition = FadeStackTransition(),
+    fail: @Composable (Throwable) -> Unit = { throw it },
+    loading: @Composable () -> Unit = {
+        CircularProgressIndicator(modifier = Modifier.center())
+    },
+    uninitialized: @Composable () -> Unit = loading,
+    successEmpty: @Composable () -> Unit = {},
+    successItemContent: @Composable (T) -> Unit
+) {
+    AsyncBox(
+        state = state,
+        modifier = modifier,
+        transition = transition,
+        fail = fail,
+        loading = loading,
+        uninitialized = uninitialized,
+        success = { items ->
+            if (items.isNotEmpty()) {
+                LazyRowItems(
+                    items = items,
+                    itemContent = successItemContent
+                )
             } else {
                 successEmpty()
             }

@@ -34,7 +34,7 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.ui.collectAsAsync
 import com.ivianuu.essentials.ui.common.AsyncBox
-import com.ivianuu.essentials.ui.common.AsyncLazyColumn
+import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -72,7 +72,7 @@ class NotificationsPage(
                     }.collectAsAsync(),
                     success = { hasPermission ->
                         if (hasPermission) {
-                            AsyncLazyColumn(
+                            AsyncLazyColumnItems(
                                 state = notificationStore.notifications.collectAsAsync(),
                                 successEmpty = {
                                     Text(
@@ -81,7 +81,7 @@ class NotificationsPage(
                                         modifier = Modifier.center()
                                     )
                                 },
-                                successItem = { sbn ->
+                                successItemContent = { sbn ->
                                     ListItem(
                                         title = {
                                             Text(

@@ -23,7 +23,6 @@ import androidx.ui.core.Measurable
 import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
 import androidx.ui.core.enforce
-import androidx.ui.unit.ipx
 
 fun Modifier.squared(fit: SquareFit) = this + SquaredModifier(fit)
 
@@ -44,9 +43,7 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
 
         val placeable = measurable.measure(finalConstraints, layoutDirection)
 
-        return layout(placeable.width, placeable.height) {
-            placeable.place(0.ipx, 0.ipx)
-        }
+        return layout(placeable.width, placeable.height) { placeable.place(0, 0) }
     }
 }
 

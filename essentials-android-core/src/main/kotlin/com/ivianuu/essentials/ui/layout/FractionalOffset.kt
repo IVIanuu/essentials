@@ -34,8 +34,8 @@ private data class FractionalOffsetModifier(val x: Float, val y: Float) : Layout
         val placeable = measurable.measure(constraints)
         return layout(placeable.width, placeable.height) {
             placeable.placeAbsolute(
-                if (layoutDirection == LayoutDirection.Ltr) placeable.width * x else placeable.width * -x,
-                placeable.height * y
+                (if (layoutDirection == LayoutDirection.Ltr) placeable.width * x else placeable.width * -x).toInt(),
+                (placeable.height * y).toInt()
             )
         }
     }

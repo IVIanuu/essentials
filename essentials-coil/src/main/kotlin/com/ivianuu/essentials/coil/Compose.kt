@@ -22,7 +22,6 @@ import androidx.ui.core.Modifier
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Image
 import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.unit.isFinite
 import coil.Coil
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder
@@ -42,8 +41,8 @@ fun CoilImage(
     error: @Composable (() -> Unit)? = null
 ) {
     WithConstraints(modifier = modifier) {
-        val width = if (constraints.maxWidth.isFinite()) constraints.maxWidth else null
-        val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
+        val width = if (constraints.maxWidth != Int.MAX_VALUE) constraints.maxWidth else null
+        val height = if (constraints.maxHeight != Int.MAX_VALUE) constraints.maxHeight else null
         val context = ContextAmbient.current
 
         val state = launchAsync(
@@ -57,7 +56,7 @@ fun CoilImage(
                     .apply {
                         data(data)
                         if (width != null && height != null) {
-                            size(width.value, height.value)
+                            size(width, height)
                         }
                         builderBlock?.invoke(this)
                     }

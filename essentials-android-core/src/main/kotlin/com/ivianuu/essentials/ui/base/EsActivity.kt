@@ -23,6 +23,8 @@ import androidx.compose.Composable
 import androidx.compose.Composition
 import androidx.compose.Providers
 import androidx.compose.Recomposer
+import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.ui.core.setContent
 import com.ivianuu.essentials.ui.core.RetainedObjects
 import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
@@ -46,7 +48,11 @@ abstract class EsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        composition = findViewById<ViewGroup>(containerId).setContent(Recomposer.current()) {
+        val container = findViewById<ViewGroup>(containerId)
+        ViewTreeLifecycleOwner.set(container, this)
+        ViewTreeViewModelStoreOwner.set(container, this)
+
+        composition = container.setContent(Recomposer.current()) {
             wrappedContent()
         }
     }

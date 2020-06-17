@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.drawable.Icon
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.launchInComposition
 import androidx.compose.onActive
 import androidx.compose.onCommit
+import androidx.compose.onDispose
 import androidx.compose.setValue
 import androidx.compose.state
 import androidx.compose.stateFor
@@ -25,12 +27,16 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.height
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.ChatBubble
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.delay
@@ -78,6 +84,8 @@ class ForegroundJobPage(
                             count++
                         }
                     }
+
+                    onDispose { foregroundJob?.stop() }
                 }
 
                 Column(
@@ -94,11 +102,11 @@ class ForegroundJobPage(
                     Spacer(Modifier.height(8.dp))
                     Button(
                         onClick = {
-                            if (foregroundJob != null) {
+                            foregroundJob = if (foregroundJob != null) {
                                 foregroundJob?.stop()
-                                foregroundJob = null
+                                null
                             } else {
-                                foregroundJob = foregroundManager.startJob(
+                                foregroundManager.startJob(
                                     buildNotification(count, primaryColor)
                                 )
                             }
@@ -128,4 +136,7 @@ class ForegroundJobPage(
         .setContentText("Current progress $count")
         .setColor(color.toArgb())
         .build()
+        .apply {
+            setSmallIcon(Icon.createWithBitmap(Icons.Default.ChatBubble.toBitmap(context)))
+        }
 }

@@ -11,11 +11,11 @@ import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
+import androidx.ui.geometry.Offset
+import androidx.ui.geometry.lerp
 import androidx.ui.layout.offset
 import androidx.ui.layout.preferredSize
-import androidx.ui.unit.PxPosition
 import androidx.ui.unit.height
-import androidx.ui.unit.lerp
 import androidx.ui.unit.width
 import androidx.ui.util.lerp
 import com.ivianuu.essentials.ui.animatable.Alpha
@@ -119,7 +119,7 @@ fun SharedElementStackTransition(
                 checkNotNull(capturedStartBounds)
                 checkNotNull(capturedEndBounds)
                 val start = SharedElementProps(
-                    position = PxPosition(
+                    position = Offset(
                         x = capturedStartBounds.left + (capturedStartBounds.width - capturedEndBounds.width) / 2,
                         y = capturedStartBounds.top + (capturedStartBounds.height - capturedEndBounds.height) / 2
                     ),
@@ -127,7 +127,7 @@ fun SharedElementStackTransition(
                     scaleY = capturedStartBounds.height / capturedEndBounds.height
                 )
                 val end = SharedElementProps(
-                    position = PxPosition(capturedEndBounds.left, capturedEndBounds.top),
+                    position = Offset(capturedEndBounds.left, capturedEndBounds.top),
                     scaleX = 1f,
                     scaleY = 1f
                 )
@@ -172,7 +172,7 @@ fun SharedElementStackTransition(
 }
 
 data class SharedElementProps(
-    val position: PxPosition,
+    val position: Offset,
     val scaleX: Float,
     val scaleY: Float
 )

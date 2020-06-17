@@ -34,10 +34,9 @@ import androidx.compose.setValue
 import androidx.compose.state
 import androidx.core.content.getSystemService
 import androidx.ui.core.DensityAmbient
-import androidx.ui.core.OwnerAmbient
+import androidx.ui.core.ViewAmbient
 import androidx.ui.layout.InnerPadding
 import androidx.ui.unit.dp
-import androidx.ui.unit.ipx
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.injekt.Transient
@@ -49,7 +48,7 @@ class WindowInsetsManager(
 ) {
     @Composable
     operator fun invoke(children: @Composable () -> Unit) {
-        val ownerView = OwnerAmbient.current as View
+        val ownerView = ViewAmbient.current
 
         val density = DensityAmbient.current
         val (windowInsets, setWindowInsets) = state { WindowInsets() }
@@ -66,10 +65,10 @@ class WindowInsetsManager(
 
                 with(density) {
                     val viewPadding = InnerPadding(
-                        start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
-                        top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),
-                        end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
-                        bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.ipx.toDp()
+                        start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.toDp(),
+                        top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.toDp(),
+                        end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.toDp(),
+                        bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.toDp()
                     )
 
                     val viewInsets = InnerPadding(
@@ -79,7 +78,7 @@ class WindowInsetsManager(
                         bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
                             ownerView,
                             insets
-                        ).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
+                        ).toDp() else insets.systemWindowInsetBottom.toDp()
                     )
 
                     val newWindowInsets = WindowInsets(viewPadding, viewInsets)

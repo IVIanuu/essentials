@@ -27,7 +27,7 @@ import androidx.ui.core.composed
 import androidx.ui.core.consumeDownChange
 import androidx.ui.core.pointerinput.PointerInputFilter
 import androidx.ui.core.pointerinput.PointerInputModifier
-import androidx.ui.unit.IntPxSize
+import androidx.ui.unit.IntSize
 
 @Composable
 fun Modifier.absorbPointer(
@@ -49,7 +49,7 @@ private class AbsorbPointerGestureFilter : PointerInputFilter(), PointerInputMod
     override fun onPointerInput(
         changes: List<PointerInputChange>,
         pass: PointerEventPass,
-        bounds: IntPxSize
+        bounds: IntSize
     ): List<PointerInputChange> {
         return if (absorb && (pass == PointerEventPass.InitialDown ||
                     pass == PointerEventPass.PreDown ||

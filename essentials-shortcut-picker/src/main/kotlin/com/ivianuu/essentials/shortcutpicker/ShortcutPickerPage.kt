@@ -30,7 +30,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
-import com.ivianuu.essentials.ui.common.AsyncLazyColumn
+import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -59,7 +59,7 @@ class ShortcutPickerPage internal constructor(
                 })
             },
             body = {
-                AsyncLazyColumn(state = viewModel.currentState.shortcuts) { shortcut ->
+                AsyncLazyColumnItems(state = viewModel.currentState.shortcuts) { shortcut ->
                     Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
                 }
             }
