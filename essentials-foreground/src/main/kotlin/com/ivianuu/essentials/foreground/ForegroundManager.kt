@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.foreground
 
+import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
@@ -24,6 +25,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.atomic.AtomicInteger
 
 @ApplicationScoped
 class ForegroundManager(
@@ -34,34 +36,47 @@ class ForegroundManager(
     private val _updates = EventFlow<Unit>()
     val updates: Flow<Unit> get() = _updates
 
-    private val _components = mutableListOf<ForegroundComponent>()
-    val components: List<ForegroundComponent> get() = _components.toList()
+    private val _jobs = mutableListOf<ForegroundJob>()
+    val job: List<ForegroundJob> get() = _jobs.toList()
 
     private val _stopServiceRequests =
         EventFlow<Unit>()
     internal val stopServiceRequests: Flow<Unit> get() = _stopServiceRequests
 
-    fun startForeground(component: ForegroundComponent) = synchronized(this) {
-        if (component in _components) {
-            logger.d("update foreground $component")
-            updateServiceState()
-            dispatchUpdate()
-            return@synchronized
+    fun startJob(notification: Notification): ForegroundJob = synchronized(this) {
+        val job = object : ForegroundJob {
+
+            override val id: Int = ids.incrementAndGet()
+
+            override val isActive: Boolean
+                get() = synchronized(this@ForegroundManager) { this in _jobs }
+
+            override var notification = notification
+
+            override fun updateNotification(notification: Notification) {
+                this.notification = notification
+                updateServiceState()
+                dispatchUpdate()
+            }
+
+            override fun stop() {
+                stopJob(this)
+            }
         }
 
-        logger.d("start foreground $component")
+        logger.d("start job $job")
 
-        _components += component
-        component.attach(this)
+        _jobs += job
         updateServiceState()
         dispatchUpdate()
+
+        return@synchronized job
     }
 
-    fun stopForeground(component: ForegroundComponent) = synchronized(this) {
-        if (component !in _components) return@synchronized
-        logger.d("stop foreground $component")
-        component.detach()
-        _components -= component
+    fun stopJob(job: ForegroundJob) = synchronized(this) {
+        if (job !in _jobs) return@synchronized
+        logger.d("stop job $job")
+        _jobs -= job
         updateServiceState()
         dispatchUpdate()
     }
@@ -71,8 +86,8 @@ class ForegroundManager(
     }
 
     private fun updateServiceState() = synchronized(this) {
-        logger.d("update service state $_components")
-        if (_components.isNotEmpty()) {
+        logger.d("update service state $_jobs")
+        if (_jobs.isNotEmpty()) {
             logger.d("start foreground service")
             ContextCompat.startForegroundService(
                 context,
@@ -83,4 +98,7 @@ class ForegroundManager(
             _stopServiceRequests.offer(Unit)
         }
     }
+
 }
+
+private val ids = AtomicInteger(0)

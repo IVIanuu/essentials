@@ -18,6 +18,7 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
@@ -41,13 +42,15 @@ class TorchManager internal constructor(
     private val scope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
-    private val foregroundComponent: TorchForegroundComponent,
+    private val notificationFactory: TorchNotificationFactory,
     private val logger: Logger,
     private val toaster: Toaster
 ) {
 
     private val _torchState = MutableStateFlow(false)
     val torchState: StateFlow<Boolean> get() = _torchState
+
+    private var foregroundJob: ForegroundJob? = null
 
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
@@ -88,15 +91,16 @@ class TorchManager internal constructor(
 
     private fun updateState(enabled: Boolean) {
         logger.d("update state $enabled")
-        if (enabled) {
-            foregroundManager.startForeground(foregroundComponent)
+        foregroundJob = if (enabled) {
+            foregroundManager.startJob(notificationFactory.create())
         } else {
-            foregroundManager.stopForeground(foregroundComponent)
+            foregroundJob?.stop()
+            null
         }
         _torchState.value = enabled
     }
 
     companion object {
-        const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.gestures.torch.TOGGLE_TORCH"
+        const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
     }
 }

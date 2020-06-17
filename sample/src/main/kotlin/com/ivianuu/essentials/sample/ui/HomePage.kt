@@ -59,6 +59,7 @@ class HomePage(
     private val counterPage: CounterPage,
     private val dialogsPage: DialogsPage,
     private val drawerPage: DrawerPage,
+    private val foregroundJobPage: ForegroundJobPage,
     private val navBarPage: NavBarPage,
     private val notificationsPage: NotificationsPage,
     private val permissionsPage: PermissionsPage,
@@ -126,6 +127,7 @@ class HomePage(
                                     HomeItem.Counter -> Route { counterPage() }
                                     HomeItem.Dialogs -> Route { dialogsPage() }
                                     HomeItem.Drawer -> Route { drawerPage() }
+                                    HomeItem.ForegroundJob -> Route { foregroundJobPage() }
                                     HomeItem.NavBar -> Route { navBarPage() }
                                     HomeItem.Notifications -> Route { notificationsPage() }
                                     HomeItem.Permission -> Route { permissionsPage() }
@@ -205,6 +207,7 @@ enum class HomeItem(val title: String) {
     Counter(title = "Counter"),
     Dialogs(title = "Dialogs"),
     Drawer(title = "Drawer"),
+    ForegroundJob(title = "Foreground job"),
     NavBar(title = "Nav bar"),
     Notifications(title = "Notifications"),
     Permission(title = "Permission"),
