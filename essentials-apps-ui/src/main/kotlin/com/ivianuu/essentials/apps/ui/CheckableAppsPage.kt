@@ -59,15 +59,15 @@ class CheckableAppsPage internal constructor(
 
     @Composable
     operator fun invoke(
-        checkedAppsFlow: Flow<Set<String>>,
+        checkedApps: Flow<Set<String>>,
         onCheckedAppsChanged: suspend (Set<String>) -> Unit,
         appBarTitle: String,
         appFilter: AppFilter = DefaultAppFilter
     ) {
         val viewModel = rememberRetained(appFilter) { viewModelFactory(appFilter) }
 
-        onCommit(checkedAppsFlow, onCheckedAppsChanged) {
-            viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)
+        onCommit(checkedApps, onCheckedAppsChanged) {
+            viewModel.attach(checkedApps, onCheckedAppsChanged)
             onDispose { viewModel.detach() }
         }
 

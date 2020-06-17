@@ -22,11 +22,11 @@ import kotlinx.coroutines.flow.onEach
 
 abstract class FlowTileService<T> : StateTileService<T>() {
 
-    abstract val flow: Flow<T>
+    abstract val state: Flow<T>
 
     override fun onStartListening() {
         super.onStartListening()
-        flow
+        state
             .onEach { setState(it) }
             .launchIn(listeningCoroutineScope)
     }

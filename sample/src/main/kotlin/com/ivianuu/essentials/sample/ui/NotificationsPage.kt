@@ -68,7 +68,7 @@ class NotificationsPage(
 
                 AsyncBox(
                     state = remember {
-                        permissionManager.hasPermissionsStream(notificationPermission)
+                        permissionManager.hasPermissions(notificationPermission)
                     }.collectAsAsync(),
                     success = { hasPermission ->
                         if (hasPermission) {

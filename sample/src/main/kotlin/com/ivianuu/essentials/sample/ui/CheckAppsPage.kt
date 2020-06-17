@@ -33,7 +33,7 @@ class CheckAppsPage(
     operator fun invoke() {
         val box = remember { boxFactory.create("apps", emptySet<String>()) }
         checkableAppsPage(
-            checkedAppsFlow = box.data,
+            checkedApps = box.data,
             onCheckedAppsChanged = { newValue ->
                 box.updateData { newValue }
             },

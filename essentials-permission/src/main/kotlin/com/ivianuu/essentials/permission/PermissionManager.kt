@@ -27,6 +27,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -46,29 +47,23 @@ class PermissionManager(
 
     private val permissionChanges = EventFlow<Unit>()
 
-    fun hasPermissionsStream(vararg permissions: Permission): Flow<Boolean> =
-        hasPermissionsStream(permissions.toList())
+    fun hasPermissions(vararg permissions: Permission): Flow<Boolean> =
+        hasPermissions(permissions.toList())
 
-    fun hasPermissionsStream(permissions: List<Permission>): Flow<Boolean> {
+    fun hasPermissions(permissions: List<Permission>): Flow<Boolean> {
         return permissionChanges
             .map { Unit }
             .onStart { emit(Unit) }
-            .map { hasPermissions(permissions) }
+            .map { permissions.all { stateProviderFor(it).isGranted(it) } }
             .distinctUntilChanged()
     }
-
-    suspend fun hasPermissions(vararg permissions: Permission): Boolean =
-        hasPermissions(permissions.toList())
-
-    suspend fun hasPermissions(permissions: List<Permission>): Boolean =
-        permissions.all { stateProviderFor(it).isGranted(it) }
 
     suspend fun request(vararg permissions: Permission): Boolean =
         request(permissions.toList())
 
     suspend fun request(permissions: List<Permission>): Boolean {
         logger.d("request permissions $permissions")
-        if (hasPermissions(permissions)) return true
+        if (hasPermissions(permissions).first()) return true
 
         val id = UUID.randomUUID().toString()
         val finished = CompletableDeferred<Unit>()
@@ -89,7 +84,7 @@ class PermissionManager(
 
         finished.await()
 
-        return hasPermissions(permissions)
+        return hasPermissions(permissions).first()
     }
 
     internal fun permissionRequestFinished() {
