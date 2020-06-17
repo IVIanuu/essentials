@@ -128,6 +128,8 @@ object Deps {
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
+    const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.6"
+
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"

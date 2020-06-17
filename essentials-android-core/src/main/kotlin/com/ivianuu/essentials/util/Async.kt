@@ -19,13 +19,11 @@ package com.ivianuu.essentials.util
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.collectAsState
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
 import androidx.compose.remember
-import androidx.compose.setValue
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.ui.coroutines.launchWithState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -33,19 +31,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @Immutable
-sealed class Async<T>(
-    complete: Boolean,
-    shouldLoad: Boolean
+sealed class Async<out T>(
+    val complete: Boolean,
+    val shouldLoad: Boolean
 ) {
-    val complete by mutableStateOf(complete)
-    val shouldLoad by mutableStateOf(shouldLoad)
-    private var readCount by mutableStateOf(0)
-
-    open operator fun invoke(): T? {
-        readCount++
-        return null
-    }
-
+    open operator fun invoke(): T? = null
 }
 
 @Immutable
@@ -61,9 +51,7 @@ class Loading<T> : Async<T>(complete = false, shouldLoad = false) {
 }
 
 @Immutable
-class Success<T>(value: T) : Async<T>(complete = true, shouldLoad = false) {
-
-    val value by mutableStateOf(value)
+class Success<T>(val value: T) : Async<T>(complete = true, shouldLoad = false) {
 
     override operator fun invoke(): T = value
 
@@ -85,9 +73,7 @@ class Success<T>(value: T) : Async<T>(complete = true, shouldLoad = false) {
 }
 
 @Immutable
-class Fail<T>(error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
-
-    val error by mutableStateOf(error)
+class Fail<T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -103,27 +89,23 @@ class Fail<T>(error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
     override fun hashCode(): Int = error.hashCode()
 
     override fun toString(): String = "Error(value=$error)"
+
 }
 
-fun <T> Flow<T>.async(): Flow<Async<T>> {
+fun <T> Flow<T>.flowAsync(): Flow<Async<T>> {
     return this
         .map { Success(it) as Async<T> }
         .onStart { emit(Loading()) }
         .catch { Fail<T>(it) }
 }
 
-fun <T> Deferred<T>.asAsyncFlow(): Flow<Async<T>> {
-    return flow {
-        emit(Loading<T>())
-        try {
-            emit(Success(await()))
-        } catch (e: Throwable) {
-            emit(Fail<T>(e))
-        }
-    }
+@JvmName("flowAsyncFromResult")
+fun <V> Flow<Result<V, Throwable>>.flowAsync(): Flow<Async<V>> {
+    return unwrap()
+        .flowAsync()
 }
 
-fun <T> asyncFlow(block: suspend () -> T): Flow<Async<T>> {
+fun <T> asyncFlowOf(block: suspend () -> T): Flow<Async<T>> {
     return flow {
         emit(Loading<T>())
         try {
@@ -139,7 +121,7 @@ inline fun <T, R> Async<T>.map(transform: (T) -> R) =
 
 @Composable
 fun <T> Flow<T>.collectAsAsync(): Async<T> {
-    return remember(this) { async() }
+    return remember(this) { flowAsync() }
         .collectAsState(Uninitialized())
         .value
 }
@@ -165,3 +147,8 @@ fun <T> launchAsync(
         }
     }.value
 }
+
+fun <V> Result<V, Throwable>.toAsync(): Async<V> = fold(
+    success = { Success(it) },
+    failure = { Fail(it) }
+)

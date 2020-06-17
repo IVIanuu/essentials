@@ -22,4 +22,6 @@ dependencies {
     compile(Deps.Kotlin.stdlib)
 
     compile(Deps.kotlinFlowExtensions)
+
+    compile(Deps.kotlinResult)
 }
