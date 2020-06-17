@@ -2,10 +2,11 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.processrestart.RestartProcessUseCase
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResultUseCase
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -19,20 +20,19 @@ internal class RestoreDataUseCase(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
     private val restartProcessUseCase: RestartProcessUseCase,
-    private val startActivityForResultUseCase: StartActivityForResultUseCase,
-    private val toaster: Toaster
+    private val startActivityForResultUseCase: StartActivityForResultUseCase
 ) {
 
-    suspend operator fun invoke() = withContext(dispatchers.io) {
-        val uri = startActivityForResultUseCase(
-            Intent.createChooser(
-                Intent(Intent.ACTION_GET_CONTENT).apply {
-                    type = "application/zip"
-                }, ""
-            )
-        ).data?.data ?: return@withContext
+    suspend operator fun invoke(): Result<Unit, Throwable> = runCatching {
+        withContext(dispatchers.io) {
+            val uri = startActivityForResultUseCase(
+                Intent.createChooser(
+                    Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "application/zip"
+                    }, ""
+                )
+            ).data?.data ?: return@withContext
 
-        try {
             val buffer = ByteArray(8192)
 
             val zipInputStream = ZipInputStream(
@@ -61,9 +61,6 @@ internal class RestoreDataUseCase(
             }
 
             restartProcessUseCase()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            toaster.toast(R.string.es_share_backup)
         }
     }
 }

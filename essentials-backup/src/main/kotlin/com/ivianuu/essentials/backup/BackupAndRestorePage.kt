@@ -2,21 +2,26 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
-import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 
 @Transient
 class BackupAndRestorePage internal constructor(
-    private val backupData: BackupDataUseCase,
-    private val restoreData: RestoreDataUseCase
+    private val viewModelFactory: @Provider () -> BackupAndRestoreViewModel
 ) {
     @Composable
     operator fun invoke() {
+        val viewModel = rememberRetained(init = viewModelFactory)
         Scaffold(
             topAppBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) },
             body = {
@@ -24,16 +29,39 @@ class BackupAndRestorePage internal constructor(
                     ListItem(
                         title = { Text(R.string.es_pref_backup) },
                         subtitle = { Text(R.string.es_pref_backup_summary) },
-                        onClick = launchOnClick { backupData() }
+                        onClick = { viewModel.backupClicked() }
                     )
 
                     ListItem(
                         title = { Text(R.string.es_pref_restore) },
                         subtitle = { Text(R.string.es_pref_restore_summary) },
-                        onClick = launchOnClick { restoreData() }
+                        onClick = { viewModel.restoreClicked() }
                     )
                 }
             }
         )
     }
+}
+
+@Transient
+internal class BackupAndRestoreViewModel(
+    private val backupDataUseCase: BackupDataUseCase,
+    private val restoreDataUseCase: RestoreDataUseCase,
+    private val toaster: Toaster
+) : ViewModel() {
+
+    fun backupClicked() {
+        scope.launch {
+            backupDataUseCase()
+                .onFailure { toaster.toast(R.string.es_backup_error) }
+        }
+    }
+
+    fun restoreClicked() {
+        scope.launch {
+            restoreDataUseCase()
+                .onFailure { toaster.toast(R.string.es_restore_error) }
+        }
+    }
+
 }
