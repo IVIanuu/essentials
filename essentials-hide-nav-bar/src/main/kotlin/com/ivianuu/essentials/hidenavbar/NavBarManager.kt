@@ -37,6 +37,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -91,7 +92,8 @@ class NavBarManager internal constructor(
                     merge(flows)
                         .onStart { emit(Unit) }
                         .map {
-                            !config.showWhileScreenOff || screenStateProvider.getScreenState() == ScreenState.Unlocked
+                            !config.showWhileScreenOff ||
+                                    screenStateProvider.screenState.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             prefs.wasNavBarHidden.updateData { navBarHidden }
@@ -133,19 +135,20 @@ class NavBarManager internal constructor(
         }
     }
 
-    private fun getNavigationBarHeight(): Int {
-        val name = if (displayRotationProvider.currentDisplayRotation.isPortrait) "navigation_bar_height"
-        else "navigation_bar_width"
+    private suspend fun getNavigationBarHeight(): Int {
+        val name =
+            if (displayRotationProvider.displayRotation.first().isPortrait) "navigation_bar_height"
+            else "navigation_bar_width"
         val id = app.resources.getIdentifier(name, "dimen", "android")
         return if (id > 0) app.resources.getDimensionPixelSize(id) else 0
     }
 
-    private fun getOverscanRect(
+    private suspend fun getOverscanRect(
         navBarHeight: Int,
         config: NavBarConfig
     ) = when (config.rotationMode) {
         NavBarRotationMode.Marshmallow -> {
-            when (displayRotationProvider.currentDisplayRotation) {
+            when (displayRotationProvider.displayRotation.first()) {
                 DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
                 DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
                 DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
@@ -153,13 +156,13 @@ class NavBarManager internal constructor(
             }
         }
         NavBarRotationMode.Nougat -> {
-            when (displayRotationProvider.currentDisplayRotation) {
+            when (displayRotationProvider.displayRotation.first()) {
                 DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
                 else -> Rect(0, 0, 0, navBarHeight)
             }
         }
         NavBarRotationMode.Tablet -> {
-            when (displayRotationProvider.currentDisplayRotation) {
+            when (displayRotationProvider.displayRotation.first()) {
                 DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
                 DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
                 DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
