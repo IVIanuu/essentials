@@ -26,11 +26,11 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
+import com.ivianuu.essentials.ui.common.StateViewModel
+import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -93,7 +93,7 @@ internal class ShortcutPickerViewModel(
     private val shortcutStore: ShortcutStore,
     private val startActivityForResult: StartActivityForResult,
     private val toaster: Toaster
-) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState(), dispatchers) {
+) : StateViewModel<ShortcutPickerState>(ShortcutPickerState(), dispatchers) {
 
     init {
         scope.execute(

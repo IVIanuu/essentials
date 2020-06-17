@@ -28,11 +28,11 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
+import com.ivianuu.essentials.ui.common.StateViewModel
+import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -100,7 +100,7 @@ internal class AppPickerViewModel(
     private val appStore: AppStore,
     private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator
-) : MvRxViewModel<AppPickerState>(AppPickerState(), dispatchers) {
+) : StateViewModel<AppPickerState>(AppPickerState(), dispatchers) {
 
     init {
         scope.execute(

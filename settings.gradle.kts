@@ -22,7 +22,6 @@ include(
     ":essentials-hide-nav-bar",
     ":essentials-kotlin-compiler",
     ":essentials-moshi",
-    ":essentials-mvrx",
     ":essentials-notification-listener",
     ":essentials-permission",
     ":essentials-process-restart",

@@ -29,11 +29,11 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.flowOf
-import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.currentState
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
+import com.ivianuu.essentials.ui.common.StateViewModel
+import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
@@ -134,7 +134,7 @@ internal class CheckableAppsViewModel(
     private val appFilter: @Assisted AppFilter,
     private val appStore: AppStore,
     dispatchers: AppCoroutineDispatchers
-) : MvRxViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {
+) : StateViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {
 
     private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
     private var checkedAppsJob: Job? = null

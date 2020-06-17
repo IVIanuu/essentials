@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.mvrx
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.collectAsState
@@ -39,13 +39,13 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 @Composable
-val <S> MvRxViewModel<S>.currentState: S
+val <S> StateViewModel<S>.currentState: S
     get() = state.collectAsState().value
 
 /**
  * State view model
  */
-abstract class MvRxViewModel<S>(
+abstract class StateViewModel<S>(
     initialState: S,
     private val dispatchers: AppCoroutineDispatchers
 ) : ViewModel() {

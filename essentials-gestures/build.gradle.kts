@@ -33,7 +33,6 @@ dependencies {
     api(project(":essentials-accessibility"))
     api(project(":essentials-apps-ui"))
     api(project(":essentials-hide-nav-bar"))
-    api(project(":essentials-mvrx"))
     api(project(":essentials-permission"))
     api(project(":essentials-screen-state"))
     api(project(":essentials-shortcut-picker"))

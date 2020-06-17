@@ -11,10 +11,10 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
+import com.ivianuu.essentials.ui.common.StateViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ResourceProvider
@@ -32,7 +32,7 @@ internal class ActionPickerViewModel(
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val resourceProvider: ResourceProvider
-) : MvRxViewModel<ActionPickerState>(ActionPickerState(), dispatchers) {
+) : StateViewModel<ActionPickerState>(ActionPickerState(), dispatchers) {
 
     init {
         scope.execute(
