@@ -16,10 +16,10 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 @Transient
-class StartActivityForResultUseCase(
+class StartActivityForResult(
     private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
-    private val startUiUseCase: StartUiUseCase
+    private val startUi: StartUi
 ) {
 
     suspend operator fun invoke(intent: Intent): ActivityResult =
@@ -30,7 +30,7 @@ class StartActivityForResultUseCase(
         input: I
     ): O = withContext(dispatchers.main) {
         suspendCancellableCoroutine { continuation ->
-            startUiUseCase()
+            startUi()
             navigator.push(
                 Route(opaque = true) {
                     val route = RouteAmbient.current

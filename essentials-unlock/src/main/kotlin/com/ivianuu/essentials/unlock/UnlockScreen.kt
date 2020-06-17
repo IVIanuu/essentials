@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Helper class for unlocking the screen
  */
 @ApplicationScoped
-class UnlockScreenUseCase(
+class UnlockScreen(
     private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,

@@ -7,7 +7,7 @@ import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
 @Transient
-class StartUiUseCase(
+class StartUi(
     private val application: @ForApplication Context,
     private val buildInfo: BuildInfo,
     private val packageManager: PackageManager

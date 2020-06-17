@@ -4,9 +4,9 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.processrestart.RestartProcessUseCase
+import com.ivianuu.essentials.processrestart.RestartProcess
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.StartActivityForResultUseCase
+import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -19,13 +19,13 @@ import java.util.zip.ZipInputStream
 internal class RestoreDataUseCase(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
-    private val restartProcessUseCase: RestartProcessUseCase,
-    private val startActivityForResultUseCase: StartActivityForResultUseCase
+    private val restartProcess: RestartProcess,
+    private val startActivityForResult: StartActivityForResult
 ) {
 
     suspend operator fun invoke(): Result<Unit, Throwable> = runCatching {
         withContext(dispatchers.io) {
-            val uri = startActivityForResultUseCase(
+            val uri = startActivityForResult(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
                         type = "application/zip"
@@ -60,7 +60,7 @@ internal class RestoreDataUseCase(
                 entry = zipInputStream.nextEntry
             }
 
-            restartProcessUseCase()
+            restartProcess()
         }
     }
 }

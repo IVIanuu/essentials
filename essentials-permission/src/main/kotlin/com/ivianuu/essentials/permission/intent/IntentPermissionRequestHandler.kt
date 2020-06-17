@@ -21,7 +21,7 @@ import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.util.StartActivityForResultUseCase
+import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
@@ -39,7 +39,7 @@ val Permission.Companion.Intent by lazy {
 @Transient
 internal class IntentPermissionRequestHandler(
     private val permissionManager: PermissionManager,
-    private val startActivityForResultUseCase: StartActivityForResultUseCase
+    private val startActivityForResult: StartActivityForResult
 ) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
@@ -49,7 +49,7 @@ internal class IntentPermissionRequestHandler(
         coroutineScope {
             select<Unit> {
                 async {
-                    startActivityForResultUseCase(permission[Permission.Intent])
+                    startActivityForResult(permission[Permission.Intent])
                 }.onAwait {}
                 async {
                     while (!permissionManager.hasPermissions(permission)) {

@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.StartUiUseCase
+import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -127,7 +127,7 @@ internal class PermissionDialogViewModel(
     private val request: @Assisted PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers,
     private val route: @Assisted Route,
-    private val startUiUseCase: StartUiUseCase
+    private val startUi: StartUi
 ) : ViewModel() {
 
     private val _permissionsToProcess = modelListOf<Permission>()
@@ -140,7 +140,7 @@ internal class PermissionDialogViewModel(
     fun permissionClicked(permission: Permission) {
         scope.launch {
             requestHandlers.requestHandlerFor(permission).request(permission)
-            startUiUseCase()
+            startUi()
             updatePermissionsToProcessOrFinish()
         }
     }

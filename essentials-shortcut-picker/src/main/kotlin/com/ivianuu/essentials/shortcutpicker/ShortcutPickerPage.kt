@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.StartActivityForResultUseCase
+import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Provider
@@ -89,7 +89,7 @@ private fun Shortcut(
 internal class ShortcutPickerViewModel(
     private val navigator: Navigator,
     private val shortcutStore: ShortcutStore,
-    private val startActivityForResultUseCase: StartActivityForResultUseCase,
+    private val startActivityForResult: StartActivityForResult,
     private val toaster: Toaster
 ) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
 
@@ -103,7 +103,7 @@ internal class ShortcutPickerViewModel(
     fun shortcutClicked(info: Shortcut) {
         scope.launch {
             try {
-                val shortcutRequestResult = startActivityForResultUseCase(info.intent)
+                val shortcutRequestResult = startActivityForResult(info.intent)
                     .data ?: return@launch
 
                 val shortcut = shortcutStore.getShortcut(shortcutRequestResult)

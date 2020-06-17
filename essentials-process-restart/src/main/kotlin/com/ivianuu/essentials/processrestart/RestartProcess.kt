@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.processrestart
 
 import android.content.Context
-import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -28,7 +27,7 @@ import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
 
 @Transient
-class RestartProcessUseCase(
+class RestartProcess(
     private val buildInfo: BuildInfo,
     private val context: @ForApplication Context,
     private val dispatchers: AppCoroutineDispatchers,
@@ -37,13 +36,11 @@ class RestartProcessUseCase(
 ) {
 
     suspend operator fun invoke() = withContext(dispatchers.main) {
-        val intent = getMainIntent()
+        val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
+            .addFlags(FLAG_ACTIVITY_NEW_TASK)
         logger.d("restart process %$intent")
         ProcessRestartActivity.launch(context, intent)
         Runtime.getRuntime().exit(0)
     }
 
-    private fun getMainIntent(): Intent =
-        packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-            .addFlags(FLAG_ACTIVITY_NEW_TASK)
 }

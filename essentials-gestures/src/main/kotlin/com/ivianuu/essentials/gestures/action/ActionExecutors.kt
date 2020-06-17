@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.unlock.UnlockScreenUseCase
+import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Transient
@@ -13,7 +13,7 @@ class ActionExecutors(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val permissionManager: PermissionManager,
-    private val unlockScreenUseCase: UnlockScreenUseCase
+    private val unlockScreen: UnlockScreen
 ) {
 
     suspend fun execute(key: String) = withContext(dispatchers.computation) {
@@ -27,7 +27,7 @@ class ActionExecutors(
         }
 
         // unlock screen
-        if (action.unlockScreen && !unlockScreenUseCase()) {
+        if (action.unlockScreen && !unlockScreen()) {
             logger.d("couldn't unlock screen for $key")
             return@withContext
         }

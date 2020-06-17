@@ -21,7 +21,7 @@ import androidx.work.WorkManager
 import com.ivianuu.injekt.Transient
 
 @Transient
-class ScheduleTasksUseCase(
+class ScheduleTasks(
     private val workManager: WorkManager
 ) {
 

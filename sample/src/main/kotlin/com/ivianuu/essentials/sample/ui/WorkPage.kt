@@ -20,14 +20,14 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
-import com.ivianuu.essentials.sample.work.ScheduleTasksUseCase
+import com.ivianuu.essentials.sample.work.ScheduleTasks
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
 
 @Transient
-class WorkPage(private val scheduleTasksUseCase: ScheduleTasksUseCase) {
+class WorkPage(private val scheduleTasks: ScheduleTasks) {
     @Composable
     operator fun invoke() {
         Scaffold(
@@ -35,7 +35,7 @@ class WorkPage(private val scheduleTasksUseCase: ScheduleTasksUseCase) {
             body = {
                 Button(
                     modifier = Modifier.center(),
-                    onClick = { scheduleTasksUseCase() }
+                    onClick = { scheduleTasks() }
                 ) {
                     Text("Perform work")
                 }

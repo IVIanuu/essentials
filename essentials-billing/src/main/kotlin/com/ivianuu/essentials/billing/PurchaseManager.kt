@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.StartUiUseCase
+import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Provider
 import kotlinx.coroutines.CompletableDeferred
@@ -67,7 +67,7 @@ class PurchaseManager(
     private val logger: Logger,
     private val navigator: Navigator,
     private val purchasePage: @Provider () -> PurchasePage,
-    private val startUiUseCase: StartUiUseCase
+    private val startUi: StartUi
 ) {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->
@@ -105,7 +105,7 @@ class PurchaseManager(
             }
         }
 
-        startUiUseCase()
+        startUi()
         withContext(dispatchers.main) {
             navigator.push(
                 Route(opaque = true) {

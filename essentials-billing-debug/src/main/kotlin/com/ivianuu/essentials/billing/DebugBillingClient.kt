@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.StartUiUseCase
+import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.essentials.util.launchAsync
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Assisted
@@ -64,7 +64,7 @@ class DebugBillingClient internal constructor(
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore,
     private val navigator: Navigator,
-    private val startUiUseCase: StartUiUseCase
+    private val startUi: StartUi
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -154,7 +154,7 @@ class DebugBillingClient internal constructor(
         val request = PurchaseRequest(params.sku, params.skuType!!)
         requests[requestId] = request
 
-        startUiUseCase()
+        startUi()
 
         scope.launch {
             navigator.push(

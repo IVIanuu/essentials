@@ -19,7 +19,7 @@ package com.ivianuu.essentials.permission
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.StartUiUseCase
+import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Lazy
@@ -39,7 +39,7 @@ class PermissionManager(
     private val navigator: Navigator,
     private val permissionRequestRouteFactory: @Lazy () -> PermissionRequestRouteFactory,
     private val permissionStateProviders: Set<PermissionStateProvider>,
-    private val startUiUseCase: StartUiUseCase
+    private val startUi: StartUi
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()
@@ -84,7 +84,7 @@ class PermissionManager(
         )
         requests[id] = request
 
-        startUiUseCase()
+        startUi()
         navigator.push(permissionRequestRouteFactory().createRoute(request))
 
         finished.await()
