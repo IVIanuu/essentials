@@ -50,21 +50,23 @@ class ScreenStateProvider(
     )
         .map { Unit }
         .onStart { emit(Unit) }
-        .map { getScreenState() }
+        .map { getCurrentScreenState() }
         .distinctUntilChanged()
         .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
 
-    suspend fun getScreenState() = withContext(dispatchers.computation) {
-        if (powerManager.isInteractive) {
-            if (keyguardManager.isDeviceLocked) {
-                ScreenState.Locked
+    private suspend fun getCurrentScreenState(): ScreenState =
+        withContext(dispatchers.computation) {
+            if (powerManager.isInteractive) {
+                if (keyguardManager.isDeviceLocked) {
+                    ScreenState.Locked
+                } else {
+                    ScreenState.Unlocked
+                }
             } else {
-                ScreenState.Unlocked
+                ScreenState.Off
             }
-        } else {
-            ScreenState.Off
         }
-    }
+
 }
 
 enum class ScreenState(val isOn: Boolean) {

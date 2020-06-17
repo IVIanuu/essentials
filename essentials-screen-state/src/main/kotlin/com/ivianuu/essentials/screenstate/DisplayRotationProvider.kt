@@ -66,12 +66,12 @@ class DisplayRotationProvider(
                 emptyFlow()
             }
         }
-        .map { currentDisplayRotation }
+        .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
         .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
 
-    val currentDisplayRotation: DisplayRotation
-        get() = when (windowManager.defaultDisplay.rotation) {
+    private fun getCurrentDisplayRotation(): DisplayRotation =
+        when (windowManager.defaultDisplay.rotation) {
             Surface.ROTATION_0 -> DisplayRotation.PortraitUp
             Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
             Surface.ROTATION_180 -> DisplayRotation.PortraitDown
@@ -80,13 +80,13 @@ class DisplayRotationProvider(
         }
 
     private fun rotationChanges() = callbackFlow {
-        var currentRotation = currentDisplayRotation
+        var currentRotation = getCurrentDisplayRotation()
 
         val listener = object : OrientationEventListener(
             app, SensorManager.SENSOR_DELAY_NORMAL
         ) {
             override fun onOrientationChanged(orientation: Int) {
-                val rotation = currentDisplayRotation
+                val rotation = getCurrentDisplayRotation()
                 if (rotation != currentRotation) {
                     offer(rotation)
                     currentRotation = rotation
