@@ -19,7 +19,7 @@
 
     <application>
         <service
-            android:name=".ComponentAccessibilityService"
+            android:name=".DefaultAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 
             <intent-filter>

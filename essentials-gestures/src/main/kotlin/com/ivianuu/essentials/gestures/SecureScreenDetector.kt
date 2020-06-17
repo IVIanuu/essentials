@@ -17,29 +17,40 @@
 package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-@BindAccessibilityComponent
 @ApplicationScoped
 class SecureScreenDetector(
-    private val logger: Logger
-) : AccessibilityComponent() {
-
-    override val config: AccessibilityConfig
-        get() = AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
+    private val logger: Logger,
+    services: AccessibilityServices,
+    scope: @ForApplication CoroutineScope
+) {
 
     private val _isOnSecureScreen = MutableStateFlow(false)
     val isOnSecureScreen: StateFlow<Boolean> get() = _isOnSecureScreen
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent) {
+    init {
+        services.applyConfig(
+            AccessibilityConfig(
+                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+            )
+        )
+
+        services.events
+            .onEach { onAccessibilityEvent(it) }
+            .launchIn(scope)
+    }
+
+    private fun onAccessibilityEvent(event: AccessibilityEvent) {
         // ignore keyboards
         if (event.className == "android.inputmethodservice.SoftInputWindow") {
             return

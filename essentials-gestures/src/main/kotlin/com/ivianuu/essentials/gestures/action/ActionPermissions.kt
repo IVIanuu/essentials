@@ -5,7 +5,7 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Accessibility
 import androidx.ui.material.icons.filled.Adb
 import androidx.ui.material.icons.filled.SettingsApplications
-import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
+import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
@@ -22,7 +22,7 @@ import com.ivianuu.injekt.ForApplication
 @ApplicationScoped
 internal class ActionPermissions(context: @ForApplication Context) {
     val accessibility = AccessibilityServicePermission(
-        ComponentAccessibilityService::class,
+        DefaultAccessibilityService::class,
         Permission.Title withValue "Accessibility", // todo res
         Permission.Desc withValue "Required to click buttons", // todo res
         Permission.Icon withValue { Icon(Icons.Default.Accessibility) }

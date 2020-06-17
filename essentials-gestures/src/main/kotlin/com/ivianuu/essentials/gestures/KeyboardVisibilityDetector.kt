@@ -18,9 +18,8 @@ package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
-import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.injekt.ApplicationScoped
@@ -28,6 +27,7 @@ import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
@@ -37,21 +37,21 @@ import kotlin.time.seconds
 /**
  * Provides info about the keyboard state
  */
-@BindAccessibilityComponent
 @ApplicationScoped
 class KeyboardVisibilityDetector(
     private val appScope: @ForApplication CoroutineScope,
-    private val inputMethodManager: InputMethodManager
-) : AccessibilityComponent() {
-
-    override val config: AccessibilityConfig
-        get() = AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
+    private val inputMethodManager: InputMethodManager,
+    private val services: AccessibilityServices
+) {
 
     private val softInputChanges = EventFlow<Unit>()
 
-    val keyboardVisible = softInputChanges
+    val keyboardVisible = services.events
+        .filter {
+            it.isFullScreen &&
+                    it.className == "android.inputmethodservice.SoftInputWindow"
+        }
+        .map { Unit }
         .onStart { emit(Unit) }
         .transformLatest {
             while (true) {
@@ -64,6 +64,14 @@ class KeyboardVisibilityDetector(
         .distinctUntilChanged()
         .replayShareIn(scope = appScope, timeout = 1.seconds)
 
+    init {
+        services.applyConfig(
+            AccessibilityConfig(
+                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+            )
+        )
+    }
+
     private fun getKeyboardHeight(): Int {
         return try {
             val method = getInputMethodWindowVisibleHeightMethod
@@ -74,12 +82,6 @@ class KeyboardVisibilityDetector(
             e.printStackTrace()
             -1
         }
-    }
-
-    override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        if (!event.isFullScreen) return
-        if (event.className != "android.inputmethodservice.SoftInputWindow") return
-        softInputChanges.offer(Unit)
     }
 
     private companion object {

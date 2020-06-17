@@ -17,29 +17,28 @@
 package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.accessibility.AccessibilityComponent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ForApplication
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Recent apps provider
  */
-@BindAccessibilityComponent
 @ApplicationScoped
 class RecentAppsProvider(
-    private val logger: Logger
-) : AccessibilityComponent() {
-
-    override val config: AccessibilityConfig
-        get() = AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
+    private val logger: Logger,
+    private val scope: @ForApplication CoroutineScope,
+    private val services: AccessibilityServices
+) {
 
     val currentApp: Flow<String?>
         get() = recentsApps
@@ -48,7 +47,20 @@ class RecentAppsProvider(
     private val _recentApps = MutableStateFlow(emptyList<String>())
     val recentsApps: StateFlow<List<String>> get() = _recentApps
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent) {
+    init {
+        services.applyConfig(
+            AccessibilityConfig(
+                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+            )
+        )
+
+        services
+            .events
+            .onEach { handleEvent(it) }
+            .launchIn(scope)
+    }
+
+    private fun handleEvent(event: AccessibilityEvent) {
         // indicates that its a activity
         if (!event.isFullScreen) {
             return

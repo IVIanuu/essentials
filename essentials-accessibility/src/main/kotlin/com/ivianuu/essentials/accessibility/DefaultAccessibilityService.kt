@@ -25,49 +25,43 @@ import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 
 @AndroidEntryPoint
-class ComponentAccessibilityService : EsAccessibilityService() {
+class DefaultAccessibilityService : EsAccessibilityService() {
 
-    private val components: Set<AccessibilityComponent> by inject()
+    private val services: AccessibilityServices by inject()
     private val logger: Logger by inject()
 
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        logger.d("initialize with components $components")
-        components.forEach { it.onServiceConnected(this) }
-
-        updateServiceInfo()
+        logger.d("connected")
+        services.onServiceConnected(this)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         logger.d("on accessibility event $event")
-        components
-            .filter { it.config.packageNames == null || event.packageName in it.config.packageNames!! }
-            .forEach { it.onAccessibilityEvent(event) }
+        services.onAccessibilityEvent(event)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         logger.d("on unbind")
-        components.reversed().forEach { it.onServiceDisconnected() }
+        services.onServiceDisconnected()
         return super.onUnbind(intent)
     }
 
-    fun updateServiceInfo() {
+    fun updateConfig(configs: List<AccessibilityConfig>) {
         serviceInfo = serviceInfo.apply {
-            val configurations = components.map { it.config }
-
-            eventTypes = configurations
+            eventTypes = configs
                 .map { it.eventTypes }
                 .fold(0) { acc, events -> acc.addFlag(events) }
 
-            flags = configurations
+            flags = configs
                 .map { it.flags }
                 .fold(0) { acc, flags -> acc.addFlag(flags) }
 
-            configurations.lastOrNull()?.feedbackType?.let { feedbackType = it } // todo
+            configs.lastOrNull()?.feedbackType?.let { feedbackType = it } // todo
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-            notificationTimeout = configurations
+            notificationTimeout = configs
                 .map { it.notificationTimeout }
                 .max() ?: 0L
 

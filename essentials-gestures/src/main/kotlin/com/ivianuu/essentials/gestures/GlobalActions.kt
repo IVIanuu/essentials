@@ -16,21 +16,14 @@
 
 package com.ivianuu.essentials.gestures
 
-import com.ivianuu.essentials.accessibility.AccessibilityComponent
-import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.BindAccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.injekt.ApplicationScoped
 
 /**
  * Simulates device inputs such as back or home
  */
-@BindAccessibilityComponent
 @ApplicationScoped
-class GlobalActions : AccessibilityComponent() {
-
-    override val config: AccessibilityConfig
-        get() = AccessibilityConfig()
-
-    fun performAction(action: Int): Boolean =
-        service?.performGlobalAction(action) ?: false
+class GlobalActions(private val services: AccessibilityServices) {
+    suspend fun performAction(action: Int): Boolean =
+        services.performGlobalAction(action)
 }

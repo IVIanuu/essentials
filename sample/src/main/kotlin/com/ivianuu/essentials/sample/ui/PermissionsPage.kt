@@ -24,7 +24,7 @@ import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
-import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
+import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -69,7 +69,7 @@ class PermissionsPage(
                 )
 
                 val accessibility = AccessibilityServicePermission(
-                    ComponentAccessibilityService::class,
+                    DefaultAccessibilityService::class,
                     Permission.Title withValue "Accessibility",
                     Permission.Desc withValue "This is a desc",
                     Permission.Icon withValue { Icon(Icons.Default.Menu) }
