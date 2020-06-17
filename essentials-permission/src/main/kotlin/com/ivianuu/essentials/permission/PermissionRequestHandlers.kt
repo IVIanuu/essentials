@@ -4,9 +4,22 @@ import com.ivianuu.injekt.Transient
 
 @Transient
 internal class PermissionRequestHandlers(
-    private val requestHandlers: Set<PermissionRequestHandler>
+    private val manager: PermissionManager,
+    requestHandlers: Set<PermissionRequestHandler>
 ) {
-    fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
-        requestHandlers.firstOrNull { it.handles(permission) }
+
+    private val requestHandlers = requestHandlers
+        .map { requestHandler ->
+            object : PermissionRequestHandler by requestHandler {
+                override suspend fun request(permission: Permission) {
+                    requestHandler.request(permission)
+                    manager.permissionRequestFinished()
+                }
+            }
+        }
+
+    fun requestHandlerFor(permission: Permission): PermissionRequestHandler {
+        return requestHandlers.firstOrNull { it.handles(permission) }
             ?: error("Couldn't find request handler for $permission")
+    }
 }

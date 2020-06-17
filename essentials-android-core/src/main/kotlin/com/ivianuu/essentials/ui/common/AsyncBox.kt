@@ -33,7 +33,7 @@ import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 
 @Composable
-fun <T> AsyncList(
+fun <T> AsyncLazyColumn(
     state: Async<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),

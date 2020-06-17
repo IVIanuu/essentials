@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUiUseCase
@@ -24,6 +25,10 @@ import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Lazy
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -38,6 +43,19 @@ class PermissionManager(
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()
+
+    private val permissionChanges = EventFlow<Unit>()
+
+    fun hasPermissionsStream(vararg permissions: Permission): Flow<Boolean> =
+        hasPermissionsStream(permissions.toList())
+
+    fun hasPermissionsStream(permissions: List<Permission>): Flow<Boolean> {
+        return permissionChanges
+            .map { Unit }
+            .onStart { emit(Unit) }
+            .map { hasPermissions(permissions) }
+            .distinctUntilChanged()
+    }
 
     suspend fun hasPermissions(vararg permissions: Permission): Boolean =
         hasPermissions(permissions.toList())
@@ -72,6 +90,10 @@ class PermissionManager(
         finished.await()
 
         return hasPermissions(permissions)
+    }
+
+    internal fun permissionRequestFinished() {
+        permissionChanges.offer(Unit)
     }
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =

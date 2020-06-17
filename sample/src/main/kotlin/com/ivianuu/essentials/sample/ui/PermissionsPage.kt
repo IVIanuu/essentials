@@ -25,7 +25,7 @@ import androidx.ui.material.Button
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
-import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
+import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
@@ -76,7 +76,7 @@ class PermissionsPage(
                 )
 
                 val notificationListener = NotificationListenerPermission(
-                    ComponentNotificationListenerService::class,
+                    DefaultNotificationListenerService::class,
                     Permission.Title withValue "Notification listener",
                     Permission.Desc withValue "This is a desc",
                     Permission.Icon withValue { Icon(Icons.Default.Menu) }

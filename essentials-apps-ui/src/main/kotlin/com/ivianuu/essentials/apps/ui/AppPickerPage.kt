@@ -30,7 +30,7 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.AsyncLazyColumn
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -60,7 +60,7 @@ class AppPickerPage internal constructor(
                 )
             },
             body = {
-                AsyncList(
+                AsyncLazyColumn(
                     state = viewModel.currentState.apps,
                     successItem = { app ->
                         key(app.packageName) {

@@ -22,44 +22,43 @@ import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
 
 @AndroidEntryPoint
-class ComponentNotificationListenerService : EsNotificationListenerService() {
+class DefaultNotificationListenerService : EsNotificationListenerService() {
 
-    private val components: Set<NotificationComponent> by inject()
     private val logger: Logger by inject()
+    private val store: NotificationStore by inject()
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        logger.d("initialize with components $components")
-        components.forEach { it.onServiceConnected(this) }
+        logger.d("listener connected")
+        store.onServiceConnected(this)
+        notifyUpdate()
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        logger.d("disconnected")
-        components.reversed().forEach { it.onServiceDisconnected() }
+        logger.d("listener disconnected")
+        store.onServiceDisconnected()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         logger.d("notification posted $sbn")
-        components.forEach { it.onNotificationPosted(sbn) }
+        notifyUpdate()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
         logger.d("notification removed $sbn")
-        components.forEach { it.onNotificationRemoved(sbn) }
+        notifyUpdate()
     }
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
         logger.d("ranking update $rankingMap")
-        components.forEach { it.onNotificationRankingUpdate(rankingMap) }
+        notifyUpdate()
     }
 
-    override fun onListenerHintsChanged(hints: Int) {
-        super.onListenerHintsChanged(hints)
-        logger.d("hints changed $hints")
-        components.forEach { it.onListenerHintsChanged(hints) }
+    private fun notifyUpdate() {
+        store.onNotificationsChanged(activeNotifications.toList())
     }
 }

@@ -24,12 +24,12 @@ import kotlinx.coroutines.cancel
 
 abstract class NotificationComponent {
 
-    var service: ComponentNotificationListenerService? = null
+    var service: DefaultNotificationListenerService? = null
         private set
 
     val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    open fun onServiceConnected(service: ComponentNotificationListenerService) {
+    open fun onServiceConnected(service: DefaultNotificationListenerService) {
         this.service = service
     }
 
@@ -40,9 +40,6 @@ abstract class NotificationComponent {
     }
 
     open fun onNotificationRankingUpdate(rankingMap: NotificationListenerService.RankingMap) {
-    }
-
-    open fun onListenerHintsChanged(hints: Int) {
     }
 
     open fun onServiceDisconnected() {

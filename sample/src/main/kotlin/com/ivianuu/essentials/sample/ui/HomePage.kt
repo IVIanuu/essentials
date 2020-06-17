@@ -60,6 +60,7 @@ class HomePage(
     private val dialogsPage: DialogsPage,
     private val drawerPage: DrawerPage,
     private val navBarPage: NavBarPage,
+    private val notificationsPage: NotificationsPage,
     private val permissionsPage: PermissionsPage,
     private val prefsPage: PrefsPage,
     private val restartProcessPage: RestartProcessPage,
@@ -126,6 +127,7 @@ class HomePage(
                                     HomeItem.Dialogs -> Route { dialogsPage() }
                                     HomeItem.Drawer -> Route { drawerPage() }
                                     HomeItem.NavBar -> Route { navBarPage() }
+                                    HomeItem.Notifications -> Route { notificationsPage() }
                                     HomeItem.Permission -> Route { permissionsPage() }
                                     HomeItem.Prefs -> Route { prefsPage() }
                                     HomeItem.RestartProcess -> Route { restartProcessPage() }
@@ -204,6 +206,7 @@ enum class HomeItem(val title: String) {
     Dialogs(title = "Dialogs"),
     Drawer(title = "Drawer"),
     NavBar(title = "Nav bar"),
+    Notifications(title = "Notifications"),
     Permission(title = "Permission"),
     Prefs(title = "Prefs"),
     RestartProcess(title = "Restart process"),

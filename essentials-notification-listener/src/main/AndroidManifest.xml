@@ -20,7 +20,7 @@
     <application>
 
         <service
-            android:name=".ComponentNotificationListenerService"
+            android:name=".DefaultNotificationListenerService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />

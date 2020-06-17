@@ -4,7 +4,7 @@ import androidx.compose.Composable
 import androidx.ui.foundation.Text
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.mvrx.currentState
-import com.ivianuu.essentials.ui.common.AsyncList
+import com.ivianuu.essentials.ui.common.AsyncLazyColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
@@ -28,7 +28,7 @@ class ActionPickerPage internal constructor(
                 val viewModel =
                     rememberRetained { viewModelFactory(showDefaultOption, showNoneOption) }
 
-                AsyncList(
+                AsyncLazyColumn(
                     state = viewModel.currentState.items,
                     successItem = { item ->
                         ActionPickerItem(
