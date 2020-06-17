@@ -130,7 +130,7 @@ class Navigator {
     }
 
     private fun popInternal(route: RouteState, result: Any? = null) {
-        route.setResult(result)
+        route.resultToSend = result
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
         setBackStackInternal(newBackStack)
@@ -174,13 +174,11 @@ class Navigator {
         private val _result = CompletableDeferred<Any?>()
         val result: Deferred<Any?> get() = _result
 
-        fun detach() {
-            if (!_result.isCompleted) setResult(null)
-            retainedObjects.dispose()
-        }
+        var resultToSend: Any? = null
 
-        fun setResult(result: Any?) {
-            _result.complete(result)
+        fun detach() {
+            _result.complete(resultToSend)
+            retainedObjects.dispose()
         }
 
     }
