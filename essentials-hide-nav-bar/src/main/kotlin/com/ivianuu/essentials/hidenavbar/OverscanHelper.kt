@@ -32,14 +32,8 @@ internal class OverscanHelper(private val logger: Logger) {
 
     fun setOverscan(rect: Rect) {
         logger.d("set overscan $rect")
-        setOverscanMethod.invoke(
-            windowManagerService,
-            Display.DEFAULT_DISPLAY, rect.left, rect.top, rect.right, rect.bottom
-        )
-    }
 
-    private companion object {
-        private val windowManagerService by lazy {
+        val windowManagerService by lazy {
             val cls = Class.forName("android.view.IWindowManager\$Stub")
             val invoke = Class.forName("android.os.ServiceManager")
                 .getMethod("checkService", String::class.java)
@@ -49,11 +43,17 @@ internal class OverscanHelper(private val logger: Logger) {
                 .invoke(null, invoke)
         }
 
-        private val setOverscanMethod by lazy {
+        val setOverscanMethod by lazy {
             windowManagerService.javaClass.getDeclaredMethod(
                 "setOverscan",
                 Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
             ).apply { isAccessible = true }
         }
+
+        setOverscanMethod.invoke(
+            windowManagerService,
+            Display.DEFAULT_DISPLAY, rect.left, rect.top, rect.right, rect.bottom
+        )
     }
+
 }
