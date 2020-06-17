@@ -231,17 +231,17 @@ class PurchaseManager(
         return@withContext isPurchased
     }
 
-    private suspend fun getPurchase(sku: Sku): Purchase? {
+    private suspend fun getPurchase(sku: Sku): Purchase? = withContext(dispatchers.io) {
         ensureConnected()
-        return billingClient.queryPurchases(sku.type.value)
+        billingClient.queryPurchases(sku.type.value)
             .purchasesList
             ?.firstOrNull { it.sku == sku.skuString }
             ?.also { logger.d("got purchase $it for $sku") }
     }
 
-    private suspend fun getSkuDetails(sku: Sku): SkuDetails? {
+    private suspend fun getSkuDetails(sku: Sku): SkuDetails? = withContext(dispatchers.io) {
         ensureConnected()
-        return billingClient.querySkuDetails(sku.toSkuDetailsParams())
+        billingClient.querySkuDetails(sku.toSkuDetailsParams())
             .skuDetailsList
             ?.firstOrNull { it.sku == sku.skuString }
             .also { logger.d("got sku details $it for $sku") }
@@ -249,9 +249,9 @@ class PurchaseManager(
 
     private val connecting = AtomicBoolean(false)
 
-    private suspend fun ensureConnected() {
-        if (billingClient.isReady) return
-        if (connecting.getAndSet(true)) return
+    private suspend fun ensureConnected() = withContext(dispatchers.io) {
+        if (billingClient.isReady) return@withContext
+        if (connecting.getAndSet(true)) return@withContext
         suspendCoroutine<Unit> { continuation ->
             logger.d("start connection")
             billingClient.startConnection(

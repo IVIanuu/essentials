@@ -16,6 +16,7 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.Async
 import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Transient
@@ -27,10 +28,11 @@ internal class ActionPickerViewModel(
     private val showNoneOption: @Assisted Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
+    dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val resourceProvider: ResourceProvider
-) : MvRxViewModel<ActionPickerState>(ActionPickerState()) {
+) : MvRxViewModel<ActionPickerState>(ActionPickerState(), dispatchers) {
 
     init {
         scope.execute(

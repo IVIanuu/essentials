@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -131,8 +132,9 @@ private fun CheckableApp(
 @Transient
 internal class CheckableAppsViewModel(
     private val appFilter: @Assisted AppFilter,
-    private val appStore: AppStore
-) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
+    private val appStore: AppStore,
+    dispatchers: AppCoroutineDispatchers
+) : MvRxViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {
 
     private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
     private var checkedAppsJob: Job? = null

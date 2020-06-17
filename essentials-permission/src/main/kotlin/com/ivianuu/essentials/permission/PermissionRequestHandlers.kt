@@ -1,9 +1,12 @@
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.withContext
 
 @Transient
 internal class PermissionRequestHandlers(
+    private val dispatchers: AppCoroutineDispatchers,
     private val manager: PermissionManager,
     requestHandlers: Set<PermissionRequestHandler>
 ) {
@@ -12,8 +15,10 @@ internal class PermissionRequestHandlers(
         .map { requestHandler ->
             object : PermissionRequestHandler by requestHandler {
                 override suspend fun request(permission: Permission) {
-                    requestHandler.request(permission)
-                    manager.permissionRequestFinished()
+                    withContext(dispatchers.computation) {
+                        requestHandler.request(permission)
+                        manager.permissionRequestFinished()
+                    }
                 }
             }
         }

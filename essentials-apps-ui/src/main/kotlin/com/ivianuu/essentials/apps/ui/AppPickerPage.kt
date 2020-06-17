@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -97,8 +98,9 @@ private fun AppInfo(
 internal class AppPickerViewModel(
     private val appFilter: @Assisted AppFilter,
     private val appStore: AppStore,
+    private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator
-) : MvRxViewModel<AppPickerState>(AppPickerState()) {
+) : MvRxViewModel<AppPickerState>(AppPickerState(), dispatchers) {
 
     init {
         scope.execute(

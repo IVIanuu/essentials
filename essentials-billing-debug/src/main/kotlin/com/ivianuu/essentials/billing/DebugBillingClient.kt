@@ -45,6 +45,7 @@ import com.ivianuu.essentials.ui.launchAsync
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
@@ -53,6 +54,7 @@ import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -60,6 +62,7 @@ import java.util.concurrent.ConcurrentHashMap
 @ApplicationScoped
 class DebugBillingClient internal constructor(
     private val buildInfo: BuildInfo,
+    private val dispatchers: AppCoroutineDispatchers,
     private val scope: @ForApplication CoroutineScope,
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore,
@@ -323,20 +326,22 @@ class DebugBillingClient internal constructor(
     }
 
     internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
-        val request = requests[requestId] ?: return null
-        return billingStore.getSkuDetails(
-            SkuDetailsParams.newBuilder()
-                .setType(request.skuType)
-                .setSkusList(listOf(request.sku))
-                .build()
-        ).firstOrNull()
+        return withContext(dispatchers.computation) {
+            val request = requests[requestId] ?: return@withContext null
+            billingStore.getSkuDetails(
+                SkuDetailsParams.newBuilder()
+                    .setType(request.skuType)
+                    .setSkusList(listOf(request.sku))
+                    .build()
+            ).firstOrNull()
+        }
     }
 
     internal suspend fun onPurchaseResult(
         requestId: String,
         responseCode: Int,
         purchases: List<Purchase>?
-    ) {
+    ) = withContext(dispatchers.computation) {
         requests -= requestId
 
         if (responseCode == BillingResponseCode.OK) {

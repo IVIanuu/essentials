@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ui.Fail
 import com.ivianuu.essentials.ui.Loading
 import com.ivianuu.essentials.ui.Success
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -44,12 +45,17 @@ val <S> MvRxViewModel<S>.currentState: S
 /**
  * State view model
  */
-abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
+abstract class MvRxViewModel<S>(
+    initialState: S,
+    private val dispatchers: AppCoroutineDispatchers
+) : ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state
 
-    private val actor = scope.actor<suspend S.() -> S> {
+    private val actor = scope.actor<suspend S.() -> S>(
+        context = dispatchers.computation
+    ) {
         for (reducer in this) {
             val currentState = _state.value
             val newState = reducer(currentState)
@@ -62,7 +68,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = scope.coroutineContext,
+        context: CoroutineContext = dispatchers.computation,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Async<V>) -> S
     ): Job = scope.execute(
@@ -82,9 +88,11 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
 
     protected fun <V> Flow<V>.executeIn(
         scope: CoroutineScope,
+        context: CoroutineContext = dispatchers.computation,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Async<V>) -> S
     ): Job {
-        return scope.launch {
+        return scope.launch(context, start) {
             setState { reducer(Loading()) }
             this@executeIn
                 .map { Success(it) }
@@ -94,7 +102,7 @@ abstract class MvRxViewModel<S>(initialState: S) : ViewModel() {
     }
 
     protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = coroutineContext,
+        context: CoroutineContext = dispatchers.computation,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
         reducer: suspend S.(Async<V>) -> S

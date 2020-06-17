@@ -145,6 +145,11 @@ class Navigator {
     }
 
     private fun setBackStackInternal(newBackStack: List<RouteState>) {
+        try {
+            error("set backstack $newBackStack")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         val oldBackStack = _backStack.toList()
         _backStack.clear()
         _backStack += newBackStack

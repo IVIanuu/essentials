@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
@@ -31,11 +32,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 @ApplicationScoped
 class PermissionManager(
     private val scope: @ForApplication CoroutineScope,
+    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val navigator: Navigator,
     private val permissionRequestRouteFactory: @Lazy () -> PermissionRequestRouteFactory,
@@ -54,37 +57,44 @@ class PermissionManager(
         return permissionChanges
             .map { Unit }
             .onStart { emit(Unit) }
-            .map { permissions.all { stateProviderFor(it).isGranted(it) } }
+            .map {
+                withContext(dispatchers.computation) {
+                    permissions.all { stateProviderFor(it).isGranted(it) }
+                }
+            }
             .distinctUntilChanged()
     }
 
     suspend fun request(vararg permissions: Permission): Boolean =
         request(permissions.toList())
 
-    suspend fun request(permissions: List<Permission>): Boolean {
-        logger.d("request permissions $permissions")
-        if (hasPermissions(permissions).first()) return true
+    suspend fun request(permissions: List<Permission>): Boolean =
+        withContext(dispatchers.computation) {
+            logger.d("request permissions $permissions")
+            if (hasPermissions(permissions).first()) return@withContext true
 
-        val id = UUID.randomUUID().toString()
-        val finished = CompletableDeferred<Unit>()
-        val request = PermissionRequest(
-            id = id,
-            permissions = permissions.toList(),
-            onComplete = {
-                scope.launch {
-                    finished.complete(Unit)
-                    requests.remove(id)
+            val id = UUID.randomUUID().toString()
+            val finished = CompletableDeferred<Unit>()
+            val request = PermissionRequest(
+                id = id,
+                permissions = permissions.toList(),
+                onComplete = {
+                    scope.launch {
+                        finished.complete(Unit)
+                        requests.remove(id)
+                    }
                 }
+            )
+            requests[id] = request
+
+            startUi()
+            withContext(dispatchers.main) {
+                navigator.push(permissionRequestRouteFactory().createRoute(request))
             }
-        )
-        requests[id] = request
 
-        startUi()
-        navigator.push(permissionRequestRouteFactory().createRoute(request))
+            finished.await()
 
-        finished.await()
-
-        return hasPermissions(permissions).first()
+            return@withContext hasPermissions(permissions).first()
     }
 
     internal fun permissionRequestFinished() {

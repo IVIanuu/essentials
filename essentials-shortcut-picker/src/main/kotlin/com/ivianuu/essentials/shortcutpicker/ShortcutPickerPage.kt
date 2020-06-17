@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
@@ -87,11 +88,12 @@ private fun Shortcut(
 
 @Transient
 internal class ShortcutPickerViewModel(
+    dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
     private val shortcutStore: ShortcutStore,
     private val startActivityForResult: StartActivityForResult,
     private val toaster: Toaster
-) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
+) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState(), dispatchers) {
 
     init {
         scope.execute(

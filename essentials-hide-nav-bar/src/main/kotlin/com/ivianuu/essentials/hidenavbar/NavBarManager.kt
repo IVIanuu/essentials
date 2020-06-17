@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Handles the state of the navigation bar
@@ -63,7 +64,7 @@ class NavBarManager internal constructor(
 
     private var job: Job? = null
 
-    suspend fun setNavBarConfig(config: NavBarConfig) {
+    suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.computation) {
         job?.cancel()
 
         if (!config.hidden) {
@@ -72,7 +73,7 @@ class NavBarManager internal constructor(
                 prefs.wasNavBarHidden.updateData { false }
             }
 
-            return
+            return@withContext
         }
 
         val flows = mutableListOf<Flow<*>>().apply {

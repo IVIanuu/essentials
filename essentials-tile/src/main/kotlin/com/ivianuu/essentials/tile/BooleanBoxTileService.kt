@@ -17,15 +17,20 @@
 package com.ivianuu.essentials.tile
 
 import com.ivianuu.essentials.store.getCurrentData
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 
 /**
  * Tile which is driven by a boolean pref
  */
 abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
+
+    private val dispatchers: AppCoroutineDispatchers by inject()
+
     override fun onClick() {
         super.onClick()
-        scope.launch {
+        scope.launch(dispatchers.computation) {
             val newValue = !box.getCurrentData()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

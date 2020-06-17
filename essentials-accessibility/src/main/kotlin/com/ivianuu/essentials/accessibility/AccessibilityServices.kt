@@ -18,15 +18,19 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationScoped
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
 @ApplicationScoped
-class AccessibilityServices {
+class AccessibilityServices(
+    private val dispatchers: AppCoroutineDispatchers
+) {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)
     val service: StateFlow<DefaultAccessibilityService?> get() = _service
@@ -49,8 +53,9 @@ class AccessibilityServices {
         }
     }
 
-    suspend fun performGlobalAction(action: Int): Boolean =
+    suspend fun performGlobalAction(action: Int): Boolean = withContext(dispatchers.computation) {
         service.first { it != null }!!.performGlobalAction(action)
+    }
 
     internal fun onServiceConnected(service: DefaultAccessibilityService) {
         _service.value = service
