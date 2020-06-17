@@ -38,7 +38,7 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
-        logger.d("start")
+        logger.d("started foreground service")
 
         foregroundManager.updates
             .onStart { emit(Unit) }
@@ -52,10 +52,10 @@ class ForegroundService : EsService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        logger.d("stop")
+        logger.d("stopped foreground service")
     }
 
-    private suspend fun update() {
+    private fun update() = synchronized(this) {
         val newJobs = foregroundManager.job
 
         logger.d("update jobs $newJobs")
@@ -81,10 +81,8 @@ class ForegroundService : EsService() {
         }
     }
 
-    private fun stop() {
-        lastJobs.forEach {
-            notificationManager.cancel(it.id)
-        }
+    private fun stop() = synchronized(this) {
+        lastJobs.forEach { notificationManager.cancel(it.id) }
         stopForeground(true)
         stopSelf()
     }

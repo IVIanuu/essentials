@@ -39,34 +39,13 @@ class ForegroundManager(
     private val _jobs = mutableListOf<ForegroundJob>()
     val job: List<ForegroundJob> get() = _jobs.toList()
 
-    private val _stopServiceRequests =
-        EventFlow<Unit>()
+    private val _stopServiceRequests = EventFlow<Unit>()
     internal val stopServiceRequests: Flow<Unit> get() = _stopServiceRequests
 
     fun startJob(notification: Notification): ForegroundJob = synchronized(this) {
-        val job = object : ForegroundJob {
-
-            override val id: Int = ids.incrementAndGet()
-
-            override val isActive: Boolean
-                get() = synchronized(this@ForegroundManager) { this in _jobs }
-
-            override var notification = notification
-
-            override fun updateNotification(notification: Notification) {
-                this.notification = notification
-                updateServiceState()
-                dispatchUpdate()
-            }
-
-            override fun stop() {
-                stopJob(this)
-            }
-        }
-
-        logger.d("start job $job")
-
+        val job = ForegroundJobImpl(notification)
         _jobs += job
+        logger.d("start job $job")
         updateServiceState()
         dispatchUpdate()
 
@@ -75,8 +54,8 @@ class ForegroundManager(
 
     fun stopJob(job: ForegroundJob) = synchronized(this) {
         if (job !in _jobs) return@synchronized
-        logger.d("stop job $job")
         _jobs -= job
+        logger.d("stop job $job")
         updateServiceState()
         dispatchUpdate()
     }
@@ -88,17 +67,38 @@ class ForegroundManager(
     private fun updateServiceState() = synchronized(this) {
         logger.d("update service state $_jobs")
         if (_jobs.isNotEmpty()) {
-            logger.d("start foreground service")
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, ForegroundService::class.java)
             )
         } else {
-            logger.d("stop foreground service")
             _stopServiceRequests.offer(Unit)
         }
     }
 
+    private inner class ForegroundJobImpl(
+        override var notification: Notification
+    ) : ForegroundJob {
+
+        override val id: Int = ids.incrementAndGet()
+
+        override val isActive: Boolean
+            get() = synchronized(this@ForegroundManager) { this in _jobs }
+
+        override fun updateNotification(notification: Notification) {
+            this.notification = notification
+            updateServiceState()
+            dispatchUpdate()
+        }
+
+        override fun stop() {
+            stopJob(this)
+        }
+
+        override fun toString(): String {
+            return "ForegroundJobImpl(id=$id, isActive=$isActive)"
+        }
+    }
 }
 
 private val ids = AtomicInteger(0)
