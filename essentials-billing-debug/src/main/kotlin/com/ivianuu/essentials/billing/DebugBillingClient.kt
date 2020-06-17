@@ -41,12 +41,12 @@ import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.common.AsyncBox
+import com.ivianuu.essentials.ui.launchAsync
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.StartUi
-import com.ivianuu.essentials.util.launchAsync
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
@@ -174,7 +174,11 @@ class DebugBillingClient internal constructor(
                 ) {
                     val route = RouteAmbient.current
                     AsyncBox(
-                        state = launchAsync(requestId) { getSkuDetailsForRequest(requestId) },
+                        state = launchAsync(requestId) {
+                            getSkuDetailsForRequest(
+                                requestId
+                            )
+                        },
                         success = { skuDetails ->
                             if (skuDetails == null) {
                                 navigator.pop(route = route)

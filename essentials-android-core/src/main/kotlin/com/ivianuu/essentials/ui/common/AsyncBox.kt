@@ -22,15 +22,15 @@ import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.material.CircularProgressIndicator
+import com.ivianuu.essentials.ui.Async
+import com.ivianuu.essentials.ui.Fail
+import com.ivianuu.essentials.ui.Loading
+import com.ivianuu.essentials.ui.Success
+import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Fail
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.Uninitialized
 
 @Composable
 fun <T> AsyncLazyColumn(

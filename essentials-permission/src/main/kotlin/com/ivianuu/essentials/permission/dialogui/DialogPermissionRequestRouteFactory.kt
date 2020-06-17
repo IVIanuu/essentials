@@ -47,6 +47,7 @@ import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @BindPermissionRequestRouteFactory
@@ -153,7 +154,7 @@ internal class PermissionDialogViewModel(
     private fun updatePermissionsToProcessOrFinish() {
         scope.launch {
             val permissionsToProcess = request.permissions
-                .filterNot { manager.hasPermissions(it) }
+                .filterNot { manager.hasPermissions(it).first() }
 
             logger.d("update permissions to process or finish not granted $permissionsToProcess")
 

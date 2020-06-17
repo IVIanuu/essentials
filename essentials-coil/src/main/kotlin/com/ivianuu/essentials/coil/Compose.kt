@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.AsyncBox
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.launchAsync
+import com.ivianuu.essentials.ui.launchAsync
 
 @Composable
 fun CoilImage(
@@ -46,7 +46,12 @@ fun CoilImage(
         val height = if (constraints.maxHeight.isFinite()) constraints.maxHeight else null
         val context = ContextAmbient.current
 
-        val state = launchAsync(data, builderBlock, width, height) {
+        val state = launchAsync(
+            data,
+            builderBlock,
+            width,
+            height
+        ) {
             Coil.imageLoader(context).execute(
                 GetRequest.Builder(context)
                     .apply {

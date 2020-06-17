@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
@@ -23,6 +23,7 @@ import androidx.compose.remember
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.ui.coroutines.launchWithState
+import com.ivianuu.essentials.util.unwrap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -117,7 +118,9 @@ fun <T> asyncFlowOf(block: suspend () -> T): Flow<Async<T>> {
 }
 
 inline fun <T, R> Async<T>.map(transform: (T) -> R) =
-    if (this is Success) Success(transform(value)) else this as Async<R>
+    if (this is Success) Success(
+        transform(value)
+    ) else this as Async<R>
 
 @Composable
 fun <T> Flow<T>.collectAsAsync(): Async<T> {
@@ -130,7 +133,8 @@ fun <T> Flow<T>.collectAsAsync(): Async<T> {
 @Composable
 fun <T> launchAsync(
     block: suspend CoroutineScope.() -> T
-): Async<T> = launchAsync(inputs = *emptyArray(), block = block)
+): Async<T> =
+    launchAsync(inputs = *emptyArray(), block = block)
 
 @Composable
 fun <T> launchAsync(

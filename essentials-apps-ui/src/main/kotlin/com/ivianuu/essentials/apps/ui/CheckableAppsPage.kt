@@ -31,6 +31,8 @@ import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.currentState
+import com.ivianuu.essentials.ui.Async
+import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.common.AsyncLazyColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
@@ -39,8 +41,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient

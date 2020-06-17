@@ -13,10 +13,10 @@ import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.ui.Async
+import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.launch
