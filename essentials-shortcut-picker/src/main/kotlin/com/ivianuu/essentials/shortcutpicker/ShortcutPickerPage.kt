@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.StartActivityForResultUseCase
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -88,8 +89,10 @@ private fun Shortcut(
 internal class ShortcutPickerViewModel(
     private val navigator: Navigator,
     private val shortcutStore: ShortcutStore,
-    private val startActivityForResultUseCase: StartActivityForResultUseCase
+    private val startActivityForResultUseCase: StartActivityForResultUseCase,
+    private val toaster: Toaster
 ) : MvRxViewModel<ShortcutPickerState>(ShortcutPickerState()) {
+
     init {
         scope.execute(
             block = { shortcutStore.getShortcuts() },
@@ -107,7 +110,7 @@ internal class ShortcutPickerViewModel(
 
                 navigator.popTop(result = shortcut)
             } catch (e: Exception) {
-                e.printStackTrace()
+                toaster.toast(R.string.es_failed_to_pick_shortcut)
             }
         }
     }
