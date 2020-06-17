@@ -29,7 +29,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.selects.select
-import kotlin.time.milliseconds
 
 val Permission.Companion.Intent by lazy {
     Permission.Key<Intent>(
@@ -55,7 +54,7 @@ internal class IntentPermissionRequestHandler(
                 }.onAwait {}
                 async {
                     while (!permissionManager.hasPermissions(permission).first()) {
-                        delay(100.milliseconds)
+                        delay(100) // todo .milliseconds
                     }
                 }.onAwait {}
             }.also { coroutineContext.cancelChildren() }
