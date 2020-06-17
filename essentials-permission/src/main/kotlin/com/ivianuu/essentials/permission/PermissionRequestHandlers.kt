@@ -15,7 +15,7 @@ internal class PermissionRequestHandlers(
         .map { requestHandler ->
             object : PermissionRequestHandler by requestHandler {
                 override suspend fun request(permission: Permission) {
-                    withContext(dispatchers.computation) {
+                    withContext(dispatchers.default) {
                         requestHandler.request(permission)
                         manager.permissionRequestFinished()
                     }

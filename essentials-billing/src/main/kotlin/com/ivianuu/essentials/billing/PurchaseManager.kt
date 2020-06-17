@@ -89,7 +89,7 @@ class PurchaseManager(
         sku: Sku,
         acknowledge: Boolean = true,
         consumeOldPurchaseIfUnspecified: Boolean = true
-    ): Boolean = withContext(dispatchers.computation) {
+    ): Boolean = withContext(dispatchers.default) {
         val requestId = UUID.randomUUID().toString()
         val result = CompletableDeferred<Boolean>()
         requests[requestId] = PurchaseRequest(sku = sku, result = result)
@@ -131,7 +131,7 @@ class PurchaseManager(
         return@withContext if (success) acknowledge(sku) else return@withContext false
     }
 
-    suspend fun consume(sku: Sku): Boolean = withContext(dispatchers.computation) {
+    suspend fun consume(sku: Sku): Boolean = withContext(dispatchers.default) {
         ensureConnected()
 
         val purchase = getPurchase(sku) ?: return@withContext false
@@ -149,7 +149,7 @@ class PurchaseManager(
         return@withContext success
     }
 
-    suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.computation) {
+    suspend fun acknowledge(sku: Sku): Boolean = withContext(dispatchers.default) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
 
@@ -171,7 +171,7 @@ class PurchaseManager(
     internal suspend fun purchaseInternal(
         requestId: String,
         activity: Activity
-    ) = withContext(dispatchers.computation) {
+    ) = withContext(dispatchers.default) {
         logger.d("purchase internal $requests")
         val request = requests[requestId] ?: return@withContext
 
@@ -216,14 +216,14 @@ class PurchaseManager(
     }
 
     suspend fun isFeatureSupported(feature: BillingFeature): Boolean =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
         ensureConnected()
         val result = billingClient.isFeatureSupported(feature.value)
             logger.d("is feature supported $feature ? ${result.responseCode} ${result.debugMessage}")
         return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
     }
 
-    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.computation) {
+    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.default) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
         val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED

@@ -30,7 +30,7 @@ abstract class CycleBoxTileService<T> : BoxTileService<T>() {
 
     override fun onClick() {
         super.onClick()
-        scope.launch(dispatchers.computation) {
+        scope.launch(dispatchers.default) {
             val newValue = box.getCurrentData().next()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

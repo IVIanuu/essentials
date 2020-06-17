@@ -30,7 +30,7 @@ abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
 
     override fun onClick() {
         super.onClick()
-        scope.launch(dispatchers.computation) {
+        scope.launch(dispatchers.default) {
             val newValue = !box.getCurrentData()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }

@@ -53,7 +53,7 @@ class TorchManager internal constructor(
 
     private var foregroundJob: ForegroundJob? = null
 
-    private val stateActor = scope.actor<Boolean>(dispatchers.computation) {
+    private val stateActor = scope.actor<Boolean>(dispatchers.default) {
         for (enabled in this) {
             logger.d("update state $enabled")
             foregroundJob = if (enabled) {

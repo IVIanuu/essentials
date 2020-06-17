@@ -12,9 +12,9 @@ fun esUtilModule() {
     installIn<ApplicationComponent>()
     scoped {
         AppCoroutineDispatchers(
-            io = Dispatchers.IO,
-            computation = Dispatchers.Default,
-            main = Dispatchers.Main
+            default = Dispatchers.Default,
+            main = Dispatchers.Main,
+            io = Dispatchers.IO
         )
     }
 }

@@ -39,45 +39,45 @@ class BillingStore internal constructor(
     private val purchases = prefs.purchases
 
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
         products.getCurrentData().filter { it.sku in params.skusList && it.type == params.skuType }
     }
 
     suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
         InternalPurchasesResult(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build(),
             purchases.getCurrentData().filter { it.signature.endsWith(skuType) })
     }
 
     suspend fun getPurchaseByToken(purchaseToken: String): Purchase? =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
         purchases.getCurrentData().firstOrNull { it.purchaseToken == purchaseToken }
     }
 
-    suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.computation) {
+    suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
         products.updateData { it + skuDetails }
     }
 
-    suspend fun removeProduct(sku: String) = withContext(dispatchers.computation) {
+    suspend fun removeProduct(sku: String) = withContext(dispatchers.default) {
         products.updateData { products -> products.filter { it.sku != sku } }
     }
 
-    suspend fun clearProducts() = withContext(dispatchers.computation) {
+    suspend fun clearProducts() = withContext(dispatchers.default) {
         products.updateData { emptyList() }
     }
 
-    suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.computation) {
+    suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.default) {
         purchases.updateData { it + purchase }
     }
 
-    suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.computation) {
+    suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.default) {
         purchases.updateData { purchases -> purchases.filter { it.purchaseToken != purchaseToken } }
         purchases.getCurrentData()
             .filter { it.purchaseToken != purchaseToken }
             .let { purchases.updateData { it } }
     }
 
-    suspend fun clearPurchases() = withContext(dispatchers.computation) {
+    suspend fun clearPurchases() = withContext(dispatchers.default) {
         purchases.updateData { emptyList() }
     }
 }

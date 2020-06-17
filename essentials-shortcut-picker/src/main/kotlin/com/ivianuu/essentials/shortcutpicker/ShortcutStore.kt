@@ -41,7 +41,7 @@ internal class ShortcutStore(
     }
 
     suspend fun getShortcut(shortcutRequestResult: Intent): Shortcut =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
             val intent =
                 shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
             val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!

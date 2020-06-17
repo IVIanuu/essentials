@@ -20,7 +20,7 @@ class NotificationStore(private val dispatchers: AppCoroutineDispatchers) {
     val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
 
     suspend fun openNotification(notification: Notification) =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
             check(isConnected)
             try {
                 notification.contentIntent.send()
@@ -28,12 +28,12 @@ class NotificationStore(private val dispatchers: AppCoroutineDispatchers) {
             }
         }
 
-    suspend fun dismissNotification(key: String) = withContext(dispatchers.computation) {
+    suspend fun dismissNotification(key: String) = withContext(dispatchers.default) {
         check(isConnected)
         service?.cancelNotification(key)
     }
 
-    suspend fun dismissAllNotifications() = withContext(dispatchers.computation) {
+    suspend fun dismissAllNotifications() = withContext(dispatchers.default) {
         check(isConnected)
         service?.cancelAllNotifications()
     }

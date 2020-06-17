@@ -16,7 +16,7 @@ class ActionExecutors(
     private val unlockScreen: UnlockScreen
 ) {
 
-    suspend fun execute(key: String) = withContext(dispatchers.computation) {
+    suspend fun execute(key: String) = withContext(dispatchers.default) {
         logger.d("execute $key")
         val action = actionStore.getAction(key)
 

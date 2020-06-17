@@ -58,7 +58,7 @@ class PermissionManager(
             .map { Unit }
             .onStart { emit(Unit) }
             .map {
-                withContext(dispatchers.computation) {
+                withContext(dispatchers.default) {
                     permissions.all { stateProviderFor(it).isGranted(it) }
                 }
             }
@@ -69,7 +69,7 @@ class PermissionManager(
         request(permissions.toList())
 
     suspend fun request(permissions: List<Permission>): Boolean =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
             logger.d("request permissions $permissions")
             if (hasPermissions(permissions).first()) return@withContext true
 

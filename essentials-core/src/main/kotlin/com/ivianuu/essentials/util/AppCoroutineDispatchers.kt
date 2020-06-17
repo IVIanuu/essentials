@@ -22,7 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * App coroutine dispatchers
  */
 data class AppCoroutineDispatchers(
-    val io: CoroutineDispatcher,
-    val computation: CoroutineDispatcher,
-    val main: CoroutineDispatcher
+    val default: CoroutineDispatcher,
+    val main: CoroutineDispatcher,
+    val io: CoroutineDispatcher
 )

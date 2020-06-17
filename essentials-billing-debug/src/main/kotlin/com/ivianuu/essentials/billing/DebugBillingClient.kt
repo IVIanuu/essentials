@@ -326,7 +326,7 @@ class DebugBillingClient internal constructor(
     }
 
     internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
-        return withContext(dispatchers.computation) {
+        return withContext(dispatchers.default) {
             val request = requests[requestId] ?: return@withContext null
             billingStore.getSkuDetails(
                 SkuDetailsParams.newBuilder()
@@ -341,7 +341,7 @@ class DebugBillingClient internal constructor(
         requestId: String,
         responseCode: Int,
         purchases: List<Purchase>?
-    ) = withContext(dispatchers.computation) {
+    ) = withContext(dispatchers.default) {
         requests -= requestId
 
         if (responseCode == BillingResponseCode.OK) {

@@ -64,7 +64,7 @@ class NavBarManager internal constructor(
 
     private var job: Job? = null
 
-    suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.computation) {
+    suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
         job?.cancel()
 
         if (!config.hidden) {
@@ -100,7 +100,7 @@ class NavBarManager internal constructor(
                             prefs.wasNavBarHidden.updateData { navBarHidden }
                             setNavBarConfigInternal(navBarHidden, config)
                         }
-                        .flowOn(dispatchers.computation)
+                        .flowOn(dispatchers.default)
                         .collect()
                 },
                 async {
@@ -111,7 +111,7 @@ class NavBarManager internal constructor(
                             logger.d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
-                        .flowOn(dispatchers.computation)
+                        .flowOn(dispatchers.default)
                         .collect()
                 }
             )

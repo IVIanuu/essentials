@@ -40,7 +40,7 @@ class UnlockScreen(
 
     private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
-    suspend operator fun invoke(): Boolean = withContext(dispatchers.computation) {
+    suspend operator fun invoke(): Boolean = withContext(dispatchers.default) {
         if (!keyguardManager.isKeyguardLocked) return@withContext true
 
         val result = CompletableDeferred<Boolean>()

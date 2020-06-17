@@ -55,7 +55,7 @@ class ScreenStateProvider(
         .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
 
     private suspend fun getCurrentScreenState(): ScreenState =
-        withContext(dispatchers.computation) {
+        withContext(dispatchers.default) {
             if (powerManager.isInteractive) {
                 if (keyguardManager.isDeviceLocked) {
                     ScreenState.Locked

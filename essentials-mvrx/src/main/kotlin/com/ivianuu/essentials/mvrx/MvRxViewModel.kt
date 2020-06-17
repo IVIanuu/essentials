@@ -54,7 +54,7 @@ abstract class MvRxViewModel<S>(
     val state: StateFlow<S> get() = _state
 
     private val actor = scope.actor<suspend S.() -> S>(
-        context = dispatchers.computation
+        context = dispatchers.default
     ) {
         for (reducer in this) {
             val currentState = _state.value
@@ -68,7 +68,7 @@ abstract class MvRxViewModel<S>(
     }
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = dispatchers.computation,
+        context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Async<V>) -> S
     ): Job = scope.execute(
@@ -88,7 +88,7 @@ abstract class MvRxViewModel<S>(
 
     protected fun <V> Flow<V>.executeIn(
         scope: CoroutineScope,
-        context: CoroutineContext = dispatchers.computation,
+        context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Async<V>) -> S
     ): Job {
@@ -102,7 +102,7 @@ abstract class MvRxViewModel<S>(
     }
 
     protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = dispatchers.computation,
+        context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
         reducer: suspend S.(Async<V>) -> S

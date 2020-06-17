@@ -53,7 +53,7 @@ class AccessibilityServices(
         }
     }
 
-    suspend fun performGlobalAction(action: Int): Boolean = withContext(dispatchers.computation) {
+    suspend fun performGlobalAction(action: Int): Boolean = withContext(dispatchers.default) {
         service.first { it != null }!!.performGlobalAction(action)
     }
 

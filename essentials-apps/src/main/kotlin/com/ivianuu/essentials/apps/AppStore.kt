@@ -31,7 +31,7 @@ class AppStore(
     private val packageManager: PackageManager
 ) {
 
-    suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.computation) {
+    suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.default) {
         packageManager.getInstalledApplications(0)
             .parallelMap {
                 AppInfo(
@@ -45,7 +45,7 @@ class AppStore(
     }
 
 
-    suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.computation) {
+    suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.default) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
