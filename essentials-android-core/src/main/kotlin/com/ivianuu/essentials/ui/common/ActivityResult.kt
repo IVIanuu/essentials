@@ -18,7 +18,7 @@ fun <I, O> registerActivityResultCallback(
 
     val registry = compositionActivity.activityResultRegistry
 
-    val launcher = remember(contract, callback) {
+    val launcher = remember(contract, callback, registry) {
         registry.registerActivityResultCallback(
             key.toString(),
             contract,

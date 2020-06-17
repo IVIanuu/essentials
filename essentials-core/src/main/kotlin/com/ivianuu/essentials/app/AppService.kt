@@ -21,6 +21,7 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Lazy
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.composition.BindingAdapter
 import com.ivianuu.injekt.composition.BindingAdapterFunction
 import com.ivianuu.injekt.composition.installIn
@@ -31,16 +32,14 @@ import kotlin.reflect.KClass
 /**
  * Will be started on app start up and lives as long as the app lives
  */
-interface AppService
-
 @BindingAdapter(ApplicationComponent::class)
 annotation class BindAppService
 
 @BindingAdapterFunction(BindAppService::class)
 @Module
-inline fun <reified T : AppService> appService() {
+inline fun <reified T : Any> appService() {
     scoped<T>()
-    map<KClass<out AppService>, AppService> {
+    map<@AppServices Map<KClass<*>, Any>, KClass<*>, Any> {
         put<T>(T::class)
     }
 }
@@ -48,13 +47,17 @@ inline fun <reified T : AppService> appService() {
 @Module
 fun esAppServiceInjectionModule() {
     installIn<ApplicationComponent>()
-    map<KClass<out AppService>, AppService>()
+    map<KClass<*>, Any>()
 }
+
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AppServices
 
 @ApplicationScoped
 class AppServiceRunner(
     private val logger: Logger,
-    private val services: Map<KClass<out AppService>, @Lazy () -> AppService>
+    private val services: @AppServices Map<KClass<*>, @Lazy () -> Any>
 ) {
     init {
         services

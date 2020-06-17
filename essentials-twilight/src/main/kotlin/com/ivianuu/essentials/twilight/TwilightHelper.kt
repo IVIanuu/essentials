@@ -23,7 +23,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
 import androidx.compose.Immutable
-import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.app.BindAppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
@@ -50,7 +49,7 @@ class TwilightHelper(
     private val resources: @ForApplication Resources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
-) : AppService {
+) {
 
     val state: Flow<TwilightState> = prefs.twilightMode.data
         .flatMapLatest { mode ->

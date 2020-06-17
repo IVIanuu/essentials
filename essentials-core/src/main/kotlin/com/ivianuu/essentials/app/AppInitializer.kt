@@ -20,6 +20,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.composition.BindingAdapter
 import com.ivianuu.injekt.composition.BindingAdapterFunction
@@ -39,26 +40,15 @@ import kotlin.reflect.KClass
  *     }
  * }
  * ´´´
- *
- * Must be bound inside your module like this:
- *
- * ´´´
- * fun ComponentBuilder.analyticsBindings() {
- *     bindAppInitializer<AnalyticsInitializer>()
- * }
- * ´´´
- *
  */
-interface AppInitializer
-
 @BindingAdapter(ApplicationComponent::class)
 annotation class BindAppInitializer
 
 @BindingAdapterFunction(BindAppInitializer::class)
 @Module
-inline fun <reified T : AppInitializer> appInitializer() {
+inline fun <reified T : Any> appInitializer() {
     scoped<T>()
-    map<KClass<out AppInitializer>, AppInitializer> {
+    map<@AppInitializers Map<KClass<*>, Any>, KClass<*>, Any> {
         put<T>(T::class)
     }
 }
@@ -66,13 +56,17 @@ inline fun <reified T : AppInitializer> appInitializer() {
 @Module
 fun esAppInitializerModule() {
     installIn<ApplicationComponent>()
-    map<KClass<out AppInitializer>, AppInitializer>()
+    map<@AppInitializers Map<KClass<*>, Any>, KClass<*>, Any>()
 }
+
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AppInitializers
 
 @Transient
 class AppInitRunner(
     private val logger: Logger,
-    private val initializers: Map<KClass<out AppInitializer>, @Provider () -> AppInitializer>
+    initializers: @AppInitializers Map<KClass<*>, @Provider () -> Any>
 ) {
     init {
         initializers

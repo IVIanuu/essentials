@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
@@ -40,7 +39,7 @@ fun esWorkModule() {
 class WorkerAppInitializer(
     context: @ForApplication Context,
     workerFactory: WorkerFactory
-) : AppInitializer {
+) {
     init {
         WorkManager.initialize(
             context, Configuration.Builder()

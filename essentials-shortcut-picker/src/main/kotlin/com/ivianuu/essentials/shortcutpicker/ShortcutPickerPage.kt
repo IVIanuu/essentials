@@ -110,6 +110,7 @@ internal class ShortcutPickerViewModel(
 
                 navigator.popTop(result = shortcut)
             } catch (e: Exception) {
+                e.printStackTrace()
                 toaster.toast(R.string.es_failed_to_pick_shortcut)
             }
         }

@@ -19,8 +19,6 @@ package com.ivianuu.essentials.permission.runtime
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.onActive
-import androidx.compose.remember
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
@@ -28,10 +26,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.ui.common.registerActivityResultCallback
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.util.StartActivityForResultUseCase
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
 
@@ -64,26 +59,16 @@ internal class RuntimePermissionStateProvider(
 @BindPermissionRequestHandler
 @Transient
 internal class RuntimePermissionRequestHandler(
-    private val navigator: Navigator
+    private val startActivityForResultUseCase: StartActivityForResultUseCase
 ) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission
 
     override suspend fun request(permission: Permission) {
-        navigator.push<Unit>(
-            Route(opaque = true) {
-                val route = RouteAmbient.current
-                val launcher = registerActivityResultCallback(
-                    remember { ActivityResultContracts.RequestPermission() }
-                ) {
-                    navigator.pop(route = route)
-                }
-
-                onActive {
-                    launcher.launch(permission[Permission.RuntimePermissionName])
-                }
-            }
-        ).await()
+        startActivityForResultUseCase(
+            ActivityResultContracts.RequestPermission(),
+            permission[Permission.RuntimePermissionName]
+        )
     }
 }
