@@ -28,7 +28,6 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.ui.common.StateViewModel
 import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.Text
@@ -50,6 +49,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -143,8 +143,11 @@ internal class CheckableAppsViewModel(
 
     init {
         scope.launch {
-            val appsFlow = flowOf {
-                appStore.getInstalledApps().filter(appFilter)
+            val appsFlow = flow {
+                emit(
+                    appStore.getInstalledApps()
+                        .filter(appFilter)
+                )
             }
 
             appsFlow.combine(checkedApps) { apps, checked ->

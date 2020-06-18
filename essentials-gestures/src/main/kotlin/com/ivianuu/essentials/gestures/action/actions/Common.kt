@@ -4,7 +4,6 @@ import androidx.compose.Composable
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.ui.image.Icon

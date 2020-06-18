@@ -23,7 +23,6 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.Logger
@@ -37,6 +36,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlin.time.seconds
@@ -54,10 +54,8 @@ class DisplayRotationProvider(
         .flatMapLatest { screenState ->
             if (screenState.isOn) {
                 merge(
-                    listOf(
-                        rotationChanges(),
-                        configChanges()
-                    )
+                    rotationChanges(),
+                    configChanges()
                 )
                     .onStart { logger.d("sub for rotation") }
                     .onCompletion { logger.d("dispose rotation") }

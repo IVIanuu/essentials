@@ -20,7 +20,6 @@ import android.app.Application
 import android.content.Intent
 import android.graphics.Rect
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
@@ -30,6 +29,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -75,34 +76,36 @@ class NavBarManager internal constructor(
             return@withContext
         }
 
-        val flows = mutableListOf<Flow<*>>().apply {
-            if (config.rotationMode != NavBarRotationMode.Nougat) {
-                this += displayRotationProvider.displayRotation.drop(1)
-            }
-
-            if (config.showWhileScreenOff) {
-                this += screenStateProvider.screenState.drop(1)
-            }
-        }
-
         job = scope.launch {
-            awaitAll(
-                async {
-                    // apply config
-                    merge(flows)
-                        .onStart { emit(Unit) }
-                        .map {
-                            !config.showWhileScreenOff ||
-                                    screenStateProvider.screenState.first() == ScreenState.Unlocked
-                        }
-                        .onEach { navBarHidden ->
-                            prefs.wasNavBarHidden.updateData { navBarHidden }
-                            setNavBarConfigInternal(navBarHidden, config)
-                        }
-                        .flowOn(dispatchers.default)
-                        .collect()
-                },
-                async {
+            buildList<Deferred<*>> {
+                val flows = buildList<Flow<*>> {
+                    if (config.rotationMode != NavBarRotationMode.Nougat) {
+                        this += displayRotationProvider.displayRotation.drop(1)
+                    }
+
+                    if (config.showWhileScreenOff) {
+                        this += screenStateProvider.screenState.drop(1)
+                    }
+                }.toTypedArray()
+
+                // apply config
+                if (flows.isNotEmpty()) {
+                    this += async {
+                        merge(*flows)
+                            .onStart { emit(Unit) }
+                            .map {
+                                !config.showWhileScreenOff ||
+                                        screenStateProvider.screenState.first() == ScreenState.Unlocked
+                            }
+                            .onEach { navBarHidden ->
+                                prefs.wasNavBarHidden.updateData { navBarHidden }
+                                setNavBarConfigInternal(navBarHidden, config)
+                            }
+                            .flowOn(dispatchers.default)
+                            .collect()
+                    }
+                }
+                this += async {
                     // force show on shut downs
                     broadcastFactory.create(Intent.ACTION_SHUTDOWN)
                         .onEach {
@@ -113,7 +116,7 @@ class NavBarManager internal constructor(
                         .flowOn(dispatchers.default)
                         .collect()
                 }
-            )
+            }.awaitAll()
         }
     }
 

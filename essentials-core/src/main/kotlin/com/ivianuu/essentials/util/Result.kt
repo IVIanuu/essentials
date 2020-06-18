@@ -4,14 +4,10 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.unwrap
-import com.ivianuu.essentials.coroutines.flowOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
-
-fun <V> catchingFlowOf(block: suspend () -> V): Flow<Result<V, Throwable>> = flowOf(block)
-    .flowCatching()
 
 fun <V> Flow<V>.flowCatching(): Flow<Result<V, Throwable>> {
     return map<V, Result<V, Throwable>> { Ok(it) }
