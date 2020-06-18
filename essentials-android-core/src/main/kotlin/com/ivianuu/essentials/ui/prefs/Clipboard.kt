@@ -16,42 +16,35 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import android.content.ClipData
-import android.content.ClipboardManager
+import android.widget.Toast
 import androidx.compose.Composable
+import androidx.ui.core.ClipboardManagerAmbient
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
+import androidx.ui.text.AnnotatedString
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
 
-@Transient
-class ClipboardListItem(
-    private val clipboardManager: ClipboardManager,
-    private val toaster: Toaster
+@Composable
+fun ClipboardListItem(
+    clipboardText: () -> String,
+    title: @Composable (() -> Unit)? = null,
+    subtitle: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
-    @Composable
-    operator fun invoke(
-        clipboardText: () -> String,
-        title: @Composable (() -> Unit)? = null,
-        subtitle: @Composable (() -> Unit)? = null,
-        leading: @Composable (() -> Unit)? = null,
-        trailing: @Composable (() -> Unit)? = null,
-        modifier: Modifier = Modifier
-    ) {
-        ListItem(
-            modifier = modifier,
-            title = title,
-            subtitle = subtitle,
-            leading = leading,
-            trailing = trailing,
-            onClick = {
-                clipboardManager.setPrimaryClip(
-                    ClipData.newPlainText("", clipboardText())
-                )
-                toaster.toast(R.string.es_copied_to_clipboard)
-            }
-        )
-    }
-
+    val context = ContextAmbient.current
+    val clipboardManager = ClipboardManagerAmbient.current
+    ListItem(
+        modifier = modifier,
+        title = title,
+        subtitle = subtitle,
+        leading = leading,
+        trailing = trailing,
+        onClick = {
+            clipboardManager.setText(AnnotatedString(clipboardText()))
+            Toast.makeText(context, R.string.es_copied_to_clipboard, Toast.LENGTH_SHORT).show()
+        }
+    )
 }
