@@ -24,7 +24,6 @@ import com.ivianuu.essentials.coroutines.merge
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
-import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
@@ -68,7 +67,7 @@ class NavBarManager internal constructor(
         job?.cancel()
 
         if (!config.hidden) {
-            if (prefs.wasNavBarHidden.getCurrentData()) {
+            if (prefs.wasNavBarHidden.data.first()) {
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.updateData { false }
             }

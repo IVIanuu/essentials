@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.tile
 
-import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -31,7 +31,7 @@ abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
     override fun onClick() {
         super.onClick()
         scope.launch(dispatchers.default) {
-            val newValue = !box.getCurrentData()
+            val newValue = !box.data.first()
             if (onRequestValueChange(newValue)) {
                 box.updateData { newValue }
             }

@@ -24,9 +24,9 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationScoped
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 @ApplicationScoped
@@ -40,18 +40,19 @@ class BillingStore internal constructor(
 
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
         withContext(dispatchers.default) {
-        products.getCurrentData().filter { it.sku in params.skusList && it.type == params.skuType }
+            products.data.first().filter { it.sku in params.skusList && it.type == params.skuType }
     }
 
     suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
         withContext(dispatchers.default) {
-        InternalPurchasesResult(BillingResult.newBuilder().setResponseCode(BillingClient.BillingResponseCode.OK).build(),
-            purchases.getCurrentData().filter { it.signature.endsWith(skuType) })
+        InternalPurchasesResult(BillingResult.newBuilder()
+            .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
+            purchases.data.first().filter { it.signature.endsWith(skuType) })
     }
 
     suspend fun getPurchaseByToken(purchaseToken: String): Purchase? =
         withContext(dispatchers.default) {
-        purchases.getCurrentData().firstOrNull { it.purchaseToken == purchaseToken }
+            purchases.data.first().firstOrNull { it.purchaseToken == purchaseToken }
     }
 
     suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
@@ -72,7 +73,7 @@ class BillingStore internal constructor(
 
     suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.default) {
         purchases.updateData { purchases -> purchases.filter { it.purchaseToken != purchaseToken } }
-        purchases.getCurrentData()
+        purchases.data.first()
             .filter { it.purchaseToken != purchaseToken }
             .let { purchases.updateData { it } }
     }

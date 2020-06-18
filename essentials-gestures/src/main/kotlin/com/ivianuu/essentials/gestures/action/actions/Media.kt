@@ -8,13 +8,13 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.store.getCurrentData
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.flow.first
 
 @Module
 internal fun <T : Action> bindMediaAction(
@@ -47,7 +47,7 @@ internal class MediaActionExecutor(
                 KeyEvent(keyEvent, keycode)
             )
 
-            val mediaApp = actionPrefs.actionMediaApp.getCurrentData()
+            val mediaApp = actionPrefs.actionMediaApp.data.first()
             if (mediaApp != null) {
                 `package` = mediaApp
             }

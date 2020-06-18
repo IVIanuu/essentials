@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.store
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 /**
  * A lightweight reactive thread safe persistence model
@@ -39,8 +38,3 @@ interface Box<T> {
      */
     suspend fun updateData(transform: suspend (T) -> T): T
 }
-
-/**
- * Returns a snapshot of the current data
- */
-suspend fun <T> Box<T>.getCurrentData(): T = data.first()
