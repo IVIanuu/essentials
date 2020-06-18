@@ -36,11 +36,9 @@ fun DrawerButton(icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }) {
 
 @Composable
 fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
-    // todo use OnBackPressedDispatcherOwnerAmbient once available
-    val onBackPressedDispatcher = compositionActivity
-        .onBackPressedDispatcher
+    val navigator = NavigatorAmbient.current
     IconButton(
-        onClick = { onBackPressedDispatcher.onBackPressed() },
+        onClick = { navigator.popTop() },
         icon = icon
     )
 }
