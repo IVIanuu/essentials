@@ -22,22 +22,18 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Lazy
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
 @ApplicationScoped
 class PermissionManager(
-    private val scope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val navigator: Navigator,
@@ -45,8 +41,6 @@ class PermissionManager(
     private val permissionStateProviders: Set<PermissionStateProvider>,
     private val startUi: StartUi
 ) {
-
-    private val requests = mutableMapOf<String, PermissionRequest>()
 
     private val permissionChanges = EventFlow<Unit>()
 
@@ -74,25 +68,19 @@ class PermissionManager(
             if (hasPermissions(permissions).first()) return@withContext true
 
             val id = UUID.randomUUID().toString()
-            val finished = CompletableDeferred<Unit>()
+            val onComplete = CompletableDeferred<Unit>()
             val request = PermissionRequest(
                 id = id,
                 permissions = permissions.toList(),
-                onComplete = {
-                    scope.launch {
-                        finished.complete(Unit)
-                        requests.remove(id)
-                    }
-                }
+                onComplete = onComplete
             )
-            requests[id] = request
 
             startUi()
             withContext(dispatchers.main) {
                 navigator.push(permissionRequestRouteFactory().createRoute(request))
             }
 
-            finished.await()
+            onComplete.await()
 
             return@withContext hasPermissions(permissions).first()
     }
@@ -103,5 +91,5 @@ class PermissionManager(
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =
         permissionStateProviders.firstOrNull { it.handles(permission) }
-            ?: error("Couln't find state provider for $permission")
+            ?: error("Couldn't find state provider for $permission")
 }

@@ -148,7 +148,7 @@ internal class PermissionDialogViewModel(
 
     fun cancelClicked() {
         navigator.pop(route = route)
-        request.onComplete()
+        request.onComplete.complete(Unit)
     }
 
     private fun updatePermissionsToProcessOrFinish() {
@@ -160,7 +160,7 @@ internal class PermissionDialogViewModel(
 
             if (permissionsToProcess.isEmpty()) {
                 navigator.pop(route = route)
-                request.onComplete()
+                request.onComplete.complete(Unit)
             } else {
                 _permissionsToProcess.clear()
                 _permissionsToProcess += permissionsToProcess

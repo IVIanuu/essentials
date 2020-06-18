@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.navigation.Route
+import kotlinx.coroutines.CompletableDeferred
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -75,5 +76,5 @@ interface PermissionRequestRouteFactory {
 data class PermissionRequest(
     val id: String,
     val permissions: List<Permission>,
-    val onComplete: () -> Unit
+    val onComplete: CompletableDeferred<Unit>
 )
