@@ -29,7 +29,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev524"
+    const val version = "${Build.versionName}-dev525"
 }
 
 object Deps {
@@ -128,9 +128,7 @@ object Deps {
 
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.6"
 
-    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
-
-    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    const val mockk = "io.mockk:mockk:1.10.0"
 
     object Moshi {
         private const val version = "1.9.2"
@@ -145,6 +143,8 @@ object Deps {
         const val codegen = "dev.zacsweers.moshisealed:moshi-sealed-codegen:$version"
     }
 
+    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
+
     const val playBilling = "com.android.billingclient:billing-ktx:2.1.0"
 
     const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
@@ -154,6 +154,8 @@ object Deps {
     const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
+
+    const val strikt = "io.strikt:strikt-core:0.26.1"
 
     const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }

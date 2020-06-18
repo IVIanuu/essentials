@@ -62,5 +62,7 @@ dependencies {
     implementation(project(":essentials-twilight"))
     implementation(project(":essentials-unlock"))
     implementation(project(":essentials-work"))
+
+    testImplementation(project(":essentials-android-test"))
     testImplementation(project(":essentials-test"))
 }

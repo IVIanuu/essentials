@@ -32,5 +32,6 @@ dependencies {
     compile(Deps.Coroutines.test)
     compile(Deps.junit)
     compile(Deps.Kotlin.stdlib)
-    compile(Deps.mockitoKotlin)
+    compile(Deps.mockk)
+    compile(Deps.strikt)
 }
