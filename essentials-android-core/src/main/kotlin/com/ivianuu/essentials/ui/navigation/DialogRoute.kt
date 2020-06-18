@@ -26,7 +26,7 @@ fun DialogRoute(
     enterTransition: StackTransition? = FadeStackTransition(),
     exitTransition: StackTransition? = FadeStackTransition(),
     opaque: Boolean = true,
-    dismissible: Boolean = false,
+    dismissible: Boolean = true,
     onDismiss: @Composable () -> Unit = {
         NavigatorAmbient.current.pop(route = RouteAmbient.current)
     },
