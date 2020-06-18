@@ -56,7 +56,6 @@ class NavBarManager internal constructor(
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
-    private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
     private val screenStateProvider: ScreenStateProvider
@@ -121,13 +120,6 @@ class NavBarManager internal constructor(
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
         logger.d("set nav bar hidden: $config")
         try {
-            try {
-                // ensure that we can access non sdk interfaces
-                nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             overscanHelper.setOverscan(rect)

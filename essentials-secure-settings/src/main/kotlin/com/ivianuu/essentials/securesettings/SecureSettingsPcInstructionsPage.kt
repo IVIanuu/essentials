@@ -40,7 +40,7 @@ import com.ivianuu.injekt.Transient
 @Transient
 class SecureSettingsPcInstructionsPage internal constructor(
     private val buildInfo: BuildInfo,
-    private val clipboardAccessor: ClipboardAccessor,
+    private val clipboardManager: ClipboardManager,
     private val popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
     private val toaster: Toaster
 ) {
@@ -105,7 +105,7 @@ class SecureSettingsPcInstructionsPage internal constructor(
                             )
                         },
                         onClick = {
-                            clipboardAccessor.clipboardText =
+                            clipboardManager.clipboardText =
                                 "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
                             toaster.toast(R.string.es_copied_to_clipboard)

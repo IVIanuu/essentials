@@ -16,17 +16,23 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.content.ClipboardManager
+import android.content.ClipData
 import com.ivianuu.injekt.Transient
+import android.content.ClipboardManager as AndroidClipboardManager
 
 /**
  * Allows to access the clipboard
  */
 @Transient
-internal class ClipboardAccessor(private val clipboardManager: ClipboardManager) {
+internal class ClipboardManager(private val clipboardManager: AndroidClipboardManager) {
     var clipboardText: String
-        get() = clipboardManager.text.toString()
+        get() = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString().orEmpty()
         set(value) {
-            clipboardManager.text = value
+            clipboardManager.setPrimaryClip(
+                ClipData.newPlainText(
+                    "plain text",
+                    value
+                )
+            )
         }
 }

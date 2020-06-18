@@ -33,6 +33,7 @@ class SecureSettingsHelper(
     private val context: @ForApplication Context,
     private val shell: Shell
 ) {
+
     fun canWriteSecureSettings(): Boolean =
         context.checkSelfPermission(WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
 
@@ -44,4 +45,5 @@ class SecureSettingsHelper(
             false
         }
     }
+
 }

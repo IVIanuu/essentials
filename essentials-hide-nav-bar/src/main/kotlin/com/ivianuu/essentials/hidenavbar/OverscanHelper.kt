@@ -18,10 +18,12 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
+import android.os.Build
 import android.os.IBinder
 import android.view.Display
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Transient
+import java.lang.reflect.Method
 
 /**
  * Utils to access overscan with reflection
@@ -44,7 +46,7 @@ internal class OverscanHelper(private val logger: Logger) {
         }
 
         val setOverscanMethod by lazy {
-            windowManagerService.javaClass.getDeclaredMethod(
+            windowManagerService.javaClass.getDeclaredMethodWorkaround(
                 "setOverscan",
                 Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
             ).apply { isAccessible = true }
@@ -56,4 +58,32 @@ internal class OverscanHelper(private val logger: Logger) {
         )
     }
 
+}
+
+private fun Class<*>.getMethodWorkaround(
+    name: String,
+    vararg parameterTypes: Class<*>
+): Method {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+        return Class::class.java.getMethod(
+            "getMethod",
+            String::class.java,
+            arrayOf<Class<*>>()::class.java
+        ).invoke(this, name, parameterTypes) as Method
+    }
+    return getMethod(name, *parameterTypes)
+}
+
+private fun Class<*>.getDeclaredMethodWorkaround(
+    name: String,
+    vararg parameterTypes: Class<*>
+): Method {
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+        return Class::class.java.getDeclaredMethod(
+            "getDeclaredMethod",
+            String::class.java,
+            arrayOf<Class<*>>()::class.java
+        ).invoke(this, name, parameterTypes) as Method
+    }
+    return getDeclaredMethod(name, *parameterTypes)
 }
