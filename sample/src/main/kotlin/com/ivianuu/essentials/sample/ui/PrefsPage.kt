@@ -45,10 +45,7 @@ import kotlin.time.hours
 import kotlin.time.minutes
 
 @Transient
-class PrefsPage(
-    private val boxFactory: PrefBoxFactory,
-    private val clipboardListItem: ClipboardListItem
-) {
+class PrefsPage(private val boxFactory: PrefBoxFactory) {
     @Composable
     operator fun invoke() {
         Scaffold(
@@ -144,7 +141,7 @@ class PrefsPage(
                         )
                     )
 
-                    clipboardListItem(
+                    ClipboardListItem(
                         title = { Text("Clipboard") },
                         subtitle = { Text("This is a clipboard preference") },
                         clipboardText = { "cool clip" },
