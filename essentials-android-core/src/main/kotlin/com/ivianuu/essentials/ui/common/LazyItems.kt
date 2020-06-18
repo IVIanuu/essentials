@@ -11,7 +11,6 @@ import androidx.compose.compositionReference
 import androidx.compose.currentComposer
 import androidx.compose.emit
 import androidx.compose.onDispose
-import androidx.compose.remember
 import androidx.ui.core.Constraints
 import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutNode
@@ -30,6 +29,7 @@ import androidx.ui.foundation.lazy.LazyColumnItems
 import androidx.ui.foundation.lazy.LazyRowItems
 import androidx.ui.layout.Spacer
 import androidx.ui.node.UiApplier
+import com.ivianuu.essentials.ui.core.rememberRetained
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -78,7 +78,7 @@ private fun <T> LazyItems(
     itemContent: @Composable (T) -> Unit,
     isVertical: Boolean
 ) {
-    val state = remember { LazyItemsState<T>(isVertical = isVertical) }
+    val state = rememberRetained { LazyItemsState<T>(isVertical = isVertical) }
     @OptIn(ExperimentalComposeApi::class)
     state.recomposer = currentComposer.recomposer
     state.itemContent = itemContent
