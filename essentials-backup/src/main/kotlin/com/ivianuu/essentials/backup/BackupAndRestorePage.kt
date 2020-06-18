@@ -53,14 +53,20 @@ internal class BackupAndRestoreViewModel(
     fun backupClicked() {
         scope.launch {
             backupDataUseCase()
-                .onFailure { toaster.toast(R.string.es_backup_error) }
+                .onFailure {
+                    it.printStackTrace()
+                    toaster.toast(R.string.es_backup_error)
+                }
         }
     }
 
     fun restoreClicked() {
         scope.launch {
             restoreDataUseCase()
-                .onFailure { toaster.toast(R.string.es_restore_error) }
+                .onFailure {
+                    it.printStackTrace()
+                    toaster.toast(R.string.es_restore_error)
+                }
         }
     }
 
