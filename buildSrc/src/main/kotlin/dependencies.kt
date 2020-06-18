@@ -29,7 +29,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev522"
+    const val version = "${Build.versionName}-dev523"
 }
 
 object Deps {
@@ -76,7 +76,7 @@ object Deps {
 
     const val autoService = "com.google.auto.service:auto-service:1.0-rc6"
 
-    const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+    const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5"
 
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"

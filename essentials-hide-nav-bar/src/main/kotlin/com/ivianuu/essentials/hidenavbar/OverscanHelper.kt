@@ -18,12 +18,10 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
-import android.os.Build
 import android.os.IBinder
 import android.view.Display
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Transient
-import java.lang.reflect.Method
 
 /**
  * Utils to access overscan with reflection
@@ -35,22 +33,31 @@ internal class OverscanHelper(private val logger: Logger) {
     fun setOverscan(rect: Rect) {
         logger.d("set overscan $rect")
 
-        val windowManagerService by lazy {
-            val cls = Class.forName("android.view.IWindowManager\$Stub")
-            val invoke = Class.forName("android.os.ServiceManager")
-                .getMethod("checkService", String::class.java)
-                .invoke(null, "window")
+        val cls = Class.forName("android.view.IWindowManager\$Stub")
+        val invoke = Class.forName("android.os.ServiceManager")
+            .getMethod("checkService", String::class.java)
+            .invoke(null, "window")
 
-            cls.getMethod("asInterface", IBinder::class.java)
-                .invoke(null, invoke)
-        }
+        println("display info " +
+                "methods ${Class.forName("android.view.DisplayInfo").methods.map {
+                    "${it.name }(${it.parameterTypes.joinToString(", ") { it.name } }): ${it.returnType.name}"
+                }.joinToString("\n")} " +
+                "fields ${Class.forName("android.view.DisplayInfo").fields.map { 
+                    "${it.name}: ${it.type.name}"
+                }.joinToString("\n")}")
 
-        val setOverscanMethod by lazy {
-            windowManagerService.javaClass.getDeclaredMethodWorkaround(
-                "setOverscan",
-                Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
-            ).apply { isAccessible = true }
-        }
+        val windowManagerService = cls.getMethod("asInterface", IBinder::class.java)
+            .invoke(null, invoke)!!
+
+        println("window manager service $windowManagerService " +
+                "methods ${windowManagerService.javaClass.methods.map { 
+                    "${it.name }(${it.parameterTypes.joinToString(", ") { it.name } }): ${it.returnType.name}"
+                }.joinToString("\n")}")
+
+        val setOverscanMethod= windowManagerService.javaClass.getDeclaredMethod(
+            "setOverscan",
+            Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
+        ).apply { isAccessible = true }
 
         setOverscanMethod.invoke(
             windowManagerService,
@@ -58,32 +65,4 @@ internal class OverscanHelper(private val logger: Logger) {
         )
     }
 
-}
-
-private fun Class<*>.getMethodWorkaround(
-    name: String,
-    vararg parameterTypes: Class<*>
-): Method {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-        return Class::class.java.getMethod(
-            "getMethod",
-            String::class.java,
-            arrayOf<Class<*>>()::class.java
-        ).invoke(this, name, parameterTypes) as Method
-    }
-    return getMethod(name, *parameterTypes)
-}
-
-private fun Class<*>.getDeclaredMethodWorkaround(
-    name: String,
-    vararg parameterTypes: Class<*>
-): Method {
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-        return Class::class.java.getDeclaredMethod(
-            "getDeclaredMethod",
-            String::class.java,
-            arrayOf<Class<*>>()::class.java
-        ).invoke(this, name, parameterTypes) as Method
-    }
-    return getDeclaredMethod(name, *parameterTypes)
 }

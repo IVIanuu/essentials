@@ -3,6 +3,7 @@ include(
     ":essentials-accessibility",
     ":essentials-analytics",
     ":essentials-android-core",
+    ":essentials-android-test",
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",
