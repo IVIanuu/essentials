@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui
+package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.Composable
+import androidx.compose.FrameManager
 import androidx.compose.Immutable
 import androidx.compose.collectAsState
+import androidx.compose.getValue
+import androidx.compose.launchInComposition
 import androidx.compose.remember
+import androidx.compose.setValue
+import androidx.compose.stateFor
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
-import com.ivianuu.essentials.ui.coroutines.launchWithState
 import com.ivianuu.essentials.util.unwrap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -32,29 +36,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @Immutable
-sealed class Async<out T>(
-    val complete: Boolean,
-    val shouldLoad: Boolean
-) {
-    open operator fun invoke(): T? = null
+sealed class Resource<out T>
+
+@Immutable
+object Idle : Resource<Nothing>() {
+    override fun toString(): String = "Idle"
 }
 
 @Immutable
-class Uninitialized<T> : Async<T>(complete = false, shouldLoad = true) {
-    override fun toString(): String = "Uninitialized"
-}
-
-@Immutable
-class Loading<T> : Async<T>(complete = false, shouldLoad = false) {
-    override fun equals(other: Any?) = other is Loading<*>
-    override fun hashCode() = "Loading".hashCode()
+object Loading : Resource<Nothing>() {
     override fun toString(): String = "Loading"
 }
 
 @Immutable
-class Success<T>(val value: T) : Async<T>(complete = true, shouldLoad = false) {
-
-    override operator fun invoke(): T = value
+class Success<T>(val value: T) : Resource<T>() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,18 +64,18 @@ class Success<T>(val value: T) : Async<T>(complete = true, shouldLoad = false) {
 
     override fun hashCode(): Int = value.hashCode()
 
-    override fun toString(): String = "Success(value=$value)"
+    override fun toString(): String = "Ok(value=$value)"
 
 }
 
 @Immutable
-class Fail<T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true) {
+class Error<T>(val error: Throwable) : Resource<T>() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Fail<*>
+        other as Error<*>
 
         if (error != other.error) return false
 
@@ -89,70 +84,84 @@ class Fail<T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = tru
 
     override fun hashCode(): Int = error.hashCode()
 
-    override fun toString(): String = "Error(value=$error)"
+    override fun toString(): String = "Err(value=$error)"
 
 }
 
-fun <T> Flow<T>.flowAsync(): Flow<Async<T>> {
+operator fun <T> Resource<T>.invoke(): T? = (this as? Success)?.value
+
+operator fun <T> Success<T>.invoke(): T = value
+
+val Resource<*>.shouldLoad: Boolean get() = this is Idle || this is Error
+
+val Resource<*>.isComplete: Boolean get() = this is Success || this is Error
+
+fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> {
     return this
-        .map { Success(it) as Async<T> }
-        .onStart { emit(Loading()) }
-        .catch { Fail<T>(it) }
+        .map { Success(it) as Resource<T> }
+        .onStart { emit(Loading) }
+        .catch { Error<T>(it) }
 }
 
 @JvmName("flowAsyncFromResult")
-fun <V> Flow<Result<V, Throwable>>.flowAsync(): Flow<Async<V>> {
+fun <V> Flow<Result<V, Throwable>>.flowAsResource(): Flow<Resource<V>> {
     return unwrap()
-        .flowAsync()
+        .flowAsResource()
 }
 
-fun <T> asyncFlowOf(block: suspend () -> T): Flow<Async<T>> {
+fun <T> resourceFlowOf(block: suspend () -> T): Flow<Resource<T>> {
     return flow {
-        emit(Loading<T>())
+        emit(Loading)
         try {
             emit(Success(block()))
         } catch (e: Throwable) {
-            emit(Fail<T>(e))
+            emit(Error<T>(e))
         }
     }
 }
 
-inline fun <T, R> Async<T>.map(transform: (T) -> R) =
-    if (this is Success) Success(
-        transform(value)
-    ) else this as Async<R>
-
 @Composable
-fun <T> Flow<T>.collectAsAsync(): Async<T> {
-    return remember(this) { flowAsync() }
-        .collectAsState(Uninitialized())
+fun <T> Flow<T>.collectAsResource(): Resource<T> {
+    return remember(this) { flowAsResource() }
+        .collectAsState(Idle)
         .value
 }
 
 // todo remove overload once compose is fixed
 @Composable
-fun <T> launchAsync(
+fun <T> produceResource(
     block: suspend CoroutineScope.() -> T
-): Async<T> =
-    launchAsync(inputs = *emptyArray(), block = block)
+): Resource<T> =
+    produceResource(
+        inputs = *emptyArray(),
+        block = block
+    )
 
 @Composable
-fun <T> launchAsync(
+fun <T> produceResource(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
-): Async<T> {
-    return launchWithState<Async<T>>(initial = Uninitialized(), inputs = *inputs) {
-        state.value = Loading()
-        try {
-            val result = block()
-            state.value = Success(result)
-        } catch (e: Exception) {
-            state.value = Fail(e)
+): Resource<T> {
+    var state by stateFor<Resource<T>>(*inputs) { Idle }
+
+    launchInComposition(state, block) {
+        FrameManager.framed {
+            state =
+                Loading
         }
-    }.value
+        val result = try {
+            Success(block())
+        } catch (e: Exception) {
+            Error(e)
+        }
+
+        FrameManager.framed { state = result }
+    }
+
+    return state
 }
 
-fun <V> Result<V, Throwable>.toAsync(): Async<V> = fold(
+fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
     success = { Success(it) },
-    failure = { Fail(it) }
+    failure = { Error(it) }
 )

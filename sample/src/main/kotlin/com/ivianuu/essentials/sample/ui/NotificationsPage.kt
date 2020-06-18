@@ -32,17 +32,17 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.ui.collectAsAsync
-import com.ivianuu.essentials.ui.common.AsyncBox
-import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.launchAsync
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.resource.ResourceBox
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.collectAsResource
+import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.withContext
@@ -66,14 +66,14 @@ class NotificationsPage(
                     )
                 }
 
-                AsyncBox(
-                    state = remember {
+                ResourceBox(
+                    resource = remember {
                         permissionManager.hasPermissions(notificationPermission)
-                    }.collectAsAsync(),
+                    }.collectAsResource(),
                     success = { hasPermission ->
                         if (hasPermission) {
-                            AsyncLazyColumnItems(
-                                state = notificationStore.notifications.collectAsAsync(),
+                            ResourceLazyColumnItems(
+                                resource = notificationStore.notifications.collectAsResource(),
                                 successEmpty = {
                                     Text(
                                         text = "No notifications",
@@ -100,14 +100,14 @@ class NotificationsPage(
                                         },
                                         leading = {
                                             val context = ContextAmbient.current
-                                            AsyncBox(
+                                            ResourceBox(
                                                 modifier = Modifier.size(40.dp)
                                                     .drawBackground(
                                                         color = Color(sbn.notification.color),
                                                         shape = CircleShape
                                                     )
                                                     .padding(all = 8.dp),
-                                                state = launchAsync {
+                                                resource = produceResource {
                                                     withContext(dispatchers.io) {
                                                         sbn.notification.smallIcon
                                                             .loadDrawable(context)
@@ -120,7 +120,7 @@ class NotificationsPage(
                                                         asset = it
                                                     )
                                                 },
-                                                fail = {
+                                                error = {
                                                     Icon(Icons.Default.Error)
                                                 }
                                             )

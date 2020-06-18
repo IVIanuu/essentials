@@ -17,13 +17,11 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.Composable
-import androidx.compose.MutableState
+import androidx.compose.FrameManager
 import androidx.compose.State
-import androidx.compose.getValue
 import androidx.compose.launchInComposition
 import androidx.compose.onDispose
 import androidx.compose.remember
-import androidx.compose.setValue
 import androidx.compose.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,52 +36,23 @@ fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): Cor
 }
 
 @Composable
-fun <T> launchForResult(
+fun <T> produceState(
     initial: T,
     block: suspend CoroutineScope.() -> T
-): State<T> = launchForResult(initial = initial, inputs = *emptyArray(), block = block)
+): State<T> = produceState(initial = initial, inputs = *emptyArray(), block = block)
 
 @Composable
-fun <T> launchForResult(
+fun <T> produceState(
     initial: T,
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): State<T> {
     val state = state { initial }
-    launchWithState(
-        inputs = *inputs,
-        initial = initial
-    ) {
-        state.value = block()
-    }
-    return state
-}
 
-// todo remove once compiler is fixed
-@Composable
-fun <T> launchWithState(
-    initial: T,
-    block: suspend StateCoroutineScope<T>.() -> Unit
-): State<T> = launchWithState(initial = initial, inputs = *emptyArray(), block = block)
-
-@Composable
-fun <T> launchWithState(
-    initial: T,
-    vararg inputs: Any?,
-    block: suspend StateCoroutineScope<T>.() -> Unit
-): State<T> {
-    val state = state { initial }
     launchInComposition(*inputs) {
-        with(StateCoroutineScope(this, state)) {
-            block()
-        }
+        val result = block()
+        FrameManager.framed { state.value = result }
     }
-    return state
-}
 
-class StateCoroutineScope<T>(
-    private val scope: CoroutineScope,
-    val state: MutableState<T>
-) : CoroutineScope by scope {
-    var value by state
+    return state
 }

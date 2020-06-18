@@ -26,9 +26,6 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.Async
-import com.ivianuu.essentials.ui.Uninitialized
-import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.common.StateViewModel
 import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.rememberRetained
@@ -36,6 +33,9 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.resource.Idle
+import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
@@ -59,7 +59,7 @@ class ShortcutPickerPage internal constructor(
                 })
             },
             body = {
-                AsyncLazyColumnItems(state = viewModel.currentState.shortcuts) { shortcut ->
+                ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
                     Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
                 }
             }
@@ -121,5 +121,5 @@ internal class ShortcutPickerViewModel(
 
 @Immutable
 internal data class ShortcutPickerState(
-    val shortcuts: Async<List<Shortcut>> = Uninitialized()
+    val shortcuts: Resource<List<Shortcut>> = Idle
 )

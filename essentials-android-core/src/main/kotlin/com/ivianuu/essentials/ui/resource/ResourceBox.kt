@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.Composable
 import androidx.compose.StructurallyEqual
@@ -22,36 +22,33 @@ import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.material.CircularProgressIndicator
-import com.ivianuu.essentials.ui.Async
-import com.ivianuu.essentials.ui.Fail
-import com.ivianuu.essentials.ui.Loading
-import com.ivianuu.essentials.ui.Success
-import com.ivianuu.essentials.ui.Uninitialized
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import com.ivianuu.essentials.ui.common.LazyColumnItems
+import com.ivianuu.essentials.ui.common.LazyRowItems
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
-fun <T> AsyncLazyColumnItems(
-    state: Async<List<T>>,
+fun <T> ResourceLazyColumnItems(
+    resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
     fail: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(modifier = Modifier.center())
     },
-    uninitialized: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable (T) -> Unit
 ) {
-    AsyncBox(
-        state = state,
+    ResourceBox(
+        resource = resource,
         modifier = modifier,
         transition = transition,
-        fail = fail,
+        error = fail,
         loading = loading,
-        uninitialized = uninitialized,
+        idle = idle,
         success = { items ->
             if (items.isNotEmpty()) {
                 LazyColumnItems(
@@ -66,25 +63,25 @@ fun <T> AsyncLazyColumnItems(
 }
 
 @Composable
-fun <T> AsyncLazyRowItems(
-    state: Async<List<T>>,
+fun <T> ResourceLazyRowItems(
+    resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
-    fail: @Composable (Throwable) -> Unit = { throw it },
+    error: @Composable (Throwable) -> Unit = { throw it },
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(modifier = Modifier.center())
     },
-    uninitialized: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable (T) -> Unit
 ) {
-    AsyncBox(
-        state = state,
+    ResourceBox(
+        resource = resource,
         modifier = modifier,
         transition = transition,
-        fail = fail,
+        error = error,
         loading = loading,
-        uninitialized = uninitialized,
+        idle = idle,
         success = { items ->
             if (items.isNotEmpty()) {
                 LazyRowItems(
@@ -99,32 +96,33 @@ fun <T> AsyncLazyRowItems(
 }
 
 @Composable
-fun <T> AsyncBox(
-    state: Async<T>,
+fun <T> ResourceBox(
+    resource: Resource<T>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
-    fail: @Composable (Throwable) -> Unit = {},
+    error: @Composable (Throwable) -> Unit = {},
     loading: @Composable () -> Unit = {
         CircularProgressIndicator(
             modifier = Modifier.center()
         )
     },
-    uninitialized: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {
-    val asyncState = remember(state::class) { mutableStateOf(state, StructurallyEqual) }
-    asyncState.value = state
+    // we only wanna animate if the resource 'state' has changed
+    val resourceState = remember(resource::class) { mutableStateOf(resource, StructurallyEqual) }
+    resourceState.value = resource
 
     AnimatedBox(
-        current = asyncState,
+        current = resourceState,
         modifier = modifier,
         transition = transition
     ) { currentState ->
-        when (val currentAsyncState = currentState.value) {
-            is Uninitialized -> uninitialized()
+        when (val currentResourceState = currentState.value) {
+            is Idle -> idle()
             is Loading -> loading()
-            is Success -> success(currentAsyncState.value)
-            is Fail -> fail(currentAsyncState.error)
+            is Success -> success(currentResourceState.value)
+            is Error -> error(currentResourceState.error)
         }
     }
 }

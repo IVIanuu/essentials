@@ -29,9 +29,6 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.coroutines.flowOf
-import com.ivianuu.essentials.ui.Async
-import com.ivianuu.essentials.ui.Uninitialized
-import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.common.StateViewModel
 import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.Text
@@ -41,6 +38,10 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.resource.Idle
+import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.invoke
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
@@ -91,8 +92,8 @@ class CheckableAppsPage internal constructor(
                 )
             },
             body = {
-                AsyncLazyColumnItems(
-                    state = viewModel.currentState.apps,
+                ResourceLazyColumnItems(
+                    resource = viewModel.currentState.apps,
                     successItemContent = { app ->
                         CheckableApp(
                             app = app,
@@ -214,7 +215,7 @@ internal class CheckableAppsViewModel(
 
 @Immutable
 internal data class CheckableAppsState(
-    val apps: Async<List<CheckableApp>> = Uninitialized()
+    val apps: Resource<List<CheckableApp>> = Idle
 )
 
 @Immutable

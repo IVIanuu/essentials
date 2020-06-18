@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.ui.common
 
-import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.Composition
 import androidx.compose.CompositionReference
@@ -10,9 +9,10 @@ import androidx.compose.Recomposer
 import androidx.compose.Untracked
 import androidx.compose.compositionReference
 import androidx.compose.currentComposer
+import androidx.compose.emit
 import androidx.compose.onDispose
+import androidx.compose.remember
 import androidx.ui.core.Constraints
-import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutDirection
 import androidx.ui.core.LayoutNode
 import androidx.ui.core.Measurable
@@ -26,9 +26,10 @@ import androidx.ui.core.materialize
 import androidx.ui.core.subcomposeInto
 import androidx.ui.foundation.gestures.DragDirection
 import androidx.ui.foundation.gestures.scrollable
+import androidx.ui.foundation.lazy.LazyColumnItems
+import androidx.ui.foundation.lazy.LazyRowItems
 import androidx.ui.layout.Spacer
-import androidx.ui.node.UiComposer
-import com.ivianuu.essentials.ui.core.rememberRetained
+import androidx.ui.node.UiApplier
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -77,18 +78,16 @@ private fun <T> LazyItems(
     itemContent: @Composable (T) -> Unit,
     isVertical: Boolean
 ) {
-    val state = rememberRetained { LazyItemsState<T>(isVertical = isVertical) }
+    val state = remember { LazyItemsState<T>(isVertical = isVertical) }
     @OptIn(ExperimentalComposeApi::class)
     state.recomposer = currentComposer.recomposer
     state.itemContent = itemContent
     state.items = items
-    state.context = ContextAmbient.current
     state.compositionRef = compositionReference()
     state.forceRecompose = true
 
     val dragDirection = if (isVertical) DragDirection.Vertical else DragDirection.Horizontal
-
-    val modifier = currentComposer.materialize(
+    val materialized = currentComposer.materialize(
         modifier
             .scrollable(
                 dragDirection = dragDirection,
@@ -99,19 +98,29 @@ private fun <T> LazyItems(
             )
             .clipToBounds()
     )
-    (currentComposer as UiComposer).emit(
-        1,
-        ctor = { LayoutNode() } as () -> LayoutNode,
+    emit<LayoutNode, UiApplier>(
+        ctor = LayoutEmitHelper.constructor,
         update = {
-            set(modifier) { this.modifier = modifier }
-            set(state.rootNodeRef) { this.ref = it }
-            set(state.measureBlocks) { this.measureBlocks = it }
+            set(materialized, LayoutEmitHelper.setModifier)
+            set(state.rootNodeRef, LayoutEmitHelper.setRef)
+            set(state.measureBlocks, LayoutEmitHelper.setMeasureBlocks)
         }
     )
     state.recomposeIfAttached()
     onDispose {
         state.disposeAllChildren()
     }
+}
+
+/**
+ * Object of pre-allocated lambdas used to make emits to LayoutNodes allocation-less.
+ */
+private object LayoutEmitHelper {
+    val constructor: () -> LayoutNode = { LayoutNode() }
+    val setModifier: LayoutNode.(Modifier) -> Unit = { this.modifier = it }
+    val setMeasureBlocks: LayoutNode.(LayoutNode.MeasureBlocks) -> Unit =
+        { this.measureBlocks = it }
+    val setRef: LayoutNode.(Ref<LayoutNode>) -> Unit = { this.ref = it }
 }
 
 private inline class ScrollDirection(val isForward: Boolean)
@@ -135,58 +144,43 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
 
     var forceRecompose = false
     var compositionRef: CompositionReference? = null
-
-    /**
-     * Should always be non-null when attached
-     */
-    var context: Context? = null
-
     /**
      * Used to get the reference to populate [rootNode]
      */
     val rootNodeRef = Ref<LayoutNode>()
-
     /**
      * The root [LayoutNode]
      */
     private val rootNode get() = rootNodeRef.value!!
-
     /**
      * The measure blocks for [rootNode]
      */
     val measureBlocks: LayoutNode.MeasureBlocks = ListMeasureBlocks()
-
     /**
      * The layout direction
      */
     private var layoutDirection: LayoutDirection = LayoutDirection.Ltr
-
     /**
      * The index of the first item that is composed into the layout tree
      */
     private var firstComposedItem = DataIndex(0)
-
     /**
      * The index of the last item that is composed into the layout tree
      */
     private var lastComposedItem = DataIndex(-1) // obviously-bogus sentinel value
-
     /**
      * Scrolling forward is positive - i.e., the amount that the item is offset backwards
      */
     private var firstItemScrollOffset = 0f
-
     /**
      * The amount of space remaining in the last item
      */
     private var lastItemRemainingSpace = 0f
-
     /**
      * The amount of scroll to be consumed in the next layout pass.  Scrolling forward is negative
      * - that is, it is the amount that the items are offset in y
      */
     private var scrollToBeConsumed = 0f
-
     /**
      * The children that have been measured this measure pass.
      * Used to avoid measuring twice in a single pass, which is illegal
@@ -564,7 +558,7 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
         }
         // TODO(b/150390669): Review use of @Untracked
         @OptIn(ExperimentalComposeApi::class)
-        val composition = subcomposeInto(context!!, node, recomposer, compositionRef) @Untracked {
+        val composition = subcomposeInto(node, recomposer, compositionRef) @Untracked {
             itemContent(items[dataIndex.value])
         }
         compositionsForLayoutNodes[node] = composition

@@ -3,13 +3,13 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 import androidx.compose.Composable
 import androidx.ui.foundation.Text
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.ui.common.AsyncLazyColumnItems
 import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
 
@@ -28,8 +28,8 @@ class ActionPickerPage internal constructor(
                 val viewModel =
                     rememberRetained { viewModelFactory(showDefaultOption, showNoneOption) }
 
-                AsyncLazyColumnItems(
-                    state = viewModel.currentState.items,
+                ResourceLazyColumnItems(
+                    resource = viewModel.currentState.items,
                     successItemContent = { item ->
                         ActionPickerItem(
                             item = item,

@@ -27,9 +27,9 @@ import coil.request.GetRequest
 import coil.request.GetRequestBuilder
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.AsyncBox
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.launchAsync
+import com.ivianuu.essentials.ui.resource.ResourceBox
+import com.ivianuu.essentials.ui.resource.produceResource
 
 @Composable
 fun CoilImage(
@@ -45,7 +45,7 @@ fun CoilImage(
         val height = if (constraints.maxHeight != Int.MAX_VALUE) constraints.maxHeight else null
         val context = ContextAmbient.current
 
-        val state = launchAsync(
+        val state = produceResource(
             data,
             builderBlock,
             width,
@@ -66,10 +66,10 @@ fun CoilImage(
                 .let { ImagePainter(it) }
         }
 
-        AsyncBox(
-            state = state,
+        ResourceBox(
+            resource = state,
             transition = transition,
-            fail = { error?.invoke() },
+            error = { error?.invoke() },
             loading = { placeholder?.invoke() },
             success = { Image(it) }
         )

@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.collectAsState
-import com.ivianuu.essentials.ui.Async
-import com.ivianuu.essentials.ui.Fail
-import com.ivianuu.essentials.ui.Loading
-import com.ivianuu.essentials.ui.Success
 import com.ivianuu.essentials.ui.base.ViewModel
+import com.ivianuu.essentials.ui.resource.Error
+import com.ivianuu.essentials.ui.resource.Loading
+import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.resource.Success
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -70,7 +70,7 @@ abstract class StateViewModel<S>(
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: suspend S.(Async<V>) -> S
+        reducer: suspend S.(Resource<V>) -> S
     ): Job = scope.execute(
         context = context,
         start = start,
@@ -78,11 +78,11 @@ abstract class StateViewModel<S>(
         reducer = reducer
     )
 
-    protected suspend fun <V> Flow<V>.execute(reducer: suspend S.(Async<V>) -> S) {
-        setState { reducer(Loading()) }
+    protected suspend fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S) {
+        setState { reducer(Loading) }
         return this
             .map { Success(it) }
-            .catch { Fail<V>(it) }
+            .catch { Error<V>(it) }
             .collect { setState { reducer(it) } }
     }
 
@@ -90,13 +90,13 @@ abstract class StateViewModel<S>(
         scope: CoroutineScope,
         context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: suspend S.(Async<V>) -> S
+        reducer: suspend S.(Resource<V>) -> S
     ): Job {
         return scope.launch(context, start) {
-            setState { reducer(Loading()) }
+            setState { reducer(Loading) }
             this@executeIn
                 .map { Success(it) }
-                .catch { Fail<V>(it) }
+                .catch { Error<V>(it) }
                 .collect { setState { reducer(it) } }
         }
     }
@@ -105,14 +105,14 @@ abstract class StateViewModel<S>(
         context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
-        reducer: suspend S.(Async<V>) -> S
+        reducer: suspend S.(Resource<V>) -> S
     ): Job = launch(context, start) {
-        setState { reducer(Loading()) }
+        setState { reducer(Loading) }
         try {
             val result = block()
             setState { reducer(Success(result)) }
         } catch (e: Exception) {
-            setState { reducer(Fail(e)) }
+            setState { reducer(Error(e)) }
         }
     }
 
