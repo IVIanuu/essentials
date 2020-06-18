@@ -144,11 +144,8 @@ fun <T> produceResource(
 ): Resource<T> {
     var state by stateFor<Resource<T>>(*inputs) { Idle }
 
-    launchInComposition(state, block) {
-        FrameManager.framed {
-            state =
-                Loading
-        }
+    launchInComposition(*inputs) {
+        FrameManager.framed { state = Loading }
         val result = try {
             Success(block())
         } catch (e: Exception) {

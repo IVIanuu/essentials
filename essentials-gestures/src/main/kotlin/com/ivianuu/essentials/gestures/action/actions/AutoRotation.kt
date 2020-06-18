@@ -18,14 +18,12 @@ import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.scoped
-import com.ivianuu.injekt.transient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

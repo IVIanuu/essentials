@@ -179,7 +179,6 @@ internal class CheckableAppsViewModel(
     fun appClicked(app: CheckableApp) {
         scope.launch {
             pushNewCheckedApps {
-
                 if (!app.isChecked) {
                     it += app.info.packageName
                 } else {
