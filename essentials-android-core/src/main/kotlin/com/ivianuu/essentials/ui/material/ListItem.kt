@@ -62,7 +62,15 @@ fun ListItem(
             .preferredHeightIn(minHeight = minHeight)
             .fillMaxWidth()
             .drawBackground(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
-            .clickable(enabled = enabled, onClick = onClick ?: {}, onLongClick = onLongClick),
+            .plus(
+                if (onClick != null || onLongClick != null)
+                    Modifier.clickable(
+                        enabled = enabled,
+                        onClick = onClick ?: {},
+                        onLongClick = onLongClick
+                    )
+                else Modifier
+            ),
         gravity = Alignment.CenterStart
     ) {
         Row(verticalGravity = Alignment.CenterVertically) {
