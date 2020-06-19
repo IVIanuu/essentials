@@ -50,12 +50,28 @@ class Animatable(val tag: Any) {
     var layoutCoordinates: LayoutCoordinates? by mutableStateOf(null)
         internal set
 
-    val bounds: PxBounds?
-        get() = layoutCoordinates
-            ?.takeIf { it.isAttached }
-            ?.globalBounds
-
 }
+
+val Animatable.bounds: PxBounds?
+    get() = layoutCoordinates
+        ?.takeIf { it.isAttached }
+        ?.globalBounds
+
+val Animatable.width: Int?
+    get() = layoutCoordinates
+        ?.takeIf { it.isAttached }
+        ?.size?.width
+
+val Animatable.height: Int?
+    get() = layoutCoordinates
+        ?.takeIf { it.isAttached }
+        ?.size?.height
+
+fun Animatable.setFractionTranslationX(fraction: Float) =
+    set(TranslationX, (width ?: 0) * fraction)
+
+fun Animatable.setFractionTranslationY(fraction: Float) =
+    set(TranslationY, (height ?: 0) * fraction)
 
 fun Modifier.animatable(
     tag: Any,
