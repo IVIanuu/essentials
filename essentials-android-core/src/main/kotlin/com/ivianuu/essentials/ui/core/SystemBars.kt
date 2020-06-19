@@ -18,7 +18,9 @@ package com.ivianuu.essentials.ui.core
 
 import android.view.View
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Providers
+import androidx.compose.Stable
 import androidx.compose.StructurallyEqual
 import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
@@ -77,11 +79,13 @@ fun SystemBarManager(children: @Composable () -> Unit) {
 
 private val SystemBarManagerAmbient = staticAmbientOf<SystemBarManager>()
 
+@Immutable
 data class SystemBarStyle(
     val bounds: Bounds,
     val light: Boolean
 )
 
+@Stable
 private class SystemBarManager {
 
     val styles = modelListOf<SystemBarStyle>()
@@ -117,11 +121,13 @@ private class SystemBarManager {
                     statusBarBounds.bottom <= it.bounds.bottom
         }?.light ?: false
 
-        activity.window.decorView.systemUiVisibility =
-            activity.window.decorView.systemUiVisibility.setFlag(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-                lightStatusBar
-            )
+        onCommit(activity, lightStatusBar) {
+            activity.window.decorView.systemUiVisibility =
+                activity.window.decorView.systemUiVisibility.setFlag(
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
+                    lightStatusBar
+                )
+        }
     }
 
     fun registerStyle(style: SystemBarStyle) {

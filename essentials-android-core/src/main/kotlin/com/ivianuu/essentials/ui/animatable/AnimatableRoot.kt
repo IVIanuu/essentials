@@ -35,6 +35,7 @@ fun AnimatableRoot(
 @Composable
 fun animatableFor(tag: Any): Animatable = AnimatableRootAmbient.current.animatableFor(tag)
 
+@Stable
 class AnimatableRoot {
 
     internal val animationOverlayEntries = modelListOf<AnimationOverlayEntry>()

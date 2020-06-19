@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.animatable
 
+import androidx.compose.Stable
 import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
@@ -12,6 +13,7 @@ import androidx.ui.core.globalBounds
 import androidx.ui.core.onPositioned
 import androidx.ui.unit.PxBounds
 
+@Stable
 class Animatable(val tag: Any) {
 
     private val _props = modelMapOf<Prop<*>, Any?>()
