@@ -32,7 +32,6 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
@@ -42,6 +41,7 @@ import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.Assisted

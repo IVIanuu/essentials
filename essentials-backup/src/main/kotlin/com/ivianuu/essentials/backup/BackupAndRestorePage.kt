@@ -3,13 +3,13 @@ package com.ivianuu.essentials.backup
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient

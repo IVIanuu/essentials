@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.activity
 
 import android.os.Bundle
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject

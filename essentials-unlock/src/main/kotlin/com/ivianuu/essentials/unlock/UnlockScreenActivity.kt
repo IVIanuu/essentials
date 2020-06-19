@@ -25,7 +25,7 @@ import android.view.WindowManager
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.activity.EsActivity
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo

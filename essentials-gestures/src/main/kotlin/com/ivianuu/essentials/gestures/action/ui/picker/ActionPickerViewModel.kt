@@ -12,10 +12,10 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionStore
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.ui.common.StateViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted

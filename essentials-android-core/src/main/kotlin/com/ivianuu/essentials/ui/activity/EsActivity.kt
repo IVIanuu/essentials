@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.ui.activity
 
 import android.os.Bundle
 import android.view.ViewGroup

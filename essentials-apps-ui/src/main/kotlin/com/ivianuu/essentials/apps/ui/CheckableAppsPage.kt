@@ -28,8 +28,6 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.ui.common.StateViewModel
-import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
@@ -41,6 +39,8 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.invoke
+import com.ivianuu.essentials.ui.viewmodel.StateViewModel
+import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider

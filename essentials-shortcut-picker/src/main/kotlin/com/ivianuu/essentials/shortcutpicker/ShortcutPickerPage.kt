@@ -26,8 +26,6 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.StateViewModel
-import com.ivianuu.essentials.ui.common.currentState
 import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -36,6 +34,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.viewmodel.StateViewModel
+import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
 import androidx.compose.collectAsState
-import com.ivianuu.essentials.ui.base.ViewModel
 import com.ivianuu.essentials.ui.resource.Error
 import com.ivianuu.essentials.ui.resource.Loading
 import com.ivianuu.essentials.ui.resource.Resource
