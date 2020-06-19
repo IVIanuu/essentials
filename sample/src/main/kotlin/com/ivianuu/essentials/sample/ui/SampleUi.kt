@@ -21,12 +21,10 @@ import androidx.compose.Providers
 import androidx.compose.remember
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
-import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
-import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeStackTransition
+import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.injekt.Transient
 
 @BindAppUi
@@ -41,10 +39,10 @@ class SampleUi(
     override fun invoke() {
         twilightTheme {
             Providers(
-                DefaultStackTransitionAmbient provides remember { VerticalFadeStackTransition() }
+                DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
             ) {
                 if (!navigator.hasRoot) {
-                    navigator.setRoot(Route(transition = NoOpStackTransition) { homePage() })
+                    navigator.setRoot { homePage() }
                 }
                 navigator()
             }
