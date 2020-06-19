@@ -7,6 +7,7 @@ import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.animation.animatedFloat
+import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import kotlin.time.Duration
@@ -32,6 +33,7 @@ fun FloatAnimationStackTransition(
     ) -> Unit
 ): StackTransition = { context ->
     val animation = animatedFloat(0f)
+    context.toAnimatable?.set(Alpha, if (animation.value == 0f) 0f else 1f)
     remember {
         if (context.toAnimatable != null) context.addTo()
         animation.animateTo(
