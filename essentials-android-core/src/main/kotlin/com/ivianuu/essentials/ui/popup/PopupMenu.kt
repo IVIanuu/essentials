@@ -23,11 +23,13 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.clickable
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Shape
 import androidx.ui.layout.Column
 import androidx.ui.layout.height
 import androidx.ui.layout.preferredWidthIn
+import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
@@ -42,9 +44,10 @@ object PopupMenu {
 @Composable
 fun PopupMenu(
     items: List<PopupMenu.Item>,
-    style: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
+    shape: Shape = RoundedCornerShape(size = 4.dp),
+    elevation: Dp = 8.dp
 ) {
-    Popup(style = style) {
+    Popup(shape = shape, elevation = elevation) {
         Column {
             val navigator = NavigatorAmbient.current
             val route = RouteAmbient.current

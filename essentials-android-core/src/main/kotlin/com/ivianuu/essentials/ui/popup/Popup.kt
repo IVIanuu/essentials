@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.staticAmbientOf
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -26,32 +24,18 @@ import androidx.ui.graphics.Shape
 import androidx.ui.layout.padding
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.material.Surface
-
-@Immutable
-data class PopupStyle(
-    val shape: Shape,
-    val elevation: Dp
-)
-
-val PopupStyleAmbient = staticAmbientOf<PopupStyle>()
-
-@Composable
-fun DefaultPopupStyle(
-    shape: Shape = RoundedCornerShape(size = 4.dp),
-    elevation: Dp = 8.dp
-) = PopupStyle(shape = shape, elevation = elevation)
 
 @Composable
 fun Popup(
-    style: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
-    children: @Composable () -> Unit
+    shape: Shape = RoundedCornerShape(size = 4.dp),
+    elevation: Dp = 8.dp,
+    content: @Composable () -> Unit
 ) {
     Surface(
-        elevation = style.elevation,
-        shape = style.shape
+        elevation = elevation,
+        shape = shape
     ) {
-        Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp), children = children)
+        Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp), children = content)
     }
 }

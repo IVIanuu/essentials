@@ -17,7 +17,6 @@ import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.untrackedState
-import com.ivianuu.essentials.ui.core.currentOrElse
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -25,8 +24,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 fun PopupMenuButton(
     items: List<PopupMenu.Item>,
     onCancel: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
-    popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() }
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier
@@ -34,7 +32,6 @@ fun PopupMenuButton(
             .popupClickable(
                 items = items,
                 onCancel = onCancel,
-                popupStyle = popupStyle,
                 indicationFactory = { RippleIndication(bounded = false) }
             )
             .plus(modifier),
@@ -48,7 +45,6 @@ fun PopupMenuButton(
 fun Modifier.popupClickable(
     items: List<PopupMenu.Item>,
     onCancel: (() -> Unit)? = null,
-    popupStyle: PopupStyle = PopupStyleAmbient.currentOrElse { DefaultPopupStyle() },
     indicationFactory: @Composable () -> Indication = IndicationAmbient.current,
 ) = composed {
     val navigator = NavigatorAmbient.current
@@ -63,10 +59,7 @@ fun Modifier.popupClickable(
                     position = coordinates.value!!.boundsInRoot,
                     onCancel = onCancel
                 ) {
-                    PopupMenu(
-                        items = items,
-                        style = popupStyle
-                    )
+                    PopupMenu(items = items)
                 }
             )
         }
