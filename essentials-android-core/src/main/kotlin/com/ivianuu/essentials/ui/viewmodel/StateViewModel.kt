@@ -81,7 +81,7 @@ abstract class StateViewModel<S>(
         setState { reducer(Loading) }
         return this
             .map { Success(it) }
-            .catch { Error<V>(it) }
+            .catch { Error(it) }
             .collect { setState { reducer(it) } }
     }
 
@@ -95,7 +95,7 @@ abstract class StateViewModel<S>(
             setState { reducer(Loading) }
             this@executeIn
                 .map { Success(it) }
-                .catch { Error<V>(it) }
+                .catch { Error(it) }
                 .collect { setState { reducer(it) } }
         }
     }

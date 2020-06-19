@@ -69,13 +69,13 @@ class Success<T>(val value: T) : Resource<T>() {
 }
 
 @Immutable
-class Error<T>(val error: Throwable) : Resource<T>() {
+class Error(val error: Throwable) : Resource<Nothing>() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Error<*>
+        other as Error
 
         if (error != other.error) return false
 
@@ -96,11 +96,25 @@ val Resource<*>.shouldLoad: Boolean get() = this is Idle || this is Error
 
 val Resource<*>.isComplete: Boolean get() = this is Success || this is Error
 
+inline fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> {
+    return when (this) {
+        is Success -> Success(transform(value))
+        else -> this as Resource<R>
+    }
+}
+
+inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R> {
+    return when (this) {
+        is Success -> transform(value)
+        else -> this as Resource<R>
+    }
+}
+
 fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> {
     return this
         .map { Success(it) as Resource<T> }
         .onStart { emit(Loading) }
-        .catch { Error<T>(it) }
+        .catch { Error(it) }
 }
 
 @JvmName("flowAsyncFromResult")
@@ -115,7 +129,7 @@ fun <T> resourceFlowOf(block: suspend () -> T): Flow<Resource<T>> {
         try {
             emit(Success(block()))
         } catch (e: Throwable) {
-            emit(Error<T>(e))
+            emit(Error(e))
         }
     }
 }
