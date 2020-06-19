@@ -17,10 +17,11 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
-import androidx.ui.material.Scaffold
+import androidx.ui.foundation.VerticalScroller
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.UrlRoute
@@ -36,11 +37,13 @@ class AboutPage(
     @Composable
     operator fun invoke() {
         Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
-            AboutSection(
-                showHeader = false,
-                packageName = buildInfo.packageName,
-                privacyPolicyUrl = privacyPolicyUrl
-            )
+            VerticalScroller {
+                AboutSection(
+                    showHeader = false,
+                    packageName = buildInfo.packageName,
+                    privacyPolicyUrl = privacyPolicyUrl
+                )
+            }
         }
     }
 }
