@@ -17,7 +17,6 @@ import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
-import java.util.UUID
 
 @Composable
 fun <T> AnimatedBox(
@@ -69,7 +68,11 @@ fun <T> AnimatedStack(
         val state = remember { AnimatedStackState(children) }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)
-        state.runningTransactions.values.toList().forEach { it.run() }
+        state.runningTransactions.values.toList().forEach {
+            key(it) {
+                it.run()
+            }
+        }
         Stack(modifier = modifier) {
             state.visibleChildren.toList().forEach {
                 key(it.key) {
@@ -235,7 +238,6 @@ internal class AnimatedStackTransaction<T>(
     private val state: AnimatedStackState<T>
 ) {
 
-    private val transactionId = UUID.randomUUID()
     val transactionKey = when {
         to != null -> to.key
         from != null -> from.key
@@ -249,44 +251,42 @@ internal class AnimatedStackTransaction<T>(
 
     @Composable
     fun run() {
-        key(transactionId) {
-            remember { from?.isAnimating = true }
+        remember { from?.isAnimating = true }
 
-            val fromAnimatable = from?.let { animatableFor(it) }
-            val toAnimatable = to?.let { animatableFor(it) }
+        val fromAnimatable = from?.let { animatableFor(it) }
+        val toAnimatable = to?.let { animatableFor(it) }
 
-            val context = remember {
-                object : StackTransitionContext(
-                    fromAnimatable = fromAnimatable,
-                    toAnimatable = toAnimatable,
-                    isPush = isPush
-                ) {
-                    override fun addTo() {
-                        checkNotNull(to)
-                        if (to !in state.visibleChildren)
-                            this@AnimatedStackTransaction.addTo()
+        val context = remember {
+            object : StackTransitionContext(
+                fromAnimatable = fromAnimatable,
+                toAnimatable = toAnimatable,
+                isPush = isPush
+            ) {
+                override fun addTo() {
+                    checkNotNull(to)
+                    if (to !in state.visibleChildren)
+                        this@AnimatedStackTransaction.addTo()
+                }
+
+                override fun removeFrom() {
+                    checkNotNull(from)
+                    if (from in state.visibleChildren)
+                        this@AnimatedStackTransaction.removeFrom()
+                }
+
+                override fun onComplete() {
+                    check(!needsCompletion) {
+                        "onComplete() must be called only once"
                     }
-
-                    override fun removeFrom() {
-                        checkNotNull(from)
-                        if (from in state.visibleChildren)
-                            this@AnimatedStackTransaction.removeFrom()
-                    }
-
-                    override fun onComplete() {
-                        check(!needsCompletion) {
-                            "onComplete() must be called only once"
-                        }
-                        if (!completed) needsCompletion = true
-                    }
+                    if (!completed) needsCompletion = true
                 }
             }
+        }
 
-            transition(context)
+        transition(context)
 
-            if (needsCompletion && !completed) {
-                complete()
-            }
+        if (needsCompletion && !completed) {
+            complete()
         }
     }
 
