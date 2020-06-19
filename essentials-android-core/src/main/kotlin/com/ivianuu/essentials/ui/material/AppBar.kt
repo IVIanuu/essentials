@@ -26,11 +26,11 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
+import androidx.ui.layout.RowScope
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.contentColorFor
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
@@ -49,15 +49,60 @@ val TopAppBarStyleAmbient = ambientOf { TopAppBarStyle.Primary }
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
+    title: @Composable (() -> Unit)? = null,
+    leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
+    actions: @Composable (() -> Unit)? = null,
     backgroundColor: Color = when (TopAppBarStyleAmbient.current) {
         TopAppBarStyle.Primary -> MaterialTheme.colors.primary
         TopAppBarStyle.Surface -> MaterialTheme.colors.surface
     },
-    contentColor: Color = contentColorFor(backgroundColor),
+    contentColor: Color = guessingContentColorFor(backgroundColor),
+    elevation: Dp = DefaultAppBarElevation
+) {
+    TopAppBar(
+        modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation
+    ) {
+        leading?.invoke()
+        if (title != null) {
+            val startPadding = if (leading != null) 16.dp else 0.dp
+            val endPadding = if (actions != null) 16.dp else 0.dp
+            Column(
+                modifier = Modifier
+                    .padding(start = startPadding, end = endPadding)
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                ProvideTextStyle(
+                    MaterialTheme.typography.h6,
+                    children = title
+                )
+            }
+        }
+
+        if (actions != null) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalGravity = Alignment.CenterVertically
+            ) {
+                actions()
+            }
+        }
+    }
+}
+
+@Composable
+fun TopAppBar(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = when (TopAppBarStyleAmbient.current) {
+        TopAppBarStyle.Primary -> MaterialTheme.colors.primary
+        TopAppBarStyle.Surface -> MaterialTheme.colors.surface
+    },
+    contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
-    title: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
-    actions: @Composable (() -> Unit)? = null
+    content: @Composable RowScope.() -> Unit
 ) {
     Surface(
         color = backgroundColor,
@@ -73,34 +118,9 @@ fun TopAppBar(
                 modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
-                verticalGravity = Alignment.CenterVertically
-            ) {
-                leading?.invoke()
-                if (title != null) {
-                    val startPadding = if (leading != null) 16.dp else 0.dp
-                    val endPadding = if (actions != null) 16.dp else 0.dp
-                    Column(
-                        modifier = Modifier
-                            .padding(start = startPadding, end = endPadding)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        ProvideTextStyle(
-                            MaterialTheme.typography.h6,
-                            children = title
-                        )
-                    }
-                }
-
-                if (actions != null) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalGravity = Alignment.CenterVertically
-                    ) {
-                        actions()
-                    }
-                }
-            }
+                verticalGravity = Alignment.CenterVertically,
+                children = content
+            )
         }
     }
 }
