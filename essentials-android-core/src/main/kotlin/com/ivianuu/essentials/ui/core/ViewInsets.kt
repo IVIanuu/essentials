@@ -23,7 +23,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.compose.Composable
 import androidx.compose.Providers
-import androidx.compose.Stable
 import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
 import androidx.compose.getValue
@@ -153,7 +152,6 @@ private fun calculateZeroSides(
     return ZeroSides.None
 }
 
-@Stable
 interface WindowInsets {
     val viewPadding: InnerPadding
     val viewInsets: InnerPadding
@@ -174,7 +172,6 @@ fun WindowInsets(
     )
 }
 
-@Stable
 private class ObservableWindowInsets(
     viewPadding: InnerPadding,
     viewInsets: InnerPadding

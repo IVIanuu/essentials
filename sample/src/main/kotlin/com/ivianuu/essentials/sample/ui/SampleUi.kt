@@ -19,19 +19,14 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.remember
-import androidx.ui.graphics.Color
-import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.VerticalFadeStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
-import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
-import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.isDark
 import com.ivianuu.injekt.Transient
 
 @BindAppUi
@@ -45,22 +40,13 @@ class SampleUi(
     @Composable
     override fun invoke() {
         twilightTheme {
-            ProvideSystemBarStyle(
-                SystemBarStyle(
-                    statusBarColor = Color.Black.copy(alpha = 0.2f),
-                    lightStatusBar = MaterialTheme.colors.onPrimary.isDark,
-                    navigationBarColor = MaterialTheme.colors.surface.copy(alpha = 0.7f),
-                    lightNavigationBar = MaterialTheme.colors.onSurface.isDark
-                )
+            Providers(
+                DefaultStackTransitionAmbient provides remember { VerticalFadeStackTransition() }
             ) {
-                Providers(
-                    DefaultStackTransitionAmbient provides remember { VerticalFadeStackTransition() }
-                ) {
-                    if (!navigator.hasRoot) {
-                        navigator.setRoot(Route(transition = NoOpStackTransition) { homePage() })
-                    }
-                    navigator()
+                if (!navigator.hasRoot) {
+                    navigator.setRoot(Route(transition = NoOpStackTransition) { homePage() })
                 }
+                navigator()
             }
         }
 

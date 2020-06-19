@@ -25,11 +25,11 @@ import androidx.compose.remember
 import androidx.ui.animation.animatedFloat
 import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.common.untrackedState
-import com.ivianuu.essentials.ui.core.EsTheme
 import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.injekt.Transient
@@ -46,7 +46,7 @@ class TwilightTheme(private val helper: TwilightHelper) {
             surface = Color.Black
         ),
         typography: Typography = Typography(),
-        children: @Composable () -> Unit
+        content: @Composable () -> Unit
     ) {
         val twilightState = helper.state.collectAsState(helper.currentState).value
 
@@ -73,10 +73,10 @@ class TwilightTheme(private val helper: TwilightHelper) {
         }
         lastColors.value = currentColors
 
-        EsTheme(
+        MaterialTheme(
             colors = currentColors,
             typography = typography,
-            children = children
+            content = content
         )
     }
 

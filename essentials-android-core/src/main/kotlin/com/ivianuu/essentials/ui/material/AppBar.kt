@@ -35,9 +35,8 @@ import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.common.SafeArea
-import com.ivianuu.essentials.ui.core.ProvideSystemBarStyle
-import com.ivianuu.essentials.ui.core.ambientSystemBarStyle
 import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.isLight
 
@@ -58,56 +57,47 @@ fun TopAppBar(
     elevation: Dp = DefaultAppBarElevation,
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
-    actions: @Composable (() -> Unit)? = null,
-    primary: Boolean = true // todo rename param
+    actions: @Composable (() -> Unit)? = null
 ) {
-    ProvideSystemBarStyle(
-        value = ambientSystemBarStyle().let {
-            if (primary) it.copy(lightStatusBar = backgroundColor.isLight) else it
-        }
+    Surface(
+        color = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation,
+        modifier = Modifier.systemBarOverlayStyle(light = backgroundColor.isLight) + modifier
     ) {
-        Surface(
-            color = backgroundColor,
-            contentColor = contentColor,
-            elevation = elevation
+        SafeArea(
+            top = true,
+            bottom = false
         ) {
-            SafeArea(
-                top = primary,
-                start = false,
-                end = false,
-                bottom = false
+            Row(
+                modifier = Modifier.preferredHeight(DefaultAppBarHeight)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                verticalGravity = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.preferredHeight(DefaultAppBarHeight)
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)
-                        .plus(modifier),
-                    verticalGravity = Alignment.CenterVertically
-                ) {
-                    leading?.invoke()
-                    if (title != null) {
-                        val startPadding = if (leading != null) 16.dp else 0.dp
-                        val endPadding = if (actions != null) 16.dp else 0.dp
-                        Column(
-                            modifier = Modifier
-                                .padding(start = startPadding, end = endPadding)
-                                .weight(1f),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            ProvideTextStyle(
-                                MaterialTheme.typography.h6,
-                                children = title
-                            )
-                        }
+                leading?.invoke()
+                if (title != null) {
+                    val startPadding = if (leading != null) 16.dp else 0.dp
+                    val endPadding = if (actions != null) 16.dp else 0.dp
+                    Column(
+                        modifier = Modifier
+                            .padding(start = startPadding, end = endPadding)
+                            .weight(1f),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        ProvideTextStyle(
+                            MaterialTheme.typography.h6,
+                            children = title
+                        )
                     }
+                }
 
-                    if (actions != null) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalGravity = Alignment.CenterVertically
-                        ) {
-                            actions()
-                        }
+                if (actions != null) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalGravity = Alignment.CenterVertically
+                    ) {
+                        actions()
                     }
                 }
             }
