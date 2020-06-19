@@ -62,16 +62,15 @@ class AppPickerPage internal constructor(
             }
         ) {
             ResourceLazyColumnItems(
-                resource = viewModel.currentState.apps,
-                successItemContent = { app ->
-                    key(app.packageName) {
-                        AppInfo(
-                            onClick = { viewModel.appClicked(app) },
-                            app = app
-                        )
-                    }
+                resource = viewModel.currentState.apps
+            ) { app ->
+                key(app.packageName) {
+                    AppInfo(
+                        onClick = { viewModel.appClicked(app) },
+                        app = app
+                    )
                 }
-            )
+            }
         }
     }
 }

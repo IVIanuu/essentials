@@ -90,15 +90,12 @@ class CheckableAppsPage internal constructor(
                 )
             }
         ) {
-            ResourceLazyColumnItems(
-                resource = viewModel.currentState.apps,
-                successItemContent = { app ->
-                    CheckableApp(
-                        app = app,
-                        onClick = { viewModel.appClicked(app) }
-                    )
-                }
-            )
+            ResourceLazyColumnItems(resource = viewModel.currentState.apps) { app ->
+                CheckableApp(
+                    app = app,
+                    onClick = { viewModel.appClicked(app) }
+                )
+            }
         }
     }
 

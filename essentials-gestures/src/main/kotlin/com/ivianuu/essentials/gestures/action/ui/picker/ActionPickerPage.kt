@@ -29,14 +29,13 @@ class ActionPickerPage internal constructor(
                 viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
 
             ResourceLazyColumnItems(
-                resource = viewModel.currentState.items,
-                successItemContent = { item ->
-                    ActionPickerItem(
-                        item = item,
-                        onClick = { viewModel.itemClicked(item) }
-                    )
-                }
-            )
+                resource = viewModel.currentState.items
+            ) { item ->
+                ActionPickerItem(
+                    item = item,
+                    onClick = { viewModel.itemClicked(item) }
+                )
+            }
         }
     }
 }

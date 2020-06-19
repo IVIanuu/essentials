@@ -48,18 +48,17 @@ fun <T> ResourceLazyColumnItems(
         transition = transition,
         error = fail,
         loading = loading,
-        idle = idle,
-        success = { items ->
-            if (items.isNotEmpty()) {
-                LazyColumnItems(
-                    items = items,
-                    itemContent = successItemContent
-                )
-            } else {
-                successEmpty()
-            }
+        idle = idle
+    ) { items ->
+        if (items.isNotEmpty()) {
+            LazyColumnItems(
+                items = items,
+                itemContent = successItemContent
+            )
+        } else {
+            successEmpty()
         }
-    )
+    }
 }
 
 @Composable
@@ -81,18 +80,17 @@ fun <T> ResourceLazyRowItems(
         transition = transition,
         error = error,
         loading = loading,
-        idle = idle,
-        success = { items ->
-            if (items.isNotEmpty()) {
-                LazyRowItems(
-                    items = items,
-                    itemContent = successItemContent
-                )
-            } else {
-                successEmpty()
-            }
+        idle = idle
+    ) { items ->
+        if (items.isNotEmpty()) {
+            LazyRowItems(
+                items = items,
+                itemContent = successItemContent
+            )
+        } else {
+            successEmpty()
         }
-    )
+    }
 }
 
 @Composable

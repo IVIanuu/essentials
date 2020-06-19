@@ -179,28 +179,27 @@ class DebugBillingClient internal constructor(
                     ResourceBox(
                         resource = produceResource(requestId) {
                             getSkuDetailsForRequest(requestId)
-                        },
-                        success = { skuDetails ->
-                            if (skuDetails == null) {
-                                navigator.pop(route = route)
-                            } else {
-                                DebugPurchaseDialog(
-                                    skuDetails = skuDetails,
-                                    onPurchaseClick = {
-                                        scope.launch {
-                                            onPurchaseResult(
-                                                requestId = requestId,
-                                                responseCode = BillingResponseCode.OK,
-                                                purchases = listOf(skuDetails.toPurchaseData())
-                                            )
-
-                                            navigator.pop(route = route)
-                                        }
-                                    }
-                                )
-                            }
                         }
-                    )
+                    ) { skuDetails ->
+                        if (skuDetails == null) {
+                            navigator.pop(route = route)
+                        } else {
+                            DebugPurchaseDialog(
+                                skuDetails = skuDetails,
+                                onPurchaseClick = {
+                                    scope.launch {
+                                        onPurchaseResult(
+                                            requestId = requestId,
+                                            responseCode = BillingResponseCode.OK,
+                                            purchases = listOf(skuDetails.toPurchaseData())
+                                        )
+
+                                        navigator.pop(route = route)
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             )
         }

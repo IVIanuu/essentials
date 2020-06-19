@@ -70,8 +70,7 @@ fun CoilImage(
             resource = state,
             transition = transition,
             error = { error?.invoke() },
-            loading = { placeholder?.invoke() },
-            success = { Image(it) }
-        )
+            loading = { placeholder?.invoke() }
+        ) { Image(it) }
     }
 }
