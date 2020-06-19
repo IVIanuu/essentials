@@ -168,18 +168,18 @@ class Navigator {
 
             val savedStateRegistry = remember {
                 UiSavedStateRegistry(
-                    restoredValues = savedState[compositionKey],
+                    restoredValues = savedState.remove(compositionKey),
                     canBeSaved = { true }
                 )
+            }
+            onDispose {
+                savedState[compositionKey] = savedStateRegistry.performSave()
             }
             Providers(
                 RouteAmbient provides route,
                 UiSavedStateRegistryAmbient provides savedStateRegistry
             ) {
                 route()
-                onDispose {
-                    savedState[compositionKey] = savedStateRegistry.performSave()
-                }
             }
         }
 

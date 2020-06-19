@@ -38,21 +38,8 @@ internal class OverscanHelper(private val logger: Logger) {
             .getMethod("checkService", String::class.java)
             .invoke(null, "window")
 
-        println("display info " +
-                "methods ${Class.forName("android.view.DisplayInfo").methods.map {
-                    "${it.name }(${it.parameterTypes.joinToString(", ") { it.name } }): ${it.returnType.name}"
-                }.joinToString("\n")} " +
-                "fields ${Class.forName("android.view.DisplayInfo").fields.map { 
-                    "${it.name}: ${it.type.name}"
-                }.joinToString("\n")}")
-
         val windowManagerService = cls.getMethod("asInterface", IBinder::class.java)
             .invoke(null, invoke)!!
-
-        println("window manager service $windowManagerService " +
-                "methods ${windowManagerService.javaClass.methods.map { 
-                    "${it.name }(${it.parameterTypes.joinToString(", ") { it.name } }): ${it.returnType.name}"
-                }.joinToString("\n")}")
 
         val setOverscanMethod= windowManagerService.javaClass.getDeclaredMethod(
             "setOverscan",

@@ -66,6 +66,10 @@ abstract class StateViewModel<S>(
         actor.offer(reducer)
     }
 
+    protected suspend fun setStateNow(reducer: suspend S.() -> S) {
+        actor.send(reducer)
+    }
+
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
@@ -78,11 +82,11 @@ abstract class StateViewModel<S>(
     )
 
     protected suspend fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S) {
-        setState { reducer(Loading) }
+        setStateNow { reducer(Loading) }
         return this
             .map { Success(it) }
             .catch { Error(it) }
-            .collect { setState { reducer(it) } }
+            .collect { setStateNow { reducer(it) } }
     }
 
     protected fun <V> Flow<V>.executeIn(
@@ -92,11 +96,11 @@ abstract class StateViewModel<S>(
         reducer: suspend S.(Resource<V>) -> S
     ): Job {
         return scope.launch(context, start) {
-            setState { reducer(Loading) }
+            setStateNow { reducer(Loading) }
             this@executeIn
                 .map { Success(it) }
                 .catch { Error(it) }
-                .collect { setState { reducer(it) } }
+                .collect { setStateNow { reducer(it) } }
         }
     }
 
@@ -106,12 +110,12 @@ abstract class StateViewModel<S>(
         block: suspend CoroutineScope.() -> V,
         reducer: suspend S.(Resource<V>) -> S
     ): Job = launch(context, start) {
-        setState { reducer(Loading) }
+        setStateNow { reducer(Loading) }
         try {
             val result = block()
-            setState { reducer(Success(result)) }
+            setStateNow { reducer(Success(result)) }
         } catch (e: Exception) {
-            setState { reducer(Error(e)) }
+            setStateNow { reducer(Error(e)) }
         }
     }
 

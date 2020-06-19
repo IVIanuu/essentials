@@ -70,7 +70,7 @@ internal class ActionPickerViewModel(
 
     fun itemClicked(selectedItem: ActionPickerItem) {
         scope.launch {
-            val result = selectedItem.getResult()
+            val result = selectedItem.getResult() ?: return@launch
             if (result is ActionPickerResult.Action) {
                 val action = actionStore.getAction(result.actionKey)
                 if (!permissionManager.request(action.permissions)) return@launch
