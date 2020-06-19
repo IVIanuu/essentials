@@ -29,7 +29,9 @@ import java.io.Closeable
 class RetainedObjects {
     private val backing = mutableMapOf<Any, Any?>()
 
-    operator fun <T> get(key: Any): T? = backing[key] as? T
+    operator fun <T> get(key: Any): T = backing[key] as T
+
+    fun <T> getOrNull(key: Any): T? = backing[key] as? T
 
     operator fun <T> set(key: Any, value: T) {
         remove(key)
@@ -48,49 +50,13 @@ class RetainedObjects {
     }
 }
 
-fun <T> RetainedObjects.getOrSet(key: Any, defaultValue: () -> T): T {
-    var value = get<T>(key)
-    if (value == null) {
-        value = defaultValue()
-        set(key, value)
-    }
-
-    return value as T
+inline fun <T> RetainedObjects.getOrSet(key: Any, defaultValue: () -> T): T {
+    return if (key in this) get(key)
+    else defaultValue().also { set(key, it) }
 }
 
-fun <T> RetainedObjects.getOrDefault(key: Any, defaultValue: () -> T): T {
-    var value = get<T>(key)
-    if (value == null) {
-        value = defaultValue()
-    }
-
-    return value as T
-}
-
-private class ValueWithInputs<T>(
-    val value: T,
-    val inputs: Array<out Any?>
-)
-
-fun <T> RetainedObjects.getOrSetIfChanged(
-    key: Any,
-    vararg inputs: Any?,
-    defaultValue: () -> T
-): T {
-    var value: ValueWithInputs<T>? = get<ValueWithInputs<T>>(key)
-    if (value != null && !value.inputs.contentEquals(inputs)) {
-        value = null
-    }
-
-    if (value == null) {
-        value = ValueWithInputs(
-            defaultValue(),
-            inputs
-        )
-        set(key, value)
-    }
-
-    return value.value
+inline fun <T> RetainedObjects.getOrDefault(key: Any, defaultValue: () -> T): T {
+    return if (key in this) get(key) else defaultValue()
 }
 
 val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>() {
@@ -102,10 +68,7 @@ val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>() {
 inline fun <T> rememberRetained(
     key: Any = currentComposer.currentCompoundKeyHash,
     noinline init: () -> T
-): T {
-    val retainedObjects = RetainedObjectsAmbient.current
-    return retainedObjects.getOrSetIfChanged(key, *emptyArray(), defaultValue = init)
-}
+): T = rememberRetained(inputs = *emptyArray(), key = key, init = init)
 
 @Composable
 inline fun <T> rememberRetained(
@@ -114,7 +77,17 @@ inline fun <T> rememberRetained(
     noinline init: () -> T
 ): T {
     val retainedObjects = RetainedObjectsAmbient.current
-    return retainedObjects.getOrSetIfChanged(key, *inputs, defaultValue = init)
+    var value: ValueWithInputs<T>? = retainedObjects.getOrNull(key)
+    if (value != null && !value.inputs.contentEquals(inputs)) {
+        value = null
+    }
+
+    if (value == null) {
+        value = ValueWithInputs(init(), inputs)
+        retainedObjects[key] = value
+    }
+
+    return value.value
 }
 
 @Composable
@@ -134,3 +107,9 @@ inline fun <T> retainedStateFor(
     key,
     *inputs
 ) { mutableStateOf(init(), areEquivalent) }
+
+@PublishedApi
+internal class ValueWithInputs<T>(
+    val value: T,
+    val inputs: Array<out Any?>
+)
