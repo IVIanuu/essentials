@@ -47,32 +47,31 @@ class BillingPage(
             .collectAsState(false)
 
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Billing") }) },
-            body = {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Is purchased ? ${isPurchased.value}",
-                        style = MaterialTheme.typography.h6
-                    )
+            topBar = { TopAppBar(title = { Text("Billing") }) }
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Is purchased ? ${isPurchased.value}",
+                    style = MaterialTheme.typography.h6
+                )
 
-                    Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-                    if (!isPurchased.value) {
-                        Button(
-                            onClick = launchOnClick { purchaseManager.purchase(DummySku) }
-                        ) { Text("Purchase") }
-                    } else {
-                        Button(
-                            onClick = launchOnClick { purchaseManager.consume(DummySku) }
-                        ) { Text("Consume") }
-                    }
+                if (!isPurchased.value) {
+                    Button(
+                        onClick = launchOnClick { purchaseManager.purchase(DummySku) }
+                    ) { Text("Purchase") }
+                } else {
+                    Button(
+                        onClick = launchOnClick { purchaseManager.consume(DummySku) }
+                    ) { Text("Consume") }
                 }
             }
-        )
+        }
     }
 }
 

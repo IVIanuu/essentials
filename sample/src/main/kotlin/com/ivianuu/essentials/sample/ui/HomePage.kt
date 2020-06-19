@@ -81,7 +81,7 @@ class HomePage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = {
+            topBar = {
                 TopAppBar(
                     title = { Text("Home") },
                     actions = {
@@ -98,69 +98,68 @@ class HomePage(
                         )
                     }
                 )
-            },
-            body = {
-                val items = remember { HomeItem.values().toList().sortedBy { it.name } }
+            }
+        ) {
+            val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
-                LazyColumnItems(items = items) { item ->
-                    val color = key(item) {
-                        rememberSavedInstanceState(item) {
-                            ColorPickerPalette.values()
-                                .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                                .shuffled()
-                                .first()
-                                .front
-                        }
-                    }
-
-                    HomeItem(
-                        item = item,
-                        color = color,
-                        onClick = {
-                            val route = when (item) {
-                                HomeItem.About -> Route { aboutPage() }
-                                HomeItem.Actions -> Route { actionsPage() }
-                                HomeItem.AppPicker -> Route { appPickerPage() }
-                                HomeItem.Billing -> Route { billingPage() }
-                                HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
-                                HomeItem.CheckApps -> Route { checkAppsPage() }
-                                HomeItem.Chips -> Route { chipsPage() }
-                                HomeItem.Counter -> Route { counterPage() }
-                                HomeItem.Dialogs -> Route { dialogsPage() }
-                                HomeItem.Drawer -> Route { drawerPage() }
-                                HomeItem.ForegroundJob -> Route { foregroundJobPage() }
-                                HomeItem.NavBar -> Route { navBarPage() }
-                                HomeItem.Notifications -> Route { notificationsPage() }
-                                HomeItem.Permission -> Route { permissionsPage() }
-                                HomeItem.Prefs -> Route { prefsPage() }
-                                HomeItem.RestartProcess -> Route { restartProcessPage() }
-                                HomeItem.Scaffold -> Route { scaffoldPage() }
-                                HomeItem.SharedElement -> Route(
-                                    enterTransition = SharedElementStackTransition(item to "b"),
-                                    exitTransition = SharedElementStackTransition(item to "b")
-                                ) {
-                                    sharedElementPage(color)
-                                }
-                                HomeItem.ShortcutPicker -> Route { shortcutPickerPage() }
-                                HomeItem.Tabs -> Route { tabsPage() }
-                                HomeItem.TextInput -> Route { textInputPage() }
-                                HomeItem.Timer -> Route { timerPage() }
-                                HomeItem.Torch -> Route { torchPage() }
-                                HomeItem.Twilight -> Route { twilightSettingsPage() }
-                                HomeItem.Unlock -> Route { unlockPage() }
-                                HomeItem.Work -> Route { workPage() }
-                            }
-
-                            navigator.push(route)
-                        }
-                    )
-
-                    if (items.indexOf(item) != items.lastIndex) {
-                        HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+            LazyColumnItems(items = items) { item ->
+                val color = key(item) {
+                    rememberSavedInstanceState(item) {
+                        ColorPickerPalette.values()
+                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                            .shuffled()
+                            .first()
+                            .front
                     }
                 }
+
+                HomeItem(
+                    item = item,
+                    color = color,
+                    onClick = {
+                        val route = when (item) {
+                            HomeItem.About -> Route { aboutPage() }
+                            HomeItem.Actions -> Route { actionsPage() }
+                            HomeItem.AppPicker -> Route { appPickerPage() }
+                            HomeItem.Billing -> Route { billingPage() }
+                            HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
+                            HomeItem.CheckApps -> Route { checkAppsPage() }
+                            HomeItem.Chips -> Route { chipsPage() }
+                            HomeItem.Counter -> Route { counterPage() }
+                            HomeItem.Dialogs -> Route { dialogsPage() }
+                            HomeItem.Drawer -> Route { drawerPage() }
+                            HomeItem.ForegroundJob -> Route { foregroundJobPage() }
+                            HomeItem.NavBar -> Route { navBarPage() }
+                            HomeItem.Notifications -> Route { notificationsPage() }
+                            HomeItem.Permission -> Route { permissionsPage() }
+                            HomeItem.Prefs -> Route { prefsPage() }
+                            HomeItem.RestartProcess -> Route { restartProcessPage() }
+                            HomeItem.Scaffold -> Route { scaffoldPage() }
+                            HomeItem.SharedElement -> Route(
+                                enterTransition = SharedElementStackTransition(item to "b"),
+                                exitTransition = SharedElementStackTransition(item to "b")
+                            ) {
+                                sharedElementPage(color)
+                            }
+                            HomeItem.ShortcutPicker -> Route { shortcutPickerPage() }
+                            HomeItem.Tabs -> Route { tabsPage() }
+                            HomeItem.TextInput -> Route { textInputPage() }
+                            HomeItem.Timer -> Route { timerPage() }
+                            HomeItem.Torch -> Route { torchPage() }
+                            HomeItem.Twilight -> Route { twilightSettingsPage() }
+                            HomeItem.Unlock -> Route { unlockPage() }
+                            HomeItem.Work -> Route { workPage() }
+                        }
+
+                        navigator.push(route)
+                    }
+                )
+
+                if (items.indexOf(item) != items.lastIndex) {
+                    HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+                }
             }
-        )
+        }
     }
 }
 

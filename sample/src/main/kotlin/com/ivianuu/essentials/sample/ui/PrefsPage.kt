@@ -48,106 +48,105 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Prefs") }) },
-            body = {
-                VerticalScroller {
-                    SwitchListItem(
+            topBar = { TopAppBar(title = { Text("Prefs") }) }
+        ) {
+            VerticalScroller {
+                SwitchListItem(
+                    box = boxFactory.create("switch", false),
+                    title = { Text("Switch") }
+                )
+
+                val dependenciesModifier = Modifier.preferenceDependencies(
+                    Dependency(
                         box = boxFactory.create("switch", false),
-                        title = { Text("Switch") }
+                        value = true
                     )
+                )
 
-                    val dependenciesModifier = Modifier.preferenceDependencies(
-                        Dependency(
-                            box = boxFactory.create("switch", false),
-                            value = true
-                        )
-                    )
+                Subheader(modifier = dependenciesModifier) { Text("Category") }
 
-                    Subheader(modifier = dependenciesModifier) { Text("Category") }
+                CheckboxListItem(
+                    box = boxFactory.create("checkbox", false),
+                    modifier = dependenciesModifier,
+                    title = { Text("Checkbox") },
+                    subtitle = { Text("This is a checkbox preference") }
+                )
 
-                    CheckboxListItem(
-                        box = boxFactory.create("checkbox", false),
-                        modifier = dependenciesModifier,
-                        title = { Text("Checkbox") },
-                        subtitle = { Text("This is a checkbox preference") }
-                    )
+                RadioButtonListItem(
+                    box = boxFactory.create("radio_button", false),
+                    modifier = dependenciesModifier,
+                    title = { Text("Radio Button") },
+                    subtitle = { Text("This is a radio button preference") }
+                )
 
-                    RadioButtonListItem(
-                        box = boxFactory.create("radio_button", false),
-                        modifier = dependenciesModifier,
-                        title = { Text("Radio Button") },
-                        subtitle = { Text("This is a radio button preference") }
-                    )
+                IntSliderListItem(
+                    box = boxFactory.create("slider", 50),
+                    modifier = dependenciesModifier,
+                    title = { Text("Slider") },
+                    subtitle = { Text("This is a slider preference") },
+                    steps = 10,
+                    valueRange = 0..100
+                )
 
-                    IntSliderListItem(
-                        box = boxFactory.create("slider", 50),
-                        modifier = dependenciesModifier,
-                        title = { Text("Slider") },
-                        subtitle = { Text("This is a slider preference") },
-                        steps = 10,
-                        valueRange = 0..100
-                    )
+                DurationSliderListItem(
+                    box = boxFactory.duration("slider_dur", 33.minutes),
+                    modifier = dependenciesModifier,
+                    title = { Text("Slider duration") },
+                    subtitle = { Text("This is a slider preference") },
+                    steps = 10,
+                    valueRange = 1.minutes..1.hours
+                )
 
-                    DurationSliderListItem(
-                        box = boxFactory.duration("slider_dur", 33.minutes),
-                        modifier = dependenciesModifier,
-                        title = { Text("Slider duration") },
-                        subtitle = { Text("This is a slider preference") },
-                        steps = 10,
-                        valueRange = 1.minutes..1.hours
-                    )
-
-                    Subheader(modifier = dependenciesModifier) {
-                        Text("Dialogs")
-                    }
-
-                    TextInputDialogListItem(
-                        box = boxFactory.create("text_input", ""),
-                        modifier = dependenciesModifier,
-                        title = { Text("Text input") },
-                        subtitle = { Text("This is a text input preference") },
-                        allowEmpty = false
-                    )
-
-                    ColorDialogListItem(
-                        box = boxFactory.color("color", Color.Red),
-                        modifier = dependenciesModifier,
-                        title = { Text("Color") },
-                        subtitle = { Text("This is a color preference") }
-                    )
-
-                    MultiChoiceDialogListItem(
-                        box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
-                        modifier = dependenciesModifier,
-                        title = { Text("Multi select list") },
-                        subtitle = { Text("This is a multi select list preference") },
-                        items = listOf(
-                            MultiChoiceDialogListItem.Item("A", "A"),
-                            MultiChoiceDialogListItem.Item("B", "B"),
-                            MultiChoiceDialogListItem.Item("C", "C")
-                        )
-                    )
-
-                    SingleChoiceDialogListItem(
-                        box = boxFactory.create("single_item_list", "C"),
-                        modifier = dependenciesModifier,
-                        title = { Text("Single item list") },
-                        subtitle = { Text("This is a single item list preference") },
-                        items = listOf(
-                            SingleChoiceDialogListItem.Item("A", "A"),
-                            SingleChoiceDialogListItem.Item("B", "B"),
-                            SingleChoiceDialogListItem.Item("C", "C")
-                        )
-                    )
-
-                    ClipboardListItem(
-                        title = { Text("Clipboard") },
-                        subtitle = { Text("This is a clipboard preference") },
-                        clipboardText = { "cool clip" },
-                        modifier = dependenciesModifier
-                    )
+                Subheader(modifier = dependenciesModifier) {
+                    Text("Dialogs")
                 }
+
+                TextInputDialogListItem(
+                    box = boxFactory.create("text_input", ""),
+                    modifier = dependenciesModifier,
+                    title = { Text("Text input") },
+                    subtitle = { Text("This is a text input preference") },
+                    allowEmpty = false
+                )
+
+                ColorDialogListItem(
+                    box = boxFactory.color("color", Color.Red),
+                    modifier = dependenciesModifier,
+                    title = { Text("Color") },
+                    subtitle = { Text("This is a color preference") }
+                )
+
+                MultiChoiceDialogListItem(
+                    box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
+                    modifier = dependenciesModifier,
+                    title = { Text("Multi select list") },
+                    subtitle = { Text("This is a multi select list preference") },
+                    items = listOf(
+                        MultiChoiceDialogListItem.Item("A", "A"),
+                        MultiChoiceDialogListItem.Item("B", "B"),
+                        MultiChoiceDialogListItem.Item("C", "C")
+                    )
+                )
+
+                SingleChoiceDialogListItem(
+                    box = boxFactory.create("single_item_list", "C"),
+                    modifier = dependenciesModifier,
+                    title = { Text("Single item list") },
+                    subtitle = { Text("This is a single item list preference") },
+                    items = listOf(
+                        SingleChoiceDialogListItem.Item("A", "A"),
+                        SingleChoiceDialogListItem.Item("B", "B"),
+                        SingleChoiceDialogListItem.Item("C", "C")
+                    )
+                )
+
+                ClipboardListItem(
+                    title = { Text("Clipboard") },
+                    subtitle = { Text("This is a clipboard preference") },
+                    clipboardText = { "cool clip" },
+                    modifier = dependenciesModifier
+                )
             }
-        )
+        }
     }
 }

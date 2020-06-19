@@ -55,25 +55,24 @@ class AppPickerPage internal constructor(
         val viewModel = viewModel(appFilter) { viewModelFactory(appFilter) }
 
         Scaffold(
-            topAppBar = {
+            topBar = {
                 TopAppBar(
                     title = { Text(title ?: stringResource(R.string.es_title_app_picker)) }
                 )
-            },
-            body = {
-                ResourceLazyColumnItems(
-                    resource = viewModel.currentState.apps,
-                    successItemContent = { app ->
-                        key(app.packageName) {
-                            AppInfo(
-                                onClick = { viewModel.appClicked(app) },
-                                app = app
-                            )
-                        }
-                    }
-                )
             }
-        )
+        ) {
+            ResourceLazyColumnItems(
+                resource = viewModel.currentState.apps,
+                successItemContent = { app ->
+                    key(app.packageName) {
+                        AppInfo(
+                            onClick = { viewModel.appClicked(app) },
+                            app = app
+                        )
+                    }
+                }
+            )
+        }
     }
 }
 

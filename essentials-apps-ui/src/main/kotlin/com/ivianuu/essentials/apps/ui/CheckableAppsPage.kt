@@ -18,7 +18,6 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.onCommit
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.layout.size
@@ -45,18 +44,18 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Transient
 class CheckableAppsPage internal constructor(
-    private val viewModelFactory: @Provider (AppFilter) -> CheckableAppsViewModel
+    private val viewModelFactory: @Provider (
+        AppFilter,
+        Flow<Set<String>>,
+        suspend (Set<String>) -> Unit
+    ) -> CheckableAppsViewModel
 ) {
 
     @Composable
@@ -66,15 +65,14 @@ class CheckableAppsPage internal constructor(
         appBarTitle: String,
         appFilter: AppFilter = DefaultAppFilter
     ) {
-        val viewModel = viewModel(appFilter) { viewModelFactory(appFilter) }
-
-        onCommit(checkedApps, onCheckedAppsChanged) {
-            viewModel.attach(checkedApps, onCheckedAppsChanged)
-            onDispose { viewModel.detach() }
-        }
+        val viewModel = viewModel(
+            appFilter,
+            checkedApps,
+            onCheckedAppsChanged
+        ) { viewModelFactory(appFilter, checkedApps, onCheckedAppsChanged) }
 
         Scaffold(
-            topAppBar = {
+            topBar = {
                 TopAppBar(
                     title = { Text(appBarTitle) },
                     actions = {
@@ -90,19 +88,18 @@ class CheckableAppsPage internal constructor(
                         )
                     }
                 )
-            },
-            body = {
-                ResourceLazyColumnItems(
-                    resource = viewModel.currentState.apps,
-                    successItemContent = { app ->
-                        CheckableApp(
-                            app = app,
-                            onClick = { viewModel.appClicked(app) }
-                        )
-                    }
-                )
             }
-        )
+        ) {
+            ResourceLazyColumnItems(
+                resource = viewModel.currentState.apps,
+                successItemContent = { app ->
+                    CheckableApp(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
+                }
+            )
+        }
     }
 
 }
@@ -133,50 +130,31 @@ private fun CheckableApp(
 @Transient
 internal class CheckableAppsViewModel(
     private val appFilter: @Assisted AppFilter,
+    private val checkedApps: @Assisted Flow<Set<String>>,
+    private val onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit,
     private val appStore: AppStore,
     dispatchers: AppCoroutineDispatchers
 ) : StateViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {
 
-    private var onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null
-    private var checkedAppsJob: Job? = null
-    private val checkedApps = MutableStateFlow(emptySet<String>())
-
     init {
-        scope.launch {
-            val appsFlow = flow {
+        combine(
+            flow {
                 emit(
                     appStore.getInstalledApps()
                         .filter(appFilter)
                 )
-            }
-
-            appsFlow.combine(checkedApps) { apps, checked ->
-                apps
-                    .map {
-                        CheckableApp(
-                            it,
-                            it.packageName in checked
-                        )
-                    }
-                    .toList()
-            }.execute { copy(apps = it) }
-        }
-    }
-
-    fun attach(
-        checkedAppsFlow: Flow<Set<String>>,
-        onCheckedAppsChanged: suspend (Set<String>) -> Unit
-    ) {
-        this.onCheckedAppsChanged = onCheckedAppsChanged
-
-        checkedAppsJob = checkedAppsFlow
-            .onEach { checkedApps.value = it }
-            .launchIn(scope)
-    }
-
-    fun detach() {
-        checkedAppsJob?.cancel()
-        onCheckedAppsChanged = null
+            },
+            checkedApps
+        ) { apps, checked ->
+            apps
+                .map {
+                    CheckableApp(
+                        it,
+                        it.packageName in checked
+                    )
+                }
+                .toList()
+        }.executeIn(scope) { copy(apps = it) }
     }
 
     fun appClicked(app: CheckableApp) {
@@ -208,10 +186,11 @@ internal class CheckableAppsViewModel(
     }
 
     private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        val newCheckedApps = checkedApps.value
+        val newCheckedApps = state.value.apps()!!
+            .map { it.info.packageName }
             .toMutableSet()
             .apply(reducer)
-        onCheckedAppsChanged?.invoke(newCheckedApps)
+        onCheckedAppsChanged(newCheckedApps)
     }
 }
 

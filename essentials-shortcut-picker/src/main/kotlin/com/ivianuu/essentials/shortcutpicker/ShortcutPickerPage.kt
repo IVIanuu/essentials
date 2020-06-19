@@ -51,19 +51,18 @@ class ShortcutPickerPage internal constructor(
     operator fun invoke(title: String? = null) {
         val viewModel = viewModel(init = viewModelFactory)
         Scaffold(
-            topAppBar = {
+            topBar = {
                 TopAppBar(title = {
                     Text(
                         title ?: stringResource(R.string.es_title_shortcut_picker)
                     )
                 })
-            },
-            body = {
-                ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
-                    Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
-                }
             }
-        )
+        ) {
+            ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
+                Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
+            }
+        }
     }
 }
 

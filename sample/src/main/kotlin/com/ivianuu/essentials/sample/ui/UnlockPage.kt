@@ -41,22 +41,21 @@ class UnlockPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Unlock") }) },
-            body = {
-                Button(
-                    modifier = Modifier.center(),
-                    onClick = launchOnClick {
-                        toaster.toast("Turn the screen off and on")
+            topBar = { TopAppBar(title = { Text("Unlock") }) }
+        ) {
+            Button(
+                modifier = Modifier.center(),
+                onClick = launchOnClick {
+                    toaster.toast("Turn the screen off and on")
 
-                        screenStateProvider.screenState
-                            .filter { it == ScreenState.Locked }
-                            .first()
+                    screenStateProvider.screenState
+                        .filter { it == ScreenState.Locked }
+                        .first()
 
-                        val unlocked = unlockScreen()
-                        toaster.toast("Screen unlocked $unlocked")
-                    }
-                ) { Text("Unlock") }
-            }
-        )
+                    val unlocked = unlockScreen()
+                    toaster.toast("Screen unlocked $unlocked")
+                }
+            ) { Text("Unlock") }
+        }
     }
 }

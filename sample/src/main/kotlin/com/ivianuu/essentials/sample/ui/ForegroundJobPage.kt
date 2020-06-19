@@ -66,63 +66,62 @@ class ForegroundJobPage(
         val primaryColor = MaterialTheme.colors.primary
 
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Foreground") }) },
-            body = {
-                var foregroundJob by state<ForegroundJob?> { null }
-                var count by stateFor(foregroundJob) { 0 }
+            topBar = { TopAppBar(title = { Text("Foreground") }) }
+        ) {
+            var foregroundJob by state<ForegroundJob?> { null }
+            var count by stateFor(foregroundJob) { 0 }
 
-                foregroundJob?.let { currentJob ->
-                    onCommit(count) {
-                        currentJob.updateNotification(
-                            buildNotification(count, primaryColor)
-                        )
-                    }
-
-                    launchInComposition(currentJob) {
-                        while (true) {
-                            delay(1000)
-                            count++
-                        }
-                    }
-
-                    onDispose { foregroundJob?.stop() }
+            foregroundJob?.let { currentJob ->
+                onCommit(count) {
+                    currentJob.updateNotification(
+                        buildNotification(count, primaryColor)
+                    )
                 }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    if (foregroundJob != null) {
-                        Text(
-                            text = "Current progress $count",
-                            style = MaterialTheme.typography.h5
-                        )
+                launchInComposition(currentJob) {
+                    while (true) {
+                        delay(1000)
+                        count++
                     }
-                    Spacer(Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            foregroundJob = if (foregroundJob != null) {
-                                foregroundJob?.stop()
-                                null
-                            } else {
-                                foregroundManager.startJob(
-                                    buildNotification(count, primaryColor)
-                                )
-                            }
+                }
+
+                onDispose { foregroundJob?.stop() }
+            }
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                if (foregroundJob != null) {
+                    Text(
+                        text = "Current progress $count",
+                        style = MaterialTheme.typography.h5
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Button(
+                    onClick = {
+                        foregroundJob = if (foregroundJob != null) {
+                            foregroundJob?.stop()
+                            null
+                        } else {
+                            foregroundManager.startJob(
+                                buildNotification(count, primaryColor)
+                            )
                         }
-                    ) {
-                        Text(
-                            if (foregroundJob != null) {
-                                "Stop foreground"
-                            } else {
-                                "Start foreground"
-                            }
-                        )
                     }
+                ) {
+                    Text(
+                        if (foregroundJob != null) {
+                            "Stop foreground"
+                        } else {
+                            "Start foreground"
+                        }
+                    )
                 }
             }
-        )
+        }
     }
 
     private fun buildNotification(

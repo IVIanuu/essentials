@@ -48,26 +48,25 @@ class ChipsPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Chips") }) },
-            body = {
-                Box(
-                    modifier = Modifier.padding(all = 8.dp),
-                    gravity = ContentGravity.TopStart
+            topBar = { TopAppBar(title = { Text("Chips") }) }
+        ) {
+            Box(
+                modifier = Modifier.padding(all = 8.dp),
+                gravity = ContentGravity.TopStart
+            ) {
+                FlowRow(
+                    mainAxisSpacing = 8.dp,
+                    crossAxisSpacing = 8.dp
                 ) {
-                    FlowRow(
-                        mainAxisSpacing = 8.dp,
-                        crossAxisSpacing = 8.dp
-                    ) {
-                        remember { Names.shuffled() }.forEach { name ->
-                            Chip(
-                                name = name,
-                                onClick = { toaster.toast("Clicked $name") }
-                            )
-                        }
+                    remember { Names.shuffled() }.forEach { name ->
+                        Chip(
+                            name = name,
+                            onClick = { toaster.toast("Clicked $name") }
+                        )
                     }
                 }
             }
-        )
+        }
     }
 }
 

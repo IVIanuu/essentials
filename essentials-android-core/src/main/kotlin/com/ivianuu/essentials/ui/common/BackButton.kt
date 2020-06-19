@@ -17,22 +17,10 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
-import androidx.compose.remember
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.material.ScaffoldAmbient
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-
-@Composable
-fun DrawerButton(icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }) {
-    val scaffold = ScaffoldAmbient.current
-    IconButton(
-        onClick = { scaffold.isDrawerOpen = !scaffold.isDrawerOpen },
-        icon = icon
-    )
-}
 
 @Composable
 fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
@@ -41,18 +29,4 @@ fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) })
         onClick = { navigator.popTop() },
         icon = icon
     )
-}
-
-@Composable
-fun NavigationButton() {
-    val scaffold = ScaffoldAmbient.current
-    val navigator = NavigatorAmbient.current
-    val canGoBack = remember {
-        navigator.backStack.size > 1 ||
-                (navigator.popsLastRoute && navigator.backStack.isNotEmpty())
-    }
-    when {
-        scaffold.hasDrawer -> DrawerButton()
-        canGoBack -> BackButton()
-    }
 }

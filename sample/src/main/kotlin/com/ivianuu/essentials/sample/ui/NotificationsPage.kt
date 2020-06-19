@@ -57,112 +57,111 @@ class NotificationsPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Notifications") }) },
-            body = {
-                val notificationPermission = remember {
-                    NotificationListenerPermission(
-                        DefaultNotificationListenerService::class,
-                        Permission.Title withValue "Notifications"
-                    )
-                }
+            topBar = { TopAppBar(title = { Text("Notifications") }) }
+        ) {
+            val notificationPermission = remember {
+                NotificationListenerPermission(
+                    DefaultNotificationListenerService::class,
+                    Permission.Title withValue "Notifications"
+                )
+            }
 
-                ResourceBox(
-                    resource = remember {
-                        permissionManager.hasPermissions(notificationPermission)
-                    }.collectAsResource(),
-                    success = { hasPermission ->
-                        if (hasPermission) {
-                            ResourceLazyColumnItems(
-                                resource = notificationStore.notifications.collectAsResource(),
-                                successEmpty = {
-                                    Text(
-                                        text = "No notifications",
-                                        style = MaterialTheme.typography.subtitle1,
-                                        modifier = Modifier.center()
-                                    )
-                                },
-                                successItemContent = { sbn ->
-                                    ListItem(
-                                        title = {
-                                            Text(
-                                                sbn.notification.extras.getString(Notification.EXTRA_TITLE)
-                                                    ?: ""
-                                            )
-                                        },
-                                        subtitle = {
-                                            Text(
-                                                sbn.notification.extras.getString(Notification.EXTRA_TEXT)
-                                                    ?: ""
-                                            )
-                                        },
-                                        onClick = launchOnClick {
-                                            notificationStore.openNotification(sbn.notification)
-                                        },
-                                        leading = {
-                                            val context = ContextAmbient.current
-                                            ResourceBox(
-                                                modifier = Modifier.size(40.dp)
-                                                    .drawBackground(
-                                                        color = Color(sbn.notification.color),
-                                                        shape = CircleShape
-                                                    )
-                                                    .padding(all = 8.dp),
-                                                resource = produceResource {
-                                                    withContext(dispatchers.io) {
-                                                        sbn.notification.smallIcon
-                                                            .loadDrawable(context)
-                                                            .toImageAsset()
-                                                    }
-                                                },
-                                                success = {
-                                                    Image(
-                                                        modifier = Modifier.size(24.dp),
-                                                        asset = it
-                                                    )
-                                                },
-                                                error = {
-                                                    Icon(Icons.Default.Error)
-                                                }
-                                            )
-                                        },
-                                        trailing = if (sbn.isClearable) {
-                                            {
-                                                IconButton(
-                                                    onClick = launchOnClick {
-                                                        notificationStore.dismissNotification(sbn.key)
-                                                    }
-                                                ) {
-                                                    Icon(Icons.Default.Clear)
-                                                }
-                                            }
-                                        } else null
-                                    )
-                                }
-                            )
-                        } else {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalGravity = Alignment.CenterHorizontally
-                            ) {
+            ResourceBox(
+                resource = remember {
+                    permissionManager.hasPermissions(notificationPermission)
+                }.collectAsResource(),
+                success = { hasPermission ->
+                    if (hasPermission) {
+                        ResourceLazyColumnItems(
+                            resource = notificationStore.notifications.collectAsResource(),
+                            successEmpty = {
                                 Text(
-                                    text = "Permissions required",
-                                    style = MaterialTheme.typography.subtitle1
+                                    text = "No notifications",
+                                    style = MaterialTheme.typography.subtitle1,
+                                    modifier = Modifier.center()
                                 )
-                                Spacer(Modifier.height(8.dp))
-                                Button(
+                            },
+                            successItemContent = { sbn ->
+                                ListItem(
+                                    title = {
+                                        Text(
+                                            sbn.notification.extras.getString(Notification.EXTRA_TITLE)
+                                                ?: ""
+                                        )
+                                    },
+                                    subtitle = {
+                                        Text(
+                                            sbn.notification.extras.getString(Notification.EXTRA_TEXT)
+                                                ?: ""
+                                        )
+                                    },
                                     onClick = launchOnClick {
-                                        permissionManager.request(notificationPermission)
-                                    }
-                                ) {
-                                    Text("Request")
+                                        notificationStore.openNotification(sbn.notification)
+                                    },
+                                    leading = {
+                                        val context = ContextAmbient.current
+                                        ResourceBox(
+                                            modifier = Modifier.size(40.dp)
+                                                .drawBackground(
+                                                    color = Color(sbn.notification.color),
+                                                    shape = CircleShape
+                                                )
+                                                .padding(all = 8.dp),
+                                            resource = produceResource {
+                                                withContext(dispatchers.io) {
+                                                    sbn.notification.smallIcon
+                                                        .loadDrawable(context)
+                                                        .toImageAsset()
+                                                }
+                                            },
+                                            success = {
+                                                Image(
+                                                    modifier = Modifier.size(24.dp),
+                                                    asset = it
+                                                )
+                                            },
+                                            error = {
+                                                Icon(Icons.Default.Error)
+                                            }
+                                        )
+                                    },
+                                    trailing = if (sbn.isClearable) {
+                                        {
+                                            IconButton(
+                                                onClick = launchOnClick {
+                                                    notificationStore.dismissNotification(sbn.key)
+                                                }
+                                            ) {
+                                                Icon(Icons.Default.Clear)
+                                            }
+                                        }
+                                    } else null
+                                )
+                            }
+                        )
+                    } else {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalGravity = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Permissions required",
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            Button(
+                                onClick = launchOnClick {
+                                    permissionManager.request(notificationPermission)
                                 }
+                            ) {
+                                Text("Request")
                             }
                         }
                     }
-                )
-            }
-        )
+                }
+            )
+        }
     }
 
 }

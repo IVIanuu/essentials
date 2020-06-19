@@ -42,7 +42,7 @@ class TabsPage {
 
         ProvideTabController(items = items) {
             Scaffold(
-                topAppBar = {
+                topBar = {
                     Surface(
                         color = MaterialTheme.colors.primary,
                         elevation = 8.dp
@@ -57,18 +57,17 @@ class TabsPage {
                             }
                         }
                     }
-                },
-                body = {
-                    TabContent<Color> { item ->
-                        Surface(color = item) {
-                            Text(
-                                text = "Index: ${items.indexOf(item)}",
-                                modifier = Modifier.center()
-                            )
-                        }
+                }
+            ) {
+                TabContent<Color> { item ->
+                    Surface(color = item) {
+                        Text(
+                            text = "Index: ${items.indexOf(item)}",
+                            modifier = Modifier.center()
+                        )
                     }
                 }
-            )
+            }
         }
     }
 

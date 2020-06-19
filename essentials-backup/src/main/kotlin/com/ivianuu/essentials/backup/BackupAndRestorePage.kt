@@ -22,23 +22,22 @@ class BackupAndRestorePage internal constructor(
     operator fun invoke() {
         val viewModel = viewModel(init = viewModelFactory)
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) },
-            body = {
-                VerticalScroller {
-                    ListItem(
-                        title = { Text(R.string.es_pref_backup) },
-                        subtitle = { Text(R.string.es_pref_backup_summary) },
-                        onClick = { viewModel.backupClicked() }
-                    )
+            topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
+        ) {
+            VerticalScroller {
+                ListItem(
+                    title = { Text(R.string.es_pref_backup) },
+                    subtitle = { Text(R.string.es_pref_backup_summary) },
+                    onClick = { viewModel.backupClicked() }
+                )
 
-                    ListItem(
-                        title = { Text(R.string.es_pref_restore) },
-                        subtitle = { Text(R.string.es_pref_restore_summary) },
-                        onClick = { viewModel.restoreClicked() }
-                    )
-                }
+                ListItem(
+                    title = { Text(R.string.es_pref_restore) },
+                    subtitle = { Text(R.string.es_pref_restore_summary) },
+                    onClick = { viewModel.restoreClicked() }
+                )
             }
-        )
+        }
     }
 }
 

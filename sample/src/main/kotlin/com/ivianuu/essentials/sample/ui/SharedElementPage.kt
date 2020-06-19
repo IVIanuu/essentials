@@ -21,20 +21,19 @@ class SharedElementPage {
     @Composable
     operator fun invoke(color: Color) {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Shared Elements") }) },
-            body = {
-                Stack {
-                    SharedElement(tag = "b", modifier = Modifier.center()) {
-                        Box(
-                            backgroundColor = color,
-                            shape = CircleShape,
-                            modifier = Modifier
-                                .size(150.dp)
-                        )
-                    }
+            topBar = { TopAppBar(title = { Text("Shared Elements") }) }
+        ) {
+            Stack {
+                SharedElement(tag = "b", modifier = Modifier.center()) {
+                    Box(
+                        backgroundColor = color,
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .size(150.dp)
+                    )
                 }
             }
-        )
+        }
     }
 
 }

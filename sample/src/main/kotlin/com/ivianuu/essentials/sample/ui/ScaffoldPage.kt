@@ -62,7 +62,7 @@ class ScaffoldPage(
         val controls = remember { ScaffoldControls() }
 
         Scaffold(
-            topAppBar = if (controls.showTopAppBar) ({
+            topBar = if (controls.showTopBar) ({
                 TopAppBar(title = { Text("Scaffold") })
             }) else null,
             fabPosition = controls.fabPosition,
@@ -94,71 +94,70 @@ class ScaffoldPage(
                         }
                     }
                 }
-            }) else null,
-            body = {
-                VerticalScroller {
-                    Subheader { Text("Top bar") }
-                    ListItem(
-                        title = { Text("Show top bar") },
-                        trailing = {
-                            Checkbox(
-                                checked = controls.showTopAppBar,
-                                modifier = Modifier.absorbPointer(),
-                                onCheckedChange = {}
-                            )
+            }) else null
+        ) {
+            VerticalScroller {
+                Subheader { Text("Top bar") }
+                ListItem(
+                    title = { Text("Show top bar") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showTopBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
 
-                        },
-                        onClick = { controls.showTopAppBar = !controls.showTopAppBar }
-                    )
+                    },
+                    onClick = { controls.showTopBar = !controls.showTopBar }
+                )
 
-                    Subheader { Text("Bottom bar") }
-                    ListItem(
-                        title = { Text("Show bottom bar") },
-                        trailing = {
-                            Checkbox(
-                                checked = controls.showBottomBar,
-                                modifier = Modifier.absorbPointer(),
-                                onCheckedChange = {}
-                            )
-                        },
-                        onClick = { controls.showBottomBar = !controls.showBottomBar }
-                    )
+                Subheader { Text("Bottom bar") }
+                ListItem(
+                    title = { Text("Show bottom bar") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showBottomBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
+                    },
+                    onClick = { controls.showBottomBar = !controls.showBottomBar }
+                )
 
-                    Subheader { Text("Fab") }
-                    ListItem(
-                        title = { Text("Show fab") },
-                        trailing = {
-                            Checkbox(
-                                checked = controls.showFab,
-                                modifier = Modifier.absorbPointer(),
-                                onCheckedChange = {}
-                            )
-                        },
-                        onClick = { controls.showFab = !controls.showFab }
-                    )
-                    ListItem(
-                        title = { Text("Fab location") },
-                        onClick = {
-                            navigator.push(
-                                DialogRoute {
-                                    SingleChoiceListDialog(
-                                        items = ScaffoldState.FabPosition.values().toList(),
-                                        selectedItem = controls.fabPosition,
-                                        onSelect = { controls.fabPosition = it },
-                                        item = { Text(it.name) }
-                                    )
-                                }
-                            )
-                        }
-                    )
-                }
+                Subheader { Text("Fab") }
+                ListItem(
+                    title = { Text("Show fab") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showFab,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
+                    },
+                    onClick = { controls.showFab = !controls.showFab }
+                )
+                ListItem(
+                    title = { Text("Fab location") },
+                    onClick = {
+                        navigator.push(
+                            DialogRoute {
+                                SingleChoiceListDialog(
+                                    items = ScaffoldState.FabPosition.values().toList(),
+                                    selectedItem = controls.fabPosition,
+                                    onSelect = { controls.fabPosition = it },
+                                    item = { Text(it.name) }
+                                )
+                            }
+                        )
+                    }
+                )
             }
-        )
+        }
     }
 }
 
 private class ScaffoldControls {
-    var showTopAppBar by mutableStateOf(true)
+    var showTopBar by mutableStateOf(true)
     var showBottomBar by mutableStateOf(false)
     var showFab by mutableStateOf(false)
     var fabPosition by mutableStateOf(ScaffoldState.FabPosition.End)

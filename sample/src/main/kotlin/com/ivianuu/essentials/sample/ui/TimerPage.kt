@@ -34,18 +34,17 @@ class TimerPage {
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Timer") }) },
-            body = {
-                val value = remember { timerFlow() }
-                    .collectAsState(0).value
+            topBar = { TopAppBar(title = { Text("Timer") }) }
+        ) {
+            val value = remember { timerFlow() }
+                .collectAsState(0).value
 
-                Text(
-                    text = "Value: $value",
-                    style = MaterialTheme.typography.h1,
-                    modifier = Modifier.center()
-                )
-            }
-        )
+            Text(
+                text = "Value: $value",
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier.center()
+            )
+        }
     }
 }
 

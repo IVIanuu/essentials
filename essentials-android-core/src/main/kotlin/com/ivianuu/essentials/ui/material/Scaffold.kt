@@ -37,22 +37,21 @@ import com.ivianuu.essentials.ui.common.onBackPressed
 
 @Composable
 fun Scaffold(
+    fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
+    applySideSafeArea: Boolean = true,
     drawerContent: @Composable (() -> Unit)? = null,
-    topAppBar: @Composable (() -> Unit)? = null,
-    body: @Composable (() -> Unit)? = null,
+    topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
     fab: @Composable (() -> Unit)? = null,
-    fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
-    applySideSafeArea: Boolean = true
+    body: @Composable (() -> Unit)? = null
 ) {
     val scaffoldState = remember { ScaffoldState() }
-    remember(fabPosition) { }
-    remember(applySideSafeArea) { scaffoldState.applySideSafeArea = applySideSafeArea }
-
+    scaffoldState.fabPosition = fabPosition
+    scaffoldState.applySideSafeArea = applySideSafeArea
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = drawerContent,
-        topAppBar = topAppBar,
+        topBar = topBar,
         body = body,
         bottomBar = bottomBar,
         fab = fab
@@ -63,17 +62,17 @@ fun Scaffold(
 fun Scaffold(
     scaffoldState: ScaffoldState,
     drawerContent: @Composable (() -> Unit)? = null,
-    topAppBar: @Composable (() -> Unit)? = null,
-    body: @Composable (() -> Unit)? = null,
+    topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
-    fab: @Composable (() -> Unit)? = null
+    fab: @Composable (() -> Unit)? = null,
+    body: @Composable (() -> Unit)? = null
 ) {
     // update state
-    remember(topAppBar) { scaffoldState.hasTopAppBar = topAppBar != null }
-    remember(drawerContent) { scaffoldState.hasDrawer = drawerContent != null }
-    remember(body) { scaffoldState.hasBody = body != null }
-    remember(bottomBar) { scaffoldState.hasBottomBar = bottomBar != null }
-    remember(fab) { scaffoldState.hasFab = fab != null }
+    scaffoldState.hasTopBar = topBar != null
+    scaffoldState.hasDrawer = drawerContent != null
+    scaffoldState.hasBody = body != null
+    scaffoldState.hasBottomBar = bottomBar != null
+    scaffoldState.hasFab = fab != null
 
     if (scaffoldState.isDrawerOpen) {
         onBackPressed { scaffoldState.isDrawerOpen = false }
@@ -83,9 +82,9 @@ fun Scaffold(
         var layout: @Composable () -> Unit = {
             Surface {
                 ScaffoldLayout(state = scaffoldState) {
-                    if (topAppBar != null) {
+                    if (topBar != null) {
                         Stack(modifier = Modifier.tag(ScaffoldSlot.TopAppBar)) {
-                            topAppBar()
+                            topBar()
                         }
                     }
 
@@ -144,7 +143,7 @@ fun Scaffold(
 
 class ScaffoldState {
 
-    var hasTopAppBar by mutableStateOf(false)
+    var hasTopBar by mutableStateOf(false)
         internal set
     var hasDrawer by mutableStateOf(false)
         internal set

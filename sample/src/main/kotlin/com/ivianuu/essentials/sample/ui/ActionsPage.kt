@@ -27,24 +27,23 @@ class ActionsPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Actions") }) },
-            body = {
-                Button(
-                    modifier = Modifier.center(),
-                    onClick = {
-                        scope.launch {
-                            val action = navigator.push<ActionPickerResult> {
-                                actionPickerPage(
-                                    showDefaultOption = false,
-                                    showNoneOption = false
-                                )
-                            }.await()
-                                .safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
-                            actionExecutors.execute(action)
-                        }
+            topBar = { TopAppBar(title = { Text("Actions") }) }
+        ) {
+            Button(
+                modifier = Modifier.center(),
+                onClick = {
+                    scope.launch {
+                        val action = navigator.push<ActionPickerResult> {
+                            actionPickerPage(
+                                showDefaultOption = false,
+                                showNoneOption = false
+                            )
+                        }.await()
+                            .safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+                        actionExecutors.execute(action)
                     }
-                ) { Text("Pick action") }
-            }
-        )
+                }
+            ) { Text("Pick action") }
+        }
     }
 }

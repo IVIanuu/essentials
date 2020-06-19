@@ -57,7 +57,7 @@ class TextInputPage {
         }
 
         Scaffold(
-            topAppBar = {
+            topBar = {
                 TopAppBar(
                     title = {
                         if (state.searchVisible) {
@@ -90,33 +90,6 @@ class TextInputPage {
                     }
                 )
             },
-            body = {
-                if (items.isNotEmpty()) {
-                    /*val animationClock = AnimationClockAmbient.current
-                    val flingConfig = FlingConfig()
-                    val scrollerPosition = retain(items) { ScrollerPosition() }
-
-                    val lastScrollPosition = holderFor(scrollerPosition) { scrollerPosition.value }
-
-                    if (lastScrollPosition.value < scrollerPosition.value) {
-                        //keyboardManager.hideKeyboard()
-                        if (state.searchVisible && state.inputValue.text.isEmpty()) {
-                            state.searchVisible = false
-                        }
-                    }*/
-
-                    LazyColumnItems(items = items) { item ->
-                        ListItem(
-                            title = { Text(item) }
-                        )
-                    }
-                } else {
-                    Text(
-                        text = "No results",
-                        modifier = Modifier.center()
-                    )
-                }
-            },
             fab = {
                 if (!state.searchVisible) {
                     ExtendedFloatingActionButton(
@@ -125,7 +98,33 @@ class TextInputPage {
                     )
                 }
             }
-        )
+        ) {
+            if (items.isNotEmpty()) {
+                /*val animationClock = AnimationClockAmbient.current
+                val flingConfig = FlingConfig()
+                val scrollerPosition = retain(items) { ScrollerPosition() }
+
+                val lastScrollPosition = holderFor(scrollerPosition) { scrollerPosition.value }
+
+                if (lastScrollPosition.value < scrollerPosition.value) {
+                    //keyboardManager.hideKeyboard()
+                    if (state.searchVisible && state.inputValue.text.isEmpty()) {
+                        state.searchVisible = false
+                    }
+                }*/
+
+                LazyColumnItems(items = items) { item ->
+                    ListItem(
+                        title = { Text(item) }
+                    )
+                }
+            } else {
+                Text(
+                    text = "No results",
+                    modifier = Modifier.center()
+                )
+            }
+        }
     }
 
 }

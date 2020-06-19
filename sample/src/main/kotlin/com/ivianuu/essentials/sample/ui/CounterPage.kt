@@ -38,35 +38,34 @@ class CounterPage {
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Counter") }) },
-            body = {
-                Column(
-                    modifier = Modifier.center(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    val (count, setCount) = state { 0 }
+            topBar = { TopAppBar(title = { Text("Counter") }) }
+        ) {
+            Column(
+                modifier = Modifier.center(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                val (count, setCount) = state { 0 }
 
-                    Text(
-                        text = "Count: $count",
-                        style = MaterialTheme.typography.h3
-                    )
+                Text(
+                    text = "Count: $count",
+                    style = MaterialTheme.typography.h3
+                )
 
-                    Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-                    ExtendedFloatingActionButton(
-                        text = { Text("Inc") },
-                        onClick = { setCount(count + 1) }
-                    )
+                ExtendedFloatingActionButton(
+                    text = { Text("Inc") },
+                    onClick = { setCount(count + 1) }
+                )
 
-                    Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-                    ExtendedFloatingActionButton(
-                        text = { Text("dec") },
-                        onClick = { setCount(count - 1) }
-                    )
-                }
+                ExtendedFloatingActionButton(
+                    text = { Text("dec") },
+                    onClick = { setCount(count - 1) }
+                )
             }
-        )
+        }
     }
 }

@@ -44,15 +44,7 @@ class BottomNavigationPage {
     operator fun invoke() {
         ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {
             Scaffold(
-                topAppBar = { TopAppBar(title = { Text("Bottom navigation") }) },
-                body = {
-                    BottomNavigationContent<BottomNavItem> { item ->
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            backgroundColor = item.color
-                        )
-                    }
-                },
+                topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
                 bottomBar = {
                     BottomNavigation<BottomNavItem> { item ->
                         BottomNavigationItem(
@@ -61,7 +53,14 @@ class BottomNavigationPage {
                         )
                     }
                 }
-            )
+            ) {
+                BottomNavigationContent<BottomNavItem> { item ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        backgroundColor = item.color
+                    )
+                }
+            }
         }
     }
 }

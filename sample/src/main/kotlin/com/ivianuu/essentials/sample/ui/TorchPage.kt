@@ -41,26 +41,25 @@ class TorchPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Torch") }) },
-            body = {
-                val torchState = torchManager.torchState.collectAsState()
+            topBar = { TopAppBar(title = { Text("Torch") }) }
+        ) {
+            val torchState = torchManager.torchState.collectAsState()
 
-                Column(
-                    modifier = Modifier.center(),
-                    horizontalGravity = Alignment.CenterHorizontally
+            Column(
+                modifier = Modifier.center(),
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Torch is ${if (torchState.value) "enabled" else "disabled"}",
+                    style = MaterialTheme.typography.h4
+                )
+                Spacer(Modifier.preferredHeight(8.dp))
+                Button(
+                    onClick = launchOnClick { torchManager.toggleTorch() }
                 ) {
-                    Text(
-                        "Torch is ${if (torchState.value) "enabled" else "disabled"}",
-                        style = MaterialTheme.typography.h4
-                    )
-                    Spacer(Modifier.preferredHeight(8.dp))
-                    Button(
-                        onClick = launchOnClick { torchManager.toggleTorch() }
-                    ) {
-                        Text("Toggle torch")
-                    }
+                    Text("Toggle torch")
                 }
             }
-        )
+        }
     }
 }

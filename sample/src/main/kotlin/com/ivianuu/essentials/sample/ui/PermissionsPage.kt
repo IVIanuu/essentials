@@ -52,73 +52,72 @@ class PermissionsPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Permissions") }) },
-            body = {
-                val camera = RuntimePermission(
-                    Manifest.permission.CAMERA,
-                    Permission.Title withValue "Camera",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            topBar = { TopAppBar(title = { Text("Permissions") }) }
+        ) {
+            val camera = RuntimePermission(
+                Manifest.permission.CAMERA,
+                Permission.Title withValue "Camera",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val phone = RuntimePermission(
-                    Manifest.permission.CALL_PHONE,
-                    Permission.Title withValue "Call phone",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val phone = RuntimePermission(
+                Manifest.permission.CALL_PHONE,
+                Permission.Title withValue "Call phone",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val accessibility = AccessibilityServicePermission(
-                    DefaultAccessibilityService::class,
-                    Permission.Title withValue "Accessibility",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val accessibility = AccessibilityServicePermission(
+                DefaultAccessibilityService::class,
+                Permission.Title withValue "Accessibility",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val notificationListener = NotificationListenerPermission(
-                    DefaultNotificationListenerService::class,
-                    Permission.Title withValue "Notification listener",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val notificationListener = NotificationListenerPermission(
+                DefaultNotificationListenerService::class,
+                Permission.Title withValue "Notification listener",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val systemOverlay = SystemOverlayPermission(
-                    ContextAmbient.current,
-                    Permission.Title withValue "System overlay",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val systemOverlay = SystemOverlayPermission(
+                ContextAmbient.current,
+                Permission.Title withValue "System overlay",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val writeSecureSettings = WriteSecureSettingsPermission(
-                    Permission.Title withValue "Write secure settings",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val writeSecureSettings = WriteSecureSettingsPermission(
+                Permission.Title withValue "Write secure settings",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                val writeSettings = WriteSettingsPermission(
-                    ContextAmbient.current,
-                    Permission.Title withValue "Write settings",
-                    Permission.Desc withValue "This is a desc",
-                    Permission.Icon withValue { Icon(Icons.Default.Menu) }
-                )
+            val writeSettings = WriteSettingsPermission(
+                ContextAmbient.current,
+                Permission.Title withValue "Write settings",
+                Permission.Desc withValue "This is a desc",
+                Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            )
 
-                Button(
-                    modifier = Modifier.center(),
-                    onClick = launchOnClick {
-                        manager.request(
-                            camera,
-                            phone,
-                            accessibility,
-                            notificationListener,
-                            systemOverlay,
-                            writeSecureSettings,
-                            writeSettings
-                        )
-                    }
-                ) {
-                    Text("Request")
+            Button(
+                modifier = Modifier.center(),
+                onClick = launchOnClick {
+                    manager.request(
+                        camera,
+                        phone,
+                        accessibility,
+                        notificationListener,
+                        systemOverlay,
+                        writeSecureSettings,
+                        writeSettings
+                    )
                 }
+            ) {
+                Text("Request")
             }
-        )
+        }
     }
 }

@@ -45,7 +45,7 @@ class SecureSettingsPage internal constructor(
         popNavigatorOnceSecureSettingsGranted(toast = true)
 
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
+            topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
             body = {
                 VerticalScroller {
                     SecureSettingsHeader(

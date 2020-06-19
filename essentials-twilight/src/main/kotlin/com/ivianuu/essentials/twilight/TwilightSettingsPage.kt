@@ -38,27 +38,26 @@ class TwilightSettingsPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) },
-            body = {
-                VerticalScroller {
-                    var twilightMode by prefs.twilightMode.asState()
-                    TwilightMode.values().toList().forEach { mode ->
-                        TwilightModeItem(
-                            mode = mode,
-                            isSelected = twilightMode == mode,
-                            onClick = { twilightMode = mode }
-                        )
-                    }
-
-                    Subheader { Text(R.string.es_twilight_pref_category_more) }
-
-                    CheckboxListItem(
-                        box = prefs.useBlack,
-                        title = { Text(R.string.es_twilight_use_black) }
+            topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
+        ) {
+            VerticalScroller {
+                var twilightMode by prefs.twilightMode.asState()
+                TwilightMode.values().toList().forEach { mode ->
+                    TwilightModeItem(
+                        mode = mode,
+                        isSelected = twilightMode == mode,
+                        onClick = { twilightMode = mode }
                     )
                 }
+
+                Subheader { Text(R.string.es_twilight_pref_category_more) }
+
+                CheckboxListItem(
+                    box = prefs.useBlack,
+                    title = { Text(R.string.es_twilight_use_black) }
+                )
             }
-        )
+        }
     }
 }
 

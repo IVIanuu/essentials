@@ -23,22 +23,21 @@ class ActionPickerPage internal constructor(
         showNoneOption: Boolean = true
     ) {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) },
-            body = {
-                val viewModel =
-                    viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
+            topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
+        ) {
+            val viewModel =
+                viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
 
-                ResourceLazyColumnItems(
-                    resource = viewModel.currentState.items,
-                    successItemContent = { item ->
-                        ActionPickerItem(
-                            item = item,
-                            onClick = { viewModel.itemClicked(item) }
-                        )
-                    }
-                )
-            }
-        )
+            ResourceLazyColumnItems(
+                resource = viewModel.currentState.items,
+                successItemContent = { item ->
+                    ActionPickerItem(
+                        item = item,
+                        onClick = { viewModel.itemClicked(item) }
+                    )
+                }
+            )
+        }
     }
 }
 

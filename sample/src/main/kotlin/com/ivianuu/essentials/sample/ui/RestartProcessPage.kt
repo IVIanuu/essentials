@@ -34,16 +34,14 @@ class RestartProcessPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Restart process") }) },
-            body = {
-                Button(
-                    modifier = Modifier.center(),
-                    onClick = launchOnClick { restartProcess() }
-                ) {
-                    Text("Restart process")
-                }
+            topBar = { TopAppBar(title = { Text("Restart process") }) }
+        ) {
+            Button(
+                modifier = Modifier.center(),
+                onClick = launchOnClick { restartProcess() }
+            ) {
+                Text("Restart process")
             }
-        )
-
+        }
     }
 }

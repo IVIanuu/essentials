@@ -31,15 +31,14 @@ class WorkPage(private val scheduleTasks: ScheduleTasks) {
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Work") }) },
-            body = {
-                Button(
-                    modifier = Modifier.center(),
-                    onClick = { scheduleTasks() }
-                ) {
-                    Text("Perform work")
-                }
+            topBar = { TopAppBar(title = { Text("Work") }) }
+        ) {
+            Button(
+                modifier = Modifier.center(),
+                onClick = { scheduleTasks() }
+            ) {
+                Text("Perform work")
             }
-        )
+        }
     }
 }

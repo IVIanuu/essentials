@@ -52,60 +52,59 @@ class NavBarPage(
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Nav bar settings") }) },
-            body = {
-                Column(
-                    modifier = Modifier.center(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalGravity = Alignment.CenterHorizontally
-                ) {
-                    val scope = compositionCoroutineScope()
-                    fun updateNavBarState(navBarHidden: Boolean) {
-                        scope.launch {
-                            navBarManager.setNavBarConfig(
-                                NavBarConfig(navBarHidden)
-                            )
-                        }
-                    }
-
-                    val hideNavBar = state { false }
-
-                    onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
-
-                    // reshow nav bar when exiting the screen
-                    onDispose { updateNavBarState(false) }
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        gravity = ContentGravity.Center
-                    ) {
-                        Text(
-                            text = if (secureSettingsHelper.canWriteSecureSettings()) {
-                                if (hideNavBar.value) {
-                                    "Nav bar hidden"
-                                } else {
-                                    "Nav bar shown"
-                                }
-                            } else {
-                                "Unknown nav bar state"
-                            },
-                            style = MaterialTheme.typography.h3
+            topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
+        ) {
+            Column(
+                modifier = Modifier.center(),
+                verticalArrangement = Arrangement.Center,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+                val scope = compositionCoroutineScope()
+                fun updateNavBarState(navBarHidden: Boolean) {
+                    scope.launch {
+                        navBarManager.setNavBarConfig(
+                            NavBarConfig(navBarHidden)
                         )
                     }
+                }
 
-                    Button(
-                        onClick = {
-                            if (secureSettingsHelper.canWriteSecureSettings()) {
-                                hideNavBar.value = !hideNavBar.value
+                val hideNavBar = state { false }
+
+                onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+
+                // reshow nav bar when exiting the screen
+                onDispose { updateNavBarState(false) }
+
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    gravity = ContentGravity.Center
+                ) {
+                    Text(
+                        text = if (secureSettingsHelper.canWriteSecureSettings()) {
+                            if (hideNavBar.value) {
+                                "Nav bar hidden"
                             } else {
-                                navigator.push { secureSettingsPage() }
+                                "Nav bar shown"
                             }
+                        } else {
+                            "Unknown nav bar state"
+                        },
+                        style = MaterialTheme.typography.h3
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        if (secureSettingsHelper.canWriteSecureSettings()) {
+                            hideNavBar.value = !hideNavBar.value
+                        } else {
+                            navigator.push { secureSettingsPage() }
                         }
-                    ) {
-                        Text("Toggle nav bar")
                     }
+                ) {
+                    Text("Toggle nav bar")
                 }
             }
-        )
+        }
     }
 }

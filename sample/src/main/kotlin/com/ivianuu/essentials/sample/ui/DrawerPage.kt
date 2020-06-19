@@ -32,7 +32,7 @@ class DrawerPage {
     @Composable
     operator fun invoke() {
         Scaffold(
-            topAppBar = { TopAppBar(title = { Text("Drawer") }) },
+            topBar = { TopAppBar(title = { Text("Drawer") }) },
             drawerContent = {
                 Surface(color = Color.Blue) {
                     Text(
@@ -41,16 +41,15 @@ class DrawerPage {
                         modifier = Modifier.center()
                     )
                 }
-            },
-            body = {
-                Surface(color = Color.Red) {
-                    Text(
-                        text = "Body",
-                        style = MaterialTheme.typography.h4,
-                        modifier = Modifier.center()
-                    )
-                }
             }
-        )
+        ) {
+            Surface(color = Color.Red) {
+                Text(
+                    text = "Body",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.center()
+                )
+            }
+        }
     }
 }
