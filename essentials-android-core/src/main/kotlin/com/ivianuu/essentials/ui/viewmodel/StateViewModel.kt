@@ -103,7 +103,7 @@ abstract class StateViewModel<S>(
     protected fun <V> CoroutineScope.execute(
         context: CoroutineContext = dispatchers.default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend () -> V,
+        block: suspend CoroutineScope.() -> V,
         reducer: suspend S.(Resource<V>) -> S
     ): Job = launch(context, start) {
         setState { reducer(Loading) }

@@ -24,6 +24,8 @@ import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+// todo remove
+
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit {
     val navigator = NavigatorAmbient.current
