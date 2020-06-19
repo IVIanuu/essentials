@@ -172,14 +172,14 @@ class Navigator {
                     canBeSaved = { true }
                 )
             }
-            onDispose {
-                savedState[compositionKey] = savedStateRegistry.performSave()
-            }
             Providers(
                 RouteAmbient provides route,
                 UiSavedStateRegistryAmbient provides savedStateRegistry
             ) {
                 route()
+                onDispose {
+                    savedState[compositionKey] = savedStateRegistry.performSave()
+                }
             }
         }
 
