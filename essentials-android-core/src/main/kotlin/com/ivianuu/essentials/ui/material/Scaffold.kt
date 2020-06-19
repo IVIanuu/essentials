@@ -102,11 +102,7 @@ fun Scaffold(
 
                     if (fab != null) {
                         Stack(modifier = Modifier.tag(ScaffoldSlot.Fab)) {
-                            if (bottomBar != null) {
-                                fab()
-                            } else {
-                                SafeArea(children = fab)
-                            }
+                            fab()
                         }
                     }
                 }
