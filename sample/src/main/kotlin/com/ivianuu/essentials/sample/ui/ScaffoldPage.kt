@@ -39,7 +39,6 @@ import androidx.ui.material.Checkbox
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -97,9 +96,7 @@ class ScaffoldPage(
                 }
             }) else null,
             body = {
-                VerticalScroller(
-                    scrollerPosition = RetainedScrollerPosition()
-                ) {
+                VerticalScroller {
                     Subheader { Text("Top bar") }
                     ListItem(
                         title = { Text("Show top bar") },

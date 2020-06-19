@@ -34,12 +34,11 @@ import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
 import androidx.ui.material.contentColorFor
 import androidx.ui.material.primarySurface
+import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.rememberRetained
-
 class TabController<T>(
     items: List<T>,
     initialIndex: Int = 0
@@ -61,7 +60,7 @@ fun <T> ProvideTabController(
     initialIndex: Int = 0,
     children: @Composable () -> Unit
 ) {
-    val controller = rememberRetained(items, initialIndex) {
+    val controller = rememberSavedInstanceState(items) {
         TabController(items = items, initialIndex = initialIndex)
     }
 

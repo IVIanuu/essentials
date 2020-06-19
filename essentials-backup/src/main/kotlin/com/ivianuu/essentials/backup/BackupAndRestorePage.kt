@@ -3,13 +3,12 @@ package com.ivianuu.essentials.backup
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -21,11 +20,11 @@ class BackupAndRestorePage internal constructor(
 ) {
     @Composable
     operator fun invoke() {
-        val viewModel = rememberRetained(init = viewModelFactory)
+        val viewModel = viewModel(init = viewModelFactory)
         Scaffold(
             topAppBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     ListItem(
                         title = { Text(R.string.es_pref_backup) },
                         subtitle = { Text(R.string.es_pref_backup_summary) },

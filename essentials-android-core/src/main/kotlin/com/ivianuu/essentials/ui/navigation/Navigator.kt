@@ -19,16 +19,19 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
+import androidx.compose.currentComposer
 import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
+import androidx.compose.onDispose
+import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.staticAmbientOf
+import androidx.ui.savedinstancestate.UiSavedStateRegistry
+import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.RetainedObjects
-import com.ivianuu.essentials.ui.core.RetainedObjectsAmbient
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
@@ -161,24 +164,35 @@ class Navigator {
             enterTransition = route.enterTransition,
             exitTransition = route.exitTransition
         ) {
+            val compositionKey = currentComposer.currentCompoundKeyHash
+
+            val savedStateRegistry = remember {
+                UiSavedStateRegistry(
+                    restoredValues = savedState[compositionKey],
+                    canBeSaved = { true }
+                )
+            }
             Providers(
-                RetainedObjectsAmbient provides retainedObjects,
-                RouteAmbient provides route
+                RouteAmbient provides route,
+                UiSavedStateRegistryAmbient provides savedStateRegistry
             ) {
                 route()
+                onDispose {
+                    savedState[compositionKey] = savedStateRegistry.performSave()
+                }
             }
         }
-
-        private val retainedObjects = RetainedObjects()
 
         private val _result = CompletableDeferred<Any?>()
         val result: Deferred<Any?> get() = _result
 
         var resultToSend: Any? = null
 
+        private var savedState =
+            mutableMapOf<Any, Map<String, Any>>()
+
         fun detach() {
             _result.complete(resultToSend)
-            retainedObjects.dispose()
         }
 
     }

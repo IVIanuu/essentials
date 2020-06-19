@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
@@ -25,6 +26,7 @@ import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.padding
 import androidx.ui.layout.size
+import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
 import com.ivianuu.essentials.apps.ui.AppPickerPage
@@ -33,7 +35,6 @@ import com.ivianuu.essentials.twilight.TwilightSettingsPage
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.common.LazyColumnItems
-import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -102,12 +103,14 @@ class HomePage(
                 val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
                 LazyColumnItems(items = items) { item ->
-                    val color = rememberRetained(item) {
-                        ColorPickerPalette.values()
-                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                            .shuffled()
-                            .first()
-                            .front
+                    val color = key(item) {
+                        rememberSavedInstanceState(item) {
+                            ColorPickerPalette.values()
+                                .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                                .shuffled()
+                                .first()
+                                .front
+                        }
                     }
 
                     HomeItem(

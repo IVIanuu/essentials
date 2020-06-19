@@ -58,7 +58,6 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
@@ -188,10 +187,7 @@ private fun ColorGrid(
         }
 
         WithConstraints(modifier = modifier) {
-            VerticalScroller(
-                modifier = Modifier.padding(all = 4.dp),
-                scrollerPosition = RetainedScrollerPosition()
-            ) {
+            VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
                 items.chunked(4).forEach { rowItems ->
                     Row(
                         horizontalArrangement = Arrangement.Center,

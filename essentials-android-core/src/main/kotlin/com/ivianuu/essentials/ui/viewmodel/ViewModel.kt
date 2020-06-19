@@ -16,6 +16,9 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
+import androidx.compose.Composable
+import androidx.compose.currentComposer
+import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -32,3 +35,10 @@ abstract class ViewModel : Closeable {
         scope.cancel()
     }
 }
+
+@Composable
+inline fun <T : ViewModel> viewModel(
+    vararg inputs: Any?,
+    key: Any = currentComposer.currentCompoundKeyHash.toString(),
+    noinline init: () -> T
+) = rememberSavedInstanceState(inputs = *inputs, key = key.toString(), init = init)

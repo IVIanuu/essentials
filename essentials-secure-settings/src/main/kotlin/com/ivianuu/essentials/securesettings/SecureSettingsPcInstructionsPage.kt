@@ -22,7 +22,6 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
@@ -52,7 +51,7 @@ class SecureSettingsPcInstructionsPage internal constructor(
         Scaffold(
             topAppBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     SecureSettingsHeader(
                         text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
                     )

@@ -21,7 +21,6 @@ import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.Checkbox
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.absorbPointer
 
 @Composable
@@ -45,9 +44,7 @@ fun <T> MultiChoiceListDialog(
         buttonLayout = buttonLayout,
         applyContentPadding = false,
         content = {
-            VerticalScroller(
-                scrollerPosition = RetainedScrollerPosition()
-            ) {
+            VerticalScroller {
                 items.forEachIndexed { index, item ->
                     key(index) {
                         MultiChoiceDialogListItem(

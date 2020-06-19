@@ -29,7 +29,7 @@ import androidx.ui.foundation.lazy.LazyColumnItems
 import androidx.ui.foundation.lazy.LazyRowItems
 import androidx.ui.layout.Spacer
 import androidx.ui.node.UiApplier
-import com.ivianuu.essentials.ui.core.rememberRetained
+import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -78,7 +78,7 @@ private fun <T> LazyItems(
     itemContent: @Composable (T) -> Unit,
     isVertical: Boolean
 ) {
-    val state = rememberRetained { LazyItemsState<T>(isVertical = isVertical) }
+    val state = rememberSavedInstanceState { LazyItemsState<T>(isVertical = isVertical) }
     @OptIn(ExperimentalComposeApi::class)
     state.recomposer = currentComposer.recomposer
     state.itemContent = itemContent

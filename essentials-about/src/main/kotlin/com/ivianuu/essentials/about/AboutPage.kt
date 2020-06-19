@@ -18,7 +18,6 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -42,7 +41,7 @@ class AboutPage(
                 TopAppBar(title = { Text(R.string.about_title) })
             },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     AboutSection(
                         showHeader = false,
                         packageName = buildInfo.packageName,

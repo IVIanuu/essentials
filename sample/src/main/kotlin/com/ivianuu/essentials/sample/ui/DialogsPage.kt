@@ -34,7 +34,6 @@ import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -55,9 +54,7 @@ class DialogsPage {
         Scaffold(
             topAppBar = { TopAppBar(title = { Text("Dialogs") }) },
             body = {
-                VerticalScroller(
-                    scrollerPosition = RetainedScrollerPosition()
-                ) {
+                VerticalScroller {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -189,9 +186,7 @@ class DialogsPage {
                             Dialog(
                                 title = { Text("List") },
                                 content = {
-                                    VerticalScroller(
-                                        scrollerPosition = RetainedScrollerPosition()
-                                    ) {
+                                    VerticalScroller {
                                         (1..100).forEach {
                                             ListItem(
                                                 title = {

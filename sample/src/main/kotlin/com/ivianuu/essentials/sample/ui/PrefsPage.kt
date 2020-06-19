@@ -24,7 +24,6 @@ import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.android.color
 import com.ivianuu.essentials.store.android.duration
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -51,7 +50,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
         Scaffold(
             topAppBar = { TopAppBar(title = { Text("Prefs") }) },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     SwitchListItem(
                         box = boxFactory.create("switch", false),
                         title = { Text("Switch") }

@@ -23,7 +23,6 @@ import androidx.compose.setValue
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.box.asState
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -41,7 +40,7 @@ class TwilightSettingsPage(
         Scaffold(
             topAppBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     var twilightMode by prefs.twilightMode.asState()
                     TwilightMode.values().toList().forEach { mode ->
                         TwilightModeItem(

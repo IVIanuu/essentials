@@ -4,12 +4,12 @@ import androidx.compose.Composable
 import androidx.ui.foundation.Text
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.currentState
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
 
@@ -26,7 +26,7 @@ class ActionPickerPage internal constructor(
             topAppBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) },
             body = {
                 val viewModel =
-                    rememberRetained { viewModelFactory(showDefaultOption, showNoneOption) }
+                    viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
 
                 ResourceLazyColumnItems(
                     resource = viewModel.currentState.items,

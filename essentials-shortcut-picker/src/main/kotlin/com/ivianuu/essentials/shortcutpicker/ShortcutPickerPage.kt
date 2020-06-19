@@ -26,7 +26,6 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -36,6 +35,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
@@ -49,7 +49,7 @@ class ShortcutPickerPage internal constructor(
 ) {
     @Composable
     operator fun invoke(title: String? = null) {
-        val viewModel = rememberRetained { viewModelFactory() }
+        val viewModel = viewModel(init = viewModelFactory)
         Scaffold(
             topAppBar = {
                 TopAppBar(title = {

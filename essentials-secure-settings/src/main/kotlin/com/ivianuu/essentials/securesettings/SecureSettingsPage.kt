@@ -19,7 +19,6 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.RetainedScrollerPosition
 import com.ivianuu.essentials.ui.common.launchOnClick
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
@@ -48,7 +47,7 @@ class SecureSettingsPage internal constructor(
         Scaffold(
             topAppBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
             body = {
-                VerticalScroller(scrollerPosition = RetainedScrollerPosition()) {
+                VerticalScroller {
                     SecureSettingsHeader(
                         stringResource(
                             if (showHideNavBarHint) {

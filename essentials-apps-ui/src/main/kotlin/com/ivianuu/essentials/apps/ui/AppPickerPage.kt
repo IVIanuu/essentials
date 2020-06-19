@@ -28,7 +28,6 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.ui.core.rememberRetained
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -38,6 +37,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
@@ -52,7 +52,7 @@ class AppPickerPage internal constructor(
         appFilter: AppFilter = DefaultAppFilter,
         title: String? = null
     ) {
-        val viewModel = rememberRetained(appFilter) { viewModelFactory(appFilter) }
+        val viewModel = viewModel(appFilter) { viewModelFactory(appFilter) }
 
         Scaffold(
             topAppBar = {

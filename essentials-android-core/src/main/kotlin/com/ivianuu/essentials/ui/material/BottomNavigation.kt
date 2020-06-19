@@ -34,13 +34,12 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
 import androidx.ui.material.primarySurface
+import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.rememberRetained
-
 class BottomNavigationController<T>(
     items: List<T>,
     initial: T = items.first()
@@ -55,7 +54,7 @@ fun <T> ProvideBottomNavigationController(
     initial: T = items.first(),
     children: @Composable () -> Unit
 ) {
-    val controller = rememberRetained(items, initial) {
+    val controller = rememberSavedInstanceState(items) {
         BottomNavigationController(items = items, initial = initial)
     }
 
