@@ -184,6 +184,7 @@ internal class CheckableAppsViewModel(
 
     private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
         val newCheckedApps = state.value.apps()!!
+            .filter { it.isChecked }
             .map { it.info.packageName }
             .toMutableSet()
             .apply(reducer)
