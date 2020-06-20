@@ -39,7 +39,7 @@ import kotlin.time.seconds
  */
 @ApplicationScoped
 class KeyboardVisibilityDetector(
-    private val appScope: @ForApplication CoroutineScope,
+    private val scope: @ForApplication CoroutineScope,
     private val inputMethodManager: InputMethodManager,
     private val services: AccessibilityServices
 ) {
@@ -62,7 +62,7 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .replayShareIn(scope = appScope, timeout = 1.seconds)
+        .replayShareIn(scope = scope, timeout = 1.seconds)
 
     init {
         services.applyConfig(

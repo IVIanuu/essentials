@@ -20,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -52,10 +51,6 @@ private class ReplayShareFlow<T>(
 
     private val sharedFlow = upstream
         .onEach { item -> mutex.withLock { lastValue = item } }
-        .catch {
-            mutex.withLock { lastValue = defaultValue }
-            throw it
-        }
         .shareIn(scope = scope, cacheSize = 0, timeout = timeout)
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
