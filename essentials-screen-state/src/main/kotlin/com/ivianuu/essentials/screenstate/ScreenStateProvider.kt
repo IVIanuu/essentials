@@ -20,18 +20,18 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
-import kotlin.time.seconds
 
 /**
  * Provides the current screen state
@@ -57,9 +57,11 @@ class ScreenStateProvider(
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
-        .shareIn(scope = scope, timeout = 2.seconds)
-        .onStart { emit(getCurrentScreenState()) }
-        .distinctUntilChanged()
+        .shareIn(
+            scope = scope,
+            replay = 1,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
+        )
 
     private suspend fun getCurrentScreenState(): ScreenState =
         withContext(dispatchers.default) {

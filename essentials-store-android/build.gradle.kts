@@ -12,5 +12,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(Deps.AndroidX.Ui.core)
+    api(Deps.Coroutines.core)
     api(project(":essentials-store"))
 }

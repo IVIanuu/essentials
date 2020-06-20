@@ -25,11 +25,11 @@ import android.os.PowerManager
 import androidx.compose.Immutable
 import com.ivianuu.essentials.app.BindAppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,8 +38,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import java.util.Calendar
-import kotlin.time.seconds
 
 @BindAppService
 class TwilightHelper(
@@ -66,7 +66,11 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
         .onEach { currentState = it }
-        .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
+        .shareIn(
+            scope = scope,
+            replay = 1,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
+        )
 
     var currentState = TwilightState(isDark = false, useBlack = false)
         private set

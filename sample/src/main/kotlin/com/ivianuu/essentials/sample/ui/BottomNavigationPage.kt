@@ -23,6 +23,7 @@ import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.fillMaxSize
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Email
 import androidx.ui.material.icons.filled.Home
@@ -46,7 +47,9 @@ class BottomNavigationPage {
             Scaffold(
                 topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
                 bottomBar = {
-                    BottomNavigation<BottomNavItem> { item ->
+                    BottomNavigation<BottomNavItem>(
+                        backgroundColor = MaterialTheme.colors.primary
+                    ) { item ->
                         BottomNavigationItem(
                             icon = { Icon(item.icon) },
                             text = { Text(item.title) }

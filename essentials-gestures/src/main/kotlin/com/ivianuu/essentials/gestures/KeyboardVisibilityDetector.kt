@@ -21,18 +21,18 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.replayShareIn
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
 import java.lang.reflect.Method
-import kotlin.time.seconds
 
 /**
  * Provides info about the keyboard state
@@ -62,7 +62,11 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .replayShareIn(scope = scope, timeout = 1.seconds)
+        .shareIn(
+            scope = scope,
+            replay = 1,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
+        )
 
     init {
         services.applyConfig(

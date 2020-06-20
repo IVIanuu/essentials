@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.shareIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
@@ -68,7 +69,8 @@ internal class DiskBoxImpl<T>(
         .distinctUntilChanged()
         .shareIn(
             scope = scope,
-            cacheSize = 1
+            replay = 1,
+            started = SharingStarted.WhileSubscribed()
         )
 
     override suspend fun updateData(transform: suspend (T) -> T): T {

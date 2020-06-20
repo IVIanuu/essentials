@@ -21,16 +21,17 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
-import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 interface SettingBox<T> : Box<T> {
@@ -90,7 +91,11 @@ class SettingBoxImpl<T>(
         .onStart { emit(Unit) }
         .map { get() }
         .distinctUntilChanged()
-        .shareIn(scope = scope, cacheSize = 1)
+        .shareIn(
+            scope = scope,
+            replay = 1,
+            started = SharingStarted.WhileSubscribed()
+        )
 
     override suspend fun updateData(transform: suspend (T) -> T): T {
         return try {

@@ -29,7 +29,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev544"
+    const val version = "${Build.versionName}-dev544-SNAPSHOT"
 }
 
 object Deps {
@@ -86,7 +86,7 @@ object Deps {
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
-        private const val version = "1.3.7"
+        private const val version = "1.3.7-SNAPSHOT"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"

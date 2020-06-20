@@ -90,10 +90,12 @@ class NavBarManager internal constructor(
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
                         this += displayRotationProvider.displayRotation.drop(1)
+                            .onEach { logger.d("display rotation $it") }
                     }
 
                     if (config.showWhileScreenOff) {
                         this += screenStateProvider.screenState.drop(1)
+                            .onEach { logger.d("screen state $it") }
                     }
                 }
 
@@ -102,11 +104,13 @@ class NavBarManager internal constructor(
                     this += async {
                         flows.merge()
                             .onStart { emit(Unit) }
+                            .onEach { logger.d("config signal $it") }
                             .map {
                                 !config.showWhileScreenOff ||
                                         screenStateProvider.screenState.first() == ScreenState.Unlocked
                             }
                             .onEach { navBarHidden ->
+                                logger.d("nav bar hidden $navBarHidden")
                                 prefs.wasNavBarHidden.updateData { navBarHidden }
                                 setNavBarConfigInternal(navBarHidden, config)
                             }
