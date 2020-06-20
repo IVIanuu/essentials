@@ -27,7 +27,6 @@ import androidx.ui.foundation.drawBackground
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
-import androidx.ui.layout.InnerPadding
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
@@ -46,10 +45,10 @@ fun ListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true,
-    selected: Boolean = false,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
+    enabled: Boolean = true,
+    selected: Boolean = false
 ) {
     val minHeight = if (subtitle != null) {
         if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
@@ -158,9 +157,3 @@ private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp
 private val TitleAndSubtitleMinHeightWithIcon = 72.dp
 private val HorizontalTextPadding = 16.dp
-private val ContentPadding = InnerPadding(
-    start = 16.dp,
-    top = 8.dp,
-    end = 16.dp,
-    bottom = 8.dp
-)
