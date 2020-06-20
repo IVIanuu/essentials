@@ -20,11 +20,11 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -44,9 +44,7 @@ class KeyboardVisibilityDetector(
     private val services: AccessibilityServices
 ) {
 
-    private val softInputChanges = EventFlow<Unit>()
-
-    val keyboardVisible = services.events
+    val keyboardVisible: Flow<Boolean> = services.events
         .filter {
             it.isFullScreen &&
                     it.className == "android.inputmethodservice.SoftInputWindow"

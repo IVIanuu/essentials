@@ -46,7 +46,7 @@ class ScreenStateProvider(
     private val powerManager: PowerManager
 ) {
 
-    val screenState = broadcastFactory.create(
+    val screenState: Flow<ScreenState> = broadcastFactory.create(
         Intent.ACTION_SCREEN_OFF,
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT

@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+// todo make this class a single shared flow
+
 @ApplicationScoped
 class SecureScreenDetector(
     private val logger: Logger,
