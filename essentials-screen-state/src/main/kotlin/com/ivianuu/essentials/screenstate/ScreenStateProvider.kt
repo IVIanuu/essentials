@@ -22,11 +22,13 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.shareIn
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import kotlin.time.seconds
@@ -39,6 +41,7 @@ class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
     private val scope: @ForApplication CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
+    private val logger: Logger,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
 ) {
@@ -48,11 +51,15 @@ class ScreenStateProvider(
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT
     )
+        .onStart { logger.d("sub for screen state") }
+        .onCompletion { logger.d("dispose screen state") }
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
-        .shareIn(scope = scope, cacheSize = 1, timeout = 1.seconds)
+        .shareIn(scope = scope, timeout = 2.seconds)
+        .onStart { emit(getCurrentScreenState()) }
+        .distinctUntilChanged()
 
     private suspend fun getCurrentScreenState(): ScreenState =
         withContext(dispatchers.default) {

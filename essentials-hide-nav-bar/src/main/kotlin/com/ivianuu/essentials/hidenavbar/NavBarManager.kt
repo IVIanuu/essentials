@@ -43,6 +43,8 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
@@ -63,9 +65,15 @@ class NavBarManager internal constructor(
 ) {
 
     private var job: Job? = null
+    private val mutex = Mutex()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
-        job?.cancel()
+        logger.d("set nav bar config $config")
+
+        mutex.withLock {
+            job?.cancel()
+            job = null
+        }
 
         if (!config.hidden) {
             if (prefs.wasNavBarHidden.data.first()) {
@@ -76,7 +84,8 @@ class NavBarManager internal constructor(
             return@withContext
         }
 
-        job = scope.launch {
+        scope.launch {
+            logger.d("launch listeners")
             buildList<Deferred<*>> {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
@@ -86,12 +95,12 @@ class NavBarManager internal constructor(
                     if (config.showWhileScreenOff) {
                         this += screenStateProvider.screenState.drop(1)
                     }
-                }.toTypedArray()
+                }
 
                 // apply config
                 if (flows.isNotEmpty()) {
                     this += async {
-                        merge(*flows)
+                        flows.merge()
                             .onStart { emit(Unit) }
                             .map {
                                 !config.showWhileScreenOff ||
@@ -109,7 +118,11 @@ class NavBarManager internal constructor(
                     // force show on shut downs
                     broadcastFactory.create(Intent.ACTION_SHUTDOWN)
                         .onEach {
-                            job?.cancel()
+                            mutex.withLock {
+                                job?.cancel()
+                                job = null
+                            }
+
                             logger.d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
@@ -117,11 +130,13 @@ class NavBarManager internal constructor(
                         .collect()
                 }
             }.awaitAll()
+        }.also { job ->
+            mutex.withLock { this@NavBarManager.job = job }
         }
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        logger.d("set nav bar hidden: $config")
+        logger.d("set nav bar hidden config $config hidden $hidden")
         try {
             try {
                 // ensure that we can access non sdk interfaces
