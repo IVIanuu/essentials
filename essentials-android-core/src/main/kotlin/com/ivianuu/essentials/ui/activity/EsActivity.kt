@@ -25,9 +25,8 @@ import androidx.compose.Recomposer
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.ui.core.setContent
-import com.ivianuu.essentials.ui.core.SystemBarManager
-import com.ivianuu.essentials.ui.core.WindowInsetsManager
-import com.ivianuu.injekt.inject
+import com.ivianuu.essentials.ui.core.ProvideInsets
+import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 
 /**
  * Base activity
@@ -36,8 +35,6 @@ abstract class EsActivity : AppCompatActivity() {
 
     protected open val containerId: Int
         get() = android.R.id.content
-
-    private val windowInsetsManager: WindowInsetsManager by inject()
 
     private lateinit var composition: Composition
 
@@ -60,8 +57,8 @@ abstract class EsActivity : AppCompatActivity() {
 
     @Composable
     protected open fun wrappedContent() {
-        windowInsetsManager {
-            SystemBarManager {
+        ProvideInsets {
+            ProvideSystemBarManager {
                 content()
             }
         }

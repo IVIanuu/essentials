@@ -68,7 +68,7 @@ fun Modifier.systemBarOverlayStyle(light: Boolean): Modifier = composed {
 }
 
 @Composable
-fun SystemBarManager(children: @Composable () -> Unit) {
+fun ProvideSystemBarManager(children: @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
@@ -103,14 +103,14 @@ private class SystemBarManager {
                 )
         }
 
-        val windowInsets = ambientWindowInsets()
+        val windowInsets = InsetsAmbient.current
         val screenWidth = ConfigurationAmbient.current.screenWidthDp
         val statusBarBounds = remember(windowInsets, screenWidth) {
             Bounds(
                 left = 0.dp,
                 top = 0.dp,
                 right = screenWidth.dp,
-                bottom = windowInsets.viewPadding.top
+                bottom = windowInsets.systemBars.top
             )
         }
 

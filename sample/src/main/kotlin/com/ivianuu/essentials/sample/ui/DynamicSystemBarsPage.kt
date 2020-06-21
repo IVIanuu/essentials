@@ -14,7 +14,6 @@ import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,17 +47,15 @@ class DynamicSystemBarsPage {
                 }
             }
 
-            SafeArea {
-                TopAppBar(
-                    modifier = Modifier
-                        .onPositioned {
-                            println("${it.size.width} ${it.size.height}")
-                        },
-                    backgroundColor = Color.Transparent,
-                    elevation = 0.dp,
-                    title = { Text("Dynamic system bars") }
-                )
-            }
+            TopAppBar(
+                modifier = Modifier
+                    .onPositioned {
+                        println("${it.size.width} ${it.size.height}")
+                    },
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp,
+                title = { Text("Dynamic system bars") }
+            )
         }
     }
 

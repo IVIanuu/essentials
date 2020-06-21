@@ -12,7 +12,7 @@ import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
-import com.ivianuu.essentials.ui.animatable.AnimatableRoot
+import com.ivianuu.essentials.ui.animatable.ProvideAnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -64,7 +64,7 @@ fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
     children: List<AnimatedStackChild<T>>
 ) {
-    AnimatableRoot {
+    ProvideAnimatableRoot {
         val state = remember { AnimatedStackState(children) }
         state.defaultTransition = DefaultStackTransitionAmbient.current
         state.setChildren(children)

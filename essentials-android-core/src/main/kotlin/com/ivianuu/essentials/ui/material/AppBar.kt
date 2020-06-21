@@ -21,6 +21,7 @@ import androidx.compose.ambientOf
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Arrangement
@@ -34,9 +35,9 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
-import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
+import com.ivianuu.essentials.ui.core.systemBarsPadding
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.isLight
 
@@ -110,10 +111,7 @@ fun TopAppBar(
         elevation = elevation,
         modifier = Modifier.systemBarOverlayStyle(light = backgroundColor.isLight) + modifier
     ) {
-        SafeArea(
-            top = true,
-            bottom = false
-        ) {
+        Box(modifier = Modifier.systemBarsPadding(top = true)) {
             Row(
                 modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                     .fillMaxWidth()

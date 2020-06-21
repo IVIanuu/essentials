@@ -15,7 +15,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.layout.Stack
 
 @Composable
-fun AnimatableRoot(
+fun ProvideAnimatableRoot(
     modifier: Modifier = Modifier,
     children: @Composable () -> Unit
 ) {

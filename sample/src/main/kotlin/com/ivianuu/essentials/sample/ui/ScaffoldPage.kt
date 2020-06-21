@@ -39,8 +39,8 @@ import androidx.ui.material.Checkbox
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.core.insetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -74,24 +74,20 @@ class ScaffoldPage(
                 }
             },
             bottomBar = if (controls.showBottomBar) ({
-                Surface(color = MaterialTheme.colors.primary) {
-                    SafeArea(
-                        top = false,
-                        start = false,
-                        end = false,
-                        bottom = true
+                Surface(
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier.insetsPadding(bottom = true)
+                ) {
+                    Box(
+                        modifier = Modifier.height(56.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        gravity = ContentGravity.CenterStart
                     ) {
-                        Box(
-                            modifier = Modifier.height(56.dp)
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            gravity = ContentGravity.CenterStart
-                        ) {
-                            Text(
-                                text = "Bottom bar",
-                                style = MaterialTheme.typography.h6
-                            )
-                        }
+                        Text(
+                            text = "Bottom bar",
+                            style = MaterialTheme.typography.h6
+                        )
                     }
                 }
             }) else null

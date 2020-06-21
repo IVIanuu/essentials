@@ -27,13 +27,14 @@ import androidx.ui.core.Constraints
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
+import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.core.insetsPadding
 
 @Composable
 fun Scaffold(
@@ -126,12 +127,12 @@ fun Scaffold(
             }
         }
 
-        SafeArea(
-            modifier = Modifier.fillMaxSize(),
-            start = scaffoldState.applySideSafeArea,
-            top = false, // will be handled by top bars
-            end = scaffoldState.applySideSafeArea,
-            bottom = true,
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .insetsPadding(
+                    left = scaffoldState.applySideSafeArea,
+                    right = scaffoldState.applySideSafeArea
+                ),
             children = layout
         )
     }
