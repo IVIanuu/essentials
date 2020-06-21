@@ -18,7 +18,6 @@ package com.ivianuu.essentials.twilight
 
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
-import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.onCommit
 import androidx.compose.remember
@@ -32,6 +31,8 @@ import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
+import com.ivianuu.essentials.ui.resource.ResourceBox
+import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.injekt.Transient
 
 @Transient
@@ -48,36 +49,36 @@ class TwilightTheme(private val helper: TwilightHelper) {
         typography: Typography = Typography(),
         content: @Composable () -> Unit
     ) {
-        val twilightState = helper.state.collectAsState(helper.currentState).value
+        ResourceBox(resource = helper.state.collectAsResource()) { twilightState ->
+            fun colorsForTwilightState() = if (twilightState.isDark) {
+                if (twilightState.useBlack) blackColors else darkColors
+            } else lightColors
 
-        fun colorsForTwilightState() = if (twilightState.isDark) {
-            if (twilightState.useBlack) blackColors else darkColors
-        } else lightColors
+            val lastColors = untrackedState { colorsForTwilightState() }
+            val targetColors = colorsForTwilightState()
 
-        val lastColors = untrackedState { colorsForTwilightState() }
-        val targetColors = colorsForTwilightState()
+            val animation = key(twilightState) { animatedFloat(0f) }
+            onCommit(animation) {
+                animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
+                    duration = 150
+                })
+            }
 
-        val animation = key(twilightState) { animatedFloat(0f) }
-        onCommit(animation) {
-            animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
-                duration = 150
-            })
-        }
+            val currentColors = remember(animation.value) {
+                lerp(
+                    lastColors.value,
+                    targetColors,
+                    animation.value
+                )
+            }
+            lastColors.value = currentColors
 
-        val currentColors = remember(animation.value) {
-            lerp(
-                lastColors.value,
-                targetColors,
-                animation.value
+            MaterialTheme(
+                colors = currentColors,
+                typography = typography,
+                content = content
             )
         }
-        lastColors.value = currentColors
-
-        MaterialTheme(
-            colors = currentColors,
-            typography = typography,
-            content = content
-        )
     }
 
 }

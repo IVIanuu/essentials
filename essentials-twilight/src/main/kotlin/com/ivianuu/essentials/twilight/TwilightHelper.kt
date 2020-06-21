@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import java.util.Calendar
@@ -65,15 +64,11 @@ class TwilightHelper(
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
-        .onEach { currentState = it }
         .shareIn(
             scope = scope,
             replay = 1,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )
-
-    var currentState = TwilightState(isDark = false, useBlack = false)
-        private set
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
