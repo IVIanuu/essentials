@@ -25,6 +25,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

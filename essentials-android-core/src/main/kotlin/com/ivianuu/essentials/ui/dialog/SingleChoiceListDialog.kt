@@ -83,7 +83,7 @@ private fun SingleChoiceDialogListItem(
             Box(modifier = Modifier.absorbPointer()) {
                 RadioButton(
                     selected = selected,
-                    onSelect = {}
+                    onClick = {}
                 )
             }
         },

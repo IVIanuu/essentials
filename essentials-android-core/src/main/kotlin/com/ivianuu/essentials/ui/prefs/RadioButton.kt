@@ -62,7 +62,7 @@ fun RadioButtonListItem(
             Box(modifier = Modifier.absorbPointer()) {
                 RadioButton(
                     selected = value,
-                    onSelect = { onValueChange(!value); Unit }
+                    onClick = { onValueChange(!value); Unit }
                 )
             }
         },

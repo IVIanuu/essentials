@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -85,38 +84,30 @@ class NavBarManager internal constructor(
         }
 
         scope.launch {
-            logger.d("launch listeners")
             buildList<Deferred<*>> {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
                         this += displayRotationProvider.displayRotation.drop(1)
-                            .onEach { logger.d("display rotation $it") }
                     }
 
                     if (config.showWhileScreenOff) {
                         this += screenStateProvider.screenState.drop(1)
-                            .onEach { logger.d("screen state $it") }
                     }
                 }
 
                 // apply config
-                if (flows.isNotEmpty()) {
-                    this += async {
-                        flows.merge()
-                            .onStart { emit(Unit) }
-                            .onEach { logger.d("config signal $it") }
-                            .map {
-                                !config.showWhileScreenOff ||
-                                        screenStateProvider.screenState.first() == ScreenState.Unlocked
-                            }
-                            .onEach { navBarHidden ->
-                                logger.d("nav bar hidden $navBarHidden")
-                                prefs.wasNavBarHidden.updateData { navBarHidden }
-                                setNavBarConfigInternal(navBarHidden, config)
-                            }
-                            .flowOn(dispatchers.default)
-                            .collect()
-                    }
+                this += async {
+                    flows.merge()
+                        .onStart { emit(Unit) }
+                        .map {
+                            !config.showWhileScreenOff ||
+                                    screenStateProvider.screenState.first() == ScreenState.Unlocked
+                        }
+                        .onEach { navBarHidden ->
+                            prefs.wasNavBarHidden.updateData { navBarHidden }
+                            setNavBarConfigInternal(navBarHidden, config)
+                        }
+                        .collect()
                 }
                 this += async {
                     // force show on shut downs
@@ -130,7 +121,6 @@ class NavBarManager internal constructor(
                             logger.d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
-                        .flowOn(dispatchers.default)
                         .collect()
                 }
             }.awaitAll()

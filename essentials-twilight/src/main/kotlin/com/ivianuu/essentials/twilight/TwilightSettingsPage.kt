@@ -74,7 +74,7 @@ private fun TwilightModeItem(
             trailing = {
                 RadioButton(
                     selected = isSelected,
-                    onSelect = onClick
+                    onClick = onClick
                 )
             },
             onClick = onClick

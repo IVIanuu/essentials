@@ -39,7 +39,7 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        const val composeVersion = "0.0.1-dev146"
+        const val composeVersion = "0.0.1-dev148"
 
         object Compose {
             const val version = composeVersion
@@ -95,7 +95,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev526"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev544-SNAPSHOT"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
