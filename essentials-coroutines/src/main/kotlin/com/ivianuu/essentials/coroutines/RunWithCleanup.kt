@@ -5,7 +5,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
 suspend fun runWithCleanup(
-    cleanUp: suspend () -> Unit,
+    cleanup: suspend () -> Unit,
     block: suspend () -> Unit
 ) {
     try {
@@ -13,7 +13,7 @@ suspend fun runWithCleanup(
     } catch (e: CancellationException) {
     } finally {
         withContext(NonCancellable) {
-            cleanUp()
+            cleanup()
         }
     }
 }
