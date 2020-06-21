@@ -26,6 +26,7 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
+import androidx.ui.core.layoutId
 import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
@@ -84,25 +85,25 @@ fun Scaffold(
             Surface {
                 ScaffoldLayout(state = scaffoldState) {
                     if (topBar != null) {
-                        Stack(modifier = Modifier.tag(ScaffoldSlot.TopAppBar)) {
+                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.TopAppBar)) {
                             topBar()
                         }
                     }
 
                     if (body != null) {
-                        Stack(modifier = Modifier.tag(ScaffoldSlot.Body)) {
+                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.Body)) {
                             body()
                         }
                     }
 
                     if (bottomBar != null) {
-                        Stack(modifier = Modifier.tag(ScaffoldSlot.BottomBar)) {
+                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.BottomBar)) {
                             bottomBar()
                         }
                     }
 
                     if (fab != null) {
-                        Stack(modifier = Modifier.tag(ScaffoldSlot.Fab)) {
+                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.Fab)) {
                             fab()
                         }
                     }

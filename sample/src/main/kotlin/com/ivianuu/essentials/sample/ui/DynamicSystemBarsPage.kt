@@ -2,8 +2,8 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.core.layoutId
 import androidx.ui.core.onPositioned
-import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.Text
@@ -40,7 +40,7 @@ class DynamicSystemBarsPage {
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .height(300.dp)
-                            .tag(color)
+                            .layoutId(color)
                             .systemBarOverlayStyle(color.isLight),
                         backgroundColor = color
                     )

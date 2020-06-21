@@ -22,6 +22,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.Modifier
 import androidx.ui.core.Placeable
+import androidx.ui.core.layoutId
 import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
@@ -179,13 +180,13 @@ private fun DialogContentLayout(
                     top = 24.dp,
                     end = 24.dp,
                     bottom = if (buttons != null && content == null) 28.dp else 24.dp
-                ).tag(DialogContentSlot.Header)
+                ).layoutId(DialogContentSlot.Header)
             ) { header() }
         }
 
         if (content != null) {
             if (header != null && showTopDivider) {
-                HorizontalDivider(modifier = Modifier.tag(DialogContentSlot.TopDivider))
+                HorizontalDivider(modifier = Modifier.layoutId(DialogContentSlot.TopDivider))
             }
 
             Stack(
@@ -194,24 +195,24 @@ private fun DialogContentLayout(
                     top = if (header == null) 24.dp else 0.dp,
                     end = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
-                ).tag(DialogContentSlot.Content)
+                ).layoutId(DialogContentSlot.Content)
             ) { content() }
         }
 
         if (buttons != null) {
             if (content != null && showBottomDivider) {
-                HorizontalDivider(modifier = Modifier.tag(DialogContentSlot.BottomDivider))
+                HorizontalDivider(modifier = Modifier.layoutId(DialogContentSlot.BottomDivider))
             }
 
             if (!showBottomDivider && content != null) {
                 Box(
                     modifier = Modifier.padding(top = 28.dp)
-                        .tag(DialogContentSlot.Buttons),
+                        .layoutId(DialogContentSlot.Buttons),
                     children = buttons
                 )
             } else {
                 Box(
-                    modifier = Modifier.tag(DialogContentSlot.Buttons),
+                    modifier = Modifier.layoutId(DialogContentSlot.Buttons),
                     children = buttons
                 )
             }
