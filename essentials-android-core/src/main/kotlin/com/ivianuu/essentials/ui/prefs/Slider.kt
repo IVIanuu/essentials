@@ -412,13 +412,14 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     onValueChange(fromFloat(sliderState.value))
                 },
                 valueRange = floatRange,
-                steps = steps
+                steps = steps,
+                modifier = Modifier.weight(1f)
             )
 
             if (valueText != null) {
                 Box(
                     modifier = Modifier.widthIn(minWidth = 72.dp),
-                    gravity = ContentGravity.Center
+                    gravity = ContentGravity.CenterEnd
                 ) {
                     valueText(fromFloat(sliderState.value))
                 }
@@ -428,7 +429,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
 }
 
 @Composable
-fun <T> SimpleSliderValueText(value: T) {
+fun <T> SliderValueText(value: T) {
     Text(
         text = value.toString(),
         style = MaterialTheme.typography.body2
@@ -437,7 +438,7 @@ fun <T> SimpleSliderValueText(value: T) {
 
 @Composable
 fun <T> SimpleValueTextProvider(toString: (T) -> String = { it.toString() }): @Composable (T) -> Unit {
-    return { SimpleSliderValueText(toString(it)) }
+    return { SliderValueText(toString(it)) }
 }
 
 @Composable
@@ -448,5 +449,5 @@ fun <T> UnitValueTextProvider(
     val textProvider = UnitValueTextProvider(
         ContextAmbient.current, unit
     )
-    return { SimpleSliderValueText(textProvider(toString(it))) }
+    return { SliderValueText(textProvider(toString(it))) }
 }

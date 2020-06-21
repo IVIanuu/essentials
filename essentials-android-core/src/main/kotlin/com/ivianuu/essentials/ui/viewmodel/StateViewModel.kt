@@ -37,10 +37,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-@Composable
-val <S> StateViewModel<S>.currentState: S
-    get() = state.collectAsState().value
-
 /**
  * State view model
  */
@@ -121,3 +117,7 @@ abstract class StateViewModel<S>(
 
     override fun toString() = "${javaClass.simpleName} -> ${state.value}"
 }
+
+@Composable
+val <S> StateViewModel<S>.currentState: S
+    get() = state.collectAsState().value

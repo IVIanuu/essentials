@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
@@ -85,7 +86,8 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                     title = { Text("Slider") },
                     subtitle = { Text("This is a slider preference") },
                     steps = 10,
-                    valueRange = 0..100
+                    valueRange = 0..100,
+                    valueText = { SliderValueText(it) }
                 )
 
                 DurationSliderListItem(
