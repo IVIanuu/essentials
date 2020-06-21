@@ -26,7 +26,7 @@ import com.ivianuu.injekt.composition.BindingAdapter
 import com.ivianuu.injekt.composition.BindingAdapterFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
-import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.transient
 import kotlin.reflect.KClass
 
 /**
@@ -47,7 +47,7 @@ annotation class BindAppInitializer
 @BindingAdapterFunction(BindAppInitializer::class)
 @Module
 inline fun <reified T : Any> appInitializer() {
-    scoped<T>()
+    transient<T>()
     map<@AppInitializers Map<KClass<*>, Any>, KClass<*>, Any> {
         put<T>(T::class)
     }
