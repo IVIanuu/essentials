@@ -9,17 +9,15 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
-@PublishedApi
-internal val deferreds = ConcurrentHashMap<Any, Deferred<*>>()
-@PublishedApi
-internal val deferredsCleanLaunched = AtomicBoolean()
+private val deferreds = ConcurrentHashMap<Any, Deferred<*>>()
+private val deferredsCleanLaunched = AtomicBoolean()
 
-suspend inline fun <T> asyncOrAwait(
+suspend fun <T> asyncOrAwait(
     key: Any,
-    crossinline action: suspend CoroutineScope.() -> T
+    block: suspend CoroutineScope.() -> T
 ): T = coroutineScope {
     val deferred = deferreds[key]?.takeIf { it.isActive }
-        ?: async { action() }.also { deferreds[key] = it }
+        ?: async(block = block).also { deferreds[key] = it }
 
     if (deferreds.size > 100 && !deferredsCleanLaunched.getAndSet(true)) {
         launch {
@@ -33,16 +31,15 @@ suspend inline fun <T> asyncOrAwait(
     deferred.await() as T
 }
 
-val jobs = ConcurrentHashMap<Any, Job>()
-val jobsCleanLaunched = AtomicBoolean()
+private val jobs = ConcurrentHashMap<Any, Job>()
+private val jobsCleanLaunched = AtomicBoolean()
 
-suspend inline fun launchOrJoin(
+suspend fun launchOrJoin(
     key: Any,
-    crossinline action: suspend CoroutineScope.() -> Unit
+    block: suspend CoroutineScope.() -> Unit
 ) = coroutineScope {
     val job = jobs[key]?.takeIf { it.isActive }
-        ?: launch { action() }
-            .also { jobs[key] = it }
+        ?: launch(block = block).also { jobs[key] = it }
 
     if (jobs.size > 100 && !jobsCleanLaunched.getAndSet(true)) {
         launch {
@@ -54,4 +51,3 @@ suspend inline fun launchOrJoin(
 
     job.join()
 }
-

@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
 
+// todo replace with original once available
+
 interface EventFlow<T> : Flow<T> {
     fun offer(value: T)
 }
