@@ -101,19 +101,18 @@ private class PrefBox<T>(
 
     override suspend fun updateData(transform: suspend (T) -> T): T =
         withContext(scope.coroutineContext) {
-            var value: Any? = this@PrefBox
+            var newData: Any? = this@PrefBox
             prefs.updateData { prefs ->
                 val currentData = prefs.getOrDefault()
-                val newData = transform(currentData)
+                newData = transform(currentData)
                 if (currentData == newData) prefs
                 else Prefs(
                     prefs.map.toMutableMap().apply {
-                        this[key] = newData.serialize()
-                        value = newData
+                        this[key] = (newData as T).serialize()
                     }
                 )
             }
-            value as T
+            newData as T
         }
 
     private fun T.serialize() = try {
