@@ -12,9 +12,7 @@ class CoilAppInitializer(
 ) {
     init {
         Coil.setImageLoader(object : ImageLoaderFactory {
-            override fun newImageLoader(): ImageLoader {
-                return imageLoaderProvider()
-            }
+            override fun newImageLoader(): ImageLoader = imageLoaderProvider()
         })
     }
 }

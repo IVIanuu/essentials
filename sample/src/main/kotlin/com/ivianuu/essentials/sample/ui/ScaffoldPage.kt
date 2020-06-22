@@ -17,16 +17,16 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.animation.FastOutSlowInEasing
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
+import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
-import androidx.ui.animation.Transition
+import androidx.ui.animation.animate
 import androidx.ui.core.Modifier
 import androidx.ui.core.TransformOrigin
+import androidx.ui.core.composed
 import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
@@ -40,7 +40,6 @@ import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.core.insetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -67,21 +66,20 @@ class ScaffoldPage(
             }) else null,
             fabPosition = controls.fabPosition,
             fab = {
-                FabAnimation(
-                    visible = controls.showFab
-                ) {
-                    ExtendedFloatingActionButton(text = { Text("Click me") }, onClick = {})
-                }
+                ExtendedFloatingActionButton(
+                    text = { Text("Click me") },
+                    modifier = Modifier.fabAnimation(controls.showFab),
+                    onClick = {}
+                )
             },
             bottomBar = if (controls.showBottomBar) ({
                 Surface(
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier.insetsPadding(bottom = true)
+                    color = MaterialTheme.colors.primary
                 ) {
                     Box(
                         modifier = Modifier.height(56.dp)
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(start = 16.dp, end = 16.dp),
                         gravity = ContentGravity.CenterStart
                     ) {
                         Text(
@@ -159,40 +157,14 @@ private class ScaffoldControls {
     var fabPosition by mutableStateOf(ScaffoldState.FabPosition.End)
 }
 
-@Composable
-private fun FabAnimation(
-    visible: Boolean,
-    fab: @Composable () -> Unit
-) {
-    Transition(
-        definition = fabTransitionDefinition,
-        toState = visible
-    ) { state ->
-        Box(
-            modifier = Modifier.drawLayer(
-                scaleX = state[FabScale],
-                scaleY = state[FabScale],
-                transformOrigin = TransformOrigin(0.5f, 0.5f)
-            ),
-            children = fab
-        )
-    }
-}
-
-private val FabScale = FloatPropKey()
-
-private val fabTransitionDefinition = transitionDefinition {
-    state(true) {
-        set(FabScale, 1f)
-    }
-    state(false) {
-        set(FabScale, 0f)
-    }
-
-    transition {
-        FabScale using tween<Float> {
-            duration = 120.milliseconds.toLongMilliseconds().toInt()
-            easing = FastOutSlowInEasing
-        }
-    }
+fun Modifier.fabAnimation(visible: Boolean): Modifier = composed {
+    val fraction = animate(if (visible) 1f else 0f, TweenBuilder<Float>().apply {
+        duration = 120.milliseconds.toLongMilliseconds().toInt()
+        easing = FastOutSlowInEasing
+    })
+    drawLayer(
+        scaleX = fraction,
+        scaleY = fraction,
+        transformOrigin = TransformOrigin(0.5f, 0.5f)
+    )
 }

@@ -26,7 +26,7 @@ import com.ivianuu.injekt.transient
 import kotlin.reflect.KClass
 
 @Module
-inline fun <D : Decoder> coilDecoder() {
+fun <D : Decoder> coilDecoder() {
     transient<D>()
     set<Decoder> { add<D>() }
 }

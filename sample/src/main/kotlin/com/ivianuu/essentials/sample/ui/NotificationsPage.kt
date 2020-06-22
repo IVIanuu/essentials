@@ -85,14 +85,14 @@ class NotificationsPage(
                             ListItem(
                                 title = {
                                     Text(
-                                        sbn.notification.extras.getString(Notification.EXTRA_TITLE)
-                                            ?: ""
+                                        sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+                                            ?.toString() ?: ""
                                     )
                                 },
                                 subtitle = {
                                     Text(
-                                        sbn.notification.extras.getString(Notification.EXTRA_TEXT)
-                                            ?: ""
+                                        sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+                                            ?.toString() ?: ""
                                     )
                                 },
                                 onClick = launchOnClick {
