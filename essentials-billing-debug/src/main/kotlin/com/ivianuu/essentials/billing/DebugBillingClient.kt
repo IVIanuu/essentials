@@ -153,13 +153,13 @@ class DebugBillingClient internal constructor(
         if (params == null) return BillingResult.newBuilder()
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
-        val requestId = UUID.randomUUID().toString()
-        val request = PurchaseRequest(params.sku, params.skuType!!)
-        requests[requestId] = request
+        scope.launch(dispatchers.default) {
+            val requestId = UUID.randomUUID().toString()
+            val request = PurchaseRequest(params.sku, params.skuType!!)
+            requests[requestId] = request
 
-        startUi()
+            startUi()
 
-        scope.launch {
             navigator.push(
                 DialogRoute(
                     onDismiss = {
