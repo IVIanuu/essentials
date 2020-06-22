@@ -23,6 +23,7 @@ import com.ivianuu.essentials.store.Serializer
 import com.ivianuu.essentials.store.SerializerException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -96,16 +97,19 @@ private class PrefBox<T>(
                     it.getOrDefault()
                 }
             }
+            .distinctUntilChanged()
 
     override suspend fun updateData(transform: suspend (T) -> T): T =
         withContext(scope.coroutineContext) {
             var value: Any? = this@PrefBox
             prefs.updateData { prefs ->
-                Prefs(
+                val currentData = prefs.getOrDefault()
+                val newData = transform(currentData)
+                if (currentData == newData) prefs
+                else Prefs(
                     prefs.map.toMutableMap().apply {
-                        val transformed = transform(prefs.getOrDefault())
-                        this[key] = transformed.serialize()
-                        value = transformed
+                        this[key] = newData.serialize()
+                        value = newData
                     }
                 )
             }
