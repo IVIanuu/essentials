@@ -19,51 +19,54 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.composition.BindingAdapter
-import com.ivianuu.injekt.composition.BindingAdapterFunction
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
-import com.ivianuu.injekt.scoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 /**
- * Will be started on app start up and lives as long as the app lives
+ * Runs while the app is alive
  */
-@BindingAdapter(ApplicationComponent::class)
-annotation class BindAppService
+interface AppWorker {
+    suspend fun run()
+}
 
-@BindingAdapterFunction(BindAppService::class)
+@BindingEffect(ApplicationComponent::class)
+annotation class BindAppWorker
+
+@BindingEffectFunction(BindAppWorker::class)
 @Module
-inline fun <reified T : Any> appService() {
-    scoped<T>()
-    map<@AppServices Map<KClass<*>, Any>, KClass<*>, Any> {
+inline fun <reified T : AppWorker> appWorker() {
+    map<KClass<*>, AppWorker> {
         put<T>(T::class)
     }
 }
 
 @Module
-fun esAppServiceInjectionModule() {
+fun esAppWorkerModule() {
     installIn<ApplicationComponent>()
-    map<KClass<*>, Any>()
+    map<KClass<*>, AppWorker>()
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AppServices
-
 @ApplicationScoped
-class AppServiceRunner(
+class AppRunnableRunner(
     private val logger: Logger,
-    private val services: @AppServices Map<KClass<*>, @Lazy () -> Any>
+    workers: Map<KClass<*>, @Provider () -> AppWorker>,
+    private val scope: @ForApplication CoroutineScope
 ) {
     init {
-        services
+        workers
             .forEach {
-                logger.d(tag = "Services", message = "start service ${it.key.java.name}")
-                it.value()
+                scope.launch {
+                    logger.d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
+                    it.value().run()
+                }
             }
     }
 }

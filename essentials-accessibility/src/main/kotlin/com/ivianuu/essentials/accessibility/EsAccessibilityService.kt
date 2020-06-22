@@ -29,6 +29,18 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
     val scope = CoroutineScope(Dispatchers.Main)
 
+    private var _connectedScope: CoroutineScope? = null
+    val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        _connectedScope = CoroutineScope(Dispatchers.Main)
+    }
+
+    override fun onInterrupt() {
+        _connectedScope!!.cancel()
+    }
+
     override fun onDestroy() {
         scope.cancel()
         super.onDestroy()
@@ -37,6 +49,4 @@ abstract class EsAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
     }
 
-    override fun onInterrupt() {
-    }
 }

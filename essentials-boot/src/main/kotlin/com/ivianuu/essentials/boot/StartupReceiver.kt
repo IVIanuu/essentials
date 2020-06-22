@@ -28,16 +28,16 @@ import kotlin.reflect.KClass
 @AndroidEntryPoint
 class StartupReceiver : EsBroadcastReceiver() {
 
-    private val bootAwareComponents: Map<KClass<out BootAware>, @Provider () -> BootAware> by inject()
+    private val bootAwareComponents: Map<KClass<*>, @Provider () -> BootListener> by inject()
     private val logger: Logger by inject()
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        logger.d("on system start")
+        logger.d("on system boot")
 
         bootAwareComponents.forEach {
-            logger.d("initialize system start component ${it.key}")
-            it.value()
+            logger.d("notify boot listener ${it.key}")
+            it.value().onBoot()
         }
     }
 }

@@ -20,13 +20,11 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Transient
-import com.ivianuu.injekt.composition.BindingAdapter
-import com.ivianuu.injekt.composition.BindingAdapterFunction
+import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
-import com.ivianuu.injekt.transient
 import kotlin.reflect.KClass
 
 /**
@@ -34,21 +32,22 @@ import kotlin.reflect.KClass
  * Can be used to initialize global stuff like logging
  *
  * ´´´
- * class AnalyticsInitializer {
+ * class AnalyticsInitializer : AppInitializer {
  *     init {
  *         Analytics.initialize(Logger())
  *     }
  * }
  * ´´´
  */
-@BindingAdapter(ApplicationComponent::class)
+interface AppInitializer
+
+@BindingEffect(ApplicationComponent::class)
 annotation class BindAppInitializer
 
-@BindingAdapterFunction(BindAppInitializer::class)
+@BindingEffectFunction(BindAppInitializer::class)
 @Module
-inline fun <reified T : Any> appInitializer() {
-    transient<T>()
-    map<@AppInitializers Map<KClass<*>, Any>, KClass<*>, Any> {
+inline fun <reified T : AppInitializer> appInitializer() {
+    map<KClass<*>, AppInitializer> {
         put<T>(T::class)
     }
 }
@@ -56,17 +55,13 @@ inline fun <reified T : Any> appInitializer() {
 @Module
 fun esAppInitializerModule() {
     installIn<ApplicationComponent>()
-    map<@AppInitializers Map<KClass<*>, Any>, KClass<*>, Any>()
+    map<KClass<*>, AppInitializer>()
 }
-
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AppInitializers
 
 @Transient
 class AppInitRunner(
     private val logger: Logger,
-    initializers: @AppInitializers Map<KClass<*>, @Provider () -> Any>
+    initializers: Map<KClass<*>, @Provider () -> AppInitializer>
 ) {
     init {
         initializers

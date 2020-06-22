@@ -21,20 +21,28 @@ import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.addFlag
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
+import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class DefaultAccessibilityService : EsAccessibilityService() {
 
-    private val services: AccessibilityServices by inject()
     private val logger: Logger by inject()
+    private val services: AccessibilityServices by inject()
+    private val workers: Map<KClass<*>, @Provider () -> AccessibilityWorker> by inject()
 
     override fun onServiceConnected() {
         super.onServiceConnected()
 
         logger.d("connected")
         services.onServiceConnected(this)
+        workers.forEach { (key, worker) ->
+            logger.d("run worker ${key.java.name}")
+            scope.launch { worker().run() }
+        }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {

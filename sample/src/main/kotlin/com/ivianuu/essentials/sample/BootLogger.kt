@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.boot.BindBootAware
-import com.ivianuu.essentials.boot.BootAware
+import com.ivianuu.essentials.boot.BootListener
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Transient
 
 @BindBootAware
 @Transient
-class BootLogger(private val logger: Logger) : BootAware {
-    init {
+class BootLogger(private val logger: Logger) : BootListener {
+    override fun onBoot() {
         logger.d("booted!")
     }
 }

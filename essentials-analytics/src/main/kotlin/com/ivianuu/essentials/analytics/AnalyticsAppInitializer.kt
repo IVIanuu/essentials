@@ -21,9 +21,11 @@ import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Transient
 import io.fabric.sdk.android.Fabric
 
 @BindAppInitializer
+@Transient
 internal class AnalyticsAppInitializer(
     buildInfo: BuildInfo,
     context: @ForApplication Context

@@ -24,6 +24,7 @@ import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Transient
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.transient
 
@@ -36,6 +37,7 @@ fun esWorkModule() {
 }
 
 @BindAppInitializer
+@Transient
 class WorkerAppInitializer(
     context: @ForApplication Context,
     workerFactory: WorkerFactory

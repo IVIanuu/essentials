@@ -18,20 +18,30 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidEntryPoint
 import com.ivianuu.injekt.inject
+import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     private val logger: Logger by inject()
     private val store: NotificationStore by inject()
+    private val workers: Map<KClass<*>, @Provider () -> NotificationWorker> by inject()
 
     override fun onListenerConnected() {
         super.onListenerConnected()
         logger.d("listener connected")
         store.onServiceConnected(this)
         notifyUpdate()
+        workers.forEach { (key, worker) ->
+            connectedScope.launch {
+                logger.d("run worker ${key.java.name}")
+                scope.launch { worker().run() }
+            }
+        }
     }
 
     override fun onListenerDisconnected() {

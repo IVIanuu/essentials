@@ -23,13 +23,11 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
 import androidx.compose.Immutable
-import com.ivianuu.essentials.app.BindAppService
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.ForApplication
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,14 +35,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import java.util.Calendar
 
-@BindAppService
+@Transient
 class TwilightHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    private val scope: @ForApplication CoroutineScope,
     private val resources: @ForApplication Resources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
@@ -64,11 +60,6 @@ class TwilightHelper(
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
-        .shareIn(
-            scope = scope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
-        )
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }

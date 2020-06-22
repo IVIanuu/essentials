@@ -26,7 +26,7 @@ import com.ivianuu.injekt.composition.get
 abstract class EsApp : Application() {
     override fun onCreate() {
         applicationComponent.get<AppInitRunner>()
-        applicationComponent.get<AppServiceRunner>()
+        applicationComponent.get<AppRunnableRunner>()
         super.onCreate()
     }
 }

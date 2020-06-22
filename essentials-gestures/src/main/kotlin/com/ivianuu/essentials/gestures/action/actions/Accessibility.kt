@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.gestures.GlobalActions
+import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPermissions
@@ -35,9 +35,9 @@ internal fun <T : Action> bindAccessibilityAction(
 @Transient
 internal class AccessibilityActionExecutor(
     private val accessibilityAction: @Assisted Int,
-    private val globalActions: GlobalActions
+    private val accessibilityServices: AccessibilityServices
 ) : ActionExecutor {
     override suspend fun invoke() {
-        globalActions.performAction(accessibilityAction)
+        accessibilityServices.performGlobalAction(accessibilityAction)
     }
 }

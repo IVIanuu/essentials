@@ -29,22 +29,22 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
 
     val scope = CoroutineScope(Dispatchers.Main)
 
-    lateinit var connectedScope: CoroutineScope
-        private set
+    private var _connectedScope: CoroutineScope? = null
+    val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
+
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        _connectedScope = CoroutineScope(Dispatchers.Main)
+    }
+
+    override fun onListenerDisconnected() {
+        _connectedScope!!.cancel()
+        super.onListenerDisconnected()
+    }
 
     override fun onDestroy() {
         scope.cancel()
         super.onDestroy()
-    }
-
-    override fun onListenerConnected() {
-        super.onListenerConnected()
-        connectedScope = CoroutineScope(Dispatchers.Main)
-    }
-
-    override fun onListenerDisconnected() {
-        connectedScope.cancel()
-        super.onListenerDisconnected()
     }
 
     override fun getActiveNotifications(): Array<StatusBarNotification> {

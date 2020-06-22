@@ -27,15 +27,17 @@ import kotlin.reflect.KClass
 /**
  * Marks a component as boot aware
  */
-interface BootAware
+interface BootListener {
+    fun onBoot()
+}
 
 @BindingEffect(ApplicationComponent::class)
 annotation class BindBootAware
 
 @BindingEffectFunction(BindBootAware::class)
 @Module
-inline fun <reified T : BootAware> bindBootAware() {
-    map<KClass<out BootAware>, BootAware> {
+inline fun <reified T : BootListener> bootListener() {
+    map<KClass<*>, BootListener> {
         put<T>(T::class)
     }
 }
@@ -43,5 +45,5 @@ inline fun <reified T : BootAware> bindBootAware() {
 @Module
 fun esBootModule() {
     installIn<ApplicationComponent>()
-    map<KClass<out BootAware>, BootAware>()
+    map<KClass<*>, BootListener>()
 }
