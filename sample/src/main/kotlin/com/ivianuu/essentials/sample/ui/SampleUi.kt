@@ -44,7 +44,7 @@ class SampleUi(
                 if (!navigator.hasRoot) {
                     navigator.setRoot { homePage() }
                 }
-                navigator()
+                navigator.content()
             }
         }
 
