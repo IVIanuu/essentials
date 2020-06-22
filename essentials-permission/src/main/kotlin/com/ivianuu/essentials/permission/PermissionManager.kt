@@ -76,9 +76,7 @@ class PermissionManager(
             )
 
             startUi()
-            withContext(dispatchers.main) {
-                navigator.push(permissionRequestRouteFactory().createRoute(request))
-            }
+            navigator.push(permissionRequestRouteFactory().createRoute(request))
 
             onComplete.await()
 

@@ -106,13 +106,11 @@ class PurchaseManager(
         }
 
         startUi()
-        withContext(dispatchers.main) {
-            navigator.push(
-                Route(opaque = true) {
-                    purchasePage()(requestId)
-                }
-            )
-        }
+        navigator.push(
+            Route(opaque = true) {
+                purchasePage()(requestId)
+            }
+        )
 
         val success = merge(
             refreshTrigger

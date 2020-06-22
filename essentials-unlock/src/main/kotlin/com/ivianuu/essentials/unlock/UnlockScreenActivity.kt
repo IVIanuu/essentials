@@ -34,7 +34,6 @@ import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.withContext
 
 /**
  * Requests a screen unlock
@@ -101,9 +100,7 @@ class UnlockScreenActivity : EsActivity() {
             )
                 .take(1)
                 .onEach {
-                    withContext(dispatchers.main) {
-                        finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
-                    }
+                    finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
                 }
                 .launchIn(lifecycleScope)
         }

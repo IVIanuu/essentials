@@ -57,20 +57,18 @@ internal class BackupDataUseCase(
 
             out.close()
 
-            withContext(dispatchers.main) {
-                val uri =
-                    FileProvider.getUriForFile(
-                        application,
-                        buildInfo.packageName,
-                        backupFile
-                    )
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "application/zip"
-                intent.data = uri
-                intent.putExtra(Intent.EXTRA_STREAM, uri)
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                navigator.push(ActivityRoute { Intent.createChooser(intent, "Share File") })
-            }
+            val uri =
+                FileProvider.getUriForFile(
+                    application,
+                    buildInfo.packageName,
+                    backupFile
+                )
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "application/zip"
+            intent.data = uri
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            navigator.push(ActivityRoute { Intent.createChooser(intent, "Share File") })
         }
     }
 }

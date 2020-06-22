@@ -223,10 +223,11 @@ class DialogsPage {
                             dismissOnSelection = false,
                             item = { Text("Item: $it") },
                             positiveButton = {
-                                Button(
+                                DialogCloseButton(
+                                    text = "OK",
                                     onClick = {
                                         setSelectedSingleChoiceItem(tmpSelectedItem)
-                                    }) { Text("OK") }
+                                    })
                             },
                             negativeButton = {
                                 DialogCloseButton(text = "Cancel")

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
-import kotlinx.coroutines.withContext
 
 @Transient
 class RestartProcess(
@@ -35,7 +34,7 @@ class RestartProcess(
     private val packageManager: PackageManager
 ) {
 
-    suspend operator fun invoke() = withContext(dispatchers.main) {
+    suspend operator fun invoke() {
         val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
             .addFlags(FLAG_ACTIVITY_NEW_TASK)
         logger.d("restart process %$intent")

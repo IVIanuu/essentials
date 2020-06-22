@@ -12,7 +12,6 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 @Transient
@@ -28,24 +27,22 @@ class StartActivityForResult(
     suspend operator fun <I, O> invoke(
         contract: ActivityResultContract<I, O>,
         input: I
-    ): O = withContext(dispatchers.main) {
-        suspendCancellableCoroutine { continuation ->
-            startUi()
-            navigator.push(
-                Route(opaque = true) {
-                    val route = RouteAmbient.current
-                    val launcher = registerActivityResultCallback(
-                        contract,
-                        ActivityResultCallback {
-                            navigator.pop(route = route)
-                            continuation.resume(it)
-                        }
-                    )
+    ): O = suspendCancellableCoroutine { continuation ->
+        startUi()
+        navigator.push(
+            Route(opaque = true) {
+                val route = RouteAmbient.current
+                val launcher = registerActivityResultCallback(
+                    contract,
+                    ActivityResultCallback {
+                        navigator.pop(route = route)
+                        continuation.resume(it)
+                    }
+                )
 
-                    onActive { launcher.launch(input) }
-                }
-            )
-        }
+                onActive { launcher.launch(input) }
+            }
+        )
     }
 
 }
