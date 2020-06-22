@@ -8,15 +8,17 @@ import com.ivianuu.injekt.ApplicationScoped
 
 @ApplicationScoped
 internal class BillingPrefs(factory: PrefBoxFactory) {
-    val products = factory.create("billing_products", emptySet<String>())
+    val products = factory.create("billing_products") { emptySet<String>() }
         .map(
-            fromRaw = { productsJson -> productsJson.map {
-                SkuDetails(it)
-            } },
+            fromRaw = { productsJson ->
+                productsJson.map {
+                    SkuDetails(it)
+                }
+            },
             toRaw = { products -> products.map { it.originalJson }.toSet() }
         )
 
-    val purchases = factory.create("billing_purchases", emptySet<String>())
+    val purchases = factory.create("billing_purchases") { emptySet<String>() }
         .map(
             fromRaw = { purchasesJson ->
                 purchasesJson.map { purchase ->

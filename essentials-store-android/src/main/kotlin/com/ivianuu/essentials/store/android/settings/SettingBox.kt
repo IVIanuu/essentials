@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-interface SettingBox<T> : Box<T> {
+object SettingBox {
     enum class Type {
         Global, Secure, System
     }
@@ -65,8 +65,8 @@ class SettingBoxImpl<T>(
     override val defaultData: T,
     private val adapter: SettingBox.Adapter<T>,
     private val contentResolver: ContentResolver,
-    private val scope: CoroutineScope
-) : SettingBox<T> {
+    scope: CoroutineScope
+) : Box<T> {
 
     private val uri: Uri by lazy {
         when (type) {
@@ -107,7 +107,7 @@ class SettingBoxImpl<T>(
                 newData
             }
         } catch (e: Exception) {
-            throw RuntimeException("couldn't write data for name: $name", e)
+            throw RuntimeException("Couldn't write data for name: $name", e)
         }
     }
 
@@ -115,7 +115,7 @@ class SettingBoxImpl<T>(
         return try {
             adapter.get(name, defaultData, contentResolver, type)
         } catch (e: Exception) {
-            throw RuntimeException("couldn't read data for name: $name", e)
+            throw RuntimeException("Couldn't read data for name: $name", e)
         }
     }
 }

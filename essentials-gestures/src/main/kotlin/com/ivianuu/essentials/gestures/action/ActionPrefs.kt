@@ -5,5 +5,5 @@ import com.ivianuu.injekt.ApplicationScoped
 
 @ApplicationScoped
 class ActionPrefs(factory: PrefBoxFactory) {
-    val actionMediaApp = factory.create<String?>("action_media_app", null)
+    val actionMediaApp = factory.create<String?>("action_media_app") { null }
 }

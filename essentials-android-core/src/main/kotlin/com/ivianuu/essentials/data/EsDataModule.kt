@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.data
 
 import android.content.Context
+import com.ivianuu.essentials.store.DiskBoxFactory
+import com.ivianuu.essentials.store.MoshiSerializerFactory
 import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -29,6 +31,7 @@ import com.ivianuu.injekt.scoped
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
+import java.io.File
 
 @Module
 private fun esDataModule() {
@@ -36,14 +39,25 @@ private fun esDataModule() {
     scoped<@PrefsPath String> { context: @ForApplication Context ->
         "${context.applicationInfo.dataDir}/prefs"
     }
+    scoped { moshi: Moshi -> MoshiSerializerFactory(moshi) }
     scoped { scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers,
              prefsPath: @PrefsPath String,
-             moshi: Moshi ->
+             serializerFactory: MoshiSerializerFactory ->
+        DiskBoxFactory(
+            scope = scope + dispatchers.io,
+            produceBoxDirectory = { File(prefsPath) },
+            serializerFactory = serializerFactory
+        )
+    }
+    scoped { scope: @ForApplication CoroutineScope,
+             dispatchers: AppCoroutineDispatchers,
+             prefsPath: @PrefsPath String,
+             serializerFactory: MoshiSerializerFactory ->
         PrefBoxFactory(
             scope = scope + dispatchers.io,
-            prefsPath = prefsPath,
-            moshi = moshi
+            producePrefsFile = { File(prefsPath, "default") },
+            serializerFactory = serializerFactory
         )
     }
     scoped { context: @ForApplication Context,

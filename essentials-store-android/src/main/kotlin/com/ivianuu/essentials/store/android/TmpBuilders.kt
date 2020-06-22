@@ -11,9 +11,9 @@ import kotlin.time.Duration
 
 fun PrefBoxFactory.color(
     name: String,
-    defaultData: Color
+    produceDefaultData: () -> Color
 ): Box<Color> {
-    return create(name = name, defaultData = defaultData.toArgb())
+    return create(key = name, produceDefaultData = { produceDefaultData().toArgb() })
         .map(
             fromRaw = { Color(it) },
             toRaw = { it.toArgb() }
@@ -22,9 +22,9 @@ fun PrefBoxFactory.color(
 
 fun PrefBoxFactory.duration(
     name: String,
-    defaultData: Duration
+    produceDefaultData: () -> Duration
 ): Box<Duration> {
-    return create(name = name, defaultData = defaultData.toDouble())
+    return create(key = name, produceDefaultData = { produceDefaultData().toDouble() })
         .map(
             fromRaw = { it.toDuration() },
             toRaw = { it.toDouble() }

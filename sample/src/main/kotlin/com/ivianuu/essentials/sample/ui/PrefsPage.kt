@@ -53,13 +53,13 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
         ) {
             VerticalScroller {
                 SwitchListItem(
-                    box = boxFactory.create("switch", false),
+                    box = boxFactory.create("switch") { false },
                     title = { Text("Switch") }
                 )
 
                 val dependenciesModifier = Modifier.preferenceDependencies(
                     Dependency(
-                        box = boxFactory.create("switch", false),
+                        box = boxFactory.create("switch") { false },
                         value = true
                     )
                 )
@@ -67,21 +67,21 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 Subheader(modifier = dependenciesModifier) { Text("Category") }
 
                 CheckboxListItem(
-                    box = boxFactory.create("checkbox", false),
+                    box = boxFactory.create("checkbox") { false },
                     modifier = dependenciesModifier,
                     title = { Text("Checkbox") },
                     subtitle = { Text("This is a checkbox preference") }
                 )
 
                 RadioButtonListItem(
-                    box = boxFactory.create("radio_button", false),
+                    box = boxFactory.create("radio_button") { false },
                     modifier = dependenciesModifier,
                     title = { Text("Radio Button") },
                     subtitle = { Text("This is a radio button preference") }
                 )
 
                 IntSliderListItem(
-                    box = boxFactory.create("slider", 50),
+                    box = boxFactory.create("slider") { 50 },
                     modifier = dependenciesModifier,
                     title = { Text("Slider") },
                     subtitle = { Text("This is a slider preference") },
@@ -91,7 +91,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 DurationSliderListItem(
-                    box = boxFactory.duration("slider_dur", 33.minutes),
+                    box = boxFactory.duration("slider_dur") { 33.minutes },
                     modifier = dependenciesModifier,
                     title = { Text("Slider duration") },
                     subtitle = { Text("This is a slider preference") },
@@ -104,7 +104,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 }
 
                 TextInputDialogListItem(
-                    box = boxFactory.create("text_input", ""),
+                    box = boxFactory.create("text_input") { "" },
                     modifier = dependenciesModifier,
                     title = { Text("Text input") },
                     subtitle = { Text("This is a text input preference") },
@@ -112,14 +112,14 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 ColorDialogListItem(
-                    box = boxFactory.color("color", Color.Red),
+                    box = boxFactory.color("color") { Color.Red },
                     modifier = dependenciesModifier,
                     title = { Text("Color") },
                     subtitle = { Text("This is a color preference") }
                 )
 
                 MultiChoiceDialogListItem(
-                    box = boxFactory.create("multi_select_list", setOf("A", "B", "C")),
+                    box = boxFactory.create("multi_select_list") { setOf("A", "B", "C") },
                     modifier = dependenciesModifier,
                     title = { Text("Multi select list") },
                     subtitle = { Text("This is a multi select list preference") },
@@ -131,7 +131,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 SingleChoiceDialogListItem(
-                    box = boxFactory.create("single_item_list", "C"),
+                    box = boxFactory.create("single_item_list") { "C" },
                     modifier = dependenciesModifier,
                     title = { Text("Single item list") },
                     subtitle = { Text("This is a single item list preference") },

@@ -3,7 +3,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.core.layoutId
-import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.foundation.Text
@@ -48,10 +47,6 @@ class DynamicSystemBarsPage {
             }
 
             TopAppBar(
-                modifier = Modifier
-                    .onPositioned {
-                        println("${it.size.width} ${it.size.height}")
-                    },
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
                 title = { Text("Dynamic system bars") }

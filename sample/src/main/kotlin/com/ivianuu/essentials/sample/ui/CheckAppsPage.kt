@@ -31,7 +31,7 @@ class CheckAppsPage(
 ) {
     @Composable
     operator fun invoke() {
-        val box = remember { boxFactory.create("apps", emptySet<String>()) }
+        val box = remember { boxFactory.create("apps") { emptySet<String>() } }
         checkableAppsPage(
             checkedApps = box.data,
             onCheckedAppsChanged = { newValue ->

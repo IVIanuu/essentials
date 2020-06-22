@@ -19,6 +19,7 @@ package com.ivianuu.essentials.store.android.settings
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
+import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.CoroutineScope
 
 class SettingsBoxFactory(
@@ -31,15 +32,15 @@ class SettingsBoxFactory(
         type: SettingBox.Type,
         defaultData: T,
         adapter: SettingBox.Adapter<T>
-    ): SettingBox<T> =
-        SettingBoxImpl(
-            type = type,
-            name = name,
-            defaultData = defaultData,
-            adapter = adapter,
-            contentResolver = context.contentResolver,
-            scope = scope
-        )
+    ): Box<T> = SettingBoxImpl(
+        type = type,
+        name = name,
+        defaultData = defaultData,
+        adapter = adapter,
+        contentResolver = context.contentResolver,
+        scope = scope
+    )
+
 }
 
 fun SettingsBoxFactory.float(
@@ -48,8 +49,7 @@ fun SettingsBoxFactory.float(
     defaultData: Float = 0f
 ) = create(name = name, type = type, defaultData = defaultData, adapter = FloatAdapter)
 
-private object FloatAdapter :
-    SettingBox.Adapter<Float> {
+private object FloatAdapter : SettingBox.Adapter<Float> {
 
     override fun get(
         name: String,
@@ -92,8 +92,7 @@ fun SettingsBoxFactory.int(
     defaultData: Int = 0
 ) = create(name = name, type = type, defaultData = defaultData, adapter = IntAdapter)
 
-private object IntAdapter :
-    SettingBox.Adapter<Int> {
+private object IntAdapter : SettingBox.Adapter<Int> {
 
     override fun get(
         name: String,
@@ -136,8 +135,7 @@ fun SettingsBoxFactory.long(
     defaultData: Long = 0L
 ) = create(name = name, type = type, defaultData = defaultData, adapter = LongAdapter)
 
-private object LongAdapter :
-    SettingBox.Adapter<Long> {
+private object LongAdapter : SettingBox.Adapter<Long> {
 
     override fun get(
         name: String,
@@ -179,8 +177,7 @@ fun SettingsBoxFactory.string(
     defaultData: String = ""
 ) = create(name = name, type = type, defaultData = defaultData, adapter = StringAdapter)
 
-private object StringAdapter :
-    SettingBox.Adapter<String> {
+private object StringAdapter : SettingBox.Adapter<String> {
 
     override fun get(
         name: String,

@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.core.insetsPadding
 @Composable
 fun Scaffold(
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
-    applySideSafeArea: Boolean = true,
     drawerContent: @Composable (() -> Unit)? = null,
     topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
@@ -49,7 +48,6 @@ fun Scaffold(
 ) {
     val scaffoldState = remember { ScaffoldState() }
     scaffoldState.fabPosition = fabPosition
-    scaffoldState.applySideSafeArea = applySideSafeArea
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = drawerContent,
@@ -131,8 +129,9 @@ fun Scaffold(
         Box(
             modifier = Modifier.fillMaxSize()
                 .insetsPadding(
-                    left = scaffoldState.applySideSafeArea,
-                    right = scaffoldState.applySideSafeArea
+                    left = true,
+                    right = true,
+                    bottom = true
                 ),
             children = layout
         )
@@ -156,7 +155,6 @@ class ScaffoldState {
     var isDrawerGesturesEnabled by mutableStateOf(false)
 
     var fabPosition by mutableStateOf(FabPosition.End)
-    var applySideSafeArea by mutableStateOf(true)
 
     enum class FabPosition { Center, End }
 }

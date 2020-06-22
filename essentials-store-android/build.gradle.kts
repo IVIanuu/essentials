@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -14,4 +15,5 @@ dependencies {
     api(Deps.AndroidX.Ui.core)
     api(Deps.Coroutines.core)
     api(project(":essentials-store"))
+    kapt(project(":essentials-compiler"))
 }
