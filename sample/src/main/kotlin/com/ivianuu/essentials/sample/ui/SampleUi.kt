@@ -39,10 +39,7 @@ class SampleUi(
 
     @Composable
     override fun content() {
-        twilightTheme(
-            lightColors = ColorPalette(isLight = true, primary = Color.Yellow),
-            darkColors = ColorPalette(isLight = false, primary = Color.Yellow)
-        ) {
+        twilightTheme {
             Providers(
                 DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
             ) {
