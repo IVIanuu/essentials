@@ -17,9 +17,10 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
+import androidx.ui.material.IconButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable

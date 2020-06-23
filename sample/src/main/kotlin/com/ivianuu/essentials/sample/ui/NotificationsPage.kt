@@ -6,6 +6,7 @@ import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.drawBackground
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.ui.coroutines.compositionScope
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem

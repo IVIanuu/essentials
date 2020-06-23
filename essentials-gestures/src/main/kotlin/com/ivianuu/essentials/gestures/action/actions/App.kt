@@ -3,6 +3,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
@@ -19,7 +20,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.actionFactory
 import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.Toaster

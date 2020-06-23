@@ -20,6 +20,7 @@ import android.Manifest
 import androidx.compose.Composable
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import androidx.ui.material.icons.Icons
@@ -39,7 +40,6 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.coroutines.compositionScope
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

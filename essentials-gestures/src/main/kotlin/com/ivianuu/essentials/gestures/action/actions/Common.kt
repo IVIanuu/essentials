@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.flow.Flow

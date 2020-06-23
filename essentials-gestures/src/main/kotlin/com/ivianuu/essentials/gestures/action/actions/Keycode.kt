@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Keyboard
@@ -13,7 +14,6 @@ import com.ivianuu.essentials.gestures.action.actionFactory
 import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent

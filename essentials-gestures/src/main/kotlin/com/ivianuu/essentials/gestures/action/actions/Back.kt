@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import androidx.ui.foundation.Icon
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.StringKey

@@ -29,6 +29,7 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.Border
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
@@ -60,7 +61,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.TextField
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
@@ -255,7 +255,7 @@ private fun ColorGridItem(
         ) {
             if (isSelected) {
                 Icon(
-                    icon = Icons.Default.Check,
+                    asset = Icons.Default.Check,
                     modifier = Modifier
                         .center()
                         .size(size = 36.dp)
@@ -269,7 +269,7 @@ private fun ColorGridItem(
 private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
-            icon = Icons.Default.ArrowBack,
+            asset = Icons.Default.ArrowBack,
             modifier = Modifier.size(size = 36.dp)
         )
     }

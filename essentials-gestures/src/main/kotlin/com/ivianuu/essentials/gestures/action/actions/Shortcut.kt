@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
@@ -16,7 +17,6 @@ import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.Navigator

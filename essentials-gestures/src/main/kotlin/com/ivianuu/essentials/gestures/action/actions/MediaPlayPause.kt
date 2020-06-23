@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
+import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PlayArrow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.StringKey

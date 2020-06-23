@@ -2,6 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Bluetooth
 import androidx.ui.material.icons.filled.BluetoothDisabled
@@ -11,7 +12,6 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module

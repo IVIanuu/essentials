@@ -2,6 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ScreenLockRotation
 import androidx.ui.material.icons.filled.ScreenRotation
@@ -15,7 +16,6 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.android.settings.SettingBox
 import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
 import com.ivianuu.essentials.store.android.settings.int
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module

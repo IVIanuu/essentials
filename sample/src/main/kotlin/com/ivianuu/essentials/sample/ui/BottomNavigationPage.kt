@@ -21,6 +21,7 @@ import androidx.compose.getValue
 import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
@@ -40,7 +41,6 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
 import com.ivianuu.essentials.ui.core.systemBarsPadding
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight

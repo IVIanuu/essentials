@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

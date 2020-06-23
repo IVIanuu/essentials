@@ -8,6 +8,7 @@ import androidx.ui.core.composed
 import androidx.ui.core.onPositioned
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
+import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Indication
 import androidx.ui.foundation.IndicationAmbient
 import androidx.ui.foundation.clickable
@@ -17,7 +18,6 @@ import androidx.ui.material.icons.filled.MoreVert
 import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.untrackedState
-import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
