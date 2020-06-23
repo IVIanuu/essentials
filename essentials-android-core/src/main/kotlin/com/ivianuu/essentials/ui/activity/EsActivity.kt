@@ -21,10 +21,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.Composition
+import androidx.compose.Providers
 import androidx.compose.Recomposer
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.ui.core.setContent
+import androidx.ui.savedinstancestate.UiSavedStateRegistry
+import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
 import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 
@@ -59,7 +62,15 @@ abstract class EsActivity : AppCompatActivity() {
     protected open fun wrappedContent() {
         ProvideInsets {
             ProvideSystemBarManager {
-                content()
+                val uiSavedStateRegistry = UiSavedStateRegistry(
+                    restoredValues = emptyMap(),
+                    canBeSaved = { true }
+                )
+                Providers(
+                    UiSavedStateRegistryAmbient provides uiSavedStateRegistry
+                ) {
+                    content()
+                }
             }
         }
     }

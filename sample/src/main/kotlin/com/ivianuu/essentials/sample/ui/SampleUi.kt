@@ -36,7 +36,7 @@ class SampleUi(
 ) : AppUi {
 
     @Composable
-    override fun invoke() {
+    override fun content() {
         twilightTheme {
             Providers(
                 DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
