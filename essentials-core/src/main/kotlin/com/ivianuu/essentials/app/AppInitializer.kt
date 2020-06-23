@@ -59,7 +59,7 @@ fun esAppInitializerModule() {
 }
 
 @Transient
-class AppInitRunner(
+class AppInitializers(
     private val logger: Logger,
     initializers: Map<KClass<*>, @Provider () -> AppInitializer>
 ) {

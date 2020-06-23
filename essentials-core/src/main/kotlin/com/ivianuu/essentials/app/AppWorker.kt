@@ -55,7 +55,7 @@ fun esAppWorkerModule() {
 }
 
 @ApplicationScoped
-class AppRunnableRunner(
+class AppWorkers(
     private val logger: Logger,
     workers: Map<KClass<*>, @Provider () -> AppWorker>,
     private val scope: @ForApplication CoroutineScope
