@@ -32,7 +32,7 @@ fun InstallUnknownAppsPermission(
     vararg metadata: KeyWithValue<*>
 ) = Permission(
     Permission.IsUnknownAppsPermission withValue Unit,
-    Permission.Intent withValue Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"), // todo Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+    Permission.Intent withValue Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
     *metadata
 )
 

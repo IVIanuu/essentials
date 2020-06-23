@@ -31,11 +31,11 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.material.ripple.RippleIndication
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient

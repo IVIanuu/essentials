@@ -28,6 +28,7 @@ import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.BottomNavigation
 import androidx.ui.material.BottomNavigationItem
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Email
 import androidx.ui.material.icons.filled.Home
@@ -41,7 +42,6 @@ import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
 import com.ivianuu.essentials.ui.core.systemBarsPadding
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Transient

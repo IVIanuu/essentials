@@ -22,12 +22,12 @@ import androidx.ui.foundation.Border
 import androidx.ui.graphics.Color
 import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun ColorDialogListItem(

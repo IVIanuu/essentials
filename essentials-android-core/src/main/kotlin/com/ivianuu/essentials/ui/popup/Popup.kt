@@ -22,9 +22,9 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Shape
 import androidx.ui.layout.padding
+import androidx.ui.material.Surface
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun Popup(

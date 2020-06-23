@@ -38,6 +38,7 @@ import androidx.ui.layout.padding
 import androidx.ui.material.Checkbox
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -45,7 +46,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.ScaffoldState
 import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator

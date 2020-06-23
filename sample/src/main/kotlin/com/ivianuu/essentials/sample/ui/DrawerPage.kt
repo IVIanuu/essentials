@@ -21,9 +21,9 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
 

@@ -54,7 +54,7 @@ internal class IntentPermissionRequestHandler(
                 }.onAwait {}
                 async {
                     while (!permissionManager.hasPermissions(permission).first()) {
-                        delay(100) // todo .milliseconds
+                        delay(100)
                     }
                 }.onAwait {}
             }.also { coroutineContext.cancelChildren() }

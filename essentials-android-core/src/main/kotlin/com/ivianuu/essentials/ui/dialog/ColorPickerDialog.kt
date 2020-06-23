@@ -48,6 +48,7 @@ import androidx.ui.layout.size
 import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
+import androidx.ui.material.Surface
 import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
@@ -63,7 +64,6 @@ import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
-import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.toColor

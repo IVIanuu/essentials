@@ -23,9 +23,9 @@ import androidx.ui.graphics.Shape
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Surface
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.material.Surface
 
 @Composable
 fun BaseDialog(

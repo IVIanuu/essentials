@@ -66,7 +66,8 @@ class DefaultAccessibilityService : EsAccessibilityService() {
                 .map { it.flags }
                 .fold(0) { acc, flags -> acc.addFlag(flags) }
 
-            configs.lastOrNull()?.feedbackType?.let { feedbackType = it } // todo
+            // last one wins
+            configs.lastOrNull()?.feedbackType?.let { feedbackType = it }
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
             notificationTimeout = configs
