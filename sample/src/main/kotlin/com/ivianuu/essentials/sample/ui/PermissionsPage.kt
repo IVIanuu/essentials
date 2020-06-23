@@ -38,12 +38,13 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 
 @Transient
 class PermissionsPage(
@@ -102,18 +103,21 @@ class PermissionsPage(
                 Permission.Icon withValue { Icon(Icons.Default.Menu) }
             )
 
+            val scope = compositionScope()
             Button(
                 modifier = Modifier.center(),
-                onClick = launchOnClick {
-                    manager.request(
-                        camera,
-                        phone,
-                        accessibility,
-                        notificationListener,
-                        systemOverlay,
-                        writeSecureSettings,
-                        writeSettings
-                    )
+                onClick = {
+                    scope.launch {
+                        manager.request(
+                            camera,
+                            phone,
+                            accessibility,
+                            notificationListener,
+                            systemOverlay,
+                            writeSecureSettings,
+                            writeSettings
+                        )
+                    }
                 }
             ) {
                 Text("Request")

@@ -22,12 +22,12 @@ import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun <T> Box<T>.asState(): MutableState<T> = key(this) {
-    val scope = compositionCoroutineScope()
+    val scope = compositionScope()
     val state = data.collectAsState(defaultData) as MutableState<T>
     remember {
         ObservableState(state) { newData ->

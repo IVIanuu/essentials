@@ -18,12 +18,12 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
-import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Qualifier
@@ -31,6 +31,7 @@ import com.ivianuu.injekt.Transient
 
 @Transient
 class AboutPage(
+    private val aboutSection: AboutSection,
     private val buildInfo: BuildInfo,
     private val privacyPolicyUrl: @PrivacyPolicyUrl String? = null
 ) {
@@ -38,7 +39,7 @@ class AboutPage(
     operator fun invoke() {
         Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
             VerticalScroller {
-                AboutSection(
+                aboutSection(
                     showHeader = false,
                     packageName = buildInfo.packageName,
                     privacyPolicyUrl = privacyPolicyUrl
@@ -52,61 +53,73 @@ class AboutPage(
 @Qualifier
 annotation class PrivacyPolicyUrl
 
-@Composable
-fun AboutSection(
-    showHeader: Boolean = false,
-    packageName: String,
-    privacyPolicyUrl: String? = null
-) {
-    if (showHeader) {
-        Subheader {
-            Text(R.string.about_title)
+@Transient
+class AboutSection(private val navigator: Navigator) {
+
+    @Composable
+    operator fun invoke(
+        packageName: String,
+        showHeader: Boolean = false,
+        privacyPolicyUrl: String? = null
+    ) {
+        if (showHeader) {
+            Subheader {
+                Text(R.string.about_title)
+            }
+        }
+
+        AboutItem(
+            titleRes = R.string.about_rate,
+            descRes = R.string.about_rate_desc,
+            url = { "https://play.google.com/store/apps/details?id=$packageName" },
+            navigator = navigator
+        )
+
+        AboutItem(
+            titleRes = R.string.about_more_apps,
+            descRes = R.string.about_more_apps_desc,
+            url = { "https://play.google.com/store/apps/developer?id=Manuel+Wrage" },
+            navigator = navigator
+        )
+
+        AboutItem(
+            titleRes = R.string.about_reddit,
+            descRes = R.string.about_reddit_desc,
+            url = { "https://www.reddit.com/r/manuelwrageapps" },
+            navigator = navigator
+        )
+
+        AboutItem(
+            titleRes = R.string.about_github,
+            descRes = R.string.about_github_desc,
+            url = { "https://github.com/IVIanuu" },
+            navigator = navigator
+        )
+
+        AboutItem(
+            titleRes = R.string.about_twitter,
+            descRes = R.string.about_twitter_desc,
+            url = { "https://twitter.com/IVIanuu" },
+            navigator = navigator
+        )
+
+        if (privacyPolicyUrl != null) {
+            AboutItem(
+                titleRes = R.string.about_privacy_policy,
+                url = { privacyPolicyUrl },
+                navigator = navigator
+            )
         }
     }
 
-    AboutItem(
-        titleRes = R.string.about_rate,
-        descRes = R.string.about_rate_desc,
-        url = { "https://play.google.com/store/apps/details?id=$packageName" }
-    )
-
-    AboutItem(
-        titleRes = R.string.about_more_apps,
-        descRes = R.string.about_more_apps_desc,
-        url = { "https://play.google.com/store/apps/developer?id=Manuel+Wrage" }
-    )
-
-    AboutItem(
-        titleRes = R.string.about_reddit,
-        descRes = R.string.about_reddit_desc,
-        url = { "https://www.reddit.com/r/manuelwrageapps" }
-    )
-
-    AboutItem(
-        titleRes = R.string.about_github,
-        descRes = R.string.about_github_desc,
-        url = { "https://github.com/IVIanuu" }
-    )
-
-    AboutItem(
-        titleRes = R.string.about_twitter,
-        descRes = R.string.about_twitter_desc,
-        url = { "https://twitter.com/IVIanuu" }
-    )
-
-    if (privacyPolicyUrl != null) {
-        AboutItem(
-            titleRes = R.string.about_privacy_policy,
-            url = { privacyPolicyUrl }
-        )
-    }
 }
 
 @Composable
 private fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
-    url: () -> String
+    url: () -> String,
+    navigator: Navigator
 ) {
     ListItem(
         title = { Text(titleRes) },
@@ -115,6 +128,6 @@ private fun AboutItem(
                 Text(it)
             }
         },
-        onClick = navigateOnClick { UrlRoute(url()) }
+        onClick = { navigator.push(UrlRoute(url())) }
     )
 }

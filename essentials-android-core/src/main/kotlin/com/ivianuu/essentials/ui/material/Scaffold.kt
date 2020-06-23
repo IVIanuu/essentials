@@ -33,6 +33,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
+import androidx.ui.material.Surface
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.insetsPadding

@@ -21,11 +21,12 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.processrestart.RestartProcess
-import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 
 @Transient
 class RestartProcessPage(
@@ -36,9 +37,14 @@ class RestartProcessPage(
         Scaffold(
             topBar = { TopAppBar(title = { Text("Restart process") }) }
         ) {
+            val scope = compositionScope()
             Button(
                 modifier = Modifier.center(),
-                onClick = launchOnClick { restartProcess() }
+                onClick = {
+                    scope.launch {
+                        restartProcess()
+                    }
+                }
             ) {
                 Text("Restart process")
             }

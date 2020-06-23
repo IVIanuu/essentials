@@ -32,10 +32,11 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 
 @Transient
 class BillingPage(
@@ -61,13 +62,23 @@ class BillingPage(
 
                 Spacer(Modifier.height(8.dp))
 
+                val scope = compositionScope()
+
                 if (!isPurchased.value) {
                     Button(
-                        onClick = launchOnClick { purchaseManager.purchase(DummySku) }
+                        onClick = {
+                            scope.launch {
+                                purchaseManager.purchase(DummySku)
+                            }
+                        }
                     ) { Text("Purchase") }
                 } else {
                     Button(
-                        onClick = launchOnClick { purchaseManager.consume(DummySku) }
+                        onClick = {
+                            scope.launch {
+                                purchaseManager.consume(DummySku)
+                            }
+                        }
                     ) { Text("Consume") }
                 }
             }

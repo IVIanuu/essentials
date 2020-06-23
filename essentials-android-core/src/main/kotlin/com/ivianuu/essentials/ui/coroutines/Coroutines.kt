@@ -29,7 +29,7 @@ import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 @Composable
-fun compositionCoroutineScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
+fun compositionScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
     val scope = remember(context) { CoroutineScope(context) }
     onDispose { scope.cancel() }
     return scope

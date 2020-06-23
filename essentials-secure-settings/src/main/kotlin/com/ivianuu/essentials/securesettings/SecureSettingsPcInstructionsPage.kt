@@ -22,12 +22,12 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
@@ -40,6 +40,7 @@ import com.ivianuu.injekt.Transient
 @Transient
 class SecureSettingsPcInstructionsPage internal constructor(
     private val buildInfo: BuildInfo,
+    private val navigator: Navigator,
     private val popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
     private val toaster: Toaster
 ) {
@@ -74,22 +75,30 @@ class SecureSettingsPcInstructionsPage internal constructor(
                 ListItem(
                     leading = { Icon(Icons.Default.Link) },
                     title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                    onClick = navigateOnClick { UrlRoute("https://youtu.be/CDuxcrrWLnY") }
+                    onClick = {
+                        navigator.push(
+                            UrlRoute("https://youtu.be/CDuxcrrWLnY")
+                        )
+                    }
                 )
 
                 ListItem(
                     leading = { Icon(Icons.Default.Link) },
                     title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                    onClick = navigateOnClick {
-                        UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+                    onClick = {
+                        navigator.push(
+                            UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+                        )
                     }
                 )
 
                 ListItem(
                     leading = { Icon(Icons.Default.Link) },
                     title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                    onClick = navigateOnClick {
-                        UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+                    onClick = {
+                        navigator.push(
+                            UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+                        )
                     }
                 )
 

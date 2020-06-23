@@ -22,7 +22,7 @@ import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
-import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -31,6 +31,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @Transient
 class UnlockPage(
@@ -43,17 +44,20 @@ class UnlockPage(
         Scaffold(
             topBar = { TopAppBar(title = { Text("Unlock") }) }
         ) {
+            val scope = compositionScope()
             Button(
                 modifier = Modifier.center(),
-                onClick = launchOnClick {
-                    toaster.toast("Turn the screen off and on")
+                onClick = {
+                    scope.launch {
+                        toaster.toast("Turn the screen off and on")
 
-                    screenStateProvider.screenState
-                        .filter { it == ScreenState.Locked }
-                        .first()
+                        screenStateProvider.screenState
+                            .filter { it == ScreenState.Locked }
+                            .first()
 
-                    val unlocked = unlockScreen()
-                    toaster.toast("Screen unlocked $unlocked")
+                        val unlocked = unlockScreen()
+                        toaster.toast("Screen unlocked $unlocked")
+                    }
                 }
             ) { Text("Unlock") }
         }

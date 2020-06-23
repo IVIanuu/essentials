@@ -32,24 +32,27 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.ui.common.launchOnClick
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Transient
 class NotificationsPage(
     private val dispatchers: AppCoroutineDispatchers,
+    private val navigator: Navigator,
     private val notificationStore: NotificationStore,
     private val permissionManager: PermissionManager
 ) {
@@ -71,6 +74,8 @@ class NotificationsPage(
                     permissionManager.hasPermissions(notificationPermission)
                 }.collectAsResource()
             ) { hasPermission ->
+                val scope = compositionScope()
+
                 if (hasPermission) {
                     ResourceLazyColumnItems(
                         resource = notificationStore.notifications.collectAsResource(),
@@ -95,8 +100,10 @@ class NotificationsPage(
                                             ?.toString() ?: ""
                                     )
                                 },
-                                onClick = launchOnClick {
-                                    notificationStore.openNotification(sbn.notification)
+                                onClick = {
+                                    scope.launch {
+                                        notificationStore.openNotification(sbn.notification)
+                                    }
                                 },
                                 leading = {
                                     val context = ContextAmbient.current
@@ -128,8 +135,10 @@ class NotificationsPage(
                                 trailing = if (sbn.isClearable) {
                                     {
                                         IconButton(
-                                            onClick = launchOnClick {
-                                                notificationStore.dismissNotification(sbn.key)
+                                            onClick = {
+                                                scope.launch {
+                                                    notificationStore.dismissNotification(sbn.key)
+                                                }
                                             }
                                         ) {
                                             Icon(Icons.Default.Clear)
@@ -151,8 +160,10 @@ class NotificationsPage(
                         )
                         Spacer(Modifier.height(8.dp))
                         Button(
-                            onClick = launchOnClick {
-                                permissionManager.request(notificationPermission)
+                            onClick = {
+                                scope.launch {
+                                    permissionManager.request(notificationPermission)
+                                }
                             }
                         ) {
                             Text("Request")

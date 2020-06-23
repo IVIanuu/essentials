@@ -34,7 +34,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
-import com.ivianuu.essentials.ui.coroutines.compositionCoroutineScope
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -59,7 +59,7 @@ class NavBarPage(
                 verticalArrangement = Arrangement.Center,
                 horizontalGravity = Alignment.CenterHorizontally
             ) {
-                val scope = compositionCoroutineScope()
+                val scope = compositionScope()
                 fun updateNavBarState(navBarHidden: Boolean) {
                     scope.launch {
                         navBarManager.setNavBarConfig(

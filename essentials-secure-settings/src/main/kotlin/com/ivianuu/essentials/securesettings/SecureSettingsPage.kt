@@ -19,15 +19,15 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.Composable
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.launchOnClick
-import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
@@ -35,6 +35,7 @@ import com.ivianuu.injekt.Transient
 @Transient
 class SecureSettingsPage internal constructor(
     private val instructionsPage: SecureSettingsPcInstructionsPage,
+    private val navigator: Navigator,
     private val popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
     private val secureSettingsHelper: SecureSettingsHelper,
     private val toaster: Toaster
@@ -61,21 +62,24 @@ class SecureSettingsPage internal constructor(
                     ListItem(
                         title = { Text(R.string.es_pref_use_pc) },
                         subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                        onClick = navigateOnClick {
-                            Route {
+                        onClick = {
+                            navigator.push {
                                 instructionsPage()
                             }
                         }
                     )
 
+                    val scope = compositionScope()
                     ListItem(
                         title = { Text(R.string.es_pref_use_root) },
                         subtitle = { Text(R.string.es_pref_use_root_summary) },
-                        onClick = launchOnClick {
-                            if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
-                                toaster.toast(R.string.es_secure_settings_permission_granted)
-                            } else {
-                                toaster.toast(R.string.es_secure_settings_no_root)
+                        onClick = {
+                            scope.launch {
+                                if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                                    toaster.toast(R.string.es_secure_settings_permission_granted)
+                                } else {
+                                    toaster.toast(R.string.es_secure_settings_no_root)
+                                }
                             }
                         }
                     )
