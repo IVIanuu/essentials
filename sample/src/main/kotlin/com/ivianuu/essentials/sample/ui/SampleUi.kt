@@ -19,11 +19,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.remember
+import androidx.ui.graphics.Color
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
+import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Transient
 
@@ -37,7 +39,10 @@ class SampleUi(
 
     @Composable
     override fun content() {
-        twilightTheme {
+        twilightTheme(
+            lightColors = ColorPalette(isLight = true, primary = Color.Yellow),
+            darkColors = ColorPalette(isLight = false, primary = Color.Yellow)
+        ) {
             Providers(
                 DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
             ) {
@@ -47,6 +52,5 @@ class SampleUi(
                 navigator.content()
             }
         }
-
     }
 }

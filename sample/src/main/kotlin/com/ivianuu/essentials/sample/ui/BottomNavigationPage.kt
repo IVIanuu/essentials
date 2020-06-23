@@ -35,10 +35,15 @@ import androidx.ui.material.icons.filled.Search
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
 import androidx.ui.savedinstancestate.savedInstanceState
+import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
+import com.ivianuu.essentials.ui.core.systemBarsPadding
 import com.ivianuu.essentials.ui.image.Icon
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Surface
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Transient
 
 @Transient
@@ -50,25 +55,33 @@ class BottomNavigationPage {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
             bottomBar = {
-                BottomNavigation(
-                    backgroundColor = MaterialTheme.colors.primary
+                Surface(
+                    modifier = Modifier.systemBarOverlayStyle(MaterialTheme.colors.primary.isLight),
+                    elevation = 8.dp,
+                    color = MaterialTheme.colors.primary
                 ) {
-                    BottomNavItem.values().forEach { item ->
-                        BottomNavigationItem(
-                            selected = item == selectedItem,
-                            onSelected = { selectedItem = item },
-                            icon = { Icon(item.icon) },
-                            text = { Text(item.title) }
-                        )
+                    BottomNavigation(
+                        modifier = Modifier.systemBarsPadding(bottom = true),
+                        backgroundColor = MaterialTheme.colors.primary,
+                        elevation = 0.dp
+                    ) {
+                        BottomNavItem.values().forEach { item ->
+                            BottomNavigationItem(
+                                selected = item == selectedItem,
+                                onSelected = { selectedItem = item },
+                                icon = { Icon(item.icon) },
+                                text = { Text(item.title) }
+                            )
+                        }
                     }
                 }
             }
         ) {
-            AnimatedBox(
-                current = selectedItem,
-                modifier = Modifier.fillMaxSize()
-            ) { item ->
-                Box(backgroundColor = item.color)
+            AnimatedBox(current = selectedItem) { item ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    backgroundColor = item.color
+                )
             }
         }
     }

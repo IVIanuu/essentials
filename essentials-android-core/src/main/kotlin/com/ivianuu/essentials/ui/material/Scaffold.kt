@@ -128,11 +128,7 @@ fun Scaffold(
 
         Box(
             modifier = Modifier.fillMaxSize()
-                .insetsPadding(
-                    left = true,
-                    right = true,
-                    bottom = true
-                ),
+                .insetsPadding(left = true, right = true),
             children = layout
         )
     }
