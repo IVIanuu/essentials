@@ -28,12 +28,20 @@ class StartActivityForResult(
     ): O {
         startUi()
         return suspendCancellableCoroutine { continuation ->
+            var popped = false
+            fun popIfNeeded() {
+                if (!popped) {
+                    popped = true
+                    navigator.popTop()
+                }
+            }
+
             navigator.push(
                 Route(opaque = true) {
                     val launcher = registerActivityResultCallback(
                         contract,
                         ActivityResultCallback {
-                            navigator.popTop()
+                            popIfNeeded()
                             continuation.resume(it)
                         }
                     )
@@ -41,7 +49,7 @@ class StartActivityForResult(
                     onActive { launcher.launch(input) }
                 }
             )
-            continuation.invokeOnCancellation { navigator.popTop() }
+            continuation.invokeOnCancellation { popIfNeeded() }
         }
     }
 
