@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.permission.dialogui
 
 import androidx.compose.Composable
+import androidx.compose.FrameManager
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.foundation.Text
@@ -159,8 +160,10 @@ internal class PermissionDialogViewModel(
                 navigator.pop(route = route)
                 request.onComplete.complete(Unit)
             } else {
-                _permissionsToProcess.clear()
-                _permissionsToProcess += permissionsToProcess
+                FrameManager.framed {
+                    _permissionsToProcess.clear()
+                    _permissionsToProcess += permissionsToProcess
+                }
             }
         }
     }
