@@ -35,7 +35,7 @@ internal class ActionPickerViewModel(
 ) : StateViewModel<ActionPickerState>(ActionPickerState(), dispatchers) {
 
     init {
-        scope.execute(
+        execute(
             block = {
                 val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

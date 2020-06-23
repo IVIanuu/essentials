@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
 
 @ApplicationScoped
 class AccessibilityServices(
@@ -53,9 +52,8 @@ class AccessibilityServices(
         }
     }
 
-    suspend fun performGlobalAction(action: Int): Boolean = withContext(dispatchers.default) {
+    suspend fun performGlobalAction(action: Int): Boolean =
         service.first { it != null }!!.performGlobalAction(action)
-    }
 
     internal fun onServiceConnected(service: DefaultAccessibilityService) {
         _service.value = service

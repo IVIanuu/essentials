@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ApplicationScoped
@@ -56,6 +57,7 @@ fun esAppWorkerModule() {
 
 @ApplicationScoped
 class AppWorkers(
+    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     workers: Map<KClass<*>, @Provider () -> AppWorker>,
     private val scope: @ForApplication CoroutineScope
@@ -63,7 +65,7 @@ class AppWorkers(
     init {
         workers
             .forEach {
-                scope.launch {
+                scope.launch(dispatchers.default) {
                     logger.d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
                     it.value().run()
                 }

@@ -19,8 +19,9 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 
 /**
@@ -28,7 +29,9 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsService : Service() {
 
-    val scope = CoroutineScope(Dispatchers.Main)
+    private val dispatchers: AppCoroutineDispatchers by inject()
+
+    val scope by lazy { CoroutineScope(dispatchers.default) }
 
     override fun onDestroy() {
         scope.cancel()

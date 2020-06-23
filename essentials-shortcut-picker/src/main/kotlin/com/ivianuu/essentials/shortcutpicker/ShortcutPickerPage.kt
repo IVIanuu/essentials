@@ -95,7 +95,7 @@ internal class ShortcutPickerViewModel(
 ) : StateViewModel<ShortcutPickerState>(ShortcutPickerState(), dispatchers) {
 
     init {
-        scope.execute(
+        execute(
             block = { shortcutStore.getShortcuts() },
             reducer = { copy(shortcuts = it) }
         )

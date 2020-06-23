@@ -42,15 +42,13 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class StateViewModel<S>(
     initialState: S,
-    private val dispatchers: AppCoroutineDispatchers
-) : ViewModel() {
+    dispatchers: AppCoroutineDispatchers
+) : ViewModel(dispatchers) {
 
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state
 
-    private val actor = scope.actor<suspend S.() -> S>(
-        context = dispatchers.default
-    ) {
+    private val actor = scope.actor<suspend S.() -> S>(context = dispatchers.default) {
         for (reducer in this) {
             val currentState = _state.value
             val newState = reducer(currentState)
@@ -67,17 +65,27 @@ abstract class StateViewModel<S>(
     }
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = dispatchers.default,
+        context: CoroutineContext = scope.coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Resource<V>) -> S
-    ): Job = scope.execute(
+    ): Job = execute(
         context = context,
         start = start,
         block = { await() },
         reducer = reducer
     )
 
-    protected suspend fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S) {
+    protected fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S): Job {
+        return scope.launch {
+            setStateNow { reducer(Loading) }
+            this@execute
+                .map { Success(it) }
+                .catch { Error(it) }
+                .collect { setStateNow { reducer(it) } }
+        }
+    }
+
+    protected suspend fun <V> Flow<V>.executeNow(reducer: suspend S.(Resource<V>) -> S) {
         setStateNow { reducer(Loading) }
         return this
             .map { Success(it) }
@@ -85,27 +93,12 @@ abstract class StateViewModel<S>(
             .collect { setStateNow { reducer(it) } }
     }
 
-    protected fun <V> Flow<V>.executeIn(
-        scope: CoroutineScope,
-        context: CoroutineContext = dispatchers.default,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: suspend S.(Resource<V>) -> S
-    ): Job {
-        return scope.launch(context, start) {
-            setStateNow { reducer(Loading) }
-            this@executeIn
-                .map { Success(it) }
-                .catch { Error(it) }
-                .collect { setStateNow { reducer(it) } }
-        }
-    }
-
-    protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = dispatchers.default,
+    protected fun <V> execute(
+        context: CoroutineContext = scope.coroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend CoroutineScope.() -> V,
         reducer: suspend S.(Resource<V>) -> S
-    ): Job = launch(context, start) {
+    ): Job = scope.launch(context, start) {
         setStateNow { reducer(Loading) }
         try {
             val result = block()

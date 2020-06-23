@@ -5,17 +5,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Transient
-import kotlinx.coroutines.withContext
 
 @Transient
 class StartUi(
     private val application: @ForApplication Context,
     private val buildInfo: BuildInfo,
-    private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager
 ) {
 
-    suspend operator fun invoke() = withContext(dispatchers.default) {
+    suspend operator fun invoke() {
         val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
         application.startActivity(
             intent.apply {

@@ -19,17 +19,17 @@ package com.ivianuu.essentials.ui.viewmodel
 import androidx.compose.Composable
 import androidx.compose.currentComposer
 import androidx.ui.savedinstancestate.rememberSavedInstanceState
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import java.io.Closeable
 
 /**
  * Base view model
  */
-abstract class ViewModel : Closeable {
+abstract class ViewModel(dispatchers: AppCoroutineDispatchers) : Closeable {
 
-    val scope = CoroutineScope(Dispatchers.Main)
+    val scope = CoroutineScope(dispatchers.default)
 
     override fun close() {
         scope.cancel()

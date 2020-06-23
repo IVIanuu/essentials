@@ -40,9 +40,7 @@ private fun esDataModule() {
     transient<@DataDir String> { context: @ForApplication Context ->
         context.applicationInfo.dataDir
     }
-    transient<@PrefsDir String> { dataDir: @DataDir String ->
-        "$dataDir/prefs"
-    }
+    transient<@PrefsDir String> { dataDir: @DataDir String -> "$dataDir/prefs" }
     scoped { moshi: Moshi -> MoshiSerializerFactory(moshi) }
     scoped { scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers,

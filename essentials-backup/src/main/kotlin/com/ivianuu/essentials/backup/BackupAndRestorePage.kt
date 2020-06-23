@@ -9,6 +9,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
@@ -44,9 +45,10 @@ class BackupAndRestorePage internal constructor(
 @Transient
 internal class BackupAndRestoreViewModel(
     private val backupDataUseCase: BackupDataUseCase,
+    dispatchers: AppCoroutineDispatchers,
     private val restoreDataUseCase: RestoreDataUseCase,
     private val toaster: Toaster
-) : ViewModel() {
+) : ViewModel(dispatchers) {
 
     fun backupClicked() {
         scope.launch {

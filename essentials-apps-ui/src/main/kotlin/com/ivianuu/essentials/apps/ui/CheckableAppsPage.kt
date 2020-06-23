@@ -151,7 +151,7 @@ internal class CheckableAppsViewModel(
                     )
                 }
                 .toList()
-        }.executeIn(scope) { copy(apps = it) }
+        }.execute { copy(apps = it) }
     }
 
     fun appClicked(app: CheckableApp) {

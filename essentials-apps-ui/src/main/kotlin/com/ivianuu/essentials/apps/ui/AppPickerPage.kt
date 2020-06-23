@@ -101,7 +101,7 @@ internal class AppPickerViewModel(
 ) : StateViewModel<AppPickerState>(AppPickerState(), dispatchers) {
 
     init {
-        scope.execute(
+        execute(
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)

@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.Assisted
@@ -117,6 +118,7 @@ internal class PermissionDialog(
 
 @Transient
 internal class PermissionDialogViewModel(
+    dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
     private val navigator: Navigator,
@@ -124,7 +126,7 @@ internal class PermissionDialogViewModel(
     private val requestHandlers: PermissionRequestHandlers,
     private val route: @Assisted Route,
     private val startUi: StartUi
-) : ViewModel() {
+) : ViewModel(dispatchers) {
 
     private val _permissionsToProcess = modelListOf<Permission>()
     val permissionsToProcess: List<Permission> get() = _permissionsToProcess
