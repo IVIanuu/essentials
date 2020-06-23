@@ -17,14 +17,16 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
+import com.ivianuu.essentials.coroutines.parallelForEach
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -56,7 +58,9 @@ internal class IntentPermissionRequestHandler(
                     delay(100)
                 }
             }.onAwait {}
-        }.also { coroutineContext.cancelChildren() }
+        }.also {
+            coroutineContext[Job]?.children?.toList()?.parallelForEach { it.cancelAndJoin() }
+        }
     }
 
 }
