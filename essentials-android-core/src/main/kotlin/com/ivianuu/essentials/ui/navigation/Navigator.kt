@@ -70,48 +70,57 @@ class Navigator {
     }
 
     fun push(content: @Composable () -> Unit) {
-        push<Unit>(Route(content = content))
+        push(Route(content = content))
     }
 
-    fun push(route: Route) {
-        push<Unit>(route)
-    }
-
-    @JvmName("pushForResult")
-    fun <T : Any> push(content: @Composable () -> Unit): Deferred<T?> {
-        return push<T>(Route(content = content))
-    }
-
-    @JvmName("pushForResult")
-    fun <T : Any> push(route: Route): Deferred<T?> = FrameManager.framed {
+    fun push(route: Route) = FrameManager.framed {
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
         setBackStackInternal(newBackStack)
-        routeState.result as Deferred<T?>
+    }
+
+    @JvmName("pushForResult")
+    suspend fun <T : Any> push(content: @Composable () -> Unit): T? =
+        push<T>(Route(content = content))
+
+    @JvmName("pushForResult")
+    suspend fun <T : Any> push(route: Route): T? {
+        val routeState = RouteState(route)
+        FrameManager.framed {
+            val newBackStack = _backStack.toMutableList()
+            newBackStack += routeState
+            setBackStackInternal(newBackStack)
+        }
+        return (routeState.result as Deferred<T?>).await()
     }
 
     fun replace(content: @Composable () -> Unit) {
-        replace<Unit>(Route(content = content))
+        replace(Route(content = content))
     }
 
-    fun replace(route: Route) {
-        replace<Unit>(route)
-    }
-
-    @JvmName("replaceForResult")
-    fun <T : Any> replace(content: @Composable () -> Unit): Deferred<T?> {
-        return replace<T>(Route(content = content))
-    }
-
-    @JvmName("replaceForResult")
-    fun <T : Any> replace(route: Route): Deferred<T?> = FrameManager.framed {
+    fun replace(route: Route) = FrameManager.framed {
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
             .also { it.removeAt(it.lastIndex) }
         newBackStack += routeState
         setBackStackInternal(newBackStack)
-        routeState.result as Deferred<T?>
+    }
+
+    @JvmName("replaceForResult")
+    suspend fun <T : Any> replace(content: @Composable () -> Unit): T? =
+        replace<T>(Route(content = content))
+
+    @JvmName("replaceForResult")
+    suspend fun <T : Any> replace(route: Route): T? {
+        val routeState = RouteState(route)
+        FrameManager.framed {
+            val newBackStack = _backStack.toMutableList()
+                .also { it.removeAt(it.lastIndex) }
+            newBackStack += routeState
+            setBackStackInternal(newBackStack)
+        }
+        return (routeState.result as Deferred<T>).await()
     }
 
     fun popTop(result: Any? = null) {

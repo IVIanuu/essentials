@@ -31,7 +31,6 @@ import androidx.ui.layout.preferredWidthIn
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 object PopupMenu {
     @Immutable
@@ -50,12 +49,11 @@ fun PopupMenu(
     Popup(shape = shape, elevation = elevation) {
         Column {
             val navigator = NavigatorAmbient.current
-            val route = RouteAmbient.current
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            navigator.pop(route = route)
+                            navigator.popTop()
                             item.onSelected()
                         },
                         children = item.content

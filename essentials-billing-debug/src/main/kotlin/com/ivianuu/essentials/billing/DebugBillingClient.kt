@@ -42,7 +42,6 @@ import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -163,7 +162,6 @@ class DebugBillingClient internal constructor(
             navigator.push(
                 DialogRoute(
                     onDismiss = {
-                        val route = RouteAmbient.current
                         scope.launch {
                             onPurchaseResult(
                                 requestId = requestId,
@@ -171,18 +169,17 @@ class DebugBillingClient internal constructor(
                                 purchases = null
                             )
 
-                            navigator.pop(route = route)
+                            navigator.popTop()
                         }
                     }
                 ) {
-                    val route = RouteAmbient.current
                     ResourceBox(
                         resource = produceResource(requestId) {
                             getSkuDetailsForRequest(requestId)
                         }
                     ) { skuDetails ->
                         if (skuDetails == null) {
-                            navigator.pop(route = route)
+                            navigator.popTop()
                         } else {
                             DebugPurchaseDialog(
                                 skuDetails = skuDetails,
@@ -194,7 +191,7 @@ class DebugBillingClient internal constructor(
                                             purchases = listOf(skuDetails.toPurchaseData())
                                         )
 
-                                        navigator.pop(route = route)
+                                        navigator.popTop()
                                     }
                                 }
                             )

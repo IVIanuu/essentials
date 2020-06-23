@@ -27,10 +27,9 @@ import com.ivianuu.essentials.ui.common.compositionActivity
 fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route {
     val activity = compositionActivity
     val navigator = NavigatorAmbient.current
-    val route = RouteAmbient.current
     onActive {
         activity.startActivity(intentFactory(activity))
-        navigator.pop(route = route)
+        navigator.popTop()
     }
 }
 

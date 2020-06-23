@@ -38,8 +38,7 @@ class ActionsPage(
                                 showDefaultOption = false,
                                 showNoneOption = false
                             )
-                        }.await()
-                            .safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+                        }.safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
                         actionExecutors.execute(action)
                     }
                 }

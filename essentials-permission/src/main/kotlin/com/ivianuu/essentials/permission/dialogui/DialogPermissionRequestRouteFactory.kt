@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.permission.dialogui
 
 import androidx.compose.Composable
-import androidx.compose.FrameManager
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.foundation.Text
@@ -39,7 +38,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -50,6 +48,7 @@ import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
 @Transient
@@ -67,13 +66,12 @@ internal class DialogPermissionRequestRouteFactory(
 
 @Transient
 internal class PermissionDialog(
-    private val viewModelFactory: @Provider (PermissionRequest, Route) -> PermissionDialogViewModel
+    private val viewModelFactory: @Provider (PermissionRequest) -> PermissionDialogViewModel
 ) {
 
     @Composable
     operator fun invoke(request: PermissionRequest) {
-        val route = RouteAmbient.current
-        val viewModel = viewModel { viewModelFactory(request, route) }
+        val viewModel = viewModel { viewModelFactory(request) }
 
         Dialog(
             title = { Text("Required Permissions") }, // todo customizable
@@ -119,13 +117,12 @@ internal class PermissionDialog(
 
 @Transient
 internal class PermissionDialogViewModel(
-    dispatchers: AppCoroutineDispatchers,
+    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
     private val navigator: Navigator,
     private val request: @Assisted PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers,
-    private val route: @Assisted Route,
     private val startUi: StartUi
 ) : ViewModel(dispatchers) {
 
@@ -145,7 +142,7 @@ internal class PermissionDialogViewModel(
     }
 
     fun cancelClicked() {
-        navigator.pop(route = route)
+        navigator.popTop()
         request.onComplete.complete(Unit)
     }
 
@@ -157,10 +154,10 @@ internal class PermissionDialogViewModel(
             logger.d("update permissions to process or finish not granted $permissionsToProcess")
 
             if (permissionsToProcess.isEmpty()) {
-                navigator.pop(route = route)
+                navigator.popTop()
                 request.onComplete.complete(Unit)
             } else {
-                FrameManager.framed {
+                withContext(dispatchers.main) { // todo remove
                     _permissionsToProcess.clear()
                     _permissionsToProcess += permissionsToProcess
                 }

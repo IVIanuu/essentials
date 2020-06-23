@@ -60,15 +60,14 @@ internal class KeycodeActionPickerDelegate(
         get() = { Icon(Icons.Default.Keyboard) }
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
-        val keycode =
-            navigator.push<String>(
-                TextInputRoute(
-                    title = resourceProvider.getString(R.string.es_keycode_picker_title),
-                    hint = resourceProvider.getString(R.string.es_keycode_input_hint),
-                    keyboardType = KeyboardType.Number,
-                    allowEmpty = false
-                )
-            ).await()?.toIntOrNull() ?: return null
+        val keycode = navigator.push<String>(
+            TextInputRoute(
+                title = resourceProvider.getString(R.string.es_keycode_picker_title),
+                hint = resourceProvider.getString(R.string.es_keycode_input_hint),
+                keyboardType = KeyboardType.Number,
+                allowEmpty = false
+            )
+        )?.toIntOrNull() ?: return null
 
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX$keycode")
     }

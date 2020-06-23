@@ -20,8 +20,9 @@ import androidx.compose.Composable
 import androidx.compose.launchInComposition
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.injekt.Transient
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 
 @Transient
 class PurchasePage(
@@ -31,10 +32,11 @@ class PurchasePage(
     @Composable
     operator fun invoke(requestId: String) {
         val activity = compositionActivity
-        val route = RouteAmbient.current
         launchInComposition {
-            manager.purchaseInternal(requestId, activity)
-            navigator.pop(route = route)
+            navigator.popTop()
+            withContext(NonCancellable) {
+                manager.purchaseInternal(requestId, activity)
+            }
         }
     }
 }

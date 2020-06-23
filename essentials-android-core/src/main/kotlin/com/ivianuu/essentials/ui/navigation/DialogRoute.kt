@@ -28,7 +28,7 @@ fun DialogRoute(
     opaque: Boolean = true,
     dismissible: Boolean = true,
     onDismiss: @Composable () -> Unit = {
-        NavigatorAmbient.current.pop(route = RouteAmbient.current)
+        NavigatorAmbient.current.popTop()
     },
     dialog: @Composable () -> Unit
 ) = Route(enterTransition, exitTransition, opaque) {

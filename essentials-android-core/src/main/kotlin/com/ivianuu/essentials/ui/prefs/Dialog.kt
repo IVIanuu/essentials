@@ -21,7 +21,6 @@ import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 @Composable
 fun DialogListItem(
@@ -41,8 +40,7 @@ fun DialogListItem(
         trailing = trailing?.let { { trailing() } },
         onClick = {
             navigator.push(DialogRoute {
-                val route = RouteAmbient.current
-                dialog { navigator.pop(route = route) }
+                dialog { navigator.popTop() }
             })
         }
     )

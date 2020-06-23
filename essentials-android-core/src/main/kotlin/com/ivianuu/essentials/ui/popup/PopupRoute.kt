@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 
 fun PopupRoute(
     position: PxBounds,
@@ -42,12 +41,11 @@ fun PopupRoute(
     exitTransition = FadeStackTransition()
 ) {
     val navigator = NavigatorAmbient.current
-    val route = RouteAmbient.current
 
     val configuration = ConfigurationAmbient.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator.pop(route = route)
+        navigator.popTop()
     }
 
     val dismissed = untrackedState { false }
@@ -55,7 +53,7 @@ fun PopupRoute(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed.value) {
             dismissed.value = true
-            navigator.pop(route = route)
+            navigator.popTop()
             if (cancelled) onCancel?.invoke()
         }
     }

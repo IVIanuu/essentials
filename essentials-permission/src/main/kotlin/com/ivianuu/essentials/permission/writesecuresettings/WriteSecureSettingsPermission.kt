@@ -45,7 +45,7 @@ internal class WriteSecureSettingsPermissionRequestHandler(
         Permission.IsWriteSecureSettingsPermission in permission
 
     override suspend fun request(permission: Permission) {
-        navigator.push<Boolean> { secureSettingsPage() }.await()
+        navigator.push<Boolean> { secureSettingsPage() }
     }
 
 }

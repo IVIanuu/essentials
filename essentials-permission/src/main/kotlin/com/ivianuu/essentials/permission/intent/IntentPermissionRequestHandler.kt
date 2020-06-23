@@ -46,19 +46,17 @@ internal class IntentPermissionRequestHandler(
     override fun handles(permission: Permission): Boolean =
         Permission.Intent in permission
 
-    override suspend fun request(permission: Permission) {
-        coroutineScope {
-            select<Unit> {
-                async {
-                    startActivityForResult(permission[Permission.Intent])
-                }.onAwait {}
-                async {
-                    while (!permissionManager.hasPermissions(permission).first()) {
-                        delay(100)
-                    }
-                }.onAwait {}
-            }.also { coroutineContext.cancelChildren() }
-        }
+    override suspend fun request(permission: Permission) = coroutineScope {
+        select<Unit> {
+            async {
+                startActivityForResult(permission[Permission.Intent])
+            }.onAwait {}
+            async {
+                while (!permissionManager.hasPermissions(permission).first()) {
+                    delay(100)
+                }
+            }.onAwait {}
+        }.also { coroutineContext.cancelChildren() }
     }
 
 }

@@ -9,14 +9,12 @@ import androidx.compose.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 @Transient
 class StartActivityForResult(
-    private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
     private val startUi: StartUi
 ) {
@@ -32,11 +30,10 @@ class StartActivityForResult(
         return suspendCancellableCoroutine { continuation ->
             navigator.push(
                 Route(opaque = true) {
-                    val route = RouteAmbient.current
                     val launcher = registerActivityResultCallback(
                         contract,
                         ActivityResultCallback {
-                            navigator.pop(route = route)
+                            navigator.popTop()
                             continuation.resume(it)
                         }
                     )
@@ -44,6 +41,7 @@ class StartActivityForResult(
                     onActive { launcher.launch(input) }
                 }
             )
+            continuation.invokeOnCancellation { navigator.popTop() }
         }
     }
 
