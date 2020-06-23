@@ -27,13 +27,18 @@ import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.coroutines.produceState
+import kotlinx.coroutines.delay
+import kotlin.time.Duration
+import kotlin.time.milliseconds
 
 val SharedElementComposable = MetaProp<@Composable () -> Unit>()
 
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
     sharedElementAnim: AnimationBuilder<Float> = defaultAnimationBuilder(),
-    contentTransition: StackTransition = FadeStackTransition(sharedElementAnim)
+    contentTransition: StackTransition = FadeStackTransition(sharedElementAnim),
+    waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = { context ->
     remember { context.addTo() }
 
@@ -54,12 +59,17 @@ fun SharedElementStackTransition(
 
     val animation = animatedFloat(0f)
 
-    if (bounds.all { it.first != null && it.second != null }) {
+    val forceRun by produceState(false) {
+        delay(waitingTimeout.toLongMilliseconds())
+        true
+    }
+
+    if (bounds.all { it.first != null && it.second != null } || forceRun) {
         var otherComplete by untrackedState { false }
         var sharedElementComplete by untrackedState { false }
 
         fun completeIfPossible() {
-            if (otherComplete && sharedElementComplete) {
+            if (otherComplete && (sharedElementComplete || forceRun)) {
                 context.removeFrom()
                 context.onComplete()
             }
@@ -113,27 +123,25 @@ fun SharedElementStackTransition(
         context.toAnimatable?.set(Alpha, 0f)
     }
 
-    val propPairs = if (animation.isRunning) {
-        bounds
-            .map { (capturedStartBounds, capturedEndBounds) ->
-                checkNotNull(capturedStartBounds)
-                checkNotNull(capturedEndBounds)
-                val start = SharedElementProps(
-                    position = Offset(
-                        x = capturedStartBounds.left + (capturedStartBounds.width - capturedEndBounds.width) / 2,
-                        y = capturedStartBounds.top + (capturedStartBounds.height - capturedEndBounds.height) / 2
-                    ),
-                    scaleX = capturedStartBounds.width / capturedEndBounds.width,
-                    scaleY = capturedStartBounds.height / capturedEndBounds.height
-                )
-                val end = SharedElementProps(
-                    position = Offset(capturedEndBounds.left, capturedEndBounds.top),
-                    scaleX = 1f,
-                    scaleY = 1f
-                )
-                start to end
-            }
-    } else emptyList()
+    val propPairs = bounds
+        .filter { it.first != null && it.second != null }
+        .map { it.first!! to it.second!! }
+        .map { (capturedStartBounds, capturedEndBounds) ->
+            val start = SharedElementProps(
+                position = Offset(
+                    x = capturedStartBounds.left + (capturedStartBounds.width - capturedEndBounds.width) / 2,
+                    y = capturedStartBounds.top + (capturedStartBounds.height - capturedEndBounds.height) / 2
+                ),
+                scaleX = capturedStartBounds.width / capturedEndBounds.width,
+                scaleY = capturedStartBounds.height / capturedEndBounds.height
+            )
+            val end = SharedElementProps(
+                position = Offset(capturedEndBounds.left, capturedEndBounds.top),
+                scaleX = 1f,
+                scaleY = 1f
+            )
+            start to end
+        }
 
     val animatedProps = propPairs
         .map { (startProps, endProps) ->
