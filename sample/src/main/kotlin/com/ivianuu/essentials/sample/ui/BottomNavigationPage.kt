@@ -17,12 +17,16 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.getValue
+import androidx.compose.setValue
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.layout.fillMaxSize
+import androidx.ui.material.BottomNavigation
+import androidx.ui.material.BottomNavigationItem
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Email
@@ -30,11 +34,9 @@ import androidx.ui.material.icons.filled.Home
 import androidx.ui.material.icons.filled.Search
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.material.icons.filled.ViewAgenda
+import androidx.ui.savedinstancestate.savedInstanceState
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.Icon
-import com.ivianuu.essentials.ui.material.BottomNavigation
-import com.ivianuu.essentials.ui.material.BottomNavigationContent
-import com.ivianuu.essentials.ui.material.BottomNavigationItem
-import com.ivianuu.essentials.ui.material.ProvideBottomNavigationController
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Transient
@@ -43,26 +45,30 @@ import com.ivianuu.injekt.Transient
 class BottomNavigationPage {
     @Composable
     operator fun invoke() {
-        ProvideBottomNavigationController(items = BottomNavItem.values().toList()) {
-            Scaffold(
-                topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
-                bottomBar = {
-                    BottomNavigation<BottomNavItem>(
-                        backgroundColor = MaterialTheme.colors.primary
-                    ) { item ->
+        var selectedItem by savedInstanceState { BottomNavItem.values().first() }
+
+        Scaffold(
+            topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
+            bottomBar = {
+                BottomNavigation(
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    BottomNavItem.values().forEach { item ->
                         BottomNavigationItem(
+                            selected = item == selectedItem,
+                            onSelected = { selectedItem = item },
                             icon = { Icon(item.icon) },
                             text = { Text(item.title) }
                         )
                     }
                 }
-            ) {
-                BottomNavigationContent<BottomNavItem> { item ->
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        backgroundColor = item.color
-                    )
-                }
+            }
+        ) {
+            AnimatedBox(
+                current = selectedItem,
+                modifier = Modifier.fillMaxSize()
+            ) { item ->
+                Box(backgroundColor = item.color)
             }
         }
     }
