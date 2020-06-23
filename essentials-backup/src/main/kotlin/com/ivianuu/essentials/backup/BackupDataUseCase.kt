@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
+import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -23,9 +24,11 @@ import java.util.zip.ZipOutputStream
 @Transient
 internal class BackupDataUseCase(
     private val application: Application,
+    private val backupDir: @BackupDir String,
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val prefsDir: @PrefsDir String
 ) {
 
     @SuppressLint("SimpleDateFormat")
@@ -33,17 +36,16 @@ internal class BackupDataUseCase(
         withContext(dispatchers.io) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName = "backup_${dateFormat.format(Date())}"
-            val dataPath = application.applicationInfo.dataDir
 
-            val backupFile = File("$dataPath/backups/$backupFileName.zip")
+            val backupFile = File("$backupDir/$backupFileName.zip")
             backupFile.mkdirs()
             backupFile.createNewFile()
 
             val dest = FileOutputStream(backupFile)
             val out = ZipOutputStream(BufferedOutputStream(dest))
 
-            val prefsDir = File("$dataPath/prefs")
-            val prefsToBackup = prefsDir.listFiles()
+            val prefsFile = File(prefsDir)
+            val prefsToBackup = prefsFile.listFiles()
 
             for (file in prefsToBackup) {
                 val content = file.bufferedReader()

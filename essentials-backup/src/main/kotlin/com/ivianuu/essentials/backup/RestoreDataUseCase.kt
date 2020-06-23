@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
+import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.RestartProcess
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
@@ -19,6 +20,7 @@ import java.util.zip.ZipInputStream
 internal class RestoreDataUseCase(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,
+    private val prefsDir: @PrefsDir String,
     private val restartProcess: RestartProcess,
     private val startActivityForResult: StartActivityForResult
 ) {
@@ -39,8 +41,7 @@ internal class RestoreDataUseCase(
                 activity.contentResolver.openInputStream(uri)!!.buffered()
             )
 
-            val targetDirectory =
-                File("${activity.applicationInfo.dataDir}/prefs")
+            val targetDirectory = File(prefsDir)
 
             var entry: ZipEntry? = zipInputStream.nextEntry
             while (entry != null) {

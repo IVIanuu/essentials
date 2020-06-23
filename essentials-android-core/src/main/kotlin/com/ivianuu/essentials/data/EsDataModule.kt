@@ -28,6 +28,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.transient
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
@@ -36,27 +37,30 @@ import java.io.File
 @Module
 private fun esDataModule() {
     installIn<ApplicationComponent>()
-    scoped<@PrefsPath String> { context: @ForApplication Context ->
-        "${context.applicationInfo.dataDir}/prefs"
+    transient<@DataDir String> { context: @ForApplication Context ->
+        context.applicationInfo.dataDir
+    }
+    transient<@PrefsDir String> { dataDir: @DataDir String ->
+        "$dataDir/prefs"
     }
     scoped { moshi: Moshi -> MoshiSerializerFactory(moshi) }
     scoped { scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers,
-             prefsPath: @PrefsPath String,
+             prefsDir: @PrefsDir String,
              serializerFactory: MoshiSerializerFactory ->
         DiskBoxFactory(
             scope = scope + dispatchers.io,
-            produceBoxDirectory = { File(prefsPath) },
+            produceBoxDirectory = { File(prefsDir) },
             serializerFactory = serializerFactory
         )
     }
     scoped { scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers,
-             prefsPath: @PrefsPath String,
+             prefsDir: @PrefsDir String,
              serializerFactory: MoshiSerializerFactory ->
         PrefBoxFactory(
             scope = scope + dispatchers.io,
-            producePrefsFile = { File(prefsPath, "default") },
+            producePrefsFile = { File(prefsDir, "default") },
             serializerFactory = serializerFactory
         )
     }
@@ -72,4 +76,8 @@ private fun esDataModule() {
 
 @Target(AnnotationTarget.TYPE)
 @Qualifier
-annotation class PrefsPath
+annotation class DataDir
+
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class PrefsDir
