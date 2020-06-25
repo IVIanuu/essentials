@@ -23,6 +23,7 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
 fun <T> SingleChoiceListDialog(
@@ -30,6 +31,7 @@ fun <T> SingleChoiceListDialog(
     selectedItem: T,
     onSelect: (T) -> Unit,
     item: @Composable (T) -> Unit,
+    dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
@@ -38,6 +40,8 @@ fun <T> SingleChoiceListDialog(
     neutralButton: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val navigator = NavigatorAmbient.current
+
     Dialog(
         modifier = modifier,
         icon = icon,
@@ -51,7 +55,10 @@ fun <T> SingleChoiceListDialog(
                         SingleChoiceDialogListItem(
                             title = { item(item) },
                             selected = item == selectedItem,
-                            onSelect = { onSelect(item) }
+                            onSelect = {
+                                onSelect(item)
+                                if (dismissOnSelection) navigator.popTop()
+                            }
                         )
                     }
                 }

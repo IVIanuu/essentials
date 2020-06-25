@@ -220,6 +220,7 @@ class DialogsPage {
                             items = singleChoiceItems,
                             selectedItem = tmpSelectedItem,
                             onSelect = setTmpSelectedItem,
+                            dismissOnSelection = false,
                             item = { Text("Item: $it") },
                             positiveButton = {
                                 DialogCloseButton(
