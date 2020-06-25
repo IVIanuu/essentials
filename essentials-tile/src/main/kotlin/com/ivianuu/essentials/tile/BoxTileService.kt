@@ -28,4 +28,5 @@ abstract class BoxTileService<T> : FlowTileService<T>() {
 
     final override val state: Flow<T>
         get() = box.data
+
 }

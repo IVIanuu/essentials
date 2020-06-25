@@ -22,8 +22,8 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.Modifier
 import androidx.ui.core.Placeable
+import androidx.ui.core.id
 import androidx.ui.core.layoutId
-import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ProvideTextStyle
 import androidx.ui.layout.Arrangement
@@ -226,15 +226,15 @@ private fun DialogContentLayout(
         )
 
         val headerMeasureable =
-            measurables.firstOrNull { it.tag == DialogContentSlot.Header }
+            measurables.firstOrNull { it.id == DialogContentSlot.Header }
         val topDividerMeasureable =
-            measurables.firstOrNull { it.tag == DialogContentSlot.TopDivider }
+            measurables.firstOrNull { it.id == DialogContentSlot.TopDivider }
         val contentMeasureable =
-            measurables.firstOrNull { it.tag == DialogContentSlot.Content }
+            measurables.firstOrNull { it.id == DialogContentSlot.Content }
         val bottomDividerMeasureable =
-            measurables.firstOrNull { it.tag == DialogContentSlot.BottomDivider }
+            measurables.firstOrNull { it.id == DialogContentSlot.BottomDivider }
         val buttonsMeasureable =
-            measurables.firstOrNull { it.tag == DialogContentSlot.Buttons }
+            measurables.firstOrNull { it.id == DialogContentSlot.Buttons }
 
         fun measureFixed(measureable: Measurable?): Placeable? {
             return if (measureable != null) {

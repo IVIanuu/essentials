@@ -26,8 +26,8 @@ import androidx.compose.staticAmbientOf
 import androidx.ui.core.Constraints
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
+import androidx.ui.core.id
 import androidx.ui.core.layoutId
-import androidx.ui.core.tag
 import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
@@ -169,16 +169,16 @@ private fun ScaffoldLayout(
         val height = incomingConstraints.maxHeight
 
         val topAppBarMeasureable = measurables.firstOrNull {
-            it.tag == ScaffoldSlot.TopAppBar
+            it.id == ScaffoldSlot.TopAppBar
         }
         val bodyMeasureable = measurables.firstOrNull {
-            it.tag == ScaffoldSlot.Body
+            it.id == ScaffoldSlot.Body
         }
         val bottomBarMeasureable = measurables.firstOrNull {
-            it.tag == ScaffoldSlot.BottomBar
+            it.id == ScaffoldSlot.BottomBar
         }
         val fabMeasureable = measurables.firstOrNull {
-            it.tag == ScaffoldSlot.Fab
+            it.id == ScaffoldSlot.Fab
         }
 
         var barConstraints = incomingConstraints.copy(

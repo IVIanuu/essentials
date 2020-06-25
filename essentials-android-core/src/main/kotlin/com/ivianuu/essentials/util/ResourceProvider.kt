@@ -17,9 +17,7 @@ class ResourceProvider(
     private val densityProvider: DensityProvider
 ) {
 
-    fun getBitmap(id: Int): ImageAsset {
-        return context.getDrawable(id)!!.toImageAsset()
-    }
+    fun getBitmap(id: Int): ImageAsset = context.getDrawable(id)!!.toImageAsset()
 
     fun getBoolean(id: Int): Boolean = context.resources.getBoolean(id)
 

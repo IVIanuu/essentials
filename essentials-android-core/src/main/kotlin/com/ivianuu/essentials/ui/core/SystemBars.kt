@@ -111,8 +111,10 @@ private class SystemBarManager {
                             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 )
 
-            activity.window.isNavigationBarContrastEnforced = false
-            activity.window.isStatusBarContrastEnforced = false
+            if (Build.VERSION.SDK_INT >= 29) {
+                activity.window.isNavigationBarContrastEnforced = false
+                activity.window.isStatusBarContrastEnforced = false
+            }
         }
 
         val windowInsets = InsetsAmbient.current

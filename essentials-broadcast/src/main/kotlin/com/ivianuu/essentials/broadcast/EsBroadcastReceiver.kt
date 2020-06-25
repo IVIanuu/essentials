@@ -22,4 +22,3 @@ import android.content.BroadcastReceiver
  * Base broadcast receiver
  */
 abstract class EsBroadcastReceiver : BroadcastReceiver()
-
