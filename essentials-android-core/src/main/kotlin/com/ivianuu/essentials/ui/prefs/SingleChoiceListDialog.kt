@@ -33,6 +33,7 @@ fun <T> SingleChoiceDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<SingleChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
@@ -45,6 +46,7 @@ fun <T> SingleChoiceDialogListItem(
         title = title,
         subtitle = subtitle,
         leading = leading,
+        trailing = trailing,
         dialogTitle = dialogTitle,
         items = items
     )
@@ -57,6 +59,7 @@ fun <T> SingleChoiceDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<SingleChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
@@ -66,6 +69,7 @@ fun <T> SingleChoiceDialogListItem(
         title = title?.let { { title() } },
         subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
+        trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
             SingleChoiceListDialog(
                 items = items,

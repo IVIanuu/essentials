@@ -34,6 +34,7 @@ fun <T> MultiChoiceDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
@@ -46,6 +47,7 @@ fun <T> MultiChoiceDialogListItem(
         title = title,
         subtitle = subtitle,
         leading = leading,
+        trailing = trailing,
         dialogTitle = dialogTitle,
         items = items
     )
@@ -58,6 +60,7 @@ fun <T> MultiChoiceDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     items: List<MultiChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
@@ -67,6 +70,7 @@ fun <T> MultiChoiceDialogListItem(
         title = title?.let { { title() } },
         subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
+        trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
             val selectedItems = state {
                 value

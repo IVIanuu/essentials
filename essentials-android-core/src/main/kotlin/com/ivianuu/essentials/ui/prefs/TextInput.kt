@@ -33,6 +33,7 @@ fun TextInputDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
@@ -47,6 +48,7 @@ fun TextInputDialogListItem(
         title = title,
         subtitle = subtitle,
         leading = leading,
+        trailing = trailing,
         dialogTitle = dialogTitle,
         dialogHint = dialogHint,
         dialogKeyboardType = dialogKeyboardType,
@@ -61,6 +63,7 @@ fun TextInputDialogListItem(
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
+    trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
@@ -72,6 +75,7 @@ fun TextInputDialogListItem(
         title = title?.let { { title() } },
         subtitle = subtitle?.let { { subtitle() } },
         leading = leading?.let { { leading() } },
+        trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
             val currentValue = stateFor(value) { value }
 
