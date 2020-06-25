@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.store.android.prefs
 
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.store.CorruptionHandler
+import com.ivianuu.essentials.store.DefaultDataCorruptionHandler
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.store.MoshiSerializerFactory
 import com.ivianuu.essentials.store.Serializer
@@ -42,7 +44,8 @@ class PrefBoxFactory(
             produceFile = producePrefsFile,
             produceSerializer = { serializerFactory.create() },
             produceDefaultData = { Prefs() },
-            scope = scope
+            scope = scope,
+            corruptionHandler = DefaultDataCorruptionHandler
         )
     }
 
@@ -67,7 +70,8 @@ class PrefBoxFactory(
                 producePrefs = { prefs },
                 produceSerializer = produceSerializer,
                 produceDefaultData = produceDefaultData,
-                scope = scope
+                scope = scope,
+                corruptionHandler = DefaultDataCorruptionHandler
             )
             boxes[key] = box
         }
@@ -81,7 +85,8 @@ private class PrefBox<T>(
     producePrefs: () -> Box<Prefs>,
     produceSerializer: () -> Serializer<T>,
     produceDefaultData: () -> T,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val corruptionHandler: CorruptionHandler
 ) : Box<T> {
 
     override val defaultData by lazy(produceDefaultData)
@@ -115,19 +120,22 @@ private class PrefBox<T>(
             newData as T
         }
 
-    private fun T.serialize() = try {
+    private suspend fun T.serialize() = try {
         serializer.serialize(this)
     } catch (e: Exception) {
         throw SerializerException("Couldn't serialize value for key $key $this", e)
     }
 
-    private fun String.deserialize() = try {
-        serializer.deserialize(this)
-    } catch (e: Exception) {
-        throw SerializerException("Couldn't deserialize value for key '$key'", e)
+    private suspend fun String.deserialize(): T {
+        return try {
+            serializer.deserialize(this)
+        } catch (e: Exception) {
+            corruptionHandler.onCorruption(this@PrefBox, this, e)
+        }
     }
 
-    private fun Prefs.getOrDefault(): T =
-        if (map.containsKey(key)) map.getValue(key).deserialize() else defaultData
+    private suspend fun Prefs.getOrDefault(): T {
+        return if (map.containsKey(key)) map.getValue(key).deserialize() else defaultData
+    }
 
 }

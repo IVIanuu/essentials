@@ -34,7 +34,7 @@ import java.io.IOException
 import java.util.concurrent.atomic.AtomicReference
 
 interface Serializer<T> {
-    fun deserialize(serialized: String): T
+    fun deserialize(serializedData: String): T
     fun serialize(data: T): String
 }
 
@@ -44,19 +44,22 @@ fun <T> DiskBox(
     produceFile: () -> File,
     produceSerializer: () -> Serializer<T>,
     produceDefaultData: () -> T,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    corruptionHandler: CorruptionHandler = NoopCorruptionHandler
 ): Box<T> = DiskBoxImpl(
     produceFile = produceFile,
     produceDefaultData = produceDefaultData,
     produceSerializer = produceSerializer,
-    scope = scope
+    scope = scope,
+    corruptionHandler = corruptionHandler
 )
 
 internal class DiskBoxImpl<T>(
     produceFile: () -> File,
     produceSerializer: () -> Serializer<T>,
     produceDefaultData: () -> T,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val corruptionHandler: CorruptionHandler
 ) : Box<T> {
 
     override val data: Flow<T> = flow {
@@ -134,31 +137,44 @@ internal class DiskBoxImpl<T>(
         failedDataChannel.close(ex)
     }
 
-    private fun readAndInitOnce(dataChannel: ConflatedBroadcastChannel<T>) {
+    private suspend fun readAndInitOnce(dataChannel: ConflatedBroadcastChannel<T>) {
         if (dataChannel.valueOrNull != null) return
 
         val data = if (!file.exists()) {
             defaultData
         } else {
-            val serializedData = try {
-                file.bufferedReader().use {
-                    it.readText()
-                }
-            } catch (e: Exception) {
-                throw IOException("Couldn't read file '$file'", e)
-            }
-
-            try {
-                serializer.deserialize(serializedData)
-            } catch (e: Exception) {
-                throw SerializerException(
-                    "Couldn't deserialize '$serializedData' for file '$file'",
-                    e
-                )
-            }
+            readOrHandleCorruption()
         }
 
         dataChannel.offer(data)
+    }
+
+    private suspend fun readOrHandleCorruption(): T {
+        val serializedData = try {
+            file.bufferedReader().use {
+                it.readText()
+            }
+        } catch (e: Exception) {
+            throw IOException("Couldn't read file '$file'", e)
+        }
+
+        return try {
+            serializer.deserialize(serializedData)
+        } catch (e: Exception) {
+            val newData = corruptionHandler.onCorruption(this, serializedData, e)
+
+            try {
+                writeData(newData)
+            } catch (writeEx: IOException) {
+                // If we fail to write the handled data, add the new exception as a suppressed
+                // exception.
+                e.addSuppressed(writeEx)
+                throw e
+            }
+
+            // If we reach this point, we've successfully replaced the data on disk with newData.
+            newData
+        }
     }
 
     private suspend fun transformAndWrite(
