@@ -25,7 +25,6 @@ import com.ivianuu.essentials.ui.resource.Success
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
@@ -63,17 +62,6 @@ abstract class StateViewModel<S>(
     protected suspend fun setStateNow(reducer: suspend S.() -> S) {
         actor.send(reducer)
     }
-
-    protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = scope.coroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: suspend S.(Resource<V>) -> S
-    ): Job = execute(
-        context = context,
-        start = start,
-        block = { await() },
-        reducer = reducer
-    )
 
     protected fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S): Job {
         return scope.launch {
