@@ -20,7 +20,7 @@ suspend fun <T> retry(
         } catch (t: Throwable) {
             if (!predicate(t)) throw RuntimeException(t)
         }
-        delay(currentDelay)
+        delay(currentDelay.toLongMilliseconds()) // todo remove toLongMilliseconds()
         currentDelay = (currentDelay * factor).coerceAtMost(maxDelay)
     }
 

@@ -40,7 +40,7 @@ private fun ScreenshotModule() {
             } else {
                 rootExecutorFactory("input keyevent 26")
             }).let {
-                it.beforeAction { delay(500.milliseconds) }
+                it.beforeAction { delay(500.milliseconds.toLongMilliseconds()) } // todo remove toLongMilliseconds()
             }
         ) as @StringKey("screenshot") Action
     }
