@@ -16,25 +16,8 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.os.StrictMode
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.injekt.android.CompositionAndroidApp
 
 @CompositionAndroidApp
-class App : EsApp() {
-
-    override fun onCreate() {
-        StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .build()
-        )
-        StrictMode.setVmPolicy(
-            StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .build()
-        )
-        super.onCreate()
-    }
-
-}
+class App : EsApp()
