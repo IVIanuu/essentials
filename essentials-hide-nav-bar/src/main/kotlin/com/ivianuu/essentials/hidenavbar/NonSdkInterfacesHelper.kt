@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.store.android.settings.SettingDataStore
-import com.ivianuu.essentials.store.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.store.android.settings.int
+import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
+import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
+import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Transient

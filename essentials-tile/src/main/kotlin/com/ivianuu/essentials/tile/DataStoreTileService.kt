@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tile
 
-import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.flow.Flow
 
 /**

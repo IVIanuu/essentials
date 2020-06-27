@@ -24,7 +24,7 @@ import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette

@@ -23,7 +23,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog

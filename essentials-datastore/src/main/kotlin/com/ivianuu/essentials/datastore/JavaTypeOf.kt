@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.datastore
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

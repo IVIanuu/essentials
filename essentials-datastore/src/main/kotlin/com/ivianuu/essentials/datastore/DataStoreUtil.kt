@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

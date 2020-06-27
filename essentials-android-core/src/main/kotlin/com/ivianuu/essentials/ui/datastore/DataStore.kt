@@ -21,7 +21,7 @@ import androidx.compose.MutableState
 import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.remember
-import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import kotlinx.coroutines.launch
 

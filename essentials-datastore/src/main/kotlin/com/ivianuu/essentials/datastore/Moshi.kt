@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.datastore
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi

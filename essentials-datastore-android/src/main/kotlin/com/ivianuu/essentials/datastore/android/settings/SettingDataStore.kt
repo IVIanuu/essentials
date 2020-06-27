@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.android.settings
+package com.ivianuu.essentials.datastore.android.settings
 
 import android.content.ContentResolver
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
-import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose

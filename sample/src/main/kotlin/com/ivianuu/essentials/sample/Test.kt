@@ -2,7 +2,7 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.BindAppWorker
-import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.datastore.android.prefs.PrefBoxFactory
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.coroutineScope

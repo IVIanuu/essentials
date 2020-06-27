@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.datastore
 
 import kotlinx.coroutines.CoroutineScope
 import java.io.File

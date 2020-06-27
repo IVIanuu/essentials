@@ -1,10 +1,10 @@
-package com.ivianuu.essentials.store.android
+package com.ivianuu.essentials.datastore.android
 
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
-import com.ivianuu.essentials.store.DataStore
-import com.ivianuu.essentials.store.DiskDataStoreFactory
-import com.ivianuu.essentials.store.map
+import com.ivianuu.essentials.datastore.DataStore
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.map
 import kotlin.time.Duration
 
 // todo remove once moshi supports inline classes

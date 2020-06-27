@@ -2,12 +2,12 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.map
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.map
 import com.ivianuu.injekt.ApplicationScoped
 
 @ApplicationScoped
-internal class BillingPrefs(factory: PrefBoxFactory) {
+internal class BillingPrefs(factory: DiskDataStoreFactory) {
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(
             fromRaw = { productsJson ->

@@ -12,10 +12,10 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.store.DataStore
-import com.ivianuu.essentials.store.android.settings.SettingDataStore
-import com.ivianuu.essentials.store.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.store.android.settings.int
+import com.ivianuu.essentials.datastore.DataStore
+import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
+import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
+import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module

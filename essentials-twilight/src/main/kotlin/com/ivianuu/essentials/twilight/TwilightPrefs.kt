@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.ApplicationScoped
 
 @ApplicationScoped
-class TwilightPrefs(factory: PrefBoxFactory) {
+class TwilightPrefs(factory: DiskDataStoreFactory) {
     val twilightMode = factory.create("twilight_mode") { TwilightMode.System }
     val useBlack = factory.create("use_black") { false }
 }

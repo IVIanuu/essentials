@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.data
 
 import android.content.Context
-import com.ivianuu.essentials.store.DiskDataStoreFactory
-import com.ivianuu.essentials.store.MoshiSerializerFactory
-import com.ivianuu.essentials.store.android.settings.SettingsDataStoreFactory
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.MoshiSerializerFactory
+import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication

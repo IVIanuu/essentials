@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
-import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.datastore.android.prefs.PrefBoxFactory
 import com.ivianuu.injekt.Transient
 
 @Transient
