@@ -12,9 +12,9 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.store.android.settings.SettingBox
-import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.store.android.settings.SettingDataStore
+import com.ivianuu.essentials.store.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.store.android.settings.int
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
@@ -45,26 +45,26 @@ private fun AutoRotationModule() {
         ) as @StringKey("auto_rotation") Action
     }
 
-    scoped<@AutoRotationSetting Box<Int>> { factory: SettingsBoxFactory ->
-        factory.int(Settings.System.ACCELEROMETER_ROTATION, SettingBox.Type.System, 1)
+    scoped<@AutoRotationSetting DataStore<Int>> { factory: SettingsDataStoreFactory ->
+        factory.int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
     }
 }
 
 @Transient
 internal class AutoRotationActionExecutor(
-    private val box: @AutoRotationSetting Box<Int>
+    private val dataStore: @AutoRotationSetting DataStore<Int>
 ) : ActionExecutor {
     override suspend fun invoke() {
-        box.updateData { if (it != 1) 1 else 0 }
+        dataStore.updateData { if (it != 1) 1 else 0 }
     }
 }
 
 @Transient
 internal class AutoRotationActionIconProvider(
-    private val box: @AutoRotationSetting Box<Int>
+    private val dataStore: @AutoRotationSetting DataStore<Int>
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
-        get() = box.data
+        get() = dataStore.data
             .map { it == 1 }
             .map {
                 if (it) Icons.Default.ScreenRotation

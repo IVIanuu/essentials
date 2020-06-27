@@ -23,14 +23,14 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.TextButton
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 
 @Composable
 fun <T> MultiChoiceDialogListItem(
-    box: Box<Set<T>>,
+    dataStore: DataStore<Set<T>>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -39,7 +39,7 @@ fun <T> MultiChoiceDialogListItem(
     items: List<MultiChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     MultiChoiceDialogListItem(
         value = state.value,
         onValueChange = { state.value = it },

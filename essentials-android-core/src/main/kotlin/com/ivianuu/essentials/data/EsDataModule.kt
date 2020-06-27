@@ -17,10 +17,9 @@
 package com.ivianuu.essentials.data
 
 import android.content.Context
-import com.ivianuu.essentials.store.DiskBoxFactory
+import com.ivianuu.essentials.store.DiskDataStoreFactory
 import com.ivianuu.essentials.store.MoshiSerializerFactory
-import com.ivianuu.essentials.store.android.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.android.settings.SettingsBoxFactory
+import com.ivianuu.essentials.store.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
@@ -46,26 +45,16 @@ private fun esDataModule() {
              dispatchers: AppCoroutineDispatchers,
              prefsDir: @PrefsDir String,
              serializerFactory: MoshiSerializerFactory ->
-        DiskBoxFactory(
+        DiskDataStoreFactory(
             scope = scope + dispatchers.io,
             produceBoxDirectory = { File(prefsDir) },
-            serializerFactory = serializerFactory
-        )
-    }
-    scoped { scope: @ForApplication CoroutineScope,
-             dispatchers: AppCoroutineDispatchers,
-             prefsDir: @PrefsDir String,
-             serializerFactory: MoshiSerializerFactory ->
-        PrefBoxFactory(
-            scope = scope + dispatchers.io,
-            producePrefsFile = { File(prefsDir, "default") },
             serializerFactory = serializerFactory
         )
     }
     scoped { context: @ForApplication Context,
              scope: @ForApplication CoroutineScope,
              dispatchers: AppCoroutineDispatchers ->
-        SettingsBoxFactory(
+        SettingsDataStoreFactory(
             context = context,
             scope = scope + dispatchers.io
         )

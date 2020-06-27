@@ -33,8 +33,8 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.essentials.util.cast
@@ -42,7 +42,7 @@ import kotlin.time.Duration
 
 @Composable
 fun DoubleSliderListItem(
-    box: Box<Double>,
+    dataStore: DataStore<Double>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -51,7 +51,7 @@ fun DoubleSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     DoubleSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
@@ -94,7 +94,7 @@ fun DoubleSliderListItem(
 
 @Composable
 fun FloatSliderListItem(
-    box: Box<Float>,
+    dataStore: DataStore<Float>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -103,7 +103,7 @@ fun FloatSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     FloatSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
@@ -146,7 +146,7 @@ fun FloatSliderListItem(
 
 @Composable
 fun IntSliderListItem(
-    box: Box<Int>,
+    dataStore: DataStore<Int>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -155,7 +155,7 @@ fun IntSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     IntSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
@@ -198,7 +198,7 @@ fun IntSliderListItem(
 
 @Composable
 fun LongSliderListItem(
-    box: Box<Long>,
+    dataStore: DataStore<Long>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -207,7 +207,7 @@ fun LongSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     LongSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
@@ -250,7 +250,7 @@ fun LongSliderListItem(
 
 @Composable
 fun DpSliderListItem(
-    box: Box<Dp>,
+    dataStore: DataStore<Dp>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -259,7 +259,7 @@ fun DpSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     DpSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },
@@ -302,7 +302,7 @@ fun DpSliderListItem(
 
 @Composable
 fun DurationSliderListItem(
-    box: Box<Duration>,
+    dataStore: DataStore<Duration>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -311,7 +311,7 @@ fun DurationSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     DurationSliderListItem(
         value = state.value,
         onValueChange = { state.value = it },

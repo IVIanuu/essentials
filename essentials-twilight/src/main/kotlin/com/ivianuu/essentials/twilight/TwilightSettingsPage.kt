@@ -17,12 +17,9 @@
 package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
-import androidx.compose.getValue
 import androidx.compose.key
-import androidx.compose.setValue
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.ui.box.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -53,7 +50,7 @@ class TwilightSettingsPage(
                 Subheader { Text(R.string.es_twilight_pref_category_more) }
 
                 CheckboxListItem(
-                    box = prefs.useBlack,
+                    dataStore = prefs.useBlack,
                     title = { Text(R.string.es_twilight_use_black) }
                 )
             }

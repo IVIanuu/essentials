@@ -24,14 +24,14 @@ import androidx.ui.layout.size
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 
 @Composable
 fun ColorDialogListItem(
-    box: Box<Color>,
+    dataStore: DataStore<Color>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
@@ -41,7 +41,7 @@ fun ColorDialogListItem(
     allowCustomArgb: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     ColorDialogListItem(
         value = state.value,
         onValueChange = { state.value = it },

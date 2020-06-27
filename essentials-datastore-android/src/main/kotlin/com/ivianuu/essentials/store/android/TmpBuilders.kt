@@ -1,0 +1,45 @@
+package com.ivianuu.essentials.store.android
+
+import androidx.ui.graphics.Color
+import androidx.ui.graphics.toArgb
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.store.DiskDataStoreFactory
+import com.ivianuu.essentials.store.map
+import kotlin.time.Duration
+
+// todo remove once moshi supports inline classes
+
+fun DiskDataStoreFactory.color(
+    name: String,
+    produceDefaultData: () -> Color
+): DataStore<Color> {
+    return create(name = name, produceDefaultData = { produceDefaultData().toArgb() })
+        .map(
+            fromRaw = { Color(it) },
+            toRaw = { it.toArgb() }
+        )
+}
+
+fun DiskDataStoreFactory.duration(
+    name: String,
+    produceDefaultData: () -> Duration
+): DataStore<Duration> {
+    return create(name = name, produceDefaultData = { produceDefaultData().toDouble() })
+        .map(
+            fromRaw = { it.toDuration() },
+            toRaw = { it.toDouble() }
+        )
+}
+
+private fun Double.toDuration(): Duration {
+    return Duration::class.java.getDeclaredConstructor(Double::class.java)
+        .also { it.isAccessible = true }
+        .newInstance(this)
+}
+
+private fun Duration.toDouble(): Double {
+    return javaClass.declaredFields
+        .first { it.type == Double::class.java }
+        .also { it.isAccessible = true }
+        .get(this)!! as Double
+}

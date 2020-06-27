@@ -20,8 +20,8 @@ import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.core.composed
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.common.interactive
 
 fun Modifier.preferenceDependencies(
@@ -30,7 +30,7 @@ fun Modifier.preferenceDependencies(
     val dependenciesSatisfied = dependencies
         .map {
             key(it) {
-                it.box.asState().value == it.value
+                it.dataStore.asState().value == it.value
             }
         }
         .all { it }
@@ -39,4 +39,4 @@ fun Modifier.preferenceDependencies(
 }
 
 @Immutable
-data class Dependency<T>(val box: Box<T>, val value: T)
+data class Dependency<T>(val dataStore: DataStore<T>, val value: T)

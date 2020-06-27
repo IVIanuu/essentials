@@ -29,6 +29,8 @@
             <option value="$PROJECT_DIR$/essentials-compiler" />
             <option value="$PROJECT_DIR$/essentials-core" />
             <option value="$PROJECT_DIR$/essentials-coroutines" />
+            <option value="$PROJECT_DIR$/essentials-datastore" />
+            <option value="$PROJECT_DIR$/essentials-datastore-android" />
             <option value="$PROJECT_DIR$/essentials-foreground" />
             <option value="$PROJECT_DIR$/essentials-gestures" />
             <option value="$PROJECT_DIR$/essentials-gradle-plugin" />
@@ -43,8 +45,6 @@
             <option value="$PROJECT_DIR$/essentials-service" />
             <option value="$PROJECT_DIR$/essentials-shell" />
             <option value="$PROJECT_DIR$/essentials-shortcut-picker" />
-            <option value="$PROJECT_DIR$/essentials-store" />
-            <option value="$PROJECT_DIR$/essentials-store-android" />
             <option value="$PROJECT_DIR$/essentials-test" />
             <option value="$PROJECT_DIR$/essentials-tile" />
             <option value="$PROJECT_DIR$/essentials-torch" />

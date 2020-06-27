@@ -12,8 +12,8 @@ dependencies {
     compile(Deps.Coroutines.core)
 
     compile(project(":essentials-coroutines"))
+    compile(project(":essentials-datastore"))
     compile(project(":essentials-moshi"))
-    compile(project(":essentials-store"))
 
     compile(Deps.Injekt.common)
     compile(Deps.Injekt.composition)

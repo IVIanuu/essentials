@@ -20,20 +20,20 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.box.asState
+import com.ivianuu.essentials.store.DataStore
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
 fun RadioButtonListItem(
-    box: Box<Boolean>,
+    dataStore: DataStore<Boolean>,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val state = box.asState()
+    val state = dataStore.asState()
     RadioButtonListItem(
         value = state.value,
         onValueChange = { state.value = it },
