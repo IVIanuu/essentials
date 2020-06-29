@@ -19,22 +19,16 @@ package com.ivianuu.essentials.ui.popup
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Shape
 import androidx.ui.layout.padding
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
-import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 
 @Composable
-fun Popup(
-    shape: Shape = RoundedCornerShape(size = 4.dp),
-    elevation: Dp = 8.dp,
-    content: @Composable () -> Unit
-) {
+fun Popup(content: @Composable () -> Unit) {
     Surface(
-        elevation = elevation,
-        shape = shape
+        elevation = 8.dp,
+        shape = MaterialTheme.shapes.medium
     ) {
         Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp), children = content)
     }
