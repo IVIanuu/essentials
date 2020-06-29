@@ -13,6 +13,7 @@ import androidx.ui.layout.RowScope
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.height
 import androidx.ui.layout.width
+import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsAmbient
 
 @Composable
@@ -25,7 +26,9 @@ fun InsettingVerticalScroller(
     VerticalScroller(scrollerPosition, modifier, isScrollable) {
         val insets = InsetsAmbient.current
         Spacer(Modifier.height(insets.systemBars.top))
-        children()
+        ConsumeInsets(left = false, right = false) {
+            children()
+        }
         Spacer(Modifier.height(insets.systemBars.bottom))
     }
 }
@@ -40,7 +43,9 @@ fun InsettingHorizontalScroller(
     HorizontalScroller(scrollerPosition, modifier, isScrollable) {
         val insets = InsetsAmbient.current
         Spacer(Modifier.width(insets.systemBars.start))
-        children()
+        ConsumeInsets(top = false, bottom = false) {
+            children()
+        }
         Spacer(Modifier.width(insets.systemBars.end))
     }
 }
@@ -51,26 +56,27 @@ fun <T> InsettingLazyColumnItems(
     modifier: Modifier = Modifier,
     itemContent: @Composable (T) -> Unit
 ) {
-    LazyColumnItems(
-        items = remember(items) {
-            buildList {
-                add(LeadingInsetsItem)
-                addAll(items)
-                add(TrailingInsetsItem)
+    val insets = InsetsAmbient.current
+    ConsumeInsets(left = false, right = false) {
+        LazyColumnItems(
+            items = remember(items) {
+                buildList {
+                    add(LeadingInsetsItem)
+                    addAll(items)
+                    add(TrailingInsetsItem)
+                }
+            },
+            modifier = modifier
+        ) { item ->
+            when (item) {
+                LeadingInsetsItem -> {
+                    Spacer(Modifier.height(insets.systemBars.top))
+                }
+                TrailingInsetsItem -> {
+                    Spacer(Modifier.height(insets.systemBars.bottom))
+                }
+                else -> itemContent(item as T)
             }
-        },
-        modifier = modifier
-    ) { item ->
-        when (item) {
-            LeadingInsetsItem -> {
-                val insets = InsetsAmbient.current
-                Spacer(Modifier.height(insets.systemBars.top))
-            }
-            TrailingInsetsItem -> {
-                val insets = InsetsAmbient.current
-                Spacer(Modifier.height(insets.systemBars.bottom))
-            }
-            else -> itemContent(item as T)
         }
     }
 }
@@ -81,26 +87,27 @@ fun <T> InsettingRowColumnItems(
     modifier: Modifier = Modifier,
     itemContent: @Composable (T) -> Unit
 ) {
-    LazyRowItems(
-        items = remember(items) {
-            buildList {
-                add(LeadingInsetsItem)
-                addAll(items)
-                add(TrailingInsetsItem)
+    val insets = InsetsAmbient.current
+    ConsumeInsets(top = false, bottom = false) {
+        LazyRowItems(
+            items = remember(items) {
+                buildList {
+                    add(LeadingInsetsItem)
+                    addAll(items)
+                    add(TrailingInsetsItem)
+                }
+            },
+            modifier = modifier
+        ) { item ->
+            when (item) {
+                LeadingInsetsItem -> {
+                    Spacer(Modifier.width(insets.systemBars.start))
+                }
+                TrailingInsetsItem -> {
+                    Spacer(Modifier.width(insets.systemBars.end))
+                }
+                else -> itemContent(item as T)
             }
-        },
-        modifier = modifier
-    ) { item ->
-        when (item) {
-            LeadingInsetsItem -> {
-                val insets = InsetsAmbient.current
-                Spacer(Modifier.width(insets.systemBars.start))
-            }
-            TrailingInsetsItem -> {
-                val insets = InsetsAmbient.current
-                Spacer(Modifier.width(insets.systemBars.end))
-            }
-            else -> itemContent(item as T)
         }
     }
 }
