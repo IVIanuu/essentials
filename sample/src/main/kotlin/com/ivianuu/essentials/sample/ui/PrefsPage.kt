@@ -21,7 +21,9 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.graphics.Color
-import com.ivianuu.essentials.datastore.android.prefs.PrefBoxFactory
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.android.color
+import com.ivianuu.essentials.datastore.android.duration
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -38,12 +40,27 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Transient
 import kotlin.time.hours
+import kotlin.time.milliseconds
 import kotlin.time.minutes
 
+@ApplicationScoped
+class Prefs(factory: DiskDataStoreFactory) {
+    val switch = factory.create("switch") { false }
+    val checkbox = factory.create("checkbox") { false }
+    val radioButton = factory.create("radio_button") { false }
+    val slider = factory.create("slider") { 50 }
+    val durationSlider = factory.duration("duration_slider") { 33.milliseconds }
+    val textInput = factory.create("text_input") { "" }
+    val color = factory.color("color") { Color.Red }
+    val multiChoice = factory.create("multi_choice") { setOf("A", "B", "C") }
+    val singleChoice = factory.create("single_choice") { "C" }
+}
+
 @Transient
-class PrefsPage(private val boxFactory: PrefBoxFactory) {
+class PrefsPage(private val prefs: Prefs) {
     @Composable
     operator fun invoke() {
         Scaffold(
@@ -51,13 +68,13 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
         ) {
             VerticalScroller {
                 SwitchListItem(
-                    dataStore = boxFactory.create("switch") { false },
+                    dataStore = prefs.switch,
                     title = { Text("Switch") }
                 )
 
                 val dependenciesModifier = Modifier.preferenceDependencies(
                     Dependency(
-                        dataStore = boxFactory.create("switch") { false },
+                        dataStore = prefs.switch,
                         value = true
                     )
                 )
@@ -65,21 +82,21 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 Subheader(modifier = dependenciesModifier) { Text("Category") }
 
                 CheckboxListItem(
-                    dataStore = boxFactory.create("checkbox") { false },
+                    dataStore = prefs.checkbox,
                     modifier = dependenciesModifier,
                     title = { Text("Checkbox") },
                     subtitle = { Text("This is a checkbox preference") }
                 )
 
                 RadioButtonListItem(
-                    dataStore = boxFactory.create("radio_button") { false },
+                    dataStore = prefs.radioButton,
                     modifier = dependenciesModifier,
                     title = { Text("Radio Button") },
                     subtitle = { Text("This is a radio button preference") }
                 )
 
                 IntSliderListItem(
-                    dataStore = boxFactory.create("slider") { 50 },
+                    dataStore = prefs.slider,
                     modifier = dependenciesModifier,
                     title = { Text("Slider") },
                     subtitle = { Text("This is a slider preference") },
@@ -89,7 +106,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 DurationSliderListItem(
-                    dataStore = boxFactory.duration("slider_dur") { 33.minutes },
+                    dataStore = prefs.durationSlider,
                     modifier = dependenciesModifier,
                     title = { Text("Slider duration") },
                     subtitle = { Text("This is a slider preference") },
@@ -102,7 +119,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 }
 
                 TextInputDialogListItem(
-                    dataStore = boxFactory.create("text_input") { "" },
+                    dataStore = prefs.textInput,
                     modifier = dependenciesModifier,
                     title = { Text("Text input") },
                     subtitle = { Text("This is a text input preference") },
@@ -110,14 +127,14 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 ColorDialogListItem(
-                    dataStore = boxFactory.color("color") { Color.Red },
+                    dataStore = prefs.color,
                     modifier = dependenciesModifier,
                     title = { Text("Color") },
                     subtitle = { Text("This is a color preference") }
                 )
 
                 MultiChoiceDialogListItem(
-                    dataStore = boxFactory.create("multi_select_list") { setOf("A", "B", "C") },
+                    dataStore = prefs.multiChoice,
                     modifier = dependenciesModifier,
                     title = { Text("Multi select list") },
                     subtitle = { Text("This is a multi select list preference") },
@@ -129,7 +146,7 @@ class PrefsPage(private val boxFactory: PrefBoxFactory) {
                 )
 
                 SingleChoiceDialogListItem(
-                    dataStore = boxFactory.create("single_item_list") { "C" },
+                    dataStore = prefs.singleChoice,
                     modifier = dependenciesModifier,
                     title = { Text("Single item list") },
                     subtitle = { Text("This is a single item list preference") },
