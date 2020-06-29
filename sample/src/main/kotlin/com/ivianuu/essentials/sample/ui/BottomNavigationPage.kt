@@ -40,7 +40,8 @@ import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.SystemBarsPadding
-import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
+import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
@@ -56,7 +57,10 @@ class BottomNavigationPage {
             topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
             bottomBar = {
                 Surface(
-                    modifier = Modifier.systemBarOverlayStyle(MaterialTheme.colors.primary.isLight),
+                    modifier = Modifier.systemBarStyle(
+                        bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
+                        lightIcons = MaterialTheme.colors.primary.isLight
+                    ),
                     elevation = 8.dp,
                     color = MaterialTheme.colors.primary
                 ) {

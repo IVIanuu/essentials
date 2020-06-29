@@ -37,7 +37,8 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.SystemBarsPadding
 import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
+import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.isLight
 
@@ -103,13 +104,17 @@ fun TopAppBar(
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
+    applySystemBarStyle: Boolean = true,
     content: @Composable RowScope.() -> Unit
 ) {
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
         elevation = elevation,
-        modifier = Modifier.systemBarOverlayStyle(light = backgroundColor.isLight) + modifier
+        modifier = (if (applySystemBarStyle) Modifier.systemBarStyle(
+            bgColor = overlaySystemBarBgColor(backgroundColor),
+            lightIcons = backgroundColor.isLight
+        ) else Modifier) + modifier
     ) {
         SystemBarsPadding(left = false, right = false, bottom = false) {
             Row(

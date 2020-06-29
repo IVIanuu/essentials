@@ -24,10 +24,10 @@ import androidx.compose.remember
 import androidx.ui.animation.animatedFloat
 import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
-import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
+import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
@@ -73,7 +73,7 @@ class TwilightTheme(private val helper: TwilightHelper) {
             }
             lastColors.value = currentColors
 
-            MaterialTheme(
+            EsMaterialTheme(
                 colors = currentColors,
                 typography = typography,
                 content = content

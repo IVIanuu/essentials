@@ -13,7 +13,7 @@ import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
+import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
@@ -40,7 +40,10 @@ class DynamicSystemBarsPage {
                         modifier = Modifier.fillMaxWidth()
                             .height(300.dp)
                             .layoutId(color)
-                            .systemBarOverlayStyle(color.isLight),
+                            .systemBarStyle(
+                                bgColor = Color.Black.copy(alpha = 0.2f),
+                                lightIcons = color.isLight
+                            ),
                         backgroundColor = color
                     )
                 }
