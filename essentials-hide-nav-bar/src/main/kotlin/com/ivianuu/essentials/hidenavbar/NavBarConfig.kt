@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import androidx.compose.Immutable
-
-@Immutable
 data class NavBarConfig(
     val hidden: Boolean,
     val rotationMode: NavBarRotationMode = NavBarRotationMode.Nougat,

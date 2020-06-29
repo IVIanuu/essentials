@@ -18,20 +18,15 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Shape
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredWidthIn
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
-import androidx.ui.unit.Dp
 import androidx.ui.unit.dp
 
 @Composable
 fun BaseDialog(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(size = 4.dp),
-    elevation: Dp = 24.dp,
     children: @Composable () -> Unit
 ) {
     Surface(
@@ -40,8 +35,8 @@ fun BaseDialog(
             .preferredWidthIn(minWidth = 280.dp, maxWidth = 356.dp)
             .plus(modifier),
         color = MaterialTheme.colors.surface,
-        elevation = elevation,
-        shape = shape,
+        elevation = 24.dp,
+        shape = MaterialTheme.shapes.medium,
         content = children
     )
 }

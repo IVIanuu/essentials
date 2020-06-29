@@ -64,6 +64,7 @@ class DisplayRotationProvider(
                 emptyFlow()
             }
         }
+        .onStart { emit(getCurrentDisplayRotation()) }
         .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
         .shareIn(
@@ -81,7 +82,7 @@ class DisplayRotationProvider(
             else -> error("unexpected rotation")
         }
 
-    private fun rotationChanges() = callbackFlow {
+    private fun rotationChanges() = callbackFlow<DisplayRotation> {
         var currentRotation = getCurrentDisplayRotation()
 
         val listener = object : OrientationEventListener(
@@ -96,7 +97,6 @@ class DisplayRotationProvider(
             }
         }
 
-        offer(currentRotation)
         listener.enable()
 
         awaitClose { listener.disable() }
