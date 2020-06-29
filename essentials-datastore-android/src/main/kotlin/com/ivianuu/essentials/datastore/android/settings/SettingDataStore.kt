@@ -65,7 +65,7 @@ class SettingDataStoreImpl<T>(
     override val defaultData: T,
     private val adapter: SettingDataStore.Adapter<T>,
     private val contentResolver: ContentResolver,
-    scope: CoroutineScope
+    private val scope: CoroutineScope
 ) : DataStore<T> {
 
     private val uri: Uri by lazy {
@@ -97,22 +97,23 @@ class SettingDataStoreImpl<T>(
             started = SharingStarted.WhileSubscribed()
         )
 
-    override suspend fun updateData(transform: suspend (T) -> T): T {
-        return try {
-            val currentData = get()
-            val newData = transform(currentData)
-            if (currentData == newData) currentData
-            else {
-                adapter.set(name, newData, contentResolver, type)
-                newData
+    override suspend fun updateData(transform: suspend (T) -> T): T =
+        withContext(scope.coroutineContext) {
+            try {
+                val currentData = get()
+                val newData = transform(currentData)
+                if (currentData == newData) currentData
+                else {
+                    adapter.set(name, newData, contentResolver, type)
+                    newData
+                }
+            } catch (e: Exception) {
+                throw RuntimeException("Couldn't write data for name: $name", e)
             }
-        } catch (e: Exception) {
-            throw RuntimeException("Couldn't write data for name: $name", e)
         }
-    }
 
-    private fun get(): T {
-        return try {
+    private suspend fun get(): T = withContext(scope.coroutineContext) {
+        try {
             adapter.get(name, defaultData, contentResolver, type)
         } catch (e: Exception) {
             throw RuntimeException("Couldn't read data for name: $name", e)

@@ -24,6 +24,7 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.ui.core.DisplayRotation
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
@@ -40,10 +41,12 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.withContext
 
 @ApplicationScoped
 class DisplayRotationProvider(
     private val app: Application,
+    private val dispatchers: AppCoroutineDispatchers,
     scope: @GlobalScope CoroutineScope,
     private val logger: Logger,
     screenStateProvider: ScreenStateProvider,
@@ -64,7 +67,7 @@ class DisplayRotationProvider(
                 emptyFlow()
             }
         }
-        .onStart { emit(getCurrentDisplayRotation()) }
+        .onStart { emit(Unit) }
         .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
         .shareIn(
@@ -73,32 +76,24 @@ class DisplayRotationProvider(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )
 
-    private fun getCurrentDisplayRotation(): DisplayRotation =
-        when (windowManager.defaultDisplay.rotation) {
-            Surface.ROTATION_0 -> DisplayRotation.PortraitUp
-            Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
-            Surface.ROTATION_180 -> DisplayRotation.PortraitDown
-            Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
-            else -> error("unexpected rotation")
-        }
-
-    private fun rotationChanges() = callbackFlow<DisplayRotation> {
-        var currentRotation = getCurrentDisplayRotation()
-
-        val listener = object : OrientationEventListener(
-            app, SensorManager.SENSOR_DELAY_NORMAL
-        ) {
-            override fun onOrientationChanged(orientation: Int) {
-                val rotation = getCurrentDisplayRotation()
-                if (rotation != currentRotation) {
-                    offer(rotation)
-                    currentRotation = rotation
-                }
+    private suspend fun getCurrentDisplayRotation(): DisplayRotation =
+        withContext(dispatchers.default) {
+            when (windowManager.defaultDisplay.rotation) {
+                Surface.ROTATION_0 -> DisplayRotation.PortraitUp
+                Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
+                Surface.ROTATION_180 -> DisplayRotation.PortraitDown
+                Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
+                else -> error("unexpected rotation")
             }
         }
 
+    private fun rotationChanges() = callbackFlow<Unit> {
+        val listener = object : OrientationEventListener(app, SensorManager.SENSOR_DELAY_NORMAL) {
+            override fun onOrientationChanged(orientation: Int) {
+                offer(Unit)
+            }
+        }
         listener.enable()
-
         awaitClose { listener.disable() }
     }
 
