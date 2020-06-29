@@ -21,7 +21,7 @@ import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.essentials.billing.BillingStore
 import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.injekt.Transient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 @Transient
 class PurchaseInitializer(
     billingStore: BillingStore,
-    scope: @ForApplication CoroutineScope
+    scope: @GlobalScope CoroutineScope
 ) : AppInitializer {
     init {
         scope.launch {

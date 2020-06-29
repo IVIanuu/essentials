@@ -21,10 +21,10 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    private val scope: @ForApplication CoroutineScope,
+    private val scope: @GlobalScope CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val notificationFactory: TorchNotificationFactory,
@@ -53,7 +53,7 @@ class TorchManager internal constructor(
 
     private var foregroundJob: ForegroundJob? = null
 
-    private val stateActor = scope.actor<Boolean>(dispatchers.default) {
+    private val stateActor = scope.actor<Boolean> {
         for (enabled in this) {
             logger.d("update state $enabled")
             foregroundJob = if (enabled) {

@@ -19,9 +19,9 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +38,8 @@ import kotlinx.coroutines.flow.onEach
 @ApplicationScoped
 class RecentAppsProvider(
     private val logger: Logger,
-    private val scope: @ForApplication CoroutineScope,
-    private val services: AccessibilityServices
+    scope: @GlobalScope CoroutineScope,
+    services: AccessibilityServices
 ) {
 
     val currentApp: Flow<String?>

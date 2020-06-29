@@ -21,6 +21,7 @@ import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
@@ -41,7 +42,7 @@ private fun esDataModule() {
     }
     transient<@PrefsDir String> { dataDir: @DataDir String -> "$dataDir/prefs" }
     scoped { moshi: Moshi -> MoshiSerializerFactory(moshi) }
-    scoped { scope: @ForApplication CoroutineScope,
+    scoped { scope: @GlobalScope CoroutineScope,
              dispatchers: AppCoroutineDispatchers,
              prefsDir: @PrefsDir String,
              serializerFactory: MoshiSerializerFactory ->
@@ -52,7 +53,7 @@ private fun esDataModule() {
         )
     }
     scoped { context: @ForApplication Context,
-             scope: @ForApplication CoroutineScope,
+             scope: @GlobalScope CoroutineScope,
              dispatchers: AppCoroutineDispatchers ->
         SettingsDataStoreFactory(
             context = context,

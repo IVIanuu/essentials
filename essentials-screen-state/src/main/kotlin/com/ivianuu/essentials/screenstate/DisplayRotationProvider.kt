@@ -24,9 +24,9 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.ui.core.DisplayRotation
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,9 +44,9 @@ import kotlinx.coroutines.flow.shareIn
 @ApplicationScoped
 class DisplayRotationProvider(
     private val app: Application,
-    private val scope: @ForApplication CoroutineScope,
+    scope: @GlobalScope CoroutineScope,
     private val logger: Logger,
-    private val screenStateProvider: ScreenStateProvider,
+    screenStateProvider: ScreenStateProvider,
     private val windowManager: WindowManager
 ) {
 

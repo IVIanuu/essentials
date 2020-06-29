@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.composition.BindingEffect
@@ -57,15 +56,14 @@ fun esAppWorkerModule() {
 
 @ApplicationScoped
 class AppWorkers(
-    private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     workers: Map<KClass<*>, @Provider () -> AppWorker>,
-    private val scope: @ForApplication CoroutineScope
+    private val scope: @GlobalScope CoroutineScope
 ) {
     init {
         workers
             .forEach {
-                scope.launch(dispatchers.default) {
+                scope.launch {
                     logger.d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
                     it.value().run()
                 }

@@ -21,9 +21,9 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 @ApplicationScoped
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
-    private val scope: @ForApplication CoroutineScope,
+    scope: @GlobalScope CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val keyguardManager: KeyguardManager,

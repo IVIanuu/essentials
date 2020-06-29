@@ -25,9 +25,9 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -53,7 +53,7 @@ import kotlinx.coroutines.withContext
 class NavBarManager internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
-    private val scope: @ForApplication CoroutineScope,
+    private val scope: @GlobalScope CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,

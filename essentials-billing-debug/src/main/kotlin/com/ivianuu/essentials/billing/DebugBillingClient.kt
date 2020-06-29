@@ -46,10 +46,10 @@ import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -62,7 +62,7 @@ import java.util.concurrent.ConcurrentHashMap
 class DebugBillingClient internal constructor(
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
-    private val scope: @ForApplication CoroutineScope,
+    private val scope: @GlobalScope CoroutineScope,
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore,
     private val navigator: Navigator,
@@ -152,7 +152,7 @@ class DebugBillingClient internal constructor(
         if (params == null) return BillingResult.newBuilder()
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
-        scope.launch(dispatchers.default) {
+        scope.launch {
             val requestId = UUID.randomUUID().toString()
             val request = PurchaseRequest(params.sku, params.skuType!!)
             requests[requestId] = request

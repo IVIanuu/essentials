@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 @Transient
 class Toaster(
     private val context: @ForApplication Context,
-    private val scope: @ForApplication CoroutineScope,
+    private val scope: @GlobalScope CoroutineScope,
     private val dispatchers: AppCoroutineDispatchers,
     private val resourceProvider: ResourceProvider
 ) {
@@ -50,9 +50,10 @@ class Toaster(
         showToast(resourceProvider.getString(messageId, *args), true)
     }
 
-    private fun showToast(message: String, long: Boolean) =
+    private fun showToast(message: String, long: Boolean) {
         scope.launch(dispatchers.main) {
             Toast.makeText(context, message, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
                 .show()
         }
+    }
 }

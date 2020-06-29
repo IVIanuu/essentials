@@ -47,7 +47,7 @@ abstract class StateViewModel<S>(
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state
 
-    private val actor = scope.actor<suspend S.() -> S>(context = dispatchers.default) {
+    private val actor = scope.actor<suspend S.() -> S> {
         for (reducer in this) {
             val currentState = _state.value
             val newState = reducer(currentState)
