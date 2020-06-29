@@ -35,7 +35,7 @@ import androidx.core.content.getSystemService
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.ViewAmbient
-import androidx.ui.core.composed
+import androidx.ui.foundation.Box
 import androidx.ui.layout.InnerPadding
 import androidx.ui.layout.absolutePadding
 import androidx.ui.unit.dp
@@ -43,49 +43,70 @@ import androidx.ui.unit.max
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
 
-fun Modifier.systemBarsPadding(
-    left: Boolean = false,
-    top: Boolean = false,
-    right: Boolean = false,
-    bottom: Boolean = false
-): Modifier = composed {
+@Composable
+fun SystemBarsPadding(
+    modifier: Modifier = Modifier,
+    left: Boolean = true,
+    top: Boolean = true,
+    right: Boolean = true,
+    bottom: Boolean = true,
+    children: @Composable () -> Unit
+) {
     val padding = InsetsAmbient.current.systemBars
-    absolutePadding(
-        if (left) padding.start else 0.dp,
-        if (top) padding.top else 0.dp,
-        if (right) padding.end else 0.dp,
-        if (bottom) padding.bottom else 0.dp
-    )
+    Box(
+        modifier = Modifier.absolutePadding(
+            if (left) padding.start else 0.dp,
+            if (top) padding.top else 0.dp,
+            if (right) padding.end else 0.dp,
+            if (bottom) padding.bottom else 0.dp
+        ) + modifier
+    ) {
+        ConsumeInsets(left, top, right, bottom, children)
+    }
 }
 
-fun Modifier.imePadding(
-    left: Boolean = false,
-    top: Boolean = false,
-    right: Boolean = false,
-    bottom: Boolean = false
-): Modifier = composed {
+@Composable
+fun ImePadding(
+    modifier: Modifier = Modifier,
+    left: Boolean = true,
+    top: Boolean = true,
+    right: Boolean = true,
+    bottom: Boolean = true,
+    children: @Composable () -> Unit
+) {
     val padding = InsetsAmbient.current.ime
-    absolutePadding(
-        if (left) padding.start else 0.dp,
-        if (top) padding.top else 0.dp,
-        if (right) padding.end else 0.dp,
-        if (bottom) padding.bottom else 0.dp
-    )
+    Box(
+        modifier = Modifier.absolutePadding(
+            if (left) padding.start else 0.dp,
+            if (top) padding.top else 0.dp,
+            if (right) padding.end else 0.dp,
+            if (bottom) padding.bottom else 0.dp
+        ) + modifier
+    ) {
+        ConsumeInsets(left, top, right, bottom, children)
+    }
 }
 
-fun Modifier.insetsPadding(
-    left: Boolean = false,
-    top: Boolean = false,
-    right: Boolean = false,
-    bottom: Boolean = false
-): Modifier = composed {
+@Composable
+fun InsetsPadding(
+    modifier: Modifier = Modifier,
+    left: Boolean = true,
+    top: Boolean = true,
+    right: Boolean = true,
+    bottom: Boolean = true,
+    children: @Composable () -> Unit
+) {
     val insets = InsetsAmbient.current
-    absolutePadding(
-        if (left) max(insets.systemBars.start, insets.ime.start) else 0.dp,
-        if (top) max(insets.systemBars.top, insets.ime.top) else 0.dp,
-        if (right) max(insets.systemBars.end, insets.ime.end) else 0.dp,
-        if (bottom) max(insets.systemBars.bottom, insets.ime.bottom) else 0.dp
-    )
+    Box(
+        modifier = Modifier.absolutePadding(
+            if (left) max(insets.systemBars.start, insets.ime.start) else 0.dp,
+            if (top) max(insets.systemBars.top, insets.ime.top) else 0.dp,
+            if (right) max(insets.systemBars.end, insets.ime.end) else 0.dp,
+            if (bottom) max(insets.systemBars.bottom, insets.ime.bottom) else 0.dp
+        ) + modifier
+    ) {
+        ConsumeInsets(left, top, right, bottom, children)
+    }
 }
 
 @Immutable
@@ -102,9 +123,29 @@ val InsetsAmbient =
     ambientOf(StructurallyEqual) { Insets.Empty }
 
 @Composable
-fun ConsumeInsets(children: @Composable () -> Unit) {
+fun ConsumeInsets(
+    left: Boolean = true,
+    top: Boolean = true,
+    right: Boolean = true,
+    bottom: Boolean = true,
+    children: @Composable () -> Unit
+) {
+    val currentInsets = InsetsAmbient.current
     Providers(
-        InsetsAmbient provides Insets.Empty,
+        InsetsAmbient provides Insets(
+            systemBars = currentInsets.systemBars.copy(
+                if (left) 0.dp else currentInsets.systemBars.start,
+                if (top) 0.dp else currentInsets.systemBars.top,
+                if (right) 0.dp else currentInsets.systemBars.end,
+                if (bottom) 0.dp else currentInsets.systemBars.bottom
+            ),
+            ime = currentInsets.ime.copy(
+                if (left) 0.dp else currentInsets.ime.start,
+                if (top) 0.dp else currentInsets.ime.top,
+                if (right) 0.dp else currentInsets.ime.end,
+                if (bottom) 0.dp else currentInsets.ime.bottom
+            )
+        ),
         children = children
     )
 }

@@ -30,11 +30,11 @@ import androidx.ui.foundation.Text
 import androidx.ui.foundation.TextField
 import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.clickable
-import androidx.ui.foundation.lazy.LazyColumnItems
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -113,7 +113,7 @@ class TextInputPage {
                     }
                 }*/
 
-                LazyColumnItems(items = items) { item ->
+                InsettingLazyColumnItems(items = items) { item ->
                     ListItem(
                         title = { Text(item) }
                     )

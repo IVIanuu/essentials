@@ -30,7 +30,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.wrapContentSize
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.insetsPadding
+import com.ivianuu.essentials.ui.core.InsetsPadding
 
 @Composable
 fun DialogWrapper(
@@ -62,12 +62,13 @@ fun DialogWrapper(
             .drawBackground(Color.Black.copy(alpha = 0.6f)),
         gravity = ContentGravity.Center
     ) {
-        Box(
-            modifier = Modifier.tapGestureFilter(onTap = {})
-                .wrapContentSize(align = Alignment.Center)
-                .insetsPadding(left = true, top = true, right = true, bottom = true),
-            gravity = ContentGravity.Center,
-            children = dialog
-        )
+        InsetsPadding {
+            Box(
+                modifier = Modifier.tapGestureFilter(onTap = {})
+                    .wrapContentSize(align = Alignment.Center),
+                gravity = ContentGravity.Center,
+                children = dialog
+            )
+        }
     }
 }

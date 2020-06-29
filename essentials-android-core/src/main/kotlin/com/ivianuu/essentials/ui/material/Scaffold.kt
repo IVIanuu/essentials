@@ -28,7 +28,6 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import androidx.ui.core.id
 import androidx.ui.core.layoutId
-import androidx.ui.foundation.Box
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.DrawerState
@@ -36,11 +35,14 @@ import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.material.Surface
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.insetsPadding
+import com.ivianuu.essentials.ui.core.ConsumeInsets
+import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.SystemBarsPadding
 
 @Composable
 fun Scaffold(
     fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
+    applyInsets: Boolean = true,
     drawerContent: @Composable (() -> Unit)? = null,
     topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
@@ -49,8 +51,9 @@ fun Scaffold(
 ) {
     val scaffoldState = remember { ScaffoldState() }
     scaffoldState.fabPosition = fabPosition
+    scaffoldState.applyInsets = applyInsets
     Scaffold(
-        scaffoldState = scaffoldState,
+        state = scaffoldState,
         drawerContent = drawerContent,
         topBar = topBar,
         body = body,
@@ -61,7 +64,7 @@ fun Scaffold(
 
 @Composable
 fun Scaffold(
-    scaffoldState: ScaffoldState,
+    state: ScaffoldState,
     drawerContent: @Composable (() -> Unit)? = null,
     topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
@@ -69,20 +72,20 @@ fun Scaffold(
     body: @Composable (() -> Unit)? = null
 ) {
     // update state
-    scaffoldState.hasTopBar = topBar != null
-    scaffoldState.hasDrawer = drawerContent != null
-    scaffoldState.hasBody = body != null
-    scaffoldState.hasBottomBar = bottomBar != null
-    scaffoldState.hasFab = fab != null
+    state.hasTopBar = topBar != null
+    state.hasDrawer = drawerContent != null
+    state.hasBody = body != null
+    state.hasBottomBar = bottomBar != null
+    state.hasFab = fab != null
 
-    if (scaffoldState.isDrawerOpen) {
-        onBackPressed { scaffoldState.isDrawerOpen = false }
+    if (state.isDrawerOpen) {
+        onBackPressed { state.isDrawerOpen = false }
     }
 
-    Providers(ScaffoldAmbient provides scaffoldState) {
+    Providers(ScaffoldAmbient provides state) {
         var layout: @Composable () -> Unit = {
             Surface {
-                ScaffoldLayout(state = scaffoldState) {
+                ScaffoldLayout(state = state) {
                     if (topBar != null) {
                         Stack(modifier = Modifier.layoutId(ScaffoldSlot.TopAppBar)) {
                             topBar()
@@ -90,8 +93,13 @@ fun Scaffold(
                     }
 
                     if (body != null) {
-                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.Body)) {
-                            body()
+                        ConsumeInsets(
+                            top = state.applyInsets && state.hasTopBar,
+                            bottom = state.applyInsets && state.hasBottomBar
+                        ) {
+                            Stack(modifier = Modifier.layoutId(ScaffoldSlot.Body)) {
+                                body()
+                            }
                         }
                     }
 
@@ -102,8 +110,15 @@ fun Scaffold(
                     }
 
                     if (fab != null) {
-                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.Fab)) {
-                            fab()
+                        SystemBarsPadding(
+                            left = state.applyInsets,
+                            top = state.applyInsets,
+                            right = state.applyInsets,
+                            bottom = state.applyInsets
+                        ) {
+                            Stack(modifier = Modifier.layoutId(ScaffoldSlot.Fab)) {
+                                fab()
+                            }
                         }
                     }
                 }
@@ -114,9 +129,9 @@ fun Scaffold(
             val tmp = layout
             layout = {
                 ModalDrawerLayout(
-                    drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
-                    onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
-                    gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
+                    drawerState = if (state.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
+                    onStateChange = { state.isDrawerOpen = it == DrawerState.Opened },
+                    gesturesEnabled = state.isDrawerGesturesEnabled,
                     drawerContent = {
                         Surface {
                             drawerContent()
@@ -127,9 +142,12 @@ fun Scaffold(
             }
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize()
-                .insetsPadding(left = true, right = true),
+        InsetsPadding(
+            modifier = Modifier.fillMaxSize(),
+            left = state.applyInsets,
+            right = state.applyInsets,
+            top = false,
+            bottom = false,
             children = layout
         )
     }
@@ -153,7 +171,10 @@ class ScaffoldState {
 
     var fabPosition by mutableStateOf(FabPosition.End)
 
+    var applyInsets by mutableStateOf(true)
+
     enum class FabPosition { Center, End }
+
 }
 
 val ScaffoldAmbient =

@@ -39,8 +39,8 @@ import androidx.ui.material.icons.filled.ViewAgenda
 import androidx.ui.savedinstancestate.savedInstanceState
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.core.SystemBarsPadding
 import com.ivianuu.essentials.ui.core.systemBarOverlayStyle
-import com.ivianuu.essentials.ui.core.systemBarsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
@@ -60,18 +60,19 @@ class BottomNavigationPage {
                     elevation = 8.dp,
                     color = MaterialTheme.colors.primary
                 ) {
-                    BottomNavigation(
-                        modifier = Modifier.systemBarsPadding(bottom = true),
-                        backgroundColor = MaterialTheme.colors.primary,
-                        elevation = 0.dp
-                    ) {
-                        BottomNavItem.values().forEach { item ->
-                            BottomNavigationItem(
-                                selected = item == selectedItem,
-                                onSelected = { selectedItem = item },
-                                icon = { Icon(item.icon) },
-                                text = { Text(item.title) }
-                            )
+                    SystemBarsPadding(left = false, top = false, right = false) {
+                        BottomNavigation(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            elevation = 0.dp
+                        ) {
+                            BottomNavItem.values().forEach { item ->
+                                BottomNavigationItem(
+                                    selected = item == selectedItem,
+                                    onSelected = { selectedItem = item },
+                                    icon = { Icon(item.icon) },
+                                    text = { Text(item.title) }
+                                )
+                            }
                         }
                     }
                 }

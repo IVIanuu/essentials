@@ -31,7 +31,6 @@ import androidx.ui.core.drawLayer
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.ContentGravity
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.height
 import androidx.ui.layout.padding
@@ -40,6 +39,7 @@ import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
@@ -90,7 +90,7 @@ class ScaffoldPage(
                 }
             }) else null
         ) {
-            VerticalScroller {
+            InsettingVerticalScroller {
                 Subheader { Text("Top bar") }
                 ListItem(
                     title = { Text("Show top bar") },
