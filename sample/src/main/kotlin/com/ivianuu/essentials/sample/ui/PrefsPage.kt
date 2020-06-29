@@ -23,7 +23,7 @@ import androidx.ui.graphics.Color
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.color
 import com.ivianuu.essentials.datastore.android.duration
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -66,7 +66,7 @@ class PrefsPage(private val prefs: Prefs) {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Prefs") }) }
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 SwitchListItem(
                     dataStore = prefs.switch,
                     title = { Text("Switch") }

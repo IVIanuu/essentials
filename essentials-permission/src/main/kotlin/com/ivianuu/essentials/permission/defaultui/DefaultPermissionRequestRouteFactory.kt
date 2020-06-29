@@ -30,7 +30,7 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -72,7 +72,7 @@ internal class DefaultPermissionPage(
                 TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
             }
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 viewModel.permissionsToProcess.forEach { permission ->
                     Permission(
                         permission = permission,

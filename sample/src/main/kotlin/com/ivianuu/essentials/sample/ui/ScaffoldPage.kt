@@ -39,7 +39,7 @@ import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.core.SystemBarsPadding
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
@@ -101,7 +101,7 @@ class ScaffoldPage(
                 }
             }) else null
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 Subheader { Text("Top bar") }
                 ListItem(
                     title = { Text("Show top bar") },

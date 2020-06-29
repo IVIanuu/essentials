@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -38,7 +38,7 @@ class AboutPage(
     @Composable
     operator fun invoke() {
         Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 aboutSection(
                     showHeader = false,
                     packageName = buildInfo.packageName,

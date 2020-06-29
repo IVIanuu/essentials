@@ -18,7 +18,7 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.ListItem
@@ -48,7 +48,7 @@ class SecureSettingsPage internal constructor(
         Scaffold(
             topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
             body = {
-                InsettingVerticalScroller {
+                InsettingScrollableColumn {
                     SecureSettingsHeader(
                         stringResource(
                             if (showHideNavBarHint) {

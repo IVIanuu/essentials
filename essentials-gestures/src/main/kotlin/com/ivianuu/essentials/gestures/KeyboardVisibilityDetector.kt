@@ -20,8 +20,8 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +39,7 @@ import java.lang.reflect.Method
  */
 @ApplicationScoped
 class KeyboardVisibilityDetector(
-    private val scope: @ForApplication CoroutineScope,
+    private val scope: @GlobalScope CoroutineScope,
     private val inputMethodManager: InputMethodManager,
     private val services: AccessibilityServices
 ) {

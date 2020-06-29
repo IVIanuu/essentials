@@ -19,9 +19,9 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.ForApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.onEach
 class SecureScreenDetector(
     private val logger: Logger,
     services: AccessibilityServices,
-    scope: @ForApplication CoroutineScope
+    scope: @GlobalScope CoroutineScope
 ) {
 
     private val _isOnSecureScreen = MutableStateFlow(false)

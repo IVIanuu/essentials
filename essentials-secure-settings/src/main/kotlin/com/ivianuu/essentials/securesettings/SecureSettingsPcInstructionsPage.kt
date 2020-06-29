@@ -22,7 +22,7 @@ import androidx.ui.foundation.Text
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Link
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -52,7 +52,7 @@ class SecureSettingsPcInstructionsPage internal constructor(
         Scaffold(
             topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 SecureSettingsHeader(
                     text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
                 )

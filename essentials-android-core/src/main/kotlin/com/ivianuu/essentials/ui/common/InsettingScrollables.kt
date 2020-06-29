@@ -17,7 +17,7 @@ import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsAmbient
 
 @Composable
-fun InsettingVerticalScroller(
+fun InsettingScrollableColumn(
     scrollerPosition: ScrollerPosition = ScrollerPosition(),
     modifier: Modifier = Modifier,
     isScrollable: Boolean = true,
@@ -34,7 +34,7 @@ fun InsettingVerticalScroller(
 }
 
 @Composable
-fun InsettingHorizontalScroller(
+fun InsettingScrollableRow(
     scrollerPosition: ScrollerPosition = ScrollerPosition(),
     modifier: Modifier = Modifier,
     isScrollable: Boolean = true,

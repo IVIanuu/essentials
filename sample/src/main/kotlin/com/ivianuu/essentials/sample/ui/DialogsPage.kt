@@ -34,7 +34,7 @@ import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -55,7 +55,7 @@ class DialogsPage {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Dialogs") }) }
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,

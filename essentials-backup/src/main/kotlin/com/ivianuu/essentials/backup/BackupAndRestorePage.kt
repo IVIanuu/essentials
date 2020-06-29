@@ -2,7 +2,7 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.Composable
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -25,7 +25,7 @@ class BackupAndRestorePage internal constructor(
         Scaffold(
             topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
         ) {
-            InsettingVerticalScroller {
+            InsettingScrollableColumn {
                 ListItem(
                     title = { Text(R.string.es_pref_backup) },
                     subtitle = { Text(R.string.es_pref_backup_summary) },
