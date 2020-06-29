@@ -111,12 +111,11 @@ fun Scaffold(
 
                     if (fab != null) {
                         SystemBarsPadding(
-                            left = state.applyInsets,
-                            top = state.applyInsets,
-                            right = state.applyInsets,
-                            bottom = state.applyInsets
+                            modifier = Modifier.layoutId(ScaffoldSlot.Fab),
+                            top = state.applyInsets && !state.hasTopBar,
+                            bottom = state.applyInsets && !state.hasBottomBar
                         ) {
-                            Stack(modifier = Modifier.layoutId(ScaffoldSlot.Fab)) {
+                            Stack {
                                 fab()
                             }
                         }

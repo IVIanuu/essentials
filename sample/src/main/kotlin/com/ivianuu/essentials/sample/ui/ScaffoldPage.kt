@@ -41,6 +41,9 @@ import androidx.ui.material.Surface
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
 import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.core.SystemBarsPadding
+import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -49,6 +52,7 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Transient
 import kotlin.time.milliseconds
 
@@ -74,18 +78,25 @@ class ScaffoldPage(
             },
             bottomBar = if (controls.showBottomBar) ({
                 Surface(
+                    modifier = Modifier.systemBarStyle(
+                        bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
+                        lightIcons = MaterialTheme.colors.primary.isLight
+                    ),
+                    elevation = 8.dp,
                     color = MaterialTheme.colors.primary
                 ) {
-                    Box(
-                        modifier = Modifier.height(56.dp)
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        gravity = ContentGravity.CenterStart
-                    ) {
-                        Text(
-                            text = "Bottom bar",
-                            style = MaterialTheme.typography.h6
-                        )
+                    SystemBarsPadding(left = false, top = false, right = false) {
+                        Box(
+                            modifier = Modifier.height(56.dp)
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            gravity = ContentGravity.CenterStart
+                        ) {
+                            Text(
+                                text = "Bottom bar",
+                                style = MaterialTheme.typography.h6
+                            )
+                        }
                     }
                 }
             }) else null
