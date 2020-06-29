@@ -23,14 +23,12 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Lazy
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import java.util.UUID
 
 @ApplicationScoped
 class PermissionManager(
@@ -67,18 +65,9 @@ class PermissionManager(
             logger.d("request permissions $permissions")
             if (hasPermissions(permissions).first()) return@withContext true
 
-            val id = UUID.randomUUID().toString()
-            val onComplete = CompletableDeferred<Unit>()
-            val request = PermissionRequest(
-                id = id,
-                permissions = permissions.toList(),
-                onComplete = onComplete
-            )
-
+            val request = PermissionRequest(permissions = permissions.toList())
             startUi()
-            navigator.push(permissionRequestRouteFactory().createRoute(request))
-
-            onComplete.await()
+            navigator.push<Any>(permissionRequestRouteFactory().createRoute(request))
 
             return@withContext hasPermissions(permissions).first()
     }

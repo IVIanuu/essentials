@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission.dialogui
+package com.ivianuu.essentials.permission.defaultui
 
 import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.material.TextButton
+import androidx.ui.material.Button
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -30,12 +29,11 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
-import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.common.InsettingVerticalScroller
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.DialogRoute
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
@@ -52,46 +50,38 @@ import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
 @Transient
-internal class DialogPermissionRequestRouteFactory(
-    private val dialog: PermissionDialog
+internal class DefaultPermissionRequestRouteFactory(
+    private val page: DefaultPermissionPage
 ) : PermissionRequestRouteFactory {
 
-    override fun createRoute(request: PermissionRequest): Route {
-        return DialogRoute {
-            dialog(request)
-        }
-    }
+    override fun createRoute(request: PermissionRequest): Route = Route { page(request) }
 
 }
 
 @Transient
-internal class PermissionDialog(
-    private val viewModelFactory: @Provider (PermissionRequest) -> PermissionDialogViewModel
+internal class DefaultPermissionPage(
+    private val viewModelFactory: @Provider (PermissionRequest) -> DefaultPermissionViewModel
 ) {
 
     @Composable
     operator fun invoke(request: PermissionRequest) {
         val viewModel = viewModel { viewModelFactory(request) }
 
-        Dialog(
-            title = { Text("Required Permissions") }, // todo customizable
-            content = {
-                VerticalScroller {
-                    viewModel.permissionsToProcess.forEach { permission ->
-                        Permission(
-                            permission = permission,
-                            onClick = { viewModel.permissionClicked(permission) }
-                        )
-                    }
-                }
-            },
-            applyContentPadding = false,
-            negativeButton = {
-                TextButton(onClick = { viewModel.cancelClicked() }) {
-                    Text(R.string.es_cancel)
+        Scaffold(
+            topBar = {
+                TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
+            }
+        ) {
+            InsettingVerticalScroller {
+                viewModel.permissionsToProcess.forEach { permission ->
+                    Permission(
+                        permission = permission,
+                        onClick = { viewModel.permissionClicked(permission) }
+                    )
                 }
             }
-        )
+        }
+
     }
 
     @Composable
@@ -108,6 +98,9 @@ internal class PermissionDialog(
                     }
                 },
                 leading = permission.getOrNull(Permission.Icon),
+                trailing = {
+                    Button(onClick = onClick) { Text("GRANT") } // todo res
+                },
                 onClick = onClick
             )
         }
@@ -116,7 +109,7 @@ internal class PermissionDialog(
 }
 
 @Transient
-internal class PermissionDialogViewModel(
+internal class DefaultPermissionViewModel(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
@@ -141,11 +134,6 @@ internal class PermissionDialogViewModel(
         }
     }
 
-    fun cancelClicked() {
-        navigator.popTop()
-        request.onComplete.complete(Unit)
-    }
-
     private fun updatePermissionsToProcessOrFinish() {
         scope.launch {
             val permissionsToProcess = request.permissions
@@ -155,7 +143,6 @@ internal class PermissionDialogViewModel(
 
             if (permissionsToProcess.isEmpty()) {
                 navigator.popTop()
-                request.onComplete.complete(Unit)
             } else {
                 withContext(dispatchers.main) { // todo remove
                     _permissionsToProcess.clear()
