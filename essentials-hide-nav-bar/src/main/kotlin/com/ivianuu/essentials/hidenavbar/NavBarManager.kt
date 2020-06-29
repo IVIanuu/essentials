@@ -75,9 +75,13 @@ class NavBarManager internal constructor(
         }
 
         if (!config.hidden) {
+            logger.d("not hidden")
             if (prefs.wasNavBarHidden.data.first()) {
+                logger.d("was hidden")
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.updateData { false }
+            } else {
+                logger.d("was not hidden")
             }
 
             return@withContext
