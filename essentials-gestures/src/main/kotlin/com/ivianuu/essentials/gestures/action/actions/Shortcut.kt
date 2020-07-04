@@ -1,42 +1,14 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.res.vectorResource
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.actionFactory
-import com.ivianuu.essentials.gestures.action.actionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.shortcutpicker.Shortcut
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
-import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
-import com.ivianuu.injekt.composition.installIn
-import java.io.ByteArrayOutputStream
-
+/**
 @Module
-private fun ShortcutModule() {
-    installIn<ApplicationComponent>()
+fun ShortcutModule() {
+installIn<ApplicationComponent>()
     actionFactory<ShortcutActionFactory>()
     actionPickerDelegate<ShortcutActionPickerDelegate>()
 }
 
-@Transient
+@Unscoped
 internal class ShortcutActionFactory(
     private val intentActionExecutorProvider: @Provider (Intent) -> IntentActionExecutor,
     private val logger: Logger
@@ -61,14 +33,14 @@ internal class ShortcutActionFactory(
 }
 
 
-@Transient
+@Unscoped
 internal class ShortcutActionPickerDelegate(
     private val resourceProvider: ResourceProvider,
     private val shortcutPickerPage: ShortcutPickerPage
 ) : ActionPickerDelegate {
-    override val title: String
-        get() = resourceProvider.getString(R.string.es_action_shortcut)
-    override val icon: @Composable () -> Unit = {
+override val title: String
+get() = getString(R.string.es_action_shortcut)
+override val icon: @Composable () -> Unit = {
         Icon(vectorResource(R.drawable.es_ic_content_cut))
     }
 
@@ -92,3 +64,4 @@ internal class ShortcutActionPickerDelegate(
 
 private const val ACTION_KEY_PREFIX = "shortcut"
 private const val DELIMITER = "=:="
+ */

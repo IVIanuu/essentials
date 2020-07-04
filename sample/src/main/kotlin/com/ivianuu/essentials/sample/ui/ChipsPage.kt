@@ -38,9 +38,9 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class ChipsPage(
     private val toaster: Toaster
 ) {

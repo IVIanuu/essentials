@@ -22,12 +22,13 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.atomic.AtomicInteger
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class ForegroundManager(
     private val context: @ForApplication Context,
     private val logger: Logger

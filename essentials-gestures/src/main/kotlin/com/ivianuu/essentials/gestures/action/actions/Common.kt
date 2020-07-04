@@ -8,13 +8,13 @@ import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-@Transient
+@Unscoped
 internal class CoilActionIconProvider(
-    private val data: @Assisted Any
+    @Assisted private val data: Any
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = flowOf {

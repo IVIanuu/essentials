@@ -48,8 +48,9 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.StartUi
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -58,12 +59,12 @@ import java.util.Date
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class DebugBillingClient internal constructor(
     private val buildInfo: BuildInfo,
     private val dispatchers: AppCoroutineDispatchers,
     private val scope: @GlobalScope CoroutineScope,
-    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
+    @Assisted private val purchasesUpdatedListener: PurchasesUpdatedListener,
     private val billingStore: BillingStore,
     private val navigator: Navigator,
     private val startUi: StartUi

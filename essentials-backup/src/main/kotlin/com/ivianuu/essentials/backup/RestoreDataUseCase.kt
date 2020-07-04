@@ -8,7 +8,7 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.RestartProcess
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -16,7 +16,7 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@Transient
+@Unscoped
 internal class RestoreDataUseCase(
     private val activity: ComponentActivity,
     private val dispatchers: AppCoroutineDispatchers,

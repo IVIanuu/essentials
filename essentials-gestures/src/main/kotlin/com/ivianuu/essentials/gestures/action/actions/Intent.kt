@@ -8,11 +8,11 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 internal class IntentActionExecutor(
-    private val intent: @Assisted Intent,
+    @Assisted private val intent: Intent,
     private val context: @ForApplication Context,
     private val toaster: Toaster
 ) : ActionExecutor {

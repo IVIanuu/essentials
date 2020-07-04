@@ -19,18 +19,23 @@ package com.ivianuu.essentials.foreground
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.android.AndroidEntryPoint
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-@AndroidEntryPoint
 class ForegroundService : EsService() {
 
-    private val foregroundManager: ForegroundManager by inject()
-    private val logger: Logger by inject()
-    private val notificationManager: NotificationManager by inject()
+    private val foregroundManager: ForegroundManager by lazy {
+        component.runReader { get() }
+    }
+    private val logger: Logger by lazy {
+        component.runReader { get() }
+    }
+    private val notificationManager: NotificationManager by lazy {
+        component.runReader { get() }
+    }
 
     private var lastJobs = listOf<ForegroundJob>()
     private var foregroundId: Int? = null

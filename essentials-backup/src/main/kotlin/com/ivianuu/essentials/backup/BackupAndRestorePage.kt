@@ -12,10 +12,10 @@ import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class BackupAndRestorePage internal constructor(
     private val viewModelFactory: @Provider () -> BackupAndRestoreViewModel
 ) {
@@ -42,7 +42,7 @@ class BackupAndRestorePage internal constructor(
     }
 }
 
-@Transient
+@Unscoped
 internal class BackupAndRestoreViewModel(
     private val backupDataUseCase: BackupDataUseCase,
     dispatchers: AppCoroutineDispatchers,

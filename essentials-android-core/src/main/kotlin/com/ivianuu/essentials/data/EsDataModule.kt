@@ -27,37 +27,32 @@ import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
-import com.ivianuu.injekt.transient
-import com.squareup.moshi.Moshi
+import com.ivianuu.injekt.unscoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 import java.io.File
 
 @Module
-private fun esDataModule() {
+fun esDataModule() {
     installIn<ApplicationComponent>()
-    transient<@DataDir String> { context: @ForApplication Context ->
-        context.applicationInfo.dataDir
+    unscoped<@DataDir String> {
+        get<@ForApplication Context>().applicationInfo.dataDir
     }
-    transient<@PrefsDir String> { dataDir: @DataDir String -> "$dataDir/prefs" }
-    scoped { moshi: Moshi -> MoshiSerializerFactory(moshi) }
-    scoped { scope: @GlobalScope CoroutineScope,
-             dispatchers: AppCoroutineDispatchers,
-             prefsDir: @PrefsDir String,
-             serializerFactory: MoshiSerializerFactory ->
+    unscoped<@PrefsDir String> { "${get<@DataDir String>()}/prefs" }
+    scoped { MoshiSerializerFactory(get()) }
+    scoped {
         DiskDataStoreFactory(
-            scope = scope + dispatchers.io,
-            produceBoxDirectory = { File(prefsDir) },
-            serializerFactory = serializerFactory
+            scope = get<@GlobalScope CoroutineScope>() + get<AppCoroutineDispatchers>().io,
+            produceBoxDirectory = { File(get<@PrefsDir String>()) },
+            serializerFactory = get()
         )
     }
-    scoped { context: @ForApplication Context,
-             scope: @GlobalScope CoroutineScope,
-             dispatchers: AppCoroutineDispatchers ->
+    scoped {
         SettingsDataStoreFactory(
-            context = context,
-            scope = scope + dispatchers.io
+            context = get<@ForApplication Context>(),
+            scope = get<@GlobalScope CoroutineScope>() + get<AppCoroutineDispatchers>().io
         )
     }
 }

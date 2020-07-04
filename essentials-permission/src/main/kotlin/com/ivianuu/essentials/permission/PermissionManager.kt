@@ -21,8 +21,9 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
-import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Lazy
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -30,12 +31,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class PermissionManager(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val navigator: Navigator,
-    private val permissionRequestRouteFactory: @Lazy () -> PermissionRequestRouteFactory,
+    private val permissionRequestRouteFactory: @Provider () -> PermissionRequestRouteFactory,
     private val permissionStateProviders: Set<PermissionStateProvider>,
     private val startUi: StartUi
 ) {

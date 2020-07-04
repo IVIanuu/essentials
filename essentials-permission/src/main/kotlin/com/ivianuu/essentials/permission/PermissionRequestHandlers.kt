@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
-@Transient
+@Unscoped
 internal class PermissionRequestHandlers(
     private val dispatchers: AppCoroutineDispatchers,
     private val manager: PermissionManager,

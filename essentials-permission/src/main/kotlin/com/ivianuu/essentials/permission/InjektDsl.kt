@@ -20,37 +20,39 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.set
-import com.ivianuu.injekt.transient
+import com.ivianuu.injekt.unscoped
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindPermissionStateProvider
-
-@BindingEffectFunction(BindPermissionStateProvider::class)
-@Module
-fun <T : PermissionStateProvider> permissionStateProvider() {
-    set<PermissionStateProvider> { add<T>() }
+annotation class BindPermissionStateProvider {
+    companion object {
+        @Module
+        operator fun <T : PermissionStateProvider> invoke() {
+            set<PermissionStateProvider> { add<T>() }
+        }
+    }
 }
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindPermissionRequestHandler
-
-@BindingEffectFunction(BindPermissionRequestHandler::class)
-@Module
-fun <T : PermissionRequestHandler> permissionRequestProvider() {
-    transient<T>()
-    set<PermissionRequestHandler> { add<T>() }
+annotation class BindPermissionRequestHandler {
+    companion object {
+        @Module
+        operator fun <T : PermissionRequestHandler> invoke() {
+            unscoped<T>()
+            set<PermissionRequestHandler> { add<T>() }
+        }
+    }
 }
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindPermissionRequestRouteFactory
-
-@BindingEffectFunction(BindPermissionRequestRouteFactory::class)
-@Module
-fun <T : PermissionRequestRouteFactory> permissionRequestRouteFactory() {
-    alias<T, PermissionRequestRouteFactory>()
+annotation class BindPermissionRequestRouteFactory {
+    companion object {
+        @Module
+        operator fun <T : PermissionRequestRouteFactory> invoke() {
+            alias<T, PermissionRequestRouteFactory>()
+        }
+    }
 }
 
 @Module

@@ -11,7 +11,7 @@ import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.composition.installIn
 
 @Module
-private fun BackModule() {
+fun BackModule() {
     installIn<ApplicationComponent>()
     bindAccessibilityAction<@StringKey("back") Action>(
         key = "back",

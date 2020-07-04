@@ -25,7 +25,7 @@ import android.os.PowerManager
 import androidx.compose.Immutable
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
-@Transient
+@Unscoped
 class TwilightHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,

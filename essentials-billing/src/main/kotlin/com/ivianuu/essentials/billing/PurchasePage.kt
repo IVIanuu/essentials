@@ -20,11 +20,11 @@ import androidx.compose.Composable
 import androidx.compose.launchInComposition
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
-@Transient
+@Unscoped
 class PurchasePage(
     private val manager: PurchaseManager,
     private val navigator: Navigator

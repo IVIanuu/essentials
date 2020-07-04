@@ -22,12 +22,12 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 /**
  * Provides infos about the secure settings access state
  */
-@Transient
+@Unscoped
 class SecureSettingsHelper(
     private val buildInfo: BuildInfo,
     private val context: @ForApplication Context,

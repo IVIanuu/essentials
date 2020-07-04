@@ -27,7 +27,8 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +44,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class DisplayRotationProvider(
     private val app: Application,
     private val dispatchers: AppCoroutineDispatchers,

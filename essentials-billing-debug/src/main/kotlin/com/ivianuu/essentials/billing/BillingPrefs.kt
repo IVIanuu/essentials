@@ -4,9 +4,10 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 internal class BillingPrefs(factory: DiskDataStoreFactory) {
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(

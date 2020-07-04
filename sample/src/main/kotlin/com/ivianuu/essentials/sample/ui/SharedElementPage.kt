@@ -13,9 +13,9 @@ import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class SharedElementPage {
 
     @Composable

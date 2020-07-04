@@ -22,12 +22,12 @@ import com.ivianuu.essentials.billing.BillingStore
 import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @BindAppInitializer
-@Transient
+@Unscoped
 class PurchaseInitializer(
     billingStore: BillingStore,
     scope: @GlobalScope CoroutineScope

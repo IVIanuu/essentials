@@ -10,7 +10,7 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 fun WriteSecureSettingsPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission withValue Unit,
@@ -22,7 +22,7 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class WriteSecureSettingsPermissionStateProvider(
     private val secureSettingsHelper: SecureSettingsHelper
 ) : PermissionStateProvider {
@@ -35,7 +35,7 @@ internal class WriteSecureSettingsPermissionStateProvider(
 }
 
 @BindPermissionRequestHandler
-@Transient
+@Unscoped
 internal class WriteSecureSettingsPermissionRequestHandler(
     private val navigator: Navigator,
     private val secureSettingsPage: SecureSettingsPage

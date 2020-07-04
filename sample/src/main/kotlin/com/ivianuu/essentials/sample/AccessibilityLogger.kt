@@ -5,10 +5,10 @@ import com.ivianuu.essentials.accessibility.BindAccessibilityWorker
 import com.ivianuu.essentials.coroutines.awaitCancellation
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 @BindAccessibilityWorker
-@Transient
+@Unscoped
 class AccessibilityLogger(
     private val logger: Logger
 ) : AccessibilityWorker {

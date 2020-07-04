@@ -21,12 +21,12 @@ import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 /**
  * Utils to access overscan with reflection
  */
-@Transient
+@Unscoped
 @SuppressLint("PrivateApi")
 internal class OverscanHelper(private val logger: Logger) {
 

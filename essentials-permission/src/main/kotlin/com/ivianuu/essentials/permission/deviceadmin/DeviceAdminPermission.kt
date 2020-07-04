@@ -26,7 +26,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
@@ -51,7 +51,7 @@ val Permission.Companion.DeviceAdminComponent by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class DeviceAdminPermissionStateProvider(
     private val devicePolicyManager: DevicePolicyManager
 ) : PermissionStateProvider {

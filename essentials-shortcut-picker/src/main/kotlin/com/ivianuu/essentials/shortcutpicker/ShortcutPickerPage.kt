@@ -40,10 +40,10 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class ShortcutPickerPage internal constructor(
     private val viewModelFactory: @Provider () -> ShortcutPickerViewModel
 ) {
@@ -85,7 +85,7 @@ private fun Shortcut(
     }
 }
 
-@Transient
+@Unscoped
 internal class ShortcutPickerViewModel(
     dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,

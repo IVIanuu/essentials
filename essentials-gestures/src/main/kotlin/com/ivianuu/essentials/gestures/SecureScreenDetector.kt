@@ -21,7 +21,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.onEach
 
 // todo make this class a single shared flow
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class SecureScreenDetector(
     private val logger: Logger,
     services: AccessibilityServices,

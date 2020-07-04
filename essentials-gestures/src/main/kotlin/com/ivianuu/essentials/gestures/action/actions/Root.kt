@@ -5,11 +5,11 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class RootActionExecutor(
-    private val command: @Assisted String,
+    @Assisted private val command: String,
     private val shell: Shell,
     private val toaster: Toaster
 ) : ActionExecutor {

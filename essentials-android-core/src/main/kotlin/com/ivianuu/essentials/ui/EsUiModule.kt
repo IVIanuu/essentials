@@ -5,6 +5,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
 import kotlinx.coroutines.CoroutineScope
 
@@ -15,7 +16,7 @@ annotation class UiScope
 @Module
 fun esUiModule() {
     installIn<ActivityComponent>()
-    scoped<@UiScope CoroutineScope> { dispatchers: AppCoroutineDispatchers ->
-        CoroutineScope(dispatchers.main)
+    scoped<@UiScope CoroutineScope> {
+        CoroutineScope(get<AppCoroutineDispatchers>().main)
     }
 }

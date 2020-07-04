@@ -19,13 +19,15 @@ package com.ivianuu.essentials.ui.activity
 import android.os.Bundle
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.core.AppUi
-import com.ivianuu.injekt.android.AndroidEntryPoint
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 
-@AndroidEntryPoint
 class DefaultActivity : EsActivity() {
 
-    private val appUi: AppUi? by inject()
+    private val appUi: AppUi? by lazy {
+        activityComponent.runReader { get() }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

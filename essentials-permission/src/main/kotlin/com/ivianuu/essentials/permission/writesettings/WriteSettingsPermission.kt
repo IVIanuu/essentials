@@ -27,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 fun WriteSettingsPermission(
     context: Context,
@@ -46,7 +46,7 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class WriteSettingsPermissionStateProvider(
     private val context: @ForApplication Context
 ) : PermissionStateProvider {

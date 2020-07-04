@@ -19,12 +19,12 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.map
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,13 +38,14 @@ interface AppWorker {
 }
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindAppWorker
-
-@BindingEffectFunction(BindAppWorker::class)
-@Module
-inline fun <reified T : AppWorker> appWorker() {
-    map<KClass<*>, AppWorker> {
-        put<T>(T::class)
+annotation class BindAppWorker {
+    companion object {
+        @Module
+        inline operator fun <reified T : AppWorker> invoke() {
+            map<KClass<*>, AppWorker> {
+                put<T>(T::class)
+            }
+        }
     }
 }
 
@@ -54,19 +55,13 @@ fun esAppWorkerModule() {
     map<KClass<*>, AppWorker>()
 }
 
-@ApplicationScoped
-class AppWorkers(
-    private val logger: Logger,
-    workers: Map<KClass<*>, @Provider () -> AppWorker>,
-    private val scope: @GlobalScope CoroutineScope
-) {
-    init {
-        workers
-            .forEach {
-                scope.launch {
-                    logger.d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
-                    it.value().run()
-                }
+@Reader
+fun runAppWorkers() {
+    get<Map<KClass<*>, @Provider () -> AppWorker>>()
+        .forEach {
+            get<@GlobalScope CoroutineScope>().launch {
+                get<Logger>().d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
+                it.value().run()
             }
-    }
+        }
 }

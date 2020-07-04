@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class AndroidLogger : Logger {
     override fun v(message: String, tag: String) {
         Log.v(tag, message)

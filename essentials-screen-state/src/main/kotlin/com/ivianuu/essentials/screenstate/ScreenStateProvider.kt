@@ -23,7 +23,8 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +38,7 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the current screen state
  */
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class ScreenStateProvider(
     broadcastFactory: BroadcastFactory,
     scope: @GlobalScope CoroutineScope,

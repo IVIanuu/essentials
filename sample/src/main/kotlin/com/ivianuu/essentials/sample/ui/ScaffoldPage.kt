@@ -53,10 +53,10 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.isLight
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlin.time.milliseconds
 
-@Transient
+@Unscoped
 class ScaffoldPage(
     private val navigator: Navigator
 ) {

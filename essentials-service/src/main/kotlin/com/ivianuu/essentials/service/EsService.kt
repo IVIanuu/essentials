@@ -20,7 +20,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.android.newServiceComponent
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -29,7 +31,11 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsService : Service() {
 
-    private val dispatchers: AppCoroutineDispatchers by inject()
+    val component by lazy { newServiceComponent() }
+
+    private val dispatchers: AppCoroutineDispatchers by lazy {
+        component.runReader { get() }
+    }
 
     val scope by lazy { CoroutineScope(dispatchers.default) }
 

@@ -23,9 +23,9 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class RestartProcess(
     private val buildInfo: BuildInfo,
     private val context: @ForApplication Context,

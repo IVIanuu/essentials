@@ -1,43 +1,22 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.net.wifi.WifiManager
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Wifi
-import androidx.ui.material.icons.filled.WifiOff
-import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.StringKey
-import com.ivianuu.injekt.Transient
-import com.ivianuu.injekt.composition.installIn
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-
+/**
 @Module
-private fun wifiActionModule() {
-    installIn<ApplicationComponent>()
+fun wifiActionModule() {
+installIn<ApplicationComponent>()
     action { resourceProvider: ResourceProvider,
              iconProvider: WifiActionIconProvider,
              executor: WifiActionExecutor ->
         Action(
-            key = "wifi",
-            title = resourceProvider.getString(R.string.es_action_wifi),
-            iconProvider = iconProvider,
+key = "wifi",
+title = getString(R.string.es_action_wifi),
+iconProvider = iconProvider,
             executor = executor
         ) as @StringKey("wifi") Action
     }
 }
 
-@Transient
+@Unscoped
 internal class WifiActionExecutor(private val wifiManager: WifiManager) :
     ActionExecutor {
     override suspend fun invoke() {
@@ -45,7 +24,7 @@ internal class WifiActionExecutor(private val wifiManager: WifiManager) :
     }
 }
 
-@Transient
+@Unscoped
 internal class WifiActionIconProvider(
     broadcastFactory: BroadcastFactory,
     private val wifiManager: WifiManager
@@ -68,3 +47,4 @@ internal class WifiActionIconProvider(
             }
         }
 }
+ */

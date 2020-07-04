@@ -28,7 +28,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlin.reflect.KClass
 
 fun AccessibilityServicePermission(
@@ -47,7 +47,7 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class AccessibilityServicePermissionStateProvider(
     private val accessibilityManager: AccessibilityManager,
     private val buildInfo: BuildInfo

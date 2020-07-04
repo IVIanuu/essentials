@@ -23,7 +23,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.util.StartActivityForResult
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -39,7 +39,7 @@ val Permission.Companion.Intent by lazy {
 }
 
 @BindPermissionRequestHandler
-@Transient
+@Unscoped
 internal class IntentPermissionRequestHandler(
     private val permissionManager: PermissionManager,
     private val startActivityForResult: StartActivityForResult

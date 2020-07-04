@@ -25,11 +25,12 @@ import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class BillingStore internal constructor(
     private val dispatchers: AppCoroutineDispatchers,
     prefs: BillingPrefs

@@ -26,13 +26,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
  */
-@Transient
+@Unscoped
 class SecureSettingsPage internal constructor(
     private val instructionsPage: SecureSettingsPcInstructionsPage,
     private val navigator: Navigator,

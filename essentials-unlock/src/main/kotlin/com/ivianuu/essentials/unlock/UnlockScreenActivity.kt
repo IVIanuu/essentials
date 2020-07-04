@@ -28,8 +28,9 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.activity.EsActivity
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.android.AndroidEntryPoint
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -37,14 +38,23 @@ import kotlinx.coroutines.flow.take
 /**
  * Requests a screen unlock
  */
-@AndroidEntryPoint
 class UnlockScreenActivity : EsActivity() {
 
-    private val broadcastFactory: BroadcastFactory by inject()
-    private val keyguardManager: KeyguardManager by inject()
-    private val logger: Logger by inject()
-    private val unlockScreen: UnlockScreen by inject()
-    private val systemBuildInfo: SystemBuildInfo by inject()
+    private val broadcastFactory: BroadcastFactory by lazy {
+        activityComponent.runReader { get() }
+    }
+    private val keyguardManager: KeyguardManager by lazy {
+        activityComponent.runReader { get() }
+    }
+    private val logger: Logger by lazy {
+        activityComponent.runReader { get() }
+    }
+    private val unlockScreen: UnlockScreen by lazy {
+        activityComponent.runReader { get() }
+    }
+    private val systemBuildInfo: SystemBuildInfo by lazy {
+        activityComponent.runReader { get() }
+    }
 
     private var hasResult = false
     private var valid = true

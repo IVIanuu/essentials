@@ -12,7 +12,7 @@ import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.composition.installIn
 
 @Module
-private fun MediaPlayPauseModule() {
+fun MediaPlayPauseModule() {
     installIn<ApplicationComponent>()
     bindMediaAction<@StringKey("media_play_pause") Action>(
         key = "media_play_pause",

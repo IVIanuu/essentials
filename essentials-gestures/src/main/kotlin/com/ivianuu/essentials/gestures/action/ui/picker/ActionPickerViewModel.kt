@@ -19,13 +19,13 @@ import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 internal class ActionPickerViewModel(
-    private val showDefaultOption: @Assisted Boolean,
-    private val showNoneOption: @Assisted Boolean,
+    @Assisted private val showDefaultOption: Boolean,
+    @Assisted private val showNoneOption: Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
     dispatchers: AppCoroutineDispatchers,

@@ -21,12 +21,12 @@ import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactor
 import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 /**
  * Deactivates non sdk interface detection
  */
-@Transient
+@Unscoped
 internal class NonSdkInterfacesHelper(
     private val logger: Logger,
     private val settings: SettingsDataStoreFactory,

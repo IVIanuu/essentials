@@ -24,6 +24,7 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
 import com.ivianuu.injekt.set
 
@@ -35,21 +36,19 @@ fun esCoilModule() {
     set<MapperBinding<*>>()
     set<MeasuredMapperBinding<*>>()
 
-    scoped { context: @ForApplication Context, decoders: Set<Decoder>,
-             fetchers: Set<FetcherBinding<*>>, mappers: Set<MapperBinding<*>>,
-             measuredMappers: Set<MeasuredMapperBinding<*>> ->
-        ImageLoader.Builder(context)
+    scoped {
+        ImageLoader.Builder(get<@ForApplication Context>())
             .componentRegistry {
-                decoders.forEach { add(it) }
-                fetchers
+                get<Set<Decoder>>().forEach { add(it) }
+                get<Set<FetcherBinding<*>>>()
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.fetcher)
                     }
-                mappers
+                get<Set<MapperBinding<*>>>()
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
-                measuredMappers
+                get<Set<MeasuredMapperBinding<*>>>()
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }

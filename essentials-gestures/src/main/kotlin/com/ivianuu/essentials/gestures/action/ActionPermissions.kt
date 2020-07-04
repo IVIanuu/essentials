@@ -16,10 +16,11 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Scoped
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 internal class ActionPermissions(context: @ForApplication Context) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,

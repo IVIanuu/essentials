@@ -32,10 +32,10 @@ import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 @SuppressLint("NewApi")
-@Transient
+@Unscoped
 internal class TorchNotificationFactory(
     private val context: @ForApplication Context,
     private val notificationManager: NotificationManager,

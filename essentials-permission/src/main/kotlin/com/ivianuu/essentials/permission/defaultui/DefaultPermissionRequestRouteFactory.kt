@@ -43,13 +43,13 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
-@Transient
+@Unscoped
 internal class DefaultPermissionRequestRouteFactory(
     private val page: DefaultPermissionPage
 ) : PermissionRequestRouteFactory {
@@ -58,7 +58,7 @@ internal class DefaultPermissionRequestRouteFactory(
 
 }
 
-@Transient
+@Unscoped
 internal class DefaultPermissionPage(
     private val viewModelFactory: @Provider (PermissionRequest) -> DefaultPermissionViewModel
 ) {
@@ -108,13 +108,13 @@ internal class DefaultPermissionPage(
 
 }
 
-@Transient
+@Unscoped
 internal class DefaultPermissionViewModel(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
     private val navigator: Navigator,
-    private val request: @Assisted PermissionRequest,
+    @Assisted private val request: PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers,
     private val startUi: StartUi
 ) : ViewModel(dispatchers) {

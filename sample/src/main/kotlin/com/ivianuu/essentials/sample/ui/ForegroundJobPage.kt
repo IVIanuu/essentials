@@ -38,10 +38,10 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.delay
 
-@Transient
+@Unscoped
 class ForegroundJobPage(
     private val context: @ForApplication Context,
     private val foregroundManager: ForegroundManager,

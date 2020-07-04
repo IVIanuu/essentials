@@ -1,32 +1,16 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Repeat
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionPermissions
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.StringKey
-import com.ivianuu.injekt.Transient
-import com.ivianuu.injekt.composition.installIn
-import kotlinx.coroutines.delay
-
+/**
 @Module
-private fun LastAppModule() {
-    installIn<ApplicationComponent>()
+fun LastAppModule() {
+installIn<ApplicationComponent>()
     action { resourceProvider: ResourceProvider,
              permissions: ActionPermissions,
              executor: LastAppActionExecutor ->
         Action(
-            key = "last_app",
-            title = resourceProvider.getString(R.string.es_action_last_app),
-            permissions = listOf(permissions.accessibility),
+key = "last_app",
+title = getString(R.string.es_action_last_app),
+permissions = listOf(permissions.accessibility),
             unlockScreen = true,
             iconProvider = SingleActionIconProvider(Icons.Default.Repeat),
             executor = executor
@@ -34,7 +18,7 @@ private fun LastAppModule() {
     }
 }
 
-@Transient
+@Unscoped
 internal class LastAppActionExecutor(
     private val lazyRecentAppsExecutor: @Provider (Int) -> AccessibilityActionExecutor
 ) : ActionExecutor {
@@ -46,3 +30,4 @@ internal class LastAppActionExecutor(
         executor()
     }
 }
+ */

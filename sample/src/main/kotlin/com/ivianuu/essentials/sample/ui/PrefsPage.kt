@@ -40,13 +40,14 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
-import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Unscoped
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class Prefs(factory: DiskDataStoreFactory) {
     val switch = factory.create("switch") { false }
     val checkbox = factory.create("checkbox") { false }
@@ -59,7 +60,7 @@ class Prefs(factory: DiskDataStoreFactory) {
     val singleChoice = factory.create("single_choice") { "C" }
 }
 
-@Transient
+@Unscoped
 class PrefsPage(private val prefs: Prefs) {
     @Composable
     operator fun invoke() {

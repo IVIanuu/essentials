@@ -11,9 +11,9 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class ActionPickerPage internal constructor(
     private val viewModelFactory: @Provider (Boolean, Boolean) -> ActionPickerViewModel
 ) {

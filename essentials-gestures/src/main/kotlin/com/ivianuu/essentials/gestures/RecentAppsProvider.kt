@@ -21,7 +21,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 /**
  * Recent apps provider
  */
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class RecentAppsProvider(
     private val logger: Logger,
     scope: @GlobalScope CoroutineScope,

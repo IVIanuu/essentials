@@ -45,11 +45,11 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Transient
+@Unscoped
 class NotificationsPage(
     private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,

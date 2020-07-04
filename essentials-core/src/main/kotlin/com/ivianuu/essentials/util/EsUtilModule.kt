@@ -4,6 +4,7 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +19,8 @@ fun esUtilModule() {
             io = Dispatchers.IO
         )
     }
-    scoped<@GlobalScope CoroutineScope> { dispatchers: AppCoroutineDispatchers ->
-        CoroutineScope(dispatchers.default)
+    scoped<@GlobalScope CoroutineScope> {
+        CoroutineScope(get<AppCoroutineDispatchers>().default)
     }
 }
 

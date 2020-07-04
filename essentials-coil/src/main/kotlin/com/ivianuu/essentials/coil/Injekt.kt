@@ -21,22 +21,23 @@ import coil.fetch.Fetcher
 import coil.map.Mapper
 import coil.map.MeasuredMapper
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.set
-import com.ivianuu.injekt.transient
+import com.ivianuu.injekt.unscoped
 import kotlin.reflect.KClass
 
 @Module
 fun <D : Decoder> coilDecoder() {
-    transient<D>()
+    unscoped<D>()
     set<Decoder> { add<D>() }
 }
 
 @Module
 inline fun <F : Fetcher<T>, reified T : Any> coilFetcher() {
-    transient<F>()
-    transient { fetcher: F ->
+    unscoped<F>()
+    unscoped {
         FetcherBinding(
-            fetcher = fetcher,
+            fetcher = get<F>(),
             type = T::class
         )
     }
@@ -52,10 +53,10 @@ data class FetcherBinding<T : Any>(
 
 @Module
 inline fun <M : Mapper<T, *>, reified T : Any> coilMapper() {
-    transient<M>()
-    transient { mapper: M ->
+    unscoped<M>()
+    unscoped {
         MapperBinding(
-            mapper = mapper,
+            mapper = get<M>(),
             type = T::class
         )
     }
@@ -71,10 +72,10 @@ data class MapperBinding<T : Any>(
 
 @Module
 inline fun <M : MeasuredMapper<T, *>, reified T : Any> coilMeasuredMapper() {
-    transient<M>()
-    transient { mapper: M ->
+    unscoped<M>()
+    unscoped {
         MeasuredMapperBinding(
-            mapper = mapper,
+            mapper = get<M>(),
             type = T::class
         )
     }

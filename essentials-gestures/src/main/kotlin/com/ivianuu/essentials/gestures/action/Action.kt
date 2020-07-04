@@ -5,10 +5,11 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.set
-import com.ivianuu.injekt.transient
 import kotlinx.coroutines.flow.Flow
 
 @Immutable
@@ -31,10 +32,18 @@ interface ActionExecutor {
 }
 
 @Module
-fun <T : Action, F : Function<T>> action(provider: F) {
-    transient(provider)
+fun <T : Action> bindAction() {
     set<Action> { add<T>() }
 }
+
+@Reader
+internal fun getString(id: Int) = get<ResourceProvider>().getString(id)
+
+@Reader
+internal fun permissions(block: ActionPermissions.() -> List<Permission>) =
+    get<ActionPermissions>().block()
+
+internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
 interface ActionFactory {
     fun handles(key: String): Boolean

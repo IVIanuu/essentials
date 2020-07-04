@@ -19,18 +19,16 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.remember
-import androidx.ui.graphics.Color
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
-import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 @BindAppUi
-@Transient
+@Unscoped
 class SampleUi(
     private val homePage: HomePage,
     private val navigator: Navigator,

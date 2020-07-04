@@ -20,10 +20,10 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.map
 import kotlin.reflect.KClass
 
@@ -42,13 +42,14 @@ import kotlin.reflect.KClass
 interface AppInitializer
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindAppInitializer
-
-@BindingEffectFunction(BindAppInitializer::class)
-@Module
-inline fun <reified T : AppInitializer> appInitializer() {
-    map<KClass<*>, AppInitializer> {
-        put<T>(T::class)
+annotation class BindAppInitializer {
+    companion object {
+        @Module
+        inline operator fun <reified T : AppInitializer> invoke() {
+            map<KClass<*>, AppInitializer> {
+                put<T>(T::class)
+            }
+        }
     }
 }
 
@@ -58,16 +59,11 @@ fun esAppInitializerModule() {
     map<KClass<*>, AppInitializer>()
 }
 
-@Transient
-class AppInitializers(
-    private val logger: Logger,
-    initializers: Map<KClass<*>, @Provider () -> AppInitializer>
-) {
-    init {
-        initializers
-            .forEach {
-                logger.d(tag = "Init", message = "initialize ${it.key.java.name}")
-                it.value()
-            }
-    }
+@Reader
+fun runInitializers() {
+    get<Map<KClass<*>, @Provider () -> AppInitializer>>()
+        .forEach {
+            get<Logger>().d(tag = "Init", message = "initialize ${it.key.java.name}")
+            it.value()
+        }
 }

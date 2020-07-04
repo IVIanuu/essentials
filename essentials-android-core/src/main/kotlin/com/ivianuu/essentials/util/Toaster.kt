@@ -19,14 +19,14 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import android.widget.Toast
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
  * Shows system toasts
  */
-@Transient
+@Unscoped
 class Toaster(
     private val context: @ForApplication Context,
     private val scope: @GlobalScope CoroutineScope,

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.boot
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
 import kotlin.reflect.KClass
@@ -32,13 +31,14 @@ interface BootListener {
 }
 
 @BindingEffect(ApplicationComponent::class)
-annotation class BindBootAware
-
-@BindingEffectFunction(BindBootAware::class)
-@Module
-inline fun <reified T : BootListener> bootListener() {
-    map<KClass<*>, BootListener> {
-        put<T>(T::class)
+annotation class BindBootAware {
+    companion object {
+        @Module
+        inline operator fun <reified T : BootListener> invoke() {
+            map<KClass<*>, BootListener> {
+                put<T>(T::class)
+            }
+        }
     }
 }
 

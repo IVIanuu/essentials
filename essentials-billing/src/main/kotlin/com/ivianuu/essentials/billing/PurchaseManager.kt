@@ -38,8 +38,9 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.StartUi
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -60,7 +61,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@ApplicationScoped
+@Scoped(ApplicationComponent::class)
 class PurchaseManager(
     billingClientProvider: @Provider (PurchasesUpdatedListener) -> BillingClient,
     private val dispatchers: AppCoroutineDispatchers,

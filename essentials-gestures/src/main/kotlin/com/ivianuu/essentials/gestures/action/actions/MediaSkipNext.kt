@@ -12,7 +12,7 @@ import com.ivianuu.injekt.StringKey
 import com.ivianuu.injekt.composition.installIn
 
 @Module
-private fun MediaSkipNextModule() {
+fun MediaSkipNextModule() {
     installIn<ApplicationComponent>()
     bindMediaAction<@StringKey("media_skip_next") Action>(
         key = "media_skip_next",

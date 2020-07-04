@@ -28,7 +28,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 fun PackageUsageStatsPermission(
     vararg metadata: KeyWithValue<*>
@@ -43,7 +43,7 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class PackageUsageStatsPermissionStateProvider(
     private val appOps: AppOpsManager,
     private val context: @ForApplication Context

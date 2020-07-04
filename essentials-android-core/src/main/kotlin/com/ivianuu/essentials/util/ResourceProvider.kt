@@ -9,9 +9,9 @@ import androidx.ui.text.font.font
 import androidx.ui.unit.Dp
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class ResourceProvider(
     private val context: @ForApplication Context,
     private val densityProvider: DensityProvider

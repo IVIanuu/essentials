@@ -6,51 +6,51 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ScreenLockRotation
 import androidx.ui.material.icons.filled.ScreenRotation
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.ActionPermissions
-import com.ivianuu.essentials.gestures.action.action
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.datastore.android.settings.int
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.getString
+import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.StringKey
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.unscoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Module
-private fun AutoRotationModule() {
+fun AutoRotationModule() {
     installIn<ApplicationComponent>()
-    action {
-            resourceProvider: ResourceProvider,
-            permissions: ActionPermissions,
-            iconProvider: AutoRotationActionIconProvider,
-            executor: AutoRotationActionExecutor ->
+    unscoped {
         Action(
             key = "auto_rotation",
-            title = resourceProvider.getString(R.string.es_action_auto_rotation),
-            permissions = listOf(permissions.writeSettings),
+            title = getString(R.string.es_action_auto_rotation),
+            permissions = permissions { listOf(writeSettings) },
             unlockScreen = true,
-            iconProvider = iconProvider,
-            executor = executor
+            iconProvider = get<AutoRotationActionIconProvider>(),
+            executor = get<AutoRotationActionExecutor>()
         ) as @StringKey("auto_rotation") Action
     }
+    bindAction<@StringKey("auto_rotation") Action>()
 
-    scoped<@AutoRotationSetting DataStore<Int>> { factory: SettingsDataStoreFactory ->
-        factory.int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
+    scoped<@AutoRotationSetting DataStore<Int>> {
+        get<SettingsDataStoreFactory>()
+            .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
     }
 }
 
-@Transient
+@Unscoped
 internal class AutoRotationActionExecutor(
     private val dataStore: @AutoRotationSetting DataStore<Int>
 ) : ActionExecutor {
@@ -59,7 +59,7 @@ internal class AutoRotationActionExecutor(
     }
 }
 
-@Transient
+@Unscoped
 internal class AutoRotationActionIconProvider(
     private val dataStore: @AutoRotationSetting DataStore<Int>
 ) : ActionIconProvider {

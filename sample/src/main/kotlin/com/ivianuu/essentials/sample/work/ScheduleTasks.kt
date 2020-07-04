@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class ScheduleTasks(
     private val workManager: WorkManager
 ) {

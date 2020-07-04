@@ -13,11 +13,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.safeAs
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class ActionsPage(
     private val actionExecutors: ActionExecutors,
     private val actionPickerPage: ActionPickerPage,

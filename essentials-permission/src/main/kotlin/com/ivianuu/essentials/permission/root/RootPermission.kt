@@ -10,7 +10,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 fun RootPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsRootPermission withValue Unit,
@@ -22,7 +22,7 @@ val Permission.Companion.IsRootPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class RootPermissionStateProvider(private val shell: Shell) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
@@ -32,7 +32,7 @@ internal class RootPermissionStateProvider(private val shell: Shell) : Permissio
 }
 
 @BindPermissionRequestHandler
-@Transient
+@Unscoped
 internal class RootPermissionRequestHandler(
     private val shell: Shell,
     private val toaster: Toaster

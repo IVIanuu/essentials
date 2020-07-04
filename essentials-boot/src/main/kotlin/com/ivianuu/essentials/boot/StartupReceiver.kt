@@ -21,23 +21,21 @@ import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.android.AndroidEntryPoint
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 import kotlin.reflect.KClass
 
-@AndroidEntryPoint
 class StartupReceiver : EsBroadcastReceiver() {
 
-    private val bootAwareComponents: Map<KClass<*>, @Provider () -> BootListener> by inject()
-    private val logger: Logger by inject()
-
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        logger.d("on system boot")
-
-        bootAwareComponents.forEach {
-            logger.d("notify boot listener ${it.key}")
-            it.value().onBoot()
+        component.runReader {
+            get<Logger>().d("on system boot")
+            get<Map<KClass<*>, @Provider () -> BootListener>>().forEach {
+                get<Logger>().d("notify boot listener ${it.key}")
+                it.value().onBoot()
+            }
         }
     }
 }

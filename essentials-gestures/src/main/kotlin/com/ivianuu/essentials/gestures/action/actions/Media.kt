@@ -7,13 +7,15 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
-import com.ivianuu.essentials.gestures.action.action
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.getString
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.unscoped
 import kotlinx.coroutines.flow.first
 
 @Module
@@ -23,20 +25,20 @@ internal fun <T : Action> bindMediaAction(
     titleRes: Int,
     icon: @Composable () -> Unit
 ) {
-    action { resourceProvider: ResourceProvider,
-             executorFactory: @Provider (Int) -> MediaActionExecutor ->
+    unscoped {
         Action(
             key = key,
-            title = resourceProvider.getString(titleRes),
+            title = getString(titleRes),
             iconProvider = SingleActionIconProvider(icon),
-            executor = executorFactory(keycode)
+            executor = get<@Provider (Int) -> MediaActionExecutor>()(keycode)
         ) as T
     }
+    bindAction<T>()
 }
 
-@Transient
+@Unscoped
 internal class MediaActionExecutor(
-    private val keycode: @Assisted Int,
+    @Assisted private val keycode: Int,
     private val actionPrefs: ActionPrefs,
     private val context: @ForApplication Context
 ) : ActionExecutor {

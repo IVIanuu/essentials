@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import java.util.regex.Pattern
 
 interface Logger {
@@ -19,7 +19,7 @@ interface Logger {
 
 }
 
-@Transient
+@Unscoped
 object NoopLogger : Logger {
     override fun v(message: String, tag: String) {
     }
@@ -40,7 +40,7 @@ object NoopLogger : Logger {
     }
 }
 
-@Transient
+@Unscoped
 class DefaultLogger : Logger {
     override fun v(message: String, tag: String) {
         println("[VERBOSE] $tag $message")

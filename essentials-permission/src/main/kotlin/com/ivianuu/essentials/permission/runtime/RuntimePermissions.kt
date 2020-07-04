@@ -28,7 +28,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 fun RuntimePermission(
     name: String,
@@ -43,7 +43,7 @@ val Permission.Companion.RuntimePermissionName by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class RuntimePermissionStateProvider(
     private val context: @ForApplication Context,
 ) : PermissionStateProvider {
@@ -57,7 +57,7 @@ internal class RuntimePermissionStateProvider(
 }
 
 @BindPermissionRequestHandler
-@Transient
+@Unscoped
 internal class RuntimePermissionRequestHandler(
     private val startActivityForResult: StartActivityForResult
 ) : PermissionRequestHandler {

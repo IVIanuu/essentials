@@ -27,9 +27,9 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class AboutPage(
     private val aboutSection: AboutSection,
     private val buildInfo: BuildInfo,
@@ -53,7 +53,7 @@ class AboutPage(
 @Qualifier
 annotation class PrivacyPolicyUrl
 
-@Transient
+@Unscoped
 class AboutSection(private val navigator: Navigator) {
 
     @Composable

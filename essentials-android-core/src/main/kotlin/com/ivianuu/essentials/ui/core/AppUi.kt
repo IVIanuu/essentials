@@ -21,7 +21,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 
 interface AppUi {
     @Composable
@@ -29,10 +28,11 @@ interface AppUi {
 }
 
 @BindingEffect(ActivityComponent::class)
-annotation class BindAppUi
-
-@BindingEffectFunction(BindAppUi::class)
-@Module
-fun <T : AppUi> bindAppUi() {
-    alias<T, AppUi>()
+annotation class BindAppUi {
+    companion object {
+        @Module
+        operator fun <T : AppUi> invoke() {
+            alias<T, AppUi>()
+        }
+    }
 }

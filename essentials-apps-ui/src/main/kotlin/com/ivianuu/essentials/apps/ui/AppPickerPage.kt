@@ -41,9 +41,9 @@ import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class AppPickerPage internal constructor(
     private val viewModelFactory: @Provider (AppFilter) -> AppPickerViewModel
 ) {
@@ -92,9 +92,9 @@ private fun AppInfo(
     )
 }
 
-@Transient
+@Unscoped
 internal class AppPickerViewModel(
-    private val appFilter: @Assisted AppFilter,
+    @Assisted private val appFilter: AppFilter,
     private val appStore: AppStore,
     private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator

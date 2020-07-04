@@ -19,10 +19,10 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.boot.BindBootAware
 import com.ivianuu.essentials.boot.BootListener
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 @BindBootAware
-@Transient
+@Unscoped
 class BootLogger(private val logger: Logger) : BootListener {
     override fun onBoot() {
         logger.d("booted!")

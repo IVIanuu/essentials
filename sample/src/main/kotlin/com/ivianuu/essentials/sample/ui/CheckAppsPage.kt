@@ -21,9 +21,9 @@ import androidx.compose.remember
 import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
-@Transient
+@Unscoped
 class CheckAppsPage(
     private val boxFactory: DiskDataStoreFactory,
     private val checkableAppsPage: CheckableAppsPage,

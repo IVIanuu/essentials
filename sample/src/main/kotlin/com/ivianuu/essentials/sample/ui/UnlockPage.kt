@@ -28,12 +28,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class UnlockPage(
     private val screenStateProvider: ScreenStateProvider,
     private val unlockScreen: UnlockScreen,

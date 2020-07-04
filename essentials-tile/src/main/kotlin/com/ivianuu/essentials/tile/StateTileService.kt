@@ -17,14 +17,17 @@
 package com.ivianuu.essentials.tile
 
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.get
 
 /**
  * Stateful tile service
  */
 abstract class StateTileService<T> : EsTileService() {
 
-    private val resourceProvider: ResourceProvider by inject()
+    private val resourceProvider: ResourceProvider by lazy {
+        component.runReader { get() }
+    }
 
     abstract fun createTile(state: T): Tile
 

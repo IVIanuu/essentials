@@ -28,7 +28,7 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
@@ -47,7 +47,7 @@ val Permission.Companion.NotificationListenerClass by lazy {
 }
 
 @BindPermissionStateProvider
-@Transient
+@Unscoped
 internal class NotificationListenerPermissionStateProvider(
     private val buildInfo: BuildInfo,
     private val context: @ForApplication Context

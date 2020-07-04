@@ -7,10 +7,10 @@ import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
-@Transient
+@Unscoped
 internal class ShortcutStore(
     private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager

@@ -1,12 +1,13 @@
 package com.ivianuu.essentials.sample.app
 
 import android.os.StrictMode
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.BindAppInitializer
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 @BindAppInitializer
-@Transient
-class StrictModeInitializer {
+@Unscoped
+class StrictModeInitializer : AppInitializer {
 
     init {
         StrictMode.setThreadPolicy(

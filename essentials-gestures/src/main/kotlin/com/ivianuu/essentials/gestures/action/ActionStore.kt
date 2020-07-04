@@ -2,13 +2,13 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
 /**
  * Store for actions
  */
-@Transient
+@Unscoped
 class ActionStore(
     private val actions: Set<@Provider () -> Action>,
     private val actionFactories: Set<@Provider () -> ActionFactory>,

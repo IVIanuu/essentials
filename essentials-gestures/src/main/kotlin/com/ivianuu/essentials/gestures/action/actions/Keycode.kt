@@ -19,17 +19,17 @@ import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
 
 @Module
-private fun KeycodeModule() {
+fun KeycodeModule() {
     installIn<ApplicationComponent>()
     actionFactory<KeycodeActionFactory>()
     actionPickerDelegate<KeycodeActionPickerDelegate>()
 }
 
-@Transient
+@Unscoped
 internal class KeycodeActionFactory(
     private val permissions: ActionPermissions,
     private val resourceProvider: ResourceProvider,
@@ -50,7 +50,7 @@ internal class KeycodeActionFactory(
     }
 }
 
-@Transient
+@Unscoped
 internal class KeycodeActionPickerDelegate(
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {

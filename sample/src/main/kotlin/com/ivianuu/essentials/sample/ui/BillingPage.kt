@@ -35,10 +35,10 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class BillingPage(
     private val purchaseManager: PurchaseManager
 ) {

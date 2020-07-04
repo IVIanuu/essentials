@@ -27,20 +27,20 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
 import kotlinx.coroutines.flow.Flow
 
 @Module
-private fun AppActionModule() {
+fun AppActionModule() {
     installIn<ApplicationComponent>()
     actionFactory<AppActionFactory>()
     actionPickerDelegate<AppActionPickerDelegate>()
 }
 
-@Transient
+@Unscoped
 internal class AppActionExecutor(
-    private val packageName: @Assisted String,
+    @Assisted private val packageName: String,
     private val packageManager: PackageManager,
     private val delegateProvider: @Provider (Intent) -> IntentActionExecutor,
     private val toaster: Toaster
@@ -59,7 +59,7 @@ internal class AppActionExecutor(
     }
 }
 
-@Transient
+@Unscoped
 internal class AppActionFactory(
     private val appStore: AppStore,
     private val appActionExecutorProvider: @Provider (String) -> AppActionExecutor,
@@ -79,7 +79,7 @@ internal class AppActionFactory(
     }
 }
 
-@Transient
+@Unscoped
 internal class AppActionPickerDelegate(
     private val appPickerPage: AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
@@ -98,10 +98,10 @@ internal class AppActionPickerDelegate(
     }
 }
 
-@Transient
+@Unscoped
 internal class AppActionIconProvider(
     private val delegateProvider: @Provider (Any) -> CoilActionIconProvider,
-    private val packageName: @Assisted String
+    @Assisted private val packageName: String
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = delegateProvider(AppIcon(packageName)).icon

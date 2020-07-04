@@ -32,12 +32,12 @@ import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 
 /**
  * Asks the user for the secure settings permission
  */
-@Transient
+@Unscoped
 class SecureSettingsPcInstructionsPage internal constructor(
     private val buildInfo: BuildInfo,
     private val navigator: Navigator,

@@ -26,7 +26,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,7 +38,7 @@ internal fun SecureSettingsHeader(text: String) {
     )
 }
 
-@Transient
+@Unscoped
 internal class PopNavigatorOnceSecureSettingsGranted(
     private val navigator: Navigator,
     private val secureSettingsHelper: SecureSettingsHelper,

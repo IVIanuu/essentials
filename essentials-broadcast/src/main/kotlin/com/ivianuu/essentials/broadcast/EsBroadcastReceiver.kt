@@ -17,8 +17,17 @@
 package com.ivianuu.essentials.broadcast
 
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import com.ivianuu.injekt.android.ReceiverComponent
+import com.ivianuu.injekt.android.newReceiverComponent
 
 /**
  * Base broadcast receiver
  */
-abstract class EsBroadcastReceiver : BroadcastReceiver()
+abstract class EsBroadcastReceiver : BroadcastReceiver() {
+    lateinit var component: ReceiverComponent
+    override fun onReceive(context: Context, intent: Intent) {
+        component = newReceiverComponent(context)
+    }
+}

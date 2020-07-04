@@ -19,13 +19,13 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
 /**
  * Store for [AppInfo]s
  */
-@Transient
+@Unscoped
 class AppStore(
     private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager

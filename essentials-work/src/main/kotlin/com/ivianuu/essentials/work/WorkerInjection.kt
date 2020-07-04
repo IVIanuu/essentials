@@ -20,28 +20,30 @@ import android.content.Context
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.BindAppInitializer
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.transient
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.unscoped
 
 @Module
 fun esWorkModule() {
     installIn<ApplicationComponent>()
-    transient { context: @ForApplication Context ->
-        WorkManager.getInstance(context)
+    unscoped {
+        WorkManager.getInstance(get<@ForApplication Context>())
     }
 }
 
 @BindAppInitializer
-@Transient
+@Unscoped
 class WorkerAppInitializer(
     context: @ForApplication Context,
     workerFactory: WorkerFactory
-) {
+) : AppInitializer {
     init {
         WorkManager.initialize(
             context, Configuration.Builder()

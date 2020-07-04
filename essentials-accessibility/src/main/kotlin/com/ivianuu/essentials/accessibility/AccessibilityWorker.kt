@@ -3,7 +3,6 @@ package com.ivianuu.essentials.accessibility
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.BindingEffectFunction
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
 import kotlin.reflect.KClass
@@ -16,13 +15,14 @@ interface AccessibilityWorker {
 }
 
 @BindingEffect(ServiceComponent::class)
-annotation class BindAccessibilityWorker
-
-@BindingEffectFunction(BindAccessibilityWorker::class)
-@Module
-inline fun <reified T : AccessibilityWorker> accessibilityWorker() {
-    map<KClass<*>, AccessibilityWorker> {
-        put<T>(T::class)
+annotation class BindAccessibilityWorker {
+    companion object {
+        @Module
+        inline operator fun <reified T : AccessibilityWorker> invoke() {
+            map<KClass<*>, AccessibilityWorker> {
+                put<T>(T::class)
+            }
+        }
     }
 }
 

@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
 /**
  * Provides the current time
  */
-@Transient
+@Unscoped
 class Clock {
     val now: Duration get() = System.currentTimeMillis().milliseconds
 }

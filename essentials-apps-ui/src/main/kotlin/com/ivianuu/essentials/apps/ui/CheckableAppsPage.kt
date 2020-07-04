@@ -43,13 +43,13 @@ import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-@Transient
+@Unscoped
 class CheckableAppsPage internal constructor(
     private val viewModelFactory: @Provider (
         AppFilter,
@@ -124,11 +124,11 @@ private fun CheckableApp(
     )
 }
 
-@Transient
+@Unscoped
 internal class CheckableAppsViewModel(
-    private val appFilter: @Assisted AppFilter,
-    private val checkedApps: @Assisted Flow<Set<String>>,
-    private val onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit,
+    @Assisted private val appFilter: AppFilter,
+    @Assisted private val checkedApps: Flow<Set<String>>,
+    @Assisted private val onCheckedAppsChanged: suspend (Set<String>) -> Unit,
     private val appStore: AppStore,
     dispatchers: AppCoroutineDispatchers
 ) : StateViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {

@@ -4,10 +4,10 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Transient
+import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
-@Transient
+@Unscoped
 class ActionExecutors(
     private val actionStore: ActionStore,
     private val dispatchers: AppCoroutineDispatchers,

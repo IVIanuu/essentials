@@ -16,23 +16,20 @@
 
 package com.ivianuu.essentials.billing
 
-import android.content.Context
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
 
 @Module
 fun esBillingModule() {
     installIn<ApplicationComponent>()
-    scoped { context: @ForApplication Context,
-             updateListener: @Assisted PurchasesUpdatedListener ->
+    scoped { updateListener: PurchasesUpdatedListener ->
         BillingClient
-            .newBuilder(context)
+            .newBuilder(get())
             .enablePendingPurchases()
             .setListener(updateListener)
             .build()
