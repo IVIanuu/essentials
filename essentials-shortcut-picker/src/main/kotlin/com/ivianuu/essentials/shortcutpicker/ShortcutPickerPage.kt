@@ -37,12 +37,14 @@ import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.StartActivityForResult
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
+@Reader
 @Unscoped
 class ShortcutPickerPage internal constructor(
     private val viewModelFactory: @Provider () -> ShortcutPickerViewModel
@@ -85,14 +87,13 @@ private fun Shortcut(
     }
 }
 
+@Reader
 @Unscoped
 internal class ShortcutPickerViewModel(
-    dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
     private val shortcutStore: ShortcutStore,
-    private val startActivityForResult: StartActivityForResult,
     private val toaster: Toaster
-) : StateViewModel<ShortcutPickerState>(ShortcutPickerState(), dispatchers) {
+) : StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {
 
     init {
         execute(

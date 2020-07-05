@@ -1,73 +1,117 @@
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import java.util.regex.Pattern
 
 interface Logger {
 
-    fun v(message: String, tag: String = stackTraceTag)
+    fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
-    fun d(message: String, tag: String = stackTraceTag)
+    fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
-    fun i(message: String, tag: String = stackTraceTag)
+    fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
-    fun w(message: String, tag: String = stackTraceTag)
+    fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
-    fun e(message: String? = null, tag: String = stackTraceTag)
+    fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
-    fun wtf(message: String? = null, tag: String = stackTraceTag)
+    fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
+}
+
+@Reader
+fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().v(message, throwable, tag)
+}
+
+@Reader
+fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().d(message, throwable, tag)
+}
+
+@Reader
+fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().i(message, throwable, tag)
+}
+
+@Reader
+fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().w(message, throwable, tag)
+}
+
+@Reader
+fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().e(message, throwable, tag)
+}
+
+@Reader
+fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
+    get<Logger>().wtf(message, throwable, tag)
 }
 
 @Unscoped
 object NoopLogger : Logger {
-    override fun v(message: String, tag: String) {
+    override fun v(message: String?, throwable: Throwable?, tag: String?) {
     }
 
-    override fun d(message: String, tag: String) {
+    override fun d(message: String?, throwable: Throwable?, tag: String?) {
     }
 
-    override fun i(message: String, tag: String) {
+    override fun i(message: String?, throwable: Throwable?, tag: String?) {
     }
 
-    override fun w(message: String, tag: String) {
+    override fun w(message: String?, throwable: Throwable?, tag: String?) {
     }
 
-    override fun e(message: String?, tag: String) {
+    override fun e(message: String?, throwable: Throwable?, tag: String?) {
     }
 
-    override fun wtf(message: String?, tag: String) {
+    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
     }
 }
 
 @Unscoped
 class DefaultLogger : Logger {
-    override fun v(message: String, tag: String) {
-        println("[VERBOSE] $tag $message")
+
+    override fun v(message: String?, throwable: Throwable?, tag: String?) {
+        println("[VERBOSE] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    override fun d(message: String, tag: String) {
-        println("[DEBUG] $tag $message")
+    override fun d(message: String?, throwable: Throwable?, tag: String?) {
+        println("[DEBUG] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    override fun i(message: String, tag: String) {
-        println("[INFO] $tag $message")
+    override fun i(message: String?, throwable: Throwable?, tag: String?) {
+        println("[INFO] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    override fun w(message: String, tag: String) {
-        println("[WARN] $tag $message")
+    override fun w(message: String?, throwable: Throwable?, tag: String?) {
+        println("[WARN] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    override fun e(message: String?, tag: String) {
-        println("[ERROR] $tag $message")
+    override fun e(message: String?, throwable: Throwable?, tag: String?) {
+        println("[ERROR] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    override fun wtf(message: String?, tag: String) {
-        println("[WTF] $tag $message")
+    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
+        println("[WTF] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
+
+    private fun render(message: String?, throwable: Throwable?) {
+        buildString {
+            append(message.orEmpty())
+            if (throwable != null) {
+                append(" ")
+            }
+            append(throwable?.toString().orEmpty())
+        }
+    }
+
 }
 
-private val Logger.stackTraceTag: String
+val Logger.stackTraceTag: String
     get() = Throwable().stackTrace
         .first {
             it.className != javaClass.canonicalName &&

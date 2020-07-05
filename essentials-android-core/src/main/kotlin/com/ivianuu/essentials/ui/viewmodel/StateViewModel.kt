@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.resource.Error
 import com.ivianuu.essentials.ui.resource.Loading
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.Success
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
@@ -39,10 +39,10 @@ import kotlin.coroutines.CoroutineContext
 /**
  * State view model
  */
+@Reader
 abstract class StateViewModel<S>(
-    initialState: S,
-    dispatchers: AppCoroutineDispatchers
-) : ViewModel(dispatchers) {
+    initialState: S
+) : ViewModel() {
 
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state

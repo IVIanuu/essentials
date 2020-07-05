@@ -20,18 +20,18 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
-import com.ivianuu.essentials.processrestart.RestartProcess
+import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
+@Reader
 @Unscoped
-class RestartProcessPage(
-    private val restartProcess: RestartProcess
-) {
+class RestartProcessPage {
     @Composable
     operator fun invoke() {
         Scaffold(

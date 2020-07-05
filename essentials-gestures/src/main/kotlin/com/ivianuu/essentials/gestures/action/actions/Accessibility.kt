@@ -35,7 +35,7 @@ internal fun <T : Action> bindAccessibilityAction(
 
 @Unscoped
 internal class AccessibilityActionExecutor(
-    @Assisted private val accessibilityAction: Int,
+    private val accessibilityAction: @Assisted Int,
     private val accessibilityServices: AccessibilityServices
 ) : ActionExecutor {
     override suspend fun invoke() {

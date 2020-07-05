@@ -45,11 +45,14 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.android.ActivityComponent
 
-@Unscoped
+@Reader
+@Scoped(ActivityComponent::class)
 class HomePage(
-    private val aboutPage: AboutPage,
     private val actionsPage: ActionsPage,
     private val appPickerPage: AppPickerPage,
     private val billingPage: BillingPage,
@@ -76,8 +79,7 @@ class HomePage(
     private val workPage: WorkPage,
     private val navigator: Navigator,
     private val shortcutPickerPage: ShortcutPickerPage,
-    private val toaster: Toaster,
-    private val twilightSettingsPage: TwilightSettingsPage
+    private val toaster: Toaster
 ) {
     @Composable
     operator fun invoke() {
@@ -119,7 +121,7 @@ class HomePage(
                     color = color,
                     onClick = {
                         val route = when (item) {
-                            HomeItem.About -> Route { aboutPage() }
+                            HomeItem.About -> Route { AboutPage() }
                             HomeItem.Actions -> Route { actionsPage() }
                             HomeItem.AppPicker -> Route { appPickerPage() }
                             HomeItem.Billing -> Route { billingPage() }
@@ -148,7 +150,7 @@ class HomePage(
                             HomeItem.TextInput -> Route { textInputPage() }
                             HomeItem.Timer -> Route { timerPage() }
                             HomeItem.Torch -> Route { torchPage() }
-                            HomeItem.Twilight -> Route { twilightSettingsPage() }
+                            HomeItem.Twilight -> Route { TwilightSettingsPage() }
                             HomeItem.Unlock -> Route { unlockPage() }
                             HomeItem.Work -> Route { workPage() }
                         }

@@ -38,9 +38,9 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
 @Unscoped
@@ -92,13 +92,13 @@ private fun AppInfo(
     )
 }
 
+@Reader
 @Unscoped
 internal class AppPickerViewModel(
-    @Assisted private val appFilter: AppFilter,
+    private val appFilter: @Assisted AppFilter,
     private val appStore: AppStore,
-    private val dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator
-) : StateViewModel<AppPickerState>(AppPickerState(), dispatchers) {
+) : StateViewModel<AppPickerState>(AppPickerState()) {
 
     init {
         execute(

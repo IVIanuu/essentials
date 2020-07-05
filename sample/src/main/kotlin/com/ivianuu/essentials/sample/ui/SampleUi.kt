@@ -25,19 +25,20 @@ import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransiti
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
+@Reader
 @BindAppUi
 @Unscoped
 class SampleUi(
     private val homePage: HomePage,
-    private val navigator: Navigator,
-    private val twilightTheme: TwilightTheme
+    private val navigator: Navigator
 ) : AppUi {
 
     @Composable
     override fun content() {
-        twilightTheme {
+        TwilightTheme {
             Providers(
                 DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
             ) {

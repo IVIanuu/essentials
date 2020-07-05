@@ -9,48 +9,44 @@ import androidx.compose.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-@Unscoped
-class StartActivityForResult(
-    private val navigator: Navigator,
-    private val startUi: StartUi
-) {
+@Reader
+suspend fun startActivityForResult(intent: Intent): ActivityResult =
+    startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
-    suspend operator fun invoke(intent: Intent): ActivityResult =
-        invoke(ActivityResultContracts.StartActivityForResult(), intent)
-
-    suspend operator fun <I, O> invoke(
-        contract: ActivityResultContract<I, O>,
-        input: I
-    ): O {
-        startUi()
-        return suspendCancellableCoroutine { continuation ->
-            var popped = false
-            fun popIfNeeded() {
-                if (!popped) {
-                    popped = true
-                    navigator.popTop()
-                }
+@Reader
+suspend fun <I, O> startActivityForResult(
+    contract: ActivityResultContract<I, O>,
+    input: I
+): O {
+    startUi()
+    return suspendCancellableCoroutine { continuation ->
+        val navigator = get<Navigator>()
+        var popped = false
+        fun popIfNeeded() {
+            if (!popped) {
+                popped = true
+                navigator.popTop()
             }
-
-            navigator.push(
-                Route(opaque = true) {
-                    val launcher = registerActivityResultCallback(
-                        contract,
-                        ActivityResultCallback {
-                            popIfNeeded()
-                            continuation.resume(it)
-                        }
-                    )
-
-                    onActive { launcher.launch(input) }
-                }
-            )
-            continuation.invokeOnCancellation { popIfNeeded() }
         }
-    }
 
+        navigator.push(
+            Route(opaque = true) {
+                val launcher = registerActivityResultCallback(
+                    contract,
+                    ActivityResultCallback {
+                        popIfNeeded()
+                        continuation.resume(it)
+                    }
+                )
+
+                onActive { launcher.launch(input) }
+            }
+        )
+        continuation.invokeOnCancellation { popIfNeeded() }
+    }
 }

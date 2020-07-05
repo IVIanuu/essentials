@@ -19,20 +19,21 @@ import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
+@Reader
 @Unscoped
 internal class ActionPickerViewModel(
-    @Assisted private val showDefaultOption: Boolean,
-    @Assisted private val showNoneOption: Boolean,
+    private val showDefaultOption: @Assisted Boolean,
+    private val showNoneOption: @Assisted Boolean,
     private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    dispatchers: AppCoroutineDispatchers,
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val resourceProvider: ResourceProvider
-) : StateViewModel<ActionPickerState>(ActionPickerState(), dispatchers) {
+) : StateViewModel<ActionPickerState>(ActionPickerState()) {
 
     init {
         execute(

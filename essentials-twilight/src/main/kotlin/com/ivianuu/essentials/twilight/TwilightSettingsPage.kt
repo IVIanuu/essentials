@@ -29,34 +29,33 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
-@Unscoped
-class TwilightSettingsPage(
-    private val prefs: TwilightPrefs
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
-        ) {
-            InsettingScrollableColumn {
-                var twilightMode by prefs.twilightMode.asState()
-                TwilightMode.values().toList().forEach { mode ->
-                    TwilightModeItem(
-                        mode = mode,
-                        isSelected = twilightMode == mode,
-                        onClick = { twilightMode = mode }
-                    )
-                }
-
-                Subheader { Text(R.string.es_twilight_pref_category_more) }
-
-                CheckboxListItem(
-                    dataStore = prefs.useBlack,
-                    title = { Text(R.string.es_twilight_use_black) }
+@Reader
+@Composable
+fun TwilightSettingsPage() {
+    val prefs = get<TwilightPrefs>()
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
+    ) {
+        InsettingScrollableColumn {
+            var twilightMode by prefs.twilightMode.asState()
+            TwilightMode.values().toList().forEach { mode ->
+                TwilightModeItem(
+                    mode = mode,
+                    isSelected = twilightMode == mode,
+                    onClick = { twilightMode = mode }
                 )
             }
+
+            Subheader { Text(R.string.es_twilight_pref_category_more) }
+
+            CheckboxListItem(
+                dataStore = prefs.useBlack,
+                title = { Text(R.string.es_twilight_use_black) }
+            )
         }
     }
 }

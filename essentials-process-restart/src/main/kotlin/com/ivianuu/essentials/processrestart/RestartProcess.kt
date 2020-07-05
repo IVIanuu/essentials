@@ -22,24 +22,17 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
-@Unscoped
-class RestartProcess(
-    private val buildInfo: BuildInfo,
-    private val context: @ForApplication Context,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
-    private val packageManager: PackageManager
-) {
-
-    suspend operator fun invoke() {
-        val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-            .addFlags(FLAG_ACTIVITY_NEW_TASK)
-        logger.d("restart process %$intent")
-        ProcessRestartActivity.launch(context, intent)
-        Runtime.getRuntime().exit(0)
-    }
-
+@Reader
+suspend fun restartProcess() {
+    val intent = get<PackageManager>().getLaunchIntentForPackage(get<BuildInfo>().packageName)!!
+        .addFlags(FLAG_ACTIVITY_NEW_TASK)
+    d("restart process %$intent")
+    ProcessRestartActivity.launch(get<@ForApplication Context>(), intent)
+    Runtime.getRuntime().exit(0)
 }

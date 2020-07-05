@@ -16,7 +16,13 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineDispatcher
+
+@Reader
+val dispatchers: AppCoroutineDispatchers
+    get() = get()
 
 /**
  * App coroutine dispatchers

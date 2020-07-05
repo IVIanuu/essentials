@@ -19,7 +19,8 @@ package com.ivianuu.essentials.ui.viewmodel
 import androidx.compose.Composable
 import androidx.compose.currentComposer
 import androidx.ui.savedinstancestate.rememberSavedInstanceState
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import java.io.Closeable
@@ -27,7 +28,8 @@ import java.io.Closeable
 /**
  * Base view model
  */
-abstract class ViewModel(dispatchers: AppCoroutineDispatchers) : Closeable {
+@Reader
+abstract class ViewModel : Closeable {
 
     val scope = CoroutineScope(dispatchers.default)
 

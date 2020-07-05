@@ -5,27 +5,29 @@ import com.ivianuu.injekt.Unscoped
 
 @Unscoped
 class AndroidLogger : Logger {
-    override fun v(message: String, tag: String) {
-        Log.v(tag, message)
+
+    override fun v(message: String?, throwable: Throwable?, tag: String?) {
+        Log.v(tag ?: stackTraceTag, message, throwable)
     }
 
-    override fun d(message: String, tag: String) {
-        Log.d(tag, message)
+    override fun d(message: String?, throwable: Throwable?, tag: String?) {
+        Log.d(tag ?: stackTraceTag, message, throwable)
     }
 
-    override fun i(message: String, tag: String) {
-        Log.i(tag, message)
+    override fun i(message: String?, throwable: Throwable?, tag: String?) {
+        Log.i(tag ?: stackTraceTag, message, throwable)
     }
 
-    override fun w(message: String, tag: String) {
-        Log.w(tag, message)
+    override fun w(message: String?, throwable: Throwable?, tag: String?) {
+        Log.w(tag ?: stackTraceTag, message, throwable)
     }
 
-    override fun e(message: String?, tag: String) {
-        Log.e(tag, message)
+    override fun e(message: String?, throwable: Throwable?, tag: String?) {
+        Log.e(tag ?: stackTraceTag, message, throwable)
     }
 
-    override fun wtf(message: String?, tag: String) {
-        Log.wtf(tag, message)
+    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
+        Log.wtf(tag ?: stackTraceTag, message, throwable)
     }
+
 }

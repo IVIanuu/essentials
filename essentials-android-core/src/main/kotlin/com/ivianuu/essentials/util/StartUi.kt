@@ -4,22 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 
-@Unscoped
-class StartUi(
-    private val application: @ForApplication Context,
-    private val buildInfo: BuildInfo,
-    private val packageManager: PackageManager
-) {
-
-    suspend operator fun invoke() {
-        val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-        application.startActivity(
-            intent.apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        )
-    }
-
+@Reader
+suspend fun startUi() {
+    val intent = get<PackageManager>().getLaunchIntentForPackage(get<BuildInfo>().packageName)!!
+    get<@ForApplication Context>().startActivity(
+        intent.apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    )
 }

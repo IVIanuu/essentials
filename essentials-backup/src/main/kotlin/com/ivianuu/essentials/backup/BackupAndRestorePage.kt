@@ -9,50 +9,42 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
-@Unscoped
-class BackupAndRestorePage internal constructor(
-    private val viewModelFactory: @Provider () -> BackupAndRestoreViewModel
-) {
-    @Composable
-    operator fun invoke() {
-        val viewModel = viewModel(init = viewModelFactory)
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
-        ) {
-            InsettingScrollableColumn {
-                ListItem(
-                    title = { Text(R.string.es_pref_backup) },
-                    subtitle = { Text(R.string.es_pref_backup_summary) },
-                    onClick = { viewModel.backupClicked() }
-                )
+@Reader
+@Composable
+fun BackupAndRestorePage() {
+    val viewModel = viewModel { get<BackupAndRestoreViewModel>() }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
+    ) {
+        InsettingScrollableColumn {
+            ListItem(
+                title = { Text(R.string.es_pref_backup) },
+                subtitle = { Text(R.string.es_pref_backup_summary) },
+                onClick = { viewModel.backupClicked() }
+            )
 
-                ListItem(
-                    title = { Text(R.string.es_pref_restore) },
-                    subtitle = { Text(R.string.es_pref_restore_summary) },
-                    onClick = { viewModel.restoreClicked() }
-                )
-            }
+            ListItem(
+                title = { Text(R.string.es_pref_restore) },
+                subtitle = { Text(R.string.es_pref_restore_summary) },
+                onClick = { viewModel.restoreClicked() }
+            )
         }
     }
 }
 
+@Reader
 @Unscoped
-internal class BackupAndRestoreViewModel(
-    private val backupDataUseCase: BackupDataUseCase,
-    dispatchers: AppCoroutineDispatchers,
-    private val restoreDataUseCase: RestoreDataUseCase,
-    private val toaster: Toaster
-) : ViewModel(dispatchers) {
+internal class BackupAndRestoreViewModel(private val toaster: Toaster) : ViewModel() {
 
     fun backupClicked() {
         scope.launch {
-            backupDataUseCase()
+            backupData()
                 .onFailure {
                     it.printStackTrace()
                     toaster.toast(R.string.es_backup_error)
@@ -62,7 +54,7 @@ internal class BackupAndRestoreViewModel(
 
     fun restoreClicked() {
         scope.launch {
-            restoreDataUseCase()
+            restoreData()
                 .onFailure {
                     it.printStackTrace()
                     toaster.toast(R.string.es_restore_error)

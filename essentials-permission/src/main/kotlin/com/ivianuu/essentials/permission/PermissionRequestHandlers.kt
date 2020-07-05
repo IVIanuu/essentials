@@ -5,7 +5,7 @@ import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.withContext
 
 @Unscoped
-internal class PermissionRequestHandlers(
+class PermissionRequestHandlers(
     private val dispatchers: AppCoroutineDispatchers,
     private val manager: PermissionManager,
     requestHandlers: Set<PermissionRequestHandler>

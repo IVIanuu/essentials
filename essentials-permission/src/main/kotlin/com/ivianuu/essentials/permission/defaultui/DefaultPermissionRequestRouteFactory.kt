@@ -40,9 +40,10 @@ import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.StartUi
+import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -108,16 +109,16 @@ internal class DefaultPermissionPage(
 
 }
 
+@Reader
 @Unscoped
 internal class DefaultPermissionViewModel(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
     private val navigator: Navigator,
-    @Assisted private val request: PermissionRequest,
-    private val requestHandlers: PermissionRequestHandlers,
-    private val startUi: StartUi
-) : ViewModel(dispatchers) {
+    private val request: @Assisted PermissionRequest,
+    private val requestHandlers: PermissionRequestHandlers
+) : ViewModel() {
 
     private val _permissionsToProcess = modelListOf<Permission>()
     val permissionsToProcess: List<Permission> get() = _permissionsToProcess

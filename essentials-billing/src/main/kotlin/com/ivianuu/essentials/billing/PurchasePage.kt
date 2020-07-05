@@ -20,23 +20,19 @@ import androidx.compose.Composable
 import androidx.compose.launchInComposition
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
-@Unscoped
-class PurchasePage(
-    private val manager: PurchaseManager,
-    private val navigator: Navigator
-) {
-    @Composable
-    operator fun invoke(requestId: String) {
-        val activity = compositionActivity
-        launchInComposition {
-            navigator.popTop()
-            withContext(NonCancellable) {
-                manager.purchaseInternal(requestId, activity)
-            }
+@Reader
+@Composable
+fun PurchasePage(requestId: String) {
+    val activity = compositionActivity
+    launchInComposition {
+        get<Navigator>().popTop()
+        withContext(NonCancellable) {
+            get<PurchaseManager>().purchaseInternal(requestId, activity)
         }
     }
 }

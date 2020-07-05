@@ -26,8 +26,9 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.util.StartActivityForResult
+import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
 fun RuntimePermission(
@@ -56,11 +57,10 @@ internal class RuntimePermissionStateProvider(
                 PackageManager.PERMISSION_GRANTED
 }
 
+@Reader
 @BindPermissionRequestHandler
 @Unscoped
-internal class RuntimePermissionRequestHandler(
-    private val startActivityForResult: StartActivityForResult
-) : PermissionRequestHandler {
+internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission

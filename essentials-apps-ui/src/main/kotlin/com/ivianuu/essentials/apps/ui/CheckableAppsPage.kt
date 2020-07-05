@@ -40,9 +40,9 @@ import com.ivianuu.essentials.ui.resource.invoke
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -124,14 +124,14 @@ private fun CheckableApp(
     )
 }
 
+@Reader
 @Unscoped
 internal class CheckableAppsViewModel(
-    @Assisted private val appFilter: AppFilter,
-    @Assisted private val checkedApps: Flow<Set<String>>,
-    @Assisted private val onCheckedAppsChanged: suspend (Set<String>) -> Unit,
-    private val appStore: AppStore,
-    dispatchers: AppCoroutineDispatchers
-) : StateViewModel<CheckableAppsState>(CheckableAppsState(), dispatchers) {
+    private val appFilter: @Assisted AppFilter,
+    private val checkedApps: @Assisted Flow<Set<String>>,
+    private val onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit,
+    private val appStore: AppStore
+) : StateViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     init {
         combine(

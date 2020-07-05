@@ -38,7 +38,7 @@ internal fun <T : Action> bindMediaAction(
 
 @Unscoped
 internal class MediaActionExecutor(
-    @Assisted private val keycode: Int,
+    private val keycode: @Assisted Int,
     private val actionPrefs: ActionPrefs,
     private val context: @ForApplication Context
 ) : ActionExecutor {

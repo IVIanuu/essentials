@@ -20,9 +20,10 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.StartUi
+import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,14 +32,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
+@Reader
 @Scoped(ApplicationComponent::class)
 class PermissionManager(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val navigator: Navigator,
     private val permissionRequestRouteFactory: @Provider () -> PermissionRequestRouteFactory,
-    private val permissionStateProviders: Set<PermissionStateProvider>,
-    private val startUi: StartUi
+    private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
     private val permissionChanges = EventFlow<Unit>()
@@ -71,7 +72,7 @@ class PermissionManager(
             navigator.push<Any>(permissionRequestRouteFactory().createRoute(request))
 
             return@withContext hasPermissions(permissions).first()
-    }
+        }
 
     internal fun permissionRequestFinished() {
         permissionChanges.offer(Unit)
