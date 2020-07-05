@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 annotation class UiScope
 
 @Module
-fun esUiModule() {
+fun EsUiModule() {
     installIn<ActivityComponent>()
     scoped<@UiScope CoroutineScope> {
         CoroutineScope(get<AppCoroutineDispatchers>().main)

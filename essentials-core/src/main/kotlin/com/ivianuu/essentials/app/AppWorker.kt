@@ -50,7 +50,7 @@ annotation class BindAppWorker {
 }
 
 @Module
-fun esAppWorkerModule() {
+fun EsAppWorkerModule() {
     installIn<ApplicationComponent>()
     map<KClass<*>, AppWorker>()
 }

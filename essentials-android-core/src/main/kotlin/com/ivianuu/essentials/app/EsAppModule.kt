@@ -25,7 +25,7 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.unscoped
 
 @Module
-fun esAppModule() {
+fun EsAppModule() {
     installIn<ApplicationComponent>()
     unscoped { get<@ForApplication Context>().packageManager!! }
 }

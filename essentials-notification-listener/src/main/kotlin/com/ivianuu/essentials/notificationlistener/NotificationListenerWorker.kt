@@ -27,7 +27,7 @@ annotation class BindNotificationWorker {
 }
 
 @Module
-fun esNotificationRunnableModule() {
+fun EsNotificationWorkerModule() {
     installIn<ServiceComponent>()
     map<KClass<*>, NotificationWorker>()
 }

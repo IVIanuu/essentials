@@ -26,7 +26,7 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.unscoped
 
 @Module
-fun esBillingModule() {
+fun EsBillingModule() {
     installIn<ApplicationComponent>()
 
     var debugBillingClient: DebugBillingClient? = null

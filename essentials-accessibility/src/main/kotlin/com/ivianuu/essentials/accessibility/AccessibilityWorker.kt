@@ -27,7 +27,7 @@ annotation class BindAccessibilityWorker {
 }
 
 @Module
-fun esAccessibilityRunnableModule() {
+fun EsAccessibilityWorkerModule() {
     installIn<ServiceComponent>()
     map<KClass<*>, AccessibilityWorker>()
 }

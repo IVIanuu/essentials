@@ -43,7 +43,7 @@ annotation class BindBootAware {
 }
 
 @Module
-fun esBootModule() {
+fun EsBootModule() {
     installIn<ApplicationComponent>()
     map<KClass<*>, BootListener>()
 }

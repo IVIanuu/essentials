@@ -27,7 +27,7 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.scoped
 
 @Module
-fun esAndroidUtilModule() {
+fun EsAndroidUtilModule() {
     installIn<ApplicationComponent>()
     scoped {
         val appInfo = get<Application>().applicationInfo

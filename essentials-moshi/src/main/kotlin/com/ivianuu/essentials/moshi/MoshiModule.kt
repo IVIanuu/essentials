@@ -27,7 +27,7 @@ annotation class BindJsonAdapter {
 annotation class JsonAdapters
 
 @Module
-fun esMoshiModule() {
+fun EsMoshiModule() {
     installIn<ApplicationComponent>()
     set<@JsonAdapters Set<Any>, Any>()
     scoped {

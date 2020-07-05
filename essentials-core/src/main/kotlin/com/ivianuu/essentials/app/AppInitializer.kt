@@ -54,7 +54,7 @@ annotation class BindAppInitializer {
 }
 
 @Module
-fun esAppInitializerModule() {
+fun EsAppInitializerModule() {
     installIn<ApplicationComponent>()
     map<KClass<*>, AppInitializer>()
 }

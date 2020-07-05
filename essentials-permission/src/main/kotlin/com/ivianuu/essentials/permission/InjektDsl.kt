@@ -56,7 +56,7 @@ annotation class BindPermissionRequestRouteFactory {
 }
 
 @Module
-fun esPermissionsModule() {
+fun EsPermissionsModule() {
     installIn<ApplicationComponent>()
     set<PermissionRequestHandler>()
     set<PermissionStateProvider>()

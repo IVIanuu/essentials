@@ -7,7 +7,7 @@ import com.ivianuu.injekt.map
 import com.ivianuu.injekt.set
 
 @Module
-fun esActionModule() {
+fun EsActionModule() {
     installIn<ApplicationComponent>()
     set<Action>()
     set<ActionFactory>()

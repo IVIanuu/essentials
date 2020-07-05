@@ -35,7 +35,7 @@ import kotlinx.coroutines.plus
 import java.io.File
 
 @Module
-fun esDataModule() {
+fun EsDataModule() {
     installIn<ApplicationComponent>()
     unscoped<@DataDir String> {
         get<@ForApplication Context>().applicationInfo.dataDir

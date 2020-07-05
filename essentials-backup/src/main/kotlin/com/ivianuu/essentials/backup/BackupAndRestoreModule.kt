@@ -9,7 +9,7 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.unscoped
 
 @Module
-internal fun backupAndRestoreModule() {
+internal fun BackupAndRestoreModule() {
     installIn<ApplicationComponent>()
     unscoped<@BackupDir String> { "${get<@DataDir String>()}/backups" }
 }

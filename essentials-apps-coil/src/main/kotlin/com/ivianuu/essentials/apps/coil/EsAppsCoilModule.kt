@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.composition.installIn
 
 @Module
-fun esAppsCoilModule() {
+fun EsAppsCoilModule() {
     installIn<ApplicationComponent>()
     coilFetcher<AppIconFetcher, AppIcon>()
 }

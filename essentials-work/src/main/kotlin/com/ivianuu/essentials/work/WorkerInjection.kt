@@ -31,7 +31,7 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.unscoped
 
 @Module
-fun esWorkModule() {
+fun EsWorkModule() {
     installIn<ApplicationComponent>()
     unscoped {
         WorkManager.getInstance(get<@ForApplication Context>())

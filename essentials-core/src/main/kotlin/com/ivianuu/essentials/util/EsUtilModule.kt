@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 @Module
-fun esUtilModule() {
+fun EsUtilModule() {
     installIn<ApplicationComponent>()
     scoped {
         AppCoroutineDispatchers(
@@ -25,6 +25,6 @@ fun esUtilModule() {
 }
 
 @Module
-fun esLoggerModule() {
+fun EsLoggerModule() {
     alias<DefaultLogger, Logger>()
 }

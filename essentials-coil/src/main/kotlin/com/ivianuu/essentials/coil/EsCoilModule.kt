@@ -29,7 +29,7 @@ import com.ivianuu.injekt.scoped
 import com.ivianuu.injekt.set
 
 @Module
-fun esCoilModule() {
+fun EsCoilModule() {
     installIn<ApplicationComponent>()
     set<Decoder>()
     set<FetcherBinding<*>>()
