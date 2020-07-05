@@ -38,32 +38,29 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class ChipsPage(
-    private val toaster: Toaster
-) {
-    @OptIn(ExperimentalLayout::class)
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Chips") }) }
+@OptIn(ExperimentalLayout::class)
+@Reader
+@Composable
+fun ChipsPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Chips") }) }
+    ) {
+        Box(
+            modifier = Modifier.padding(all = 8.dp),
+            gravity = ContentGravity.TopStart
         ) {
-            Box(
-                modifier = Modifier.padding(all = 8.dp),
-                gravity = ContentGravity.TopStart
+            FlowRow(
+                mainAxisSpacing = 8.dp,
+                crossAxisSpacing = 8.dp
             ) {
-                FlowRow(
-                    mainAxisSpacing = 8.dp,
-                    crossAxisSpacing = 8.dp
-                ) {
-                    remember { Names.shuffled() }.forEach { name ->
-                        Chip(
-                            name = name,
-                            onClick = { toaster.toast("Clicked $name") }
-                        )
-                    }
+                remember { Names.shuffled() }.forEach { name ->
+                    Chip(
+                        name = name,
+                        onClick = { Toaster.toast("Clicked $name") }
+                    )
                 }
             }
         }

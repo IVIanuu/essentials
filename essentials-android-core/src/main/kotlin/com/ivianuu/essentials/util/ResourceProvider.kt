@@ -6,16 +6,14 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.ImageAsset
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.font
+import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Unscoped
 
 @Unscoped
-class ResourceProvider(
-    private val context: @ForApplication Context,
-    private val densityProvider: DensityProvider
-) {
+class ResourceProvider(private val context: @ForApplication Context) {
 
     fun getBitmap(id: Int): ImageAsset = context.getDrawable(id)!!.toImageAsset()
 
@@ -23,7 +21,7 @@ class ResourceProvider(
 
     fun getColor(id: Int): Color = Color(context.getColor(id))
 
-    fun getDimension(id: Int): Dp = densityProvider.withDensity {
+    fun getDimension(id: Int): Dp = with(Density(context)) {
         context.resources.getDimension(id).toInt().toDp()
     }
 

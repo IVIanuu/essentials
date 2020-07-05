@@ -25,67 +25,57 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
-/**
- * Asks the user for the secure settings permission
- */
-@Unscoped
-class SecureSettingsPage internal constructor(
-    private val instructionsPage: SecureSettingsPcInstructionsPage,
-    private val navigator: Navigator,
-    private val popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
-    private val secureSettingsHelper: SecureSettingsHelper,
-    private val toaster: Toaster
-) {
+@Reader
+@Composable
+fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
+    popNavigatorOnceSecureSettingsGranted(toast = true)
 
-    @Composable
-    operator fun invoke(showHideNavBarHint: Boolean = false) {
-        popNavigatorOnceSecureSettingsGranted(toast = true)
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
+        body = {
+            InsettingScrollableColumn {
+                SecureSettingsHeader(
+                    stringResource(
+                        if (showHideNavBarHint) {
+                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                        } else {
+                            R.string.es_pref_secure_settings_header_summary
+                        }
+                    )
+                )
 
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
-            body = {
-                InsettingScrollableColumn {
-                    SecureSettingsHeader(
-                        stringResource(
-                            if (showHideNavBarHint) {
-                                R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                ListItem(
+                    title = { Text(R.string.es_pref_use_pc) },
+                    subtitle = { Text(R.string.es_pref_use_pc_summary) },
+                    onClick = {
+                        navigator.push {
+                            SecureSettingsPcInstructionsPage()
+                        }
+                    }
+                )
+
+                val scope = compositionScope()
+                ListItem(
+                    title = { Text(R.string.es_pref_use_root) },
+                    subtitle = { Text(R.string.es_pref_use_root_summary) },
+                    onClick = {
+                        scope.launch {
+                            if (get<SecureSettingsHelper>().grantWriteSecureSettingsViaRoot()) {
+                                Toaster.toast(R.string.es_secure_settings_permission_granted)
                             } else {
-                                R.string.es_pref_secure_settings_header_summary
-                            }
-                        )
-                    )
-
-                    ListItem(
-                        title = { Text(R.string.es_pref_use_pc) },
-                        subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                        onClick = {
-                            navigator.push {
-                                instructionsPage()
+                                Toaster.toast(R.string.es_secure_settings_no_root)
                             }
                         }
-                    )
-
-                    val scope = compositionScope()
-                    ListItem(
-                        title = { Text(R.string.es_pref_use_root) },
-                        subtitle = { Text(R.string.es_pref_use_root_summary) },
-                        onClick = {
-                            scope.launch {
-                                if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
-                                    toaster.toast(R.string.es_secure_settings_permission_granted)
-                                } else {
-                                    toaster.toast(R.string.es_secure_settings_no_root)
-                                }
-                            }
-                        }
-                    )
-                }
+                    }
+                )
             }
-        )
-    }
-
+        }
+    )
 }

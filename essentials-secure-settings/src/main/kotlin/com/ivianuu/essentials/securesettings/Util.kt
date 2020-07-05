@@ -25,8 +25,11 @@ import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,25 +41,19 @@ internal fun SecureSettingsHeader(text: String) {
     )
 }
 
-@Unscoped
-internal class PopNavigatorOnceSecureSettingsGranted(
-    private val navigator: Navigator,
-    private val secureSettingsHelper: SecureSettingsHelper,
-    private val toaster: Toaster
-) {
-    @Composable
-    operator fun invoke(toast: Boolean) {
-        // we check the permission periodically to automatically pop this screen
-        // once we got the permission
-        launchInComposition {
-            while (true) {
-                if (secureSettingsHelper.canWriteSecureSettings()) {
-                    if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
-                    navigator.popTop(result = true)
-                    break
-                }
-                delay(500)
+@Reader
+@Composable
+internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
+    // we check the permission periodically to automatically pop this screen
+    // once we got the permission
+    launchInComposition {
+        while (true) {
+            if (get<SecureSettingsHelper>().canWriteSecureSettings()) {
+                if (toast) Toaster.toast(R.string.es_secure_settings_permission_granted)
+                navigator.popTop(result = true)
+                break
             }
+            delay(500)
         }
     }
 }

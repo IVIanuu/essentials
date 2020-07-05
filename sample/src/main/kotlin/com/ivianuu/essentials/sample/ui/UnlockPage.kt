@@ -28,16 +28,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@Reader
 @Unscoped
 class UnlockPage(
     private val screenStateProvider: ScreenStateProvider,
-    private val unlockScreen: UnlockScreen,
-    private val toaster: Toaster
+    private val unlockScreen: UnlockScreen
 ) {
     @Composable
     operator fun invoke() {
@@ -49,14 +50,14 @@ class UnlockPage(
                 modifier = Modifier.center(),
                 onClick = {
                     scope.launch {
-                        toaster.toast("Turn the screen off and on")
+                        Toaster.toast("Turn the screen off and on")
 
                         screenStateProvider.screenState
                             .filter { it == ScreenState.Locked }
                             .first()
 
                         val unlocked = unlockScreen()
-                        toaster.toast("Screen unlocked $unlocked")
+                        Toaster.toast("Screen unlocked $unlocked")
                     }
                 }
             ) { Text("Unlock") }

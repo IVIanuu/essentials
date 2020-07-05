@@ -22,6 +22,8 @@ import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
@@ -44,7 +46,7 @@ fun EsDataModule() {
     scoped { MoshiSerializerFactory(get()) }
     scoped {
         DiskDataStoreFactory(
-            scope = get<@GlobalScope CoroutineScope>() + get<AppCoroutineDispatchers>().io,
+            scope = globalScope + dispatchers.io,
             produceBoxDirectory = { File(get<@PrefsDir String>()) },
             serializerFactory = get()
         )

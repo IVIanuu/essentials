@@ -42,6 +42,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
@@ -58,7 +59,6 @@ class HomePage(
     private val billingPage: BillingPage,
     private val bottomNavigationPage: BottomNavigationPage,
     private val checkAppsPage: CheckAppsPage,
-    private val chipsPage: ChipsPage,
     private val counterPage: CounterPage,
     private val dialogsPage: DialogsPage,
     private val drawerPage: DrawerPage,
@@ -76,10 +76,7 @@ class HomePage(
     private val timerPage: TimerPage,
     private val torchPage: TorchPage,
     private val unlockPage: UnlockPage,
-    private val workPage: WorkPage,
-    private val navigator: Navigator,
-    private val shortcutPickerPage: ShortcutPickerPage,
-    private val toaster: Toaster
+    private val workPage: WorkPage
 ) {
     @Composable
     operator fun invoke() {
@@ -94,7 +91,7 @@ class HomePage(
                                 "Option 2",
                                 "Option 3"
                             ).map { title ->
-                                PopupMenu.Item(onSelected = { toaster.toast("Selected $title") }) {
+                                PopupMenu.Item(onSelected = { Toaster.toast("Selected $title") }) {
                                     Text(title)
                                 }
                             }
@@ -127,7 +124,7 @@ class HomePage(
                             HomeItem.Billing -> Route { billingPage() }
                             HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
                             HomeItem.CheckApps -> Route { checkAppsPage() }
-                            HomeItem.Chips -> Route { chipsPage() }
+                            HomeItem.Chips -> Route { ChipsPage() }
                             HomeItem.Counter -> Route { counterPage() }
                             HomeItem.Dialogs -> Route { dialogsPage() }
                             HomeItem.Drawer -> Route { drawerPage() }
@@ -145,7 +142,7 @@ class HomePage(
                             ) {
                                 sharedElementPage(color)
                             }
-                            HomeItem.ShortcutPicker -> Route { shortcutPickerPage() }
+                            HomeItem.ShortcutPicker -> Route { ShortcutPickerPage() }
                             HomeItem.Tabs -> Route { tabsPage() }
                             HomeItem.TextInput -> Route { textInputPage() }
                             HomeItem.Timer -> Route { timerPage() }

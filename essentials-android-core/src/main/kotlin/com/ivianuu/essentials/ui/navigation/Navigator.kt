@@ -33,8 +33,14 @@ import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+
+@Reader
+val navigator: Navigator
+    get() = get()
 
 @Stable
 class Navigator {

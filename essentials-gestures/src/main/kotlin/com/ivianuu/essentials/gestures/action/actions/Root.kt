@@ -5,20 +5,21 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
+@Reader
 @Unscoped
 class RootActionExecutor(
     private val command: @Assisted String,
-    private val shell: Shell,
-    private val toaster: Toaster
+    private val shell: Shell
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
             shell.run(command)
         } catch (e: Exception) {
             e.printStackTrace()
-            toaster.toast(R.string.es_no_root)
+            Toaster.toast(R.string.es_no_root)
         }
     }
 }

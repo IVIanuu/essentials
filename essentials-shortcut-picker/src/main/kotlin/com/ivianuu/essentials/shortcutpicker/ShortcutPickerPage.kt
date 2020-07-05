@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
@@ -42,28 +43,24 @@ import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
-class ShortcutPickerPage internal constructor(
-    private val viewModelFactory: @Provider () -> ShortcutPickerViewModel
-) {
-    @Composable
-    operator fun invoke(title: String? = null) {
-        val viewModel = viewModel(init = viewModelFactory)
-        Scaffold(
-            topBar = {
-                TopAppBar(title = {
-                    Text(
-                        title ?: stringResource(R.string.es_title_shortcut_picker)
-                    )
-                })
-            }
-        ) {
-            ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
-                Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
-            }
+@Composable
+fun ShortcutPickerPage(title: String? = null) {
+    val viewModel = viewModel<ShortcutPickerViewModel>()
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    title ?: stringResource(R.string.es_title_shortcut_picker)
+                )
+            })
+        }
+    ) {
+        ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
+            Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
         }
     }
 }
@@ -90,9 +87,7 @@ private fun Shortcut(
 @Reader
 @Unscoped
 internal class ShortcutPickerViewModel(
-    private val navigator: Navigator,
-    private val shortcutStore: ShortcutStore,
-    private val toaster: Toaster
+    private val shortcutStore: ShortcutStore
 ) : StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {
 
     init {
@@ -113,7 +108,7 @@ internal class ShortcutPickerViewModel(
                 navigator.popTop(result = shortcut)
             } catch (e: Exception) {
                 e.printStackTrace()
-                toaster.toast(R.string.es_failed_to_pick_shortcut)
+                Toaster.toast(R.string.es_failed_to_pick_shortcut)
             }
         }
     }

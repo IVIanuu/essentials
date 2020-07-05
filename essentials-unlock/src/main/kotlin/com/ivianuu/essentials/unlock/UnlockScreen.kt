@@ -22,11 +22,16 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+
+@Reader
+suspend fun unlockScreen(): Boolean = get<UnlockScreen>()()
 
 /**
  * Helper class for unlocking the screen

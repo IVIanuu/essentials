@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
@@ -37,7 +38,6 @@ import kotlinx.coroutines.withContext
 class PermissionManager(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
-    private val navigator: Navigator,
     private val permissionRequestRouteFactory: @Provider () -> PermissionRequestRouteFactory,
     private val permissionStateProviders: Set<PermissionStateProvider>
 ) {

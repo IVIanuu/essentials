@@ -27,6 +27,7 @@ import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
 import kotlinx.coroutines.flow.Flow
@@ -38,12 +39,12 @@ fun AppActionModule() {
     actionPickerDelegate<AppActionPickerDelegate>()
 }
 
+@Reader
 @Unscoped
 internal class AppActionExecutor(
     private val packageName: @Assisted String,
     private val packageManager: PackageManager,
-    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor,
-    private val toaster: Toaster
+    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
@@ -54,7 +55,7 @@ internal class AppActionExecutor(
             )()
         } catch (e: Exception) {
             e.printStackTrace()
-            toaster.toast(R.string.es_activity_not_found)
+            Toaster.toast(R.string.es_activity_not_found)
         }
     }
 }

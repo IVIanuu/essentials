@@ -39,15 +39,16 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
+@Reader
 @Unscoped
 class NavBarPage(
-    private val navigator: Navigator,
     private val navBarManager: NavBarManager,
-    private val secureSettingsHelper: SecureSettingsHelper,
-    private val secureSettingsPage: SecureSettingsPage
+    private val secureSettingsHelper: SecureSettingsHelper
 ) {
     @Composable
     operator fun invoke() {
@@ -98,7 +99,7 @@ class NavBarPage(
                         if (secureSettingsHelper.canWriteSecureSettings()) {
                             hideNavBar.value = !hideNavBar.value
                         } else {
-                            navigator.push { secureSettingsPage() }
+                            navigator.push { SecureSettingsPage() }
                         }
                     }
                 ) {

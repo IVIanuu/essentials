@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -115,7 +116,6 @@ internal class DefaultPermissionViewModel(
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val manager: PermissionManager,
-    private val navigator: Navigator,
     private val request: @Assisted PermissionRequest,
     private val requestHandlers: PermissionRequestHandlers
 ) : ViewModel() {

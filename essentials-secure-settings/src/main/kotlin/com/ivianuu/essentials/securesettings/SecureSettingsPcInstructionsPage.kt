@@ -29,95 +29,89 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
 /**
  * Asks the user for the secure settings permission
  */
-@Unscoped
-class SecureSettingsPcInstructionsPage internal constructor(
-    private val buildInfo: BuildInfo,
-    private val navigator: Navigator,
-    private val popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
-    private val toaster: Toaster
-) {
+@Reader
+@Composable
+fun SecureSettingsPcInstructionsPage() {
+    popNavigatorOnceSecureSettingsGranted(toast = false)
 
-    @Composable
-    operator fun invoke() {
-        popNavigatorOnceSecureSettingsGranted(toast = false)
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
+    ) {
+        InsettingScrollableColumn {
+            SecureSettingsHeader(
+                text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
+            )
 
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
-        ) {
-            InsettingScrollableColumn {
-                SecureSettingsHeader(
-                    text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
-                )
+            ListItem(
+                title = { Text(R.string.es_pref_secure_settings_step_1) },
+                subtitle = { Text(R.string.es_pref_secure_settings_step_1_summary) }
+            )
 
-                ListItem(
-                    title = { Text(R.string.es_pref_secure_settings_step_1) },
-                    subtitle = { Text(R.string.es_pref_secure_settings_step_1_summary) }
-                )
+            ListItem(
+                title = { Text(R.string.es_pref_secure_settings_step_2) },
+                subtitle = { Text(R.string.es_pref_secure_settings_step_2_summary) }
+            )
 
-                ListItem(
-                    title = { Text(R.string.es_pref_secure_settings_step_2) },
-                    subtitle = { Text(R.string.es_pref_secure_settings_step_2_summary) }
-                )
+            ListItem(
+                title = { Text(R.string.es_pref_secure_settings_step_3) },
+                subtitle = { Text(R.string.es_pref_secure_settings_step_3_summary) }
+            )
 
-                ListItem(
-                    title = { Text(R.string.es_pref_secure_settings_step_3) },
-                    subtitle = { Text(R.string.es_pref_secure_settings_step_3_summary) }
-                )
+            ListItem(
+                leading = { Icon(Icons.Default.Link) },
+                title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
+                onClick = {
+                    navigator.push(
+                        UrlRoute("https://youtu.be/CDuxcrrWLnY")
+                    )
+                }
+            )
 
-                ListItem(
-                    leading = { Icon(Icons.Default.Link) },
-                    title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                    onClick = {
-                        navigator.push(
-                            UrlRoute("https://youtu.be/CDuxcrrWLnY")
+            ListItem(
+                leading = { Icon(Icons.Default.Link) },
+                title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
+                onClick = {
+                    navigator.push(
+                        UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+                    )
+                }
+            )
+
+            ListItem(
+                leading = { Icon(Icons.Default.Link) },
+                title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
+                onClick = {
+                    navigator.push(
+                        UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+                    )
+                }
+            )
+
+            ClipboardListItem(
+                title = { Text(R.string.es_pref_secure_settings_step_4) },
+                subtitle = {
+                    Text(
+                        stringResource(
+                            R.string.es_pref_secure_settings_step_4_summary,
+                            get<BuildInfo>().packageName
                         )
-                    }
-                )
-
-                ListItem(
-                    leading = { Icon(Icons.Default.Link) },
-                    title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                    onClick = {
-                        navigator.push(
-                            UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-                        )
-                    }
-                )
-
-                ListItem(
-                    leading = { Icon(Icons.Default.Link) },
-                    title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                    onClick = {
-                        navigator.push(
-                            UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-                        )
-                    }
-                )
-
-                ClipboardListItem(
-                    title = { Text(R.string.es_pref_secure_settings_step_4) },
-                    subtitle = {
-                        Text(
-                            stringResource(
-                                R.string.es_pref_secure_settings_step_4_summary,
-                                buildInfo.packageName
-                            )
-                        )
-                    },
-                    clipboardText = {
-                        "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
-                    }
-                )
-            }
+                    )
+                },
+                clipboardText = {
+                    "adb shell pm grant ${get<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS"
+                }
+            )
         }
     }
-
 }

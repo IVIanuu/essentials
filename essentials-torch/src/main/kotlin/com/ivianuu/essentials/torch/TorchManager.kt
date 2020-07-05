@@ -24,7 +24,11 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.actor
@@ -37,16 +41,13 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
+@Reader
 @Scoped(ApplicationComponent::class)
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    private val scope: @GlobalScope CoroutineScope,
-    private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
-    private val notificationFactory: TorchNotificationFactory,
-    private val logger: Logger,
-    private val toaster: Toaster
+    private val notificationFactory: TorchNotificationFactory
 ) {
 
     private val _torchState = MutableStateFlow(false)
@@ -54,9 +55,9 @@ class TorchManager internal constructor(
 
     private var foregroundJob: ForegroundJob? = null
 
-    private val stateActor = scope.actor<Boolean> {
+    private val stateActor = globalScope.actor<Boolean> {
         for (enabled in this) {
-            logger.d("update state $enabled")
+            d("update state $enabled")
             foregroundJob = if (enabled) {
                 foregroundManager.startJob(notificationFactory.create())
             } else {
@@ -70,7 +71,7 @@ class TorchManager internal constructor(
     init {
         broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
-            .launchIn(scope)
+            .launchIn(globalScope)
     }
 
     suspend fun toggleTorch() = withContext(dispatchers.main) {
@@ -87,7 +88,7 @@ class TorchManager internal constructor(
                 override fun onTorchModeUnavailable(cameraId: String) {
                     tryOrToast {
                         cameraManager.unregisterTorchCallback(this)
-                        toaster.toast(R.string.es_failed_to_toggle_torch)
+                        Toaster.toast(R.string.es_failed_to_toggle_torch)
                         stateActor.offer(false)
                     }
                 }
@@ -100,7 +101,7 @@ class TorchManager internal constructor(
             action()
         } catch (e: Exception) {
             e.printStackTrace()
-            toaster.toast(R.string.es_failed_to_toggle_torch)
+            Toaster.toast(R.string.es_failed_to_toggle_torch)
         }
     }
 

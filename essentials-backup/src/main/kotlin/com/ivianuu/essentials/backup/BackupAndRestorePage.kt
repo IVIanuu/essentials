@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @Reader
 @Composable
 fun BackupAndRestorePage() {
-    val viewModel = viewModel { get<BackupAndRestoreViewModel>() }
+    val viewModel = viewModel<BackupAndRestoreViewModel>()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {
@@ -40,14 +40,14 @@ fun BackupAndRestorePage() {
 
 @Reader
 @Unscoped
-internal class BackupAndRestoreViewModel(private val toaster: Toaster) : ViewModel() {
+internal class BackupAndRestoreViewModel : ViewModel() {
 
     fun backupClicked() {
         scope.launch {
             backupData()
                 .onFailure {
                     it.printStackTrace()
-                    toaster.toast(R.string.es_backup_error)
+                    Toaster.toast(R.string.es_backup_error)
                 }
         }
     }
@@ -57,7 +57,7 @@ internal class BackupAndRestoreViewModel(private val toaster: Toaster) : ViewMod
             restoreData()
                 .onFailure {
                     it.printStackTrace()
-                    toaster.toast(R.string.es_restore_error)
+                    Toaster.toast(R.string.es_restore_error)
                 }
         }
     }

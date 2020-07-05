@@ -10,6 +10,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
 fun RootPermission(vararg metadata: KeyWithValue<*>) = Permission(
@@ -31,17 +32,17 @@ internal class RootPermissionStateProvider(private val shell: Shell) : Permissio
     override suspend fun isGranted(permission: Permission): Boolean = shell.isAvailable()
 }
 
+@Reader
 @BindPermissionRequestHandler
 @Unscoped
 internal class RootPermissionRequestHandler(
-    private val shell: Shell,
-    private val toaster: Toaster
+    private val shell: Shell
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
     override suspend fun request(permission: Permission) {
         val isOk = shell.isAvailable()
-        if (!isOk) toaster.toast(R.string.es_no_root)
+        if (!isOk) Toaster.toast(R.string.es_no_root)
     }
 }

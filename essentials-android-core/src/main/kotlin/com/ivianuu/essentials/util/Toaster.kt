@@ -18,41 +18,44 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.widget.Toast
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-/**
- * Shows system toasts
- */
-@Unscoped
-class Toaster(
-    private val context: @ForApplication Context,
-    private val scope: @GlobalScope CoroutineScope,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val resourceProvider: ResourceProvider
-) {
+object Toaster {
 
+    @Reader
     fun toast(message: String) {
         showToast(message, false)
     }
 
+    @Reader
     fun toast(messageId: Int, vararg args: Any?) {
-        showToast(resourceProvider.getString(messageId, *args), false)
+        showToast(get<ResourceProvider>().getString(messageId, *args), false)
     }
 
+    @Reader
     fun toastLong(message: String) {
         showToast(message, true)
     }
 
+    @Reader
     fun toastLong(messageId: Int, vararg args: Any?) {
-        showToast(resourceProvider.getString(messageId, *args), true)
+        showToast(get<ResourceProvider>().getString(messageId, *args), true)
     }
 
+    @Reader
     private fun showToast(message: String, long: Boolean) {
-        scope.launch(dispatchers.main) {
-            Toast.makeText(context, message, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
+        globalScope.launch(dispatchers.main) {
+            Toast.makeText(
+                applicationContext,
+                message,
+                if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }

@@ -9,10 +9,12 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionStore
+import com.ivianuu.essentials.gestures.action.getAction
+import com.ivianuu.essentials.gestures.action.getActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
@@ -28,9 +30,7 @@ import kotlinx.coroutines.launch
 internal class ActionPickerViewModel(
     private val showDefaultOption: @Assisted Boolean,
     private val showNoneOption: @Assisted Boolean,
-    private val actionStore: ActionStore,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val resourceProvider: ResourceProvider
 ) : StateViewModel<ActionPickerState>(ActionPickerState()) {
@@ -60,7 +60,7 @@ internal class ActionPickerViewModel(
                             it,
                             navigator
                         )
-                    }) + (actionStore.getActions().map { ActionPickerItem.ActionItem(it) }))
+                    }) + (getActions().map { ActionPickerItem.ActionItem(it) }))
                     .sortedBy { it.title }
 
                 return@execute specialOptions + actionsAndDelegates
@@ -73,7 +73,7 @@ internal class ActionPickerViewModel(
         scope.launch {
             val result = selectedItem.getResult() ?: return@launch
             if (result is ActionPickerResult.Action) {
-                val action = actionStore.getAction(result.actionKey)
+                val action = getAction(result.actionKey)
                 if (!permissionManager.request(action.permissions)) return@launch
             }
 

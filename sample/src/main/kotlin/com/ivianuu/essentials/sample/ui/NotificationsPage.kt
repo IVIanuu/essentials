@@ -52,7 +52,6 @@ import kotlinx.coroutines.withContext
 @Unscoped
 class NotificationsPage(
     private val dispatchers: AppCoroutineDispatchers,
-    private val navigator: Navigator,
     private val notificationStore: NotificationStore,
     private val permissionManager: PermissionManager
 ) {
