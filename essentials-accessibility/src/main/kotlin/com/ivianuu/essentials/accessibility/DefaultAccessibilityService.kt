@@ -36,9 +36,10 @@ class DefaultAccessibilityService : EsAccessibilityService() {
         component.runReader {
             d("connected")
             get<AccessibilityServices>().onServiceConnected(this)
-            get<Map<KClass<*>, @Provider () -> AccessibilityWorker>>().forEach { (key, worker) ->
-                d("run worker ${key.java.name}")
-                scope.launch { worker().run() }
+            get<@AccessibilityWorkers Set<suspend () -> Unit>>().forEach { worker ->
+                connectedScope.launch {
+                    scope.launch { worker() }
+                }
             }
         }
     }

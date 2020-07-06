@@ -18,32 +18,31 @@ package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.composition.BindingEffect
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.map
+import com.ivianuu.injekt.set
 import kotlin.reflect.KClass
 
-/**
- * Marks a component as boot aware
- */
-interface BootListener {
-    fun onBoot()
-}
-
 @BindingEffect(ApplicationComponent::class)
-annotation class BindBootAware {
+annotation class BootListener {
     companion object {
         @Module
-        inline operator fun <reified T : BootListener> invoke() {
-            map<KClass<*>, BootListener> {
-                put<T>(T::class)
+        operator fun <T : () -> Unit> invoke() {
+            set<@BootListeners Set<() -> Unit>, () -> Unit> {
+                add<T>()
             }
         }
     }
 }
 
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class BootListeners
+
 @Module
 fun EsBootModule() {
     installIn<ApplicationComponent>()
-    map<KClass<*>, BootListener>()
+    set<@BootListeners Set<() -> Unit>, () -> Unit>()
 }
