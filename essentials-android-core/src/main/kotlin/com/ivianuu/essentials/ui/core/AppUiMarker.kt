@@ -25,14 +25,14 @@ import com.ivianuu.injekt.composition.BindingEffect
 
 @Target(AnnotationTarget.TYPE)
 @Qualifier
-annotation class AppUi
+annotation class AppUiMarker
 
 @BindingEffect(ActivityComponent::class)
-annotation class BindAppUi {
+annotation class AppUi {
     companion object {
         @Module
         operator fun <T : @Composable () -> Unit> invoke() {
-            alias<T, @AppUi @Composable () -> Unit>()
+            alias<T, @AppUiMarker @Composable () -> Unit>()
         }
     }
 }
