@@ -5,8 +5,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.getString
 import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
@@ -24,7 +24,7 @@ internal fun <T : Action> bindAccessibilityAction(
     unscoped {
         Action(
             key = key,
-            title = getString(titleRes),
+            title = Resources.getString(titleRes),
             iconProvider = SingleActionIconProvider(icon),
             permissions = permissions { listOf(accessibility) },
             executor = get<@Provider (Int) -> AccessibilityActionExecutor>()(accessibilityAction)

@@ -86,13 +86,12 @@ private fun Shortcut(
 
 @Reader
 @Unscoped
-internal class ShortcutPickerViewModel(
-    private val shortcutStore: ShortcutStore
-) : StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {
+internal class ShortcutPickerViewModel :
+    StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {
 
     init {
         execute(
-            block = { shortcutStore.getShortcuts() },
+            block = { getShortcuts() },
             reducer = { copy(shortcuts = it) }
         )
     }
@@ -103,7 +102,7 @@ internal class ShortcutPickerViewModel(
                 val shortcutRequestResult = startActivityForResult(info.intent)
                     .data ?: return@launch
 
-                val shortcut = shortcutStore.getShortcut(shortcutRequestResult)
+                val shortcut = extractShortcut(shortcutRequestResult)
 
                 navigator.popTop(result = shortcut)
             } catch (e: Exception) {

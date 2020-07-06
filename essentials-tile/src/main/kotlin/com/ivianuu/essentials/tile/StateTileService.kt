@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tile
 
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.composition.runReader
 import com.ivianuu.injekt.get
 
@@ -25,10 +25,6 @@ import com.ivianuu.injekt.get
  */
 abstract class StateTileService<T> : EsTileService() {
 
-    private val resourceProvider: ResourceProvider by lazy {
-        component.runReader { get() }
-    }
-
     abstract fun createTile(state: T): Tile
 
     protected fun setState(state: T) {
@@ -36,24 +32,26 @@ abstract class StateTileService<T> : EsTileService() {
     }
 
     fun setTile(tile: Tile) {
-        val qsTile = qsTile ?: return
+        component.runReader {
+            val qsTile = qsTile ?: return
 
-        qsTile.state = when (tile.state) {
-            Tile.State.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
-            Tile.State.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
-            Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
+            qsTile.state = when (tile.state) {
+                Tile.State.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
+                Tile.State.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
+                Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
+            }
+            qsTile.icon = tile.icon
+            qsTile.label = when {
+                tile.label != null -> tile.label
+                tile.labelRes != null -> Resources.getString(tile.labelRes)
+                else -> null
+            }
+            qsTile.contentDescription = when {
+                tile.description != null -> tile.description
+                tile.descriptionRes != null -> Resources.getString(tile.descriptionRes)
+                else -> null
+            }
+            qsTile.updateTile()
         }
-        qsTile.icon = tile.icon
-        qsTile.label = when {
-            tile.label != null -> tile.label
-            tile.labelRes != null -> resourceProvider.getString(tile.labelRes)
-            else -> null
-        }
-        qsTile.contentDescription = when {
-            tile.description != null -> tile.description
-            tile.descriptionRes != null -> resourceProvider.getString(tile.descriptionRes)
-            else -> null
-        }
-        qsTile.updateTile()
     }
 }

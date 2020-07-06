@@ -7,7 +7,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.getString
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.StringKey
@@ -22,7 +22,7 @@ fun AssistantAction() {
     unscoped {
         Action(
             key = "assistant",
-            title = getString(R.string.es_action_assistant),
+            title = Resources.getString(R.string.es_action_assistant),
             iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
             unlockScreen = true,
             executor = get<AssistantActionExecutor>()

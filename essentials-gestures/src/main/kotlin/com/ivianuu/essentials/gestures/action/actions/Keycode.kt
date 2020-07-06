@@ -15,10 +15,11 @@ import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
 
@@ -29,10 +30,10 @@ fun KeycodeModule() {
     actionPickerDelegate<KeycodeActionPickerDelegate>()
 }
 
+@Reader
 @Unscoped
 internal class KeycodeActionFactory(
     private val permissions: ActionPermissions,
-    private val resourceProvider: ResourceProvider,
     private val rootActionExecutorProvider: @Provider (String) -> RootActionExecutor
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
@@ -40,7 +41,7 @@ internal class KeycodeActionFactory(
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             key = key,
-            title = resourceProvider.getString(R.string.es_action_keycode_suffix, keycode),
+            title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
             iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
             permissions = listOf(permissions.root),
             executor = rootActionExecutorProvider("input keyevent $keycode"),
@@ -50,20 +51,19 @@ internal class KeycodeActionFactory(
     }
 }
 
+@Reader
 @Unscoped
-internal class KeycodeActionPickerDelegate(
-    private val resourceProvider: ResourceProvider
-) : ActionPickerDelegate {
+internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val title: String
-        get() = resourceProvider.getString(R.string.es_action_keycode)
+        get() = Resources.getString(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Keyboard) }
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val keycode = navigator.push<String>(
             TextInputRoute(
-                title = resourceProvider.getString(R.string.es_keycode_picker_title),
-                hint = resourceProvider.getString(R.string.es_keycode_input_hint),
+                title = Resources.getString(R.string.es_keycode_picker_title),
+                hint = Resources.getString(R.string.es_keycode_input_hint),
                 keyboardType = KeyboardType.Number,
                 allowEmpty = false
             )

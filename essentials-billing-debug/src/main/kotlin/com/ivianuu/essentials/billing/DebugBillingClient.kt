@@ -42,11 +42,14 @@ import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Assisted
@@ -64,11 +67,8 @@ import java.util.concurrent.ConcurrentHashMap
 @Scoped(ApplicationComponent::class)
 class DebugBillingClient internal constructor(
     private val buildInfo: BuildInfo,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val scope: @GlobalScope CoroutineScope,
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
-    private val billingStore: BillingStore,
-    private val navigator: Navigator
+    private val billingStore: BillingStore
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -131,7 +131,7 @@ class DebugBillingClient internal constructor(
             return
         }
 
-        scope.launch {
+        globalScope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 billingStore.removePurchase(purchase.purchaseToken)
@@ -154,7 +154,7 @@ class DebugBillingClient internal constructor(
         if (params == null) return BillingResult.newBuilder()
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
-        scope.launch {
+        globalScope.launch {
             val requestId = UUID.randomUUID().toString()
             val request = PurchaseRequest(params.sku, params.skuType!!)
             requests[requestId] = request
@@ -164,7 +164,7 @@ class DebugBillingClient internal constructor(
             navigator.push(
                 DialogRoute(
                     onDismiss = {
-                        scope.launch {
+                        globalScope.launch {
                             onPurchaseResult(
                                 requestId = requestId,
                                 responseCode = BillingResponseCode.USER_CANCELED,
@@ -186,7 +186,7 @@ class DebugBillingClient internal constructor(
                             DebugPurchaseDialog(
                                 skuDetails = skuDetails,
                                 onPurchaseClick = {
-                                    scope.launch {
+                                    globalScope.launch {
                                         onPurchaseResult(
                                             requestId = requestId,
                                             responseCode = BillingResponseCode.OK,
@@ -218,7 +218,7 @@ class DebugBillingClient internal constructor(
             )
             return
         }
-        scope.launch {
+        globalScope.launch {
             val history = queryPurchases(skuType)
             listener.onPurchaseHistoryResponse(BillingResult.newBuilder()
                 .setResponseCode(history.responseCode).build(),
@@ -238,7 +238,7 @@ class DebugBillingClient internal constructor(
             )
             return
         }
-        scope.launch {
+        globalScope.launch {
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
@@ -291,7 +291,7 @@ class DebugBillingClient internal constructor(
             return
         }
 
-        scope.launch {
+        globalScope.launch {
             val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 val updated = Purchase(

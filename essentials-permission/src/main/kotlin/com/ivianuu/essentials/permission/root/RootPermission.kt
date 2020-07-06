@@ -22,27 +22,26 @@ val Permission.Companion.IsRootPermission by lazy {
     Permission.Key<Unit>("IsRootPermission")
 }
 
+@Reader
 @BindPermissionStateProvider
 @Unscoped
-internal class RootPermissionStateProvider(private val shell: Shell) : PermissionStateProvider {
+internal class RootPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
-    override suspend fun isGranted(permission: Permission): Boolean = shell.isAvailable()
+    override suspend fun isGranted(permission: Permission): Boolean = Shell.isAvailable()
 }
 
 @Reader
 @BindPermissionRequestHandler
 @Unscoped
-internal class RootPermissionRequestHandler(
-    private val shell: Shell
-) : PermissionRequestHandler {
+internal class RootPermissionRequestHandler : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
     override suspend fun request(permission: Permission) {
-        val isOk = shell.isAvailable()
+        val isOk = Shell.isAvailable()
         if (!isOk) Toaster.toast(R.string.es_no_root)
     }
 }

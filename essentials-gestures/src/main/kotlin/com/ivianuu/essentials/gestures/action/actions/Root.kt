@@ -11,12 +11,11 @@ import com.ivianuu.injekt.Unscoped
 @Reader
 @Unscoped
 class RootActionExecutor(
-    private val command: @Assisted String,
-    private val shell: Shell
+    private val command: @Assisted String
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
-            shell.run(command)
+            Shell.run(command)
         } catch (e: Exception) {
             e.printStackTrace()
             Toaster.toast(R.string.es_no_root)

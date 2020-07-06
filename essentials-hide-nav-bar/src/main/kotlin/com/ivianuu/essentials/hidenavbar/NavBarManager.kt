@@ -27,7 +27,11 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -50,16 +54,11 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
+@Reader
 @Scoped(ApplicationComponent::class)
 class NavBarManager internal constructor(
     private val app: Application,
-    private val broadcastFactory: BroadcastFactory,
-    private val scope: @GlobalScope CoroutineScope,
     private val displayRotationProvider: DisplayRotationProvider,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
-    private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
-    private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
     private val screenStateProvider: ScreenStateProvider
 ) {
@@ -68,7 +67,7 @@ class NavBarManager internal constructor(
     private val mutex = Mutex()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
-        logger.d("set nav bar config $config")
+        d("set nav bar config $config")
 
         mutex.withLock {
             job?.cancel()
@@ -76,19 +75,19 @@ class NavBarManager internal constructor(
         }
 
         if (!config.hidden) {
-            logger.d("not hidden")
+            d("not hidden")
             if (prefs.wasNavBarHidden.data.first()) {
-                logger.d("was hidden")
+                d("was hidden")
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.updateData { false }
             } else {
-                logger.d("was not hidden")
+                d("was not hidden")
             }
 
             return@withContext
         }
 
-        scope.launch {
+        globalScope.launch {
             buildList<Deferred<*>> {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
@@ -116,14 +115,14 @@ class NavBarManager internal constructor(
                 }
                 this += async {
                     // force show on shut downs
-                    broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+                    BroadcastFactory.create(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             mutex.withLock {
                                 job?.cancel()
                                 job = null
                             }
 
-                            logger.d("show nav bar because of shutdown")
+                            d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
                         .collect()
@@ -135,18 +134,18 @@ class NavBarManager internal constructor(
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        logger.d("set nav bar hidden config $config hidden $hidden")
+        d("set nav bar hidden config $config hidden $hidden")
         try {
             try {
                 // ensure that we can access non sdk interfaces
-                nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
+                disableNonSdkInterfaceDetection()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
-            overscanHelper.setOverscan(rect)
+            setOverscan(rect)
         } catch (e: Exception) {
             e.printStackTrace()
         }

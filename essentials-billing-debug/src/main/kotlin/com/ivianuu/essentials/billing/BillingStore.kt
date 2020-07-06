@@ -25,14 +25,16 @@ import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
+@Reader
 @Scoped(ApplicationComponent::class)
 class BillingStore internal constructor(
-    private val dispatchers: AppCoroutineDispatchers,
     prefs: BillingPrefs
 ) {
 
@@ -42,19 +44,19 @@ class BillingStore internal constructor(
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
         withContext(dispatchers.default) {
             products.data.first().filter { it.sku in params.skusList && it.type == params.skuType }
-    }
+        }
 
     suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
         withContext(dispatchers.default) {
-        InternalPurchasesResult(BillingResult.newBuilder()
-            .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
-            purchases.data.first().filter { it.signature.endsWith(skuType) })
-    }
+            InternalPurchasesResult(BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
+                purchases.data.first().filter { it.signature.endsWith(skuType) })
+        }
 
     suspend fun getPurchaseByToken(purchaseToken: String): Purchase? =
         withContext(dispatchers.default) {
             purchases.data.first().firstOrNull { it.purchaseToken == purchaseToken }
-    }
+        }
 
     suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
         products.updateData { it + skuDetails }

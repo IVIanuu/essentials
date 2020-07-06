@@ -18,8 +18,7 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
@@ -31,8 +30,7 @@ internal class ActionPickerViewModel(
     private val showDefaultOption: @Assisted Boolean,
     private val showNoneOption: @Assisted Boolean,
     private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    private val permissionManager: PermissionManager,
-    private val resourceProvider: ResourceProvider
+    private val permissionManager: PermissionManager
 ) : StateViewModel<ActionPickerState>(ActionPickerState()) {
 
     init {
@@ -42,14 +40,14 @@ internal class ActionPickerViewModel(
 
                 if (showDefaultOption) {
                     specialOptions += ActionPickerItem.SpecialOption(
-                        title = resourceProvider.getString(R.string.es_default),
+                        title = Resources.getString(R.string.es_default),
                         getResult = { ActionPickerResult.Default }
                     )
                 }
 
                 if (showNoneOption) {
                     specialOptions += ActionPickerItem.SpecialOption(
-                        title = resourceProvider.getString(R.string.es_none),
+                        title = Resources.getString(R.string.es_none),
                         getResult = { ActionPickerResult.None }
                     )
                 }

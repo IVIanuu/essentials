@@ -27,56 +27,49 @@ import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.FlashOn
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
 @SuppressLint("NewApi")
-@Unscoped
-internal class TorchNotificationFactory(
-    private val context: @ForApplication Context,
-    private val notificationManager: NotificationManager,
-    private val resourceProvider: ResourceProvider,
-    private val systemBuildInfo: SystemBuildInfo
-) {
+@Reader
+internal fun createTorchNotification(): Notification {
+    val notificationManager = get<NotificationManager>()
+    val systemBuildInfo = get<SystemBuildInfo>()
+    if (systemBuildInfo.sdk >= 26) {
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                Resources.getString(R.string.es_notif_channel_torch),
+                NotificationManager.IMPORTANCE_LOW
+            )
+        )
+    }
 
-    init {
-        if (systemBuildInfo.sdk >= 26) {
-            notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    resourceProvider.getString(R.string.es_notif_channel_torch),
-                    NotificationManager.IMPORTANCE_LOW
+    return NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        .apply {
+            setAutoCancel(true)
+            setContentTitle(Resources.getString(R.string.es_notif_title_torch))
+            setContentText(Resources.getString(R.string.es_notif_text_torch))
+            setContentIntent(
+                PendingIntent.getBroadcast(
+                    applicationContext,
+                    1,
+                    Intent(TorchManager.ACTION_TOGGLE_TORCH),
+                    PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
         }
-    }
-
-    fun create(): Notification {
-        return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .apply {
-                setAutoCancel(true)
-                setContentTitle(resourceProvider.getString(R.string.es_notif_title_torch))
-                setContentText(resourceProvider.getString(R.string.es_notif_text_torch))
-                setContentIntent(
-                    PendingIntent.getBroadcast(
-                        context,
-                        1,
-                        Intent(TorchManager.ACTION_TOGGLE_TORCH),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                )
-            }
-            .build()
-            .apply {
-                setSmallIcon(Icon.createWithBitmap(Icons.Default.FlashOn.toBitmap(context)))
-            }
-    }
-
-    private companion object {
-        private const val NOTIFICATION_CHANNEL_ID = "torch"
-    }
+        .build()
+        .apply {
+            setSmallIcon(Icon.createWithBitmap(Icons.Default.FlashOn.toBitmap(applicationContext)))
+        }
 }
+
+private const val NOTIFICATION_CHANNEL_ID = "torch"

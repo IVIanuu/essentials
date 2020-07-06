@@ -15,8 +15,8 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.getString
 import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
@@ -35,7 +35,7 @@ fun AutoRotationModule() {
     unscoped {
         Action(
             key = "auto_rotation",
-            title = getString(R.string.es_action_auto_rotation),
+            title = Resources.getString(R.string.es_action_auto_rotation),
             permissions = permissions { listOf(writeSettings) },
             unlockScreen = true,
             iconProvider = get<AutoRotationActionIconProvider>(),

@@ -44,10 +44,8 @@ import kotlinx.coroutines.withContext
 @Reader
 @Scoped(ApplicationComponent::class)
 class TorchManager internal constructor(
-    broadcastFactory: BroadcastFactory,
     private val cameraManager: CameraManager,
-    private val foregroundManager: ForegroundManager,
-    private val notificationFactory: TorchNotificationFactory
+    private val foregroundManager: ForegroundManager
 ) {
 
     private val _torchState = MutableStateFlow(false)
@@ -59,7 +57,7 @@ class TorchManager internal constructor(
         for (enabled in this) {
             d("update state $enabled")
             foregroundJob = if (enabled) {
-                foregroundManager.startJob(notificationFactory.create())
+                foregroundManager.startJob(createTorchNotification())
             } else {
                 foregroundJob?.stop()
                 null
@@ -69,7 +67,7 @@ class TorchManager internal constructor(
     }
 
     init {
-        broadcastFactory.create(ACTION_TOGGLE_TORCH)
+        BroadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
             .launchIn(globalScope)
     }

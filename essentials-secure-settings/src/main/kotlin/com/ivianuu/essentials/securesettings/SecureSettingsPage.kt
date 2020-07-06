@@ -24,12 +24,9 @@ import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
@@ -67,7 +64,7 @@ fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
                     subtitle = { Text(R.string.es_pref_use_root_summary) },
                     onClick = {
                         scope.launch {
-                            if (get<SecureSettingsHelper>().grantWriteSecureSettingsViaRoot()) {
+                            if (SecureSettings.grantPermissionViaRoot()) {
                                 Toaster.toast(R.string.es_secure_settings_permission_granted)
                             } else {
                                 Toaster.toast(R.string.es_secure_settings_no_root)

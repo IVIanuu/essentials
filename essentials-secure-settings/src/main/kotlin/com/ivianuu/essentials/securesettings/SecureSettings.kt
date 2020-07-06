@@ -17,30 +17,24 @@
 package com.ivianuu.essentials.securesettings
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
-import android.content.Context
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 
-/**
- * Provides infos about the secure settings access state
- */
-@Unscoped
-class SecureSettingsHelper(
-    private val buildInfo: BuildInfo,
-    private val context: @ForApplication Context,
-    private val shell: Shell
-) {
+object SecureSettings {
 
-    fun canWriteSecureSettings(): Boolean =
-        context.checkSelfPermission(WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
+    @Reader
+    fun canWrite() = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+            PackageManager.PERMISSION_GRANTED
 
-    suspend fun grantWriteSecureSettingsViaRoot(): Boolean {
+    @Reader
+    suspend fun grantPermissionViaRoot(): Boolean {
         return try {
-            shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-            canWriteSecureSettings()
+            Shell.run("pm grant ${get<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS")
+            canWrite()
         } catch (e: Exception) {
             false
         }

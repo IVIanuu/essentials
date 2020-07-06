@@ -24,12 +24,9 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.delay
 
 @Composable
@@ -48,7 +45,7 @@ internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
     // once we got the permission
     launchInComposition {
         while (true) {
-            if (get<SecureSettingsHelper>().canWriteSecureSettings()) {
+            if (SecureSettings.canWrite()) {
                 if (toast) Toaster.toast(R.string.es_secure_settings_permission_granted)
                 navigator.popTop(result = true)
                 break

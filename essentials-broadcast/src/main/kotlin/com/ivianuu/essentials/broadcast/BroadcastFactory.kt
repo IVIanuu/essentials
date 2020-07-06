@@ -20,7 +20,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -29,15 +31,16 @@ import kotlinx.coroutines.flow.callbackFlow
 /**
  * A factory for broadcast receiver observables
  */
-@Unscoped
-class BroadcastFactory(private val context: @ForApplication Context) {
+object BroadcastFactory {
 
+    @Reader
     fun create(vararg actions: String): Flow<Intent> = create(
         IntentFilter().apply {
             actions.forEach { addAction(it) }
         }
     )
 
+    @Reader
     fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -45,13 +48,13 @@ class BroadcastFactory(private val context: @ForApplication Context) {
             }
         }
         try {
-            context.registerReceiver(broadcastReceiver, intentFilter)
+            applicationContext.registerReceiver(broadcastReceiver, intentFilter)
         } catch (e: Exception) {
         }
 
         awaitClose {
             try {
-                context.unregisterReceiver(broadcastReceiver)
+                applicationContext.unregisterReceiver(broadcastReceiver)
             } catch (e: Exception) {
             }
         }

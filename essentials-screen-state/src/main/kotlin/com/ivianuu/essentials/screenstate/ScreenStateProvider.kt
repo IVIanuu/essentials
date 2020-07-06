@@ -23,7 +23,11 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -38,29 +42,26 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the current screen state
  */
+@Reader
 @Scoped(ApplicationComponent::class)
 class ScreenStateProvider(
-    broadcastFactory: BroadcastFactory,
-    scope: @GlobalScope CoroutineScope,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager
 ) {
 
-    val screenState: Flow<ScreenState> = broadcastFactory.create(
+    val screenState: Flow<ScreenState> = BroadcastFactory.create(
         Intent.ACTION_SCREEN_OFF,
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT
     )
-        .onStart { logger.d("sub for screen state") }
-        .onCompletion { logger.d("dispose screen state") }
+        .onStart { d("sub for screen state") }
+        .onCompletion { d("dispose screen state") }
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
         .shareIn(
-            scope = scope,
+            scope = globalScope,
             replay = 1,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )

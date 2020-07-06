@@ -32,16 +32,14 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
-import com.ivianuu.essentials.securesettings.SecureSettingsHelper
+import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
@@ -72,13 +70,12 @@ fun NavBarPage() {
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }
 
-            val secureSettingsHelper = get<SecureSettingsHelper>()
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 gravity = ContentGravity.Center
             ) {
                 Text(
-                    text = if (secureSettingsHelper.canWriteSecureSettings()) {
+                    text = if (SecureSettings.canWrite()) {
                         if (hideNavBar.value) {
                             "Nav bar hidden"
                         } else {
@@ -93,7 +90,7 @@ fun NavBarPage() {
 
             Button(
                 onClick = {
-                    if (secureSettingsHelper.canWriteSecureSettings()) {
+                    if (SecureSettings.canWrite()) {
                         hideNavBar.value = !hideNavBar.value
                     } else {
                         navigator.push { SecureSettingsPage() }

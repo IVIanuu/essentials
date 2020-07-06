@@ -16,14 +16,10 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.Context
 import android.widget.Toast
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.get
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 object Toaster {
@@ -35,7 +31,7 @@ object Toaster {
 
     @Reader
     fun toast(messageId: Int, vararg args: Any?) {
-        showToast(get<ResourceProvider>().getString(messageId, *args), false)
+        showToast(Resources.getString(messageId, *args), false)
     }
 
     @Reader
@@ -45,7 +41,7 @@ object Toaster {
 
     @Reader
     fun toastLong(messageId: Int, vararg args: Any?) {
-        showToast(get<ResourceProvider>().getString(messageId, *args), true)
+        showToast(Resources.getString(messageId, *args), true)
     }
 
     @Reader

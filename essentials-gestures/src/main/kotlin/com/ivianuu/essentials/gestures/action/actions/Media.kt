@@ -8,7 +8,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
 import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.getString
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
@@ -28,7 +28,7 @@ internal fun <T : Action> bindMediaAction(
     unscoped {
         Action(
             key = key,
-            title = getString(titleRes),
+            title = Resources.getString(titleRes),
             iconProvider = SingleActionIconProvider(icon),
             executor = get<@Provider (Int) -> MediaActionExecutor>()(keycode)
         ) as T

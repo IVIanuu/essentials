@@ -5,7 +5,7 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.get
@@ -35,9 +35,6 @@ interface ActionExecutor {
 fun <T : Action> bindAction() {
     set<Action> { add<T>() }
 }
-
-@Reader
-internal fun getString(id: Int) = get<ResourceProvider>().getString(id)
 
 @Reader
 internal fun permissions(block: ActionPermissions.() -> List<Permission>) =

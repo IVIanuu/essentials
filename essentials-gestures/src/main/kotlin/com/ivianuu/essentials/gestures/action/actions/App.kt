@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.action.actionFactory
 import com.ivianuu.essentials.gestures.action.actionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Assisted
@@ -30,6 +30,7 @@ import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.Flow
 
 @Module
@@ -82,18 +83,15 @@ internal class AppActionFactory(
 
 @Reader
 @Unscoped
-internal class AppActionPickerDelegate(
-    private val launchableAppFilter: LaunchableAppFilter,
-    private val resourceProvider: ResourceProvider
-) : ActionPickerDelegate {
+internal class AppActionPickerDelegate : ActionPickerDelegate {
     override val title: String
-        get() = resourceProvider.getString(R.string.es_action_app)
+        get() = Resources.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Apps) }
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
-            AppPickerPage(appFilter = launchableAppFilter)
+            AppPickerPage(appFilter = get<LaunchableAppFilter>())
         } ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }

@@ -21,6 +21,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Provider
@@ -36,8 +38,6 @@ import kotlinx.coroutines.withContext
 @Reader
 @Scoped(ApplicationComponent::class)
 class PermissionManager(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
     private val permissionRequestRouteFactory: @Provider () -> PermissionRequestRouteFactory,
     private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
@@ -64,7 +64,7 @@ class PermissionManager(
 
     suspend fun request(permissions: List<Permission>): Boolean =
         withContext(dispatchers.default) {
-            logger.d("request permissions $permissions")
+            d("request permissions $permissions")
             if (hasPermissions(permissions).first()) return@withContext true
 
             val request = PermissionRequest(permissions = permissions.toList())

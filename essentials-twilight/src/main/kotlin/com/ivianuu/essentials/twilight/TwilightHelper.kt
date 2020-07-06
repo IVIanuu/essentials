@@ -26,6 +26,7 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.channels.awaitClose
@@ -39,10 +40,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
+@Reader
 @Scoped(ApplicationComponent::class)
 class TwilightHelper(
     private val app: Application,
-    private val broadcastFactory: BroadcastFactory,
     private val resources: @ForApplication Resources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
@@ -63,7 +64,7 @@ class TwilightHelper(
         }
         .distinctUntilChanged()
 
-    private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+    private fun battery() = BroadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
         .onStart { emit(Unit) }
         .map { powerManager.isPowerSaveMode }
@@ -75,7 +76,7 @@ class TwilightHelper(
                 .UI_MODE_NIGHT_YES
         }
 
-    private fun time() = broadcastFactory.create(Intent.ACTION_TIME_TICK)
+    private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
         .map { Unit }
         .onStart { emit(Unit) }
         .map {
