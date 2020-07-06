@@ -28,9 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 @Scoped(ApplicationComponent::class)
-class AccessibilityServices(
-    private val dispatchers: AppCoroutineDispatchers
-) {
+class AccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)
     val service: StateFlow<DefaultAccessibilityService?> get() = _service

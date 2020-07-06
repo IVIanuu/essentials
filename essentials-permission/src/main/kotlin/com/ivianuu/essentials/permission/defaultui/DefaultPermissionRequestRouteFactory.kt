@@ -46,68 +46,65 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
+@Reader
 @Unscoped
-internal class DefaultPermissionRequestRouteFactory(
-    private val page: DefaultPermissionPage
-) : PermissionRequestRouteFactory {
+internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
 
-    override fun createRoute(request: PermissionRequest): Route = Route { page(request) }
+    override fun createRoute(request: PermissionRequest): Route {
+        return Route { DefaultPermissionPage(request) }
+    }
 
 }
 
-@Unscoped
-internal class DefaultPermissionPage(
-    private val viewModelFactory: @Provider (PermissionRequest) -> DefaultPermissionViewModel
-) {
-
-    @Composable
-    operator fun invoke(request: PermissionRequest) {
-        val viewModel = viewModel { viewModelFactory(request) }
-
-        Scaffold(
-            topBar = {
-                TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
-            }
-        ) {
-            InsettingScrollableColumn {
-                viewModel.permissionsToProcess.forEach { permission ->
-                    Permission(
-                        permission = permission,
-                        onClick = { viewModel.permissionClicked(permission) }
-                    )
-                }
-            }
-        }
-
+@Reader
+@Composable
+internal fun DefaultPermissionPage(request: PermissionRequest) {
+    val viewModel = viewModel {
+        get<@Provider (PermissionRequest) -> DefaultPermissionViewModel>()(request)
     }
 
-    @Composable
-    private fun Permission(
-        onClick: () -> Unit,
-        permission: Permission
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
+        }
     ) {
-        key(permission) {
-            ListItem(
-                title = { Text(permission[Permission.Title]) },
-                subtitle = permission.getOrNull(Permission.Desc)?.let {
-                    {
-                        Text(it)
-                    }
-                },
-                leading = permission.getOrNull(Permission.Icon),
-                trailing = {
-                    Button(onClick = onClick) { Text("GRANT") } // todo res
-                },
-                onClick = onClick
-            )
+        InsettingScrollableColumn {
+            viewModel.permissionsToProcess.forEach { permission ->
+                Permission(
+                    permission = permission,
+                    onClick = { viewModel.permissionClicked(permission) }
+                )
+            }
         }
     }
+}
 
+@Composable
+private fun Permission(
+    onClick: () -> Unit,
+    permission: Permission
+) {
+    key(permission) {
+        ListItem(
+            title = { Text(permission[Permission.Title]) },
+            subtitle = permission.getOrNull(Permission.Desc)?.let {
+                {
+                    Text(it)
+                }
+            },
+            leading = permission.getOrNull(Permission.Icon),
+            trailing = {
+                Button(onClick = onClick) { Text("GRANT") } // todo res
+            },
+            onClick = onClick
+        )
+    }
 }
 
 @Reader
