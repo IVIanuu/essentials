@@ -39,94 +39,91 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class TextInputPage {
+@Reader
+@Composable
+fun TextInputPage() {
+    val state = remember { TextInputState() }
 
-    @Composable
-    operator fun invoke() {
-        val state = remember { TextInputState() }
-
-        if (!state.searchVisible) {
-            state.inputValue = TextFieldValue()
-        }
-
-        val items = AllItems.filter {
-            state.inputValue.text.isEmpty() || state.inputValue.text in it.toLowerCase().trim()
-        }
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        if (state.searchVisible) {
-                            val focusModifier = FocusModifier()
-
-                            Stack(
-                                modifier = Modifier.fillMaxSize()
-                                    .clickable { focusModifier.requestFocus() }
-                            ) {
-                                if (state.inputValue.text.isEmpty()) {
-                                    Text(
-                                        text = "Search..",
-                                        style = MaterialTheme.typography.subtitle1,
-                                        modifier = Modifier.drawOpacity(0.5f)
-                                            .gravity(Alignment.CenterStart) + focusModifier
-                                    )
-                                }
-                                TextField(
-                                    value = state.inputValue,
-                                    onValueChange = { state.inputValue = it },
-                                    textStyle = MaterialTheme.typography.subtitle1,
-                                    modifier = Modifier.gravity(Alignment.CenterStart)
-                                )
-                            }
-
-                            onActive { focusModifier.requestFocus() }
-                        } else {
-                            Text("Text input")
-                        }
-                    }
-                )
-            },
-            fab = {
-                if (!state.searchVisible) {
-                    ExtendedFloatingActionButton(
-                        text = { Text("Search") },
-                        onClick = { state.searchVisible = true }
-                    )
-                }
-            }
-        ) {
-            if (items.isNotEmpty()) {
-                /*val animationClock = AnimationClockAmbient.current
-                val flingConfig = FlingConfig()
-                val scrollerPosition = retain(items) { ScrollerPosition() }
-
-                val lastScrollPosition = holderFor(scrollerPosition) { scrollerPosition.value }
-
-                if (lastScrollPosition.value < scrollerPosition.value) {
-                    //keyboardManager.hideKeyboard()
-                    if (state.searchVisible && state.inputValue.text.isEmpty()) {
-                        state.searchVisible = false
-                    }
-                }*/
-
-                InsettingLazyColumnItems(items = items) { item ->
-                    ListItem(
-                        title = { Text(item) }
-                    )
-                }
-            } else {
-                Text(
-                    text = "No results",
-                    modifier = Modifier.center()
-                )
-            }
-        }
+    if (!state.searchVisible) {
+        state.inputValue = TextFieldValue()
     }
 
+    val items = AllItems.filter {
+        state.inputValue.text.isEmpty() || state.inputValue.text in it.toLowerCase().trim()
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    if (state.searchVisible) {
+                        val focusModifier = FocusModifier()
+
+                        Stack(
+                            modifier = Modifier.fillMaxSize()
+                                .clickable { focusModifier.requestFocus() }
+                        ) {
+                            if (state.inputValue.text.isEmpty()) {
+                                Text(
+                                    text = "Search..",
+                                    style = MaterialTheme.typography.subtitle1,
+                                    modifier = Modifier.drawOpacity(0.5f)
+                                        .gravity(Alignment.CenterStart) + focusModifier
+                                )
+                            }
+                            TextField(
+                                value = state.inputValue,
+                                onValueChange = { state.inputValue = it },
+                                textStyle = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.gravity(Alignment.CenterStart)
+                            )
+                        }
+
+                        onActive { focusModifier.requestFocus() }
+                    } else {
+                        Text("Text input")
+                    }
+                }
+            )
+        },
+        fab = {
+            if (!state.searchVisible) {
+                ExtendedFloatingActionButton(
+                    text = { Text("Search") },
+                    onClick = { state.searchVisible = true }
+                )
+            }
+        }
+    ) {
+        if (items.isNotEmpty()) {
+            /*val animationClock = AnimationClockAmbient.current
+            val flingConfig = FlingConfig()
+            val scrollerPosition = retain(items) { ScrollerPosition() }
+
+            val lastScrollPosition = holderFor(scrollerPosition) { scrollerPosition.value }
+
+            if (lastScrollPosition.value < scrollerPosition.value) {
+                //keyboardManager.hideKeyboard()
+                if (state.searchVisible && state.inputValue.text.isEmpty()) {
+                    state.searchVisible = false
+                }
+            }*/
+
+            InsettingLazyColumnItems(items = items) { item ->
+                ListItem(
+                    title = { Text(item) }
+                )
+            }
+        } else {
+            Text(
+                text = "No results",
+                modifier = Modifier.center()
+            )
+        }
+    }
 }
 
 private class TextInputState {

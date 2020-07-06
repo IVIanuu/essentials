@@ -27,29 +27,26 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class DrawerPage {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Drawer") }) },
-            drawerContent = {
-                Surface(color = Color.Blue) {
-                    Text(
-                        text = "Drawer",
-                        style = MaterialTheme.typography.h4,
-                        modifier = Modifier.center()
-                    )
-                }
-            }
-        ) {
-            Surface(color = Color.Red) {
+@Composable
+fun DrawerPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Drawer") }) },
+        drawerContent = {
+            Surface(color = Color.Blue) {
                 Text(
-                    text = "Body",
+                    text = "Drawer",
                     style = MaterialTheme.typography.h4,
                     modifier = Modifier.center()
                 )
             }
+        }
+    ) {
+        Surface(color = Color.Red) {
+            Text(
+                text = "Body",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.center()
+            )
         }
     }
 }

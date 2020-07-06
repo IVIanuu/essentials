@@ -26,6 +26,7 @@ import androidx.ui.material.Button
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
+import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -43,85 +44,83 @@ import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
-@Unscoped
-class PermissionsPage(
-    private val manager: PermissionManager
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Permissions") }) }
-        ) {
-            val camera = RuntimePermission(
-                Manifest.permission.CAMERA,
-                Permission.Title withValue "Camera",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+@Reader
+@Composable
+fun PermissionsPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Permissions") }) }
+    ) {
+        val camera = RuntimePermission(
+            Manifest.permission.CAMERA,
+            Permission.Title withValue "Camera",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val phone = RuntimePermission(
-                Manifest.permission.CALL_PHONE,
-                Permission.Title withValue "Call phone",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val phone = RuntimePermission(
+            Manifest.permission.CALL_PHONE,
+            Permission.Title withValue "Call phone",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val accessibility = AccessibilityServicePermission(
-                DefaultAccessibilityService::class,
-                Permission.Title withValue "Accessibility",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val accessibility = AccessibilityServicePermission(
+            DefaultAccessibilityService::class,
+            Permission.Title withValue "Accessibility",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val notificationListener = NotificationListenerPermission(
-                DefaultNotificationListenerService::class,
-                Permission.Title withValue "Notification listener",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val notificationListener = NotificationListenerPermission(
+            DefaultNotificationListenerService::class,
+            Permission.Title withValue "Notification listener",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val systemOverlay = SystemOverlayPermission(
-                ContextAmbient.current,
-                Permission.Title withValue "System overlay",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val systemOverlay = SystemOverlayPermission(
+            ContextAmbient.current,
+            Permission.Title withValue "System overlay",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val writeSecureSettings = WriteSecureSettingsPermission(
-                Permission.Title withValue "Write secure settings",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val writeSecureSettings = WriteSecureSettingsPermission(
+            Permission.Title withValue "Write secure settings",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val writeSettings = WriteSettingsPermission(
-                ContextAmbient.current,
-                Permission.Title withValue "Write settings",
-                Permission.Desc withValue "This is a desc",
-                Permission.Icon withValue { Icon(Icons.Default.Menu) }
-            )
+        val writeSettings = WriteSettingsPermission(
+            ContextAmbient.current,
+            Permission.Title withValue "Write settings",
+            Permission.Desc withValue "This is a desc",
+            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+        )
 
-            val scope = compositionScope()
-            Button(
-                modifier = Modifier.center(),
-                onClick = {
-                    scope.launch {
-                        manager.request(
-                            camera,
-                            phone,
-                            accessibility,
-                            notificationListener,
-                            systemOverlay,
-                            writeSecureSettings,
-                            writeSettings
-                        )
-                    }
+        val scope = compositionScope()
+        Button(
+            modifier = Modifier.center(),
+            onClick = {
+                scope.launch {
+                    get<PermissionManager>().request(
+                        camera,
+                        phone,
+                        accessibility,
+                        notificationListener,
+                        systemOverlay,
+                        writeSecureSettings,
+                        writeSettings
+                    )
                 }
-            ) {
-                Text("Request")
             }
+        ) {
+            Text("Request")
         }
     }
 }

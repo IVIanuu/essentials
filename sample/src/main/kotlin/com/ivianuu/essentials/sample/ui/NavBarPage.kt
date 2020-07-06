@@ -42,69 +42,65 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
-class NavBarPage(
-    private val navBarManager: NavBarManager,
-    private val secureSettingsHelper: SecureSettingsHelper
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
+@Composable
+fun NavBarPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
+    ) {
+        Column(
+            modifier = Modifier.center(),
+            verticalArrangement = Arrangement.Center,
+            horizontalGravity = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.center(),
-                verticalArrangement = Arrangement.Center,
-                horizontalGravity = Alignment.CenterHorizontally
-            ) {
-                val scope = compositionScope()
-                fun updateNavBarState(navBarHidden: Boolean) {
-                    scope.launch {
-                        navBarManager.setNavBarConfig(
-                            NavBarConfig(navBarHidden)
-                        )
-                    }
-                }
-
-                val hideNavBar = state { false }
-
-                onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
-
-                // reshow nav bar when exiting the screen
-                onDispose { updateNavBarState(false) }
-
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    gravity = ContentGravity.Center
-                ) {
-                    Text(
-                        text = if (secureSettingsHelper.canWriteSecureSettings()) {
-                            if (hideNavBar.value) {
-                                "Nav bar hidden"
-                            } else {
-                                "Nav bar shown"
-                            }
-                        } else {
-                            "Unknown nav bar state"
-                        },
-                        style = MaterialTheme.typography.h3
+            val scope = compositionScope()
+            fun updateNavBarState(navBarHidden: Boolean) {
+                scope.launch {
+                    get<NavBarManager>().setNavBarConfig(
+                        NavBarConfig(navBarHidden)
                     )
                 }
+            }
 
-                Button(
-                    onClick = {
-                        if (secureSettingsHelper.canWriteSecureSettings()) {
-                            hideNavBar.value = !hideNavBar.value
+            val hideNavBar = state { false }
+
+            onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+
+            // reshow nav bar when exiting the screen
+            onDispose { updateNavBarState(false) }
+
+            val secureSettingsHelper = get<SecureSettingsHelper>()
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                gravity = ContentGravity.Center
+            ) {
+                Text(
+                    text = if (secureSettingsHelper.canWriteSecureSettings()) {
+                        if (hideNavBar.value) {
+                            "Nav bar hidden"
                         } else {
-                            navigator.push { SecureSettingsPage() }
+                            "Nav bar shown"
                         }
+                    } else {
+                        "Unknown nav bar state"
+                    },
+                    style = MaterialTheme.typography.h3
+                )
+            }
+
+            Button(
+                onClick = {
+                    if (secureSettingsHelper.canWriteSecureSettings()) {
+                        hideNavBar.value = !hideNavBar.value
+                    } else {
+                        navigator.push { SecureSettingsPage() }
                     }
-                ) {
-                    Text("Toggle nav bar")
                 }
+            ) {
+                Text("Toggle nav bar")
             }
         }
     }

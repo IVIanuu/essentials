@@ -35,52 +35,51 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
-@Unscoped
-class BillingPage(
-    private val purchaseManager: PurchaseManager
-) {
-    @Composable
-    operator fun invoke() {
-        val isPurchased = remember { purchaseManager.isPurchased(DummySku) }
-            .collectAsState(false)
+@Reader
+@Composable
+fun BillingPage() {
+    val purchaseManager = get<PurchaseManager>()
+    val isPurchased = remember { purchaseManager.isPurchased(DummySku) }
+        .collectAsState(false)
 
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Billing") }) }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Billing") }) }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalGravity = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalGravity = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Is purchased ? ${isPurchased.value}",
-                    style = MaterialTheme.typography.h6
-                )
+            Text(
+                text = "Is purchased ? ${isPurchased.value}",
+                style = MaterialTheme.typography.h6
+            )
 
-                Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
-                val scope = compositionScope()
+            val scope = compositionScope()
 
-                if (!isPurchased.value) {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                purchaseManager.purchase(DummySku)
-                            }
+            if (!isPurchased.value) {
+                Button(
+                    onClick = {
+                        scope.launch {
+                            purchaseManager.purchase(DummySku)
                         }
-                    ) { Text("Purchase") }
-                } else {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                purchaseManager.consume(DummySku)
-                            }
+                    }
+                ) { Text("Purchase") }
+            } else {
+                Button(
+                    onClick = {
+                        scope.launch {
+                            purchaseManager.consume(DummySku)
                         }
-                    ) { Text("Consume") }
-                }
+                    }
+                ) { Text("Consume") }
             }
         }
     }

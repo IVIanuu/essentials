@@ -25,26 +25,25 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-@Unscoped
-class TimerPage {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Timer") }) }
-        ) {
-            val value = remember { timerFlow() }
-                .collectAsState(0).value
+@Reader
+@Composable
+fun TimerPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Timer") }) }
+    ) {
+        val value = remember { timerFlow() }
+            .collectAsState(0).value
 
-            Text(
-                text = "Value: $value",
-                style = MaterialTheme.typography.h1,
-                modifier = Modifier.center()
-            )
-        }
+        Text(
+            text = "Value: $value",
+            style = MaterialTheme.typography.h1,
+            modifier = Modifier.center()
+        )
     }
 }
 

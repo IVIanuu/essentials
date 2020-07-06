@@ -15,25 +15,20 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class SharedElementPage {
-
-    @Composable
-    operator fun invoke(color: Color) {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Shared Elements") }) }
-        ) {
-            Stack {
-                SharedElement(tag = "b", modifier = Modifier.center()) {
-                    Box(
-                        backgroundColor = color,
-                        shape = CircleShape,
-                        modifier = Modifier
-                            .size(150.dp)
-                    )
-                }
+@Composable
+fun SharedElementPage(color: Color) {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Shared Elements") }) }
+    ) {
+        Stack {
+            SharedElement(tag = "b", modifier = Modifier.center()) {
+                Box(
+                    backgroundColor = color,
+                    shape = CircleShape,
+                    modifier = Modifier
+                        .size(150.dp)
+                )
             }
         }
     }
-
 }

@@ -32,39 +32,37 @@ import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
-@Unscoped
-class TorchPage(
-    private val torchManager: TorchManager
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Torch") }) }
-        ) {
-            val torchState = torchManager.torchState.collectAsState()
+@Reader
+@Composable
+fun TorchPage() {
+    Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
+        val torchManager = get<TorchManager>()
 
-            Column(
-                modifier = Modifier.center(),
-                horizontalGravity = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Torch is ${if (torchState.value) "enabled" else "disabled"}",
-                    style = MaterialTheme.typography.h4
-                )
-                Spacer(Modifier.preferredHeight(8.dp))
-                val scope = compositionScope()
-                Button(
-                    onClick = {
-                        scope.launch {
-                            torchManager.toggleTorch()
-                        }
+        val torchState = torchManager.torchState.collectAsState()
+
+        Column(
+            modifier = Modifier.center(),
+            horizontalGravity = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Torch is ${if (torchState.value) "enabled" else "disabled"}",
+                style = MaterialTheme.typography.h4
+            )
+            Spacer(Modifier.preferredHeight(8.dp))
+            val scope = compositionScope()
+            Button(
+                onClick = {
+                    scope.launch {
+                        torchManager.toggleTorch()
                     }
-                ) {
-                    Text("Toggle torch")
                 }
+            ) {
+                Text("Toggle torch")
             }
         }
     }

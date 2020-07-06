@@ -21,29 +21,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
-class ActionsPage(
-    private val actionPickerPage: ActionPickerPage
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Actions") }) }
-        ) {
-            Button(
-                modifier = Modifier.center(),
-                onClick = {
-                    uiScope.launch {
-                        val action = navigator.push<ActionPickerResult> {
-                            actionPickerPage(
-                                showDefaultOption = false,
-                                showNoneOption = false
-                            )
-                        }.safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
-                        executeAction(action)
-                    }
+@Composable
+fun ActionsPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Actions") }) }
+    ) {
+        Button(
+            modifier = Modifier.center(),
+            onClick = {
+                uiScope.launch {
+                    val action = navigator.push<ActionPickerResult> {
+                        ActionPickerPage(
+                            showDefaultOption = false,
+                            showNoneOption = false
+                        )
+                    }.safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+                    executeAction(action)
                 }
-            ) { Text("Pick action") }
-        }
+            }
+        ) { Text("Pick action") }
     }
 }

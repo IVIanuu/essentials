@@ -45,132 +45,130 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Unscoped
-class NotificationsPage(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val notificationStore: NotificationStore,
-    private val permissionManager: PermissionManager
-) {
+@Reader
+@Composable
+fun NotificationsPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Notifications") }) }
+    ) {
+        val notificationPermission = remember {
+            NotificationListenerPermission(
+                DefaultNotificationListenerService::class,
+                Permission.Title withValue "Notifications"
+            )
+        }
 
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Notifications") }) }
-        ) {
-            val notificationPermission = remember {
-                NotificationListenerPermission(
-                    DefaultNotificationListenerService::class,
-                    Permission.Title withValue "Notifications"
-                )
-            }
+        val notificationStore = get<NotificationStore>()
+        val permissionManager = get<PermissionManager>()
 
-            ResourceBox(
-                resource = remember {
-                    permissionManager.hasPermissions(notificationPermission)
-                }.collectAsResource()
-            ) { hasPermission ->
-                val scope = compositionScope()
+        ResourceBox(
+            resource = remember {
+                permissionManager.hasPermissions(notificationPermission)
+            }.collectAsResource()
+        ) { hasPermission ->
+            val scope = compositionScope()
 
-                if (hasPermission) {
-                    ResourceLazyColumnItems(
-                        resource = notificationStore.notifications.collectAsResource(),
-                        successEmpty = {
-                            Text(
-                                text = "No notifications",
-                                style = MaterialTheme.typography.subtitle1,
-                                modifier = Modifier.center()
-                            )
-                        },
-                        successItemContent = { sbn ->
-                            ListItem(
-                                title = {
-                                    Text(
-                                        sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
-                                            ?.toString() ?: ""
-                                    )
-                                },
-                                subtitle = {
-                                    Text(
-                                        sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
-                                            ?.toString() ?: ""
-                                    )
-                                },
-                                onClick = {
-                                    scope.launch {
-                                        notificationStore.openNotification(sbn.notification)
-                                    }
-                                },
-                                leading = {
-                                    val context = ContextAmbient.current
-                                    ResourceBox(
-                                        modifier = Modifier.size(40.dp)
-                                            .drawBackground(
-                                                color = Color(sbn.notification.color),
-                                                shape = CircleShape
-                                            )
-                                            .padding(all = 8.dp),
-                                        resource = produceResource {
-                                            withContext(dispatchers.io) {
-                                                sbn.notification.smallIcon
-                                                    .loadDrawable(context)
-                                                    .toImageAsset()
-                                            }
-                                        },
-                                        success = {
-                                            Image(
-                                                modifier = Modifier.size(24.dp),
-                                                asset = it
-                                            )
-                                        },
-                                        error = {
-                                            Icon(Icons.Default.Error)
-                                        }
-                                    )
-                                },
-                                trailing = if (sbn.isClearable) {
-                                    {
-                                        IconButton(
-                                            onClick = {
-                                                scope.launch {
-                                                    notificationStore.dismissNotification(sbn.key)
-                                                }
-                                            }
-                                        ) {
-                                            Icon(Icons.Default.Clear)
-                                        }
-                                    }
-                                } else null
-                            )
-                        }
-                    )
-                } else {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalGravity = Alignment.CenterHorizontally
-                    ) {
+            if (hasPermission) {
+                ResourceLazyColumnItems(
+                    resource = notificationStore.notifications.collectAsResource(),
+                    successEmpty = {
                         Text(
-                            text = "Permissions required",
-                            style = MaterialTheme.typography.subtitle1
+                            text = "No notifications",
+                            style = MaterialTheme.typography.subtitle1,
+                            modifier = Modifier.center()
                         )
-                        Spacer(Modifier.height(8.dp))
-                        Button(
+                    },
+                    successItemContent = { sbn ->
+                        ListItem(
+                            title = {
+                                Text(
+                                    sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+                                        ?.toString() ?: ""
+                                )
+                            },
+                            subtitle = {
+                                Text(
+                                    sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+                                        ?.toString() ?: ""
+                                )
+                            },
                             onClick = {
                                 scope.launch {
-                                    permissionManager.request(notificationPermission)
+                                    notificationStore.openNotification(sbn.notification)
                                 }
+                            },
+                            leading = {
+                                val context = ContextAmbient.current
+                                ResourceBox(
+                                    modifier = Modifier.size(40.dp)
+                                        .drawBackground(
+                                            color = Color(sbn.notification.color),
+                                            shape = CircleShape
+                                        )
+                                        .padding(all = 8.dp),
+                                    resource = produceResource {
+                                        withContext(dispatchers.io) {
+                                            sbn.notification.smallIcon
+                                                .loadDrawable(context)
+                                                .toImageAsset()
+                                        }
+                                    },
+                                    success = {
+                                        Image(
+                                            modifier = Modifier.size(24.dp),
+                                            asset = it
+                                        )
+                                    },
+                                    error = {
+                                        Icon(Icons.Default.Error)
+                                    }
+                                )
+                            },
+                            trailing = if (sbn.isClearable) {
+                                {
+                                    IconButton(
+                                        onClick = {
+                                            scope.launch {
+                                                notificationStore.dismissNotification(sbn.key)
+                                            }
+                                        }
+                                    ) {
+                                        Icon(Icons.Default.Clear)
+                                    }
+                                }
+                            } else null
+                        )
+                    }
+                )
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalGravity = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Permissions required",
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                permissionManager.request(notificationPermission)
                             }
-                        ) {
-                            Text("Request")
                         }
+                    ) {
+                        Text("Request")
                     }
                 }
             }
         }
     }
-
 }

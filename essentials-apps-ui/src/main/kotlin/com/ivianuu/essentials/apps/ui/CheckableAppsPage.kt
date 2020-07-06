@@ -24,8 +24,8 @@ import androidx.ui.layout.size
 import androidx.ui.material.Checkbox
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -44,61 +44,58 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-@Unscoped
-class CheckableAppsPage internal constructor(
-    private val viewModelFactory: @Provider (
-        AppFilter,
-        Flow<Set<String>>,
-        suspend (Set<String>) -> Unit
-    ) -> CheckableAppsViewModel
+@Reader
+@Composable
+fun CheckableAppsPage(
+    checkedApps: Flow<Set<String>>,
+    onCheckedAppsChanged: suspend (Set<String>) -> Unit,
+    appBarTitle: String,
+    appFilter: AppFilter = DefaultAppFilter
 ) {
-
-    @Composable
-    operator fun invoke(
-        checkedApps: Flow<Set<String>>,
-        onCheckedAppsChanged: suspend (Set<String>) -> Unit,
-        appBarTitle: String,
-        appFilter: AppFilter = DefaultAppFilter
+    val viewModel = viewModel(
+        appFilter,
+        checkedApps,
+        onCheckedAppsChanged
     ) {
-        val viewModel = viewModel(
-            appFilter,
-            checkedApps,
-            onCheckedAppsChanged
-        ) { viewModelFactory(appFilter, checkedApps, onCheckedAppsChanged) }
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(appBarTitle) },
-                    actions = {
-                        PopupMenuButton(
-                            items = listOf(
-                                PopupMenu.Item(onSelected = { viewModel.selectAllClicked() }) {
-                                    Text(R.string.es_select_all)
-                                },
-                                PopupMenu.Item(onSelected = { viewModel.deselectAllClicked() }) {
-                                    Text(R.string.es_deselect_all)
-                                }
-                            )
-                        )
-                    }
-                )
-            }
-        ) {
-            ResourceLazyColumnItems(resource = viewModel.currentState.apps) { app ->
-                CheckableApp(
-                    app = app,
-                    onClick = { viewModel.appClicked(app) }
-                )
-            }
-        }
+        get<@Provider (
+            AppFilter,
+            Flow<Set<String>>,
+            suspend (Set<String>) -> Unit
+        ) -> CheckableAppsViewModel>()(appFilter, checkedApps, onCheckedAppsChanged)
     }
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(appBarTitle) },
+                actions = {
+                    PopupMenuButton(
+                        items = listOf(
+                            PopupMenu.Item(onSelected = { viewModel.selectAllClicked() }) {
+                                Text(R.string.es_select_all)
+                            },
+                            PopupMenu.Item(onSelected = { viewModel.deselectAllClicked() }) {
+                                Text(R.string.es_deselect_all)
+                            }
+                        )
+                    )
+                }
+            )
+        }
+    ) {
+        ResourceLazyColumnItems(resource = viewModel.currentState.apps) { app ->
+            CheckableApp(
+                app = app,
+                onClick = { viewModel.appClicked(app) }
+            )
+        }
+    }
 }
 
 @Composable
@@ -129,15 +126,14 @@ private fun CheckableApp(
 internal class CheckableAppsViewModel(
     private val appFilter: @Assisted AppFilter,
     private val checkedApps: @Assisted Flow<Set<String>>,
-    private val onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit,
-    private val appStore: AppStore
+    private val onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit
 ) : StateViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     init {
         combine(
             flow {
                 emit(
-                    appStore.getInstalledApps()
+                    getInstalledApps()
                         .filter(appFilter)
                 )
             },

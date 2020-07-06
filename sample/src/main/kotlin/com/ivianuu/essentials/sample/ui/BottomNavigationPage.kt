@@ -47,47 +47,44 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class BottomNavigationPage {
-    @Composable
-    operator fun invoke() {
-        var selectedItem by savedInstanceState { BottomNavItem.values().first() }
+@Composable
+fun BottomNavigationPage() {
+    var selectedItem by savedInstanceState { BottomNavItem.values().first() }
 
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
-            bottomBar = {
-                Surface(
-                    modifier = Modifier.systemBarStyle(
-                        bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-                        lightIcons = MaterialTheme.colors.primary.isLight
-                    ),
-                    elevation = 8.dp,
-                    color = MaterialTheme.colors.primary
-                ) {
-                    SystemBarsPadding(left = false, top = false, right = false) {
-                        BottomNavigation(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            elevation = 0.dp
-                        ) {
-                            BottomNavItem.values().forEach { item ->
-                                BottomNavigationItem(
-                                    selected = item == selectedItem,
-                                    onSelected = { selectedItem = item },
-                                    icon = { Icon(item.icon) },
-                                    text = { Text(item.title) }
-                                )
-                            }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.systemBarStyle(
+                    bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
+                    lightIcons = MaterialTheme.colors.primary.isLight
+                ),
+                elevation = 8.dp,
+                color = MaterialTheme.colors.primary
+            ) {
+                SystemBarsPadding(left = false, top = false, right = false) {
+                    BottomNavigation(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        elevation = 0.dp
+                    ) {
+                        BottomNavItem.values().forEach { item ->
+                            BottomNavigationItem(
+                                selected = item == selectedItem,
+                                onSelected = { selectedItem = item },
+                                icon = { Icon(item.icon) },
+                                text = { Text(item.title) }
+                            )
                         }
                     }
                 }
             }
-        ) {
-            AnimatedBox(current = selectedItem) { item ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    backgroundColor = item.color
-                )
-            }
+        }
+    ) {
+        AnimatedBox(current = selectedItem) { item ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                backgroundColor = item.color
+            )
         }
     }
 }

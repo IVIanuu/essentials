@@ -52,113 +52,86 @@ import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.android.ActivityComponent
 
 @Reader
-@Scoped(ActivityComponent::class)
-class HomePage(
-    private val actionsPage: ActionsPage,
-    private val appPickerPage: AppPickerPage,
-    private val billingPage: BillingPage,
-    private val bottomNavigationPage: BottomNavigationPage,
-    private val checkAppsPage: CheckAppsPage,
-    private val counterPage: CounterPage,
-    private val dialogsPage: DialogsPage,
-    private val drawerPage: DrawerPage,
-    private val dynamicSystemBarsPage: DynamicSystemBarsPage,
-    private val foregroundJobPage: ForegroundJobPage,
-    private val navBarPage: NavBarPage,
-    private val notificationsPage: NotificationsPage,
-    private val permissionsPage: PermissionsPage,
-    private val prefsPage: PrefsPage,
-    private val restartProcessPage: RestartProcessPage,
-    private val scaffoldPage: ScaffoldPage,
-    private val sharedElementPage: SharedElementPage,
-    private val tabsPage: TabsPage,
-    private val textInputPage: TextInputPage,
-    private val timerPage: TimerPage,
-    private val torchPage: TorchPage,
-    private val unlockPage: UnlockPage,
-    private val workPage: WorkPage
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Home") },
-                    actions = {
-                        PopupMenuButton(
-                            items = listOf(
-                                "Option 1",
-                                "Option 2",
-                                "Option 3"
-                            ).map { title ->
-                                PopupMenu.Item(onSelected = { Toaster.toast("Selected $title") }) {
-                                    Text(title)
-                                }
+@Composable
+fun HomePage() {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Home") },
+                actions = {
+                    PopupMenuButton(
+                        items = listOf(
+                            "Option 1",
+                            "Option 2",
+                            "Option 3"
+                        ).map { title ->
+                            PopupMenu.Item(onSelected = { Toaster.toast("Selected $title") }) {
+                                Text(title)
                             }
-                        )
-                    }
-                )
-            }
-        ) {
-            val items = remember { HomeItem.values().toList().sortedBy { it.name } }
-
-            InsettingLazyColumnItems(items = items) { item ->
-                val color = key(item) {
-                    rememberSavedInstanceState(item) {
-                        ColorPickerPalette.values()
-                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                            .shuffled()
-                            .first()
-                            .front
-                    }
-                }
-
-                HomeItem(
-                    item = item,
-                    color = color,
-                    onClick = {
-                        val route = when (item) {
-                            HomeItem.About -> Route { AboutPage() }
-                            HomeItem.Actions -> Route { actionsPage() }
-                            HomeItem.AppPicker -> Route { appPickerPage() }
-                            HomeItem.Billing -> Route { billingPage() }
-                            HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
-                            HomeItem.CheckApps -> Route { checkAppsPage() }
-                            HomeItem.Chips -> Route { ChipsPage() }
-                            HomeItem.Counter -> Route { counterPage() }
-                            HomeItem.Dialogs -> Route { dialogsPage() }
-                            HomeItem.Drawer -> Route { drawerPage() }
-                            HomeItem.DynamicSystemBars -> Route { dynamicSystemBarsPage() }
-                            HomeItem.ForegroundJob -> Route { foregroundJobPage() }
-                            HomeItem.NavBar -> Route { navBarPage() }
-                            HomeItem.Notifications -> Route { notificationsPage() }
-                            HomeItem.Permission -> Route { permissionsPage() }
-                            HomeItem.Prefs -> Route { prefsPage() }
-                            HomeItem.RestartProcess -> Route { restartProcessPage() }
-                            HomeItem.Scaffold -> Route { scaffoldPage() }
-                            HomeItem.SharedElement -> Route(
-                                enterTransition = SharedElementStackTransition(item to "b"),
-                                exitTransition = SharedElementStackTransition(item to "b")
-                            ) {
-                                sharedElementPage(color)
-                            }
-                            HomeItem.ShortcutPicker -> Route { ShortcutPickerPage() }
-                            HomeItem.Tabs -> Route { tabsPage() }
-                            HomeItem.TextInput -> Route { textInputPage() }
-                            HomeItem.Timer -> Route { timerPage() }
-                            HomeItem.Torch -> Route { torchPage() }
-                            HomeItem.Twilight -> Route { TwilightSettingsPage() }
-                            HomeItem.Unlock -> Route { unlockPage() }
-                            HomeItem.Work -> Route { workPage() }
                         }
-
-                        navigator.push(route)
-                    }
-                )
-
-                if (items.indexOf(item) != items.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+                    )
                 }
+            )
+        }
+    ) {
+        val items = remember { HomeItem.values().toList().sortedBy { it.name } }
+
+        InsettingLazyColumnItems(items = items) { item ->
+            val color = key(item) {
+                rememberSavedInstanceState(item) {
+                    ColorPickerPalette.values()
+                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                        .shuffled()
+                        .first()
+                        .front
+                }
+            }
+
+            HomeItem(
+                item = item,
+                color = color,
+                onClick = {
+                    val route = when (item) {
+                        HomeItem.About -> Route { AboutPage() }
+                        HomeItem.Actions -> Route { ActionsPage() }
+                        HomeItem.AppPicker -> Route { AppPickerPage() }
+                        HomeItem.Billing -> Route { BillingPage() }
+                        HomeItem.BottomNavigation -> Route { BottomNavigationPage() }
+                        HomeItem.CheckApps -> Route { CheckAppsPage() }
+                        HomeItem.Chips -> Route { ChipsPage() }
+                        HomeItem.Counter -> Route { CounterPage() }
+                        HomeItem.Dialogs -> Route { DialogsPage() }
+                        HomeItem.Drawer -> Route { DrawerPage() }
+                        HomeItem.DynamicSystemBars -> Route { DynamicSystemBarsPage() }
+                        HomeItem.ForegroundJob -> Route { ForegroundJobPage() }
+                        HomeItem.NavBar -> Route { NavBarPage() }
+                        HomeItem.Notifications -> Route { NotificationsPage() }
+                        HomeItem.Permission -> Route { PermissionsPage() }
+                        HomeItem.Prefs -> Route { PrefsPage() }
+                        HomeItem.RestartProcess -> Route { RestartProcessPage() }
+                        HomeItem.Scaffold -> Route { ScaffoldPage() }
+                        HomeItem.SharedElement -> Route(
+                            enterTransition = SharedElementStackTransition(item to "b"),
+                            exitTransition = SharedElementStackTransition(item to "b")
+                        ) {
+                            SharedElementPage(color)
+                        }
+                        HomeItem.ShortcutPicker -> Route { ShortcutPickerPage() }
+                        HomeItem.Tabs -> Route { TabsPage() }
+                        HomeItem.TextInput -> Route { TextInputPage() }
+                        HomeItem.Timer -> Route { TimerPage() }
+                        HomeItem.Torch -> Route { TorchPage() }
+                        HomeItem.Twilight -> Route { TwilightSettingsPage() }
+                        HomeItem.Unlock -> Route { UnlockPage() }
+                        HomeItem.Work -> Route { WorkPage() }
+                    }
+
+                    navigator.push(route)
+                }
+            )
+
+            if (items.indexOf(item) != items.lastIndex) {
+                HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
             }
         }
     }

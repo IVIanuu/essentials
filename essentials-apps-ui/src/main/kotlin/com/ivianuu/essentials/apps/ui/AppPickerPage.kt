@@ -25,13 +25,14 @@ import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
@@ -42,34 +43,33 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
-@Unscoped
-class AppPickerPage internal constructor(
-    private val viewModelFactory: @Provider (AppFilter) -> AppPickerViewModel
+@Reader
+@Composable
+fun AppPickerPage(
+    appFilter: AppFilter = DefaultAppFilter,
+    title: String? = null
 ) {
-    @Composable
-    operator fun invoke(
-        appFilter: AppFilter = DefaultAppFilter,
-        title: String? = null
-    ) {
-        val viewModel = viewModel(appFilter) { viewModelFactory(appFilter) }
+    val viewModel = viewModel(appFilter) {
+        get<@Provider (AppFilter) -> AppPickerViewModel>()(appFilter)
+    }
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(title ?: stringResource(R.string.es_title_app_picker)) }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(title ?: stringResource(R.string.es_title_app_picker)) }
+            )
+        }
+    ) {
+        ResourceLazyColumnItems(
+            resource = viewModel.currentState.apps
+        ) { app ->
+            key(app.packageName) {
+                AppInfo(
+                    onClick = { viewModel.appClicked(app) },
+                    app = app
                 )
-            }
-        ) {
-            ResourceLazyColumnItems(
-                resource = viewModel.currentState.apps
-            ) { app ->
-                key(app.packageName) {
-                    AppInfo(
-                        onClick = { viewModel.appClicked(app) },
-                        app = app
-                    )
-                }
             }
         }
     }
@@ -95,15 +95,13 @@ private fun AppInfo(
 @Reader
 @Unscoped
 internal class AppPickerViewModel(
-    private val appFilter: @Assisted AppFilter,
-    private val appStore: AppStore,
-    private val navigator: Navigator
+    private val appFilter: @Assisted AppFilter
 ) : StateViewModel<AppPickerState>(AppPickerState()) {
 
     init {
         execute(
             block = {
-                appStore.getInstalledApps()
+                getInstalledApps()
                     .filter(appFilter)
             },
             reducer = { copy(apps = it) }

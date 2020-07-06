@@ -21,24 +21,21 @@ import androidx.compose.remember
 import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.get
 
-@Unscoped
-class CheckAppsPage(
-    private val boxFactory: DiskDataStoreFactory,
-    private val checkableAppsPage: CheckableAppsPage,
-    private val launchableAppFilter: LaunchableAppFilter
-) {
-    @Composable
-    operator fun invoke() {
-        val box = remember { boxFactory.create("apps") { emptySet<String>() } }
-        checkableAppsPage(
-            checkedApps = box.data,
-            onCheckedAppsChanged = { newValue ->
-                box.updateData { newValue }
-            },
-            appBarTitle = "Send check apps",
-            appFilter = launchableAppFilter
-        )
+@Reader
+@Composable
+fun CheckAppsPage() {
+    val dataStore = remember {
+        get<DiskDataStoreFactory>().create("apps") { emptySet<String>() }
     }
+    CheckableAppsPage(
+        checkedApps = dataStore.data,
+        onCheckedAppsChanged = { newValue ->
+            dataStore.updateData { newValue }
+        },
+        appBarTitle = "Send check apps",
+        appFilter = get<LaunchableAppFilter>()
+    )
 }

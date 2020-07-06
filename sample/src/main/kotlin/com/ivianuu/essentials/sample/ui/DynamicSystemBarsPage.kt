@@ -19,42 +19,37 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class DynamicSystemBarsPage {
+@Composable
+fun DynamicSystemBarsPage() {
+    Stack {
+        val scrollerPosition = ScrollerPosition()
 
-    @Composable
-    operator fun invoke() {
-        Stack {
-            val scrollerPosition = ScrollerPosition()
-
-            VerticalScroller(scrollerPosition = scrollerPosition) {
-                val colors: List<Color> = rememberSavedInstanceState {
-                    ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                        .flatMap { it.colors }
-                        .shuffled()
-                }
-
-                colors.forEach { color ->
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                            .height(300.dp)
-                            .layoutId(color)
-                            .systemBarStyle(
-                                bgColor = Color.Black.copy(alpha = 0.2f),
-                                lightIcons = color.isLight
-                            ),
-                        backgroundColor = color
-                    )
-                }
+        VerticalScroller(scrollerPosition = scrollerPosition) {
+            val colors: List<Color> = rememberSavedInstanceState {
+                ColorPickerPalette.values()
+                    .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                    .flatMap { it.colors }
+                    .shuffled()
             }
 
-            TopAppBar(
-                backgroundColor = Color.Transparent,
-                elevation = 0.dp,
-                title = { Text("Dynamic system bars") }
-            )
+            colors.forEach { color ->
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .height(300.dp)
+                        .layoutId(color)
+                        .systemBarStyle(
+                            bgColor = Color.Black.copy(alpha = 0.2f),
+                            lightIcons = color.isLight
+                        ),
+                    backgroundColor = color
+                )
+            }
         }
-    }
 
+        TopAppBar(
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp,
+            title = { Text("Dynamic system bars") }
+        )
+    }
 }

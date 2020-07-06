@@ -20,25 +20,23 @@ import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
-import com.ivianuu.essentials.sample.work.ScheduleTasks
+import com.ivianuu.essentials.sample.work.scheduleTasks
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Reader
 
-@Unscoped
-class WorkPage(private val scheduleTasks: ScheduleTasks) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Work") }) }
+@Reader
+@Composable
+fun WorkPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Work") }) }
+    ) {
+        Button(
+            modifier = Modifier.center(),
+            onClick = { scheduleTasks() }
         ) {
-            Button(
-                modifier = Modifier.center(),
-                onClick = { scheduleTasks() }
-            ) {
-                Text("Perform work")
-            }
+            Text("Perform work")
         }
     }
 }

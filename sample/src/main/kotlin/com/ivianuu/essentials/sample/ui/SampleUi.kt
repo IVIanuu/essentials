@@ -25,16 +25,15 @@ import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransiti
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.BindAppUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
 @Reader
 @BindAppUi
 @Unscoped
-class SampleUi(
-    private val homePage: HomePage,
-    private val navigator: Navigator
-) : AppUi {
+class SampleUi : AppUi {
 
     @Composable
     override fun content() {
@@ -43,7 +42,7 @@ class SampleUi(
                 DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
             ) {
                 if (!navigator.hasRoot) {
-                    navigator.setRoot { homePage() }
+                    navigator.setRoot { HomePage() }
                 }
                 navigator.content()
             }

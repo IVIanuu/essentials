@@ -18,15 +18,11 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
-@Unscoped
-class ScheduleTasks(
-    private val workManager: WorkManager
-) {
-
-    operator fun invoke() {
-        workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
-    }
-
+@Reader
+fun scheduleTasks() {
+    get<WorkManager>().enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
 }

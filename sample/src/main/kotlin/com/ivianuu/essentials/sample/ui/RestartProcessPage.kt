@@ -30,24 +30,21 @@ import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
-class RestartProcessPage {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Restart process") }) }
-        ) {
-            val scope = compositionScope()
-            Button(
-                modifier = Modifier.center(),
-                onClick = {
-                    scope.launch {
-                        restartProcess()
-                    }
+@Composable
+fun RestartProcessPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Restart process") }) }
+    ) {
+        val scope = compositionScope()
+        Button(
+            modifier = Modifier.center(),
+            onClick = {
+                scope.launch {
+                    restartProcess()
                 }
-            ) {
-                Text("Restart process")
             }
+        ) {
+            Text("Restart process")
         }
     }
 }

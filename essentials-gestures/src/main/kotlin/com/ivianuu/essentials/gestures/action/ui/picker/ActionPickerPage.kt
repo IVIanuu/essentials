@@ -11,31 +11,33 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 
-@Unscoped
-class ActionPickerPage internal constructor(
-    private val viewModelFactory: @Provider (Boolean, Boolean) -> ActionPickerViewModel
+@Reader
+@Composable
+fun ActionPickerPage(
+    showDefaultOption: Boolean = true,
+    showNoneOption: Boolean = true
 ) {
-    @Composable
-    operator fun invoke(
-        showDefaultOption: Boolean = true,
-        showNoneOption: Boolean = true
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
-        ) {
-            val viewModel =
-                viewModel { viewModelFactory(showDefaultOption, showNoneOption) }
+        val viewModel = viewModel {
+            get<@Provider (Boolean, Boolean) -> ActionPickerViewModel>()(
+                showDefaultOption,
+                showNoneOption
+            )
+        }
 
-            ResourceLazyColumnItems(
-                resource = viewModel.currentState.items
-            ) { item ->
-                ActionPickerItem(
-                    item = item,
-                    onClick = { viewModel.itemClicked(item) }
-                )
-            }
+        ResourceLazyColumnItems(
+            resource = viewModel.currentState.items
+        ) { item ->
+            ActionPickerItem(
+                item = item,
+                onClick = { viewModel.itemClicked(item) }
+            )
         }
     }
 }

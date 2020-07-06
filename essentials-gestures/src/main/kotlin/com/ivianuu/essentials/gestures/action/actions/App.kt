@@ -7,8 +7,8 @@ import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.AppPickerPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.gestures.R
@@ -60,9 +60,9 @@ internal class AppActionExecutor(
     }
 }
 
+@Reader
 @Unscoped
 internal class AppActionFactory(
-    private val appStore: AppStore,
     private val appActionExecutorProvider: @Provider (String) -> AppActionExecutor,
     private val appActionIconProvider: @Provider (String) -> AppActionIconProvider
 ) : ActionFactory {
@@ -71,7 +71,7 @@ internal class AppActionFactory(
         val packageName = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             key = key,
-            title = appStore.getAppInfo(packageName).packageName,
+            title = getAppInfo(packageName).packageName,
             unlockScreen = true,
             iconProvider = appActionIconProvider(packageName),
             executor = appActionExecutorProvider(packageName),
@@ -80,9 +80,9 @@ internal class AppActionFactory(
     }
 }
 
+@Reader
 @Unscoped
 internal class AppActionPickerDelegate(
-    private val appPickerPage: AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
     private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
@@ -93,7 +93,7 @@ internal class AppActionPickerDelegate(
 
     override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
-            appPickerPage(appFilter = launchableAppFilter)
+            AppPickerPage(appFilter = launchableAppFilter)
         } ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }

@@ -41,11 +41,121 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
+
+@Reader
+@Composable
+fun PrefsPage() {
+    val prefs = get<Prefs>()
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Prefs") }) }
+    ) {
+        InsettingScrollableColumn {
+            SwitchListItem(
+                dataStore = prefs.switch,
+                title = { Text("Switch") }
+            )
+
+            val dependenciesModifier = Modifier.preferenceDependencies(
+                Dependency(
+                    dataStore = prefs.switch,
+                    value = true
+                )
+            )
+
+            Subheader(modifier = dependenciesModifier) { Text("Category") }
+
+            CheckboxListItem(
+                dataStore = prefs.checkbox,
+                modifier = dependenciesModifier,
+                title = { Text("Checkbox") },
+                subtitle = { Text("This is a checkbox preference") }
+            )
+
+            RadioButtonListItem(
+                dataStore = prefs.radioButton,
+                modifier = dependenciesModifier,
+                title = { Text("Radio Button") },
+                subtitle = { Text("This is a radio button preference") }
+            )
+
+            IntSliderListItem(
+                dataStore = prefs.slider,
+                modifier = dependenciesModifier,
+                title = { Text("Slider") },
+                subtitle = { Text("This is a slider preference") },
+                steps = 10,
+                valueRange = 0..100,
+                valueText = { SliderValueText(it) }
+            )
+
+            DurationSliderListItem(
+                dataStore = prefs.durationSlider,
+                modifier = dependenciesModifier,
+                title = { Text("Slider duration") },
+                subtitle = { Text("This is a slider preference") },
+                steps = 10,
+                valueRange = 1.minutes..1.hours
+            )
+
+            Subheader(modifier = dependenciesModifier) {
+                Text("Dialogs")
+            }
+
+            TextInputDialogListItem(
+                dataStore = prefs.textInput,
+                modifier = dependenciesModifier,
+                title = { Text("Text input") },
+                subtitle = { Text("This is a text input preference") },
+                allowEmpty = false
+            )
+
+            ColorDialogListItem(
+                dataStore = prefs.color,
+                modifier = dependenciesModifier,
+                title = { Text("Color") },
+                subtitle = { Text("This is a color preference") }
+            )
+
+            MultiChoiceDialogListItem(
+                dataStore = prefs.multiChoice,
+                modifier = dependenciesModifier,
+                title = { Text("Multi select list") },
+                subtitle = { Text("This is a multi select list preference") },
+                items = listOf(
+                    MultiChoiceDialogListItem.Item("A", "A"),
+                    MultiChoiceDialogListItem.Item("B", "B"),
+                    MultiChoiceDialogListItem.Item("C", "C")
+                )
+            )
+
+            SingleChoiceDialogListItem(
+                dataStore = prefs.singleChoice,
+                modifier = dependenciesModifier,
+                title = { Text("Single item list") },
+                subtitle = { Text("This is a single item list preference") },
+                items = listOf(
+                    SingleChoiceDialogListItem.Item("A", "A"),
+                    SingleChoiceDialogListItem.Item("B", "B"),
+                    SingleChoiceDialogListItem.Item("C", "C")
+                )
+            )
+
+            ClipboardListItem(
+                title = { Text("Clipboard") },
+                subtitle = { Text("This is a clipboard preference") },
+                clipboardText = { "cool clip" },
+                modifier = dependenciesModifier
+            )
+        }
+    }
+}
 
 @Scoped(ApplicationComponent::class)
 class Prefs(factory: DiskDataStoreFactory) {
@@ -58,113 +168,4 @@ class Prefs(factory: DiskDataStoreFactory) {
     val color = factory.color("color") { Color.Red }
     val multiChoice = factory.create("multi_choice") { setOf("A", "B", "C") }
     val singleChoice = factory.create("single_choice") { "C" }
-}
-
-@Unscoped
-class PrefsPage(private val prefs: Prefs) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Prefs") }) }
-        ) {
-            InsettingScrollableColumn {
-                SwitchListItem(
-                    dataStore = prefs.switch,
-                    title = { Text("Switch") }
-                )
-
-                val dependenciesModifier = Modifier.preferenceDependencies(
-                    Dependency(
-                        dataStore = prefs.switch,
-                        value = true
-                    )
-                )
-
-                Subheader(modifier = dependenciesModifier) { Text("Category") }
-
-                CheckboxListItem(
-                    dataStore = prefs.checkbox,
-                    modifier = dependenciesModifier,
-                    title = { Text("Checkbox") },
-                    subtitle = { Text("This is a checkbox preference") }
-                )
-
-                RadioButtonListItem(
-                    dataStore = prefs.radioButton,
-                    modifier = dependenciesModifier,
-                    title = { Text("Radio Button") },
-                    subtitle = { Text("This is a radio button preference") }
-                )
-
-                IntSliderListItem(
-                    dataStore = prefs.slider,
-                    modifier = dependenciesModifier,
-                    title = { Text("Slider") },
-                    subtitle = { Text("This is a slider preference") },
-                    steps = 10,
-                    valueRange = 0..100,
-                    valueText = { SliderValueText(it) }
-                )
-
-                DurationSliderListItem(
-                    dataStore = prefs.durationSlider,
-                    modifier = dependenciesModifier,
-                    title = { Text("Slider duration") },
-                    subtitle = { Text("This is a slider preference") },
-                    steps = 10,
-                    valueRange = 1.minutes..1.hours
-                )
-
-                Subheader(modifier = dependenciesModifier) {
-                    Text("Dialogs")
-                }
-
-                TextInputDialogListItem(
-                    dataStore = prefs.textInput,
-                    modifier = dependenciesModifier,
-                    title = { Text("Text input") },
-                    subtitle = { Text("This is a text input preference") },
-                    allowEmpty = false
-                )
-
-                ColorDialogListItem(
-                    dataStore = prefs.color,
-                    modifier = dependenciesModifier,
-                    title = { Text("Color") },
-                    subtitle = { Text("This is a color preference") }
-                )
-
-                MultiChoiceDialogListItem(
-                    dataStore = prefs.multiChoice,
-                    modifier = dependenciesModifier,
-                    title = { Text("Multi select list") },
-                    subtitle = { Text("This is a multi select list preference") },
-                    items = listOf(
-                        MultiChoiceDialogListItem.Item("A", "A"),
-                        MultiChoiceDialogListItem.Item("B", "B"),
-                        MultiChoiceDialogListItem.Item("C", "C")
-                    )
-                )
-
-                SingleChoiceDialogListItem(
-                    dataStore = prefs.singleChoice,
-                    modifier = dependenciesModifier,
-                    title = { Text("Single item list") },
-                    subtitle = { Text("This is a single item list preference") },
-                    items = listOf(
-                        SingleChoiceDialogListItem.Item("A", "A"),
-                        SingleChoiceDialogListItem.Item("B", "B"),
-                        SingleChoiceDialogListItem.Item("C", "C")
-                    )
-                )
-
-                ClipboardListItem(
-                    title = { Text("Clipboard") },
-                    subtitle = { Text("This is a clipboard preference") },
-                    clipboardText = { "cool clip" },
-                    modifier = dependenciesModifier
-                )
-            }
-        }
-    }
 }

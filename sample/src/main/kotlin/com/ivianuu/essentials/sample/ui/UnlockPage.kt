@@ -27,40 +27,36 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.UnlockScreen
+import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
-class UnlockPage(
-    private val screenStateProvider: ScreenStateProvider,
-    private val unlockScreen: UnlockScreen
-) {
-    @Composable
-    operator fun invoke() {
-        Scaffold(
-            topBar = { TopAppBar(title = { Text("Unlock") }) }
-        ) {
-            val scope = compositionScope()
-            Button(
-                modifier = Modifier.center(),
-                onClick = {
-                    scope.launch {
-                        Toaster.toast("Turn the screen off and on")
+@Composable
+fun UnlockPage() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Unlock") }) }
+    ) {
+        val scope = compositionScope()
+        Button(
+            modifier = Modifier.center(),
+            onClick = {
+                scope.launch {
+                    Toaster.toast("Turn the screen off and on")
 
-                        screenStateProvider.screenState
-                            .filter { it == ScreenState.Locked }
-                            .first()
+                    get<ScreenStateProvider>().screenState
+                        .filter { it == ScreenState.Locked }
+                        .first()
 
-                        val unlocked = unlockScreen()
-                        Toaster.toast("Screen unlocked $unlocked")
-                    }
+                    val unlocked = unlockScreen()
+                    Toaster.toast("Screen unlocked $unlocked")
                 }
-            ) { Text("Unlock") }
-        }
+            }
+        ) { Text("Unlock") }
     }
 }

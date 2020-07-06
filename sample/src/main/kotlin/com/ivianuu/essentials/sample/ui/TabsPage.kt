@@ -35,45 +35,40 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Unscoped
 
-@Unscoped
-class TabsPage {
-
-    @Composable
-    operator fun invoke() {
-        var selectedIndex by savedInstanceState { 0 }
-        Scaffold(
-            topBar = {
-                Surface(
-                    color = MaterialTheme.colors.primary,
-                    elevation = 8.dp
-                ) {
-                    Column {
-                        TopAppBar(
-                            title = { Text("Tabs") },
-                            elevation = 0.dp
+@Composable
+fun TabsPage() {
+    var selectedIndex by savedInstanceState { 0 }
+    Scaffold(
+        topBar = {
+            Surface(
+                color = MaterialTheme.colors.primary,
+                elevation = 8.dp
+            ) {
+                Column {
+                    TopAppBar(
+                        title = { Text("Tabs") },
+                        elevation = 0.dp
+                    )
+                    TabRow(items = TabItems, selectedIndex = selectedIndex) { index, _ ->
+                        Tab(
+                            selected = selectedIndex == index,
+                            onSelected = { selectedIndex = index },
+                            text = { Text("Item: $index") }
                         )
-                        TabRow(items = TabItems, selectedIndex = selectedIndex) { index, _ ->
-                            Tab(
-                                selected = selectedIndex == index,
-                                onSelected = { selectedIndex = index },
-                                text = { Text("Item: $index") }
-                            )
-                        }
                     }
                 }
             }
-        ) {
-            AnimatedBox(current = TabItems[selectedIndex]) { item ->
-                Surface(color = item) {
-                    Text(
-                        text = "Index: ${TabItems.indexOf(item)}",
-                        modifier = Modifier.center()
-                    )
-                }
+        }
+    ) {
+        AnimatedBox(current = TabItems[selectedIndex]) { item ->
+            Surface(color = item) {
+                Text(
+                    text = "Index: ${TabItems.indexOf(item)}",
+                    modifier = Modifier.center()
+                )
             }
         }
     }
-
 }
 
 private val TabItems = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
