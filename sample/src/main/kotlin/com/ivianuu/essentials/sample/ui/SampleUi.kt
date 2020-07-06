@@ -30,22 +30,18 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.get
 
-@Reader
 @BindAppUi
-@Unscoped
-class SampleUi : AppUi {
-
-    @Composable
-    override fun content() {
-        TwilightTheme {
-            Providers(
-                DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
-            ) {
-                if (!navigator.hasRoot) {
-                    navigator.setRoot { HomePage() }
-                }
-                navigator.content()
+@Reader
+@Composable
+fun SampleUi() {
+    TwilightTheme {
+        Providers(
+            DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
+        ) {
+            if (!navigator.hasRoot) {
+                navigator.setRoot { HomePage() }
             }
+            navigator.content()
         }
     }
 }

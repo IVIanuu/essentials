@@ -25,7 +25,7 @@ import com.ivianuu.injekt.get
 
 class DefaultActivity : EsActivity() {
 
-    private val appUi: AppUi? by lazy {
+    private val appUi: (@AppUi @Composable () -> Unit)? by lazy {
         activityComponent.runReader { get() }
     }
 
@@ -38,7 +38,7 @@ class DefaultActivity : EsActivity() {
 
     @Composable
     override fun content() {
-        appUi!!.content()
+        appUi!!()
     }
 
 }

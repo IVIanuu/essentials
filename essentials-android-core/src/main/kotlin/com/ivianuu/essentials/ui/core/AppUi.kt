@@ -18,21 +18,21 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.alias
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.composition.BindingEffect
 
-interface AppUi {
-    @Composable
-    fun content()
-}
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AppUi
 
 @BindingEffect(ActivityComponent::class)
 annotation class BindAppUi {
     companion object {
         @Module
-        operator fun <T : AppUi> invoke() {
-            alias<T, AppUi>()
+        operator fun <T : @Composable () -> Unit> invoke() {
+            alias<T, @AppUi @Composable () -> Unit>()
         }
     }
 }
