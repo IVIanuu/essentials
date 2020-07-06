@@ -16,54 +16,52 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.composition.BindingEffect
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.map
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.set
 
 /**
  * Will be instantiated on app start up
  * Can be used to initialize global stuff like logging
  *
  * ´´´
- * class AnalyticsInitializer : AppInitializer {
- *     init {
- *         Analytics.initialize(Logger())
- *     }
+ * @BindAppInitializer
+ * fun initializeAnalytics() {
+ *     Analytics.initialize(Logger())
  * }
  * ´´´
  */
-interface AppInitializer
-
 @BindingEffect(ApplicationComponent::class)
-annotation class BindAppInitializer {
+annotation class AppInitializer {
     companion object {
         @Module
-        inline operator fun <reified T : AppInitializer> invoke() {
-            map<KClass<*>, AppInitializer> {
-                put<T>(T::class)
+        operator fun <T : () -> Unit> invoke() {
+            set<@AppInitializers Set<() -> Unit>, () -> Unit> {
+                add<T>()
             }
         }
     }
 }
 
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AppInitializers
+
 @Module
 fun EsAppInitializerModule() {
     installIn<ApplicationComponent>()
-    map<KClass<*>, AppInitializer>()
+    set<@AppInitializers Set<() -> Unit>, () -> Unit>()
 }
 
 @Reader
 fun runInitializers() {
-    get<Map<KClass<*>, @Provider () -> AppInitializer>>()
-        .forEach {
-            get<Logger>().d(tag = "Init", message = "initialize ${it.key.java.name}")
-            it.value()
-        }
+    d("Initialize")
+    get<@AppInitializers Set<() -> Unit>>()
+        .forEach { it() }
 }

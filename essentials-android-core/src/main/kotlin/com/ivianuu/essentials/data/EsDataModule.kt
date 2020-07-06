@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.data
 
 import android.content.Context
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
@@ -40,7 +41,7 @@ import java.io.File
 fun EsDataModule() {
     installIn<ApplicationComponent>()
     unscoped<@DataDir String> {
-        get<@ForApplication Context>().applicationInfo.dataDir
+        applicationContext.applicationInfo.dataDir
     }
     unscoped<@PrefsDir String> { "${get<@DataDir String>()}/prefs" }
     scoped { MoshiSerializerFactory(get()) }
@@ -53,8 +54,8 @@ fun EsDataModule() {
     }
     scoped {
         SettingsDataStoreFactory(
-            context = get<@ForApplication Context>(),
-            scope = get<@GlobalScope CoroutineScope>() + get<AppCoroutineDispatchers>().io
+            context = applicationContext,
+            scope = globalScope + dispatchers.io
         )
     }
 }

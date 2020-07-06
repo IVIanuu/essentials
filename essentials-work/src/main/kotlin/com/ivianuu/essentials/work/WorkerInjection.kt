@@ -21,10 +21,11 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.BindAppInitializer
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.Unscoped
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.get
@@ -33,22 +34,16 @@ import com.ivianuu.injekt.unscoped
 @Module
 fun EsWorkModule() {
     installIn<ApplicationComponent>()
-    unscoped {
-        WorkManager.getInstance(get<@ForApplication Context>())
-    }
+    unscoped { WorkManager.getInstance(applicationContext) }
 }
 
-@BindAppInitializer
-@Unscoped
-class WorkerAppInitializer(
-    context: @ForApplication Context,
-    workerFactory: WorkerFactory
-) : AppInitializer {
-    init {
-        WorkManager.initialize(
-            context, Configuration.Builder()
-                .setWorkerFactory(workerFactory)
-                .build()
-        )
-    }
+@AppInitializer
+@Reader
+fun initializeWorkers() {
+    WorkManager.initialize(
+        applicationContext,
+        Configuration.Builder()
+            .setWorkerFactory(get())
+            .build()
+    )
 }

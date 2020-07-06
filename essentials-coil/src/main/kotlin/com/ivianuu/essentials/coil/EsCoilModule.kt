@@ -20,6 +20,7 @@ import android.content.Context
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Module
@@ -37,7 +38,7 @@ fun EsCoilModule() {
     set<MeasuredMapperBinding<*>>()
 
     scoped {
-        ImageLoader.Builder(get<@ForApplication Context>())
+        ImageLoader.Builder(applicationContext)
             .componentRegistry {
                 get<Set<Decoder>>().forEach { add(it) }
                 get<Set<FetcherBinding<*>>>()

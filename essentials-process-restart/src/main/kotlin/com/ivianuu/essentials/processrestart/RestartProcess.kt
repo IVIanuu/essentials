@@ -19,6 +19,7 @@ package com.ivianuu.essentials.processrestart
 import android.content.Context
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
@@ -33,6 +34,6 @@ suspend fun restartProcess() {
     val intent = get<PackageManager>().getLaunchIntentForPackage(get<BuildInfo>().packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
     d("restart process %$intent")
-    ProcessRestartActivity.launch(get<@ForApplication Context>(), intent)
+    ProcessRestartActivity.launch(applicationContext, intent)
     Runtime.getRuntime().exit(0)
 }

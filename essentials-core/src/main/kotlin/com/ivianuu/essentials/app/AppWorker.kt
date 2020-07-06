@@ -18,14 +18,18 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.composition.BindingEffect
 import com.ivianuu.injekt.composition.installIn
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.map
+import com.ivianuu.injekt.set
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
@@ -33,35 +37,35 @@ import kotlin.reflect.KClass
 /**
  * Runs while the app is alive
  */
-interface AppWorker {
-    suspend fun run()
-}
-
 @BindingEffect(ApplicationComponent::class)
-annotation class BindAppWorker {
+annotation class AppWorker {
     companion object {
         @Module
-        inline operator fun <reified T : AppWorker> invoke() {
-            map<KClass<*>, AppWorker> {
-                put<T>(T::class)
+        operator fun <T : suspend () -> Unit> invoke() {
+            set<@AppWorkers Set<suspend () -> Unit>, suspend () -> Unit> {
+                add<T>()
             }
         }
     }
 }
 
+@Target(AnnotationTarget.TYPE)
+@Qualifier
+annotation class AppWorkers
+
 @Module
 fun EsAppWorkerModule() {
     installIn<ApplicationComponent>()
-    map<KClass<*>, AppWorker>()
+    set<@AppWorkers Set<suspend () -> Unit>, suspend () -> Unit>()
 }
 
 @Reader
 fun runAppWorkers() {
-    get<Map<KClass<*>, @Provider () -> AppWorker>>()
-        .forEach {
-            get<@GlobalScope CoroutineScope>().launch {
-                get<Logger>().d(tag = "AppWorkers", message = "run worker ${it.key.java.name}")
-                it.value().run()
+    d("run workers")
+    get<@AppWorkers Set<suspend () -> Unit>>()
+        .forEach { worker ->
+            globalScope.launch {
+                worker()
             }
         }
 }

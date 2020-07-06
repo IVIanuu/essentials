@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.github.michaelbull.result.runCatching
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -51,7 +52,7 @@ internal suspend fun backupData() = runCatching {
 
         val uri =
             FileProvider.getUriForFile(
-                get<@ForApplication Context>(),
+                applicationContext,
                 get<BuildInfo>().packageName,
                 backupFile
             )

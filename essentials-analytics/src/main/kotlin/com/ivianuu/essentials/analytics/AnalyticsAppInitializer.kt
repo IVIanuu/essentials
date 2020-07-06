@@ -19,21 +19,16 @@ package com.ivianuu.essentials.analytics
 import android.content.Context
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.BindAppInitializer
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.get
 import io.fabric.sdk.android.Fabric
 
-@BindAppInitializer
-@Unscoped
-internal class AnalyticsAppInitializer(
-    buildInfo: BuildInfo,
-    context: @ForApplication Context
-) : AppInitializer {
-    init {
-        if (!buildInfo.isDebug) {
-            Fabric.with(context, Crashlytics())
-        }
+@AppInitializer
+fun initializeAnalytics() {
+    if (!get<BuildInfo>().isDebug) {
+        Fabric.with(applicationContext, Crashlytics())
     }
 }
