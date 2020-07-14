@@ -1,12 +1,13 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
 
-@Module
-fun EsNavigatorModule() {
-    installIn<ApplicationComponent>()
-    scoped { Navigator() }
+object EsNavigatorModule {
+
+    @Given(ApplicationComponent::class)
+    @Reader
+    fun navigator() = Navigator()
+
 }

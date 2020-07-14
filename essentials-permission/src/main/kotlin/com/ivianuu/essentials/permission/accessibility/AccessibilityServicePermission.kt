@@ -21,14 +21,15 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
-import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlin.reflect.KClass
 
 fun AccessibilityServicePermission(
@@ -46,21 +47,21 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
     )
 }
 
-@BindPermissionStateProvider
-@Unscoped
-internal class AccessibilityServicePermissionStateProvider(
-    private val accessibilityManager: AccessibilityManager,
-    private val buildInfo: BuildInfo
-) : PermissionStateProvider {
+@Given
+@Reader
+internal class AccessibilityServicePermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.AccessibilityServiceClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+        return given<AccessibilityManager>().getEnabledAccessibilityServiceList(
+            AccessibilityServiceInfo.FEEDBACK_ALL_MASK
+        )
             .any {
-                it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
+                it.resolveInfo.serviceInfo.packageName == given<BuildInfo>().packageName &&
                         it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
             }
     }
+
 }

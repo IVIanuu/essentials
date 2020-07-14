@@ -26,9 +26,9 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -37,16 +37,15 @@ fun AboutPage() {
         InsettingScrollableColumn {
             AboutSection(
                 showHeader = false,
-                packageName = get<BuildInfo>().packageName,
-                privacyPolicyUrl = get<@PrivacyPolicyUrl String?>()
+                packageName = given<BuildInfo>().packageName,
+                privacyPolicyUrl = given<PrivacyPolicyUrl?>()
             )
         }
     }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class PrivacyPolicyUrl
+@Distinct
+typealias PrivacyPolicyUrl = String
 
 @Reader
 @Composable
@@ -55,7 +54,7 @@ fun AboutSection(
     showHeader: Boolean = false,
     privacyPolicyUrl: String? = null
 ) {
-    val navigator = get<Navigator>()
+    val navigator = given<Navigator>()
     if (showHeader) {
         Subheader {
             Text(R.string.about_title)

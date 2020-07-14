@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.accessibility
+package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Distinct
@@ -8,13 +8,13 @@ import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @Effect
-annotation class AccessibilityWorker {
+annotation class NotificationWorker {
     companion object {
         @SetElements(ApplicationComponent::class)
         @Reader
-        operator fun <T : suspend () -> Unit> invoke(): AccessibilityWorkers = setOf(given<T>())
+        operator fun <T : suspend () -> Unit> invoke(): NotificationWorkers = setOf(given<T>())
     }
 }
 
 @Distinct
-typealias AccessibilityWorkers = Set<suspend () -> Unit>
+typealias NotificationWorkers = Set<suspend () -> Unit>

@@ -8,10 +8,10 @@ installIn<ApplicationComponent>()
     actionPickerDelegate<ShortcutActionPickerDelegate>()
 }
 
-@Unscoped
+@Given
 internal class ShortcutActionFactory(
-    private val intentActionExecutorProvider: @Provider (Intent) -> IntentActionExecutor,
-    private val logger: Logger
+private val intentActionExecutorProvider: (Intent) -> IntentActionExecutor,
+private val logger: Logger
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -33,7 +33,7 @@ internal class ShortcutActionFactory(
 }
 
 
-@Unscoped
+@Given
 internal class ShortcutActionPickerDelegate(
     private val resourceProvider: ResourceProvider,
     private val shortcutPickerPage: ShortcutPickerPage

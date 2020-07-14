@@ -17,32 +17,22 @@
 package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.map
-import com.ivianuu.injekt.set
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class BootListener {
     companion object {
-        @Module
-        operator fun <T : () -> Unit> invoke() {
-            set<@BootListeners Set<() -> Unit>, () -> Unit> {
-                add<T>()
-            }
-        }
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
     }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class BootListeners
+@Distinct
+typealias BootListeners = Set<() -> Unit>
 
-@Module
-fun EsBootModule() {
-    installIn<ApplicationComponent>()
-    set<@BootListeners Set<() -> Unit>, () -> Unit>()
-}

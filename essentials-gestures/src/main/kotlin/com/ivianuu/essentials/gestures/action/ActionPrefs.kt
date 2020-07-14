@@ -2,9 +2,12 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
-@Scoped(ApplicationComponent::class)
-class ActionPrefs(factory: DiskDataStoreFactory) {
-    val actionMediaApp = factory.create<String?>("action_media_app") { null }
+@Given(ApplicationComponent::class)
+@Reader
+class ActionPrefs {
+    val actionMediaApp = given<DiskDataStoreFactory>().create<String?>("action_media_app") { null }
 }

@@ -1,23 +1,23 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
-@Unscoped
-class PermissionRequestHandlers(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val manager: PermissionManager,
-    requestHandlers: Set<PermissionRequestHandler>
-) {
+@Given
+@Reader
+class PermissionRequestHandlers {
 
-    private val requestHandlers = requestHandlers
+    private val requestHandlers = given<Set<PermissionRequestHandler>>()
         .map { requestHandler ->
             object : PermissionRequestHandler by requestHandler {
                 override suspend fun request(permission: Permission) {
                     withContext(dispatchers.default) {
                         requestHandler.request(permission)
-                        manager.permissionRequestFinished()
+                        given<PermissionManager>().permissionRequestFinished()
                     }
                 }
             }

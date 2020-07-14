@@ -31,6 +31,7 @@ import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
+import androidx.compose.structuralEqualityPolicy
 import androidx.core.content.getSystemService
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
@@ -120,7 +121,7 @@ data class Insets(
 }
 
 val InsetsAmbient =
-    ambientOf(StructurallyEqual) { Insets.Empty }
+    ambientOf(structuralEqualityPolicy()) { Insets.Empty }
 
 @Composable
 fun ConsumeInsets(
@@ -154,7 +155,7 @@ fun ConsumeInsets(
 fun ProvideInsets(children: @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
-    var insets by state(StructurallyEqual) { Insets.Empty }
+    var insets by state(structuralEqualityPolicy()) { Insets.Empty }
 
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, androidInsets ->

@@ -20,14 +20,15 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
 
 fun SystemOverlayPermission(
     context: Context,
@@ -46,15 +47,14 @@ val Permission.Companion.IsSystemOverlayPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Unscoped
-internal class SystemOverlayPermissionStateProvider(
-    private val context: @ForApplication Context
-) : PermissionStateProvider {
+@Given
+@Reader
+internal class SystemOverlayPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsSystemOverlayPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        Settings.canDrawOverlays(context)
+        Settings.canDrawOverlays(applicationContext)
 
 }

@@ -40,8 +40,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-
 @Reader
 @Composable
 fun TextInputPage() {

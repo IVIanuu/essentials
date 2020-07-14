@@ -23,15 +23,18 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
+@Reader
 class ForegroundManager(
-    private val context: @ForApplication Context,
-    private val logger: Logger
+    private val context: ApplicationContext = given(),
+    private val logger: Logger = given()
 ) {
 
     private val _updates = EventFlow<Unit>()

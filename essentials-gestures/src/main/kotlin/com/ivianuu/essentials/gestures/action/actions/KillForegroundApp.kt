@@ -20,12 +20,12 @@ iconProvider = SingleActionIconProvider(Icons.Default.Clear),
     }
 }
 
-@Unscoped
+@Given
 internal class KillForegroundAppActionExecutor(
     private val buildInfo: BuildInfo,
     private val recentAppsProvider: RecentAppsProvider,
-    private val packageManager: PackageManager,
-    private val rootActionExecutorProvider: @Provider (String) -> RootActionExecutor
+private val packageManager: PackageManager,
+private val rootActionExecutorProvider: (String) -> RootActionExecutor
 ) : ActionExecutor {
     override suspend fun invoke() {
         val currentApp = recentAppsProvider.currentApp.first()

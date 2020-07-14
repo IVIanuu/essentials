@@ -15,7 +15,7 @@ iconProvider = SingleActionIconProvider(Icons.Default.KeyboardHide),
     }
 }
 
-@Unscoped
+@Given
 internal class InputMethodActionExecutor(
     private val inputMethodManager: InputMethodManager
 ) : ActionExecutor {

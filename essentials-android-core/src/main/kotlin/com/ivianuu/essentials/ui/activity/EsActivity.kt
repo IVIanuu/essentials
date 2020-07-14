@@ -30,6 +30,10 @@ import androidx.ui.savedinstancestate.UiSavedStateRegistry
 import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
 import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
+import com.ivianuu.essentials.ui.uiScope
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.runReader
+import kotlinx.coroutines.cancel
 
 /**
  * Base activity
@@ -55,6 +59,9 @@ abstract class EsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         composition.dispose()
+        activityComponent.runReader {
+            uiScope.cancel()
+        }
         super.onDestroy()
     }
 

@@ -8,9 +8,8 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -35,7 +34,7 @@ internal suspend fun restoreData() = runCatching {
             applicationContext.contentResolver.openInputStream(uri)!!.buffered()
         )
 
-        val targetDirectory = File(get<@PrefsDir String>())
+        val targetDirectory = File(given<PrefsDir>())
 
         var entry: ZipEntry? = zipInputStream.nextEntry
         while (entry != null) {

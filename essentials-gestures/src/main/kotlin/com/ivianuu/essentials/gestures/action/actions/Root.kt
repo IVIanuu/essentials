@@ -4,14 +4,13 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 @Reader
-@Unscoped
+@Given
 class RootActionExecutor(
-    private val command: @Assisted String
+    private val command: String
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {

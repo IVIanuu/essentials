@@ -34,8 +34,7 @@ import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 /**
  * Asks the user for the secure settings permission
@@ -104,12 +103,12 @@ fun SecureSettingsPcInstructionsPage() {
                     Text(
                         stringResource(
                             R.string.es_pref_secure_settings_step_4_summary,
-                            get<BuildInfo>().packageName
+                            given<BuildInfo>().packageName
                         )
                     )
                 },
                 clipboardText = {
-                    "adb shell pm grant ${get<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    "adb shell pm grant ${given<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS"
                 }
             )
         }

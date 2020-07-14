@@ -21,8 +21,12 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,12 +40,9 @@ import kotlinx.coroutines.flow.onEach
 /**
  * Recent apps provider
  */
-@Scoped(ApplicationComponent::class)
-class RecentAppsProvider(
-    private val logger: Logger,
-    scope: @GlobalScope CoroutineScope,
-    services: AccessibilityServices
-) {
+@Given(ApplicationComponent::class)
+@Reader
+class RecentAppsProvider {
 
     val currentApp: Flow<String?>
         get() = recentsApps
@@ -51,6 +52,7 @@ class RecentAppsProvider(
     val recentsApps: StateFlow<List<String>> get() = _recentApps
 
     init {
+        val services = given<AccessibilityServices>()
         services.applyConfig(
             AccessibilityConfig(
                 eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -60,7 +62,7 @@ class RecentAppsProvider(
         services
             .events
             .onEach { handleEvent(it) }
-            .launchIn(scope)
+            .launchIn(globalScope)
     }
 
     private fun handleEvent(event: AccessibilityEvent) {
@@ -105,7 +107,7 @@ class RecentAppsProvider(
         // make sure that were not getting bigger than the limit
         val finalRecentApps = recentApps.chunked(10).first()
 
-        logger.d("recent apps changed $finalRecentApps")
+        d("recent apps changed $finalRecentApps")
 
         // push
         _recentApps.value = finalRecentApps

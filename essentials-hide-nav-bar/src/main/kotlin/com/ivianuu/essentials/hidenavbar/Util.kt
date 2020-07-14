@@ -9,16 +9,16 @@ import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 internal suspend fun disableNonSdkInterfaceDetection() {
-    val systemBuildInfo = get<SystemBuildInfo>()
-    val settingsDataStoreFactory = get<SettingsDataStoreFactory>()
+    val systemBuildInfo = given<SystemBuildInfo>()
+    val settingsDataStoreFactory = given<SettingsDataStoreFactory>()
     if (systemBuildInfo.sdk >= 29) {
         d("disable non sdk on 29")
 
-        val hiddenApiPolicy = get<SettingsDataStoreFactory>().int(
+        val hiddenApiPolicy = given<SettingsDataStoreFactory>().int(
             "hidden_api_policy", SettingDataStore.Type.Global
         )
         hiddenApiPolicy.updateData { 1 }

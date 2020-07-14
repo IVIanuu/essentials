@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import java.util.regex.Pattern
 
 interface Logger {
@@ -23,35 +23,35 @@ interface Logger {
 
 @Reader
 fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().v(message, throwable, tag)
+    given<Logger>().v(message, throwable, tag)
 }
 
 @Reader
 fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().d(message, throwable, tag)
+    given<Logger>().d(message, throwable, tag)
 }
 
 @Reader
 fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().i(message, throwable, tag)
+    given<Logger>().i(message, throwable, tag)
 }
 
 @Reader
 fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().w(message, throwable, tag)
+    given<Logger>().w(message, throwable, tag)
 }
 
 @Reader
 fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().e(message, throwable, tag)
+    given<Logger>().e(message, throwable, tag)
 }
 
 @Reader
 fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().wtf(message, throwable, tag)
+    given<Logger>().wtf(message, throwable, tag)
 }
 
-@Unscoped
+@Given
 object NoopLogger : Logger {
     override fun v(message: String?, throwable: Throwable?, tag: String?) {
     }
@@ -72,7 +72,7 @@ object NoopLogger : Logger {
     }
 }
 
-@Unscoped
+@Given
 class DefaultLogger : Logger {
 
     override fun v(message: String?, throwable: Throwable?, tag: String?) {

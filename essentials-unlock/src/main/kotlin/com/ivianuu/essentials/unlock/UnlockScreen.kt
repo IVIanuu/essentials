@@ -18,47 +18,45 @@ package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
 import android.content.Context
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @Reader
-suspend fun unlockScreen(): Boolean = get<UnlockScreen>()()
+suspend fun unlockScreen(): Boolean = given<UnlockScreen>()()
 
 /**
  * Helper class for unlocking the screen
  */
-@Scoped(ApplicationComponent::class)
-class UnlockScreen(
-    private val context: @ForApplication Context,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
-    private val keyguardManager: KeyguardManager
-) {
+@Given(ApplicationComponent::class)
+@Reader
+class UnlockScreen {
 
     private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
     suspend operator fun invoke(): Boolean = withContext(dispatchers.default) {
-        if (!keyguardManager.isKeyguardLocked) return@withContext true
+        if (!given<KeyguardManager>().isKeyguardLocked) return@withContext true
 
         val result = CompletableDeferred<Boolean>()
         val requestId = UUID.randomUUID().toString()
         requestsById[requestId] = result
 
-        logger.d("unlock screen $requestId")
+        d("unlock screen $requestId")
 
-        UnlockScreenActivity.unlock(context, requestId)
+        UnlockScreenActivity.unlock(applicationContext, requestId)
 
         return@withContext result.await().also {
-            logger.d("unlock result $requestId -> $it")
+            d("unlock result $requestId -> $it")
         }
     }
 

@@ -18,9 +18,9 @@ permissions = listOf(permissions.accessibility),
     }
 }
 
-@Unscoped
+@Given
 internal class LastAppActionExecutor(
-    private val lazyRecentAppsExecutor: @Provider (Int) -> AccessibilityActionExecutor
+private val lazyRecentAppsExecutor: (Int) -> AccessibilityActionExecutor
 ) : ActionExecutor {
     override suspend fun invoke() {
         val executor =

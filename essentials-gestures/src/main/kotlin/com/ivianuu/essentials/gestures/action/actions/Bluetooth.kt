@@ -18,7 +18,7 @@ iconProvider = iconProvider,
     }
 }
 
-@Unscoped
+@Given
 internal class BluetoothActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         BluetoothAdapter.getDefaultAdapter()?.let {
@@ -31,7 +31,7 @@ internal class BluetoothActionExecutor : ActionExecutor {
     }
 }
 
-@Unscoped
+@Given
 internal class BluetoothActionIconProvider(
     private val broadcastFactory: BroadcastFactory
 ) : ActionIconProvider {

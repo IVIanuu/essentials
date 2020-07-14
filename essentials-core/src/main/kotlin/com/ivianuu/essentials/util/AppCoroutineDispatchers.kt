@@ -16,13 +16,17 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 @Reader
-val dispatchers: AppCoroutineDispatchers
-    get() = get()
+inline val dispatchers: AppCoroutineDispatchers
+    get() = given()
 
 /**
  * App coroutine dispatchers
@@ -31,4 +35,13 @@ data class AppCoroutineDispatchers(
     val default: CoroutineDispatcher,
     val main: CoroutineDispatcher,
     val io: CoroutineDispatcher
-)
+) {
+    companion object {
+        @Given(ApplicationComponent::class)
+        fun bind() = AppCoroutineDispatchers(
+            default = Dispatchers.Default,
+            main = Dispatchers.Main,
+            io = Dispatchers.IO
+        )
+    }
+}

@@ -16,7 +16,7 @@ iconProvider = iconProvider,
     }
 }
 
-@Unscoped
+@Given
 internal class WifiActionExecutor(private val wifiManager: WifiManager) :
     ActionExecutor {
     override suspend fun invoke() {
@@ -24,7 +24,7 @@ internal class WifiActionExecutor(private val wifiManager: WifiManager) :
     }
 }
 
-@Unscoped
+@Given
 internal class WifiActionIconProvider(
     broadcastFactory: BroadcastFactory,
     private val wifiManager: WifiManager

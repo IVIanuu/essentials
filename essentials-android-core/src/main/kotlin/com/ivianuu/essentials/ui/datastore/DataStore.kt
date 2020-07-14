@@ -21,13 +21,13 @@ import androidx.compose.MutableState
 import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.rememberCoroutineScope
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun <T> DataStore<T>.asState(): MutableState<T> = key(this) {
-    val scope = compositionScope()
+    val scope = rememberCoroutineScope()
     val state = data.collectAsState(defaultData) as MutableState<T>
     remember {
         ObservableState(state) { newData ->

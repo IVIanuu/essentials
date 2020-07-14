@@ -8,8 +8,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
 @Reader
@@ -18,7 +17,7 @@ suspend fun executeAction(key: String) = withContext(dispatchers.default) {
     val action = getAction(key)
 
     // check permissions
-    if (!get<PermissionManager>().request(action.permissions)) {
+    if (!given<PermissionManager>().request(action.permissions)) {
         d("couldn't get permissions for $key")
         return@withContext
     }

@@ -25,10 +25,9 @@ import android.os.PowerManager
 import androidx.compose.Immutable
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.android.ApplicationResources
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,10 +40,10 @@ import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
 @Reader
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class TwilightHelper(
     private val app: Application,
-    private val resources: @ForApplication Resources,
+    private val resources: ApplicationResources,
     private val powerManager: PowerManager,
     prefs: TwilightPrefs
 ) {

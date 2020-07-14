@@ -17,17 +17,14 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -35,12 +32,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
+@Given(ApplicationComponent::class)
 @Reader
-@Scoped(ApplicationComponent::class)
-class PermissionManager(
-    private val permissionRequestRouteFactory: @Provider () -> PermissionRequestRouteFactory,
-    private val permissionStateProviders: Set<PermissionStateProvider>
-) {
+class PermissionManager {
 
     private val permissionChanges = EventFlow<Unit>()
 
@@ -69,7 +63,7 @@ class PermissionManager(
 
             val request = PermissionRequest(permissions = permissions.toList())
             startUi()
-            navigator.push<Any>(permissionRequestRouteFactory().createRoute(request))
+            navigator.push<Any>(given<PermissionRequestRouteFactory>().createRoute(request))
 
             return@withContext hasPermissions(permissions).first()
         }
@@ -79,6 +73,7 @@ class PermissionManager(
     }
 
     private fun stateProviderFor(permission: Permission): PermissionStateProvider =
-        permissionStateProviders.firstOrNull { it.handles(permission) }
+        given<Set<PermissionStateProvider>>().firstOrNull { it.handles(permission) }
             ?: error("Couldn't find state provider for $permission")
+
 }

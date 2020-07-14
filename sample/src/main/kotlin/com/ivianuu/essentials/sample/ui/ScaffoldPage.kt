@@ -55,7 +55,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 import kotlin.time.milliseconds
 
 @Reader

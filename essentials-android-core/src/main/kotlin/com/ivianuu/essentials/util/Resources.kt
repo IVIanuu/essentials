@@ -10,9 +10,7 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 object Resources {
 

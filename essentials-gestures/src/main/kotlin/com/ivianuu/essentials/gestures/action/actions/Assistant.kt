@@ -7,37 +7,33 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.StringKey
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-@Module
-fun AssistantAction() {
-    installIn<ApplicationComponent>()
-    unscoped {
-        Action(
-            key = "assistant",
-            title = Resources.getString(R.string.es_action_assistant),
-            iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
-            unlockScreen = true,
-            executor = get<AssistantActionExecutor>()
-        ) as @StringKey("assistant") Action
-    }
-    bindAction<@StringKey("assistant") Action>()
+@SetElements(ApplicationComponent::class)
+@Reader
+fun assistantAction() = bindAction {
+    Action(
+        key = "assistant",
+        title = Resources.getString(R.string.es_action_assistant),
+        iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
+        unlockScreen = true,
+        executor = given<AssistantActionExecutor>()
+    )
 }
 
-@Unscoped
-internal class AssistantActionExecutor(
-    private val searchManager: SearchManager
-) : ActionExecutor {
+@Given
+@Reader
+internal class AssistantActionExecutor : ActionExecutor {
     @SuppressLint("DiscouragedPrivateApi")
     override suspend fun invoke() {
         try {
+            val searchManager = given<SearchManager>()
             val launchAssist = searchManager.javaClass
                 .getDeclaredMethod("launchAssist", Bundle::class.java)
             launchAssist.invoke(searchManager, Bundle())

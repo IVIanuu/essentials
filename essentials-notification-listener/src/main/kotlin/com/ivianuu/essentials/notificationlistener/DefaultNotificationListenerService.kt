@@ -17,14 +17,11 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 class DefaultNotificationListenerService : EsNotificationListenerService() {
 
@@ -32,8 +29,8 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
         super.onListenerConnected()
         component.runReader {
             d("listener connected")
-            get<NotificationStore>().onServiceConnected(this)
-            get<@NotificationWorkers Set<suspend () -> Unit>>().forEach { worker ->
+            given<NotificationStore>().onServiceConnected(this)
+            given<NotificationWorkers>().forEach { worker ->
                 connectedScope.launch {
                     scope.launch { worker() }
                 }
@@ -46,7 +43,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
         super.onListenerDisconnected()
         component.runReader {
             d("listener disconnected")
-            get<NotificationStore>().onServiceDisconnected()
+            given<NotificationStore>().onServiceDisconnected()
         }
     }
 
@@ -76,6 +73,6 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     @Reader
     private fun notifyUpdate() {
-        get<NotificationStore>().onNotificationsChanged(activeNotifications.toList())
+        given<NotificationStore>().onNotificationsChanged(activeNotifications.toList())
     }
 }

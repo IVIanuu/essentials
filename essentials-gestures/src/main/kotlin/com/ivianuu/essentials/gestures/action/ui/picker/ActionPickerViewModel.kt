@@ -19,18 +19,16 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
-@Unscoped
+@Given
 internal class ActionPickerViewModel(
-    private val showDefaultOption: @Assisted Boolean,
-    private val showNoneOption: @Assisted Boolean,
-    private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    private val permissionManager: PermissionManager
+    private val showDefaultOption: Boolean,
+    private val showNoneOption: Boolean
 ) : StateViewModel<ActionPickerState>(ActionPickerState()) {
 
     init {
@@ -52,7 +50,7 @@ internal class ActionPickerViewModel(
                     )
                 }
 
-                val actionsAndDelegates = ((actionPickerDelegates
+                val actionsAndDelegates = ((given<Set<ActionPickerDelegate>>()
                     .map {
                         ActionPickerItem.PickerDelegate(
                             it,
@@ -72,7 +70,7 @@ internal class ActionPickerViewModel(
             val result = selectedItem.getResult() ?: return@launch
             if (result is ActionPickerResult.Action) {
                 val action = getAction(result.actionKey)
-                if (!permissionManager.request(action.permissions)) return@launch
+                if (!given<PermissionManager>().request(action.permissions)) return@launch
             }
 
             navigator.popTop(result = result)

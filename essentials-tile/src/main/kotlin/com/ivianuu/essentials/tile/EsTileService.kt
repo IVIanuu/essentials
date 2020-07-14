@@ -19,8 +19,8 @@ package com.ivianuu.essentials.tile
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.android.newServiceComponent
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -32,7 +32,7 @@ abstract class EsTileService : TileService() {
     val component by lazy { newServiceComponent() }
 
     private val dispatchers: AppCoroutineDispatchers by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
 
     val scope by lazy { CoroutineScope(dispatchers.default) }

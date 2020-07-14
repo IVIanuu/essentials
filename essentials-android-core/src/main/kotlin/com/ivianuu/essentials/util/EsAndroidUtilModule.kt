@@ -21,31 +21,35 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
-@Module
-fun EsAndroidUtilModule() {
-    installIn<ApplicationComponent>()
-    scoped {
-        val appInfo = get<Application>().applicationInfo
-        val packageInfo = get<PackageManager>()
+object EsAndroidUtilModule {
+
+    @Given(ApplicationComponent::class)
+    @Reader
+    fun buildInfo(): BuildInfo {
+        val appInfo = given<Application>().applicationInfo
+        val packageInfo = given<PackageManager>()
             .getPackageInfo(appInfo.packageName, 0)
-        BuildInfo(
+        return BuildInfo(
             isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
             packageName = appInfo.packageName,
             versionCode = packageInfo.versionCode
         )
     }
-    scoped { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
-    scoped { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
-    scoped {
-        if (get<BuildInfo>().isDebug) {
-            get<AndroidLogger>()
-        } else {
-            get<NoopLogger>()
-        }
+
+    @Given
+    @Reader
+    fun deviceInfo() = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+
+    @Given
+    @Reader
+    fun logger() = if (given<BuildInfo>().isDebug) {
+        given<AndroidLogger>()
+    } else {
+        given<NoopLogger>()
     }
+
 }

@@ -10,10 +10,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -25,7 +23,7 @@ fun ActionPickerPage(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
         val viewModel = viewModel {
-            get<@Provider (Boolean, Boolean) -> ActionPickerViewModel>()(
+            given<(Boolean, Boolean) -> ActionPickerViewModel>()(
                 showDefaultOption,
                 showNoneOption
             )

@@ -10,9 +10,8 @@ import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.File
@@ -28,14 +27,14 @@ internal suspend fun backupData() = runCatching {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
         val backupFileName = "backup_${dateFormat.format(Date())}"
 
-        val backupFile = File("${get<@BackupDir String>()}/$backupFileName.zip")
+        val backupFile = File("${given<BackupDir>()}/$backupFileName.zip")
         backupFile.mkdirs()
         backupFile.createNewFile()
 
         val dest = FileOutputStream(backupFile)
         val out = ZipOutputStream(BufferedOutputStream(dest))
 
-        val prefsFile = File(get<@PrefsDir String>())
+        val prefsFile = File(given<PrefsDir>())
         val prefsToBackup = prefsFile.listFiles()
 
         for (file in prefsToBackup) {
@@ -53,7 +52,7 @@ internal suspend fun backupData() = runCatching {
         val uri =
             FileProvider.getUriForFile(
                 applicationContext,
-                get<BuildInfo>().packageName,
+                given<BuildInfo>().packageName,
                 backupFile
             )
         val intent = Intent(Intent.ACTION_SEND)
@@ -61,6 +60,6 @@ internal suspend fun backupData() = runCatching {
         intent.data = uri
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        get<Navigator>().push(ActivityRoute { Intent.createChooser(intent, "Share File") })
+        given<Navigator>().push(ActivityRoute { Intent.createChooser(intent, "Share File") })
     }
 }

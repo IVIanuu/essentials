@@ -1,46 +1,39 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
 import androidx.compose.Composable
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 
-@Module
-internal fun <T : Action> bindMediaAction(
+@Reader
+fun bindMediaAction(
     key: String,
     keycode: Int,
     titleRes: Int,
     icon: @Composable () -> Unit
-) {
-    unscoped {
-        Action(
-            key = key,
-            title = Resources.getString(titleRes),
-            iconProvider = SingleActionIconProvider(icon),
-            executor = get<@Provider (Int) -> MediaActionExecutor>()(keycode)
-        ) as T
-    }
-    bindAction<T>()
+) = bindAction {
+    Action(
+        key = key,
+        title = Resources.getString(titleRes),
+        iconProvider = SingleActionIconProvider(icon),
+        executor = given<(Int) -> MediaActionExecutor>()(keycode)
+    )
 }
 
-@Unscoped
+@Given
+@Reader
 internal class MediaActionExecutor(
-    private val keycode: @Assisted Int,
-    private val actionPrefs: ActionPrefs,
-    private val context: @ForApplication Context
+    private val keycode: Int
 ) : ActionExecutor {
     override suspend fun invoke() {
         suspend fun mediaIntent(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
@@ -49,13 +42,13 @@ internal class MediaActionExecutor(
                 KeyEvent(keyEvent, keycode)
             )
 
-            val mediaApp = actionPrefs.actionMediaApp.data.first()
+            val mediaApp = given<ActionPrefs>().actionMediaApp.data.first()
             if (mediaApp != null) {
                 `package` = mediaApp
             }
         }
 
-        context.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN), null)
-        context.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP), null)
+        applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN), null)
+        applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP), null)
     }
 }

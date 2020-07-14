@@ -6,6 +6,8 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.key
+import androidx.compose.mutableStateListOf
+import androidx.compose.mutableStateMapOf
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.setValue
@@ -89,11 +91,11 @@ internal class AnimatedStackState<T>(
 ) {
 
     private var _children = initialChildren
-    val visibleChildren = modelListOf<AnimatedStackChild<T>>()
+    val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
 
     var defaultTransition = NoOpStackTransition
 
-    val runningTransactions = modelMapOf<T, AnimatedStackTransaction<T>>()
+    val runningTransactions = mutableStateMapOf<T, AnimatedStackTransaction<T>>()
 
     init {
         _children

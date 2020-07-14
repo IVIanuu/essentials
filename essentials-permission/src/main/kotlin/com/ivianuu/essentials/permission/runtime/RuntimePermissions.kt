@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission.runtime
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.permission.BindPermissionRequestHandler
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
@@ -27,9 +28,8 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 fun RuntimePermission(
     name: String,
@@ -44,22 +44,22 @@ val Permission.Companion.RuntimePermissionName by lazy {
 }
 
 @BindPermissionStateProvider
-@Unscoped
-internal class RuntimePermissionStateProvider(
-    private val context: @ForApplication Context,
-) : PermissionStateProvider {
+@Given
+@Reader
+internal class RuntimePermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        context.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
+        applicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
+
 }
 
-@Reader
 @BindPermissionRequestHandler
-@Unscoped
+@Given
+@Reader
 internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
@@ -71,4 +71,5 @@ internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
             permission[Permission.RuntimePermissionName]
         )
     }
+
 }

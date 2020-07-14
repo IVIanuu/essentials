@@ -10,8 +10,8 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 fun WriteSecureSettingsPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission withValue Unit,
@@ -24,7 +24,7 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
 
 @Reader
 @BindPermissionStateProvider
-@Unscoped
+@Given
 internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
@@ -37,7 +37,7 @@ internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvi
 
 @Reader
 @BindPermissionRequestHandler
-@Unscoped
+@Given
 internal class WriteSecureSettingsPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =

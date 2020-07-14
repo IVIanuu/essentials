@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.AnimationBuilder
+import androidx.animation.AnimationSpec
 import androidx.animation.Easing
 import androidx.animation.FastOutSlowInEasing
-import androidx.animation.TweenBuilder
+import androidx.animation.TweenSpec
 import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.animation.animatedFloat
@@ -13,18 +13,18 @@ import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-fun defaultAnimationBuilder(
+fun defaultAnimationSpec(
     duration: Duration = 300.milliseconds,
-    easing: Easing = FastOutSlowInEasing,
-    delay: Duration = 0.milliseconds
-): AnimationBuilder<Float> = TweenBuilder<Float>().apply {
-    this.duration = duration.toLongMilliseconds().toInt()
-    this.easing = easing
-    this.delay = delay.toLongMilliseconds().toInt()
-}
+    delay: Duration = 0.milliseconds,
+    easing: Easing = FastOutSlowInEasing
+): AnimationSpec<Float> = TweenSpec<Float>(
+    durationMillis = duration.toLongMilliseconds().toInt(),
+    delay = delay.toLongMilliseconds().toInt(),
+    easing = easing
+)
 
 fun FloatAnimationStackTransition(
-    anim: AnimationBuilder<Float> = defaultAnimationBuilder(),
+    anim: AnimationSpec<Float> = defaultAnimationSpec(),
     apply: @Composable (
         fromAnimatable: Animatable?,
         toAnimatable: Animatable?,

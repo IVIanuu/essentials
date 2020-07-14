@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.android.work.BindWorker
 import kotlinx.coroutines.delay
 

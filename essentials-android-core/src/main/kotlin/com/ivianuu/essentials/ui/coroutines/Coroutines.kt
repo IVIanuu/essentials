@@ -29,13 +29,6 @@ import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 @Composable
-fun compositionScope(context: CoroutineContext = Dispatchers.Main): CoroutineScope {
-    val scope = remember(context) { CoroutineScope(context) }
-    onDispose { scope.cancel() }
-    return scope
-}
-
-@Composable
 fun <T> produceState(
     initial: T,
     block: suspend CoroutineScope.() -> T
@@ -49,10 +42,7 @@ fun <T> produceState(
 ): State<T> {
     val state = state { initial }
 
-    launchInComposition(*inputs) {
-        val result = block()
-        FrameManager.framed { state.value = result }
-    }
+    launchInComposition(*inputs) { state.value = block() }
 
     return state
 }

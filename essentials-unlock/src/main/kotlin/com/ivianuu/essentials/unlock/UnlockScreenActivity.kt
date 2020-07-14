@@ -30,8 +30,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -62,12 +62,12 @@ class UnlockScreenActivity : EsActivity() {
             fun finishWithResult(success: Boolean) {
                 d("finish with result $success")
                 hasResult = true
-                get<UnlockScreen>().onUnlockScreenResult(requestId, success)
+                given<UnlockScreen>().onUnlockScreenResult(requestId, success)
                 finish()
             }
 
-            if (get<SystemBuildInfo>().sdk >= 26) {
-                get<KeyguardManager>().requestDismissKeyguard(this, object :
+            if (given<SystemBuildInfo>().sdk >= 26) {
+                given<KeyguardManager>().requestDismissKeyguard(this, object :
                     KeyguardManager.KeyguardDismissCallback() {
                     override fun onDismissSucceeded() {
                         super.onDismissSucceeded()
@@ -108,7 +108,7 @@ class UnlockScreenActivity : EsActivity() {
         activityComponent.runReader {
             // just in case we didn't respond yet
             if (valid && !hasResult) {
-                get<UnlockScreen>().onUnlockScreenResult(requestId, false)
+                given<UnlockScreen>().onUnlockScreenResult(requestId, false)
             }
         }
         super.onDestroy()

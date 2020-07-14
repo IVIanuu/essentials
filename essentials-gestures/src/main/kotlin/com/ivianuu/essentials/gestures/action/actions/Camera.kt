@@ -5,8 +5,8 @@ package com.ivianuu.essentials.gestures.action.actions
 fun CameraModule() {
 installIn<ApplicationComponent>()
     action { resourceProvider: ResourceProvider,
-             executorFactory: @Provider (Intent) -> IntentActionExecutor ->
-        Action(
+executorFactory: (Intent) -> IntentActionExecutor ->
+Action(
 key = "camera",
 title = getString(R.string.es_action_camera),
 iconProvider = SingleActionIconProvider(Icons.Default.PhotoCamera),

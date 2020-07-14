@@ -7,15 +7,13 @@ import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 @Reader
-@Unscoped
+@Given
 internal class IntentActionExecutor(
-    private val intent: @Assisted Intent
+    private val intent: Intent
 ) : ActionExecutor {
     override suspend fun invoke() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

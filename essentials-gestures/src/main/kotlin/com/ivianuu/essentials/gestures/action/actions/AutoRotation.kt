@@ -15,56 +15,54 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.StringKey
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.scoped
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@Module
-fun AutoRotationModule() {
-    installIn<ApplicationComponent>()
-    unscoped {
+object AutoRotationModule {
+
+    @SetElements(ApplicationComponent::class)
+    @Reader
+    fun autoRotationAction() = bindAction {
         Action(
             key = "auto_rotation",
             title = Resources.getString(R.string.es_action_auto_rotation),
             permissions = permissions { listOf(writeSettings) },
             unlockScreen = true,
-            iconProvider = get<AutoRotationActionIconProvider>(),
-            executor = get<AutoRotationActionExecutor>()
-        ) as @StringKey("auto_rotation") Action
+            iconProvider = given<AutoRotationActionIconProvider>(),
+            executor = given<AutoRotationActionExecutor>()
+        )
     }
-    bindAction<@StringKey("auto_rotation") Action>()
 
-    scoped<@AutoRotationSetting DataStore<Int>> {
-        get<SettingsDataStoreFactory>()
-            .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
-    }
+    @Given(ApplicationComponent::class)
+    @Reader
+    fun autoRotationSetting(): AutoRotationSetting = given<SettingsDataStoreFactory>()
+        .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
+
 }
 
-@Unscoped
-internal class AutoRotationActionExecutor(
-    private val dataStore: @AutoRotationSetting DataStore<Int>
-) : ActionExecutor {
+@Given
+@Reader
+internal class AutoRotationActionExecutor : ActionExecutor {
     override suspend fun invoke() {
-        dataStore.updateData { if (it != 1) 1 else 0 }
+        given<AutoRotationSetting>()
+            .updateData { if (it != 1) 1 else 0 }
     }
 }
 
-@Unscoped
-internal class AutoRotationActionIconProvider(
-    private val dataStore: @AutoRotationSetting DataStore<Int>
-) : ActionIconProvider {
+@Given
+@Reader
+internal class AutoRotationActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
-        get() = dataStore.data
+        get() = given<AutoRotationSetting>().data
             .map { it == 1 }
             .map {
                 if (it) Icons.Default.ScreenRotation
@@ -73,6 +71,5 @@ internal class AutoRotationActionIconProvider(
             .map { { Icon(it) } }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AutoRotationSetting
+@Distinct
+typealias AutoRotationSetting = DataStore<Int>

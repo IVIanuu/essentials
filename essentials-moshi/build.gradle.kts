@@ -26,7 +26,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     compile(Deps.Injekt.core)
-    compile(Deps.Injekt.composition)
     compile(Deps.Injekt.common)
     compile(Deps.Moshi.moshi)
     compile(Deps.Moshi.adapters)

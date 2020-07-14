@@ -18,14 +18,13 @@ package com.ivianuu.essentials.app
 
 import android.content.Context
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
 
-@Module
-fun EsAppModule() {
-    installIn<ApplicationComponent>()
-    unscoped { applicationContext.packageManager!! }
+object EsAppModule {
+
+    @Given
+    @Reader
+    fun packageManager() = applicationContext.packageManager
+
 }

@@ -32,16 +32,14 @@ import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @SuppressLint("NewApi")
 @Reader
 internal fun createTorchNotification(): Notification {
-    val notificationManager = get<NotificationManager>()
-    val systemBuildInfo = get<SystemBuildInfo>()
+    val notificationManager = given<NotificationManager>()
+    val systemBuildInfo = given<SystemBuildInfo>()
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(

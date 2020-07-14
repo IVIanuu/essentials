@@ -10,32 +10,37 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.actionFactory
-import com.ivianuu.essentials.gestures.action.actionPickerDelegate
+import com.ivianuu.essentials.gestures.action.bindActionFactory
+import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.composition.installIn
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-@Module
-fun KeycodeModule() {
-    installIn<ApplicationComponent>()
-    actionFactory<KeycodeActionFactory>()
-    actionPickerDelegate<KeycodeActionPickerDelegate>()
+object KeycodeModule {
+
+    @SetElements(ApplicationComponent::class)
+    @Reader
+    fun actionFactory() = bindActionFactory {
+        given<KeycodeActionFactory>()
+    }
+
+    @SetElements(ApplicationComponent::class)
+    @Reader
+    fun actionPickerDelegate() = bindActionPickerDelegate {
+        given<KeycodeActionPickerDelegate>()
+    }
+
 }
 
 @Reader
-@Unscoped
-internal class KeycodeActionFactory(
-    private val permissions: ActionPermissions,
-    private val rootActionExecutorProvider: @Provider (String) -> RootActionExecutor
-) : ActionFactory {
+@Given
+internal class KeycodeActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
@@ -43,8 +48,8 @@ internal class KeycodeActionFactory(
             key = key,
             title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
             iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
-            permissions = listOf(permissions.root),
-            executor = rootActionExecutorProvider("input keyevent $keycode"),
+            permissions = listOf(given<ActionPermissions>().root),
+            executor = given<(String) -> RootActionExecutor>()("input keyevent $keycode"),
             unlockScreen = false,
             enabled = true
         )
@@ -52,7 +57,7 @@ internal class KeycodeActionFactory(
 }
 
 @Reader
-@Unscoped
+@Given
 internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_keycode)

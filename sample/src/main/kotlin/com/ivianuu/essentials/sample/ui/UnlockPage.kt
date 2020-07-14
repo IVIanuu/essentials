@@ -30,8 +30,6 @@ import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -49,7 +47,7 @@ fun UnlockPage() {
                 scope.launch {
                     Toaster.toast("Turn the screen off and on")
 
-                    get<ScreenStateProvider>().screenState
+                    given<ScreenStateProvider>().screenState
                         .filter { it == ScreenState.Locked }
                         .first()
 

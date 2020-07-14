@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
 
-@Unscoped
+@Given
 class AndroidLogger : Logger {
 
     override fun v(message: String?, throwable: Throwable?, tag: String?) {

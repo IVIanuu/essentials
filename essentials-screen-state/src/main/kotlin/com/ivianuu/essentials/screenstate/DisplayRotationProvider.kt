@@ -23,12 +23,18 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,27 +50,21 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Scoped(ApplicationComponent::class)
-class DisplayRotationProvider(
-    private val app: Application,
-    private val dispatchers: AppCoroutineDispatchers,
-    scope: @GlobalScope CoroutineScope,
-    private val logger: Logger,
-    screenStateProvider: ScreenStateProvider,
-    private val windowManager: WindowManager
-) {
+@Given(ApplicationComponent::class)
+@Reader
+class DisplayRotationProvider {
 
-    val displayRotation: Flow<DisplayRotation> = screenStateProvider.screenState
+    val displayRotation: Flow<DisplayRotation> = given<ScreenStateProvider>().screenState
         .flatMapLatest { screenState ->
             if (screenState.isOn) {
                 merge(
                     rotationChanges(),
                     configChanges()
                 )
-                    .onStart { logger.d("sub for rotation") }
-                    .onCompletion { logger.d("dispose rotation") }
+                    .onStart { d("sub for rotation") }
+                    .onCompletion { d("dispose rotation") }
             } else {
-                logger.d("do not observe rotation while screen is off")
+                d("do not observe rotation while screen is off")
                 emptyFlow()
             }
         }
@@ -72,14 +72,14 @@ class DisplayRotationProvider(
         .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
         .shareIn(
-            scope = scope,
+            scope = globalScope,
             replay = 1,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )
 
     private suspend fun getCurrentDisplayRotation(): DisplayRotation =
         withContext(dispatchers.default) {
-            when (windowManager.defaultDisplay.rotation) {
+            when (given<WindowManager>().defaultDisplay.rotation) {
                 Surface.ROTATION_0 -> DisplayRotation.PortraitUp
                 Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
                 Surface.ROTATION_180 -> DisplayRotation.PortraitDown
@@ -89,7 +89,8 @@ class DisplayRotationProvider(
         }
 
     private fun rotationChanges() = callbackFlow<Unit> {
-        val listener = object : OrientationEventListener(app, SensorManager.SENSOR_DELAY_NORMAL) {
+        val listener = object :
+            OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
             override fun onOrientationChanged(orientation: Int) {
                 offer(Unit)
             }
@@ -110,7 +111,7 @@ class DisplayRotationProvider(
             override fun onTrimMemory(level: Int) {
             }
         }
-        app.registerComponentCallbacks(callbacks)
-        awaitClose { app.unregisterComponentCallbacks(callbacks) }
+        applicationContext.registerComponentCallbacks(callbacks)
+        awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
     }
 }

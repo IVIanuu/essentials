@@ -33,15 +33,13 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
 @Composable
 fun TorchPage() {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
-        val torchManager = get<TorchManager>()
+        val torchManager = given<TorchManager>()
 
         val torchState = torchManager.torchState.collectAsState()
 

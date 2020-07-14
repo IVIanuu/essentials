@@ -16,7 +16,7 @@ iconProvider = SingleActionIconProvider(Icons.Default.VolumeUp),
     }
 }
 
-@Unscoped
+@Given
 internal class VolumeActionExecutor(
     private val audioManager: AudioManager
 ) : ActionExecutor {

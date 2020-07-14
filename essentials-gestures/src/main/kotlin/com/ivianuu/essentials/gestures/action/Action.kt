@@ -6,10 +6,8 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.set
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
 @Immutable
@@ -31,14 +29,11 @@ interface ActionExecutor {
     suspend operator fun invoke()
 }
 
-@Module
-fun <T : Action> bindAction() {
-    set<Action> { add<T>() }
-}
+inline fun bindAction(block: () -> Action) = setOf(block())
 
 @Reader
-internal fun permissions(block: ActionPermissions.() -> List<Permission>) =
-    get<ActionPermissions>().block()
+internal inline fun permissions(block: ActionPermissions.() -> List<Permission>) =
+    given<ActionPermissions>().block()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
@@ -47,10 +42,7 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-@Module
-fun <T : ActionFactory> actionFactory() {
-    set<ActionFactory> { add<T>() }
-}
+inline fun bindActionFactory(block: () -> ActionFactory) = setOf(block())
 
 interface ActionPickerDelegate {
     val title: String
@@ -58,7 +50,4 @@ interface ActionPickerDelegate {
     suspend fun getResult(navigator: Navigator): ActionPickerResult?
 }
 
-@Module
-fun <T : ActionPickerDelegate> actionPickerDelegate() {
-    set<ActionPickerDelegate> { add<T>() }
-}
+inline fun bindActionPickerDelegate(block: () -> ActionPickerDelegate) = setOf(block())

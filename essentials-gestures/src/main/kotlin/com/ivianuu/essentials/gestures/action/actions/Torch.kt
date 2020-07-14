@@ -17,7 +17,7 @@ iconProvider = iconProvider,
     }
 }
 
-@Unscoped
+@Given
 internal class TorchActionExecutor(
     private val torchManager: TorchManager
 ) : ActionExecutor {
@@ -26,7 +26,7 @@ internal class TorchActionExecutor(
     }
 }
 
-@Unscoped
+@Given
 internal class TorchActionIconProvider(
     private val torchManager: TorchManager
 ) : ActionIconProvider {

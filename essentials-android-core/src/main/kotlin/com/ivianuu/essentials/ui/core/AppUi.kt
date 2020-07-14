@@ -17,22 +17,19 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.Composable
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.alias
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.composition.BindingEffect
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AppUiMarker
-
-@BindingEffect(ActivityComponent::class)
+@Effect
 annotation class AppUi {
     companion object {
-        @Module
-        operator fun <T : @Composable () -> Unit> invoke() {
-            alias<T, @AppUiMarker @Composable () -> Unit>()
-        }
+        @Reader
+        operator fun <T : AppUiMarker> invoke(): AppUiMarker =
+            given<T>() as AppUiMarker // todo remove cast once compiler is fixed
     }
 }
+
+@Distinct
+typealias AppUiMarker = @Composable () -> Unit

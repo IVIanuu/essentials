@@ -15,7 +15,7 @@ public final class AndroidImageAssetAccessor {
     @NotNull
     public static Bitmap getBitmap(ImageAsset imageAsset) {
         //noinspection KotlinInternalInJava
-        return ((AndroidImageAsset) imageAsset).getBitmap$ui_graphics_release();
+        return ((AndroidImageAsset) imageAsset).getBitmap$core_graphics_release();
     }
 
 }

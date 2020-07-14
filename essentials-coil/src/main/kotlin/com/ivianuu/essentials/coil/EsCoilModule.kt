@@ -16,44 +16,48 @@
 
 package com.ivianuu.essentials.coil
 
-import android.content.Context
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.scoped
-import com.ivianuu.injekt.set
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-@Module
-fun EsCoilModule() {
-    installIn<ApplicationComponent>()
-    set<Decoder>()
-    set<FetcherBinding<*>>()
-    set<MapperBinding<*>>()
-    set<MeasuredMapperBinding<*>>()
+object EsCoilModule {
 
-    scoped {
-        ImageLoader.Builder(applicationContext)
-            .componentRegistry {
-                get<Set<Decoder>>().forEach { add(it) }
-                get<Set<FetcherBinding<*>>>()
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.fetcher)
-                    }
-                get<Set<MapperBinding<*>>>()
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.mapper)
-                    }
-                get<Set<MeasuredMapperBinding<*>>>()
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.mapper)
-                    }
-            }
-            .build()
-    }
+    @SetElements(ApplicationComponent::class)
+    fun decoders() = emptySet<Decoder>()
+
+    @SetElements(ApplicationComponent::class)
+    fun fetchers() = emptySet<FetcherBinding<*>>()
+
+    @SetElements(ApplicationComponent::class)
+    fun mappers() = emptySet<MapperBinding<*>>()
+
+    @SetElements(ApplicationComponent::class)
+    fun measuredMappers() = emptySet<MeasuredMapperBinding<*>>()
+
+    @Given(ApplicationComponent::class)
+    @Reader
+    fun imageLoader() = ImageLoader.Builder(applicationContext)
+        .componentRegistry {
+            given<Set<Decoder>>().forEach { add(it) }
+            given<Set<FetcherBinding<*>>>()
+                .forEach { binding ->
+                    CoilAccessor.add(this, binding.type.java, binding.fetcher)
+                }
+            given<Set<MapperBinding<*>>>()
+                .forEach { binding ->
+                    CoilAccessor.add(this, binding.type.java, binding.mapper)
+                }
+            given<Set<MeasuredMapperBinding<*>>>()
+                .forEach { binding ->
+                    CoilAccessor.add(this, binding.type.java, binding.mapper)
+                }
+        }
+        .build()
+
 }

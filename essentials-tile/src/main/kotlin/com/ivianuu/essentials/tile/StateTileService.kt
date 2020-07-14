@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
-
+import com.ivianuu.injekt.runReader
 /**
  * Stateful tile service
  */

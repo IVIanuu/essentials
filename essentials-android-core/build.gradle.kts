@@ -35,13 +35,8 @@ dependencies {
     api(Deps.AndroidX.Lifecycle.runtime)
 
     api(Deps.AndroidX.Compose.runtime)
-    api(Deps.AndroidX.Ui.animation)
-    api(Deps.AndroidX.Ui.core)
-    api(Deps.AndroidX.Ui.foundation)
-    api(Deps.AndroidX.Ui.layout)
-    api(Deps.AndroidX.Ui.material)
-    api(Deps.AndroidX.Ui.materialIconsExtended)
-    api(Deps.AndroidX.Ui.text)
+    api(Deps.AndroidX.Compose.material)
+    api(Deps.AndroidX.Compose.materialIconsExtended)
 
     api(Deps.Coroutines.android)
 

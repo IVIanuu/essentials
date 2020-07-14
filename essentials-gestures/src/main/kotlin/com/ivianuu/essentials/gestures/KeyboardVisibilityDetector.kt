@@ -21,8 +21,11 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -38,14 +41,11 @@ import java.lang.reflect.Method
 /**
  * Provides info about the keyboard state
  */
-@Scoped(ApplicationComponent::class)
-class KeyboardVisibilityDetector(
-    private val scope: @GlobalScope CoroutineScope,
-    private val inputMethodManager: InputMethodManager,
-    private val services: AccessibilityServices
-) {
+@Given(ApplicationComponent::class)
+@Reader
+class KeyboardVisibilityDetector {
 
-    val keyboardVisible: Flow<Boolean> = services.events
+    val keyboardVisible: Flow<Boolean> = given<AccessibilityServices>().events
         .filter {
             it.isFullScreen &&
                     it.className == "android.inputmethodservice.SoftInputWindow"
@@ -62,13 +62,13 @@ class KeyboardVisibilityDetector(
         .map { it > 0 }
         .distinctUntilChanged()
         .shareIn(
-            scope = scope,
+            scope = globalScope,
             replay = 1,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )
 
     init {
-        services.applyConfig(
+        given<AccessibilityServices>().applyConfig(
             AccessibilityConfig(
                 eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
             )
@@ -77,6 +77,7 @@ class KeyboardVisibilityDetector(
 
     private fun getKeyboardHeight(): Int {
         return try {
+            val inputMethodManager = given<InputMethodManager>()
             val method = getInputMethodWindowVisibleHeightMethod
                 ?: inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
                     .also { getInputMethodWindowVisibleHeightMethod = it }

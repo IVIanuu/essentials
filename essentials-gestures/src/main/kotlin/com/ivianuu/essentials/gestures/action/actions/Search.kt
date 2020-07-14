@@ -5,8 +5,8 @@ package com.ivianuu.essentials.gestures.action.actions
 fun SearchModule() {
 installIn<ApplicationComponent>()
     action { resourceProvider: ResourceProvider,
-             executorFactory: @Provider (Intent) -> IntentActionExecutor ->
-        Action(
+executorFactory: (Intent) -> IntentActionExecutor ->
+Action(
 key = "search",
 title = getString(R.string.es_action_search),
 iconProvider = SingleActionIconProvider(Icons.Default.Search),

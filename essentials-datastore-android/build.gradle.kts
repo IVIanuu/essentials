@@ -12,7 +12,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.AndroidX.Ui.core)
+    api(Deps.AndroidX.Compose.core)
     api(Deps.Coroutines.core)
     api(project(":essentials-datastore"))
     kapt(project(":essentials-compiler"))

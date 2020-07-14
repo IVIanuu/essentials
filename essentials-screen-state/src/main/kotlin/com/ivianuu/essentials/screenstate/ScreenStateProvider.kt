@@ -27,8 +27,8 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -43,7 +43,7 @@ import kotlinx.coroutines.withContext
  * Provides the current screen state
  */
 @Reader
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class ScreenStateProvider(
     private val keyguardManager: KeyguardManager,
     private val powerManager: PowerManager

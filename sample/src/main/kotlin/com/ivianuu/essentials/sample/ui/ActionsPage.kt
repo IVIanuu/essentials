@@ -16,7 +16,6 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.uiScope
 import com.ivianuu.essentials.util.safeAs
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -36,6 +35,7 @@ fun ActionsPage() {
                             showNoneOption = false
                         )
                     }.safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+
                     executeAction(action)
                 }
             }

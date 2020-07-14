@@ -15,9 +15,8 @@ dependencies {
     compile(project(":essentials-datastore"))
     compile(project(":essentials-moshi"))
 
-    compile(Deps.Injekt.common)
-    compile(Deps.Injekt.composition)
     compile(Deps.Injekt.core)
+    compile(Deps.Injekt.common)
 
     compile(Deps.Kotlin.stdlib)
 

@@ -36,14 +36,13 @@ import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
 @Composable
 fun BillingPage() {
-    val purchaseManager = get<PurchaseManager>()
+    val purchaseManager = given<PurchaseManager>()
     val isPurchased = remember { purchaseManager.isPurchased(DummySku) }
         .collectAsState(false)
 

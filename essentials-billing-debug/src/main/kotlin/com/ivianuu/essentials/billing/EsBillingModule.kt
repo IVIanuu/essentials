@@ -19,24 +19,26 @@ package com.ivianuu.essentials.billing
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
-@Module
-fun EsBillingModule() {
-    installIn<ApplicationComponent>()
+object EsBillingModule {
 
-    var debugBillingClient: DebugBillingClient? = null
-    unscoped {
-        get<PurchaseManager>()
-        debugBillingClient!!
+    private var debugBillingClient: DebugBillingClient? = null
+
+    @Given
+    @Reader
+    fun debugBillingClient(): DebugBillingClient {
+        given<PurchaseManager>()
+        return debugBillingClient!!
     }
 
-    unscoped<BillingClient> { listener: PurchasesUpdatedListener ->
-        get<@Provider (PurchasesUpdatedListener) -> DebugBillingClient>()(listener)
+    @Given
+    @Reader
+    fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
+        given<(PurchasesUpdatedListener) -> DebugBillingClient>()(listener)
             .also { debugBillingClient = it }
-    }
+
 }
+

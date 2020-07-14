@@ -21,9 +21,8 @@ import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlin.reflect.KClass
 
 class StartupReceiver : EsBroadcastReceiver() {
@@ -33,7 +32,7 @@ class StartupReceiver : EsBroadcastReceiver() {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         component.runReader {
             d("on system boot")
-            get<@BootListeners Set<() -> Unit>>().forEach { it() }
+            given<BootListeners>().forEach { it() }
         }
     }
 }

@@ -23,8 +23,9 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.util.startActivityForResult
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -41,10 +42,8 @@ val Permission.Companion.Intent by lazy {
 
 @Reader
 @BindPermissionRequestHandler
-@Unscoped
-internal class IntentPermissionRequestHandler(
-    private val permissionManager: PermissionManager
-) : PermissionRequestHandler {
+@Given
+internal class IntentPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.Intent in permission
@@ -55,7 +54,7 @@ internal class IntentPermissionRequestHandler(
                 startActivityForResult(permission[Permission.Intent])
             }.onAwait {}
             async {
-                while (!permissionManager.hasPermissions(permission).first()) {
+                while (!given<PermissionManager>().hasPermissions(permission).first()) {
                     delay(100)
                 }
             }.onAwait {}

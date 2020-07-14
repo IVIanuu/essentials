@@ -1,14 +1,21 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class GlobalScope
+@Distinct
+typealias GlobalScope = CoroutineScope
 
 @Reader
-val globalScope: @GlobalScope CoroutineScope
-    get() = get()
+inline val globalScope: GlobalScope
+    get() = given()
+
+object GlobalScopeModule {
+    @Given(ApplicationComponent::class)
+    @Reader
+    fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)
+}

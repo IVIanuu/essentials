@@ -16,53 +16,33 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.map
-import com.ivianuu.injekt.set
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
-/**
- * Runs while the app is alive
- */
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class AppWorker {
     companion object {
-        @Module
-        operator fun <T : suspend () -> Unit> invoke() {
-            set<@AppWorkers Set<suspend () -> Unit>, suspend () -> Unit> {
-                add<T>()
-            }
-        }
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
     }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AppWorkers
-
-@Module
-fun EsAppWorkerModule() {
-    installIn<ApplicationComponent>()
-    set<@AppWorkers Set<suspend () -> Unit>, suspend () -> Unit>()
-}
+@Distinct
+typealias AppWorkers = Set<suspend () -> Unit>
 
 @Reader
 fun runAppWorkers() {
     d("run workers")
-    get<@AppWorkers Set<suspend () -> Unit>>()
+    given<AppWorkers>()
         .forEach { worker ->
             globalScope.launch {
                 worker()

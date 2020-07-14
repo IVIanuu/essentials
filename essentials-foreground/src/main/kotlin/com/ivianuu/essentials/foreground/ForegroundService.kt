@@ -19,8 +19,8 @@ package com.ivianuu.essentials.foreground
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -28,13 +28,13 @@ import kotlinx.coroutines.flow.onStart
 class ForegroundService : EsService() {
 
     private val foregroundManager: ForegroundManager by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
     private val logger: Logger by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
     private val notificationManager: NotificationManager by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
 
     private var lastJobs = listOf<ForegroundJob>()

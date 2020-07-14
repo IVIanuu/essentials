@@ -27,8 +27,10 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
 fun PackageUsageStatsPermission(
     vararg metadata: KeyWithValue<*>
@@ -43,20 +45,18 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Unscoped
-internal class PackageUsageStatsPermissionStateProvider(
-    private val appOps: AppOpsManager,
-    private val context: @ForApplication Context
-) : PermissionStateProvider {
+@Given
+@Reader
+internal class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsPackageUsageStatsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        val mode = appOps.checkOpNoThrow(
+        val mode = given<AppOpsManager>().checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
             Process.myUid(),
-            context.packageName
+            given<BuildInfo>().packageName
         )
 
         return mode == AppOpsManager.MODE_ALLOWED

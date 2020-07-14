@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
@@ -57,7 +56,7 @@ fun NavBarPage() {
             val scope = compositionScope()
             fun updateNavBarState(navBarHidden: Boolean) {
                 scope.launch {
-                    get<NavBarManager>().setNavBarConfig(
+                    given<NavBarManager>().setNavBarConfig(
                         NavBarConfig(navBarHidden)
                     )
                 }

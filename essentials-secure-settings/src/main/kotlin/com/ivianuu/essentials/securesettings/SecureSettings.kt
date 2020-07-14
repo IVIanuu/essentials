@@ -22,7 +22,7 @@ import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 object SecureSettings {
 
@@ -33,7 +33,7 @@ object SecureSettings {
     @Reader
     suspend fun grantPermissionViaRoot(): Boolean {
         return try {
-            Shell.run("pm grant ${get<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS")
+            Shell.run("pm grant ${given<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS")
             canWrite()
         } catch (e: Exception) {
             false

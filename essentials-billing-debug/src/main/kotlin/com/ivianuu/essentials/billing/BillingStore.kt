@@ -27,15 +27,16 @@ import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 @Reader
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class BillingStore internal constructor(
-    prefs: BillingPrefs
+    prefs: BillingPrefs = given()
 ) {
 
     private val products = prefs.products

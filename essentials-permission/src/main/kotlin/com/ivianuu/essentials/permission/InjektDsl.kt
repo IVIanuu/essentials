@@ -17,47 +17,38 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.alias
-import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.set
-import com.ivianuu.injekt.unscoped
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class BindPermissionStateProvider {
     companion object {
-        @Module
-        operator fun <T : PermissionStateProvider> invoke() {
-            set<PermissionStateProvider> { add<T>() }
-        }
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
+            setOf(given<T>())
     }
 }
 
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class BindPermissionRequestHandler {
     companion object {
-        @Module
-        operator fun <T : PermissionRequestHandler> invoke() {
-            unscoped<T>()
-            set<PermissionRequestHandler> { add<T>() }
-        }
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
+            setOf(given<T>())
     }
 }
 
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class BindPermissionRequestRouteFactory {
     companion object {
-        @Module
-        operator fun <T : PermissionRequestRouteFactory> invoke() {
-            alias<T, PermissionRequestRouteFactory>()
-        }
+        @Given
+        @Reader
+        operator fun <T : PermissionRequestRouteFactory> invoke(): PermissionRequestRouteFactory =
+            given<T>()
     }
-}
-
-@Module
-fun EsPermissionsModule() {
-    installIn<ApplicationComponent>()
-    set<PermissionRequestHandler>()
-    set<PermissionStateProvider>()
 }

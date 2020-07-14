@@ -52,9 +52,9 @@ import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -64,11 +64,11 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @Reader
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class DebugBillingClient internal constructor(
-    private val buildInfo: BuildInfo,
-    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
-    private val billingStore: BillingStore
+    private val buildInfo: BuildInfo = given(),
+    private val purchasesUpdatedListener: PurchasesUpdatedListener,
+    private val billingStore: BillingStore = given()
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null

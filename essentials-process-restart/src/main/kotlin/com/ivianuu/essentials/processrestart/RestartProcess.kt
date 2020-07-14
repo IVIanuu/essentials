@@ -24,14 +24,12 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 suspend fun restartProcess() {
-    val intent = get<PackageManager>().getLaunchIntentForPackage(get<BuildInfo>().packageName)!!
+    val intent = given<PackageManager>().getLaunchIntentForPackage(given<BuildInfo>().packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
     d("restart process %$intent")
     ProcessRestartActivity.launch(applicationContext, intent)

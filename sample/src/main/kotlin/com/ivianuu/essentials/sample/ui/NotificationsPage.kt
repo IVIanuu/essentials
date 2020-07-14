@@ -47,8 +47,6 @@ import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -65,8 +63,8 @@ fun NotificationsPage() {
             )
         }
 
-        val notificationStore = get<NotificationStore>()
-        val permissionManager = get<PermissionManager>()
+        val notificationStore = given<NotificationStore>()
+        val permissionManager = given<PermissionManager>()
 
         ResourceBox(
             resource = remember {

@@ -31,8 +31,8 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -55,7 +55,7 @@ import kotlinx.coroutines.withContext
  * Handles the state of the navigation bar
  */
 @Reader
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class NavBarManager internal constructor(
     private val app: Application,
     private val displayRotationProvider: DisplayRotationProvider,

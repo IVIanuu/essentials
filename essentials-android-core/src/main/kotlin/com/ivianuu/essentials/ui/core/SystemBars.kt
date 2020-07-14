@@ -26,11 +26,13 @@ import androidx.compose.Stable
 import androidx.compose.StructurallyEqual
 import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
+import androidx.compose.mutableStateListOf
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
+import androidx.compose.structuralEqualityPolicy
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.composed
@@ -60,7 +62,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = contentColor().isDark
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
-    var globalBounds by state<PxBounds?>(StructurallyEqual) { null }
+    var globalBounds by state<PxBounds?>(structuralEqualityPolicy()) { null }
     val density = DensityAmbient.current
 
     onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
@@ -103,7 +105,7 @@ data class SystemBarStyle(
 @Stable
 private class SystemBarManager {
 
-    val styles = modelListOf<SystemBarStyle>()
+    val styles = mutableStateListOf<SystemBarStyle>()
 
     @Composable
     fun updateSystemBars() {

@@ -42,9 +42,6 @@ import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
@@ -52,7 +49,7 @@ import kotlin.time.minutes
 @Reader
 @Composable
 fun PrefsPage() {
-    val prefs = get<Prefs>()
+    val prefs = given<Prefs>()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
@@ -157,7 +154,7 @@ fun PrefsPage() {
     }
 }
 
-@Scoped(ApplicationComponent::class)
+@Given(ApplicationComponent::class)
 class Prefs(factory: DiskDataStoreFactory) {
     val switch = factory.create("switch") { false }
     val checkbox = factory.create("checkbox") { false }
