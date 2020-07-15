@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateProvider
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -30,6 +30,7 @@ import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ fun UnlockPage() {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {
-        val scope = compositionScope()
+        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {

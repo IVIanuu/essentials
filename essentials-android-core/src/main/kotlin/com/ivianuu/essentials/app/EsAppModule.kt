@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.app
 
-import android.content.Context
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
@@ -25,6 +23,6 @@ object EsAppModule {
 
     @Given
     @Reader
-    fun packageManager() = applicationContext.packageManager
+    fun packageManager() = applicationContext.packageManager!!
 
 }

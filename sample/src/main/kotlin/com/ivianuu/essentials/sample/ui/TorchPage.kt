@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.collectAsState
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -28,11 +29,11 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.torch.TorchManager
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
@@ -52,7 +53,7 @@ fun TorchPage() {
                 style = MaterialTheme.typography.h4
             )
             Spacer(Modifier.preferredHeight(8.dp))
-            val scope = compositionScope()
+            val scope = rememberCoroutineScope()
             Button(
                 onClick = {
                     scope.launch {

@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
 
 @SuppressLint("NewApi")

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.collectAsState
 import androidx.compose.remember
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -32,7 +33,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
 import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
@@ -61,7 +61,7 @@ fun BillingPage() {
 
             Spacer(Modifier.height(8.dp))
 
-            val scope = compositionScope()
+            val scope = rememberCoroutineScope()
 
             if (!isPurchased.value) {
                 Button(

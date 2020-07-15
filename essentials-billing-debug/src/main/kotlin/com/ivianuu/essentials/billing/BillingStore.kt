@@ -35,12 +35,10 @@ import kotlinx.coroutines.withContext
 
 @Reader
 @Given(ApplicationComponent::class)
-class BillingStore internal constructor(
-    prefs: BillingPrefs = given()
-) {
+class BillingStore {
 
-    private val products = prefs.products
-    private val purchases = prefs.purchases
+    private val products = given<BillingPrefs>().products
+    private val purchases = given<BillingPrefs>().purchases
 
     suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
         withContext(dispatchers.default) {
@@ -49,8 +47,9 @@ class BillingStore internal constructor(
 
     suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
         withContext(dispatchers.default) {
-            InternalPurchasesResult(BillingResult.newBuilder()
-                .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
+            InternalPurchasesResult(
+                BillingResult.newBuilder()
+                    .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
                 purchases.data.first().filter { it.signature.endsWith(skuType) })
         }
 

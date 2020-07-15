@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.animation.FastOutSlowInEasing
-import androidx.animation.TweenBuilder
+import androidx.animation.TweenSpec
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
@@ -166,10 +166,12 @@ private class ScaffoldControls {
 }
 
 fun Modifier.fabAnimation(visible: Boolean): Modifier = composed {
-    val fraction = animate(if (visible) 1f else 0f, TweenBuilder<Float>().apply {
-        duration = 120.milliseconds.toLongMilliseconds().toInt()
-        easing = FastOutSlowInEasing
-    })
+    val fraction = animate(
+        if (visible) 1f else 0f, TweenSpec(
+            durationMillis = 120.milliseconds.toLongMilliseconds().toInt(),
+            easing = FastOutSlowInEasing
+        )
+    )
     drawLayer(
         scaleX = fraction,
         scaleY = fraction,

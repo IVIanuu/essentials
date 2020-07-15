@@ -2,6 +2,7 @@ package com.ivianuu.essentials.sample.app
 
 import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializer
+
 @AppInitializer
 fun initializeStrictModule() {
     StrictMode.setThreadPolicy(

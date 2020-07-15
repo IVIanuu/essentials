@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+
 @Composable
 fun TabsPage() {
     var selectedIndex by savedInstanceState { 0 }

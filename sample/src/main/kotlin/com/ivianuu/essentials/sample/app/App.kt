@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.composition.initializeCompositions
+import com.ivianuu.injekt.initializeComponents
 
 class App : EsApp() {
 
     override fun onCreate() {
-        initializeCompositions()
+        initializeComponents()
         super.onCreate()
     }
 

@@ -65,10 +65,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Reader
 @Given(ApplicationComponent::class)
-class DebugBillingClient internal constructor(
-    private val buildInfo: BuildInfo = given(),
-    private val purchasesUpdatedListener: PurchasesUpdatedListener,
-    private val billingStore: BillingStore = given()
+class DebugBillingClient(
+    private val purchasesUpdatedListener: PurchasesUpdatedListener
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -84,11 +82,15 @@ class DebugBillingClient internal constructor(
 
     private var clientState = DISCONNECTED
 
+    private val billingStore = given<BillingStore>()
+
     override fun isReady(): Boolean = clientState == CONNECTED
 
     override fun startConnection(listener: BillingClientStateListener) {
         if (isReady) {
-            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build())
+            listener.onBillingSetupFinished(
+                BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build()
+            )
             return
         }
 
@@ -352,7 +354,8 @@ class DebugBillingClient internal constructor(
     }
 
     private fun SkuDetails.toPurchaseData(): Purchase {
-        val json = """{"orderId":"$sku..0","packageName":"${buildInfo.packageName}","productId":
+        val json =
+            """{"orderId":"$sku..0","packageName":"${given<BuildInfo>().packageName}","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
       |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")

@@ -51,7 +51,6 @@ fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = nu
     given<Logger>().wtf(message, throwable, tag)
 }
 
-@Given
 object NoopLogger : Logger {
     override fun v(message: String?, throwable: Throwable?, tag: String?) {
     }
@@ -69,6 +68,12 @@ object NoopLogger : Logger {
     }
 
     override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    // todo replace with @Given on NoopLogger
+    object Companion {
+        @Given
+        fun bind() = NoopLogger
     }
 }
 

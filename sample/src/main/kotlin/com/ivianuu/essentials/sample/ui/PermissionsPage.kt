@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
 import androidx.compose.Composable
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Icon
@@ -40,11 +41,11 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
@@ -101,7 +102,7 @@ fun PermissionsPage() {
             Permission.Icon withValue { Icon(Icons.Default.Menu) }
         )
 
-        val scope = compositionScope()
+        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {

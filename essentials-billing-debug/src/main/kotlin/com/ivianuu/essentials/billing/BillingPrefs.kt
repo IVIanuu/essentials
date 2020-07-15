@@ -11,8 +11,8 @@ import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
 @Reader
-internal class BillingPrefs(factory: DiskDataStoreFactory = given()) {
-    val products = factory.create("billing_products") { emptySet<String>() }
+internal class BillingPrefs {
+    val products = given<DiskDataStoreFactory>().create("billing_products") { emptySet<String>() }
         .map(
             fromRaw = { productsJson ->
                 productsJson.map {
@@ -22,7 +22,7 @@ internal class BillingPrefs(factory: DiskDataStoreFactory = given()) {
             toRaw = { products -> products.map { it.originalJson }.toSet() }
         )
 
-    val purchases = factory.create("billing_purchases") { emptySet<String>() }
+    val purchases = given<DiskDataStoreFactory>().create("billing_purchases") { emptySet<String>() }
         .map(
             fromRaw = { purchasesJson ->
                 purchasesJson.map { purchase ->

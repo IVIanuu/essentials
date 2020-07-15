@@ -17,6 +17,7 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.isLight
+
 @Composable
 fun DynamicSystemBarsPage() {
     Stack {

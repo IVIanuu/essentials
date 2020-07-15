@@ -41,7 +41,9 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
