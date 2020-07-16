@@ -23,58 +23,32 @@ interface Logger {
 
 @Reader
 fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().v(message, throwable, tag)
+    given<Logger?>()?.v(message, throwable, tag)
 }
 
 @Reader
 fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().d(message, throwable, tag)
+    given<Logger?>()?.d(message, throwable, tag)
 }
 
 @Reader
 fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().i(message, throwable, tag)
+    given<Logger?>()?.i(message, throwable, tag)
 }
 
 @Reader
 fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().w(message, throwable, tag)
+    given<Logger?>()?.w(message, throwable, tag)
 }
 
 @Reader
 fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().e(message, throwable, tag)
+    given<Logger?>()?.e(message, throwable, tag)
 }
 
 @Reader
 fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger>().wtf(message, throwable, tag)
-}
-
-object NoopLogger : Logger {
-    override fun v(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun d(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun i(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun w(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun e(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    // todo replace with @Given on NoopLogger
-    object Companion {
-        @Given
-        fun bind() = NoopLogger
-    }
+    given<Logger?>()?.wtf(message, throwable, tag)
 }
 
 @Given

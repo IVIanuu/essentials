@@ -15,7 +15,9 @@ inline val globalScope: GlobalScope
     get() = given()
 
 object GlobalScopeModule {
+
     @Given(ApplicationComponent::class)
     @Reader
     fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)
+
 }

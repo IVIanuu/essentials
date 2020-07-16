@@ -16,10 +16,19 @@
 
 package com.ivianuu.essentials.util
 
+import android.os.Build
 import androidx.compose.Immutable
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
 
 @Immutable
 data class DeviceInfo(
     val model: String,
     val manufacturer: String
-)
+) {
+    companion object {
+        @Given
+        @Reader
+        fun bind() = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+    }
+}
