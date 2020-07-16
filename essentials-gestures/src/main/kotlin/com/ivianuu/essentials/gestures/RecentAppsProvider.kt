@@ -88,7 +88,7 @@ class RecentAppsProvider {
     }
 
     private fun handlePackage(packageName: String) {
-        /*val recentApps = _recentApps.value.toMutableList()
+        val recentApps = _recentApps.value.toMutableList()
         val index = recentApps.indexOf(packageName)
 
         // app has not changed
@@ -110,6 +110,6 @@ class RecentAppsProvider {
         d("recent apps changed $finalRecentApps")
 
         // push
-        _recentApps.value = finalRecentApps*/
+        _recentApps.value = finalRecentApps
     }
 }
