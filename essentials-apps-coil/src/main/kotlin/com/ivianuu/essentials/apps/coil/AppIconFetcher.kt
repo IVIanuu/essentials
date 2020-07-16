@@ -27,6 +27,7 @@ import coil.fetch.Fetcher
 import coil.size.Size
 import com.ivianuu.essentials.coil.FetcherBinding
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
@@ -39,10 +40,7 @@ data class AppIcon(val packageName: String)
 
 @Given
 @Reader
-internal class AppIconFetcher(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val packageManager: PackageManager
-) : Fetcher<AppIcon> {
+internal class AppIconFetcher : Fetcher<AppIcon> {
 
     override fun key(data: AppIcon): String? = data.packageName
 
@@ -52,18 +50,18 @@ internal class AppIconFetcher(
         size: Size,
         options: Options
     ): FetchResult = withContext(dispatchers.io) {
-        val drawable = packageManager.getApplicationIcon(data.packageName)
+        val drawable = given<PackageManager>().getApplicationIcon(data.packageName)
         return@withContext DrawableResult(drawable, false, DataSource.DISK)
     }
 
     companion object {
         @SetElements(ApplicationComponent::class)
         @Reader
-        fun appIconFetcherIntoMap(): Set<() -> FetcherBinding<*>> = setOf {
+        fun appIconFetcherIntoMap(): Set<FetcherBinding<*>> = setOf(
             FetcherBinding(
                 given<AppIconFetcher>(),
                 AppIcon::class
             )
-        }
+        )
     }
 }

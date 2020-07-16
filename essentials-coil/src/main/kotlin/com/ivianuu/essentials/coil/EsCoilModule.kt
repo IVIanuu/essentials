@@ -28,18 +28,6 @@ import com.ivianuu.injekt.given
 
 object EsCoilModule {
 
-    @SetElements(ApplicationComponent::class)
-    fun decoders() = emptySet<Decoder>()
-
-    @SetElements(ApplicationComponent::class)
-    fun fetchers() = emptySet<FetcherBinding<*>>()
-
-    @SetElements(ApplicationComponent::class)
-    fun mappers() = emptySet<MapperBinding<*>>()
-
-    @SetElements(ApplicationComponent::class)
-    fun measuredMappers() = emptySet<MeasuredMapperBinding<*>>()
-
     @Given(ApplicationComponent::class)
     @Reader
     fun imageLoader() = ImageLoader.Builder(applicationContext)
