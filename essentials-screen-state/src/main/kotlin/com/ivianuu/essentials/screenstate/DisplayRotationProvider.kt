@@ -61,10 +61,10 @@ class DisplayRotationProvider {
                     rotationChanges(),
                     configChanges()
                 )
-                    .onStart { d("sub for rotation") }
-                    .onCompletion { d("dispose rotation") }
+                    .onStart { d { "sub for rotation" } }
+                    .onCompletion { d { "dispose rotation" } }
             } else {
-                d("do not observe rotation while screen is off")
+                d { "do not observe rotation while screen is off" }
                 emptyFlow()
             }
         }

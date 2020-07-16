@@ -38,7 +38,7 @@ typealias AppInitializers = Set<() -> Unit>
 
 @Reader
 fun runInitializers() {
-    d("run initializers")
+    d { "run initializers" }
     given<AppInitializers>()
         .forEach { it() }
 }

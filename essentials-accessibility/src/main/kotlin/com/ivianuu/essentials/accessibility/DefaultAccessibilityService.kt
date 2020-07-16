@@ -33,7 +33,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
         super.onServiceConnected()
 
         component.runReader {
-            d("connected")
+            d { "connected" }
             given<AccessibilityServices>().onServiceConnected(this)
             given<AccessibilityWorkers>().forEach { worker ->
                 connectedScope.launch {
@@ -45,14 +45,14 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         component.runReader {
-            d("on accessibility event $event")
+            d { "on accessibility event $event" }
             given<AccessibilityServices>().onAccessibilityEvent(event)
         }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         component.runReader {
-            d("on unbind")
+            d { "on unbind" }
             given<AccessibilityServices>().onServiceDisconnected()
         }
 
@@ -79,7 +79,9 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
             packageNames = null
 
-            component.runReader { d("update service info $this") }
+            component.runReader {
+                d { "update service info $this" }
+            }
         }
     }
 }

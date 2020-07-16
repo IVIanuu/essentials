@@ -75,7 +75,7 @@ class SecureScreenDetector {
         }
 
         // distinct
-        d("on secure screen changed: $isOnSecureScreen")
+        d { "on secure screen changed: $isOnSecureScreen" }
         _isOnSecureScreen.value = isOnSecureScreen
     }
 }

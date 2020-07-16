@@ -42,7 +42,7 @@ class ForegroundService : EsService() {
         super.onCreate()
 
         component.runReader {
-            d("started foreground service")
+            d { "started foreground service" }
         }
 
         foregroundManager.updates
@@ -58,7 +58,7 @@ class ForegroundService : EsService() {
     override fun onDestroy() {
         super.onDestroy()
         component.runReader {
-            d("stopped foreground service")
+            d { "stopped foreground service" }
         }
     }
 
@@ -66,7 +66,7 @@ class ForegroundService : EsService() {
         val newJobs = foregroundManager.job
 
         component.runReader {
-            d("update jobs $newJobs")
+            d { "update jobs $newJobs" }
         }
 
         lastJobs

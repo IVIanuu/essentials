@@ -21,34 +21,40 @@ interface Logger {
 
 }
 
+// todo swap throwable and tag once we can be sure that no every usage has been migrated
+
 @Reader
-fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.v(message, throwable, tag)
+inline fun v(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.v(message(), throwable, tag)
 }
 
 @Reader
-fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.d(message, throwable, tag)
+inline fun d(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.d(message(), throwable, tag)
 }
 
 @Reader
-fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.i(message, throwable, tag)
+inline fun i(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.i(message(), throwable, tag)
 }
 
 @Reader
-fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.w(message, throwable, tag)
+inline fun w(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.w(message(), throwable, tag)
 }
 
 @Reader
-fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.e(message, throwable, tag)
+inline fun e(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.e(message(), throwable, tag)
 }
 
 @Reader
-fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    given<Logger?>()?.wtf(message, throwable, tag)
+inline fun wtf(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null }
+) {
+    given<Logger?>()?.wtf(message(), throwable, tag)
 }
 
 @Given

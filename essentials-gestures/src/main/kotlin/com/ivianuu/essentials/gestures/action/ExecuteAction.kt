@@ -13,22 +13,22 @@ import kotlinx.coroutines.withContext
 
 @Reader
 suspend fun executeAction(key: String) = withContext(dispatchers.default) {
-    d("execute $key")
+    d { "execute $key" }
     val action = getAction(key)
 
     // check permissions
     if (!given<PermissionManager>().request(action.permissions)) {
-        d("couldn't get permissions for $key")
+        d { "couldn't get permissions for $key" }
         return@withContext
     }
 
     // unlock screen
     if (action.unlockScreen && !unlockScreen()) {
-        d("couldn't unlock screen for $key")
+        d { "couldn't unlock screen for $key" }
         return@withContext
     }
 
-    d("fire $key")
+    d { "fire $key" }
 
     // fire
     try {

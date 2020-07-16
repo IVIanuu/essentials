@@ -58,7 +58,7 @@ class PermissionManager {
 
     suspend fun request(permissions: List<Permission>): Boolean =
         withContext(dispatchers.default) {
-            d("request permissions $permissions")
+            d { "request permissions $permissions" }
             if (hasPermissions(permissions).first()) return@withContext true
 
             val request = PermissionRequest(permissions = permissions.toList())

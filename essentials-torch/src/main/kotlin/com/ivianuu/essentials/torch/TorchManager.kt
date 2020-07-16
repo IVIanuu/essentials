@@ -53,7 +53,7 @@ class TorchManager {
 
     private val stateActor = globalScope.actor<Boolean> {
         for (enabled in this) {
-            d("update state $enabled")
+            d { "update state $enabled" }
             foregroundJob = if (enabled) {
                 given<ForegroundManager>().startJob(createTorchNotification())
             } else {

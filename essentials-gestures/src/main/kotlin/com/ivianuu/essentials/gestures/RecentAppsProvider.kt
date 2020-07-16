@@ -107,7 +107,7 @@ class RecentAppsProvider {
         // make sure that were not getting bigger than the limit
         val finalRecentApps = recentApps.chunked(10).first()
 
-        d("recent apps changed $finalRecentApps")
+        d { "recent apps changed $finalRecentApps" }
 
         // push
         _recentApps.value = finalRecentApps

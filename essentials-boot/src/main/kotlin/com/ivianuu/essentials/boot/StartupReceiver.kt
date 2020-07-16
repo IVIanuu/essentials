@@ -31,7 +31,7 @@ class StartupReceiver : EsBroadcastReceiver() {
         super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         component.runReader {
-            d("on system boot")
+            d { "on system boot" }
             given<BootListeners>().forEach { it() }
         }
     }

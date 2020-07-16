@@ -135,7 +135,7 @@ internal class DefaultPermissionViewModel(
             val permissionsToProcess = request.permissions
                 .filterNot { given<PermissionManager>().hasPermissions(it).first() }
 
-            d("update permissions to process or finish not granted $permissionsToProcess")
+            d { "update permissions to process or finish not granted $permissionsToProcess" }
 
             if (permissionsToProcess.isEmpty()) {
                 navigator.popTop()

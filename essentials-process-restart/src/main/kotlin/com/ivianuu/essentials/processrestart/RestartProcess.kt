@@ -31,7 +31,7 @@ import com.ivianuu.injekt.given
 suspend fun restartProcess() {
     val intent = given<PackageManager>().getLaunchIntentForPackage(given<BuildInfo>().packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
-    d("restart process %$intent")
+    d { "restart process %$intent" }
     ProcessRestartActivity.launch(applicationContext, intent)
     Runtime.getRuntime().exit(0)
 }

@@ -57,10 +57,10 @@ class UnlockScreenActivity : EsActivity() {
 
             requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-            d("unlock screen for $requestId")
+            d { "unlock screen for $requestId" }
 
             fun finishWithResult(success: Boolean) {
-                d("finish with result $success")
+                d { "finish with result $success" }
                 hasResult = true
                 given<UnlockScreen>().onUnlockScreenResult(requestId, success)
                 finish()

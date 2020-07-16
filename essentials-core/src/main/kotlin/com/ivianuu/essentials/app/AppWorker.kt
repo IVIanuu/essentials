@@ -41,7 +41,7 @@ typealias AppWorkers = Set<suspend () -> Unit>
 
 @Reader
 fun runAppWorkers() {
-    d("run workers")
+    d { "run workers" }
     given<AppWorkers>()
         .forEach { worker ->
             globalScope.launch {

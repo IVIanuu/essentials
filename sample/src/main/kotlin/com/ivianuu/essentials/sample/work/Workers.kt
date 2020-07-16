@@ -35,9 +35,9 @@ class TestWorker(
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        d("start work")
+        d { "start work" }
         delay(5000)
-        d("finish work")
+        d { "finish work" }
         return Result.success()
     }
 }

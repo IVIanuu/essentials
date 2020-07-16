@@ -15,8 +15,8 @@ private val logger: Logger
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
-        logger.d("create action from $key")
-        val tmp = key.split(DELIMITER)
+logger.d { "create action from $key" }
+val tmp = key.split(DELIMITER)
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)

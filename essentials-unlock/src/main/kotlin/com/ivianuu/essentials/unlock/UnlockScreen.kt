@@ -51,12 +51,12 @@ class UnlockScreen {
         val requestId = UUID.randomUUID().toString()
         requestsById[requestId] = result
 
-        d("unlock screen $requestId")
+        d { "unlock screen $requestId" }
 
         UnlockScreenActivity.unlock(applicationContext, requestId)
 
         return@withContext result.await().also {
-            d("unlock result $requestId -> $it")
+            d { "unlock result $requestId -> $it" }
         }
     }
 

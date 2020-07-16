@@ -11,10 +11,10 @@ import com.ivianuu.injekt.Reader
 @Reader
 suspend fun logNotifications() = runWithCleanup(
     block = {
-        d("hello from notifications")
+        d { "hello from notifications" }
         awaitCancellation()
     },
     cleanup = {
-        d("bye from notifications")
+        d { "bye from notifications" }
     }
 )

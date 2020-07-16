@@ -24,5 +24,5 @@ import com.ivianuu.injekt.Reader
 @BootListener
 @Reader
 fun logBoot() {
-    d("booted!")
+    d { "booted!" }
 }

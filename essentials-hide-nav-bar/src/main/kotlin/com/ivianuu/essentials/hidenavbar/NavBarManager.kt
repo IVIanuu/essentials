@@ -68,7 +68,7 @@ class NavBarManager {
     private val screenStateProvider = given<ScreenStateProvider>()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
-        d("set nav bar config $config")
+        d { "set nav bar config $config" }
 
         mutex.withLock {
             job?.cancel()
@@ -76,13 +76,13 @@ class NavBarManager {
         }
 
         if (!config.hidden) {
-            d("not hidden")
+            d { "not hidden" }
             if (prefs.wasNavBarHidden.data.first()) {
-                d("was hidden")
+                d { "was hidden" }
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.updateData { false }
             } else {
-                d("was not hidden")
+                d { "was not hidden" }
             }
 
             return@withContext
@@ -123,7 +123,7 @@ class NavBarManager {
                                 job = null
                             }
 
-                            d("show nav bar because of shutdown")
+                            d { "show nav bar because of shutdown" }
                             setNavBarConfigInternal(false, config)
                         }
                         .collect()
@@ -135,7 +135,7 @@ class NavBarManager {
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        d("set nav bar hidden config $config hidden $hidden")
+        d { "set nav bar hidden config $config hidden $hidden" }
         try {
             try {
                 // ensure that we can access non sdk interfaces

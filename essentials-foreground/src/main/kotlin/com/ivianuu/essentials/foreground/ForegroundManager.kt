@@ -48,7 +48,7 @@ class ForegroundManager {
     fun startJob(notification: Notification): ForegroundJob = synchronized(this) {
         val job = ForegroundJobImpl(notification)
         _jobs += job
-        d("start job $job")
+        d { "start job $job" }
         updateServiceState()
         dispatchUpdate()
 
@@ -58,7 +58,7 @@ class ForegroundManager {
     fun stopJob(job: ForegroundJob) = synchronized(this) {
         if (job !in _jobs) return@synchronized
         _jobs -= job
-        d("stop job $job")
+        d { "stop job $job" }
         updateServiceState()
         dispatchUpdate()
     }
@@ -68,7 +68,7 @@ class ForegroundManager {
     }
 
     private fun updateServiceState() = synchronized(this) {
-        d("update service state $_jobs")
+        d { "update service state $_jobs" }
         if (_jobs.isNotEmpty()) {
             ContextCompat.startForegroundService(
                 applicationContext,

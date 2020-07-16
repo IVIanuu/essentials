@@ -52,8 +52,8 @@ class ScreenStateProvider {
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT
     )
-        .onStart { d("sub for screen state") }
-        .onCompletion { d("dispose screen state") }
+        .onStart { d { "sub for screen state" } }
+        .onCompletion { d { "dispose screen state" } }
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
