@@ -157,14 +157,16 @@ fun PrefsPage() {
 }
 
 @Given(ApplicationComponent::class)
-class Prefs(factory: DiskDataStoreFactory) {
-    val switch = factory.create("switch") { false }
-    val checkbox = factory.create("checkbox") { false }
-    val radioButton = factory.create("radio_button") { false }
-    val slider = factory.create("slider") { 50 }
-    val durationSlider = factory.duration("duration_slider") { 33.milliseconds }
-    val textInput = factory.create("text_input") { "" }
-    val color = factory.color("color") { Color.Red }
-    val multiChoice = factory.create("multi_choice") { setOf("A", "B", "C") }
-    val singleChoice = factory.create("single_choice") { "C" }
+@Reader
+class Prefs {
+    val switch = given<DiskDataStoreFactory>().create("switch") { false }
+    val checkbox = given<DiskDataStoreFactory>().create("checkbox") { false }
+    val radioButton = given<DiskDataStoreFactory>().create("radio_button") { false }
+    val slider = given<DiskDataStoreFactory>().create("slider") { 50 }
+    val durationSlider =
+        given<DiskDataStoreFactory>().duration("duration_slider") { 33.milliseconds }
+    val textInput = given<DiskDataStoreFactory>().create("text_input") { "" }
+    val color = given<DiskDataStoreFactory>().color("color") { Color.Red }
+    val multiChoice = given<DiskDataStoreFactory>().create("multi_choice") { setOf("A", "B", "C") }
+    val singleChoice = given<DiskDataStoreFactory>().create("single_choice") { "C" }
 }

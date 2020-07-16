@@ -20,8 +20,10 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
@@ -32,10 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @Given(ApplicationComponent::class)
 @Reader
-class ForegroundManager(
-    private val context: ApplicationContext = given(),
-    private val logger: Logger = given()
-) {
+class ForegroundManager {
 
     private val _updates = EventFlow<Unit>()
     val updates: Flow<Unit> get() = _updates
@@ -49,7 +48,7 @@ class ForegroundManager(
     fun startJob(notification: Notification): ForegroundJob = synchronized(this) {
         val job = ForegroundJobImpl(notification)
         _jobs += job
-        logger.d("start job $job")
+        d("start job $job")
         updateServiceState()
         dispatchUpdate()
 
@@ -59,7 +58,7 @@ class ForegroundManager(
     fun stopJob(job: ForegroundJob) = synchronized(this) {
         if (job !in _jobs) return@synchronized
         _jobs -= job
-        logger.d("stop job $job")
+        d("stop job $job")
         updateServiceState()
         dispatchUpdate()
     }
@@ -69,11 +68,11 @@ class ForegroundManager(
     }
 
     private fun updateServiceState() = synchronized(this) {
-        logger.d("update service state $_jobs")
+        d("update service state $_jobs")
         if (_jobs.isNotEmpty()) {
             ContextCompat.startForegroundService(
-                context,
-                Intent(context, ForegroundService::class.java)
+                applicationContext,
+                Intent(applicationContext, ForegroundService::class.java)
             )
         } else {
             _stopServiceRequests.offer(Unit)

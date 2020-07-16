@@ -19,14 +19,16 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.Composable
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class AppUi {
     companion object {
+        @Given
         @Reader
-        operator fun <T : AppUiMarker> invoke(): AppUiMarker =
+        operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
             given<T>() as AppUiMarker // todo remove cast once compiler is fixed
     }
 }

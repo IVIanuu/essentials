@@ -52,4 +52,8 @@ object EsAndroidUtilModule {
         given<NoopLogger>()
     }
 
+    @Given
+    @Reader
+    fun systemBuildInfo() = SystemBuildInfo(Build.VERSION.SDK_INT)
+
 }

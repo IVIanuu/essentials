@@ -43,6 +43,7 @@ import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -65,9 +66,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @Given(ApplicationComponent::class)
 @Reader
-class PurchaseManager(
-    billingClientProvider: (PurchasesUpdatedListener) -> BillingClient
-) {
+class PurchaseManager {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->
         d("on purchases update ${result.responseCode} ${result.debugMessage} $purchases")
@@ -75,7 +74,7 @@ class PurchaseManager(
     }
     private val refreshTrigger = EventFlow<Unit>()
 
-    private val billingClient = billingClientProvider(updateListener)
+    private val billingClient = given<(PurchasesUpdatedListener) -> BillingClient>()(updateListener)
 
     private val requests = ConcurrentHashMap<String, PurchaseRequest>()
 

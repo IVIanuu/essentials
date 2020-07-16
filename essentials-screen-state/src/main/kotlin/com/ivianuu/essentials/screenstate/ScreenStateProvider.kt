@@ -29,6 +29,7 @@ import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,10 +45,7 @@ import kotlinx.coroutines.withContext
  */
 @Reader
 @Given(ApplicationComponent::class)
-class ScreenStateProvider(
-    private val keyguardManager: KeyguardManager,
-    private val powerManager: PowerManager
-) {
+class ScreenStateProvider {
 
     val screenState: Flow<ScreenState> = BroadcastFactory.create(
         Intent.ACTION_SCREEN_OFF,
@@ -68,8 +66,8 @@ class ScreenStateProvider(
 
     private suspend fun getCurrentScreenState(): ScreenState =
         withContext(dispatchers.default) {
-            if (powerManager.isInteractive) {
-                if (keyguardManager.isDeviceLocked) {
+            if (given<PowerManager>().isInteractive) {
+                if (given<KeyguardManager>().isDeviceLocked) {
                     ScreenState.Locked
                 } else {
                     ScreenState.Unlocked

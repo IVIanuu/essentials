@@ -23,11 +23,13 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
 import androidx.compose.Immutable
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.ApplicationResources
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,14 +43,9 @@ import java.util.Calendar
 
 @Reader
 @Given(ApplicationComponent::class)
-class TwilightHelper(
-    private val app: Application,
-    private val resources: ApplicationResources,
-    private val powerManager: PowerManager,
-    prefs: TwilightPrefs
-) {
+class TwilightHelper {
 
-    val state: Flow<TwilightState> = prefs.twilightMode.data
+    val state: Flow<TwilightState> = given<TwilightPrefs>().twilightMode.data
         .flatMapLatest { mode ->
             when (mode) {
                 TwilightMode.System -> system()
@@ -58,7 +55,7 @@ class TwilightHelper(
                 TwilightMode.Time -> time()
             }
         }
-        .combine(prefs.useBlack.data) { isDark, useBlack ->
+        .combine(given<TwilightPrefs>().useBlack.data) { isDark, useBlack ->
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
@@ -66,12 +63,12 @@ class TwilightHelper(
     private fun battery() = BroadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
         .onStart { emit(Unit) }
-        .map { powerManager.isPowerSaveMode }
+        .map { given<PowerManager>().isPowerSaveMode }
 
     private fun system() = configChanges()
         .onStart { emit(Unit) }
         .map {
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
+            (given<ApplicationResources>().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
                 .UI_MODE_NIGHT_YES
         }
 
@@ -96,8 +93,8 @@ class TwilightHelper(
             override fun onTrimMemory(level: Int) {
             }
         }
-        app.registerComponentCallbacks(callbacks)
-        awaitClose { app.unregisterComponentCallbacks(callbacks) }
+        applicationContext.registerComponentCallbacks(callbacks)
+        awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
     }
 }
 

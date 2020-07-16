@@ -35,11 +35,10 @@ class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
 }
 
 @Given
-class LaunchableAppFilter(
-    private val packageManager: PackageManager
-) : AppFilter {
+@Reader
+class LaunchableAppFilter : AppFilter {
     private val wrapped = CachingAppFilter { app ->
-        packageManager.getLaunchIntentForPackage(app.packageName) != null
+        given<PackageManager>().getLaunchIntentForPackage(app.packageName) != null
     }
 
     override fun invoke(app: AppInfo) = wrapped(app)

@@ -30,7 +30,7 @@ object EsBillingModule {
     @Given
     @Reader
     fun debugBillingClient(): DebugBillingClient {
-        given<PurchaseManager>()
+        given<() -> PurchaseManager>()()
         return debugBillingClient!!
     }
 
@@ -41,4 +41,3 @@ object EsBillingModule {
             .also { debugBillingClient = it }
 
 }
-

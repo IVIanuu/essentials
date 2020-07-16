@@ -63,7 +63,7 @@ class PermissionManager {
 
             val request = PermissionRequest(permissions = permissions.toList())
             startUi()
-            navigator.push<Any>(given<PermissionRequestRouteFactory>().createRoute(request))
+            navigator.push<Any>(given<() -> PermissionRequestRouteFactory>()().createRoute(request))
 
             return@withContext hasPermissions(permissions).first()
         }

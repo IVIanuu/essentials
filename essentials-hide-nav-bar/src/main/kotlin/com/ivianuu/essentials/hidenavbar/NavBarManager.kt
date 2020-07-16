@@ -19,6 +19,7 @@ package com.ivianuu.essentials.hidenavbar
 import android.app.Application
 import android.content.Intent
 import android.graphics.Rect
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
@@ -33,6 +34,7 @@ import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -56,15 +58,14 @@ import kotlinx.coroutines.withContext
  */
 @Reader
 @Given(ApplicationComponent::class)
-class NavBarManager internal constructor(
-    private val app: Application,
-    private val displayRotationProvider: DisplayRotationProvider,
-    private val prefs: NavBarPrefs,
-    private val screenStateProvider: ScreenStateProvider
-) {
+class NavBarManager {
 
     private var job: Job? = null
     private val mutex = Mutex()
+
+    private val displayRotationProvider = given<DisplayRotationProvider>()
+    private val prefs = given<NavBarPrefs>()
+    private val screenStateProvider = given<ScreenStateProvider>()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
         d("set nav bar config $config")
@@ -155,8 +156,8 @@ class NavBarManager internal constructor(
         val name =
             if (displayRotationProvider.displayRotation.first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
-        val id = app.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) app.resources.getDimensionPixelSize(id) else 0
+        val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
+        return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
     }
 
     private suspend fun getOverscanRect(

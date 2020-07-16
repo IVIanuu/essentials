@@ -40,9 +40,9 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.2.0"
 
         object Compose {
-            const val version = "0.0.1-dev153"
+            const val version = "0.0.1-dev155"
             const val compiler = "androidx.compose:compose-compiler:$version"
-            const val core = "androidx.compose.core:core:$version"
+            const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
             const val materialIconsExtended =
                 "androidx.compose.material:material-icons-extended:$version"
@@ -95,7 +95,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev213"
+        private const val version = "0.0.1-dev214"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"

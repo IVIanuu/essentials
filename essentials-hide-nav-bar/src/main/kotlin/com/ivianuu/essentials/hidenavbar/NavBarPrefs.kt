@@ -19,8 +19,11 @@ package com.ivianuu.essentials.hidenavbar
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-internal class NavBarPrefs(factory: DiskDataStoreFactory) {
-    val wasNavBarHidden = factory.create("was_nav_bar_hidden") { false }
+@Reader
+internal class NavBarPrefs {
+    val wasNavBarHidden = given<DiskDataStoreFactory>().create("was_nav_bar_hidden") { false }
 }
