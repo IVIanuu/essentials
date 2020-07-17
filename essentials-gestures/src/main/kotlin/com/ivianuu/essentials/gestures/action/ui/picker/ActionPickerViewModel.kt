@@ -106,7 +106,7 @@ sealed class ActionPickerItem {
             delegate.icon()
         }
 
-        override suspend fun getResult() = delegate.getResult(navigator)
+        override suspend fun getResult() = delegate.getResult()
     }
 
     @Immutable

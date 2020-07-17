@@ -7,13 +7,14 @@ import androidx.ui.material.icons.filled.PlayArrow
 import androidx.ui.material.icons.filled.SkipPrevious
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 
-@SetElements(ApplicationComponent::class)
+@BindAction
 @Reader
-fun mediaPlayPauseAction() = bindMediaAction(
+fun mediaPlayPauseAction() = mediaAction(
     key = "media_play_pause",
     keycode = KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
     titleRes = R.string.es_action_media_play_pause,

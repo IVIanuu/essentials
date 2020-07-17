@@ -5,7 +5,10 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
@@ -20,6 +23,15 @@ data class Action(
     val enabled: Boolean = true
 )
 
+@Effect
+annotation class BindAction {
+    companion object {
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : () -> Action> invoke() = setOf(given<T>())
+    }
+}
+
 interface ActionIconProvider {
     val icon: Flow<@Composable () -> Unit>
 }
@@ -27,8 +39,6 @@ interface ActionIconProvider {
 interface ActionExecutor {
     suspend operator fun invoke()
 }
-
-inline fun bindAction(block: () -> Action) = setOf(block())
 
 @Reader
 internal inline fun permissions(block: ActionPermissions.() -> List<Permission>) =
@@ -41,12 +51,26 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-inline fun bindActionFactory(block: () -> ActionFactory) = setOf(block())
+@Effect
+annotation class BindActionFactory {
+    companion object {
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : ActionFactory> invoke() = setOf(given<T>())
+    }
+}
 
 interface ActionPickerDelegate {
     val title: String
     val icon: @Composable () -> Unit
-    suspend fun getResult(navigator: Navigator): ActionPickerResult?
+    suspend fun getResult(): ActionPickerResult?
 }
 
-inline fun bindActionPickerDelegate(block: () -> ActionPickerDelegate) = setOf(block())
+@Effect
+annotation class BindActionPickerDelegate {
+    companion object {
+        @SetElements(ApplicationComponent::class)
+        @Reader
+        operator fun <T : ActionPickerDelegate> invoke() = setOf(given<T>())
+    }
+}

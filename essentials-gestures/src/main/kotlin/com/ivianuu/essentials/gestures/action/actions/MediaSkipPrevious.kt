@@ -6,15 +6,15 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.SkipPrevious
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.bindAction
+import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 
-@SetElements(ApplicationComponent::class)
+@BindAction
 @Reader
-fun mediaSkipPreviousAction() = bindMediaAction(
+fun mediaSkipPreviousAction() = mediaAction(
     key = "media_skip_previous",
     keycode = KeyEvent.KEYCODE_MEDIA_PREVIOUS,
     titleRes = R.string.es_action_media_skip_previous,

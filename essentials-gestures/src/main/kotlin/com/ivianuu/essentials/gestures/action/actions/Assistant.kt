@@ -6,8 +6,7 @@ import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.bindActionFactory
+import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
@@ -15,17 +14,15 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
-@SetElements(ApplicationComponent::class)
+@BindAction
 @Reader
-fun assistantAction() = bindAction {
-    Action(
-        key = "assistant",
-        title = Resources.getString(R.string.es_action_assistant),
-        iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
-        unlockScreen = true,
-        executor = given<AssistantActionExecutor>()
-    )
-}
+fun assistantAction() = Action(
+    key = "assistant",
+    title = Resources.getString(R.string.es_action_assistant),
+    iconProvider = SingleActionIconProvider(R.drawable.es_ic_google),
+    unlockScreen = true,
+    executor = given<AssistantActionExecutor>()
+)
 
 @Given
 @Reader

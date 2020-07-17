@@ -10,11 +10,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactory
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.BindActionFactory
+import com.ivianuu.essentials.gestures.action.BindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
@@ -22,22 +23,7 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
-object KeycodeModule {
-
-    @SetElements(ApplicationComponent::class)
-    @Reader
-    fun actionFactory() = bindActionFactory {
-        given<KeycodeActionFactory>()
-    }
-
-    @SetElements(ApplicationComponent::class)
-    @Reader
-    fun actionPickerDelegate() = bindActionPickerDelegate {
-        given<KeycodeActionPickerDelegate>()
-    }
-
-}
-
+@BindActionFactory
 @Reader
 @Given
 internal class KeycodeActionFactory : ActionFactory {
@@ -56,6 +42,7 @@ internal class KeycodeActionFactory : ActionFactory {
     }
 }
 
+@BindActionPickerDelegate
 @Reader
 @Given
 internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
@@ -64,7 +51,7 @@ internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Keyboard) }
 
-    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerResult? {
         val keycode = navigator.push<String>(
             TextInputRoute(
                 title = Resources.getString(R.string.es_keycode_picker_title),

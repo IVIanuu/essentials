@@ -7,8 +7,6 @@ import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionPrefs
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.bindActionFactory
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
@@ -16,19 +14,17 @@ import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 
 @Reader
-fun bindMediaAction(
+fun mediaAction(
     key: String,
     keycode: Int,
     titleRes: Int,
     icon: @Composable () -> Unit
-) = bindAction {
-    Action(
-        key = key,
-        title = Resources.getString(titleRes),
-        iconProvider = SingleActionIconProvider(icon),
-        executor = given<(Int) -> MediaActionExecutor>()(keycode)
-    )
-}
+) = Action(
+    key = key,
+    title = Resources.getString(titleRes),
+    iconProvider = SingleActionIconProvider(icon),
+    executor = given<(Int) -> MediaActionExecutor>()(keycode)
+)
 
 @Given
 @Reader

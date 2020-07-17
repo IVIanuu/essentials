@@ -17,30 +17,17 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.bindActionFactory
-import com.ivianuu.essentials.gestures.action.bindActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.BindActionFactory
+import com.ivianuu.essentials.gestures.action.BindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
-
-object AppActionModule {
-
-    @SetElements(ApplicationComponent::class)
-    @Reader
-    fun actionFactory() = bindActionFactory { given<AppActionFactory>() }
-
-    @SetElements(ApplicationComponent::class)
-    @Reader
-    fun actionPickerDelegate() = bindActionPickerDelegate { given<AppActionPickerDelegate>() }
-
-}
 
 @Reader
 @Given
@@ -62,6 +49,7 @@ internal class AppActionExecutor(
     }
 }
 
+@BindActionFactory
 @Reader
 @Given
 internal class AppActionFactory(
@@ -82,6 +70,7 @@ internal class AppActionFactory(
     }
 }
 
+@BindActionPickerDelegate
 @Reader
 @Given
 internal class AppActionPickerDelegate : ActionPickerDelegate {
@@ -90,7 +79,7 @@ internal class AppActionPickerDelegate : ActionPickerDelegate {
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Apps) }
 
-    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
             AppPickerPage(appFilter = given<LaunchableAppFilter>())
         } ?: return null

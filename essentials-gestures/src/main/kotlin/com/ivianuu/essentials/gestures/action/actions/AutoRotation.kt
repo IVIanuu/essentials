@@ -14,8 +14,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.essentials.gestures.action.bindAction
-import com.ivianuu.essentials.gestures.action.bindActionFactory
+import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationComponent
@@ -29,18 +28,16 @@ import kotlinx.coroutines.flow.map
 
 object AutoRotationModule {
 
-    @SetElements(ApplicationComponent::class)
+    @BindAction
     @Reader
-    fun autoRotationAction() = bindAction {
-        Action(
-            key = "auto_rotation",
-            title = Resources.getString(R.string.es_action_auto_rotation),
-            permissions = permissions { listOf(writeSettings) },
-            unlockScreen = true,
-            iconProvider = given<AutoRotationActionIconProvider>(),
-            executor = given<AutoRotationActionExecutor>()
-        )
-    }
+    fun autoRotationAction() = Action(
+        key = "auto_rotation",
+        title = Resources.getString(R.string.es_action_auto_rotation),
+        permissions = permissions { listOf(writeSettings) },
+        unlockScreen = true,
+        iconProvider = given<AutoRotationActionIconProvider>(),
+        executor = given<AutoRotationActionExecutor>()
+    )
 
     @Given(ApplicationComponent::class)
     @Reader
