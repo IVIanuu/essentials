@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -27,3 +29,7 @@ import kotlin.time.milliseconds
 class Clock {
     val now: Duration get() = System.currentTimeMillis().milliseconds
 }
+
+@Reader
+val now: Duration
+    get() = given<Clock>().now
