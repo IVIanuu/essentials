@@ -28,7 +28,7 @@ annotation class BindAction {
     companion object {
         @SetElements(ApplicationComponent::class)
         @Reader
-        operator fun <T : () -> Action> invoke() = setOf(given<T>())
+        operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
     }
 }
 
@@ -56,7 +56,7 @@ annotation class BindActionFactory {
     companion object {
         @SetElements(ApplicationComponent::class)
         @Reader
-        operator fun <T : ActionFactory> invoke() = setOf(given<T>())
+        operator fun <T : ActionFactory> invoke(): Set<ActionFactory> = setOf(given<T>())
     }
 }
 
@@ -71,6 +71,7 @@ annotation class BindActionPickerDelegate {
     companion object {
         @SetElements(ApplicationComponent::class)
         @Reader
-        operator fun <T : ActionPickerDelegate> invoke() = setOf(given<T>())
+        operator fun <T : ActionPickerDelegate> invoke(): Set<ActionPickerDelegate> =
+            setOf(given<T>())
     }
 }
