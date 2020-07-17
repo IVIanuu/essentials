@@ -40,4 +40,5 @@ object Shell {
     suspend fun isAvailable(): Boolean = withContext(dispatchers.io) {
         SU.available()
     }
+
 }
