@@ -31,7 +31,6 @@ fun homeAction() = Action(
 )
 
 @Given
-@Reader
 internal class IntentHomeActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         try {

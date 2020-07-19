@@ -44,7 +44,6 @@ internal class BluetoothActionExecutor : ActionExecutor {
 }
 
 @Given
-@Reader
 internal class BluetoothActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = BroadcastFactory.create(BluetoothAdapter.ACTION_STATE_CHANGED)

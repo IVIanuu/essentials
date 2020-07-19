@@ -25,7 +25,6 @@ import com.ivianuu.injekt.Reader
 data class SystemBuildInfo(val sdk: Int) {
     companion object {
         @Given
-        @Reader
         fun bind() = SystemBuildInfo(Build.VERSION.SDK_INT)
     }
 }

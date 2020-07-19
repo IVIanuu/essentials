@@ -28,7 +28,6 @@ data class DeviceInfo(
 ) {
     companion object {
         @Given
-        @Reader
         fun bind() = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
     }
 }

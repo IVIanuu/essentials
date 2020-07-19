@@ -48,7 +48,6 @@ val Permission.Companion.IsSystemOverlayPermission by lazy {
 
 @BindPermissionStateProvider
 @Given
-@Reader
 internal class SystemOverlayPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

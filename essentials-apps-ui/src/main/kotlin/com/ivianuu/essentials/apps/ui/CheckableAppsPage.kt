@@ -119,7 +119,6 @@ private fun CheckableApp(
     )
 }
 
-@Reader
 @Given
 internal class CheckableAppsViewModel(
     private val appFilter: AppFilter,

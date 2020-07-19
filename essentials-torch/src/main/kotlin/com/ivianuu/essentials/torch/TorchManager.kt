@@ -42,7 +42,6 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-@Reader
 @Given(ApplicationComponent::class)
 class TorchManager {
 

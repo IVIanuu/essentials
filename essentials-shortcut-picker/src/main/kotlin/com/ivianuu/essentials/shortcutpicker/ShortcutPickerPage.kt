@@ -82,7 +82,6 @@ private fun Shortcut(
     }
 }
 
-@Reader
 @Given
 internal class ShortcutPickerViewModel :
     StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {

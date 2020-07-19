@@ -39,7 +39,6 @@ suspend fun unlockScreen(): Boolean = given<UnlockScreen>()()
  * Helper class for unlocking the screen
  */
 @Given(ApplicationComponent::class)
-@Reader
 class UnlockScreen {
 
     private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()

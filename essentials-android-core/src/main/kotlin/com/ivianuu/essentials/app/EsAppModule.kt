@@ -22,7 +22,6 @@ import com.ivianuu.injekt.Reader
 object EsAppModule {
 
     @Given
-    @Reader
     fun packageManager() = applicationContext.packageManager!!
 
 }

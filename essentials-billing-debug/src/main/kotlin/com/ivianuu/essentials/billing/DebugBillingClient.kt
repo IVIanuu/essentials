@@ -63,7 +63,6 @@ import java.util.Date
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-@Reader
 @Given(ApplicationComponent::class)
 class DebugBillingClient(
     private val purchasesUpdatedListener: PurchasesUpdatedListener

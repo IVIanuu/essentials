@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.atomic.AtomicInteger
 
 @Given(ApplicationComponent::class)
-@Reader
 class ForegroundManager {
 
     private val _updates = EventFlow<Unit>()

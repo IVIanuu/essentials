@@ -33,7 +33,6 @@ data class BuildInfo(
 ) {
     companion object {
         @Given(ApplicationComponent::class)
-        @Reader
         fun bind(): BuildInfo {
             val appInfo = applicationContext.applicationInfo
             val packageInfo = given<PackageManager>()

@@ -28,14 +28,12 @@ object EsBillingModule {
     private var debugBillingClient: DebugBillingClient? = null
 
     @Given
-    @Reader
     fun debugBillingClient(): DebugBillingClient {
         given<() -> PurchaseManager>()()
         return debugBillingClient!!
     }
 
     @Given
-    @Reader
     fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
         given<(PurchasesUpdatedListener) -> DebugBillingClient>()(listener)
             .also { debugBillingClient = it }

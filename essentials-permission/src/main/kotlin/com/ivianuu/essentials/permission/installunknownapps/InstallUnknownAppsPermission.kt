@@ -44,7 +44,6 @@ val Permission.Companion.IsUnknownAppsPermission by lazy {
 
 @BindPermissionStateProvider
 @Given
-@Reader
 internal class InstallUnknownAppsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

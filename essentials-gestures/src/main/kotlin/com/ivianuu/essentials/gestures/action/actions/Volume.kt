@@ -22,7 +22,6 @@ fun volumeAction() = Action(
 )
 
 @Given
-@Reader
 internal class VolumeActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         given<AudioManager>().adjustStreamVolume(

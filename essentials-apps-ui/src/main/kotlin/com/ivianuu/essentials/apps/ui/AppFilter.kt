@@ -35,7 +35,6 @@ class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
 }
 
 @Given
-@Reader
 class LaunchableAppFilter : AppFilter {
     private val wrapped = CachingAppFilter { app ->
         given<PackageManager>().getLaunchIntentForPackage(app.packageName) != null
@@ -45,7 +44,6 @@ class LaunchableAppFilter : AppFilter {
 }
 
 @Given
-@Reader
 class IntentAppFilter(private val intent: Intent) : AppFilter {
     private val apps by lazy {
         given<PackageManager>().queryIntentActivities(intent, 0)

@@ -37,19 +37,15 @@ import java.io.File
 object EsDataModule {
 
     @Given
-    @Reader
     fun dataDir(): DataDir = applicationContext.applicationInfo.dataDir
 
     @Given
-    @Reader
     fun prefsDir(): PrefsDir = "${given<DataDir>()}/prefs"
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun moshiSerializerFactory() = MoshiSerializerFactory(given())
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun diskDataStoreFactory() = DiskDataStoreFactory(
         scope = globalScope + dispatchers.io,
         produceBoxDirectory = { File(given<PrefsDir>()) },
@@ -57,7 +53,6 @@ object EsDataModule {
     )
 
     @Given
-    @Reader
     fun settingsDataStoreFactory() = SettingsDataStoreFactory(
         context = applicationContext,
         scope = globalScope + dispatchers.io

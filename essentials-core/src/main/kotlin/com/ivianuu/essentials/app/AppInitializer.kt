@@ -28,7 +28,6 @@ import com.ivianuu.injekt.given
 annotation class AppInitializer {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
     }
 }

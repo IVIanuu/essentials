@@ -48,7 +48,6 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
 }
 
 @Given
-@Reader
 internal class AccessibilityServicePermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

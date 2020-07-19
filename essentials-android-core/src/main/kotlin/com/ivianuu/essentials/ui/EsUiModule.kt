@@ -19,7 +19,6 @@ inline val uiScope: UiScope
 object EsUiModule {
 
     @Given(ActivityComponent::class)
-    @Reader
     fun uiScope(): UiScope = CoroutineScope(dispatchers.main)
 
 }

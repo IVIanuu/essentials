@@ -65,7 +65,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Given(ApplicationComponent::class)
-@Reader
 class PurchaseManager {
 
     private val updateListener = PurchasesUpdatedListener { result, purchases ->

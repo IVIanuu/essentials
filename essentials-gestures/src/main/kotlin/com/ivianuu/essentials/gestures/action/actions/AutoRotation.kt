@@ -40,14 +40,12 @@ object AutoRotationModule {
     )
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun autoRotationSetting(): AutoRotationSetting = given<SettingsDataStoreFactory>()
         .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
 
 }
 
 @Given
-@Reader
 internal class AutoRotationActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         given<AutoRotationSetting>()
@@ -56,7 +54,6 @@ internal class AutoRotationActionExecutor : ActionExecutor {
 }
 
 @Given
-@Reader
 internal class AutoRotationActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = given<AutoRotationSetting>().data

@@ -90,7 +90,6 @@ private fun AppInfo(
     )
 }
 
-@Reader
 @Given
 internal class AppPickerViewModel(
     private val appFilter: AppFilter

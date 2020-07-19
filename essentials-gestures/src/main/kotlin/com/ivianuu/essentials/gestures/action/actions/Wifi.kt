@@ -30,7 +30,6 @@ fun wifiAction() = Action(
 )
 
 @Given
-@Reader
 internal class WifiActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         val wifiManager = given<WifiManager>()
@@ -39,7 +38,6 @@ internal class WifiActionExecutor : ActionExecutor {
 }
 
 @Given
-@Reader
 internal class WifiActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit> =
         BroadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)

@@ -23,7 +23,6 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-@Reader
 class TwilightPrefs {
     val twilightMode = given<DiskDataStoreFactory>().create("twilight_mode") { TwilightMode.System }
     val useBlack = given<DiskDataStoreFactory>().create("use_black") { false }

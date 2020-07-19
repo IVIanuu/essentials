@@ -24,7 +24,6 @@ fun inputMethodAction() = Action(
 )
 
 @Given
-@Reader
 internal class InputMethodActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         given<InputMethodManager>().showInputMethodPicker()

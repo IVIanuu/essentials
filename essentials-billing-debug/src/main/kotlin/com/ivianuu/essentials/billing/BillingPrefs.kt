@@ -10,7 +10,6 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-@Reader
 internal class BillingPrefs {
     val products = given<DiskDataStoreFactory>().create("billing_products") { emptySet<String>() }
         .map(

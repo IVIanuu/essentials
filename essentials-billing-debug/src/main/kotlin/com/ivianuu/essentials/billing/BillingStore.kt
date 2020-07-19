@@ -33,7 +33,6 @@ import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-@Reader
 @Given(ApplicationComponent::class)
 class BillingStore {
 

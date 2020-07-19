@@ -10,7 +10,6 @@ import com.ivianuu.injekt.given
 object BackupAndRestoreModule {
 
     @Given
-    @Reader
     fun backupDir() = "${given<DataDir>()}/backups"
 
 }

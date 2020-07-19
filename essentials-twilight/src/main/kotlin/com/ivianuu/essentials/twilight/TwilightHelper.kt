@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
-@Reader
 @Given(ApplicationComponent::class)
 class TwilightHelper {
 

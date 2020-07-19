@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.onEach
 // todo make this class a single shared flow
 
 @Given(ApplicationComponent::class)
-@Reader
 class SecureScreenDetector {
 
     private val _isOnSecureScreen = MutableStateFlow(false)

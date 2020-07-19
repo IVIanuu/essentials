@@ -29,7 +29,6 @@ fun killForegroundAction() = Action(
 )
 
 @Given
-@Reader
 internal class KillForegroundAppActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         val currentApp = given<RecentAppsProvider>().currentApp.first()

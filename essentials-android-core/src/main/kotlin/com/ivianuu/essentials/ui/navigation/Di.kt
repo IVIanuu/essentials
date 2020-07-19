@@ -7,7 +7,6 @@ import com.ivianuu.injekt.Reader
 object EsNavigatorModule {
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun navigator() = Navigator()
 
 }

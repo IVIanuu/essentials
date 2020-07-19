@@ -28,7 +28,6 @@ import com.ivianuu.injekt.given
 annotation class BootListener {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
     }
 }

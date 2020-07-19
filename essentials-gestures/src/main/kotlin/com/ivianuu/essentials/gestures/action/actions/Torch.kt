@@ -28,7 +28,6 @@ fun torchAction() = Action(
 )
 
 @Given
-@Reader
 internal class TorchActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         given<TorchManager>().toggleTorch()
@@ -36,7 +35,6 @@ internal class TorchActionExecutor : ActionExecutor {
 }
 
 @Given
-@Reader
 internal class TorchActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
         get() = given<TorchManager>().torchState

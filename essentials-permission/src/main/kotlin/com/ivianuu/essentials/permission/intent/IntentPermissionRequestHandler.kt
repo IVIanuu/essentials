@@ -40,7 +40,6 @@ val Permission.Companion.Intent by lazy {
     )
 }
 
-@Reader
 @BindPermissionRequestHandler
 @Given
 internal class IntentPermissionRequestHandler : PermissionRequestHandler {

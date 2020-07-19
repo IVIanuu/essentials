@@ -66,7 +66,6 @@ internal class DeviceAdminPermissionStateProvider(
 
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         fun intoSet() = setOf(given<DeviceAdminPermissionStateProvider>())
     }
 }

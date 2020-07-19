@@ -50,7 +50,6 @@ val Permission.Companion.NotificationListenerClass by lazy {
 
 @BindPermissionStateProvider
 @Given
-@Reader
 internal class NotificationListenerPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

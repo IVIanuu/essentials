@@ -7,7 +7,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
-@Reader
 @Given
 class RootActionExecutor(
     private val command: String

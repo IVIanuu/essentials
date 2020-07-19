@@ -25,7 +25,6 @@ internal fun accessibilityAction(
 )
 
 @Given
-@Reader
 internal class AccessibilityActionExecutor(
     private val accessibilityAction: Int
 ) : ActionExecutor {

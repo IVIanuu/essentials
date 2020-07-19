@@ -29,7 +29,6 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
-@Reader
 @Given
 internal class AppActionExecutor(
     private val packageName: String,
@@ -50,7 +49,6 @@ internal class AppActionExecutor(
 }
 
 @BindActionFactory
-@Reader
 @Given
 internal class AppActionFactory(
     private val appActionExecutorProvider: (String) -> AppActionExecutor,
@@ -71,7 +69,6 @@ internal class AppActionFactory(
 }
 
 @BindActionPickerDelegate
-@Reader
 @Given
 internal class AppActionPickerDelegate : ActionPickerDelegate {
     override val title: String
@@ -88,7 +85,6 @@ internal class AppActionPickerDelegate : ActionPickerDelegate {
 }
 
 @Given
-@Reader
 internal class AppActionIconProvider(
     private val packageName: String
 ) : ActionIconProvider {

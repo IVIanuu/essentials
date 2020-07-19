@@ -26,7 +26,6 @@ fun lastAppAction() = Action(
 )
 
 @Given
-@Reader
 internal class LastAppActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         val executor =

@@ -27,7 +27,6 @@ import com.ivianuu.injekt.given
 annotation class AppUi {
     companion object {
         @Given
-        @Reader
         operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
             given<T>() as AppUiMarker // todo remove cast once compiler is fixed
     }

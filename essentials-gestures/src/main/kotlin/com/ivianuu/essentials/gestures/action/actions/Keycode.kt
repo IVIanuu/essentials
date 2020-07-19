@@ -24,7 +24,6 @@ import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @BindActionFactory
-@Reader
 @Given
 internal class KeycodeActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
@@ -43,7 +42,6 @@ internal class KeycodeActionFactory : ActionFactory {
 }
 
 @BindActionPickerDelegate
-@Reader
 @Given
 internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val title: String

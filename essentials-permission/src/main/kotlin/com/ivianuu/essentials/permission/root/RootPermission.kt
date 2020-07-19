@@ -21,7 +21,6 @@ val Permission.Companion.IsRootPermission by lazy {
     Permission.Key<Unit>("IsRootPermission")
 }
 
-@Reader
 @BindPermissionStateProvider
 @Given
 internal class RootPermissionStateProvider : PermissionStateProvider {
@@ -32,7 +31,6 @@ internal class RootPermissionStateProvider : PermissionStateProvider {
     override suspend fun isGranted(permission: Permission): Boolean = Shell.isAvailable()
 }
 
-@Reader
 @BindPermissionRequestHandler
 @Given
 internal class RootPermissionRequestHandler : PermissionRequestHandler {

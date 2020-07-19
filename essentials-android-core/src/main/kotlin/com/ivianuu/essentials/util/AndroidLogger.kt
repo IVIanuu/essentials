@@ -34,7 +34,6 @@ class AndroidLogger : Logger {
 
     companion object {
         @Given
-        @Reader
         fun bind(): Logger? = if (given<BuildInfo>().isDebug) given<AndroidLogger>() else null
     }
 }

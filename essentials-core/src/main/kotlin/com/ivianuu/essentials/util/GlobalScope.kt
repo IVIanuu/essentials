@@ -17,7 +17,6 @@ inline val globalScope: GlobalScope
 object GlobalScopeModule {
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)
 
 }

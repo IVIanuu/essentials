@@ -46,7 +46,6 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
 }
 
 @Given
-@Reader
 internal class WriteSettingsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

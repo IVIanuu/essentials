@@ -56,7 +56,6 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
-@Reader
 @Given(ApplicationComponent::class)
 class NavBarManager {
 

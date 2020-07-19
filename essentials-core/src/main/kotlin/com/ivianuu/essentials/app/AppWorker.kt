@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 annotation class AppWorker {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
     }
 }

@@ -43,7 +43,6 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the current screen state
  */
-@Reader
 @Given(ApplicationComponent::class)
 class ScreenStateProvider {
 

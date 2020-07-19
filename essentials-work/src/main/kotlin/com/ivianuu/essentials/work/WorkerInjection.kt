@@ -42,7 +42,6 @@ fun initializeWorkers() {
 object EsWorkModule {
 
     @Given
-    @Reader
     fun workManager() = WorkManager.getInstance(applicationContext)
 
 }

@@ -26,7 +26,6 @@ import com.ivianuu.injekt.Reader
 object EsBillingModule {
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun billingClient(updateListener: PurchasesUpdatedListener) = BillingClient
         .newBuilder(applicationContext)
         .enablePendingPurchases()

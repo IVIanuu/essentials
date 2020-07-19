@@ -10,7 +10,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
-@Reader
 @Given
 internal class IntentActionExecutor(
     private val intent: Intent

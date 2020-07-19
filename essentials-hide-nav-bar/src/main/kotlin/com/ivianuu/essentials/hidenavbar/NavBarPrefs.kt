@@ -23,7 +23,6 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-@Reader
 internal class NavBarPrefs {
     val wasNavBarHidden = given<DiskDataStoreFactory>().create("was_nav_bar_hidden") { false }
 }

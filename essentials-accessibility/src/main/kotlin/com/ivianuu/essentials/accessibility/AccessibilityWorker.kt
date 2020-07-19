@@ -11,7 +11,6 @@ import com.ivianuu.injekt.given
 annotation class AccessibilityWorker {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : suspend () -> Unit> invoke(): AccessibilityWorkers = setOf(given<T>())
     }
 }

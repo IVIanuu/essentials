@@ -22,7 +22,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
 @Given(ApplicationComponent::class)
-@Reader
 internal class ActionPermissions {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,

@@ -30,7 +30,6 @@ import java.io.ByteArrayOutputStream
 
 @BindActionFactory
 @Given
-@Reader
 internal class ShortcutActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -54,7 +53,6 @@ internal class ShortcutActionFactory : ActionFactory {
 
 @BindActionPickerDelegate
 @Given
-@Reader
 internal class ShortcutActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_shortcut)

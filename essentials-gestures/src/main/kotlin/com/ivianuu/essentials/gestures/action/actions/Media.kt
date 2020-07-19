@@ -27,7 +27,6 @@ fun mediaAction(
 )
 
 @Given
-@Reader
 internal class MediaActionExecutor(
     private val keycode: Int
 ) : ActionExecutor {

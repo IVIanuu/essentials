@@ -22,7 +22,6 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
     Permission.Key<Unit>("IsWriteSecureSettingsPermission")
 }
 
-@Reader
 @BindPermissionStateProvider
 @Given
 internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvider {
@@ -35,7 +34,6 @@ internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvi
 
 }
 
-@Reader
 @BindPermissionRequestHandler
 @Given
 internal class WriteSecureSettingsPermissionRequestHandler : PermissionRequestHandler {

@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
-@Reader
 @Given
 internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
 
@@ -107,7 +106,6 @@ private fun Permission(
     }
 }
 
-@Reader
 @Given
 internal class DefaultPermissionViewModel(
     private val request: PermissionRequest

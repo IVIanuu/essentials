@@ -7,7 +7,6 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-@Reader
 class ActionPrefs {
     val actionMediaApp = given<DiskDataStoreFactory>().create<String?>("action_media_app") { null }
 }

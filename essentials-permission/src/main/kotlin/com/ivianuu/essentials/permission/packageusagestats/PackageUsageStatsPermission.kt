@@ -46,7 +46,6 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
 
 @BindPermissionStateProvider
 @Given
-@Reader
 internal class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

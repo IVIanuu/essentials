@@ -27,7 +27,6 @@ import com.ivianuu.injekt.given
 annotation class BindPermissionStateProvider {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
             setOf(given<T>())
     }
@@ -37,7 +36,6 @@ annotation class BindPermissionStateProvider {
 annotation class BindPermissionRequestHandler {
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
             setOf(given<T>())
     }
@@ -47,7 +45,6 @@ annotation class BindPermissionRequestHandler {
 annotation class BindPermissionRequestRouteFactory {
     companion object {
         @Given
-        @Reader
         operator fun <T : PermissionRequestRouteFactory> invoke(): PermissionRequestRouteFactory =
             given<T>()
     }

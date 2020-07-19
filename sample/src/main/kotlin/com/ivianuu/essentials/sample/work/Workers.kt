@@ -28,7 +28,6 @@ import kotlinx.coroutines.delay
 
 @BindWorker
 @Given
-@Reader
 class TestWorker(
     context: Context,
     workerParams: WorkerParameters

@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 @Given(ApplicationComponent::class)
-@Reader
 class PermissionManager {
 
     private val permissionChanges = EventFlow<Unit>()

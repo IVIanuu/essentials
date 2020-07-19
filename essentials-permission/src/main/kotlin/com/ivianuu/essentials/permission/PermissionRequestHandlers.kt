@@ -8,7 +8,6 @@ import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
 @Given
-@Reader
 class PermissionRequestHandlers {
 
     private val requestHandlers = given<Set<PermissionRequestHandler>>()

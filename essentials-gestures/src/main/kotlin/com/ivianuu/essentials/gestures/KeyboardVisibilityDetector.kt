@@ -42,7 +42,6 @@ import java.lang.reflect.Method
  * Provides info about the keyboard state
  */
 @Given(ApplicationComponent::class)
-@Reader
 class KeyboardVisibilityDetector {
 
     val keyboardVisible: Flow<Boolean> = given<AccessibilityServices>().events

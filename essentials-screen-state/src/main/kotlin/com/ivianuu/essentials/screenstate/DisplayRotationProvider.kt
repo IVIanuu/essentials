@@ -51,7 +51,6 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 @Given(ApplicationComponent::class)
-@Reader
 class DisplayRotationProvider {
 
     val displayRotation: Flow<DisplayRotation> = given<ScreenStateProvider>().screenState

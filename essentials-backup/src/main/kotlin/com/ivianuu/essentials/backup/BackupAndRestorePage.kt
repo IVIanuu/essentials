@@ -38,7 +38,6 @@ fun BackupAndRestorePage() {
 }
 
 @Given
-@Reader
 internal class BackupAndRestoreViewModel : ViewModel() {
 
     fun backupClicked() {

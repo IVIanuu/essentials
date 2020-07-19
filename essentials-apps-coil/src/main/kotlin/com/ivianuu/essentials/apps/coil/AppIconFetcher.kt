@@ -39,7 +39,6 @@ import kotlinx.coroutines.withContext
 data class AppIcon(val packageName: String)
 
 @Given
-@Reader
 internal class AppIconFetcher : Fetcher<AppIcon> {
 
     override fun key(data: AppIcon): String? = data.packageName
@@ -56,7 +55,6 @@ internal class AppIconFetcher : Fetcher<AppIcon> {
 
     companion object {
         @SetElements(ApplicationComponent::class)
-        @Reader
         fun appIconFetcherIntoMap(): Set<FetcherBinding<*>> = setOf(
             FetcherBinding(
                 given<AppIconFetcher>(),

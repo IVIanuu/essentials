@@ -25,7 +25,6 @@ fun assistantAction() = Action(
 )
 
 @Given
-@Reader
 internal class AssistantActionExecutor : ActionExecutor {
     @SuppressLint("DiscouragedPrivateApi")
     override suspend fun invoke() {

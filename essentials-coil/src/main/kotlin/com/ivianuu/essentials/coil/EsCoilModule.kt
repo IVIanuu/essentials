@@ -29,7 +29,6 @@ import com.ivianuu.injekt.given
 object EsCoilModule {
 
     @Given(ApplicationComponent::class)
-    @Reader
     fun imageLoader() = ImageLoader.Builder(applicationContext)
         .componentRegistry {
             given<Set<Decoder>>().forEach { add(it) }

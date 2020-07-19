@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.onEach
  * Recent apps provider
  */
 @Given(ApplicationComponent::class)
-@Reader
 class RecentAppsProvider {
 
     val currentApp: Flow<String?>
