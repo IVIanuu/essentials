@@ -21,6 +21,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
@@ -47,6 +48,7 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
     )
 }
 
+@BindPermissionStateProvider
 @Given
 internal class AccessibilityServicePermissionStateProvider : PermissionStateProvider {
 
