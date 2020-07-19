@@ -17,7 +17,7 @@ fun searchAction() = Action(
     key = "search",
     title = Resources.getString(R.string.es_action_search),
     iconProvider = SingleActionIconProvider(Icons.Default.Search),
-    executor = given<(Intent) -> IntentActionExecutor>()(
+    executor = given<IntentActionExecutor>(
         Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(
                 "com.google.android.googlequicksearchbox",

@@ -34,7 +34,7 @@ internal class KeycodeActionFactory : ActionFactory {
             title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
             iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
             permissions = listOf(given<ActionPermissions>().root),
-            executor = given<(String) -> RootActionExecutor>()("input keyevent $keycode"),
+            executor = given<RootActionExecutor>("input keyevent $keycode"),
             unlockScreen = false,
             enabled = true
         )

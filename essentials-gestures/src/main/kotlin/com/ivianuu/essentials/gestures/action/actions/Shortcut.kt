@@ -44,7 +44,7 @@ internal class ShortcutActionFactory : ActionFactory {
             title = label,
             unlockScreen = true,
             iconProvider = SingleActionIconProvider { Icon(ImagePainter(icon)) },
-            executor = given<(Intent) -> IntentActionExecutor>()(intent),
+            executor = given<IntentActionExecutor>(intent),
             enabled = true
         )
     }

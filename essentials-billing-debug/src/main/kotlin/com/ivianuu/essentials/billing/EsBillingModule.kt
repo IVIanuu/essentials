@@ -29,13 +29,13 @@ object EsBillingModule {
 
     @Given
     fun debugBillingClient(): DebugBillingClient {
-        given<() -> PurchaseManager>()()
+        given<PurchaseManager>(lazy = true)
         return debugBillingClient!!
     }
 
     @Given
     fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
-        given<(PurchasesUpdatedListener) -> DebugBillingClient>()(listener)
+        given<DebugBillingClient>(listener)
             .also { debugBillingClient = it }
 
 }

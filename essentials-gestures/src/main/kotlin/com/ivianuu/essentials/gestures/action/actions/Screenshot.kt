@@ -29,9 +29,9 @@ fun screenshotAction(): Action {
             )
         },
         executor = (if (systemBuildInfo.sdk >= 28) {
-            given<(Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+            given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
         } else {
-            given<(String) -> RootActionExecutor>()("input keyevent 26")
+            given<RootActionExecutor>("input keyevent 26")
         }).let {
             it.beforeAction { delay(500.milliseconds.toLongMilliseconds()) } // todo remove toLongMilliseconds()
         }

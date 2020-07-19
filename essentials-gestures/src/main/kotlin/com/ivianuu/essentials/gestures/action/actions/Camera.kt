@@ -19,7 +19,7 @@ fun cameraAction() = Action(
     key = "camera",
     title = Resources.getString(R.string.es_action_camera),
     iconProvider = SingleActionIconProvider(Icons.Default.PhotoCamera),
-    executor = given<(Intent) -> IntentActionExecutor>()(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)),
+    executor = given<IntentActionExecutor>(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)),
     unlockScreen = true
 )
 

@@ -21,7 +21,7 @@ internal fun accessibilityAction(
     title = Resources.getString(titleRes),
     iconProvider = SingleActionIconProvider(icon),
     permissions = permissions { listOf(accessibility) },
-    executor = given<(Int) -> AccessibilityActionExecutor>()(accessibilityAction)
+    executor = given<AccessibilityActionExecutor>(accessibilityAction)
 )
 
 @Given

@@ -26,8 +26,8 @@ fun homeAction() = Action(
         else listOf(accessibility)
     },
     iconProvider = SingleActionIconProvider(R.drawable.es_ic_action_home),
-    executor = if (needsHomeIntentWorkaround) given<() -> IntentHomeActionExecutor>()()
-    else given<(Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_HOME)
+    executor = if (needsHomeIntentWorkaround) given<IntentHomeActionExecutor>(lazy = true)
+    else given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_HOME)
 )
 
 @Given
@@ -40,7 +40,7 @@ internal class IntentHomeActionExecutor : ActionExecutor {
             e.printStackTrace()
         }
 
-        given<(Intent) -> IntentActionExecutor>()(Intent(Intent.ACTION_MAIN).apply {
+        given<IntentActionExecutor>(Intent(Intent.ACTION_MAIN).apply {
             addCategory(
                 Intent.CATEGORY_HOME
             )

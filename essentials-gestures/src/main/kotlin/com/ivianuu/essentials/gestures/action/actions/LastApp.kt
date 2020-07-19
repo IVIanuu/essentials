@@ -29,7 +29,7 @@ fun lastAppAction() = Action(
 internal class LastAppActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         val executor =
-            given<(Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_RECENTS)
+            given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_RECENTS)
         executor()
         delay(250)
         executor()

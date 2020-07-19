@@ -38,7 +38,7 @@ internal class KillForegroundAppActionExecutor : ActionExecutor {
             currentApp != given<BuildInfo>().packageName && // we have no suicidal intentions :D
             currentApp != getHomePackage()
         ) {
-            given<(String) -> RootActionExecutor>()("am force-stop $currentApp")()
+            given<RootActionExecutor>("am force-stop $currentApp")()
         }
     }
 

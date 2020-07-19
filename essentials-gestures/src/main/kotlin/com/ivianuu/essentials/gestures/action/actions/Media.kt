@@ -23,7 +23,7 @@ fun mediaAction(
     key = key,
     title = Resources.getString(titleRes),
     iconProvider = SingleActionIconProvider(icon),
-    executor = given<(Int) -> MediaActionExecutor>()(keycode)
+    executor = given<MediaActionExecutor>(keycode)
 )
 
 @Given

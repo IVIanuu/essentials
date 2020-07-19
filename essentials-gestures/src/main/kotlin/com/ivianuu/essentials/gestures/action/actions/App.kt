@@ -89,7 +89,7 @@ internal class AppActionIconProvider(
     private val packageName: String
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
-        get() = given<(Any) -> CoilActionIconProvider>()(AppIcon(packageName)).icon
+        get() = given<CoilActionIconProvider>(AppIcon(packageName)).icon
 }
 
 private const val ACTION_KEY_PREFIX = "app=:="

@@ -23,7 +23,7 @@ fun ActionPickerPage(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
         val viewModel = viewModel {
-            given<(Boolean, Boolean) -> ActionPickerViewModel>()(
+            given<ActionPickerViewModel>(
                 showDefaultOption,
                 showNoneOption
             )

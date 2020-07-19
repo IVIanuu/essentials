@@ -27,9 +27,9 @@ fun lockScreenAction(): Action {
             )
         },
         executor = if (systemBuildInfo.sdk >= 28) {
-            given<(Int) -> AccessibilityActionExecutor>()(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+            given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
         } else {
-            given<(String) -> RootActionExecutor>()("input keyevent 26")
+            given<RootActionExecutor>("input keyevent 26")
         }
     )
 }

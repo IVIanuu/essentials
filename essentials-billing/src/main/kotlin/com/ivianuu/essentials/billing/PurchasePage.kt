@@ -32,7 +32,7 @@ fun PurchasePage(requestId: String) {
     launchInComposition {
         given<Navigator>().popTop()
         withContext(NonCancellable) {
-            given<() -> PurchaseManager>()().purchaseInternal(requestId, activity)
+            given<PurchaseManager>(lazy = true).purchaseInternal(requestId, activity)
         }
     }
 }

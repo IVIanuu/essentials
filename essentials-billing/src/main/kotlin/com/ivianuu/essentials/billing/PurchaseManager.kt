@@ -73,7 +73,7 @@ class PurchaseManager {
     }
     private val refreshTrigger = EventFlow<Unit>()
 
-    private val billingClient = given<(PurchasesUpdatedListener) -> BillingClient>()(updateListener)
+    private val billingClient = given<BillingClient>(updateListener)
 
     private val requests = ConcurrentHashMap<String, PurchaseRequest>()
 

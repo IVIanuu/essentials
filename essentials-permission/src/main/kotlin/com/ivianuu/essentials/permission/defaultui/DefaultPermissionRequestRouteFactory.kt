@@ -64,9 +64,7 @@ internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFact
 @Reader
 @Composable
 internal fun DefaultPermissionPage(request: PermissionRequest) {
-    val viewModel = viewModel {
-        given<(PermissionRequest) -> DefaultPermissionViewModel>()(request)
-    }
+    val viewModel = viewModel { given<DefaultPermissionViewModel>(request) }
 
     Scaffold(
         topBar = {

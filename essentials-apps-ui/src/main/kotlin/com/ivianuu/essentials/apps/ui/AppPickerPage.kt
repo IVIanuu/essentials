@@ -50,7 +50,7 @@ fun AppPickerPage(
     title: String? = null
 ) {
     val viewModel = viewModel(appFilter) {
-        given<(AppFilter) -> AppPickerViewModel>()(appFilter)
+        given<AppPickerViewModel>(appFilter)
     }
 
     Scaffold(

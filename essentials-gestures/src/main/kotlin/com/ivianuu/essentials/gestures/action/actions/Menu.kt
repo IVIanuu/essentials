@@ -17,5 +17,5 @@ fun menuAction() = Action(
     title = Resources.getString(R.string.es_action_menu),
     iconProvider = SingleActionIconProvider(Icons.Default.MoreVert),
     permissions = permissions { listOf(root) },
-    executor = given<(String) -> RootActionExecutor>()("input keyevent 82")
+    executor = given<RootActionExecutor>("input keyevent 82")
 )
