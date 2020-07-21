@@ -16,21 +16,16 @@
 
 package com.ivianuu.essentials.data
 
-import android.content.Context
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
 import java.io.File
 
@@ -52,7 +47,7 @@ object EsDataModule {
         serializerFactory = given()
     )
 
-    @Given
+    @Given(ApplicationComponent::class)
     fun settingsDataStoreFactory() = SettingsDataStoreFactory(
         context = applicationContext,
         scope = globalScope + dispatchers.io
