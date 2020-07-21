@@ -3,7 +3,6 @@ package com.ivianuu.essentials.gestures.action
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)

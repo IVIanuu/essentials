@@ -4,7 +4,6 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader

@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.DisposableHandle

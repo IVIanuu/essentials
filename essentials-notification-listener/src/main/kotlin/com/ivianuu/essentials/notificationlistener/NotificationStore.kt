@@ -2,11 +2,9 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext

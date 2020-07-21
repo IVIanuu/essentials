@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.permission.notificationlistener
 
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
@@ -29,7 +28,6 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlin.reflect.KClass
 

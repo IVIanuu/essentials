@@ -11,7 +11,6 @@ import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 fun WriteSecureSettingsPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission withValue Unit,

@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.ui
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Given

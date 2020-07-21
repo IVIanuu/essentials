@@ -16,16 +16,12 @@
 
 package com.ivianuu.essentials.work
 
-import android.content.Context
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @AppInitializer

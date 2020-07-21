@@ -21,7 +21,6 @@ import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given

@@ -24,8 +24,6 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin

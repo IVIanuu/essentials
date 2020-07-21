@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 
 @Reader
 @Composable

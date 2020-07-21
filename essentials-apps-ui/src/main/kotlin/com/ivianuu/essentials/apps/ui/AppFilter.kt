@@ -20,7 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 typealias AppFilter = (AppInfo) -> Boolean

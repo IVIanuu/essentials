@@ -17,11 +17,9 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.Composable
-import androidx.compose.FrameManager
 import androidx.compose.Providers
 import androidx.compose.Stable
 import androidx.compose.currentComposer
-import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateListOf
 import androidx.compose.mutableStateOf

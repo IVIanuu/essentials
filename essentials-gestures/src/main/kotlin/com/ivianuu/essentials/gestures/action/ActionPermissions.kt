@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.gestures.action
 
-import android.content.Context
 import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Accessibility
@@ -19,7 +18,6 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 @Given(ApplicationComponent::class)
 internal class ActionPermissions {

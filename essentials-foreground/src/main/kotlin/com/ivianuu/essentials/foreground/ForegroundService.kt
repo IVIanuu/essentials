@@ -18,7 +18,6 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader

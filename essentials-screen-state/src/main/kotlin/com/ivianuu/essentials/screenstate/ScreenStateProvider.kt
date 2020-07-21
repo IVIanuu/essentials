@@ -20,24 +20,15 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 @Reader

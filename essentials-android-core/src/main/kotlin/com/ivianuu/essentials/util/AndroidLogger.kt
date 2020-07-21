@@ -2,7 +2,6 @@ package com.ivianuu.essentials.util
 
 import android.util.Log
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Given

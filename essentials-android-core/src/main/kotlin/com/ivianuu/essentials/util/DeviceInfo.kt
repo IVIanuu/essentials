@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import android.os.Build
 import androidx.compose.Immutable
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 @Immutable
 data class DeviceInfo(

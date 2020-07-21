@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

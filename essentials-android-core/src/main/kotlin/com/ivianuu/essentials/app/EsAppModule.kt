@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 object EsAppModule {
 

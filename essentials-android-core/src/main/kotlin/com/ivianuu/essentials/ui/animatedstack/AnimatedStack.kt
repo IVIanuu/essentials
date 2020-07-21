@@ -2,8 +2,6 @@ package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.Composable
 import androidx.compose.Stable
-import androidx.compose.frames.modelListOf
-import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateListOf

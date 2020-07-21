@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.Composable
-import androidx.compose.FrameManager
 import androidx.compose.Immutable
 import androidx.compose.collectAsState
 import androidx.compose.getValue

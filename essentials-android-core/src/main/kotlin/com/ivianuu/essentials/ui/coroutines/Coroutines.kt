@@ -17,16 +17,10 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.Composable
-import androidx.compose.FrameManager
 import androidx.compose.State
 import androidx.compose.launchInComposition
-import androidx.compose.onDispose
-import androidx.compose.remember
 import androidx.compose.state
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlin.coroutines.CoroutineContext
 
 @Composable
 fun <T> produceState(

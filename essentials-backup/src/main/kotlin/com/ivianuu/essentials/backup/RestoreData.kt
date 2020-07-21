@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.backup
 
-import android.content.Context
 import android.content.Intent
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.applicationContext

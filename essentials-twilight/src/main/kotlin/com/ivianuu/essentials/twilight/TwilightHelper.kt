@@ -16,17 +16,13 @@
 
 package com.ivianuu.essentials.twilight
 
-import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.PowerManager
 import androidx.compose.Immutable
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.given

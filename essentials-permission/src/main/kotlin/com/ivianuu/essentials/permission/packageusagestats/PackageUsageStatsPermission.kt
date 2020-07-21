@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.permission.packageusagestats
 
 import android.app.AppOpsManager
-import android.content.Context
 import android.content.Intent
 import android.os.Process
 import android.provider.Settings
@@ -29,7 +28,6 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 fun PackageUsageStatsPermission(

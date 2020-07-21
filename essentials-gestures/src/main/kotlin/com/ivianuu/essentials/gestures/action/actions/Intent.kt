@@ -1,14 +1,12 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 @Given
 internal class IntentActionExecutor(

@@ -19,13 +19,11 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 class DefaultAccessibilityService : EsAccessibilityService() {
 

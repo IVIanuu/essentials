@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
 import eu.chainfire.libsuperuser.Shell.SU

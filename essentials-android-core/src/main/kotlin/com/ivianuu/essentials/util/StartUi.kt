@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.util
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.app.applicationContext

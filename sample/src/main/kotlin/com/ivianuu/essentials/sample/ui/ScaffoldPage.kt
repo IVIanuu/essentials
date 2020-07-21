@@ -51,7 +51,6 @@ import com.ivianuu.essentials.ui.material.ScaffoldState
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.Reader

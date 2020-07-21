@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.Composable
-import androidx.compose.StructurallyEqual
 import androidx.compose.mutableStateOf
 import androidx.compose.remember
 import androidx.compose.structuralEqualityPolicy

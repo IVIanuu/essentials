@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.permission.runtime
 
-import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.app.applicationContext
@@ -29,7 +28,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 fun RuntimePermission(
     name: String,

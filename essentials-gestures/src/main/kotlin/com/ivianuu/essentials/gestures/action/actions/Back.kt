@@ -5,9 +5,7 @@ import androidx.ui.foundation.Icon
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 
 @BindAction
 @Reader

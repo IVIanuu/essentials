@@ -26,7 +26,6 @@ import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.activity.EsActivity
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.activityComponent

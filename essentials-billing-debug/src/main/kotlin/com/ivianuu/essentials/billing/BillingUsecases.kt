@@ -24,10 +24,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first

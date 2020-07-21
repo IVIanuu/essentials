@@ -19,11 +19,9 @@ package com.ivianuu.essentials.boot
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader
-import kotlin.reflect.KClass
 
 class StartupReceiver : EsBroadcastReceiver() {
 

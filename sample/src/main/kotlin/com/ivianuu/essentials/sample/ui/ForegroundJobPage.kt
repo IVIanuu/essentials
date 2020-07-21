@@ -3,7 +3,6 @@ package com.ivianuu.essentials.sample.ui
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.graphics.drawable.Icon
 import androidx.compose.Composable
 import androidx.compose.getValue

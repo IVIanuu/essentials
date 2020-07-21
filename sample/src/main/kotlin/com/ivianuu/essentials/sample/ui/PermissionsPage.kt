@@ -27,7 +27,6 @@ import androidx.ui.material.Button
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -45,7 +44,6 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader

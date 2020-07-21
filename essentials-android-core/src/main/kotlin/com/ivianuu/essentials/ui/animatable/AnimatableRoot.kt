@@ -3,7 +3,6 @@ package com.ivianuu.essentials.ui.animatable
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
-import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.key
 import androidx.compose.mutableStateListOf

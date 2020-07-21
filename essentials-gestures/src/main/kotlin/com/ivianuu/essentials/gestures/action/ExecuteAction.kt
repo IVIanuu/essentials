@@ -5,7 +5,6 @@ import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
 @Reader

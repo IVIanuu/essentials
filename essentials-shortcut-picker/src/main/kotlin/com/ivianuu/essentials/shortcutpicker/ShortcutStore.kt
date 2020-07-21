@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.activity
 
 import android.os.Bundle
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.AppUiMarker
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.given

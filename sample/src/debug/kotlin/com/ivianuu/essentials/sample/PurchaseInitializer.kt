@@ -20,11 +20,8 @@ import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.billing.addProduct
 import com.ivianuu.essentials.sample.ui.DummySku
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @AppInitializer

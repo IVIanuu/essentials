@@ -17,18 +17,13 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.Notification
-import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.atomic.AtomicInteger
 

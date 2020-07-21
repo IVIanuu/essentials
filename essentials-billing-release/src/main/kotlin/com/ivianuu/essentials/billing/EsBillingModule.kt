@@ -21,7 +21,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 
 object EsBillingModule {
 

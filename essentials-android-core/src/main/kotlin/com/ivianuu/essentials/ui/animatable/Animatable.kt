@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.ui.animatable
 
 import androidx.compose.Stable
-import androidx.compose.frames.modelMapOf
 import androidx.compose.getValue
 import androidx.compose.mutableStateMapOf
 import androidx.compose.mutableStateOf

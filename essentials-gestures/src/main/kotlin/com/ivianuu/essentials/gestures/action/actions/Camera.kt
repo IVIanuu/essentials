@@ -8,9 +8,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @BindAction

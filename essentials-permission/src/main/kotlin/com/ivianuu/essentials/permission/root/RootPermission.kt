@@ -11,7 +11,7 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
+
 fun RootPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsRootPermission withValue Unit,
     *metadata

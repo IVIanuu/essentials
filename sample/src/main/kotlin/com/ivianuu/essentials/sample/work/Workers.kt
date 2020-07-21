@@ -18,11 +18,9 @@ package com.ivianuu.essentials.sample.work
 
 import android.content.Context
 import androidx.work.WorkerParameters
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.work.BindWorker
 import kotlinx.coroutines.delay
 

@@ -17,14 +17,9 @@
 package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
-import android.content.Context
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.CompletableDeferred

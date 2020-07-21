@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import android.hardware.SensorManager
@@ -25,17 +24,12 @@ import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.core.DisplayRotation
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

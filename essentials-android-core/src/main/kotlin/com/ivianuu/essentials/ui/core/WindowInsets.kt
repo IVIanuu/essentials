@@ -24,7 +24,6 @@ import android.view.WindowManager
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
-import androidx.compose.StructurallyEqual
 import androidx.compose.ambientOf
 import androidx.compose.getValue
 import androidx.compose.onCommit

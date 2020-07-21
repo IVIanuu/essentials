@@ -20,7 +20,6 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 

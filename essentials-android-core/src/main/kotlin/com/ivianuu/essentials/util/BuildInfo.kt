@@ -22,7 +22,6 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Immutable

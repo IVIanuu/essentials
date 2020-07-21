@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.util
 
-import android.content.Context
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ImageAsset

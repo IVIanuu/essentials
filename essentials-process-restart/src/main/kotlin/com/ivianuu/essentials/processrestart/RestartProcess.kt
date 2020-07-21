@@ -16,13 +16,10 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.content.Context
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given

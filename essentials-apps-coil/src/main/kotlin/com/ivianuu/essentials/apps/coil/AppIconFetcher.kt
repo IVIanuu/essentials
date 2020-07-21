@@ -26,11 +26,9 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.size.Size
 import com.ivianuu.essentials.coil.FetcherBinding
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
