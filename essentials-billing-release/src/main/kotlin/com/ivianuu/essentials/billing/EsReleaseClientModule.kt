@@ -18,22 +18,17 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
 
-object EsBillingModule {
+object EsReleaseClientModule {
 
-    private var debugBillingClient: DebugBillingClient? = null
-
-    @Given
-    fun debugBillingClient(): DebugBillingClient {
-        given<PurchaseManager>(lazy = true)
-        return debugBillingClient!!
-    }
-
-    @Given
-    fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
-        given<DebugBillingClient>(listener)
-            .also { debugBillingClient = it }
+    @Given(ApplicationComponent::class)
+    fun billingClient(updateListener: PurchasesUpdatedListener) = BillingClient
+        .newBuilder(applicationContext)
+        .enablePendingPurchases()
+        .setListener(updateListener)
+        .build()
 
 }

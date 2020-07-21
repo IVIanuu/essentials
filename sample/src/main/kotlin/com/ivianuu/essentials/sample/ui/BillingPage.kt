@@ -31,19 +31,19 @@ import androidx.ui.layout.height
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.billing.consumePurchase
+import com.ivianuu.essentials.billing.isPurchased
+import com.ivianuu.essentials.billing.purchase
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
 @Composable
 fun BillingPage() {
-    val purchaseManager = given<PurchaseManager>()
-    val isPurchased = remember { purchaseManager.isPurchased(DummySku) }
+    val isPurchased = remember { isPurchased(DummySku) }
         .collectAsState(false)
 
     Scaffold(
@@ -67,7 +67,7 @@ fun BillingPage() {
                 Button(
                     onClick = {
                         scope.launch {
-                            purchaseManager.purchase(DummySku)
+                            purchase(DummySku)
                         }
                     }
                 ) { Text("Purchase") }
@@ -75,7 +75,7 @@ fun BillingPage() {
                 Button(
                     onClick = {
                         scope.launch {
-                            purchaseManager.consume(DummySku)
+                            consumePurchase(DummySku)
                         }
                     }
                 ) { Text("Consume") }
