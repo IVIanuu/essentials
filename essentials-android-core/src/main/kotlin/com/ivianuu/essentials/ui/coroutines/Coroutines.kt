@@ -35,8 +35,6 @@ fun <T> produceState(
     block: suspend CoroutineScope.() -> T
 ): State<T> {
     val state = state { initial }
-
     launchInComposition(*inputs) { state.value = block() }
-
     return state
 }

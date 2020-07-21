@@ -8,9 +8,6 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
-private val deferreds = ConcurrentHashMap<Any, Deferred<*>>()
-private val deferredsCleanLaunched = AtomicBoolean()
-
 suspend fun <T> runOrAwait(
     key: Any,
     block: suspend CoroutineScope.() -> T
@@ -29,3 +26,6 @@ suspend fun <T> runOrAwait(
     @Suppress("UNCHECKED_CAST")
     deferred.await() as T
 }
+
+private val deferreds = ConcurrentHashMap<Any, Deferred<*>>()
+private val deferredsCleanLaunched = AtomicBoolean()
