@@ -22,11 +22,10 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.screenstate.ScreenStateProvider
+import com.ivianuu.essentials.screenstate.screenState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.unlock.UnlockScreen
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
@@ -48,7 +47,7 @@ fun UnlockPage() {
                 scope.launch {
                     Toaster.toast("Turn the screen off and on")
 
-                    given<ScreenStateProvider>().screenState
+                    screenState
                         .filter { it == ScreenState.Locked }
                         .first()
 

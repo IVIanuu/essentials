@@ -62,7 +62,7 @@ class UnlockScreenActivity : EsActivity() {
             fun finishWithResult(success: Boolean) {
                 d { "finish with result $success" }
                 hasResult = true
-                given<UnlockScreen>().onUnlockScreenResult(requestId, success)
+                onUnlockScreenResult(requestId, success)
                 finish()
             }
 
@@ -108,7 +108,7 @@ class UnlockScreenActivity : EsActivity() {
         activityComponent.runReader {
             // just in case we didn't respond yet
             if (valid && !hasResult) {
-                given<UnlockScreen>().onUnlockScreenResult(requestId, false)
+                onUnlockScreenResult(requestId, false)
             }
         }
         super.onDestroy()

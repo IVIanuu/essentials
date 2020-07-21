@@ -77,7 +77,7 @@ class TorchManager {
                     tryOrToast {
                         given<CameraManager>().unregisterTorchCallback(this)
                         given<CameraManager>().setTorchMode(cameraId, !enabled)
-                        //stateActor.offer(!enabled)
+                        stateActor.offer(!enabled)
                     }
                 }
 
@@ -85,7 +85,7 @@ class TorchManager {
                     tryOrToast {
                         given<CameraManager>().unregisterTorchCallback(this)
                         Toaster.toast(R.string.es_failed_to_toggle_torch)
-                        //stateActor.offer(false)
+                        stateActor.offer(false)
                     }
                 }
             }, null)

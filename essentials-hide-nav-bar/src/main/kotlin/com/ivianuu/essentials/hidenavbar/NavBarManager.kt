@@ -23,7 +23,7 @@ import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.screenstate.ScreenStateProvider
+import com.ivianuu.essentials.screenstate.screenState
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
@@ -64,7 +64,6 @@ class NavBarManager {
 
     private val displayRotationProvider = given<DisplayRotationProvider>()
     private val prefs = given<NavBarPrefs>()
-    private val screenStateProvider = given<ScreenStateProvider>()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
         d { "set nav bar config $config" }
@@ -95,7 +94,7 @@ class NavBarManager {
                     }
 
                     if (config.showWhileScreenOff) {
-                        this += screenStateProvider.screenState.drop(1)
+                        this += screenState.drop(1)
                     }
                 }
 
@@ -105,7 +104,7 @@ class NavBarManager {
                         .onStart { emit(Unit) }
                         .map {
                             !config.showWhileScreenOff ||
-                                    screenStateProvider.screenState.first() == ScreenState.Unlocked
+                                    screenState.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             prefs.wasNavBarHidden.updateData { navBarHidden }

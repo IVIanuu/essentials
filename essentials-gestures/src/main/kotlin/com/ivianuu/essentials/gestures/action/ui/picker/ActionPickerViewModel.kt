@@ -12,7 +12,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
@@ -69,7 +69,7 @@ internal class ActionPickerViewModel(
             val result = selectedItem.getResult() ?: return@launch
             if (result is ActionPickerResult.Action) {
                 val action = getAction(result.actionKey)
-                if (!given<PermissionManager>().request(action.permissions)) return@launch
+                if (!requestPermissions(action.permissions)) return@launch
             }
 
             navigator.popTop(result = result)

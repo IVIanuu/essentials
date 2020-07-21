@@ -30,9 +30,10 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
@@ -65,11 +66,10 @@ fun NotificationsPage() {
         }
 
         val notificationStore = given<NotificationStore>()
-        val permissionManager = given<PermissionManager>()
 
         ResourceBox(
             resource = remember {
-                permissionManager.hasPermissions(notificationPermission)
+                hasPermissions(notificationPermission)
             }.collectAsResource()
         ) { hasPermission ->
             val scope = rememberCoroutineScope()
@@ -160,7 +160,7 @@ fun NotificationsPage() {
                     Button(
                         onClick = {
                             scope.launch {
-                                permissionManager.request(notificationPermission)
+                                requestPermissions(notificationPermission)
                             }
                         }
                     ) {

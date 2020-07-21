@@ -1,10 +1,7 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.unlock.UnlockScreen
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.unlock.unlockScreen
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
@@ -17,7 +14,7 @@ suspend fun executeAction(key: String) = withContext(dispatchers.default) {
     val action = getAction(key)
 
     // check permissions
-    if (!given<PermissionManager>().request(action.permissions)) {
+    if (!requestPermissions(action.permissions)) {
         d { "couldn't get permissions for $key" }
         return@withContext
     }

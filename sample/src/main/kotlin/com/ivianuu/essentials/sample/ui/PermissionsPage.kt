@@ -32,10 +32,10 @@ import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerSe
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
@@ -107,7 +107,7 @@ fun PermissionsPage() {
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    given<PermissionManager>().request(
+                    requestPermissions(
                         camera,
                         phone,
                         accessibility,

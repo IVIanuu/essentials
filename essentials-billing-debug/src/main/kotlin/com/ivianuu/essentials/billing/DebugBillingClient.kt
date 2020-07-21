@@ -81,8 +81,6 @@ class DebugBillingClient(
 
     private var clientState = DISCONNECTED
 
-    private val billingStore = given<BillingStore>()
-
     override fun isReady(): Boolean = clientState == CONNECTED
 
     override fun startConnection(listener: BillingClientStateListener) {
@@ -133,9 +131,9 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase = billingStore.getPurchaseByToken(purchaseToken)
+            val purchase = getPurchaseByToken(purchaseToken)
             if (purchase != null) {
-                billingStore.removePurchase(purchase.purchaseToken)
+                removePurchase(purchase.purchaseToken)
                 listener.onConsumeResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -243,7 +241,7 @@ class DebugBillingClient(
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
-                ).build(), billingStore.getSkuDetails(params)
+                ).build(), getSkuDetails(params)
             )
         }
     }
@@ -263,7 +261,7 @@ class DebugBillingClient(
                 ).build(), /* purchasesList */ null
             )
         }
-        return runBlocking { billingStore.getPurchases(skuType) }
+        return runBlocking { getPurchases(skuType) }
     }
 
     override fun launchPriceChangeConfirmationFlow(
@@ -293,7 +291,7 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase = billingStore.getPurchaseByToken(purchaseToken)
+            val purchase = getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 val updated = Purchase(
                     orderId = purchase.orderId,
@@ -306,7 +304,7 @@ class DebugBillingClient(
                     isAutoRenewing = purchase.isAutoRenewing,
                     developerPayload = purchase.developerPayload
                 )
-                billingStore.addPurchase(updated)
+                addPurchase(updated)
                 listener?.onAcknowledgePurchaseResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -325,7 +323,7 @@ class DebugBillingClient(
     internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
         return withContext(dispatchers.default) {
             val request = requests[requestId] ?: return@withContext null
-            billingStore.getSkuDetails(
+            getSkuDetails(
                 SkuDetailsParams.newBuilder()
                     .setType(request.skuType)
                     .setSkusList(listOf(request.sku))
@@ -342,7 +340,7 @@ class DebugBillingClient(
         requests -= requestId
 
         if (responseCode == BillingResponseCode.OK) {
-            purchases!!.forEach { billingStore.addPurchase(it) }
+            purchases!!.forEach { addPurchase(it) }
         }
 
         purchasesUpdatedListener.onPurchasesUpdated(

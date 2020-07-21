@@ -40,13 +40,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-/**
- * Provides the current screen state
- */
-@Given(ApplicationComponent::class)
-class ScreenStateProvider {
-
-    val screenState: Flow<ScreenState> = BroadcastFactory.create(
+@Reader
+val screenState: Flow<ScreenState>
+    get() = BroadcastFactory.create(
         Intent.ACTION_SCREEN_OFF,
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT
@@ -57,26 +53,20 @@ class ScreenStateProvider {
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
-        .shareIn(
-            scope = globalScope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
-        )
 
-    private suspend fun getCurrentScreenState(): ScreenState =
-        withContext(dispatchers.default) {
-            if (given<PowerManager>().isInteractive) {
-                if (given<KeyguardManager>().isDeviceLocked) {
-                    ScreenState.Locked
-                } else {
-                    ScreenState.Unlocked
-                }
+@Reader
+private suspend fun getCurrentScreenState(): ScreenState =
+    withContext(dispatchers.default) {
+        if (given<PowerManager>().isInteractive) {
+            if (given<KeyguardManager>().isDeviceLocked) {
+                ScreenState.Locked
             } else {
-                ScreenState.Off
+                ScreenState.Unlocked
             }
+        } else {
+            ScreenState.Off
         }
-
-}
+    }
 
 enum class ScreenState(val isOn: Boolean) {
     Off(false), Locked(true), Unlocked(true)

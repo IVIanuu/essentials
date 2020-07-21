@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.permission.defaultui
 
 import androidx.compose.Composable
-import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.mutableStateListOf
 import androidx.ui.foundation.Text
@@ -26,22 +25,19 @@ import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
+import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startUi
@@ -118,9 +114,7 @@ internal class DefaultPermissionViewModel(
 
     fun permissionClicked(permission: Permission) {
         scope.launch {
-            given<PermissionRequestHandlers>()
-                .requestHandlerFor(permission)
-                .request(permission)
+            permission.requestHandler.request(permission)
             startUi()
             updatePermissionsToProcessOrFinish()
         }
@@ -129,7 +123,7 @@ internal class DefaultPermissionViewModel(
     private fun updatePermissionsToProcessOrFinish() {
         scope.launch {
             val permissionsToProcess = request.permissions
-                .filterNot { given<PermissionManager>().hasPermissions(it).first() }
+                .filterNot { hasPermissions(it).first() }
 
             d { "update permissions to process or finish not granted $permissionsToProcess" }
 

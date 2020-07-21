@@ -53,7 +53,7 @@ import kotlinx.coroutines.withContext
 @Given(ApplicationComponent::class)
 class DisplayRotationProvider {
 
-    val displayRotation: Flow<DisplayRotation> = given<ScreenStateProvider>().screenState
+    val displayRotation: Flow<DisplayRotation> = screenState
         .flatMapLatest { screenState ->
             if (screenState.isOn) {
                 merge(

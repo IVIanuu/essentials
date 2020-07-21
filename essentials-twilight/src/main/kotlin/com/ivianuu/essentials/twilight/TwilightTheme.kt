@@ -48,7 +48,7 @@ fun TwilightTheme(
     typography: Typography = Typography(),
     content: @Composable () -> Unit
 ) {
-    ResourceBox(resource = given<TwilightHelper>().state.collectAsResource()) { twilightState ->
+    ResourceBox(resource = remember { twilightState }.collectAsResource()) { twilightState ->
         fun colorsForTwilightState() = if (twilightState.isDark) {
             if (twilightState.useBlack) blackColors else darkColors
         } else lightColors
