@@ -46,7 +46,14 @@ class MutableDrawLayerModifier : DrawLayerModifier {
     override var rotationX by mutableStateOf(0f)
     override var rotationY by mutableStateOf(0f)
     override var rotationZ by mutableStateOf(0f)
-    override var transformOrigin by mutableStateOf(TransformOrigin.Center)
+
+    private var _transformOrigin = mutableStateOf(TransformOrigin.Center)
+    override var transformOrigin: TransformOrigin
+        get() = _transformOrigin.value
+        set(value) {
+            _transformOrigin.value = value
+        }
+
     override var shape by mutableStateOf(RectangleShape)
     override var clip by mutableStateOf(false)
 }
