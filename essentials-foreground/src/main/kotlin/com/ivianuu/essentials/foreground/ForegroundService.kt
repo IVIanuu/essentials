@@ -23,7 +23,6 @@ import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 class ForegroundService : EsService() {
 
@@ -44,13 +43,8 @@ class ForegroundService : EsService() {
             d { "started foreground service" }
         }
 
-        foregroundManager.updates
-            .onStart { emit(Unit) }
-            .onEach { update() }
-            .launchIn(scope)
-
-        foregroundManager.stopServiceRequests
-            .onEach { stop() }
+        foregroundManager.jobs
+            .onEach { update(it) }
             .launchIn(scope)
     }
 
@@ -61,9 +55,7 @@ class ForegroundService : EsService() {
         }
     }
 
-    private fun update() = synchronized(this) {
-        val newJobs = foregroundManager.job
-
+    private fun update(newJobs: List<ForegroundJob>) = synchronized(this) {
         component.runReader {
             d { "update jobs $newJobs" }
         }
@@ -78,20 +70,19 @@ class ForegroundService : EsService() {
             }
 
         lastJobs = newJobs
-        if (newJobs.isEmpty()) return
 
-        newJobs.forEachIndexed { index, job ->
-            if (index == 0) {
-                startForeground(job.id, job.notification)
-            } else {
-                notificationManager.notify(job.id, job.notification)
+        if (newJobs.isNotEmpty()) {
+            newJobs.forEachIndexed { index, job ->
+                if (index == 0) {
+                    startForeground(job.id, job.notification)
+                } else {
+                    notificationManager.notify(job.id, job.notification)
+                }
             }
+        } else {
+            stopForeground(true)
+            stopSelf()
         }
     }
 
-    private fun stop() = synchronized(this) {
-        lastJobs.forEach { notificationManager.cancel(it.id) }
-        stopForeground(true)
-        stopSelf()
-    }
 }
