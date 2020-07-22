@@ -24,6 +24,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -38,12 +39,31 @@ suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
     }
 
 @Reader
+suspend fun addProduct(skuDetails: SkuDetails): Unit = withContext(dispatchers.default) {
+    given<BillingPrefs>().products.updateData { it + skuDetails }
+}
+
+@Reader
+suspend fun removeProduct(sku: String): Unit = withContext(dispatchers.default) {
+    given<BillingPrefs>().products.updateData { products ->
+        products.filter { it.sku != sku }
+    }
+}
+
+@Reader
+suspend fun clearProducts(): Unit = withContext(dispatchers.default) {
+    given<BillingPrefs>().products.updateData { emptyList() }
+}
+
+@Reader
 suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
     withContext(dispatchers.default) {
         InternalPurchasesResult(
             BillingResult.newBuilder()
                 .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
             given<BillingPrefs>().purchases.data.first().filter { it.signature.endsWith(skuType) })
+    }.also {
+        d { "got purchase result for $skuType -> ${it.responseCode} ${it.purchasesList}" }
     }
 
 @Reader
@@ -54,29 +74,12 @@ suspend fun getPurchaseByToken(purchaseToken: String): Purchase? =
     }
 
 @Reader
-suspend fun addProduct(skuDetails: SkuDetails) = withContext(dispatchers.default) {
-    given<BillingPrefs>().products.updateData { it + skuDetails }
-}
-
-@Reader
-suspend fun removeProduct(sku: String) = withContext(dispatchers.default) {
-    given<BillingPrefs>().products.updateData { products ->
-        products.filter { it.sku != sku }
-    }
-}
-
-@Reader
-suspend fun clearProducts() = withContext(dispatchers.default) {
-    given<BillingPrefs>().products.updateData { emptyList() }
-}
-
-@Reader
-suspend fun addPurchase(purchase: Purchase) = withContext(dispatchers.default) {
+suspend fun addPurchase(purchase: Purchase): Unit = withContext(dispatchers.default) {
     given<BillingPrefs>().purchases.updateData { it + purchase }
 }
 
 @Reader
-suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.default) {
+suspend fun removePurchase(purchaseToken: String): Unit = withContext(dispatchers.default) {
     given<BillingPrefs>().purchases.updateData { purchases ->
         purchases.filter { it.purchaseToken != purchaseToken }
     }
@@ -86,6 +89,6 @@ suspend fun removePurchase(purchaseToken: String) = withContext(dispatchers.defa
 }
 
 @Reader
-suspend fun clearPurchases() = withContext(dispatchers.default) {
+suspend fun clearPurchases(): Unit = withContext(dispatchers.default) {
     given<BillingPrefs>().purchases.updateData { emptyList() }
 }

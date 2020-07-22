@@ -20,10 +20,8 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -68,14 +66,10 @@ internal class DiskDataStoreImpl<T>(
     private val serializer: Serializer<T> by lazy(produceSerializer)
     override val defaultData: T by lazy(produceDefaultData)
 
-    override val data: Flow<T> = changeNotifier
-        .onStart { emit(getData()) }
-        .distinctUntilChanged()
-        .shareIn(
-            scope = scope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed()
-        )
+    override val data: Flow<T>
+        get() = changeNotifier
+            .onStart { emit(getData()) }
+            .distinctUntilChanged()
 
     override suspend fun updateData(transform: suspend (t: T) -> T): T {
         return withContext(scope.coroutineContext) {

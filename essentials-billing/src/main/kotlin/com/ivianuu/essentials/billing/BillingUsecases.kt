@@ -27,8 +27,8 @@ import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -77,15 +77,11 @@ suspend fun purchase(
         .build()
 
     val result = given<BillingClient>().launchBillingFlow(activity, billingFlowParams)
-    d { "launch billing flow result ${result.responseCode} ${result.debugMessage}" }
     if (result.responseCode != BillingClient.BillingResponseCode.OK) return@withContext false
 
-    val success = refreshTrigger
-        .take(1)
-        .map { getIsPurchased(sku) }
-        .first()
+    refreshTrigger.take(1).collect()
 
-    d { "purchase finished $sku -> success ? $success" }
+    val success = getIsPurchased(sku)
 
     if (!acknowledge) return@withContext success
 
@@ -145,12 +141,10 @@ fun isPurchased(sku: Sku): Flow<Boolean> {
         appMovedToForegroundFlow,
         refreshTrigger
     )
-        .onEach { d { "is purchased flow for $sku -> refresh triggered" } }
         .onStart { emit(Unit) }
         .map { getIsPurchased(sku) }
-        .onEach { d { "is purchased flow for $sku -> fetched value $it" } }
         .distinctUntilChanged()
-        .onEach { d { "is purchased flow for $sku -> emit $it" } }
+        .onEach { d { "is purchased flow for $sku -> $it" } }
 }
 
 @Reader
@@ -177,7 +171,7 @@ private suspend fun getPurchase(sku: Sku): Purchase? = withContext(dispatchers.i
     given<BillingClient>().queryPurchases(sku.type.value)
         .purchasesList
         ?.firstOrNull { it.sku == sku.skuString }
-        ?.also { d { "got purchase $it for $sku" } }
+        .also { d { "got purchase $it for $sku" } }
 }
 
 @Reader

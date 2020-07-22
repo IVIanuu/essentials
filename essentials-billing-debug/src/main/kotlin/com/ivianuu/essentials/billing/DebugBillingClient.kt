@@ -55,8 +55,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 @Given(ApplicationComponent::class)
 class DebugBillingClient(
@@ -71,8 +69,6 @@ class DebugBillingClient(
         CONNECTED,
         CLOSED
     }
-
-    private val requests = ConcurrentHashMap<String, PurchaseRequest>()
 
     private var clientState = DISCONNECTED
 
@@ -149,20 +145,16 @@ class DebugBillingClient(
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
         globalScope.launch {
-            val requestId = UUID.randomUUID().toString()
-            val request = PurchaseRequest(params.sku, params.skuType!!)
-            requests[requestId] = request
-
             startUi()
 
             navigator.push(
                 DialogRoute(
                     onDismiss = {
                         globalScope.launch {
-                            onPurchaseResult(
-                                requestId = requestId,
-                                responseCode = BillingResponseCode.USER_CANCELED,
-                                purchases = null
+                            purchasesUpdatedListener.onPurchasesUpdated(
+                                BillingResult.newBuilder().setResponseCode(
+                                    BillingResponseCode.USER_CANCELED
+                                ).build(), null
                             )
 
                             navigator.popTop()
@@ -170,8 +162,15 @@ class DebugBillingClient(
                     }
                 ) {
                     ResourceBox(
-                        resource = produceResource(requestId) {
-                            getSkuDetailsForRequest(requestId)
+                        resource = produceResource {
+                            withContext(dispatchers.default) {
+                                getSkuDetails(
+                                    SkuDetailsParams.newBuilder()
+                                        .setType(params.skuType)
+                                        .setSkusList(listOf(params.sku))
+                                        .build()
+                                ).firstOrNull()
+                            }
                         }
                     ) { skuDetails ->
                         if (skuDetails == null) {
@@ -181,10 +180,13 @@ class DebugBillingClient(
                                 skuDetails = skuDetails,
                                 onPurchaseClick = {
                                     globalScope.launch {
-                                        onPurchaseResult(
-                                            requestId = requestId,
-                                            responseCode = BillingResponseCode.OK,
-                                            purchases = listOf(skuDetails.toPurchaseData())
+                                        val purchases = listOf(skuDetails.toPurchaseData())
+                                        purchases.forEach { addPurchase(it) }
+
+                                        purchasesUpdatedListener.onPurchasesUpdated(
+                                            BillingResult.newBuilder().setResponseCode(
+                                                BillingResponseCode.OK
+                                            ).build(), purchases
                                         )
 
                                         navigator.popTop()
@@ -253,7 +255,7 @@ class DebugBillingClient(
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
-                ).build(), /* purchasesList */ null
+                ).build(), null
             )
         }
         return runBlocking { getPurchases(skuType) }
@@ -315,39 +317,9 @@ class DebugBillingClient(
         }
     }
 
-    internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
-        return withContext(dispatchers.default) {
-            val request = requests[requestId] ?: return@withContext null
-            getSkuDetails(
-                SkuDetailsParams.newBuilder()
-                    .setType(request.skuType)
-                    .setSkusList(listOf(request.sku))
-                    .build()
-            ).firstOrNull()
-        }
-    }
-
-    internal suspend fun onPurchaseResult(
-        requestId: String,
-        responseCode: Int,
-        purchases: List<Purchase>?
-    ) = withContext(dispatchers.default) {
-        requests -= requestId
-
-        if (responseCode == BillingResponseCode.OK) {
-            purchases!!.forEach { addPurchase(it) }
-        }
-
-        purchasesUpdatedListener.onPurchasesUpdated(
-            BillingResult.newBuilder().setResponseCode(
-                responseCode
-            ).build(), purchases
-        )
-    }
-
     private fun SkuDetails.toPurchaseData(): Purchase {
         val json =
-            """{"orderId":"$sku..0","packageName":"${given<BuildInfo>().packageName}","productId":
+            """{"orderId":"$sku","packageName":"${given<BuildInfo>().packageName}","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
       |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")
