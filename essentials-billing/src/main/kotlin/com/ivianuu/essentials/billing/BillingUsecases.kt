@@ -58,15 +58,7 @@ suspend fun purchase(
         }
     }
 
-    startUi()
-
-    val activity = suspendCancellableCoroutine<Activity> { cont ->
-        navigator.push(
-            Route(opaque = true) {
-                cont.resume(ContextAmbient.current as Activity)
-            }
-        )
-    }
+    val activity = startUi()
 
     ensureConnected()
 
