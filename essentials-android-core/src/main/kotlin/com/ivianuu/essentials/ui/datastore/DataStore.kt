@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.datastore
 
 import androidx.compose.Composable
 import androidx.compose.MutableState
+import androidx.compose.State
 import androidx.compose.collectAsState
 import androidx.compose.key
 import androidx.compose.remember
@@ -28,8 +29,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun <T> DataStore<T>.asState(): MutableState<T> = key(this) {
     val scope = rememberCoroutineScope()
-    val state = data.collectAsState(defaultData) as MutableState<T>
-    remember {
+    val state = data.collectAsState(defaultData)
+    remember(state) {
         ObservableState(state) { newData ->
             scope.launch {
                 updateData { newData }
@@ -39,13 +40,15 @@ fun <T> DataStore<T>.asState(): MutableState<T> = key(this) {
 }
 
 private class ObservableState<T>(
-    val delegate: MutableState<T>,
+    val delegate: State<T>,
     val onWrite: (T) -> Unit
-) : MutableState<T> by delegate {
+) : MutableState<T> {
     override var value: T
         get() = delegate.value
         set(value) {
-            delegate.value = value
             onWrite(value)
         }
+
+    override fun component1(): T = value
+    override fun component2(): (T) -> Unit = { value = it }
 }
