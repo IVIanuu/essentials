@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.twilight
 
-import androidx.animation.TweenBuilder
+import androidx.animation.TweenSpec
 import androidx.compose.Composable
 import androidx.compose.key
 import androidx.compose.onCommit
@@ -34,8 +34,6 @@ import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 
 @Reader
 @Composable
@@ -49,7 +47,7 @@ fun TwilightTheme(
     typography: Typography = Typography(),
     content: @Composable () -> Unit
 ) {
-    ResourceBox(resource = get<TwilightHelper>().state.collectAsResource()) { twilightState ->
+    ResourceBox(resource = remember { twilightState }.collectAsResource()) { twilightState ->
         fun colorsForTwilightState() = if (twilightState.isDark) {
             if (twilightState.useBlack) blackColors else darkColors
         } else lightColors
@@ -59,9 +57,7 @@ fun TwilightTheme(
 
         val animation = key(twilightState) { animatedFloat(0f) }
         onCommit(animation) {
-            animation.animateTo(1f, anim = TweenBuilder<Float>().apply {
-                duration = 150
-            })
+            animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
         }
 
         val currentColors = remember(animation.value) {

@@ -1,19 +1,33 @@
 package com.ivianuu.essentials.util
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.ui.core.ContextAmbient
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ForApplication
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import kotlinx.coroutines.CompletableDeferred
 
 @Reader
-suspend fun startUi() {
-    val intent = get<PackageManager>().getLaunchIntentForPackage(get<BuildInfo>().packageName)!!
+suspend fun startUi(): Activity {
+    val intent = given<PackageManager>().getLaunchIntentForPackage(given<BuildInfo>().packageName)!!
+    val deferredActivity = CompletableDeferred<Activity>()
+
+    navigator.push(
+        Route(opaque = true) {
+            deferredActivity.complete(ContextAmbient.current as Activity)
+            navigator.popTop()
+        }
+    )
+
     applicationContext.startActivity(
         intent.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     )
+
+    return deferredActivity.await()
 }

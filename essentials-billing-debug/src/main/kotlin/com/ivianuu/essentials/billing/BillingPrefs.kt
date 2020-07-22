@@ -5,10 +5,11 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
-@Scoped(ApplicationComponent::class)
-internal class BillingPrefs(factory: DiskDataStoreFactory) {
+@Given(ApplicationComponent::class)
+internal class BillingPrefs(factory: DiskDataStoreFactory = given()) {
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(
             fromRaw = { productsJson ->

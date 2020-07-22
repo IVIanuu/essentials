@@ -22,13 +22,13 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
 fun CheckAppsPage() {
     val dataStore = remember {
-        get<DiskDataStoreFactory>().create("apps") { emptySet<String>() }
+        given<DiskDataStoreFactory>().create("apps") { emptySet<String>() }
     }
     CheckableAppsPage(
         checkedApps = dataStore.data,
@@ -36,6 +36,6 @@ fun CheckAppsPage() {
             dataStore.updateData { newValue }
         },
         appBarTitle = "Send check apps",
-        appFilter = get<LaunchableAppFilter>()
+        appFilter = given<LaunchableAppFilter>()
     )
 }

@@ -16,54 +16,47 @@
 
 package com.ivianuu.essentials.data
 
-import android.content.Context
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.scoped
-import com.ivianuu.injekt.unscoped
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.plus
 import java.io.File
 
-@Module
-fun EsDataModule() {
-    installIn<ApplicationComponent>()
-    unscoped<@DataDir String> {
-        applicationContext.applicationInfo.dataDir
-    }
-    unscoped<@PrefsDir String> { "${get<@DataDir String>()}/prefs" }
-    scoped { MoshiSerializerFactory(get()) }
-    scoped {
-        DiskDataStoreFactory(
-            scope = globalScope + dispatchers.io,
-            produceBoxDirectory = { File(get<@PrefsDir String>()) },
-            serializerFactory = get()
-        )
-    }
-    scoped {
-        SettingsDataStoreFactory(
-            context = applicationContext,
-            scope = globalScope + dispatchers.io
-        )
-    }
+object EsDataModule {
+
+    @Given
+    fun dataDir(): DataDir = applicationContext.applicationInfo.dataDir
+
+    @Given
+    fun prefsDir(): PrefsDir = "${given<DataDir>()}/prefs"
+
+    @Given(ApplicationComponent::class)
+    fun moshiSerializerFactory() = MoshiSerializerFactory(given())
+
+    @Given(ApplicationComponent::class)
+    fun diskDataStoreFactory() = DiskDataStoreFactory(
+        scope = globalScope + dispatchers.io,
+        produceBoxDirectory = { File(given<PrefsDir>()) },
+        serializerFactory = given()
+    )
+
+    @Given(ApplicationComponent::class)
+    fun settingsDataStoreFactory() = SettingsDataStoreFactory(
+        context = applicationContext,
+        scope = globalScope + dispatchers.io
+    )
+
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class DataDir
+@Distinct
+typealias DataDir = String
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class PrefsDir
+@Distinct
+typealias PrefsDir = String

@@ -3,6 +3,7 @@ package com.ivianuu.essentials.sample.ui
 import android.app.Notification
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
@@ -29,26 +30,23 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -65,15 +63,14 @@ fun NotificationsPage() {
             )
         }
 
-        val notificationStore = get<NotificationStore>()
-        val permissionManager = get<PermissionManager>()
+        val notificationStore = given<NotificationStore>()
 
         ResourceBox(
             resource = remember {
-                permissionManager.hasPermissions(notificationPermission)
+                hasPermissions(notificationPermission)
             }.collectAsResource()
         ) { hasPermission ->
-            val scope = compositionScope()
+            val scope = rememberCoroutineScope()
 
             if (hasPermission) {
                 ResourceLazyColumnItems(
@@ -161,7 +158,7 @@ fun NotificationsPage() {
                     Button(
                         onClick = {
                             scope.launch {
-                                permissionManager.request(notificationPermission)
+                                requestPermissions(notificationPermission)
                             }
                         }
                     ) {

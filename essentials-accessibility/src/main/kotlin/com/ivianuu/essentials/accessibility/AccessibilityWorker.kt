@@ -1,35 +1,18 @@
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.map
-import com.ivianuu.injekt.set
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-/**
- * Runs while a accessiblity service is alive
- */
-@BindingEffect(ServiceComponent::class)
+@Effect
 annotation class AccessibilityWorker {
     companion object {
-        @Module
-        operator fun <T : suspend () -> Unit> invoke() {
-            set<@AccessibilityWorker Set<suspend () -> Unit>, suspend () -> Unit> {
-                add<T>()
-            }
-        }
+        @SetElements(ApplicationComponent::class)
+        operator fun <T : suspend () -> Unit> invoke(): AccessibilityWorkers = setOf(given<T>())
     }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AccessibilityWorkers
-
-@Module
-fun EsNotificationWorkerModule() {
-    installIn<ServiceComponent>()
-    set<@AccessibilityWorkers Set<suspend () -> Unit>, suspend () -> Unit>()
-}
+@Distinct
+typealias AccessibilityWorkers = Set<suspend () -> Unit>

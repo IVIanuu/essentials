@@ -21,8 +21,8 @@ import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.core.composed
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.common.interactive
+import com.ivianuu.essentials.ui.datastore.asState
 
 fun Modifier.preferenceDependencies(
     vararg dependencies: Dependency<*>

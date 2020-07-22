@@ -47,7 +47,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 @Reader
 @Composable

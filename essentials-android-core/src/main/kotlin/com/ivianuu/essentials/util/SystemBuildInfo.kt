@@ -16,7 +16,14 @@
 
 package com.ivianuu.essentials.util
 
+import android.os.Build
 import androidx.compose.Immutable
+import com.ivianuu.injekt.Given
 
 @Immutable
-data class SystemBuildInfo(val sdk: Int)
+data class SystemBuildInfo(val sdk: Int) {
+    companion object {
+        @Given
+        fun bind() = SystemBuildInfo(Build.VERSION.SDK_INT)
+    }
+}

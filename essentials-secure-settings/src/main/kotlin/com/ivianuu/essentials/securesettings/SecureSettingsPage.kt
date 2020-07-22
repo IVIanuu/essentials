@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -58,7 +58,7 @@ fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
                     }
                 )
 
-                val scope = compositionScope()
+                val scope = rememberCoroutineScope()
                 ListItem(
                     title = { Text(R.string.es_pref_use_root) },
                     subtitle = { Text(R.string.es_pref_use_root_summary) },

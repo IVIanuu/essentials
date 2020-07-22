@@ -41,34 +41,24 @@ import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.navigation.DialogRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
-@Reader
-@Scoped(ApplicationComponent::class)
-class DebugBillingClient internal constructor(
-    private val buildInfo: BuildInfo,
-    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
-    private val billingStore: BillingStore
+@Given(ApplicationComponent::class)
+class DebugBillingClient(
+    private val purchasesUpdatedListener: PurchasesUpdatedListener
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -80,15 +70,15 @@ class DebugBillingClient internal constructor(
         CLOSED
     }
 
-    private val requests = ConcurrentHashMap<String, PurchaseRequest>()
-
     private var clientState = DISCONNECTED
 
     override fun isReady(): Boolean = clientState == CONNECTED
 
     override fun startConnection(listener: BillingClientStateListener) {
         if (isReady) {
-            listener.onBillingSetupFinished(BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build())
+            listener.onBillingSetupFinished(
+                BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build()
+            )
             return
         }
 
@@ -132,9 +122,9 @@ class DebugBillingClient internal constructor(
         }
 
         globalScope.launch {
-            val purchase = billingStore.getPurchaseByToken(purchaseToken)
+            val purchase = getPurchaseByToken(purchaseToken)
             if (purchase != null) {
-                billingStore.removePurchase(purchase.purchaseToken)
+                removePurchase(purchase.purchaseToken)
                 listener.onConsumeResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -155,20 +145,16 @@ class DebugBillingClient internal constructor(
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
         globalScope.launch {
-            val requestId = UUID.randomUUID().toString()
-            val request = PurchaseRequest(params.sku, params.skuType!!)
-            requests[requestId] = request
-
             startUi()
 
             navigator.push(
                 DialogRoute(
                     onDismiss = {
                         globalScope.launch {
-                            onPurchaseResult(
-                                requestId = requestId,
-                                responseCode = BillingResponseCode.USER_CANCELED,
-                                purchases = null
+                            purchasesUpdatedListener.onPurchasesUpdated(
+                                BillingResult.newBuilder().setResponseCode(
+                                    BillingResponseCode.USER_CANCELED
+                                ).build(), null
                             )
 
                             navigator.popTop()
@@ -176,8 +162,15 @@ class DebugBillingClient internal constructor(
                     }
                 ) {
                     ResourceBox(
-                        resource = produceResource(requestId) {
-                            getSkuDetailsForRequest(requestId)
+                        resource = produceResource {
+                            withContext(dispatchers.default) {
+                                getSkuDetails(
+                                    SkuDetailsParams.newBuilder()
+                                        .setType(params.skuType)
+                                        .setSkusList(listOf(params.sku))
+                                        .build()
+                                ).firstOrNull()
+                            }
                         }
                     ) { skuDetails ->
                         if (skuDetails == null) {
@@ -187,10 +180,13 @@ class DebugBillingClient internal constructor(
                                 skuDetails = skuDetails,
                                 onPurchaseClick = {
                                     globalScope.launch {
-                                        onPurchaseResult(
-                                            requestId = requestId,
-                                            responseCode = BillingResponseCode.OK,
-                                            purchases = listOf(skuDetails.toPurchaseData())
+                                        val purchases = listOf(skuDetails.toPurchaseData())
+                                        purchases.forEach { addPurchase(it) }
+
+                                        purchasesUpdatedListener.onPurchasesUpdated(
+                                            BillingResult.newBuilder().setResponseCode(
+                                                BillingResponseCode.OK
+                                            ).build(), purchases
                                         )
 
                                         navigator.popTop()
@@ -242,7 +238,7 @@ class DebugBillingClient internal constructor(
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
-                ).build(), billingStore.getSkuDetails(params)
+                ).build(), getSkuDetails(params)
             )
         }
     }
@@ -259,10 +255,10 @@ class DebugBillingClient internal constructor(
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
-                ).build(), /* purchasesList */ null
+                ).build(), null
             )
         }
-        return runBlocking { billingStore.getPurchases(skuType) }
+        return runBlocking { getPurchases(skuType) }
     }
 
     override fun launchPriceChangeConfirmationFlow(
@@ -292,7 +288,7 @@ class DebugBillingClient internal constructor(
         }
 
         globalScope.launch {
-            val purchase = billingStore.getPurchaseByToken(purchaseToken)
+            val purchase = getPurchaseByToken(purchaseToken)
             if (purchase != null) {
                 val updated = Purchase(
                     orderId = purchase.orderId,
@@ -305,7 +301,7 @@ class DebugBillingClient internal constructor(
                     isAutoRenewing = purchase.isAutoRenewing,
                     developerPayload = purchase.developerPayload
                 )
-                billingStore.addPurchase(updated)
+                addPurchase(updated)
                 listener?.onAcknowledgePurchaseResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -321,38 +317,9 @@ class DebugBillingClient internal constructor(
         }
     }
 
-    internal suspend fun getSkuDetailsForRequest(requestId: String): SkuDetails? {
-        return withContext(dispatchers.default) {
-            val request = requests[requestId] ?: return@withContext null
-            billingStore.getSkuDetails(
-                SkuDetailsParams.newBuilder()
-                    .setType(request.skuType)
-                    .setSkusList(listOf(request.sku))
-                    .build()
-            ).firstOrNull()
-        }
-    }
-
-    internal suspend fun onPurchaseResult(
-        requestId: String,
-        responseCode: Int,
-        purchases: List<Purchase>?
-    ) = withContext(dispatchers.default) {
-        requests -= requestId
-
-        if (responseCode == BillingResponseCode.OK) {
-            purchases!!.forEach { billingStore.addPurchase(it) }
-        }
-
-        purchasesUpdatedListener.onPurchasesUpdated(
-            BillingResult.newBuilder().setResponseCode(
-                responseCode
-            ).build(), purchases
-        )
-    }
-
     private fun SkuDetails.toPurchaseData(): Purchase {
-        val json = """{"orderId":"$sku..0","packageName":"${buildInfo.packageName}","productId":
+        val json =
+            """{"orderId":"$sku","packageName":"${given<BuildInfo>().packageName}","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
       |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")

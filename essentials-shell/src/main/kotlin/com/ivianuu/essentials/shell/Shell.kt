@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
@@ -41,4 +39,5 @@ object Shell {
     suspend fun isAvailable(): Boolean = withContext(dispatchers.io) {
         SU.available()
     }
+
 }

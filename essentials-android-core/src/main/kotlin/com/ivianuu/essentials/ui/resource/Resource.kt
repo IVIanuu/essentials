@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.Composable
-import androidx.compose.FrameManager
 import androidx.compose.Immutable
 import androidx.compose.collectAsState
 import androidx.compose.getValue
@@ -159,14 +158,12 @@ fun <T> produceResource(
     var state by stateFor<Resource<T>>(*inputs) { Idle }
 
     launchInComposition(*inputs) {
-        FrameManager.framed { state = Loading }
-        val result = try {
+        state = Loading
+        state = try {
             Success(block())
         } catch (e: Exception) {
             Error(e)
         }
-
-        FrameManager.framed { state = result }
     }
 
     return state

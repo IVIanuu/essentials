@@ -40,16 +40,12 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.android.ActivityComponent
 
 @Reader
 @Composable

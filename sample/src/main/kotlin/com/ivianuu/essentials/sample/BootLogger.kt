@@ -17,13 +17,11 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.boot.BootListener
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 @BootListener
 @Reader
 fun logBoot() {
-    d("booted!")
+    d { "booted!" }
 }

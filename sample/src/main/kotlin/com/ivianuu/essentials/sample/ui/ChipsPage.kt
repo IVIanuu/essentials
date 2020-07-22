@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 @OptIn(ExperimentalLayout::class)
 @Reader

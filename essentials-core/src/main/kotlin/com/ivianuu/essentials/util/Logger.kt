@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import java.util.regex.Pattern
 
 interface Logger {
@@ -21,58 +21,43 @@ interface Logger {
 
 }
 
-@Reader
-fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().v(message, throwable, tag)
-}
+// todo swap throwable and tag once we can be sure that no every usage has been migrated
 
 @Reader
-fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().d(message, throwable, tag)
+inline fun v(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.v(message(), throwable, tag)
 }
 
 @Reader
-fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().i(message, throwable, tag)
+inline fun d(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.d(message(), throwable, tag)
 }
 
 @Reader
-fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().w(message, throwable, tag)
+inline fun i(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.i(message(), throwable, tag)
 }
 
 @Reader
-fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().e(message, throwable, tag)
+inline fun w(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.w(message(), throwable, tag)
 }
 
 @Reader
-fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null) {
-    get<Logger>().wtf(message, throwable, tag)
+inline fun e(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
+    given<Logger?>()?.e(message(), throwable, tag)
 }
 
-@Unscoped
-object NoopLogger : Logger {
-    override fun v(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun d(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun i(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun w(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun e(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
-    }
+@Reader
+inline fun wtf(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null }
+) {
+    given<Logger?>()?.wtf(message(), throwable, tag)
 }
 
-@Unscoped
+@Given
 class DefaultLogger : Logger {
 
     override fun v(message: String?, throwable: Throwable?, tag: String?) {

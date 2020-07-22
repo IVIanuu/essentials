@@ -18,23 +18,19 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 class ForegroundService : EsService() {
 
     private val foregroundManager: ForegroundManager by lazy {
-        component.runReader { get() }
-    }
-    private val logger: Logger by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
     private val notificationManager: NotificationManager by lazy {
-        component.runReader { get() }
+        component.runReader { given() }
     }
 
     private var lastJobs = listOf<ForegroundJob>()
@@ -43,27 +39,26 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
-        logger.d("started foreground service")
+        component.runReader {
+            d { "started foreground service" }
+        }
 
-        foregroundManager.updates
-            .onStart { emit(Unit) }
-            .onEach { update() }
-            .launchIn(scope)
-
-        foregroundManager.stopServiceRequests
-            .onEach { stop() }
+        foregroundManager.jobs
+            .onEach { update(it) }
             .launchIn(scope)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        logger.d("stopped foreground service")
+        component.runReader {
+            d { "stopped foreground service" }
+        }
     }
 
-    private fun update() = synchronized(this) {
-        val newJobs = foregroundManager.job
-
-        logger.d("update jobs $newJobs")
+    private fun update(newJobs: List<ForegroundJob>) = synchronized(this) {
+        component.runReader {
+            d { "update jobs $newJobs" }
+        }
 
         lastJobs
             .filter { it !in newJobs }
@@ -75,20 +70,19 @@ class ForegroundService : EsService() {
             }
 
         lastJobs = newJobs
-        if (newJobs.isEmpty()) return
 
-        newJobs.forEachIndexed { index, job ->
-            if (index == 0) {
-                startForeground(job.id, job.notification)
-            } else {
-                notificationManager.notify(job.id, job.notification)
+        if (newJobs.isNotEmpty()) {
+            newJobs.forEachIndexed { index, job ->
+                if (index == 0) {
+                    startForeground(job.id, job.notification)
+                } else {
+                    notificationManager.notify(job.id, job.notification)
+                }
             }
+        } else {
+            stopForeground(true)
+            stopSelf()
         }
     }
 
-    private fun stop() = synchronized(this) {
-        lastJobs.forEach { notificationManager.cancel(it.id) }
-        stopForeground(true)
-        stopSelf()
-    }
 }

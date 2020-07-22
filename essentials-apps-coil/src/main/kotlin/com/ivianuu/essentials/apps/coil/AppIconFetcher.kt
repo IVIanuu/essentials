@@ -25,18 +25,19 @@ import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.size.Size
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.essentials.coil.FetcherBinding
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
 @Immutable
 data class AppIcon(val packageName: String)
 
-@Unscoped
-internal class AppIconFetcher(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val packageManager: PackageManager
-) : Fetcher<AppIcon> {
+@Given
+internal class AppIconFetcher : Fetcher<AppIcon> {
 
     override fun key(data: AppIcon): String? = data.packageName
 
@@ -46,7 +47,17 @@ internal class AppIconFetcher(
         size: Size,
         options: Options
     ): FetchResult = withContext(dispatchers.io) {
-        val drawable = packageManager.getApplicationIcon(data.packageName)
+        val drawable = given<PackageManager>().getApplicationIcon(data.packageName)
         return@withContext DrawableResult(drawable, false, DataSource.DISK)
+    }
+
+    companion object {
+        @SetElements(ApplicationComponent::class)
+        fun appIconFetcherIntoMap(): Set<FetcherBinding<*>> = setOf(
+            FetcherBinding(
+                given<AppIconFetcher>(),
+                AppIcon::class
+            )
+        )
     }
 }

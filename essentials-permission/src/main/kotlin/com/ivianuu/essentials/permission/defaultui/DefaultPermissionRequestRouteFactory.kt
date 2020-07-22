@@ -17,57 +17,50 @@
 package com.ivianuu.essentials.permission.defaultui
 
 import androidx.compose.Composable
-import androidx.compose.frames.modelListOf
 import androidx.compose.key
+import androidx.compose.mutableStateListOf
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestHandlers
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
+import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
-@Reader
-@Unscoped
+@Given
 internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
 
-    override fun createRoute(request: PermissionRequest): Route {
-        return Route { DefaultPermissionPage(request) }
-    }
+    override fun createRoute(request: PermissionRequest): Route =
+        Route { DefaultPermissionPage(request) }
 
 }
 
 @Reader
 @Composable
 internal fun DefaultPermissionPage(request: PermissionRequest) {
-    val viewModel = viewModel {
-        get<@Provider (PermissionRequest) -> DefaultPermissionViewModel>()(request)
-    }
+    val viewModel = viewModel { given<DefaultPermissionViewModel>(request) }
 
     Scaffold(
         topBar = {
@@ -107,17 +100,12 @@ private fun Permission(
     }
 }
 
-@Reader
-@Unscoped
+@Given
 internal class DefaultPermissionViewModel(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val logger: Logger,
-    private val manager: PermissionManager,
-    private val request: @Assisted PermissionRequest,
-    private val requestHandlers: PermissionRequestHandlers
+    private val request: PermissionRequest
 ) : ViewModel() {
 
-    private val _permissionsToProcess = modelListOf<Permission>()
+    private val _permissionsToProcess = mutableStateListOf<Permission>()
     val permissionsToProcess: List<Permission> get() = _permissionsToProcess
 
     init {
@@ -126,7 +114,7 @@ internal class DefaultPermissionViewModel(
 
     fun permissionClicked(permission: Permission) {
         scope.launch {
-            requestHandlers.requestHandlerFor(permission).request(permission)
+            permission.requestHandler.request(permission)
             startUi()
             updatePermissionsToProcessOrFinish()
         }
@@ -135,9 +123,9 @@ internal class DefaultPermissionViewModel(
     private fun updatePermissionsToProcessOrFinish() {
         scope.launch {
             val permissionsToProcess = request.permissions
-                .filterNot { manager.hasPermissions(it).first() }
+                .filterNot { hasPermissions(it).first() }
 
-            logger.d("update permissions to process or finish not granted $permissionsToProcess")
+            d { "update permissions to process or finish not granted $permissionsToProcess" }
 
             if (permissionsToProcess.isEmpty()) {
                 navigator.popTop()

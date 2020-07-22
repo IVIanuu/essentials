@@ -17,40 +17,25 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionIconProvider
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.actionFactory
-import com.ivianuu.essentials.gestures.action.actionPickerDelegate
+import com.ivianuu.essentials.gestures.action.BindActionFactory
+import com.ivianuu.essentials.gestures.action.BindActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
-@Module
-fun AppActionModule() {
-    installIn<ApplicationComponent>()
-    actionFactory<AppActionFactory>()
-    actionPickerDelegate<AppActionPickerDelegate>()
-}
-
-@Reader
-@Unscoped
+@Given
 internal class AppActionExecutor(
-    private val packageName: @Assisted String,
-    private val packageManager: PackageManager,
-    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor
+    private val packageName: String,
+    private val delegateProvider: (Intent) -> IntentActionExecutor
 ) : ActionExecutor {
     override suspend fun invoke() {
         try {
             delegateProvider(
-                packageManager.getLaunchIntentForPackage(
+                given<PackageManager>().getLaunchIntentForPackage(
                     packageName
                 )!!
             )()
@@ -61,11 +46,11 @@ internal class AppActionExecutor(
     }
 }
 
-@Reader
-@Unscoped
+@BindActionFactory
+@Given
 internal class AppActionFactory(
-    private val appActionExecutorProvider: @Provider (String) -> AppActionExecutor,
-    private val appActionIconProvider: @Provider (String) -> AppActionIconProvider
+    private val appActionExecutorProvider: (String) -> AppActionExecutor,
+    private val appActionIconProvider: (String) -> AppActionIconProvider
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -81,29 +66,28 @@ internal class AppActionFactory(
     }
 }
 
-@Reader
-@Unscoped
+@BindActionPickerDelegate
+@Given
 internal class AppActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
         get() = { Icon(Icons.Default.Apps) }
 
-    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
-            AppPickerPage(appFilter = get<LaunchableAppFilter>())
+            AppPickerPage(appFilter = given<LaunchableAppFilter>())
         } ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }
 
-@Unscoped
+@Given
 internal class AppActionIconProvider(
-    private val delegateProvider: @Provider (Any) -> CoilActionIconProvider,
-    private val packageName: @Assisted String
+    private val packageName: String
 ) : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit>
-        get() = delegateProvider(AppIcon(packageName)).icon
+        get() = given<CoilActionIconProvider>(AppIcon(packageName)).icon
 }
 
 private const val ACTION_KEY_PREFIX = "app=:="

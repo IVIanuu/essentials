@@ -1,44 +1,54 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-/**
-@Module
-fun wifiActionModule() {
-installIn<ApplicationComponent>()
-    action { resourceProvider: ResourceProvider,
-             iconProvider: WifiActionIconProvider,
-             executor: WifiActionExecutor ->
-        Action(
-key = "wifi",
-title = getString(R.string.es_action_wifi),
-iconProvider = iconProvider,
-            executor = executor
-        ) as @StringKey("wifi") Action
-    }
-}
+import android.net.wifi.WifiManager
+import androidx.compose.Composable
+import androidx.ui.foundation.Icon
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Wifi
+import androidx.ui.material.icons.filled.WifiOff
+import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIconProvider
+import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.util.Resources
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
-@Unscoped
-internal class WifiActionExecutor(private val wifiManager: WifiManager) :
-    ActionExecutor {
+@BindAction
+@Reader
+fun wifiAction() = Action(
+    key = "wifi",
+    title = Resources.getString(R.string.es_action_wifi),
+    iconProvider = given<WifiActionIconProvider>(),
+    executor = given<WifiActionExecutor>()
+)
+
+@Given
+internal class WifiActionExecutor : ActionExecutor {
     override suspend fun invoke() {
+        val wifiManager = given<WifiManager>()
         wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
     }
 }
 
-@Unscoped
-internal class WifiActionIconProvider(
-    broadcastFactory: BroadcastFactory,
-    private val wifiManager: WifiManager
-) : ActionIconProvider {
+@Given
+internal class WifiActionIconProvider : ActionIconProvider {
     override val icon: Flow<@Composable () -> Unit> =
-        broadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        BroadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)
             .map {
                 val state =
                     it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
                 state == WifiManager.WIFI_STATE_ENABLED
             }
-            .onStart { emit(wifiManager.isWifiEnabled) }
-        .map { wifiEnabled ->
-            if (wifiEnabled) Icons.Default.Wifi
+            .onStart { emit(given<WifiManager>().isWifiEnabled) }
+            .map { wifiEnabled ->
+                if (wifiEnabled) Icons.Default.Wifi
             else Icons.Default.WifiOff
         }
         .map {
@@ -47,4 +57,3 @@ internal class WifiActionIconProvider(
             }
         }
 }
- */

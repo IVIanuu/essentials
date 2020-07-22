@@ -18,7 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.composition.runReader
+import com.ivianuu.injekt.runReader
 
 /**
  * App

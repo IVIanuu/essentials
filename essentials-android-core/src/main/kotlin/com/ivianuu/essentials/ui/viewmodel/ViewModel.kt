@@ -21,7 +21,7 @@ import androidx.compose.currentComposer
 import androidx.ui.savedinstancestate.rememberSavedInstanceState
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import java.io.Closeable
@@ -51,4 +51,4 @@ inline fun <T : ViewModel> viewModel(
 inline fun <T : ViewModel> viewModel(
     vararg inputs: Any?,
     key: Any = currentComposer.currentCompoundKeyHash.toString()
-) = viewModel(*inputs, key = key) { get<T>() }
+) = viewModel(*inputs, key = key) { given<T>() }

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import android.widget.Toast
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 object Toaster {

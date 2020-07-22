@@ -20,32 +20,27 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Scoped
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
-import java.lang.reflect.Method
 
-/**
- * Provides info about the keyboard state
- */
-@Scoped(ApplicationComponent::class)
-class KeyboardVisibilityDetector(
-    private val scope: @GlobalScope CoroutineScope,
-    private val inputMethodManager: InputMethodManager,
-    private val services: AccessibilityServices
-) {
-
-    val keyboardVisible: Flow<Boolean> = services.events
+@Reader
+val keyboardVisible: Flow<Boolean>
+    get() = given<AccessibilityServices>().events
+        .onEach {
+            given<AccessibilityServices>().applyConfig(
+                AccessibilityConfig(
+                    eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                )
+            )
+        }
         .filter {
             it.isFullScreen &&
                     it.className == "android.inputmethodservice.SoftInputWindow"
@@ -61,33 +56,15 @@ class KeyboardVisibilityDetector(
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
-        .shareIn(
-            scope = scope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
-        )
 
-    init {
-        services.applyConfig(
-            AccessibilityConfig(
-                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-            )
-        )
-    }
-
-    private fun getKeyboardHeight(): Int {
-        return try {
-            val method = getInputMethodWindowVisibleHeightMethod
-                ?: inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
-                    .also { getInputMethodWindowVisibleHeightMethod = it }
-            method.invoke(inputMethodManager) as Int
-        } catch (e: Exception) {
-            e.printStackTrace()
-            -1
-        }
-    }
-
-    private companion object {
-        private var getInputMethodWindowVisibleHeightMethod: Method? = null
+@Reader
+private fun getKeyboardHeight(): Int {
+    return try {
+        val inputMethodManager = given<InputMethodManager>()
+        val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
+        method.invoke(inputMethodManager) as Int
+    } catch (e: Exception) {
+        e.printStackTrace()
+        -1
     }
 }

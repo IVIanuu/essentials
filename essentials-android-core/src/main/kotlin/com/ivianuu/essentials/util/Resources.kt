@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.util
 
-import android.content.Context
 import androidx.core.content.res.ResourcesCompat
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.ImageAsset
@@ -10,9 +9,7 @@ import androidx.ui.unit.Density
 import androidx.ui.unit.Dp
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
 
 object Resources {
 

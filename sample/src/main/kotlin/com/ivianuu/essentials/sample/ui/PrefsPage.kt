@@ -41,10 +41,9 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
@@ -52,7 +51,7 @@ import kotlin.time.minutes
 @Reader
 @Composable
 fun PrefsPage() {
-    val prefs = get<Prefs>()
+    val prefs = given<Prefs>()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
@@ -157,13 +156,14 @@ fun PrefsPage() {
     }
 }
 
-@Scoped(ApplicationComponent::class)
-class Prefs(factory: DiskDataStoreFactory) {
+@Given(ApplicationComponent::class)
+class Prefs(factory: DiskDataStoreFactory = given()) {
     val switch = factory.create("switch") { false }
     val checkbox = factory.create("checkbox") { false }
     val radioButton = factory.create("radio_button") { false }
     val slider = factory.create("slider") { 50 }
-    val durationSlider = factory.duration("duration_slider") { 33.milliseconds }
+    val durationSlider =
+        factory.duration("duration_slider") { 33.milliseconds }
     val textInput = factory.create("text_input") { "" }
     val color = factory.color("color") { Color.Red }
     val multiChoice = factory.create("multi_choice") { setOf("A", "B", "C") }

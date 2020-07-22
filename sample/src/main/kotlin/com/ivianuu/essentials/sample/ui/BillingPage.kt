@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.collectAsState
 import androidx.compose.remember
+import androidx.compose.rememberCoroutineScope
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -30,21 +31,19 @@ import androidx.ui.layout.height
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.billing.PurchaseManager
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.ui.coroutines.compositionScope
+import com.ivianuu.essentials.billing.consumePurchase
+import com.ivianuu.essentials.billing.isPurchased
+import com.ivianuu.essentials.billing.purchase
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
 import kotlinx.coroutines.launch
 
 @Reader
 @Composable
 fun BillingPage() {
-    val purchaseManager = get<PurchaseManager>()
-    val isPurchased = remember { purchaseManager.isPurchased(DummySku) }
+    val isPurchased = remember { isPurchased(DummySku) }
         .collectAsState(false)
 
     Scaffold(
@@ -62,13 +61,13 @@ fun BillingPage() {
 
             Spacer(Modifier.height(8.dp))
 
-            val scope = compositionScope()
+            val scope = rememberCoroutineScope()
 
             if (!isPurchased.value) {
                 Button(
                     onClick = {
                         scope.launch {
-                            purchaseManager.purchase(DummySku)
+                            purchase(DummySku)
                         }
                     }
                 ) { Text("Purchase") }
@@ -76,7 +75,7 @@ fun BillingPage() {
                 Button(
                     onClick = {
                         scope.launch {
-                            purchaseManager.consume(DummySku)
+                            consumePurchase(DummySku)
                         }
                     }
                 ) { Text("Consume") }

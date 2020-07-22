@@ -19,14 +19,11 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 class DefaultAccessibilityService : EsAccessibilityService() {
 
@@ -34,9 +31,9 @@ class DefaultAccessibilityService : EsAccessibilityService() {
         super.onServiceConnected()
 
         component.runReader {
-            d("connected")
-            get<AccessibilityServices>().onServiceConnected(this)
-            get<@AccessibilityWorkers Set<suspend () -> Unit>>().forEach { worker ->
+            d { "connected" }
+            given<AccessibilityServices>().onServiceConnected(this)
+            given<AccessibilityWorkers>().forEach { worker ->
                 connectedScope.launch {
                     scope.launch { worker() }
                 }
@@ -46,15 +43,15 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         component.runReader {
-            d("on accessibility event $event")
-            get<AccessibilityServices>().onAccessibilityEvent(event)
+            d { "on accessibility event $event" }
+            given<AccessibilityServices>().onAccessibilityEvent(event)
         }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         component.runReader {
-            d("on unbind")
-            get<AccessibilityServices>().onServiceDisconnected()
+            d { "on unbind" }
+            given<AccessibilityServices>().onServiceDisconnected()
         }
 
         return super.onUnbind(intent)
@@ -80,7 +77,9 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
             packageNames = null
 
-            component.runReader { d("update service info $this") }
+            component.runReader {
+                d { "update service info $this" }
+            }
         }
     }
 }

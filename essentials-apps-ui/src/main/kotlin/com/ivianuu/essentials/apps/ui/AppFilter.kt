@@ -19,8 +19,8 @@ package com.ivianuu.essentials.apps.ui
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
 typealias AppFilter = (AppInfo) -> Boolean
 
@@ -33,24 +33,19 @@ class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
     }
 }
 
-@Unscoped
-class LaunchableAppFilter(
-    private val packageManager: PackageManager
-) : AppFilter {
+@Given
+class LaunchableAppFilter : AppFilter {
     private val wrapped = CachingAppFilter { app ->
-        packageManager.getLaunchIntentForPackage(app.packageName) != null
+        given<PackageManager>().getLaunchIntentForPackage(app.packageName) != null
     }
 
     override fun invoke(app: AppInfo) = wrapped(app)
 }
 
-@Unscoped
-class IntentAppFilter(
-    private val intent: @Assisted Intent,
-    private val packageManager: PackageManager
-) : AppFilter {
+@Given
+class IntentAppFilter(private val intent: Intent) : AppFilter {
     private val apps by lazy {
-        packageManager.queryIntentActivities(intent, 0)
+        given<PackageManager>().queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo.packageName }
     }
 

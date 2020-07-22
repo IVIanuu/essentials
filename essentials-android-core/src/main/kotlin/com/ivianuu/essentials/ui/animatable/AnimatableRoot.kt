@@ -3,9 +3,9 @@ package com.ivianuu.essentials.ui.animatable
 import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.compose.Stable
-import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
 import androidx.compose.key
+import androidx.compose.mutableStateListOf
 import androidx.compose.mutableStateOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
@@ -38,7 +38,7 @@ fun animatableFor(tag: Any): Animatable = AnimatableRootAmbient.current.animatab
 @Stable
 class AnimatableRoot {
 
-    internal val animationOverlayEntries = modelListOf<AnimationOverlayEntry>()
+    internal val animationOverlayEntries = mutableStateListOf<AnimationOverlayEntry>()
 
     private val animatables = mutableMapOf<Any, AnimatableState>()
 

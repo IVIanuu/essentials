@@ -10,10 +10,10 @@ import com.ivianuu.injekt.Reader
 @Reader
 suspend fun logAccessibility() = runWithCleanup(
     block = {
-        d("hello from accessibility")
+        d { "hello from accessibility" }
         awaitCancellation()
     },
     cleanup = {
-        d("bye from accessibility")
+        d { "bye from accessibility" }
     }
 )

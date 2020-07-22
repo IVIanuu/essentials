@@ -31,7 +31,6 @@ import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
@@ -39,11 +38,9 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.viewmodel.StateViewModel
 import com.ivianuu.essentials.ui.viewmodel.currentState
 import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -52,7 +49,7 @@ fun AppPickerPage(
     title: String? = null
 ) {
     val viewModel = viewModel(appFilter) {
-        get<@Provider (AppFilter) -> AppPickerViewModel>()(appFilter)
+        given<AppPickerViewModel>(appFilter)
     }
 
     Scaffold(
@@ -92,10 +89,9 @@ private fun AppInfo(
     )
 }
 
-@Reader
-@Unscoped
+@Given
 internal class AppPickerViewModel(
-    private val appFilter: @Assisted AppFilter
+    private val appFilter: AppFilter
 ) : StateViewModel<AppPickerState>(AppPickerState()) {
 
     init {

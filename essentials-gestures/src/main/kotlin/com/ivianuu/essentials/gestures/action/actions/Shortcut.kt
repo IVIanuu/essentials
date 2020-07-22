@@ -1,21 +1,37 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-/**
-@Module
-fun ShortcutModule() {
-installIn<ApplicationComponent>()
-    actionFactory<ShortcutActionFactory>()
-    actionPickerDelegate<ShortcutActionPickerDelegate>()
-}
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.Composable
+import androidx.ui.foundation.Icon
+import androidx.ui.graphics.painter.ImagePainter
+import androidx.ui.res.vectorResource
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.BindActionFactory
+import com.ivianuu.essentials.gestures.action.BindActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.shortcutpicker.Shortcut
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
+import com.ivianuu.essentials.ui.image.toBitmap
+import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
+import java.io.ByteArrayOutputStream
 
-@Unscoped
-internal class ShortcutActionFactory(
-    private val intentActionExecutorProvider: @Provider (Intent) -> IntentActionExecutor,
-    private val logger: Logger
-) : ActionFactory {
+@BindActionFactory
+@Given
+internal class ShortcutActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
-        logger.d("create action from $key")
+        d { "create action from $key" }
         val tmp = key.split(DELIMITER)
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
@@ -26,26 +42,24 @@ internal class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             iconProvider = SingleActionIconProvider { Icon(ImagePainter(icon)) },
-            executor = intentActionExecutorProvider(intent),
+            executor = given<IntentActionExecutor>(intent),
             enabled = true
         )
     }
 }
 
 
-@Unscoped
-internal class ShortcutActionPickerDelegate(
-    private val resourceProvider: ResourceProvider,
-    private val shortcutPickerPage: ShortcutPickerPage
-) : ActionPickerDelegate {
-override val title: String
-get() = getString(R.string.es_action_shortcut)
-override val icon: @Composable () -> Unit = {
+@BindActionPickerDelegate
+@Given
+internal class ShortcutActionPickerDelegate : ActionPickerDelegate {
+    override val title: String
+        get() = Resources.getString(R.string.es_action_shortcut)
+    override val icon: @Composable () -> Unit = {
         Icon(vectorResource(R.drawable.es_ic_content_cut))
     }
 
-    override suspend fun getResult(navigator: Navigator): ActionPickerResult? {
-        val shortcut = navigator.push<Shortcut> { shortcutPickerPage() }
+    override suspend fun getResult(): ActionPickerResult? {
+        val shortcut = navigator.push<Shortcut> { ShortcutPickerPage() }
             ?: return null
 
         val label = shortcut.name
@@ -54,14 +68,14 @@ override val icon: @Composable () -> Unit = {
         icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val iconBytes = stream.toByteArray()
         val key =
-            "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${Base64.encodeToString(
-                iconBytes,
-                0
-            )}"
+            "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
+                Base64.encodeToString(
+                    iconBytes,
+                    0
+                )}"
         return ActionPickerResult.Action(key)
     }
 }
 
 private const val ACTION_KEY_PREFIX = "shortcut"
 private const val DELIMITER = "=:="
- */

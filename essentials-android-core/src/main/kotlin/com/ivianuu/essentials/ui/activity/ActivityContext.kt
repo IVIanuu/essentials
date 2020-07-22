@@ -1,11 +1,9 @@
 package com.ivianuu.essentials.ui.activity
 
-import android.content.Context
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.android.ForActivity
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.android.ActivityContext
+import com.ivianuu.injekt.given
 
 @Reader
-val activityContext: @ForActivity Context
-    get() = get()
+inline val activityContext: ActivityContext
+    get() = given()

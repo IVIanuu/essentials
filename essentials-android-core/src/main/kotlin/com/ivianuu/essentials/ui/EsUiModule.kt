@@ -1,27 +1,23 @@
 package com.ivianuu.essentials.ui
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.scoped
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class UiScope
+@Distinct
+typealias UiScope = CoroutineScope
 
 @Reader
-val uiScope: @UiScope CoroutineScope
-    get() = get()
+inline val uiScope: UiScope
+    get() = given()
 
-@Module
-fun EsUiModule() {
-    installIn<ActivityComponent>()
-    scoped<@UiScope CoroutineScope> {
-        CoroutineScope(get<AppCoroutineDispatchers>().main)
-    }
+object EsUiModule {
+
+    @Given(ActivityComponent::class)
+    fun uiScope(): UiScope = CoroutineScope(dispatchers.main)
+
 }

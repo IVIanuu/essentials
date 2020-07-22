@@ -6,12 +6,12 @@ import androidx.compose.setValue
 import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.TextField
+import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.currentTextStyle
 import androidx.ui.graphics.Color
 import androidx.ui.input.ImeAction
 import androidx.ui.input.KeyboardType
-import androidx.ui.input.TextFieldValue
 import androidx.ui.input.VisualTransformation
 import androidx.ui.text.SoftwareKeyboardController
 import androidx.ui.text.TextLayoutResult

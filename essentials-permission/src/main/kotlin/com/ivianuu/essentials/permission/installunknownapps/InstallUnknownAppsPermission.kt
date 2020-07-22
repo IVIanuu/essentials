@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.permission.installunknownapps
 
-import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
@@ -25,8 +25,8 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.ForApplication
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
 fun InstallUnknownAppsPermission(
     vararg metadata: KeyWithValue<*>
@@ -41,14 +41,13 @@ val Permission.Companion.IsUnknownAppsPermission by lazy {
 }
 
 @BindPermissionStateProvider
-@Unscoped
-internal class InstallUnknownAppsPermissionStateProvider(
-    private val context: @ForApplication Context
-) : PermissionStateProvider {
+@Given
+internal class InstallUnknownAppsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsUnknownAppsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        Build.VERSION.SDK_INT < 26 || context.packageManager.canRequestPackageInstalls()
+        Build.VERSION.SDK_INT < 26 || given<PackageManager>().canRequestPackageInstalls()
+
 }

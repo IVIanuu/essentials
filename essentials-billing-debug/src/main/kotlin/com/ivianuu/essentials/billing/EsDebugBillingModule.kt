@@ -16,7 +16,24 @@
 
 package com.ivianuu.essentials.billing
 
-internal data class PurchaseRequest(
-    val sku: String,
-    val skuType: String
-)
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
+
+object EsDebugBillingModule {
+
+    private var debugBillingClient: DebugBillingClient? = null
+
+    @Given
+    fun debugBillingClient(): DebugBillingClient {
+        given<BillingClient>(lazy = true)
+        return debugBillingClient!!
+    }
+
+    @Given
+    fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
+        given<DebugBillingClient>(listener)
+            .also { debugBillingClient = it }
+
+}

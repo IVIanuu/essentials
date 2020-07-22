@@ -19,10 +19,9 @@ package com.ivianuu.essentials.sample.work
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 
 @Reader
 fun scheduleTasks() {
-    get<WorkManager>().enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
+    given<WorkManager>().enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
 }

@@ -16,11 +16,31 @@
 
 package com.ivianuu.essentials.util
 
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import androidx.compose.Immutable
+import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
 @Immutable
 data class BuildInfo(
     val isDebug: Boolean,
     val packageName: String,
     val versionCode: Int
-)
+) {
+    companion object {
+        @Given(ApplicationComponent::class)
+        fun bind(): BuildInfo {
+            val appInfo = applicationContext.applicationInfo
+            val packageInfo = given<PackageManager>()
+                .getPackageInfo(appInfo.packageName, 0)
+            return BuildInfo(
+                isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+                packageName = appInfo.packageName,
+                versionCode = packageInfo.versionCode
+            )
+        }
+    }
+}

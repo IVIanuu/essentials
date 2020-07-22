@@ -18,50 +18,26 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Distinct
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.composition.BindingEffect
-import com.ivianuu.injekt.composition.installIn
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.set
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 
-/**
- * Will be instantiated on app start up
- * Can be used to initialize global stuff like logging
- *
- * ´´´
- * @BindAppInitializer
- * fun initializeAnalytics() {
- *     Analytics.initialize(Logger())
- * }
- * ´´´
- */
-@BindingEffect(ApplicationComponent::class)
+@Effect
 annotation class AppInitializer {
     companion object {
-        @Module
-        operator fun <T : () -> Unit> invoke() {
-            set<@AppInitializers Set<() -> Unit>, () -> Unit> {
-                add<T>()
-            }
-        }
+        @SetElements(ApplicationComponent::class)
+        operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
     }
 }
 
-@Target(AnnotationTarget.TYPE)
-@Qualifier
-annotation class AppInitializers
-
-@Module
-fun EsAppInitializerModule() {
-    installIn<ApplicationComponent>()
-    set<@AppInitializers Set<() -> Unit>, () -> Unit>()
-}
+@Distinct
+typealias AppInitializers = Set<() -> Unit>
 
 @Reader
 fun runInitializers() {
-    d("Initialize")
-    get<@AppInitializers Set<() -> Unit>>()
+    d { "run initializers" }
+    given<AppInitializers>()
         .forEach { it() }
 }

@@ -18,23 +18,23 @@ package com.ivianuu.essentials.sample.work
 
 import android.content.Context
 import androidx.work.WorkerParameters
-import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.work.BindWorker
 import kotlinx.coroutines.delay
 
 @BindWorker
+@Given
 class TestWorker(
-    context: @Assisted Context,
-    workerParams: @Assisted WorkerParameters,
-    private val logger: Logger
+    context: Context,
+    workerParams: WorkerParameters
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        logger.d("start work")
+        d { "start work" }
         delay(5000)
-        logger.d("finish work")
+        d { "finish work" }
         return Result.success()
     }
 }

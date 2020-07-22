@@ -20,13 +20,13 @@ import android.os.Bundle
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.core.AppUiMarker
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 
 class DefaultActivity : EsActivity() {
 
-    private val appUi: (@AppUiMarker @Composable () -> Unit)? by lazy {
-        activityComponent.runReader { get() }
+    private val appUi: AppUiMarker? by lazy {
+        activityComponent.runReader { given() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

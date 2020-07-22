@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.Composable
 import androidx.compose.onCommit
 import androidx.compose.onDispose
+import androidx.compose.rememberCoroutineScope
 import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
@@ -34,13 +35,12 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
-import com.ivianuu.essentials.ui.coroutines.compositionScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Reader
@@ -54,10 +54,10 @@ fun NavBarPage() {
             verticalArrangement = Arrangement.Center,
             horizontalGravity = Alignment.CenterHorizontally
         ) {
-            val scope = compositionScope()
+            val scope = rememberCoroutineScope()
             fun updateNavBarState(navBarHidden: Boolean) {
                 scope.launch {
-                    get<NavBarManager>().setNavBarConfig(
+                    given<NavBarManager>().setNavBarConfig(
                         NavBarConfig(navBarHidden)
                     )
                 }

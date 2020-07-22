@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.AnimationBuilder
+import androidx.animation.AnimationSpec
 import com.ivianuu.essentials.ui.animatable.ScaleX
 import com.ivianuu.essentials.ui.animatable.ScaleY
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 fun ScaleStackTransition(
-    anim: AnimationBuilder<Float> = defaultAnimationBuilder()
+    anim: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition {
     return FloatAnimationStackTransition(anim = anim) { from, to, isPush, progress ->
         if (to != null && isPush) {

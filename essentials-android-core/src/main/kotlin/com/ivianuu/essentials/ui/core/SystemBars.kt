@@ -23,14 +23,14 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Providers
 import androidx.compose.Stable
-import androidx.compose.StructurallyEqual
-import androidx.compose.frames.modelListOf
 import androidx.compose.getValue
+import androidx.compose.mutableStateListOf
 import androidx.compose.onCommit
 import androidx.compose.remember
 import androidx.compose.setValue
 import androidx.compose.state
 import androidx.compose.staticAmbientOf
+import androidx.compose.structuralEqualityPolicy
 import androidx.ui.core.DensityAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.composed
@@ -60,7 +60,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = contentColor().isDark
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
-    var globalBounds by state<PxBounds?>(StructurallyEqual) { null }
+    var globalBounds by state<PxBounds?>(structuralEqualityPolicy()) { null }
     val density = DensityAmbient.current
 
     onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
@@ -103,7 +103,7 @@ data class SystemBarStyle(
 @Stable
 private class SystemBarManager {
 
-    val styles = modelListOf<SystemBarStyle>()
+    val styles = mutableStateListOf<SystemBarStyle>()
 
     @Composable
     fun updateSystemBars() {
@@ -153,7 +153,8 @@ private class SystemBarManager {
 
         onCommit(activity, statusBarStyle?.barColor) {
             activity.window.statusBarColor =
-                (statusBarStyle?.barColor ?: Color.Black).toArgb() // todo better default
+                (statusBarStyle?.barColor ?: Color.Black
+                    .copy(alpha = 0.2f)).toArgb()
         }
 
         onCommit(activity, statusBarStyle?.lightIcons) {
@@ -164,51 +165,58 @@ private class SystemBarManager {
                 )
         }
 
-        val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
-            when {
-                windowInsets.systemBars.bottom != 0.dp -> {
-                    Position(
-                        windowInsets.systemBars.start,
-                        screenHeight - windowInsets.systemBars.bottom
-                    )
-                }
-                windowInsets.systemBars.start != 0.dp -> {
-                    Position(
-                        0.dp,
-                        screenHeight
-                    )
-                }
-                windowInsets.systemBars.end != 0.dp -> {
-                    Position(
-                        screenWidth - windowInsets.systemBars.end,
-                        screenHeight
-                    )
-                }
-                else -> Position(Int.MAX_VALUE.dp, Int.MAX_VALUE.dp)
-            }
-        }
-
-        val navBarStyle = remember(navBarHitPoint, styles.toList()) {
-            styles.lastOrNull {
-                navBarHitPoint.x >= it.bounds.left &&
-                        navBarHitPoint.y >= it.bounds.top &&
-                        navBarHitPoint.x <= it.bounds.right &&
-                        navBarHitPoint.y <= it.bounds.bottom
-            }
-        }
-
-        onCommit(activity, navBarStyle?.barColor) {
-            activity.window.navigationBarColor =
-                (navBarStyle?.barColor ?: Color.Black).toArgb() // todo better default
-        }
-
         if (Build.VERSION.SDK_INT >= 26) {
+            val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
+                when {
+                    windowInsets.systemBars.bottom != 0.dp -> {
+                        Position(
+                            windowInsets.systemBars.start,
+                            screenHeight - windowInsets.systemBars.bottom
+                        )
+                    }
+                    windowInsets.systemBars.start != 0.dp -> {
+                        Position(
+                            0.dp,
+                            screenHeight
+                        )
+                    }
+                    windowInsets.systemBars.end != 0.dp -> {
+                        Position(
+                            screenWidth - windowInsets.systemBars.end,
+                            screenHeight
+                        )
+                    }
+                    else -> Position(Int.MAX_VALUE.dp, Int.MAX_VALUE.dp)
+                }
+            }
+
+            val navBarStyle = remember(navBarHitPoint, styles.toList()) {
+                styles.lastOrNull {
+                    navBarHitPoint.x >= it.bounds.left &&
+                            navBarHitPoint.y >= it.bounds.top &&
+                            navBarHitPoint.x <= it.bounds.right &&
+                            navBarHitPoint.y <= it.bounds.bottom
+                }
+            }
+
+            onCommit(activity, navBarStyle?.barColor) {
+                activity.window.navigationBarColor =
+                    (navBarStyle?.barColor ?: Color.Black
+                        .copy(alpha = 0.2f)).toArgb()
+            }
+
             onCommit(activity, navBarStyle?.lightIcons) {
                 activity.window.decorView.systemUiVisibility =
                     activity.window.decorView.systemUiVisibility.setFlag(
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
                         navBarStyle?.lightIcons ?: false
                     )
+            }
+        } else {
+            onCommit(activity) {
+                activity.window.navigationBarColor = Color.Black
+                    .copy(alpha = 0.2f)
+                    .toArgb()
             }
         }
     }

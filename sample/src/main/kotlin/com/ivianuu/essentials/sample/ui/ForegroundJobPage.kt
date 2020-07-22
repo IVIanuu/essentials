@@ -3,7 +3,6 @@ package com.ivianuu.essentials.sample.ui
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.graphics.drawable.Icon
 import androidx.compose.Composable
 import androidx.compose.getValue
@@ -38,19 +37,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.setSmallIcon
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Unscoped
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
 
 @SuppressLint("NewApi")
 @Reader
 @Composable
 fun ForegroundJobPage() {
-    if (get<SystemBuildInfo>().sdk >= 26) {
+    if (given<SystemBuildInfo>().sdk >= 26) {
         onActive {
-            get<NotificationManager>().createNotificationChannel(
+            given<NotificationManager>().createNotificationChannel(
                 NotificationChannel(
                     "foreground", "Foreground",
                     NotificationManager.IMPORTANCE_LOW
@@ -61,7 +58,7 @@ fun ForegroundJobPage() {
 
     val primaryColor = MaterialTheme.colors.primary
 
-    val foregroundManager = get<ForegroundManager>()
+    val foregroundManager = given<ForegroundManager>()
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Foreground") }) }

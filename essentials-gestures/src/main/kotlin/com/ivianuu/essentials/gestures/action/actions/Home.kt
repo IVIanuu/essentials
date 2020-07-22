@@ -1,41 +1,49 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-/**
+import android.accessibilityservice.AccessibilityService
+import android.content.Intent
+import android.os.Build
+import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.util.Resources
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
+
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
 
-@Module
-fun HomeModule() {
-installIn<ApplicationComponent>()
-    action { resourceProvider: ResourceProvider,
-             permissions: ActionPermissions,
-             intentHomeExecutorFactory: @Provider () -> IntentHomeActionExecutor,
-             accessibilityExecutorFactory: @Provider (Int) -> AccessibilityActionExecutor ->
-        Action(
-key = "home",
-title = getString(R.string.es_action_home),
-permissions = if (needsHomeIntentWorkaround) emptyList()
-            else listOf(permissions.accessibility),
-            iconProvider = SingleActionIconProvider(R.drawable.es_ic_action_home),
-            executor = if (needsHomeIntentWorkaround) intentHomeExecutorFactory()
-            else accessibilityExecutorFactory(AccessibilityService.GLOBAL_ACTION_HOME)
-        ) as @StringKey("home") Action
-    }
-}
+@BindAction
+@Reader
+fun homeAction() = Action(
+    key = "home",
+    title = Resources.getString(R.string.es_action_home),
+    permissions = permissions {
+        if (needsHomeIntentWorkaround) emptyList()
+        else listOf(accessibility)
+    },
+    iconProvider = SingleActionIconProvider(R.drawable.es_ic_action_home),
+    executor = if (needsHomeIntentWorkaround) given<IntentHomeActionExecutor>(lazy = true)
+    else given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_HOME)
+)
 
-@Unscoped
-internal class IntentHomeActionExecutor(
-    private val context: @ForApplication Context,
-    private val delegateProvider: @Provider (Intent) -> IntentActionExecutor
-) : ActionExecutor {
+@Given
+internal class IntentHomeActionExecutor : ActionExecutor {
     override suspend fun invoke() {
         try {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-            context.sendBroadcast(intent)
+            applicationContext.sendBroadcast(intent)
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        delegateProvider(Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_HOME) })()
+        given<IntentActionExecutor>(Intent(Intent.ACTION_MAIN).apply {
+            addCategory(
+                Intent.CATEGORY_HOME
+            )
+        })()
     }
 }
- */

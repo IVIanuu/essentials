@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.AnimationBuilder
+import androidx.animation.AnimationSpec
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.key
@@ -36,7 +36,7 @@ val SharedElementComposable = MetaProp<@Composable () -> Unit>()
 
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
-    sharedElementAnim: AnimationBuilder<Float> = defaultAnimationBuilder(),
+    sharedElementAnim: AnimationSpec<Float> = defaultAnimationSpec(),
     contentTransition: StackTransition = FadeStackTransition(sharedElementAnim),
     waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = { context ->

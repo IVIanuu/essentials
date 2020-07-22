@@ -33,8 +33,8 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
 @Composable
 internal fun DebugPurchaseDialog(
-    skuDetails: SkuDetails,
-    onPurchaseClick: () -> Unit
+    onPurchaseClick: () -> Unit,
+    skuDetails: SkuDetails
 ) {
     Dialog(
         title = {

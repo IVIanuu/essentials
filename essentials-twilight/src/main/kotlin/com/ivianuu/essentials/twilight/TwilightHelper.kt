@@ -16,19 +16,16 @@
 
 package com.ivianuu.essentials.twilight
 
-import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.PowerManager
 import androidx.compose.Immutable
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.injekt.ApplicationComponent
-import com.ivianuu.injekt.ForApplication
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.android.ApplicationResources
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,15 +38,8 @@ import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
 @Reader
-@Scoped(ApplicationComponent::class)
-class TwilightHelper(
-    private val app: Application,
-    private val resources: @ForApplication Resources,
-    private val powerManager: PowerManager,
-    prefs: TwilightPrefs
-) {
-
-    val state: Flow<TwilightState> = prefs.twilightMode.data
+val twilightState: Flow<TwilightState>
+    get() = given<TwilightPrefs>().twilightMode.data
         .flatMapLatest { mode ->
             when (mode) {
                 TwilightMode.System -> system()
@@ -59,47 +49,50 @@ class TwilightHelper(
                 TwilightMode.Time -> time()
             }
         }
-        .combine(prefs.useBlack.data) { isDark, useBlack ->
+        .combine(given<TwilightPrefs>().useBlack.data) { isDark, useBlack ->
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
 
-    private fun battery() = BroadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map { powerManager.isPowerSaveMode }
+@Reader
+private fun battery() = BroadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map { given<PowerManager>().isPowerSaveMode }
 
-    private fun system() = configChanges()
-        .onStart { emit(Unit) }
-        .map {
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
-                .UI_MODE_NIGHT_YES
-        }
-
-    private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map {
-            val calendar = Calendar.getInstance()
-            val hour = calendar[Calendar.HOUR_OF_DAY]
-            hour < 6 || hour >= 22
-        }
-
-    private fun configChanges() = callbackFlow<Unit> {
-        val callbacks = object : ComponentCallbacks2 {
-            override fun onConfigurationChanged(newConfig: Configuration) {
-                offer(Unit)
-            }
-
-            override fun onLowMemory() {
-            }
-
-            override fun onTrimMemory(level: Int) {
-            }
-        }
-        app.registerComponentCallbacks(callbacks)
-        awaitClose { app.unregisterComponentCallbacks(callbacks) }
+@Reader
+private fun system() = configChanges()
+    .onStart { emit(Unit) }
+    .map {
+        (given<ApplicationResources>().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
+            .UI_MODE_NIGHT_YES
     }
+
+@Reader
+private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map {
+        val calendar = Calendar.getInstance()
+        val hour = calendar[Calendar.HOUR_OF_DAY]
+        hour < 6 || hour >= 22
+    }
+
+@Reader
+private fun configChanges() = callbackFlow<Unit> {
+    val callbacks = object : ComponentCallbacks2 {
+        override fun onConfigurationChanged(newConfig: Configuration) {
+            offer(Unit)
+        }
+
+        override fun onLowMemory() {
+        }
+
+        override fun onTrimMemory(level: Int) {
+        }
+    }
+    applicationContext.registerComponentCallbacks(callbacks)
+    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
 }
 
 @Immutable

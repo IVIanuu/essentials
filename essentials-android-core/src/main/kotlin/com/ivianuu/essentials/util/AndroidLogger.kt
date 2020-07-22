@@ -1,9 +1,10 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
-@Unscoped
+@Given
 class AndroidLogger : Logger {
 
     override fun v(message: String?, throwable: Throwable?, tag: String?) {
@@ -30,4 +31,8 @@ class AndroidLogger : Logger {
         Log.wtf(tag ?: stackTraceTag, message, throwable)
     }
 
+    companion object {
+        @Given
+        fun bind(): Logger? = if (given<BuildInfo>().isDebug) given<AndroidLogger>() else null
+    }
 }

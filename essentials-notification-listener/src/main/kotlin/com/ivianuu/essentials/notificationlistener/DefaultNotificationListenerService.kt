@@ -17,23 +17,20 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.composition.runReader
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
         component.runReader {
-            d("listener connected")
-            get<NotificationStore>().onServiceConnected(this)
-            get<@NotificationWorkers Set<suspend () -> Unit>>().forEach { worker ->
+            d { "listener connected" }
+            given<NotificationStore>().onServiceConnected(this)
+            given<NotificationWorkers>().forEach { worker ->
                 connectedScope.launch {
                     scope.launch { worker() }
                 }
@@ -45,15 +42,15 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
         component.runReader {
-            d("listener disconnected")
-            get<NotificationStore>().onServiceDisconnected()
+            d { "listener disconnected" }
+            given<NotificationStore>().onServiceDisconnected()
         }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         component.runReader {
-            d("notification posted $sbn")
+            d { "notification posted $sbn" }
             notifyUpdate()
         }
     }
@@ -61,7 +58,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
         component.runReader {
-            d("notification removed $sbn")
+            d { "notification removed $sbn" }
             notifyUpdate()
         }
     }
@@ -69,13 +66,13 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
         component.runReader {
-            d("ranking update $rankingMap")
+            d { "ranking update $rankingMap" }
             notifyUpdate()
         }
     }
 
     @Reader
     private fun notifyUpdate() {
-        get<NotificationStore>().onNotificationsChanged(activeNotifications.toList())
+        given<NotificationStore>().onNotificationsChanged(activeNotifications.toList())
     }
 }

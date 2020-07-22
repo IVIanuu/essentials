@@ -29,7 +29,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev544-SNAPSHOT"
+    const val version = "${Build.versionName}-dev555"
 }
 
 object Deps {
@@ -39,11 +39,15 @@ object Deps {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.2.0"
 
-        const val composeVersion = "0.0.1-dev150"
-
         object Compose {
-            const val version = composeVersion
-            const val runtime = "androidx.compose:compose-runtime:$composeVersion"
+            const val version = "0.1.0-dev15"
+            const val compiler = "androidx.compose:compose-compiler:$version"
+            const val core = "androidx.compose.ui:ui:$version"
+            const val material = "androidx.compose.material:material:$version"
+            const val materialIconsExtended =
+                "androidx.compose.material:material-icons-extended:$version"
+            const val runtime = "androidx.compose.runtime:runtime:$version"
+            const val test = "androidx.compose.test:test-core:$version"
         }
 
         object Lifecycle {
@@ -57,18 +61,6 @@ object Deps {
             const val junit = "androidx.test.ext:junit:1.1.1"
             const val rules = "androidx.test:rules:1.2.0"
             const val runner = "androidx.test:runner:1.2.0"
-        }
-
-        object Ui {
-            private const val version = composeVersion
-            const val animation = "androidx.ui:ui-animation:$version"
-            const val core = "androidx.ui:ui-core:$version"
-            const val foundation = "androidx.ui:ui-foundation:$version"
-            const val layout = "androidx.ui:ui-layout:$version"
-            const val material = "androidx.ui:ui-material:$version"
-            const val materialIconsExtended = "androidx.ui:ui-material-icons-extended:$version"
-            const val test = "androidx.ui:ui-test:$version"
-            const val text = "androidx.ui:ui-text:$version"
         }
 
         const val work = "androidx.work:work-runtime-ktx:2.1.0"
@@ -95,7 +87,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev544-SNAPSHOT"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev555"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
@@ -103,13 +95,11 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev207"
+        private const val version = "0.0.1-dev225"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
-        const val androidCompose = "com.ivianuu.injekt:injekt-android-compose:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
-        const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"
-        const val composition = "com.ivianuu.injekt:injekt-composition:$version"
+        const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 

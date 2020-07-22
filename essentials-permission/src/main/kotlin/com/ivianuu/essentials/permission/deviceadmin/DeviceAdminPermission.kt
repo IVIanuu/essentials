@@ -26,7 +26,10 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.Unscoped
+import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.given
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
@@ -51,14 +54,12 @@ val Permission.Companion.DeviceAdminComponent by lazy {
 }
 
 @BindPermissionStateProvider
-@Unscoped
-internal class DeviceAdminPermissionStateProvider(
-    private val devicePolicyManager: DevicePolicyManager
-) : PermissionStateProvider {
+@Given
+internal class DeviceAdminPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.DeviceAdminComponent in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        devicePolicyManager.isAdminActive(permission[Permission.DeviceAdminComponent])
+        given<DevicePolicyManager>().isAdminActive(permission[Permission.DeviceAdminComponent])
 }
