@@ -20,6 +20,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
@@ -52,19 +53,13 @@ val Permission.Companion.DeviceAdminComponent by lazy {
     Permission.Key<ComponentName>("DeviceAdminComponent")
 }
 
+@BindPermissionStateProvider
 @Given
-internal class DeviceAdminPermissionStateProvider(
-    private val devicePolicyManager: DevicePolicyManager
-) : PermissionStateProvider {
+internal class DeviceAdminPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.DeviceAdminComponent in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        devicePolicyManager.isAdminActive(permission[Permission.DeviceAdminComponent])
-
-    companion object {
-        @SetElements(ApplicationComponent::class)
-        fun intoSet() = setOf(given<DeviceAdminPermissionStateProvider>())
-    }
+        given<DevicePolicyManager>().isAdminActive(permission[Permission.DeviceAdminComponent])
 }

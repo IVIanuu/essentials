@@ -21,6 +21,7 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.permission.BindPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
@@ -44,6 +45,7 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
     Permission.Key<Unit>("IsWriteSettingsPermission")
 }
 
+@BindPermissionStateProvider
 @Given
 internal class WriteSettingsPermissionStateProvider : PermissionStateProvider {
 
