@@ -12,7 +12,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.uiScope
-import com.ivianuu.essentials.util.safeAs
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.launch
 
@@ -31,7 +30,9 @@ fun ActionsPage() {
                             showDefaultOption = false,
                             showNoneOption = false
                         )
-                    }.safeAs<ActionPickerResult.Action>()?.actionKey ?: return@launch
+                    }
+                        ?.let { it as? ActionPickerResult.Action }
+                        ?.actionKey ?: return@launch
 
                     executeAction(action)
                 }
