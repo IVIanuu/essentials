@@ -37,7 +37,6 @@ import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.UnitValueTextProvider
-import com.ivianuu.essentials.util.cast
 import kotlin.time.Duration
 
 @Composable
@@ -363,7 +362,7 @@ private fun Duration.toFloat(): Float {
         .first { it.type == Double::class.java }
         .also { it.isAccessible = true }
         .get(this)!!
-        .cast<Double>()
+        .let { it as Double }
         .toFloat()
 }
 
