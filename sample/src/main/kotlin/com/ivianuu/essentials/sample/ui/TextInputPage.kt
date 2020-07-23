@@ -28,8 +28,8 @@ import androidx.ui.core.drawOpacity
 import androidx.ui.core.focus.FocusModifier
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.TextField
-import androidx.ui.foundation.TextFieldValue
 import androidx.ui.foundation.clickable
+import androidx.ui.input.TextFieldValue
 import androidx.ui.layout.Stack
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.material.ExtendedFloatingActionButton
