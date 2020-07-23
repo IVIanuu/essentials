@@ -2,13 +2,13 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.core.content.FileProvider
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
@@ -21,7 +21,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 @Reader
-internal suspend fun backupData() = runCatching {
+internal suspend fun backupData() = runCatchingAndLog {
     withContext(dispatchers.io) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
         val backupFileName = "backup_${dateFormat.format(Date())}"

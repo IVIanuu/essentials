@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.transform
 
 fun <V> Flow<V>.flowCatching(): Flow<Result<V, Throwable>> {
     return map<V, Result<V, Throwable>> { Ok(it) }
-        .catch { emit(Err(it)) }
+        .catch {
+            it.printStackTrace()
+            emit(Err(it))
+        }
 }
 
 fun <V, E> Flow<Result<V, E>>.unwrap(): Flow<V> {
@@ -25,5 +28,14 @@ fun <V> Flow<Result<V, Throwable>>.unwrap(): Flow<V> {
             is Ok -> emit(it.value)
             is Err -> throw it.error
         }
+    }
+}
+
+inline fun <V> runCatchingAndLog(block: () -> V): Result<V, Throwable> {
+    return try {
+        Ok(block())
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        Err(e)
     }
 }

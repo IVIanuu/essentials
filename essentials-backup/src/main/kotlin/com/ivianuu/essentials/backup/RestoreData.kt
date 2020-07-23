@@ -6,6 +6,7 @@ import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -17,7 +18,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
 @Reader
-internal suspend fun restoreData() = runCatching {
+internal suspend fun restoreData() = runCatchingAndLog {
     withContext(dispatchers.io) {
         val uri = startActivityForResult(
             Intent.createChooser(
