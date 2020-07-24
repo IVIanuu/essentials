@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.ui.core.setContent
 import androidx.ui.savedinstancestate.UiSavedStateRegistry
 import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
+import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.ui.uiScope
@@ -45,6 +46,8 @@ abstract class EsActivity : AppCompatActivity() {
 
     private lateinit var composition: Composition
 
+    private val retainedObjects = RetainedObjects()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,6 +62,7 @@ abstract class EsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         composition.dispose()
+        retainedObjects.dispose()
         activityComponent.runReader {
             uiScope.cancel()
         }

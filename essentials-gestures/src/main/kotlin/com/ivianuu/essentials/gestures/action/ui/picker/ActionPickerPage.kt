@@ -8,10 +8,10 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
-import com.ivianuu.essentials.ui.viewmodel.currentState
-import com.ivianuu.essentials.ui.viewmodel.viewModel
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -22,28 +22,16 @@ fun ActionPickerPage(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
-        val viewModel = viewModel {
-            given<ActionPickerViewModel>(
-                showDefaultOption,
-                showNoneOption
-            )
-        }
-
-        ResourceLazyColumnItems(
-            resource = viewModel.currentState.items
-        ) { item ->
+        val (state, dispatch) = rememberStore(
+            showDefaultOption, showNoneOption
+        ) { actionPickerStore(showDefaultOption, showNoneOption) }
+        ResourceLazyColumnItems(state.items) { item ->
             ActionPickerItem(
                 item = item,
-                onClick = { viewModel.itemClicked(item) }
+                onClick = { dispatch(ActionPickerAction.ItemClicked(item)) }
             )
         }
     }
-}
-
-sealed class ActionPickerResult {
-    data class Action(val actionKey: String) : ActionPickerResult()
-    object Default : ActionPickerResult()
-    object None : ActionPickerResult()
 }
 
 @Composable

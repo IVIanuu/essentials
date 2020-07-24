@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -26,7 +27,10 @@ import androidx.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
+import com.ivianuu.essentials.apps.ui.AppPickerAction.AppClicked
 import com.ivianuu.essentials.coil.CoilImage
+import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -37,9 +41,7 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
-import com.ivianuu.essentials.ui.store.onEachAction
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.ui.store.store
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.CoroutineScope
@@ -59,10 +61,10 @@ fun AppPickerPage(
             )
         }
     ) {
-        ResourceLazyColumnItems(resource = state.apps) { app ->
+        ResourceLazyColumnItems(state.apps) { app ->
             key(app.packageName) {
                 AppInfo(
-                    onClick = { dispatch(AppPickerAction.AppClicked(app)) },
+                    onClick = { dispatch(AppClicked(app)) },
                     app = app
                 )
             }
@@ -101,13 +103,15 @@ private fun CoroutineScope.appPickerStore(
 
     onEachAction {
         when (it) {
-            is AppPickerAction.AppClicked -> navigator.popTop(result = it.app)
+            is AppClicked -> navigator.popTop(result = it.app)
         }.exhaustive
     }
 }
+
+@Immutable
+private data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
 
 private sealed class AppPickerAction {
     data class AppClicked(val app: AppInfo) : AppPickerAction()
 }
 
-internal data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)

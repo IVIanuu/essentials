@@ -20,7 +20,12 @@ import androidx.compose.Composable
 import androidx.compose.State
 import androidx.compose.launchInComposition
 import androidx.compose.state
+import com.ivianuu.essentials.ui.common.rememberRetained
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.cancel
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun <T> produceState(
@@ -37,4 +42,17 @@ fun <T> produceState(
     val state = state { initial }
     launchInComposition(*inputs) { state.value = block() }
     return state
+}
+
+@Composable
+fun rememberRetainedCoroutinesScope(
+    getContext: () -> CoroutineContext = { EmptyCoroutineContext }
+): CoroutineScope = rememberRetained { ClosableCoroutineScope(CoroutineScope(getContext())) }
+
+private class ClosableCoroutineScope(
+    private val coroutineScope: CoroutineScope
+) : CoroutineScope by coroutineScope, DisposableHandle {
+    override fun dispose() {
+        coroutineScope.cancel()
+    }
 }

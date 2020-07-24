@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.permission.defaultui
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.key
-import androidx.compose.mutableStateListOf
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
@@ -30,23 +30,25 @@ import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
+import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.setState
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.viewmodel.ViewModel
-import com.ivianuu.essentials.ui.viewmodel.viewModel
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @BindPermissionRequestRouteFactory
 @Given
@@ -59,19 +61,20 @@ internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFact
 
 @Reader
 @Composable
-internal fun DefaultPermissionPage(request: PermissionRequest) {
-    val viewModel = viewModel { given<DefaultPermissionViewModel>(request) }
-
+private fun DefaultPermissionPage(request: PermissionRequest) {
+    val (state, dispatch) = rememberStore {
+        defaultPermissionStore(request)
+    }
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
         }
     ) {
         InsettingScrollableColumn {
-            viewModel.permissionsToProcess.forEach { permission ->
+            state.permissionsToProcess.forEach { permission ->
                 Permission(
                     permission = permission,
-                    onClick = { viewModel.permissionClicked(permission) }
+                    onClick = { dispatch(PermissionAction.PermissionClicked(permission)) }
                 )
             }
         }
@@ -100,42 +103,44 @@ private fun Permission(
     }
 }
 
-@Given
-internal class DefaultPermissionViewModel(
-    private val request: PermissionRequest
-) : ViewModel() {
+@Reader
+private fun CoroutineScope.defaultPermissionStore(
+    request: PermissionRequest
+) = store<PermissionState, PermissionAction>(
+    PermissionState()
+) {
+    suspend fun updatePermissionsToProcessOrFinish() {
+        val permissionsToProcess = request.permissions
+            .filterNot { hasPermissions(it).first() }
 
-    private val _permissionsToProcess = mutableStateListOf<Permission>()
-    val permissionsToProcess: List<Permission> get() = _permissionsToProcess
+        d { "update permissions to process or finish not granted $permissionsToProcess" }
 
-    init {
-        updatePermissionsToProcessOrFinish()
-    }
-
-    fun permissionClicked(permission: Permission) {
-        scope.launch {
-            permission.requestHandler.request(permission)
-            startUi()
-            updatePermissionsToProcessOrFinish()
+        if (permissionsToProcess.isEmpty()) {
+            navigator.popTop()
+        } else {
+            setState { copy(permissionsToProcess = permissionsToProcess) }
         }
     }
 
-    private fun updatePermissionsToProcessOrFinish() {
-        scope.launch {
-            val permissionsToProcess = request.permissions
-                .filterNot { hasPermissions(it).first() }
+    updatePermissionsToProcessOrFinish()
 
-            d { "update permissions to process or finish not granted $permissionsToProcess" }
-
-            if (permissionsToProcess.isEmpty()) {
-                navigator.popTop()
-            } else {
-                withContext(dispatchers.main) { // todo remove
-                    _permissionsToProcess.clear()
-                    _permissionsToProcess += permissionsToProcess
-                }
+    onEachAction { action ->
+        when (action) {
+            is PermissionAction.PermissionClicked -> {
+                action.permission.requestHandler.request(action.permission)
+                startUi()
+                updatePermissionsToProcessOrFinish()
             }
-        }
+        }.exhaustive
     }
+}
 
+
+@Immutable
+private data class PermissionState(
+    val permissionsToProcess: List<Permission> = emptyList()
+)
+
+private sealed class PermissionAction {
+    data class PermissionClicked(val permission: Permission) : PermissionAction()
 }

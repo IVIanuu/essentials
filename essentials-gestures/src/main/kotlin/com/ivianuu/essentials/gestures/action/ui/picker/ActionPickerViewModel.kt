@@ -12,68 +12,82 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemClicked
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.viewmodel.StateViewModel
+import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
 
-@Given
-internal class ActionPickerViewModel(
-    private val showDefaultOption: Boolean,
-    private val showNoneOption: Boolean
-) : StateViewModel<ActionPickerState>(ActionPickerState()) {
+@Reader
+fun CoroutineScope.actionPickerStore(
+    showDefaultOption: Boolean,
+    showNoneOption: Boolean
+) = store<ActionPickerState, ActionPickerAction>(
+    ActionPickerState()
+) {
+    execute(
+        block = {
+            val specialOptions = mutableListOf<SpecialOption>()
 
-    init {
-        execute(
-            block = {
-                val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
-
-                if (showDefaultOption) {
-                    specialOptions += ActionPickerItem.SpecialOption(
-                        title = Resources.getString(R.string.es_default),
-                        getResult = { ActionPickerResult.Default }
-                    )
-                }
-
-                if (showNoneOption) {
-                    specialOptions += ActionPickerItem.SpecialOption(
-                        title = Resources.getString(R.string.es_none),
-                        getResult = { ActionPickerResult.None }
-                    )
-                }
-
-                val actionsAndDelegates = ((given<Set<ActionPickerDelegate>>()
-                    .map {
-                        ActionPickerItem.PickerDelegate(
-                            it,
-                            navigator
-                        )
-                    }) + (getActions().map { ActionPickerItem.ActionItem(it) }))
-                    .sortedBy { it.title }
-
-                return@execute specialOptions + actionsAndDelegates
-            },
-            reducer = { copy(items = it) }
-        )
-    }
-
-    fun itemClicked(selectedItem: ActionPickerItem) {
-        scope.launch {
-            val result = selectedItem.getResult() ?: return@launch
-            if (result is ActionPickerResult.Action) {
-                val action = getAction(result.actionKey)
-                if (!requestPermissions(action.permissions)) return@launch
+            if (showDefaultOption) {
+                specialOptions += SpecialOption(
+                    title = Resources.getString(R.string.es_default),
+                    getResult = { ActionPickerResult.Default }
+                )
             }
 
-            navigator.popTop(result = result)
-        }
+            if (showNoneOption) {
+                specialOptions += SpecialOption(
+                    title = Resources.getString(R.string.es_none),
+                    getResult = { ActionPickerResult.None }
+                )
+            }
+
+            val actionsAndDelegates = ((given<Set<ActionPickerDelegate>>()
+                .map {
+                    PickerDelegate(
+                        it,
+                        navigator
+                    )
+                }) + (getActions().map { ActionItem(it) }))
+                .sortedBy { it.title }
+
+            return@execute specialOptions + actionsAndDelegates
+        },
+        reducer = { copy(items = it) }
+    )
+
+    onEachAction { action ->
+        when (action) {
+            is ItemClicked -> {
+                val result = action.item.getResult() ?: return@onEachAction
+                if (result is ActionPickerResult.Action) {
+                    val pickedAction = getAction(result.actionKey)
+                    if (!requestPermissions(pickedAction.permissions)) return@onEachAction
+                }
+
+                navigator.popTop(result = result)
+            }
+        }.exhaustive
     }
+}
+
+sealed class ActionPickerResult {
+    data class Action(val actionKey: String) : ActionPickerResult()
+    object Default : ActionPickerResult()
+    object None : ActionPickerResult()
 }
 
 @Immutable
@@ -131,3 +145,7 @@ sealed class ActionPickerItem {
 
 @Immutable
 data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
+
+sealed class ActionPickerAction {
+    data class ItemClicked(val item: ActionPickerItem) : ActionPickerAction()
+}

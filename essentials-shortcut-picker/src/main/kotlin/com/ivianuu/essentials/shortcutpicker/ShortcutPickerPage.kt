@@ -26,6 +26,8 @@ import androidx.ui.graphics.painter.ImagePainter
 import androidx.ui.layout.size
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -33,19 +35,20 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
-import com.ivianuu.essentials.ui.viewmodel.StateViewModel
-import com.ivianuu.essentials.ui.viewmodel.currentState
-import com.ivianuu.essentials.ui.viewmodel.viewModel
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.execute
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
 fun ShortcutPickerPage(title: String? = null) {
-    val viewModel = viewModel<ShortcutPickerViewModel>()
+    val (state, dispatch) = rememberStore { shortcutPickerStore() }
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -55,8 +58,10 @@ fun ShortcutPickerPage(title: String? = null) {
             })
         }
     ) {
-        ResourceLazyColumnItems(resource = viewModel.currentState.shortcuts) { shortcut ->
-            Shortcut(info = shortcut, onClick = { viewModel.shortcutClicked(shortcut) })
+        ResourceLazyColumnItems(state.shortcuts) { shortcut ->
+            Shortcut(
+                info = shortcut,
+                onClick = { dispatch(ShortcutPickerAction.ShortcutClicked(shortcut)) })
         }
     }
 }
@@ -80,35 +85,39 @@ private fun Shortcut(
     }
 }
 
-@Given
-internal class ShortcutPickerViewModel :
-    StateViewModel<ShortcutPickerState>(ShortcutPickerState()) {
-
-    init {
+@Reader
+private fun CoroutineScope.shortcutPickerStore() =
+    store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
         execute(
             block = { getShortcuts() },
             reducer = { copy(shortcuts = it) }
         )
-    }
 
-    fun shortcutClicked(info: Shortcut) {
-        scope.launch {
-            try {
-                val shortcutRequestResult = startActivityForResult(info.intent)
-                    .data ?: return@launch
+        onEachAction { action ->
+            when (action) {
+                is ShortcutPickerAction.ShortcutClicked -> {
+                    try {
+                        val shortcutRequestResult = startActivityForResult(action.shortcut.intent)
+                            .data ?: return@onEachAction
 
-                val shortcut = extractShortcut(shortcutRequestResult)
+                        val shortcut = extractShortcut(shortcutRequestResult)
 
-                navigator.popTop(result = shortcut)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toaster.toast(R.string.es_failed_to_pick_shortcut)
-            }
+                        navigator.popTop(result = shortcut)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toaster.toast(R.string.es_failed_to_pick_shortcut)
+                    }
+                }
+            }.exhaustive
         }
     }
-}
+
 
 @Immutable
-internal data class ShortcutPickerState(
+private data class ShortcutPickerState(
     val shortcuts: Resource<List<Shortcut>> = Idle
 )
+
+private sealed class ShortcutPickerAction {
+    data class ShortcutClicked(val shortcut: Shortcut) : ShortcutPickerAction()
+}
