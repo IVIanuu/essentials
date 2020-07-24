@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -35,12 +34,16 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
-import com.ivianuu.essentials.ui.viewmodel.StateViewModel
-import com.ivianuu.essentials.ui.viewmodel.currentState
-import com.ivianuu.essentials.ui.viewmodel.viewModel
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.enableLogging
+import com.ivianuu.essentials.ui.store.execute
+import com.ivianuu.essentials.ui.store.onEachAction
+import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.ui.store.store
+import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -48,9 +51,7 @@ fun AppPickerPage(
     appFilter: AppFilter = DefaultAppFilter,
     title: String? = null
 ) {
-    val viewModel = viewModel(appFilter) {
-        given<AppPickerViewModel>(appFilter)
-    }
+    val (state, dispatch) = rememberStore { appPickerStore(appFilter) }
 
     Scaffold(
         topBar = {
@@ -59,12 +60,10 @@ fun AppPickerPage(
             )
         }
     ) {
-        ResourceLazyColumnItems(
-            resource = viewModel.currentState.apps
-        ) { app ->
+        ResourceLazyColumnItems(resource = state.apps) { app ->
             key(app.packageName) {
                 AppInfo(
-                    onClick = { viewModel.appClicked(app) },
+                    onClick = { dispatch(AppPickerAction.AppClicked(app)) },
                     app = app
                 )
             }
@@ -89,25 +88,29 @@ private fun AppInfo(
     )
 }
 
-@Given
-internal class AppPickerViewModel(
-    private val appFilter: AppFilter
-) : StateViewModel<AppPickerState>(AppPickerState()) {
+@Reader
+private fun CoroutineScope.appPickerStore(
+    appFilter: AppFilter
+) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
+    enableLogging()
 
-    init {
-        execute(
-            block = {
-                getInstalledApps()
-                    .filter(appFilter)
-            },
-            reducer = { copy(apps = it) }
-        )
-    }
+    execute(
+        block = {
+            getInstalledApps()
+                .filter(appFilter)
+        },
+        reducer = { copy(apps = it) }
+    )
 
-    fun appClicked(app: AppInfo) {
-        navigator.popTop(result = app)
+    onEachAction {
+        when (it) {
+            is AppPickerAction.AppClicked -> navigator.popTop(result = it.app)
+        }.exhaustive
     }
 }
 
-@Immutable
+private sealed class AppPickerAction {
+    data class AppClicked(val app: AppInfo) : AppPickerAction()
+}
+
 internal data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)

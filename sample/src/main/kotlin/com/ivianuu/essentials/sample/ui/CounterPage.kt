@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
-import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
@@ -28,10 +27,21 @@ import androidx.ui.layout.height
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.enableLogging
+import com.ivianuu.essentials.ui.store.onEachAction
+import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.ui.store.setState
+import com.ivianuu.essentials.ui.store.store
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
+import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -44,10 +54,10 @@ fun CounterPage() {
             verticalArrangement = Arrangement.Center,
             horizontalGravity = Alignment.CenterHorizontally
         ) {
-            val (count, setCount) = state { 0 }
+            val (state, dispatch) = rememberStore { counterStore() }
 
             Text(
-                text = "Count: $count",
+                text = "Count: ${state.count}",
                 style = MaterialTheme.typography.h3
             )
 
@@ -55,15 +65,38 @@ fun CounterPage() {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { setCount(count + 1) }
+                onClick = { dispatch(CounterAction.Inc) }
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { setCount(count - 1) }
+                onClick = { dispatch(CounterAction.Dec) }
             )
         }
     }
 }
+
+@Reader
+private fun CoroutineScope.counterStore() =
+    store<CounterState, CounterAction>(CounterState(0)) {
+        runWithCleanup(
+            block = {
+                enableLogging()
+
+                onEachAction {
+                    when (it) {
+                        CounterAction.Inc -> setState { copy(count = count + 1) }
+                        CounterAction.Dec -> setState { copy(count = count - 1) }
+                    }.exhaustive
+                }
+            },
+            cleanup = {
+                d { "" }
+            }
+        )
+    }
+
+private data class CounterState(val count: Int)
+private enum class CounterAction { Inc, Dec }
