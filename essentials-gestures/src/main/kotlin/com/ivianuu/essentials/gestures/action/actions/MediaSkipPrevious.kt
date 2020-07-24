@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
-import androidx.ui.foundation.Icon
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.SkipPrevious
 import com.ivianuu.essentials.gestures.R
@@ -14,5 +13,5 @@ fun mediaSkipPreviousAction() = mediaAction(
     key = "media_skip_previous",
     keycode = KeyEvent.KEYCODE_MEDIA_PREVIOUS,
     titleRes = R.string.es_action_media_skip_previous,
-    icon = { Icon(Icons.Default.SkipPrevious) }
+    icon = singleActionIcon(Icons.Default.SkipPrevious)
 )

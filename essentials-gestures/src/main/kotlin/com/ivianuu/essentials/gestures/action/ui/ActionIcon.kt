@@ -6,5 +6,5 @@ import com.ivianuu.essentials.gestures.action.Action
 
 @Composable
 fun ActionIcon(action: Action) {
-    action.iconProvider.icon.collectAsState(null).value?.invoke()
+    action.icon.collectAsState(null).value?.invoke()
 }

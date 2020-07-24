@@ -18,8 +18,10 @@ suspend fun startUi(): Activity {
 
     navigator.push(
         Route(opaque = true) {
-            deferredActivity.complete(ContextAmbient.current as Activity)
-            navigator.popTop()
+            if (!deferredActivity.isCompleted) {
+                deferredActivity.complete(ContextAmbient.current as Activity)
+                navigator.popTop()
+            }
         }
     )
 

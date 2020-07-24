@@ -1,53 +1,54 @@
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.app.PendingIntent
+import android.content.Intent
 import androidx.compose.Composable
 import androidx.ui.foundation.Icon
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
+import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.coil.CoilImage
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIconProvider
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.flowOf
 
-@Given
-internal class CoilActionIconProvider(
-    private val data: Any
-) : ActionIconProvider {
-    override val icon: Flow<@Composable () -> Unit>
-        get() = flowOf { CoilImage(data = data) }
-}
+internal fun coilActionIcon(data: Any): ActionIcon = flowOf { CoilImage(data = data) }
 
-internal fun SingleActionIconProvider(
-    icon: @Composable () -> Unit
-): ActionIconProvider = object : ActionIconProvider {
-    override val icon: Flow<@Composable () -> Unit>
-        get() = flowOf(icon)
-}
+internal fun singleActionIcon(icon: @Composable () -> Unit): ActionIcon = flowOf(icon)
 
-internal fun SingleActionIconProvider(
-    icon: VectorAsset
-): ActionIconProvider = SingleActionIconProvider { Icon(icon) }
+internal fun singleActionIcon(icon: VectorAsset) = singleActionIcon { Icon(icon) }
 
-internal fun SingleActionIconProvider(
-    id: Int
-): ActionIconProvider = SingleActionIconProvider { Icon(vectorResource(id)) }
+internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(id)) }
 
-internal fun ActionExecutor.beforeAction(
-    block: suspend () -> Unit
-) = object : ActionExecutor {
-    override suspend fun invoke() {
-        block()
-        this@beforeAction.invoke()
+@Reader
+internal suspend fun runRootCommand(command: String) {
+    try {
+        Shell.run(command)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toaster.toast(R.string.es_no_root)
     }
 }
 
-internal fun ActionExecutor.afterAction(
-    block: suspend () -> Unit
-) = object : ActionExecutor {
-    override suspend fun invoke() {
-        this@afterAction.invoke()
-        block()
+@Reader
+internal fun Intent.send() {
+    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    try {
+        PendingIntent.getActivity(
+            applicationContext, 99, this, 0, null
+        ).send()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toaster.toast(R.string.es_activity_not_found)
     }
+}
+
+@Reader
+internal suspend fun performGlobalAction(action: Int) {
+    given<AccessibilityServices>().performGlobalAction(action)
 }

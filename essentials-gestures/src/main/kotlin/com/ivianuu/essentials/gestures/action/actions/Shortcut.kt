@@ -23,7 +23,6 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
 import java.io.ByteArrayOutputStream
 
 @BindActionFactory
@@ -41,9 +40,9 @@ internal class ShortcutActionFactory : ActionFactory {
             key = key,
             title = label,
             unlockScreen = true,
-            iconProvider = SingleActionIconProvider { Icon(ImagePainter(icon)) },
-            executor = given<IntentActionExecutor>(intent),
-            enabled = true
+            enabled = true,
+            icon = singleActionIcon { Icon(ImagePainter(icon)) },
+            execute = { intent.send() }
         )
     }
 }

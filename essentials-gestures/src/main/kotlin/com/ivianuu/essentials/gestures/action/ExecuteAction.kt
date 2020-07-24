@@ -2,6 +2,7 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.unlock.unlockScreen
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
@@ -28,8 +29,9 @@ suspend fun executeAction(key: String) = withContext(dispatchers.default) {
 
     // fire
     try {
-        action.executor()
+        action.execute()
     } catch (e: Exception) {
         e.printStackTrace()
+        Toaster.toast("Failed to execute '${action.title}'") // todo res
     }
 }

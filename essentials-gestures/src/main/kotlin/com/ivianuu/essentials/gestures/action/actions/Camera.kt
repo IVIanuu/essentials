@@ -9,15 +9,16 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 
 @BindAction
 @Reader
 fun cameraAction() = Action(
     key = "camera",
     title = Resources.getString(R.string.es_action_camera),
-    iconProvider = SingleActionIconProvider(Icons.Default.PhotoCamera),
-    executor = given<IntentActionExecutor>(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)),
-    unlockScreen = true
+    icon = singleActionIcon(Icons.Default.PhotoCamera),
+    unlockScreen = true,
+    execute = {
+        Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
+            .send()
+    }
 )
-

@@ -12,7 +12,6 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
-import kotlin.time.milliseconds
 
 @BindAction
 @Reader
@@ -21,19 +20,20 @@ fun screenshotAction(): Action {
     return Action(
         key = "screenshot",
         title = Resources.getString(R.string.es_action_screenshot),
-        iconProvider = SingleActionIconProvider(Icons.Default.PhotoAlbum),
+        icon = singleActionIcon(Icons.Default.PhotoAlbum),
         permissions = permissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility
                 else root
             )
         },
-        executor = (if (systemBuildInfo.sdk >= 28) {
-            given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-        } else {
-            given<RootActionExecutor>("input keyevent 26")
-        }).let {
-            it.beforeAction { delay(500.milliseconds.toLongMilliseconds()) } // todo remove toLongMilliseconds()
+        execute = {
+            delay(500)
+            if (systemBuildInfo.sdk >= 28) {
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+            } else {
+                runRootCommand("input keyevent 26")
+            }
         }
     )
 }

@@ -19,17 +19,19 @@ fun lockScreenAction(): Action {
     return Action(
         key = "lock_screen",
         title = Resources.getString(R.string.es_action_lock_screen),
-        iconProvider = SingleActionIconProvider(Icons.Default.SettingsPower),
+        icon = singleActionIcon(Icons.Default.SettingsPower),
         permissions = permissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility
                 else root
             )
         },
-        executor = if (systemBuildInfo.sdk >= 28) {
-            given<AccessibilityActionExecutor>(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
-        } else {
-            given<RootActionExecutor>("input keyevent 26")
+        execute = {
+            if (systemBuildInfo.sdk >= 28) {
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+            } else {
+                runRootCommand("input keyevent 26")
+            }
         }
     )
 }

@@ -28,11 +28,11 @@ internal class KeycodeActionFactory : ActionFactory {
         return Action(
             key = key,
             title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
-            iconProvider = SingleActionIconProvider(Icons.Default.Keyboard),
+            icon = singleActionIcon(Icons.Default.Keyboard),
             permissions = listOf(given<ActionPermissions>().root),
-            executor = given<RootActionExecutor>("input keyevent $keycode"),
             unlockScreen = false,
-            enabled = true
+            enabled = true,
+            execute = { runRootCommand("input keyevent $keycode") }
         )
     }
 }

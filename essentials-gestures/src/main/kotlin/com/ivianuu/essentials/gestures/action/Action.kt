@@ -17,10 +17,12 @@ data class Action(
     val title: String,
     val permissions: List<Permission> = emptyList(),
     val unlockScreen: Boolean = false,
-    val iconProvider: ActionIconProvider,
-    val executor: ActionExecutor,
-    val enabled: Boolean = true
+    val enabled: Boolean = true,
+    val icon: ActionIcon,
+    val execute: suspend () -> Unit
 )
+
+typealias ActionIcon = Flow<@Composable () -> Unit>
 
 @Effect
 annotation class BindAction {
@@ -28,14 +30,6 @@ annotation class BindAction {
         @SetElements(ApplicationComponent::class)
         operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
     }
-}
-
-interface ActionIconProvider {
-    val icon: Flow<@Composable () -> Unit>
-}
-
-interface ActionExecutor {
-    suspend operator fun invoke()
 }
 
 @Reader
