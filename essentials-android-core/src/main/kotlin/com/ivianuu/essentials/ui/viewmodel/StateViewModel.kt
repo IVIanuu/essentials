@@ -18,23 +18,18 @@ package com.ivianuu.essentials.ui.viewmodel
 
 import androidx.compose.Composable
 import androidx.compose.collectAsState
-import com.ivianuu.essentials.ui.resource.Error
-import com.ivianuu.essentials.ui.resource.Loading
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.Success
+import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * State view model
@@ -47,53 +42,42 @@ abstract class StateViewModel<S>(
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> get() = _state
 
-    private val actor = scope.actor<suspend S.() -> S> {
-        for (reducer in this) {
+    private val actor = scope.actor<SetState> {
+        for (msg in this) {
             val currentState = _state.value
-            val newState = reducer(currentState)
+            val newState = msg.reducer(currentState)
             _state.value = newState
+            msg.acknowledged?.complete(newState)
         }
     }
 
     protected fun setState(reducer: suspend S.() -> S) {
-        actor.offer(reducer)
+        actor.offer(SetState(reducer, null))
     }
 
-    protected suspend fun setStateNow(reducer: suspend S.() -> S) {
-        actor.send(reducer)
+    protected suspend fun setStateNow(reducer: suspend S.() -> S): S {
+        val acknowledged = CompletableDeferred<S>()
+        actor.offer(SetState(reducer, acknowledged))
+        return acknowledged.await()
     }
+
+    private inner class SetState(
+        val reducer: suspend S.() -> S,
+        val acknowledged: CompletableDeferred<S>?
+    )
 
     protected fun <V> Flow<V>.execute(reducer: suspend S.(Resource<V>) -> S): Job {
-        return scope.launch {
-            setStateNow { reducer(Loading) }
-            this@execute
-                .map { Success(it) }
-                .catch { Error(it) }
-                .collect { setStateNow { reducer(it) } }
-        }
-    }
-
-    protected suspend fun <V> Flow<V>.executeNow(reducer: suspend S.(Resource<V>) -> S) {
-        setStateNow { reducer(Loading) }
-        return this
-            .map { Success(it) }
-            .catch { Error(it) }
-            .collect { setStateNow { reducer(it) } }
+        return flowAsResource()
+            .onEach { setStateNow { reducer(it) } }
+            .launchIn(scope)
     }
 
     protected fun <V> execute(
-        context: CoroutineContext = scope.coroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> V,
+        block: suspend () -> V,
         reducer: suspend S.(Resource<V>) -> S
-    ): Job = scope.launch(context, start) {
-        setStateNow { reducer(Loading) }
-        try {
-            val result = block()
-            setStateNow { reducer(Success(result)) }
-        } catch (e: Exception) {
-            setStateNow { reducer(Error(e)) }
-        }
+    ): Job {
+        return flow { emit(block()) }
+            .execute(reducer)
     }
 
     override fun toString() = "${javaClass.simpleName} -> ${state.value}"

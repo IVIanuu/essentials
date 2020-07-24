@@ -29,10 +29,9 @@ import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.util.unwrap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 
 @Immutable
 sealed class Resource<out T>
@@ -110,10 +109,7 @@ inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R
 }
 
 fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> {
-    return this
-        .map { Success(it) as Resource<T> }
-        .onStart { emit(Loading) }
-        .catch { Error(it) }
+    return resourceFlow { emitAll(this@flowAsResource) }
 }
 
 @JvmName("flowAsyncFromResult")
@@ -122,11 +118,15 @@ fun <V> Flow<Result<V, Throwable>>.flowAsResource(): Flow<Resource<V>> {
         .flowAsResource()
 }
 
-fun <T> resourceFlowOf(block: suspend () -> T): Flow<Resource<T>> {
-    return flow {
+fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
+    return flow<Resource<T>> {
         emit(Loading)
         try {
-            emit(Success(block()))
+            block(object : FlowCollector<T> {
+                override suspend fun emit(value: T) {
+                    this@flow.emit(Success(value))
+                }
+            })
         } catch (e: Throwable) {
             emit(Error(e))
         }
