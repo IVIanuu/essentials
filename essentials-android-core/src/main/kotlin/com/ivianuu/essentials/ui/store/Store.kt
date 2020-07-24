@@ -5,6 +5,7 @@ import androidx.compose.collectAsState
 import androidx.compose.remember
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.awaitCancellation
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.util.d
@@ -48,8 +49,10 @@ inline fun <S, A> StoreScope<S, A>.enableLogging() {
         .launchIn(scope)
 
     scope.launch {
-        awaitCancellation()
-        d { "cancel" }
+        runWithCleanup(
+            block = { awaitCancellation() },
+            cleanup = { d { "cancel" } }
+        )
     }
 }
 
@@ -95,10 +98,20 @@ var <S> StoreScope<S, *>.currentState: S
     }
 
 @BuilderInference
-fun <S, A> CoroutineScope.store(
+fun <S, A> CoroutineScope.baseStore(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit
 ): Store<S, A> = StoreImpl(this, initial, block)
+
+@Reader
+@BuilderInference
+inline fun <S, A> CoroutineScope.store(
+    initial: S,
+    noinline block: suspend StoreScope<S, A>.() -> Unit
+): Store<S, A> = baseStore(initial) {
+    enableLogging()
+    block()
+}
 
 internal class StoreImpl<S, A>(
     override val scope: CoroutineScope,

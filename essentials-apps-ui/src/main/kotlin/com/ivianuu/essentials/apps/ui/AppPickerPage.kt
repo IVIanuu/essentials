@@ -36,7 +36,6 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.enableLogging
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.onEachAction
 import com.ivianuu.essentials.ui.store.rememberStore
@@ -92,8 +91,6 @@ private fun AppInfo(
 private fun CoroutineScope.appPickerStore(
     appFilter: AppFilter
 ) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
-    enableLogging()
-
     execute(
         block = {
             getInstalledApps()

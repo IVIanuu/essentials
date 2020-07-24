@@ -27,18 +27,15 @@ import androidx.ui.layout.height
 import androidx.ui.material.ExtendedFloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.enableLogging
 import com.ivianuu.essentials.ui.store.onEachAction
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.ui.store.setState
 import com.ivianuu.essentials.ui.store.store
-import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.CoroutineScope
@@ -81,21 +78,12 @@ fun CounterPage() {
 @Reader
 private fun CoroutineScope.counterStore() =
     store<CounterState, CounterAction>(CounterState(0)) {
-        runWithCleanup(
-            block = {
-                enableLogging()
-
-                onEachAction {
-                    when (it) {
-                        CounterAction.Inc -> setState { copy(count = count + 1) }
-                        CounterAction.Dec -> setState { copy(count = count - 1) }
-                    }.exhaustive
-                }
-            },
-            cleanup = {
-                d { "" }
-            }
-        )
+        onEachAction {
+            when (it) {
+                CounterAction.Inc -> setState { copy(count = count + 1) }
+                CounterAction.Dec -> setState { copy(count = count - 1) }
+            }.exhaustive
+        }
     }
 
 private data class CounterState(val count: Int)
