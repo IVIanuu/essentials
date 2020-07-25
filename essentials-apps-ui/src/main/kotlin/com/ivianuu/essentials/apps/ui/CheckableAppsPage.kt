@@ -195,4 +195,3 @@ private sealed class CheckableAppsAction {
     object SelectAllClicked : CheckableAppsAction()
     object DeselectAllClicked : CheckableAppsAction()
 }
-
