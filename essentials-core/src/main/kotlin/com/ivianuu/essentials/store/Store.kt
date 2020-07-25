@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,10 +47,8 @@ inline fun <S, A> StoreScope<S, A>.enableLogging() {
     }
 }
 
-fun <A> StoreScope<*, A>.onEachAction(block: suspend (A) -> Unit) {
-    actions
-        .onEach(block)
-        .launchIn(scope)
+suspend fun <A> StoreScope<*, A>.onEachAction(block: suspend (A) -> Unit) {
+    actions.collect(block)
 }
 
 fun <S> StoreScope<S, *>.setState(reducer: suspend S.() -> S) {
