@@ -48,7 +48,6 @@ import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
@@ -56,7 +55,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
 
-@Given(ApplicationComponent::class)
+@Given
 class DebugBillingClient(
     private val purchasesUpdatedListener: PurchasesUpdatedListener
 ) : BillingClient() {

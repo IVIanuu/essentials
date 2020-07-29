@@ -27,7 +27,7 @@ object EsDebugBillingModule {
 
     @Given
     fun debugBillingClient(): DebugBillingClient {
-        given<BillingClient>(lazy = true)
+        given<BillingClient>()
         return debugBillingClient!!
     }
 

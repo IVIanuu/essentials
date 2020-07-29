@@ -9,7 +9,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 @Given(ApplicationComponent::class)
-internal class BillingPrefs(factory: DiskDataStoreFactory = given()) {
+internal class BillingPrefs {
+    private val factory = given<DiskDataStoreFactory>()
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(
             fromRaw = { productsJson ->

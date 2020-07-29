@@ -33,7 +33,7 @@ object Publishing {
 }
 
 object Deps {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.0"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
@@ -95,7 +95,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev232"
+        private const val version = "0.0.1-dev261"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"
@@ -106,7 +106,7 @@ object Deps {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.255-SNAPSHOT"
+        private const val version = "1.4.0-rc"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

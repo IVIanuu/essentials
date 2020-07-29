@@ -27,7 +27,7 @@ annotation class AppUi {
     companion object {
         @Given
         operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
-            given<T>() as AppUiMarker // todo remove cast once compiler is fixed
+            given<T>() as @Composable () -> Unit
     }
 }
 

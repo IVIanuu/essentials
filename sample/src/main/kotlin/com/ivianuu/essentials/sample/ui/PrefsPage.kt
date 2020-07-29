@@ -157,7 +157,8 @@ fun PrefsPage() {
 }
 
 @Given(ApplicationComponent::class)
-class Prefs(factory: DiskDataStoreFactory = given()) {
+class Prefs {
+    private val factory = given<DiskDataStoreFactory>()
     val switch = factory.create("switch") { false }
     val checkbox = factory.create("checkbox") { false }
     val radioButton = factory.create("radio_button") { false }
