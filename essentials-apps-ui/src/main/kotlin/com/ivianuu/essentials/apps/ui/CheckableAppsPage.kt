@@ -48,7 +48,6 @@ import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
@@ -119,7 +118,7 @@ private fun CheckableApp(
 }
 
 @Reader
-private fun CoroutineScope.checkableAppsStore(
+private fun checkableAppsStore(
     appFilter: AppFilter,
     checkedApps: Flow<Set<String>>,
     onCheckedAppsChanged: suspend (Set<String>) -> Unit

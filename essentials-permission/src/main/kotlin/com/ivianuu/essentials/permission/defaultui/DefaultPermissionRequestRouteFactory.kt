@@ -47,7 +47,6 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 
 @BindPermissionRequestRouteFactory
@@ -104,7 +103,7 @@ private fun Permission(
 }
 
 @Reader
-private fun CoroutineScope.defaultPermissionStore(
+private fun defaultPermissionStore(
     request: PermissionRequest
 ) = store<PermissionState, PermissionAction>(
     PermissionState()

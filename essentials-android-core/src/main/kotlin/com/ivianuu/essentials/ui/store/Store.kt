@@ -11,7 +11,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.withInstances
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -53,15 +53,19 @@ val <S> Store<S, *>.observedState: S
 @Reader
 @Composable
 fun <S, A> rememberStore(
-    init: CoroutineScope.() -> Store<S, A>
+    init: @Reader () -> Store<S, A>
 ): Store<S, A> = rememberStore(inputs = *emptyArray(), init = init)
 
 @Reader
 @Composable
 fun <S, A> rememberStore(
     vararg inputs: Any?,
-    init: CoroutineScope.() -> Store<S, A>
+    init: @Reader () -> Store<S, A>
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { dispatchers.default }
-    return rememberRetained(*inputs) { init(scope) }
+    return rememberRetained(*inputs) {
+        withInstances(scope) {
+            init()
+        }
+    }
 }

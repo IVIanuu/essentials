@@ -61,7 +61,6 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -158,7 +157,7 @@ private fun NotificationPermissions(
 }
 
 @Reader
-private fun CoroutineScope.notificationStore(): Store<NotificationsState, NotificationsAction> {
+private fun notificationStore(): Store<NotificationsState, NotificationsAction> {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
         Permission.Title withValue "Notifications"

@@ -44,7 +44,6 @@ import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -90,7 +89,7 @@ private fun AppInfo(
 }
 
 @Reader
-private fun CoroutineScope.appPickerStore(
+private fun appPickerStore(
     appFilter: AppFilter
 ) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
     execute(

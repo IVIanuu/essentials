@@ -17,7 +17,6 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -43,7 +42,7 @@ fun BackupAndRestorePage() {
 }
 
 @Reader
-private fun CoroutineScope.backupAndRestorePage() =
+private fun backupAndRestorePage() =
     store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
         onEachAction { action ->
             when (action) {

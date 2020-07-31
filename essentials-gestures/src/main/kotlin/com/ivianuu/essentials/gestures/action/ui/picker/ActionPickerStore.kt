@@ -28,10 +28,9 @@ import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
 
 @Reader
-fun CoroutineScope.actionPickerStore(
+fun actionPickerStore(
     showDefaultOption: Boolean,
     showNoneOption: Boolean
 ) = store<ActionPickerState, ActionPickerAction>(

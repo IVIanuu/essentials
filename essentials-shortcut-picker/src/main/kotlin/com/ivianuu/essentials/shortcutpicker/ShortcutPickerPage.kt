@@ -43,7 +43,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startActivityForResult
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -86,7 +85,7 @@ private fun Shortcut(
 }
 
 @Reader
-private fun CoroutineScope.shortcutPickerStore() =
+private fun shortcutPickerStore() =
     store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
         execute(
             block = { getShortcuts() },

@@ -5,6 +5,7 @@ import com.ivianuu.essentials.coroutines.awaitCancellation
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,17 +66,17 @@ var <S> StoreScope<S, *>.currentState: S
     }
 
 @BuilderInference
-fun <S, A> CoroutineScope.baseStore(
+fun <S, A> CoroutineScope.store(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit
 ): Store<S, A> = StoreImpl(this, initial, block)
 
 @Reader
 @BuilderInference
-inline fun <S, A> CoroutineScope.store(
+inline fun <S, A> store(
     initial: S,
     noinline block: suspend StoreScope<S, A>.() -> Unit
-): Store<S, A> = baseStore(initial) {
+): Store<S, A> = given<CoroutineScope>().store(initial) {
     enableLogging()
     block()
 }
