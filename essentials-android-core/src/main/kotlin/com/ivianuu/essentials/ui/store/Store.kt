@@ -1,7 +1,10 @@
 package com.ivianuu.essentials.ui.store
 
+import android.app.Application
+import androidx.activity.ComponentActivity
 import androidx.compose.Composable
 import androidx.compose.collectAsState
+import androidx.ui.core.ContextAmbient
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setState
@@ -11,7 +14,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.withInstances
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -63,9 +66,19 @@ fun <S, A> rememberStore(
     init: @Reader () -> Store<S, A>
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { dispatchers.default }
+
+    val application = ContextAmbient.current.applicationContext as Application
+    val activity: ComponentActivity? = ContextAmbient.current as? ComponentActivity
+
     return rememberRetained(*inputs) {
-        withInstances(scope) {
-            init()
+        if (activity != null) {
+            runReader(application, activity, scope) {
+                init()
+            }
+        } else {
+            runReader(application, scope) {
+                init()
+            }
         }
     }
 }

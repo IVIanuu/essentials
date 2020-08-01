@@ -22,7 +22,7 @@ import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
@@ -37,17 +37,17 @@ object EsDataModule {
     @Given
     fun prefsDir(): PrefsDir = "${given<DataDir>()}/prefs"
 
-    @Given(ApplicationComponent::class)
+    @Given(ApplicationScoped::class)
     fun moshiSerializerFactory() = MoshiSerializerFactory(given())
 
-    @Given(ApplicationComponent::class)
+    @Given(ApplicationScoped::class)
     fun diskDataStoreFactory() = DiskDataStoreFactory(
         scope = globalScope + dispatchers.io,
         produceBoxDirectory = { File(given<PrefsDir>()) },
         serializerFactory = given()
     )
 
-    @Given(ApplicationComponent::class)
+    @Given(ApplicationScoped::class)
     fun settingsDataStoreFactory() = SettingsDataStoreFactory(
         context = applicationContext,
         scope = globalScope + dispatchers.io

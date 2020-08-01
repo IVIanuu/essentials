@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.Deferred
@@ -50,7 +50,7 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
-@Given(ApplicationComponent::class)
+@Given(ApplicationScoped::class)
 class NavBarManager {
 
     private var job: Job? = null

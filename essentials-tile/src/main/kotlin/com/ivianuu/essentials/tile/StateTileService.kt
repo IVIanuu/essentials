@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.tile
 
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.runServiceReader
+
 /**
  * Stateful tile service
  */
@@ -30,7 +31,7 @@ abstract class StateTileService<T> : EsTileService() {
     }
 
     fun setTile(tile: Tile) {
-        component.runReader {
+        runServiceReader {
             val qsTile = qsTile ?: return
 
             qsTile.state = when (tile.state) {

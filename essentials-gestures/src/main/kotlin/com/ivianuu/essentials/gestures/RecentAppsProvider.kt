@@ -21,7 +21,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 /**
  * Recent apps provider
  */
-@Given(ApplicationComponent::class)
+@Given(ApplicationScoped::class)
 class RecentAppsProvider {
 
     val currentApp: Flow<String?>

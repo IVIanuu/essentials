@@ -16,32 +16,22 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Application
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.applicationComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Given(ApplicationComponent::class)
+@Given(ApplicationScoped::class)
 class ForegroundManager {
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
     internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
-
-    init {
-        try {
-            error("initialize ${System.identityHashCode(this)}\n app component ${(applicationContext as Application).applicationComponent}")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(notification)

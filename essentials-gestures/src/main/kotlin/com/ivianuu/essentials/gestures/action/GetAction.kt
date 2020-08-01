@@ -16,8 +16,7 @@ suspend fun getAction(key: String): Action = withContext(dispatchers.default) {
     given<Set<() -> Action>>()
         .map { it() }
         .firstOrNull { it.key == key }
-        ?: given<Set<() -> ActionFactory>>()
-            .map { it() }
+        ?: given<Set<ActionFactory>>()
             .firstOrNull { it.handles(key) }
             ?.createAction(key)
         ?: error("Unsupported action key $key")

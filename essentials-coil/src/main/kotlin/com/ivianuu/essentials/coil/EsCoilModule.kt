@@ -20,13 +20,14 @@ import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 object EsCoilModule {
 
-    @Given(ApplicationComponent::class)
+    @Given(ApplicationScoped::class)
     fun imageLoader() = ImageLoader.Builder(applicationContext)
         .componentRegistry {
             given<Set<Decoder>>().forEach { add(it) }
@@ -44,5 +45,17 @@ object EsCoilModule {
                 }
         }
         .build()
+
+    @SetElements
+    fun decoders(): Set<Decoder> = emptySet()
+
+    @SetElements
+    fun fetchers(): Set<FetcherBinding<*>> = emptySet()
+
+    @SetElements
+    fun mappers(): Set<MapperBinding<*>> = emptySet()
+
+    @SetElements
+    fun measuredMappers(): Set<MeasuredMapperBinding<*>> = emptySet()
 
 }

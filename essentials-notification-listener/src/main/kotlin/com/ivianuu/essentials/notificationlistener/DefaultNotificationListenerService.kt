@@ -19,15 +19,15 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.android.runServiceReader
 import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
 
 class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        component.runReader {
+        runServiceReader {
             d { "listener connected" }
             given<NotificationStore>().onServiceConnected(this)
             given<NotificationWorkers>().forEach { worker ->
@@ -41,7 +41,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        component.runReader {
+        runServiceReader {
             d { "listener disconnected" }
             given<NotificationStore>().onServiceDisconnected()
         }
@@ -49,7 +49,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        component.runReader {
+        runServiceReader {
             d { "notification posted $sbn" }
             notifyUpdate()
         }
@@ -57,7 +57,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        component.runReader {
+        runServiceReader {
             d { "notification removed $sbn" }
             notifyUpdate()
         }
@@ -65,7 +65,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
-        component.runReader {
+        runServiceReader {
             d { "ranking update $rankingMap" }
             notifyUpdate()
         }

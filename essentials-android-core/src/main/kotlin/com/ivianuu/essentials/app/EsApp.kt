@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.runApplicationReader
 
 /**
  * App
  */
 abstract class EsApp : Application() {
     override fun onCreate() {
-        applicationComponent.runReader {
+        runApplicationReader {
             runInitializers()
             runAppWorkers()
         }

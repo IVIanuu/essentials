@@ -18,7 +18,6 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
@@ -29,9 +28,14 @@ import kotlinx.coroutines.launch
 @Effect
 annotation class AppWorker {
     companion object {
-        @SetElements(ApplicationComponent::class)
+        @SetElements
         operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
     }
+}
+
+object AppWorkersModule {
+    @SetElements
+    fun defaultWorkers(): AppWorkers = emptySet()
 }
 
 @Distinct

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.actor
@@ -37,7 +37,7 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-@Given(ApplicationComponent::class)
+@Given(ApplicationScoped::class)
 class TorchManager {
 
     private val _torchState = MutableStateFlow(false)

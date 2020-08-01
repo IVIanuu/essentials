@@ -3,13 +3,13 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.ApplicationComponent
+import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 
-@Given(ApplicationComponent::class)
+@Given(ApplicationScoped::class)
 class NotificationStore {
 
     private var service: DefaultNotificationListenerService? = null

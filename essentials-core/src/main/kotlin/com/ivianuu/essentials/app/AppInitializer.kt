@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ApplicationComponent
 import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
@@ -27,7 +26,7 @@ import com.ivianuu.injekt.given
 @Effect
 annotation class AppInitializer {
     companion object {
-        @SetElements(ApplicationComponent::class)
+        @SetElements
         operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
     }
 }

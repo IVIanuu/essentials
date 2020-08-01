@@ -36,6 +36,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
@@ -174,7 +175,7 @@ private fun notificationStore(): Store<NotificationsState, NotificationsAction> 
         onEachAction { action ->
             when (action) {
                 is RequestPermissionsClicked -> {
-
+                    requestPermissions(permission)
                 }
                 is NotificationClicked -> {
                     notificationStore.openNotification(action.notification.sbn.notification)
