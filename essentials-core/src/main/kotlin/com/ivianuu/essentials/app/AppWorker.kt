@@ -35,7 +35,7 @@ annotation class AppWorker {
 
 object AppWorkersModule {
     @SetElements
-    fun defaultWorkers(): AppWorkers = emptySet()
+    fun appWorkers(): AppWorkers = emptySet()
 }
 
 @Distinct

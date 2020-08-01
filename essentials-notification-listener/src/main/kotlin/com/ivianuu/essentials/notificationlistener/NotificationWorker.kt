@@ -13,5 +13,10 @@ annotation class NotificationWorker {
     }
 }
 
+object NotificationModule {
+    @SetElements
+    fun notificationWorkers(): NotificationWorkers = emptySet()
+}
+
 @Distinct
 typealias NotificationWorkers = Set<suspend () -> Unit>

@@ -29,5 +29,12 @@ annotation class BootListener {
     }
 }
 
+object BootListenersModule {
+
+    @SetElements
+    fun bootListeners(): BootListeners = emptySet()
+
+}
+
 @Distinct
 typealias BootListeners = Set<() -> Unit>

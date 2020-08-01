@@ -13,5 +13,10 @@ annotation class AccessibilityWorker {
     }
 }
 
+object AccessibilityModule {
+    @SetElements
+    fun accessibilityWorkers(): AccessibilityWorkers = emptySet()
+}
+
 @Distinct
 typealias AccessibilityWorkers = Set<suspend () -> Unit>

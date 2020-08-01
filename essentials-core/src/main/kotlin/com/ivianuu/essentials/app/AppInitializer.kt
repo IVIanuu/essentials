@@ -31,6 +31,11 @@ annotation class AppInitializer {
     }
 }
 
+object AppInitializerModule {
+    @SetElements
+    fun appInitializers(): AppInitializers = emptySet()
+}
+
 @Distinct
 typealias AppInitializers = Set<() -> Unit>
 
