@@ -2,12 +2,13 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.lazy.LazyColumnItems
-import androidx.ui.foundation.lazy.LazyRowItems
+import androidx.ui.foundation.ScrollState
+import androidx.ui.foundation.ScrollableColumn
+import androidx.ui.foundation.ScrollableRow
+import androidx.ui.foundation.rememberScrollState
+import androidx.ui.layout.Arrangement
 import androidx.ui.layout.ColumnScope
 import androidx.ui.layout.RowScope
 import androidx.ui.layout.Spacer
@@ -18,12 +19,22 @@ import com.ivianuu.essentials.ui.core.InsetsAmbient
 
 @Composable
 fun InsettingScrollableColumn(
-    scrollerPosition: ScrollerPosition = ScrollerPosition(),
     modifier: Modifier = Modifier,
-    isScrollable: Boolean = true,
+    scrollState: ScrollState = rememberScrollState(0f),
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    reverseScrollDirection: Boolean = false,
+    isScrollEnabled: Boolean = true,
     children: @Composable ColumnScope.() -> Unit
 ) {
-    VerticalScroller(scrollerPosition, modifier, isScrollable) {
+    ScrollableColumn(
+        modifier = modifier,
+        scrollState = scrollState,
+        verticalArrangement = verticalArrangement,
+        horizontalGravity = horizontalGravity,
+        reverseScrollDirection = reverseScrollDirection,
+        isScrollEnabled = isScrollEnabled
+    ) {
         val insets = InsetsAmbient.current
         Spacer(Modifier.height(insets.systemBars.top))
         ConsumeInsets(left = false, right = false) {
@@ -35,12 +46,22 @@ fun InsettingScrollableColumn(
 
 @Composable
 fun InsettingScrollableRow(
-    scrollerPosition: ScrollerPosition = ScrollerPosition(),
     modifier: Modifier = Modifier,
-    isScrollable: Boolean = true,
+    scrollState: ScrollState = rememberScrollState(0f),
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    verticalGravity: Alignment.Vertical = Alignment.Top,
+    reverseScrollDirection: Boolean = false,
+    isScrollEnabled: Boolean = true,
     children: @Composable RowScope.() -> Unit
 ) {
-    HorizontalScroller(scrollerPosition, modifier, isScrollable) {
+    ScrollableRow(
+        modifier = modifier,
+        scrollState = scrollState,
+        horizontalArrangement = horizontalArrangement,
+        verticalGravity = verticalGravity,
+        reverseScrollDirection = reverseScrollDirection,
+        isScrollEnabled = isScrollEnabled
+    ) {
         val insets = InsetsAmbient.current
         Spacer(Modifier.width(insets.systemBars.start))
         ConsumeInsets(top = false, bottom = false) {
