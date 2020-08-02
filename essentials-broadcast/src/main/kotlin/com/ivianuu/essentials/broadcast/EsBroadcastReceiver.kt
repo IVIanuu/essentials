@@ -27,7 +27,7 @@ import com.ivianuu.injekt.android.runReceiverReader
  */
 abstract class EsBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        runReceiverReader(context) {
+        runReceiverReader(context, intent) {
             onReceive(intent)
         }
     }

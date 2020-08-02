@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.sample
 
 import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializer
