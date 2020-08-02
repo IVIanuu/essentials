@@ -48,18 +48,18 @@ inline fun <S, A> StoreScope<S, A>.enableLogging() {
     }
 }
 
-suspend fun <A> StoreScope<*, A>.onEachAction(block: suspend (A) -> Unit) {
+suspend fun <S, A> StoreScope<S, A>.onEachAction(block: suspend (A) -> Unit) {
     actions.collect(block)
 }
 
-fun <S> StoreScope<S, *>.setState(reducer: suspend S.() -> S) {
+fun <S, A> StoreScope<S, A>.setState(reducer: suspend S.() -> S) {
     scope.launch {
         val newState = reducer(state.value)
         state.value = newState
     }
 }
 
-var <S> StoreScope<S, *>.currentState: S
+var <S, A> StoreScope<S, A>.currentState: S
     get() = state.value
     set(value) {
         state.value = value
