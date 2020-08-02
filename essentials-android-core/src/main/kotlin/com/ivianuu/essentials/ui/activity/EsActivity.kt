@@ -29,6 +29,7 @@ import androidx.ui.core.setContent
 import androidx.ui.savedinstancestate.UiSavedStateRegistry
 import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
 import com.ivianuu.essentials.ui.common.RetainedObjects
+import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.ui.uiScope
@@ -77,7 +78,8 @@ abstract class EsActivity : AppCompatActivity() {
                     canBeSaved = { true }
                 )
                 Providers(
-                    UiSavedStateRegistryAmbient provides uiSavedStateRegistry
+                    UiSavedStateRegistryAmbient provides uiSavedStateRegistry,
+                    RetainedObjectsAmbient provides retainedObjects
                 ) {
                     content()
                 }
