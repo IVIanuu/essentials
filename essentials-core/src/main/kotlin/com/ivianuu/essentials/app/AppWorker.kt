@@ -18,7 +18,6 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
@@ -38,7 +37,6 @@ object AppWorkersModule {
     fun appWorkers(): AppWorkers = emptySet()
 }
 
-@Distinct
 typealias AppWorkers = Set<suspend () -> Unit>
 
 @Reader

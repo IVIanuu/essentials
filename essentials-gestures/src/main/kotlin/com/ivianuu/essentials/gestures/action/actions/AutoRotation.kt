@@ -16,7 +16,6 @@ import com.ivianuu.essentials.gestures.action.BindAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -53,5 +52,4 @@ private fun autoRotationIcon(): ActionIcon = given<AutoRotationSetting>().data
     }
     .map { { Icon(it) } }
 
-@Distinct
 typealias AutoRotationSetting = DataStore<Int>

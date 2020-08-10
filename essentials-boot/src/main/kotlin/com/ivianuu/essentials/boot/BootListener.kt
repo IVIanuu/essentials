@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
@@ -36,5 +35,4 @@ object BootListenersModule {
 
 }
 
-@Distinct
 typealias BootListeners = Set<() -> Unit>

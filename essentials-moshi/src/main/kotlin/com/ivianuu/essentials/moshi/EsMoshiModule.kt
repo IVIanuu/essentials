@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.SetElements
@@ -16,7 +15,6 @@ annotation class JsonAdapter {
     }
 }
 
-@Distinct
 typealias JsonAdapters = Set<Any>
 
 object EsMoshiModule {

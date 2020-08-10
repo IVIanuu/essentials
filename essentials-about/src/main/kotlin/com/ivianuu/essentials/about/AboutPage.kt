@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
@@ -44,7 +43,6 @@ fun AboutPage() {
     }
 }
 
-@Distinct
 typealias PrivacyPolicyUrl = String
 
 @Reader

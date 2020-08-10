@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
@@ -18,5 +17,4 @@ object NotificationModule {
     fun notificationWorkers(): NotificationWorkers = emptySet()
 }
 
-@Distinct
 typealias NotificationWorkers = Set<suspend () -> Unit>

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
@@ -36,7 +35,6 @@ object AppInitializerModule {
     fun appInitializers(): AppInitializers = emptySet()
 }
 
-@Distinct
 typealias AppInitializers = Set<() -> Unit>
 
 @Reader

@@ -23,7 +23,6 @@ import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactor
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.ApplicationScoped
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.plus
@@ -55,8 +54,6 @@ object EsDataModule {
 
 }
 
-@Distinct
 typealias DataDir = String
 
-@Distinct
 typealias PrefsDir = String

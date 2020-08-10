@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Distinct
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
@@ -18,5 +17,4 @@ object AccessibilityModule {
     fun accessibilityWorkers(): AccessibilityWorkers = emptySet()
 }
 
-@Distinct
 typealias AccessibilityWorkers = Set<suspend () -> Unit>
