@@ -17,25 +17,26 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.getValue
 import androidx.compose.remember
+import androidx.compose.setValue
 import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
 @Reader
 @Composable
 fun CheckAppsPage() {
-    val dataStore = remember {
-        given<DiskDataStoreFactory>().create("apps") { emptySet<String>() }
-    }
+    var checkedApps by remember {
+        given<DiskDataStoreFactory>().create("checked_apps") { emptySet<String>() }
+    }.asState()
     CheckableAppsPage(
-        checkedApps = dataStore.data,
-        onCheckedAppsChanged = { newValue ->
-            dataStore.updateData { newValue }
-        },
+        checkedApps = checkedApps,
+        onCheckedAppsChanged = { newCheckedApps -> checkedApps = newCheckedApps },
         appBarTitle = "Send check apps",
-        appFilter = given<LaunchableAppFilter>()
+        appFilter = remember { given<LaunchableAppFilter>() }
     )
 }

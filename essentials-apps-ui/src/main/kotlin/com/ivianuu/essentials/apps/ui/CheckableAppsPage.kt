@@ -18,6 +18,7 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.onCommit
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
 import androidx.ui.layout.size
@@ -31,6 +32,7 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -42,8 +44,10 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.resource.invoke
+import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
@@ -55,15 +59,19 @@ import kotlinx.coroutines.flow.flow
 @Reader
 @Composable
 fun CheckableAppsPage(
-    checkedApps: Flow<Set<String>>,
+    checkedApps: Set<String>,
     onCheckedAppsChanged: suspend (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) {
     val (state, dispatch) = rememberStore(
-        appFilter, checkedApps, onCheckedAppsChanged
+        appFilter, onCheckedAppsChanged
     ) {
-        checkableAppsStore(appFilter, checkedApps, onCheckedAppsChanged)
+        checkableAppsStore(appFilter, onCheckedAppsChanged)
+    }
+
+    onCommit(checkedApps) {
+        dispatch(CheckableAppsAction.CheckedAppsChanged(checkedApps))
     }
 
     Scaffold(
@@ -85,7 +93,7 @@ fun CheckableAppsPage(
             )
         }
     ) {
-        ResourceLazyColumnItems(state.apps) { app ->
+        ResourceLazyColumnItems(state.checkableApps) { app ->
             CheckableApp(
                 app = app,
                 onClick = { dispatch(AppClicked(app)) }
@@ -120,33 +128,21 @@ private fun CheckableApp(
 @Reader
 private fun checkableAppsStore(
     appFilter: AppFilter,
-    checkedApps: Flow<Set<String>>,
     onCheckedAppsChanged: suspend (Set<String>) -> Unit
 ) = store<CheckableAppsState, CheckableAppsAction>(
     CheckableAppsState()
 ) {
-    combine(
-        flow {
-            emit(
-                getInstalledApps()
-                    .filter(appFilter)
-            )
+    execute(
+        block = {
+            getInstalledApps()
+                .filter(appFilter)
         },
-        checkedApps
-    ) { apps, checked ->
-        apps
-            .map {
-                CheckableApp(
-                    it,
-                    it.packageName in checked
-                )
-            }
-            .toList()
-    }.executeIn(this@store) { copy(apps = it) }
+        reducer = { copy(apps = it) }
+    )
 
     onEachAction { action ->
         suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-            val newCheckedApps = state.value.apps()!!
+            val newCheckedApps = state.value.checkableApps()!!
                 .filter { it.isChecked }
                 .map { it.info.packageName }
                 .toMutableSet()
@@ -155,6 +151,11 @@ private fun checkableAppsStore(
         }
 
         when (action) {
+            is CheckableAppsAction.CheckedAppsChanged -> {
+                setState {
+                    copy(checkedApps = action.checkedApps)
+                }
+            }
             is AppClicked -> {
                 pushNewCheckedApps {
                     if (!action.app.isChecked) {
@@ -167,7 +168,7 @@ private fun checkableAppsStore(
             SelectAllClicked -> {
                 state.value.apps()?.let { allApps ->
                     pushNewCheckedApps { newApps ->
-                        newApps += allApps.map { it.info.packageName }
+                        newApps += allApps.map { it.packageName }
                     }
                 }
             }
@@ -186,10 +187,21 @@ private data class CheckableApp(
 
 @Immutable
 private data class CheckableAppsState(
-    val apps: Resource<List<CheckableApp>> = Idle
-)
+    val apps: Resource<List<AppInfo>> = Idle,
+    val checkedApps: Set<String> = emptySet()
+) {
+    val checkableApps = apps.map { apps ->
+        apps.map { app ->
+            CheckableApp(
+                info = app,
+                isChecked = app.packageName in checkedApps
+            )
+        }
+    }
+}
 
 private sealed class CheckableAppsAction {
+    data class CheckedAppsChanged(val checkedApps: Set<String>) : CheckableAppsAction()
     data class AppClicked(val app: CheckableApp) : CheckableAppsAction()
     object SelectAllClicked : CheckableAppsAction()
     object DeselectAllClicked : CheckableAppsAction()
