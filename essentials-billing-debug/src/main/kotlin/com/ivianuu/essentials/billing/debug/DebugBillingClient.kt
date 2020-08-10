@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing
+package com.ivianuu.essentials.billing.debug
 
 import android.app.Activity
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -37,9 +37,9 @@ import com.android.billingclient.api.RewardResponseListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
-import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
-import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
-import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
@@ -121,7 +121,10 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase = getPurchaseByToken(purchaseToken)
+            val purchase =
+                getPurchaseByToken(
+                    purchaseToken
+                )
             if (purchase != null) {
                 removePurchase(purchase.purchaseToken)
                 listener.onConsumeResponse(
@@ -180,7 +183,11 @@ class DebugBillingClient(
                                 onPurchaseClick = {
                                     globalScope.launch {
                                         val purchases = listOf(skuDetails.toPurchaseData())
-                                        purchases.forEach { addPurchase(it) }
+                                        purchases.forEach {
+                                            addPurchase(
+                                                it
+                                            )
+                                        }
 
                                         purchasesUpdatedListener.onPurchasesUpdated(
                                             BillingResult.newBuilder().setResponseCode(
@@ -237,7 +244,8 @@ class DebugBillingClient(
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
-                ).build(), getSkuDetails(params)
+                ).build(),
+                getSkuDetails(params)
             )
         }
     }
@@ -257,7 +265,11 @@ class DebugBillingClient(
                 ).build(), null
             )
         }
-        return runBlocking { getPurchases(skuType) }
+        return runBlocking {
+            getPurchases(
+                skuType
+            )
+        }
     }
 
     override fun launchPriceChangeConfirmationFlow(
@@ -287,7 +299,10 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase = getPurchaseByToken(purchaseToken)
+            val purchase =
+                getPurchaseByToken(
+                    purchaseToken
+                )
             if (purchase != null) {
                 val updated = Purchase(
                     orderId = purchase.orderId,

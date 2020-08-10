@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing
+package com.ivianuu.essentials.billing.debug
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
@@ -26,7 +26,6 @@ import androidx.ui.layout.Spacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.billing.debug.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.material.guessingContentColorFor

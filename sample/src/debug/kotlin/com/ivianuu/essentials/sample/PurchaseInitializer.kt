@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.billing.SkuDetails
-import com.ivianuu.essentials.billing.addProduct
+import com.ivianuu.essentials.billing.debug.SkuDetails
+import com.ivianuu.essentials.billing.debug.addProduct
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.Reader
