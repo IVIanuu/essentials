@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.ReferentiallyEqual
-import androidx.compose.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ReferentiallyEqual
+import androidx.compose.runtime.remember
 
 @Composable
 inline fun <T> untrackedState(

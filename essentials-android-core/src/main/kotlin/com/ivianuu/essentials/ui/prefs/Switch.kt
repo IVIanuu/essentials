@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.material.Switch
+import androidx.compose.foundation.Box
+import androidx.compose.material.Switch
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState

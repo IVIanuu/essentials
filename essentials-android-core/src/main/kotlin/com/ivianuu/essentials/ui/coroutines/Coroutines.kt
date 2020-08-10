@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.coroutines
 
-import androidx.compose.Composable
-import androidx.compose.State
-import androidx.compose.launchInComposition
-import androidx.compose.state
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.state
 import com.ivianuu.essentials.ui.common.rememberRetained
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle

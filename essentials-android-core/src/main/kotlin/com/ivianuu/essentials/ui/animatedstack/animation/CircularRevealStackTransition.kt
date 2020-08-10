@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.ui.graphics.Color
+import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import kotlin.time.Duration
 import kotlin.time.milliseconds

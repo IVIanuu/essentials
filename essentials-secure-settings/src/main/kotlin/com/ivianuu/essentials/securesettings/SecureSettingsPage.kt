@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.Composable
-import androidx.compose.rememberCoroutineScope
-import androidx.ui.res.stringResource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

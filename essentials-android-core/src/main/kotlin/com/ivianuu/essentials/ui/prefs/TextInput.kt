@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.compose.stateFor
-import androidx.ui.core.Modifier
-import androidx.ui.input.KeyboardType
-import androidx.ui.material.TextButton
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text
@@ -83,7 +83,7 @@ fun TextInputDialogListItem(
                 value = currentValue.value,
                 onValueChange = { currentValue.value = it },
                 title = dialogTitle,
-                hint = dialogHint,
+                label = dialogHint,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     TextButton(

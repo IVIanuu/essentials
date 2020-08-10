@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.ui.layout
 
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.wrapContentSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 
 fun Modifier.center() = align(align = Alignment.Center)
 

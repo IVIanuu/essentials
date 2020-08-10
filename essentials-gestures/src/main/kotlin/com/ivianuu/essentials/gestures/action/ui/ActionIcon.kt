@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action.ui
 
-import androidx.compose.Composable
-import androidx.compose.collectAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.gestures.action.Action
 
 @Composable

@@ -16,28 +16,30 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.drawBackground
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.preferredHeightIn
-import androidx.ui.material.EmphasisAmbient
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ProvideEmphasis
-import androidx.ui.material.ripple.RippleThemeAmbient
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.preferredHeightIn
+import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideEmphasis
+import androidx.compose.material.ripple.RippleThemeAmbient
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListItem(
     modifier: Modifier = Modifier,
@@ -60,8 +62,8 @@ fun ListItem(
         modifier = modifier + Modifier
             .preferredHeightIn(minHeight = minHeight)
             .fillMaxWidth()
-            .drawBackground(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
-            .plus(
+            .background(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
+            .then(
                 if (onClick != null || onLongClick != null)
                     Modifier.clickable(
                         enabled = enabled,

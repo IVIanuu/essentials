@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.datastore.android
 
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map

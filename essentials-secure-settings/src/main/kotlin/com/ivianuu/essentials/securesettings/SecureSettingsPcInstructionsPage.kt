@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Link
-import androidx.ui.res.stringResource
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

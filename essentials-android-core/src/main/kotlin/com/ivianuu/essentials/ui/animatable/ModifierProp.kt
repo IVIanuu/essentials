@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.Composable
-import androidx.compose.Stable
-import androidx.ui.core.Modifier
-import androidx.ui.core.composed
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 
 @Stable
 interface ModifierProp<T> : Prop<T> {

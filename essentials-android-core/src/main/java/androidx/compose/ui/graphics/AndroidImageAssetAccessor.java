@@ -1,4 +1,4 @@
-package androidx.ui.graphics;
+package androidx.compose.ui.graphics;
 
 import android.graphics.Bitmap;
 

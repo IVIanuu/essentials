@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.Composable
-import androidx.compose.launchInComposition
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.contentColor
-import androidx.ui.layout.padding
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.contentColor
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Reader

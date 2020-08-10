@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.graphics.Color
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.color
 import com.ivianuu.essentials.datastore.android.duration

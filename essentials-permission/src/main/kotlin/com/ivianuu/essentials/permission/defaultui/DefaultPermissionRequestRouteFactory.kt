@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.key
-import androidx.ui.foundation.Text
-import androidx.ui.material.Button
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon

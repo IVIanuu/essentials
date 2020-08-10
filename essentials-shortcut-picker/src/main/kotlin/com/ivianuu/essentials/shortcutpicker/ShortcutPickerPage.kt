@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.key
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
-import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.layout.size
-import androidx.ui.res.stringResource
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.material.ListItem

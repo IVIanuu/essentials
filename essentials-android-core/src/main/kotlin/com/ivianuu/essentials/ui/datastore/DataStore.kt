@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.datastore
 
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.State
-import androidx.compose.collectAsState
-import androidx.compose.key
-import androidx.compose.remember
-import androidx.compose.rememberCoroutineScope
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.launch
 

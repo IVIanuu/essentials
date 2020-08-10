@@ -2,8 +2,8 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.provider.MediaStore
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PhotoCamera
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.BindAction

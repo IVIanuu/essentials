@@ -1,13 +1,13 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.Stable
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.setValue
-import androidx.ui.core.DrawLayerModifier
-import androidx.ui.core.TransformOrigin
-import androidx.ui.graphics.RectangleShape
-import androidx.ui.graphics.Shape
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.DrawLayerModifier
+import androidx.compose.ui.TransformOrigin
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 
 @Stable
 interface DrawLayerProp<T> : Prop<T> {

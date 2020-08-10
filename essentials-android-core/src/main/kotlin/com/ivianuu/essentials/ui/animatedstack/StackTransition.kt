@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.compose.Composable
-import androidx.compose.onPreCommit
-import androidx.compose.remember
-import androidx.compose.staticAmbientOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.animatable.Animatable
 
 abstract class StackTransitionContext(

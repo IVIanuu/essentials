@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.ui.store
 
-import androidx.compose.Composable
-import androidx.compose.collectAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setState

@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.collectAsState
-import androidx.compose.getValue
-import androidx.compose.launchInComposition
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.stateFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.stateFor
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.util.unwrap

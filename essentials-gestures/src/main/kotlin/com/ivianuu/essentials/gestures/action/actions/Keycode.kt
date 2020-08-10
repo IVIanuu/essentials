@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.input.KeyboardType
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Keyboard
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
@@ -49,7 +49,7 @@ internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
         val keycode = navigator.push<String>(
             TextInputRoute(
                 title = Resources.getString(R.string.es_keycode_picker_title),
-                hint = Resources.getString(R.string.es_keycode_input_hint),
+                label = Resources.getString(R.string.es_keycode_input_hint),
                 keyboardType = KeyboardType.Number,
                 allowEmpty = false
             )

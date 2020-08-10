@@ -1,13 +1,13 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.SnapshotMutationPolicy
-import androidx.compose.Stable
-import androidx.compose.currentComposer
-import androidx.compose.mutableStateOf
-import androidx.compose.referentialEqualityPolicy
-import androidx.compose.staticAmbientOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SnapshotMutationPolicy
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.staticAmbientOf
 import kotlinx.coroutines.DisposableHandle
 
 @Stable

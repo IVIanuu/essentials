@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.Composable
-import androidx.ui.unit.PxBounds
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.PxBounds
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatable.bounds
 import com.ivianuu.essentials.ui.common.untrackedState

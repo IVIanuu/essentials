@@ -3,7 +3,7 @@ package com.ivianuu.essentials.util
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.ui.core.ContextAmbient
+import androidx.compose.ui.platform.ContextAmbient
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator

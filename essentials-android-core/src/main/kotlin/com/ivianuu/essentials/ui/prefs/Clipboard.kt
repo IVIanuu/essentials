@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.prefs
 
 import android.widget.Toast
-import androidx.compose.Composable
-import androidx.ui.core.ClipboardManagerAmbient
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.text.AnnotatedString
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManagerAmbient
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.text.AnnotatedString
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.material.ListItem
 

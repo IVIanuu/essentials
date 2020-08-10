@@ -2,10 +2,10 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.PendingIntent
 import android.content.Intent
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.graphics.vector.VectorAsset
-import androidx.ui.res.vectorResource
+import androidx.compose.foundation.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.coil.CoilImage

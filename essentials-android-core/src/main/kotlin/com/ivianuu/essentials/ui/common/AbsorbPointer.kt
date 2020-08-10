@@ -16,18 +16,18 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Composable
-import androidx.compose.remember
-import androidx.ui.core.Modifier
-import androidx.ui.core.PointerEventPass
-import androidx.ui.core.PointerId
-import androidx.ui.core.PointerInputChange
-import androidx.ui.core.changedToDown
-import androidx.ui.core.composed
-import androidx.ui.core.consumeDownChange
-import androidx.ui.core.pointerinput.PointerInputFilter
-import androidx.ui.core.pointerinput.PointerInputModifier
-import androidx.ui.unit.IntSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.input.pointer.PointerInputFilter
+import androidx.compose.ui.input.pointer.PointerInputModifier
+import androidx.compose.ui.platform.PointerEventPass
+import androidx.compose.ui.platform.PointerId
+import androidx.compose.ui.platform.PointerInputChange
+import androidx.compose.ui.platform.changedToDown
+import androidx.compose.ui.platform.consumeDownChange
+import androidx.compose.ui.unit.IntSize
 
 @Composable
 fun Modifier.absorbPointer(

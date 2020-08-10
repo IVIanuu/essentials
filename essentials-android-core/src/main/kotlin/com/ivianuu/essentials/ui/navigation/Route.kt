@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.staticAmbientOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 @Immutable

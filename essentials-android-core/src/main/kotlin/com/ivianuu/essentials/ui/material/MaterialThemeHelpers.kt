@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.lerp
-import androidx.ui.material.ColorPalette
-import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
-import androidx.ui.text.TextStyle
+import androidx.compose.material.Colors
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.text.TextStyle
 import com.ivianuu.essentials.util.isDark
 
 inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
@@ -43,7 +43,7 @@ inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
     )
 }
 
-fun ColorPalette(
+fun Colors(
     isLight: Boolean = true,
     primary: Color = if (isLight) Color(0xFF6200EE) else Color(0xFFBB86FC),
     primaryVariant: Color = if (isLight) Color(0xFF3700B3) else Color(0xFF3700B3),
@@ -57,8 +57,8 @@ fun ColorPalette(
     onBackground: Color = if (background.isDark) Color.White else Color.Black,
     onSurface: Color = if (surface.isDark) Color.White else Color.Black,
     onError: Color = if (error.isDark) Color.White else Color.Black
-): ColorPalette = if (isLight) {
-    lightColorPalette(
+): Colors = if (isLight) {
+    lightColors(
         primary = primary,
         primaryVariant = primaryVariant,
         secondary = secondary,
@@ -73,7 +73,7 @@ fun ColorPalette(
         onError = onError
     )
 } else {
-    darkColorPalette(
+    darkColors(
         primary, primaryVariant,
         secondary = secondary,
         background = background,
@@ -87,7 +87,7 @@ fun ColorPalette(
     )
 }
 
-fun ColorPalette.copy(
+fun Colors.copy(
     isLight: Boolean = this.isLight,
     primary: Color = this.primary,
     primaryVariant: Color = this.primaryVariant,
@@ -101,7 +101,7 @@ fun ColorPalette.copy(
     onBackground: Color = this.onBackground,
     onSurface: Color = this.onSurface,
     onError: Color = this.onError
-) = ColorPalette(
+) = Colors(
     isLight = isLight,
     primary = primary,
     primaryVariant = primaryVariant,
@@ -118,10 +118,10 @@ fun ColorPalette.copy(
 )
 
 fun lerp(
-    start: ColorPalette,
-    end: ColorPalette,
+    start: Colors,
+    end: Colors,
     fraction: Float
-): ColorPalette = ColorPalette(
+): Colors = Colors(
     isLight = if (fraction < 0.5) start.isLight else end.isLight,
     primary = lerp(start.primary, end.primary, fraction),
     primaryVariant = lerp(start.primaryVariant, end.primaryVariant, fraction),

@@ -1,4 +1,4 @@
-package androidx.compose;
+package androidx.compose.runtime;
 
 import org.jetbrains.annotations.NotNull;
 

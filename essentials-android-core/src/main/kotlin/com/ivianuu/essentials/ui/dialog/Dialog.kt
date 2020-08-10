@@ -16,29 +16,29 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Layout
-import androidx.ui.core.Measurable
-import androidx.ui.core.Modifier
-import androidx.ui.core.Placeable
-import androidx.ui.core.id
-import androidx.ui.core.layoutId
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.Stack
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.layout.width
-import androidx.ui.material.EmphasisAmbient
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ProvideEmphasis
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideEmphasis
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Layout
+import androidx.compose.ui.Measurable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Placeable
+import androidx.compose.ui.layout.id
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable
@@ -219,7 +219,7 @@ private fun DialogContentLayout(
         }
     }
 
-    Layout(children = children) { measurables, constraints, _ ->
+    Layout(children = children) { measurables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = 0

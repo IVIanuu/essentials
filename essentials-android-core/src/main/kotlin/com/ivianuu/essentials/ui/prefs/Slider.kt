@@ -16,23 +16,23 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.compose.remember
-import androidx.compose.stateFor
-import androidx.ui.core.Alignment
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Row
-import androidx.ui.layout.Stack
-import androidx.ui.layout.padding
-import androidx.ui.layout.widthIn
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Slider
-import androidx.ui.unit.Dp
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
@@ -445,8 +445,6 @@ fun <T> UnitValueTextProvider(
     unit: UnitValueTextProvider.Unit,
     toString: (T) -> String = { it.toString() }
 ): @Composable (T) -> Unit {
-    val textProvider = UnitValueTextProvider(
-        ContextAmbient.current, unit
-    )
+    val textProvider = UnitValueTextProvider(ContextAmbient.current, unit)
     return { SliderValueText(textProvider(toString(it))) }
 }

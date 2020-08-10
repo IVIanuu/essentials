@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Bluetooth
-import androidx.ui.material.icons.filled.BluetoothDisabled
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.BluetoothDisabled
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action

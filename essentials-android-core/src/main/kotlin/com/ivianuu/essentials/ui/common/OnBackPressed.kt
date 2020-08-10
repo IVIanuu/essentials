@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.Composable
-import androidx.compose.onCommit
-import androidx.compose.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.remember
 
 @Composable
 fun onBackPressed(

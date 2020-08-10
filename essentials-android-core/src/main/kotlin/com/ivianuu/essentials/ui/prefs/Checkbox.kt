@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.material.Checkbox
+import androidx.compose.material.Checkbox
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState

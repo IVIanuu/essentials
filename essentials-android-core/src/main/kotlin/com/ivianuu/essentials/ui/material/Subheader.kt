@@ -16,18 +16,18 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentColorAmbient
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredHeight
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ContentColorAmbient
+import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun Subheader(

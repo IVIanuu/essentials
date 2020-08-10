@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Immutable
-import androidx.compose.key
-import androidx.ui.core.Modifier
-import androidx.ui.core.composed
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.datastore.asState

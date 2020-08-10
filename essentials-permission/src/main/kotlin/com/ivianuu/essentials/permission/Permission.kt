@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.navigation.Route
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

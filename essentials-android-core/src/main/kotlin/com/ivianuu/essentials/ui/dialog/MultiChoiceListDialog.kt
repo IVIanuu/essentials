@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.compose.key
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.material.Checkbox
+import androidx.compose.foundation.VerticalScroller
+import androidx.compose.material.Checkbox
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.common.absorbPointer
 
 @Composable

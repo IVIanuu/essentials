@@ -18,7 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import androidx.compose.Immutable
+import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.ApplicationScoped
 import com.ivianuu.injekt.Given

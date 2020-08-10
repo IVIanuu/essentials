@@ -1,18 +1,18 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.material.ColorPalette
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Shapes
-import androidx.ui.material.Typography
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.systemBarStyle
 
 @Composable
 fun EsMaterialTheme(
-    colors: ColorPalette = MaterialTheme.colors,
+    colors: Colors = MaterialTheme.colors,
     typography: Typography = MaterialTheme.typography,
     shapes: Shapes = MaterialTheme.shapes,
     content: @Composable () -> Unit

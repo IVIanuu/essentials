@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.Composable
-import androidx.compose.mutableStateOf
-import androidx.compose.remember
-import androidx.compose.structuralEqualityPolicy
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.lazy.LazyRowItems
-import androidx.ui.material.CircularProgressIndicator
+import androidx.compose.foundation.lazy.LazyRowItems
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition

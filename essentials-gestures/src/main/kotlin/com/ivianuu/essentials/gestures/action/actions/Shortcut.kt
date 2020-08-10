@@ -4,10 +4,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.graphics.painter.ImagePainter
-import androidx.ui.res.vectorResource
+import androidx.compose.foundation.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory

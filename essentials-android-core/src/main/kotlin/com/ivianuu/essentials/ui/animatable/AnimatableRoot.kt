@@ -1,18 +1,18 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.Stable
-import androidx.compose.getValue
-import androidx.compose.key
-import androidx.compose.mutableStateListOf
-import androidx.compose.mutableStateOf
-import androidx.compose.onPreCommit
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.staticAmbientOf
-import androidx.ui.core.Modifier
-import androidx.ui.layout.Stack
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.ui.Modifier
 
 @Composable
 fun ProvideAnimatableRoot(

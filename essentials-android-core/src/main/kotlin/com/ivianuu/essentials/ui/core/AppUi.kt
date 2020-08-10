@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
