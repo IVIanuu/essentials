@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.billing
+package com.ivianuu.essentials.billing.debug
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails

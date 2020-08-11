@@ -1,6 +1,7 @@
 package androidx.compose;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations
+        .NotNull;
 
 import java.util.Map;
 
