@@ -47,14 +47,13 @@ import com.ivianuu.essentials.ui.resource.invoke
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 @Reader
 @Composable
@@ -64,14 +63,12 @@ fun CheckableAppsPage(
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) {
-    val (state, dispatch) = rememberStore(
-        appFilter, onCheckedAppsChanged
-    ) {
-        checkableAppsStore(appFilter, onCheckedAppsChanged)
+    val (state, dispatch) = rememberStore {
+        checkableAppsStore()
     }
 
-    onCommit(checkedApps) {
-        dispatch(CheckableAppsAction.CheckedAppsChanged(checkedApps))
+    onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
+        dispatch(CheckableAppsAction.UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
     }
 
     Scaffold(
@@ -126,58 +123,59 @@ private fun CheckableApp(
 }
 
 @Reader
-private fun checkableAppsStore(
-    appFilter: AppFilter,
-    onCheckedAppsChanged: suspend (Set<String>) -> Unit
-) = store<CheckableAppsState, CheckableAppsAction>(
-    CheckableAppsState()
-) {
-    execute(
-        block = {
-            getInstalledApps()
-                .filter(appFilter)
-        },
-        reducer = { copy(apps = it) }
-    )
+private fun checkableAppsStore() =
+    store<CheckableAppsState, CheckableAppsAction>(
+        CheckableAppsState()
+    ) {
+        state
+            .map { it.appFilter }
+            .distinctUntilChanged()
+            .mapLatest { getInstalledApps().filter(it) }
+            .executeIn(this) { copy(apps = it) }
 
-    onEachAction { action ->
-        suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-            val newCheckedApps = state.value.checkableApps()!!
-                .filter { it.isChecked }
-                .map { it.info.packageName }
-                .toMutableSet()
-                .apply(reducer)
-            onCheckedAppsChanged(newCheckedApps)
+        onEachAction { action ->
+            suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
+                val currentState = state.value
+                val newCheckedApps = currentState.checkableApps()!!
+                    .filter { it.isChecked }
+                    .map { it.info.packageName }
+                    .toMutableSet()
+                    .apply(reducer)
+                currentState.onCheckedAppsChanged(newCheckedApps)
+            }
+
+            when (action) {
+                is CheckableAppsAction.UpdateRefs -> {
+                    setState {
+                        copy(
+                            checkedApps = action.checkedApps,
+                            onCheckedAppsChanged = action.onCheckedAppsChanged,
+                            appFilter = action.appFilter
+                        )
+                    }
+                }
+                is AppClicked -> {
+                    pushNewCheckedApps {
+                        if (!action.app.isChecked) {
+                            it += action.app.info.packageName
+                        } else {
+                            it -= action.app.info.packageName
+                        }
+                    }
+                }
+                SelectAllClicked -> {
+                    state.value.apps()?.let { allApps ->
+                        pushNewCheckedApps { newApps ->
+                            newApps += allApps.map { it.packageName }
+                        }
+                    }
+                }
+                DeselectAllClicked -> {
+                    pushNewCheckedApps { it.clear() }
+                }
+            }.exhaustive
         }
-
-        when (action) {
-            is CheckableAppsAction.CheckedAppsChanged -> {
-                setState {
-                    copy(checkedApps = action.checkedApps)
-                }
-            }
-            is AppClicked -> {
-                pushNewCheckedApps {
-                    if (!action.app.isChecked) {
-                        it += action.app.info.packageName
-                    } else {
-                        it -= action.app.info.packageName
-                    }
-                }
-            }
-            SelectAllClicked -> {
-                state.value.apps()?.let { allApps ->
-                    pushNewCheckedApps { newApps ->
-                        newApps += allApps.map { it.packageName }
-                    }
-                }
-            }
-            DeselectAllClicked -> {
-                pushNewCheckedApps { it.clear() }
-            }
-        }.exhaustive
     }
-}
 
 @Immutable
 private data class CheckableApp(
@@ -188,7 +186,9 @@ private data class CheckableApp(
 @Immutable
 private data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
-    val checkedApps: Set<String> = emptySet()
+    val checkedApps: Set<String> = emptySet(),
+    val onCheckedAppsChanged: suspend (Set<String>) -> Unit = {},
+    val appFilter: AppFilter = DefaultAppFilter
 ) {
     val checkableApps = apps.map { apps ->
         apps.map { app ->
@@ -201,7 +201,12 @@ private data class CheckableAppsState(
 }
 
 private sealed class CheckableAppsAction {
-    data class CheckedAppsChanged(val checkedApps: Set<String>) : CheckableAppsAction()
+    data class UpdateRefs(
+        val checkedApps: Set<String>,
+        val onCheckedAppsChanged: suspend (Set<String>) -> Unit,
+        val appFilter: AppFilter
+    ) : CheckableAppsAction()
+
     data class AppClicked(val app: CheckableApp) : CheckableAppsAction()
     object SelectAllClicked : CheckableAppsAction()
     object DeselectAllClicked : CheckableAppsAction()
