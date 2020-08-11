@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.boot.BootListener
+import com.ivianuu.essentials.boot.GivenBootListener
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Reader
 
-@BootListener
-@Reader
+@GivenBootListener
 fun logBoot() {
     d { "booted!" }
 }

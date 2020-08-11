@@ -22,7 +22,7 @@ import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @Effect
-annotation class BindPermissionStateProvider {
+annotation class GivenPermissionStateProvider {
     companion object {
         @SetElements
         operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
@@ -31,7 +31,7 @@ annotation class BindPermissionStateProvider {
 }
 
 @Effect
-annotation class BindPermissionRequestHandler {
+annotation class GivenPermissionRequestHandler {
     companion object {
         @SetElements
         operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
@@ -40,7 +40,7 @@ annotation class BindPermissionRequestHandler {
 }
 
 @Effect
-annotation class BindPermissionRequestRouteFactory {
+annotation class GivenPermissionRequestRouteFactory {
     companion object {
         @Given
         operator fun <T : PermissionRequestRouteFactory> invoke(): PermissionRequestRouteFactory =

@@ -18,12 +18,11 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.coroutines.parallelForEach
-import com.ivianuu.essentials.permission.BindPermissionRequestHandler
+import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.Given
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -38,8 +37,7 @@ val Permission.Companion.Intent by lazy {
     )
 }
 
-@BindPermissionRequestHandler
-@Given
+@GivenPermissionRequestHandler
 internal class IntentPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =

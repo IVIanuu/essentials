@@ -8,7 +8,7 @@ import com.ivianuu.injekt.given
 import com.squareup.moshi.Moshi
 
 @Effect
-annotation class JsonAdapter {
+annotation class GivenJsonAdapter {
     companion object {
         @SetElements
         operator fun <T : Any> invoke(): JsonAdapters = setOf(given<T>())

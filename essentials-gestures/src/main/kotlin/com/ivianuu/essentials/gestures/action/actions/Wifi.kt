@@ -9,15 +9,14 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@BindAction
-@Reader
+@GivenAction
 fun wifiAction() = Action(
     key = "wifi",
     title = Resources.getString(R.string.es_action_wifi),

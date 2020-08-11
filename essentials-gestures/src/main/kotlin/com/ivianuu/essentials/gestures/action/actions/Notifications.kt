@@ -4,11 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Notifications
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.gestures.action.GivenAction
 
-@BindAction
-@Reader
+@GivenAction
 fun notificationsAction() = accessibilityAction(
     key = "notifications",
     accessibilityAction = AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,

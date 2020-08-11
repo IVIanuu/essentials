@@ -4,11 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Settings
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.gestures.action.GivenAction
 
-@BindAction
-@Reader
+@GivenAction
 fun quickSettingsAction() = accessibilityAction(
     key = "quick_settings",
     accessibilityAction = AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,

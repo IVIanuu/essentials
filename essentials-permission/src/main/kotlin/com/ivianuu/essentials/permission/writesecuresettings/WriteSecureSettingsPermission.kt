@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import com.ivianuu.essentials.permission.BindPermissionRequestHandler
-import com.ivianuu.essentials.permission.BindPermissionStateProvider
+import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
+import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -10,7 +10,6 @@ import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.injekt.Given
 
 fun WriteSecureSettingsPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission withValue Unit,
@@ -21,8 +20,7 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
     Permission.Key<Unit>("IsWriteSecureSettingsPermission")
 }
 
-@BindPermissionStateProvider
-@Given
+@GivenPermissionStateProvider
 internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
@@ -33,8 +31,7 @@ internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvi
 
 }
 
-@BindPermissionRequestHandler
-@Given
+@GivenPermissionRequestHandler
 internal class WriteSecureSettingsPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =

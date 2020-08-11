@@ -5,13 +5,11 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.KeyboardHide
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
-@BindAction
-@Reader
+@GivenAction
 fun inputMethodAction() = Action(
     key = "input_method",
     title = Resources.getString(R.string.es_action_input_method),

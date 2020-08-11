@@ -18,14 +18,12 @@ package com.ivianuu.essentials.work
 
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.GivenAppInitializer
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
-@AppInitializer
-@Reader
+@GivenAppInitializer
 fun initializeWorkers() {
     WorkManager.initialize(
         applicationContext,

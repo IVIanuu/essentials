@@ -17,35 +17,29 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
-import kotlinx.coroutines.launch
 
 @Effect
-annotation class AppWorker {
+annotation class GivenAppInitializer {
     companion object {
         @SetElements
-        operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
+        operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
     }
 }
 
-object AppWorkersModule {
+object AppInitializerModule {
     @SetElements
-    fun appWorkers(): AppWorkers = emptySet()
+    fun appInitializers(): AppInitializers = emptySet()
 }
 
-typealias AppWorkers = Set<suspend () -> Unit>
+typealias AppInitializers = Set<() -> Unit>
 
 @Reader
-fun runAppWorkers() {
-    d { "run workers" }
-    given<AppWorkers>()
-        .forEach { worker ->
-            globalScope.launch {
-                worker()
-            }
-        }
+fun runInitializers() {
+    d { "run initializers" }
+    given<AppInitializers>()
+        .forEach { it() }
 }

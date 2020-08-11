@@ -21,8 +21,8 @@ import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.ui.foundation.Text
 import androidx.ui.material.Button
-import com.ivianuu.essentials.permission.BindPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Desc
+import com.ivianuu.essentials.permission.GivenPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequest
@@ -45,12 +45,10 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.flow.first
 
-@BindPermissionRequestRouteFactory
-@Given
+@GivenPermissionRequestRouteFactory
 internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
 
     override fun createRoute(request: PermissionRequest): Route =

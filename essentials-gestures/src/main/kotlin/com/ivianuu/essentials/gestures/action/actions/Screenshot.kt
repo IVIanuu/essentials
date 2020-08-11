@@ -5,16 +5,14 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoAlbum
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
 
-@BindAction
-@Reader
+@GivenAction
 fun screenshotAction(): Action {
     val systemBuildInfo = given<SystemBuildInfo>()
     return Action(

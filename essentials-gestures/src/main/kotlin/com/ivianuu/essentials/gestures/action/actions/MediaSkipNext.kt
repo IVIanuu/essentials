@@ -4,11 +4,9 @@ import android.view.KeyEvent
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.SkipNext
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.gestures.action.GivenAction
 
-@BindAction
-@Reader
+@GivenAction
 fun mediaSkipNextAction() = mediaAction(
     key = "media_skip_next",
     keycode = KeyEvent.KEYCODE_MEDIA_NEXT,

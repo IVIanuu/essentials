@@ -2,11 +2,9 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.gestures.action.GivenAction
 
-@BindAction
-@Reader
+@GivenAction
 fun backAction() = accessibilityAction(
     key = "back",
     accessibilityAction = AccessibilityService.GLOBAL_ACTION_BACK,

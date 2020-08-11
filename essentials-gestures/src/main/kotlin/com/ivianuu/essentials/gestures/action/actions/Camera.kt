@@ -6,12 +6,10 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.PhotoCamera
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
 
-@BindAction
-@Reader
+@GivenAction
 fun cameraAction() = Action(
     key = "camera",
     title = Resources.getString(R.string.es_action_camera),

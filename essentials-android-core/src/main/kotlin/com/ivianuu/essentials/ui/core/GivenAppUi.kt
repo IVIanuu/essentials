@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.boot
+package com.ivianuu.essentials.ui.core
 
+import androidx.compose.Composable
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 @Effect
-annotation class BootListener {
+annotation class GivenAppUi {
     companion object {
-        @SetElements
-        operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
+        @Given
+        operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
+            given<T>() as @Composable () -> Unit
     }
 }
 
-object BootListenersModule {
-
-    @SetElements
-    fun bootListeners(): BootListeners = emptySet()
-
-}
-
-typealias BootListeners = Set<() -> Unit>
+typealias AppUiMarker = @Composable () -> Unit

@@ -7,15 +7,14 @@ import androidx.ui.material.icons.filled.FlashOn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.map
 
-@BindAction
-@Reader
+@GivenAction
 fun torchAction() = Action(
     key = "torch",
     title = Resources.getString(R.string.es_action_torch),

@@ -14,32 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.boot
 
-import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @Effect
-annotation class AppInitializer {
+annotation class GivenBootListener {
     companion object {
         @SetElements
-        operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
+        operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
     }
 }
 
-object AppInitializerModule {
+object BootListenersModule {
+
     @SetElements
-    fun appInitializers(): AppInitializers = emptySet()
+    fun bootListeners(): BootListeners = emptySet()
+
 }
 
-typealias AppInitializers = Set<() -> Unit>
-
-@Reader
-fun runInitializers() {
-    d { "run initializers" }
-    given<AppInitializers>()
-        .forEach { it() }
-}
+typealias BootListeners = Set<() -> Unit>

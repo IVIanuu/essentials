@@ -7,7 +7,7 @@ import androidx.ui.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.util.BuildInfo
@@ -16,8 +16,7 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 
-@BindAction
-@Reader
+@GivenAction
 fun killForegroundAction() = Action(
     key = "kill_foreground_action",
     title = Resources.getString(R.string.es_action_kill_foreground_app),

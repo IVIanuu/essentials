@@ -12,7 +12,7 @@ import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.BindAction
+import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.ApplicationScoped
@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.map
 
 object AutoRotationModule {
 
-    @BindAction
-    @Reader
+    @GivenAction
     fun autoRotationAction() = Action(
         key = "auto_rotation",
         title = Resources.getString(R.string.es_action_auto_rotation),

@@ -14,20 +14,38 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.core
+package com.ivianuu.essentials.app
 
-import androidx.compose.Composable
+import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
+import kotlinx.coroutines.launch
 
 @Effect
-annotation class AppUi {
+annotation class GivenAppWorker {
     companion object {
-        @Given
-        operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
-            given<T>() as @Composable () -> Unit
+        @SetElements
+        operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
     }
 }
 
-typealias AppUiMarker = @Composable () -> Unit
+object AppWorkersModule {
+    @SetElements
+    fun appWorkers(): AppWorkers = emptySet()
+}
+
+typealias AppWorkers = Set<suspend () -> Unit>
+
+@Reader
+fun runAppWorkers() {
+    d { "run workers" }
+    given<AppWorkers>()
+        .forEach { worker ->
+            globalScope.launch {
+                worker()
+            }
+        }
+}

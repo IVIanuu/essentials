@@ -21,13 +21,12 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.essentials.permission.BindPermissionStateProvider
+import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.Given
 
 fun SystemOverlayPermission(
     context: Context,
@@ -45,8 +44,7 @@ val Permission.Companion.IsSystemOverlayPermission by lazy {
     Permission.Key<Unit>("IsSystemOverlayPermission")
 }
 
-@BindPermissionStateProvider
-@Given
+@GivenPermissionStateProvider
 internal class SystemOverlayPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

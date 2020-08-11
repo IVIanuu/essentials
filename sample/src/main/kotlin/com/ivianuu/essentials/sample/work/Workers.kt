@@ -20,12 +20,10 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.work.BindWorker
+import com.ivianuu.injekt.android.work.GivenWorker
 import kotlinx.coroutines.delay
 
-@BindWorker
-@Given
+@GivenWorker
 class TestWorker(
     context: Context,
     workerParams: WorkerParameters

@@ -24,7 +24,7 @@ data class Action(
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
 @Effect
-annotation class BindAction {
+annotation class GivenAction {
     companion object {
         @SetElements
         operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
@@ -43,7 +43,7 @@ interface ActionFactory {
 }
 
 @Effect
-annotation class BindActionFactory {
+annotation class GivenActionFactory {
     companion object {
         @SetElements
         operator fun <T : ActionFactory> invoke(): Set<ActionFactory> = setOf(given<T>())
@@ -57,7 +57,7 @@ interface ActionPickerDelegate {
 }
 
 @Effect
-annotation class BindActionPickerDelegate {
+annotation class GivenActionPickerDelegate {
     companion object {
         @SetElements
         operator fun <T : ActionPickerDelegate> invoke(): Set<ActionPickerDelegate> =

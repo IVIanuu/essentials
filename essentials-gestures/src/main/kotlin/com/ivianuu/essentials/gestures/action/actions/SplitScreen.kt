@@ -4,11 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ViewAgenda
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.BindAction
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.gestures.action.GivenAction
 
-@BindAction
-@Reader
+@GivenAction
 fun splitScreenAction() = accessibilityAction(
     key = "split_screen",
     accessibilityAction = AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN,

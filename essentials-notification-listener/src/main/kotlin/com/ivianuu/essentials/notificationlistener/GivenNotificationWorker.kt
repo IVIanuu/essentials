@@ -5,7 +5,7 @@ import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @Effect
-annotation class NotificationWorker {
+annotation class GivenNotificationWorker {
     companion object {
         @SetElements
         operator fun <T : suspend () -> Unit> invoke(): NotificationWorkers = setOf(given<T>())

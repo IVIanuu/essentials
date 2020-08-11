@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.GivenAppInitializer
 import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.billing.debug.addProduct
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.launch
 
-@AppInitializer
-@Reader
+@GivenAppInitializer
 fun initializePurchases() {
     globalScope.launch {
         addProduct(SkuDetails(DummySku))

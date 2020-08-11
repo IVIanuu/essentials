@@ -19,13 +19,12 @@ package com.ivianuu.essentials.permission.installunknownapps
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import com.ivianuu.essentials.permission.BindPermissionStateProvider
+import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 fun InstallUnknownAppsPermission(
@@ -40,8 +39,7 @@ val Permission.Companion.IsUnknownAppsPermission by lazy {
     Permission.Key<Unit>("IsUnknownAppsPermission")
 }
 
-@BindPermissionStateProvider
-@Given
+@GivenPermissionStateProvider
 internal class InstallUnknownAppsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

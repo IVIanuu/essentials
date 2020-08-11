@@ -12,8 +12,8 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.BindActionFactory
-import com.ivianuu.essentials.gestures.action.BindActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.GivenActionFactory
+import com.ivianuu.essentials.gestures.action.GivenActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
@@ -22,11 +22,9 @@ import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
-@BindActionFactory
-@Given
+@GivenActionFactory
 internal class ShortcutActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
@@ -48,8 +46,7 @@ internal class ShortcutActionFactory : ActionFactory {
 }
 
 
-@BindActionPickerDelegate
-@Given
+@GivenActionPickerDelegate
 internal class ShortcutActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_shortcut)

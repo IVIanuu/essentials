@@ -20,14 +20,13 @@ import android.app.AppOpsManager
 import android.content.Intent
 import android.os.Process
 import android.provider.Settings
-import com.ivianuu.essentials.permission.BindPermissionStateProvider
+import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 fun PackageUsageStatsPermission(
@@ -42,8 +41,7 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
     Permission.Key<Unit>("IsPackageUsageStatsPermission")
 }
 
-@BindPermissionStateProvider
-@Given
+@GivenPermissionStateProvider
 internal class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

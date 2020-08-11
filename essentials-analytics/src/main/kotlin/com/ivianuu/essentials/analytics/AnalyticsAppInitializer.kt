@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.analytics
 
 import com.crashlytics.android.Crashlytics
-import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.GivenAppInitializer
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import io.fabric.sdk.android.Fabric
 
-@AppInitializer
+@GivenAppInitializer
 @Reader
 fun initializeAnalytics() {
     if (!given<BuildInfo>().isDebug) {

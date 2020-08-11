@@ -22,12 +22,10 @@ import androidx.compose.remember
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.core.GivenAppUi
 import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.injekt.Reader
 
-@AppUi
-@Reader
+@GivenAppUi
 @Composable
 fun SampleUi() {
     TwilightTheme {
