@@ -18,7 +18,6 @@
 
 object Build {
     const val applicationId = "com.ivianuu.essentials.sample"
-
     const val compileSdk = 29
     const val minSdk = 24
     const val targetSdk = 29
@@ -29,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev587"
+    const val version = "${Build.versionName}-dev588"
 }
 
 object Deps {

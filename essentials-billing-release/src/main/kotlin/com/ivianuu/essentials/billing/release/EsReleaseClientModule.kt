@@ -19,12 +19,12 @@ package com.ivianuu.essentials.billing.release
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 
 object EsReleaseClientModule {
 
-    @Given(ApplicationScoped::class)
+    @Given(ApplicationStorage::class)
     fun billingClient(updateListener: PurchasesUpdatedListener) = BillingClient
         .newBuilder(applicationContext)
         .enablePendingPurchases()
