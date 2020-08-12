@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.moshi
 
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.SetElements
@@ -19,7 +19,7 @@ typealias JsonAdapters = Set<Any>
 
 object EsMoshiModule {
 
-    @Given(ApplicationScoped::class)
+    @Given(ApplicationStorage::class)
     fun moshi(): Moshi = Moshi.Builder()
         .apply {
             given<JsonAdapters>()

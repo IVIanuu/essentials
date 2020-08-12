@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.android.ActivityScoped
+import com.ivianuu.injekt.android.ActivityStorage
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.CoroutineScope
 
@@ -15,7 +15,7 @@ inline val uiScope: UiScope
 
 object EsUiModule {
 
-    @Given(ActivityScoped::class)
+    @Given(ActivityStorage::class)
     fun uiScope(): UiScope = CoroutineScope(dispatchers.main)
 
 }

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Given(ApplicationScoped::class)
+@Given(ApplicationStorage::class)
 class DisplayRotationProvider {
 
     val displayRotation: Flow<DisplayRotation> = screenState

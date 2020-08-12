@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -156,7 +156,7 @@ fun PrefsPage() {
     }
 }
 
-@Given(ApplicationScoped::class)
+@Given(ApplicationStorage::class)
 class Prefs {
     private val factory = given<DiskDataStoreFactory>()
     val switch = factory.create("switch") { false }

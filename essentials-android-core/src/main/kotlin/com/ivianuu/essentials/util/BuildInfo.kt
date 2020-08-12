@@ -20,7 +20,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.compose.Immutable
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
@@ -31,7 +31,7 @@ data class BuildInfo(
     val versionCode: Int
 ) {
     companion object {
-        @Given(ApplicationScoped::class)
+        @Given(ApplicationStorage::class)
         fun bind(): BuildInfo {
             val appInfo = applicationContext.applicationInfo
             val packageInfo = given<PackageManager>()

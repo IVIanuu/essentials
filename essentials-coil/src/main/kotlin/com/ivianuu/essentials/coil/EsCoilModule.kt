@@ -20,14 +20,14 @@ import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 object EsCoilModule {
 
-    @Given(ApplicationScoped::class)
+    @Given(ApplicationStorage::class)
     fun imageLoader() = ImageLoader.Builder(applicationContext)
         .componentRegistry {
             given<Set<Decoder>>().forEach { add(it) }

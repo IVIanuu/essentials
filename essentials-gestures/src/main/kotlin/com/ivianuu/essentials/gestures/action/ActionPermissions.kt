@@ -16,10 +16,10 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 
-@Given(ApplicationScoped::class)
+@Given(ApplicationStorage::class)
 internal class ActionPermissions {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,

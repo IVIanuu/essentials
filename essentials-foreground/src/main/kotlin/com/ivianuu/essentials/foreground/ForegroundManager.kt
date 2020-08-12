@@ -21,13 +21,13 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.applicationContext
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ApplicationScoped
+import com.ivianuu.injekt.ApplicationStorage
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Given(ApplicationScoped::class)
+@Given(ApplicationStorage::class)
 class ForegroundManager {
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
