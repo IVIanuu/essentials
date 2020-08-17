@@ -21,8 +21,8 @@ import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.runServiceReader
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.launch
 
 class DefaultAccessibilityService : EsAccessibilityService() {
@@ -30,7 +30,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        runServiceReader {
+        readerContext.runReader {
             d { "connected" }
             given<AccessibilityServices>().onServiceConnected(this)
             given<AccessibilityWorkers>().forEach { worker ->
@@ -42,14 +42,14 @@ class DefaultAccessibilityService : EsAccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        runServiceReader {
+        readerContext.runReader {
             d { "on accessibility event $event" }
             given<AccessibilityServices>().onAccessibilityEvent(event)
         }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        runServiceReader {
+        readerContext.runReader {
             d { "on unbind" }
             given<AccessibilityServices>().onServiceDisconnected()
         }
@@ -77,7 +77,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
             packageNames = null
 
-            runServiceReader {
+            readerContext.runReader {
                 d { "update service info $this" }
             }
         }

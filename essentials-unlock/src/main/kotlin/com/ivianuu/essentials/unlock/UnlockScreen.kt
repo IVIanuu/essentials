@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.injekt.Reader
@@ -37,7 +37,7 @@ suspend fun unlockScreen(): Boolean = withContext(dispatchers.default) {
 
     d { "unlock screen $requestId" }
 
-    UnlockScreenActivity.unlock(applicationContext, requestId)
+    UnlockScreenActivity.unlock(androidApplicationContext, requestId)
 
     return@withContext result.await().also {
         d { "unlock result $requestId -> $it" }

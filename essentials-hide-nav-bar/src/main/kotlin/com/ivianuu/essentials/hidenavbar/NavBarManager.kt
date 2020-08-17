@@ -18,7 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.Deferred
@@ -50,7 +50,7 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class NavBarManager {
 
     private var job: Job? = null
@@ -148,8 +148,8 @@ class NavBarManager {
         val name =
             if (displayRotationProvider.displayRotation.first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
-        val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
+        val id = androidApplicationContext.resources.getIdentifier(name, "dimen", "android")
+        return if (id > 0) androidApplicationContext.resources.getDimensionPixelSize(id) else 0
     }
 
     private suspend fun getOverscanRect(

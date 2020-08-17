@@ -18,13 +18,13 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class GivenPermissionStateProvider {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
             setOf(given<T>())
     }
@@ -33,7 +33,7 @@ annotation class GivenPermissionStateProvider {
 @Effect
 annotation class GivenPermissionRequestHandler {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
             setOf(given<T>())
     }

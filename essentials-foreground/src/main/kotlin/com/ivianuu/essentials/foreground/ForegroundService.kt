@@ -19,18 +19,18 @@ package com.ivianuu.essentials.foreground
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.runServiceReader
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ForegroundService : EsService() {
 
     private val foregroundManager: ForegroundManager by lazy {
-        runServiceReader { given() }
+        readerContext.runReader { given() }
     }
     private val notificationManager: NotificationManager by lazy {
-        runServiceReader { given() }
+        readerContext.runReader { given() }
     }
 
     private var lastJobs = listOf<ForegroundJob>()
@@ -39,7 +39,7 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
-        runServiceReader {
+        readerContext.runReader {
             d { "started foreground service" }
         }
 
@@ -50,13 +50,13 @@ class ForegroundService : EsService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        runServiceReader {
+        readerContext.runReader {
             d { "stopped foreground service" }
         }
     }
 
     private fun update(newJobs: List<ForegroundJob>) = synchronized(this) {
-        runServiceReader {
+        readerContext.runReader {
             d { "update jobs $newJobs" }
         }
 

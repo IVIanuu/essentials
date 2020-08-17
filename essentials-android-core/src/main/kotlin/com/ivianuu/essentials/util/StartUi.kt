@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.ui.core.ContextAmbient
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
@@ -25,7 +25,7 @@ suspend fun startUi(): Activity {
         }
     )
 
-    applicationContext.startActivity(
+    androidApplicationContext.startActivity(
         intent.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }

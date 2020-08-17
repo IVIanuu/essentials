@@ -29,7 +29,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ChatBubble
 import androidx.ui.unit.dp
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.ui.image.toBitmap
@@ -124,7 +124,7 @@ private fun buildNotification(
     count: Int,
     color: Color
 ) = NotificationCompat.Builder(
-    applicationContext,
+    androidApplicationContext,
     "foreground"
 )
     .setContentTitle("Foreground")
@@ -132,5 +132,11 @@ private fun buildNotification(
     .setColor(color.toArgb())
     .build()
     .apply {
-        setSmallIcon(Icon.createWithBitmap(Icons.Default.ChatBubble.toBitmap(applicationContext)))
+        setSmallIcon(
+            Icon.createWithBitmap(
+                Icons.Default.ChatBubble.toBitmap(
+                    androidApplicationContext
+                )
+            )
+        )
     }

@@ -20,16 +20,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.android.runReceiverReader
+import com.ivianuu.injekt.android.ReceiverContext
+import com.ivianuu.injekt.android.createReceiverContext
+import com.ivianuu.injekt.runReader
 
 /**
  * Base broadcast receiver
  */
 abstract class EsBroadcastReceiver : BroadcastReceiver() {
+
+    lateinit var readerContext: ReceiverContext
+
     override fun onReceive(context: Context, intent: Intent) {
-        runReceiverReader(context, intent) {
-            onReceive(intent)
-        }
+        readerContext = createReceiverContext(context, intent)
+        readerContext.runReader { onReceive(intent) }
     }
 
     @Reader

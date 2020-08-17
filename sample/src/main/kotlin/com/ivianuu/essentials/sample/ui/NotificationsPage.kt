@@ -28,7 +28,7 @@ import androidx.ui.material.icons.filled.Clear
 import androidx.ui.material.icons.filled.Error
 import androidx.ui.unit.dp
 import com.github.michaelbull.result.fold
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
@@ -200,7 +200,7 @@ private fun notifications() = given<NotificationStore>().notifications
                         ?.toString() ?: "",
                     icon = runCatchingAndLog {
                         sbn.notification.smallIcon
-                            .loadDrawable(applicationContext)
+                            .loadDrawable(androidApplicationContext)
                             .toImageAsset();
 
                     }.fold(

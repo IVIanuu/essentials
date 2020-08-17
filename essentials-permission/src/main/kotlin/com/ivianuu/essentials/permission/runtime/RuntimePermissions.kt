@@ -18,7 +18,7 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
 import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
@@ -47,7 +47,7 @@ internal class RuntimePermissionStateProvider : PermissionStateProvider {
         Permission.RuntimePermissionName in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        applicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
+        androidApplicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
 
 }

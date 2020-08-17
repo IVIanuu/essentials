@@ -21,7 +21,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.onEach
 
 // todo make this class a single shared flow
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class SecureScreenDetector {
 
     private val _isOnSecureScreen = MutableStateFlow(false)

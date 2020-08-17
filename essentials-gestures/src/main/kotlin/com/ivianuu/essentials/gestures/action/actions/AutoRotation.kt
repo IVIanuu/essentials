@@ -15,7 +15,7 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.gestures.action.permissions
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -36,7 +36,7 @@ object AutoRotationModule {
         }
     )
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun autoRotationSetting(): AutoRotationSetting = given<SettingsDataStoreFactory>()
         .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
 

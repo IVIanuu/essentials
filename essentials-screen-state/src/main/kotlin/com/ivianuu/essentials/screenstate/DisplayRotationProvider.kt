@@ -22,12 +22,12 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class DisplayRotationProvider {
 
     val displayRotation: Flow<DisplayRotation> = screenState
@@ -83,7 +83,7 @@ class DisplayRotationProvider {
 
     private fun rotationChanges() = callbackFlow<Unit> {
         val listener = object :
-            OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
+            OrientationEventListener(androidApplicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
             override fun onOrientationChanged(orientation: Int) {
                 offer(Unit)
             }
@@ -104,7 +104,7 @@ class DisplayRotationProvider {
             override fun onTrimMemory(level: Int) {
             }
         }
-        applicationContext.registerComponentCallbacks(callbacks)
-        awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
+        androidApplicationContext.registerComponentCallbacks(callbacks)
+        awaitClose { androidApplicationContext.unregisterComponentCallbacks(callbacks) }
     }
 }

@@ -7,7 +7,7 @@ import androidx.ui.foundation.Icon
 import androidx.ui.graphics.vector.VectorAsset
 import androidx.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
@@ -40,7 +40,7 @@ internal fun Intent.send() {
     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
         PendingIntent.getActivity(
-            applicationContext, 99, this, 0, null
+            androidApplicationContext, 99, this, 0, null
         ).send()
     } catch (e: Exception) {
         e.printStackTrace()

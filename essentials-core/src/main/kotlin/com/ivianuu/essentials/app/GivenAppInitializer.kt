@@ -18,20 +18,20 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class GivenAppInitializer {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
     }
 }
 
 object AppInitializerModule {
-    @SetElements
+    @GivenSetElements
     fun appInitializers(): AppInitializers = emptySet()
 }
 

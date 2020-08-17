@@ -26,7 +26,7 @@ import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.FlashOn
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
@@ -49,14 +49,14 @@ internal fun createTorchNotification(): Notification {
         )
     }
 
-    return NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+    return NotificationCompat.Builder(androidApplicationContext, NOTIFICATION_CHANNEL_ID)
         .apply {
             setAutoCancel(true)
             setContentTitle(Resources.getString(R.string.es_notif_title_torch))
             setContentText(Resources.getString(R.string.es_notif_text_torch))
             setContentIntent(
                 PendingIntent.getBroadcast(
-                    applicationContext,
+                    androidApplicationContext,
                     1,
                     Intent(TorchManager.ACTION_TOGGLE_TORCH),
                     PendingIntent.FLAG_UPDATE_CURRENT
@@ -65,7 +65,13 @@ internal fun createTorchNotification(): Notification {
         }
         .build()
         .apply {
-            setSmallIcon(Icon.createWithBitmap(Icons.Default.FlashOn.toBitmap(applicationContext)))
+            setSmallIcon(
+                Icon.createWithBitmap(
+                    Icons.Default.FlashOn.toBitmap(
+                        androidApplicationContext
+                    )
+                )
+            )
         }
 }
 

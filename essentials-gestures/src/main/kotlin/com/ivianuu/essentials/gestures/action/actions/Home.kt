@@ -3,7 +3,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction
@@ -32,7 +32,7 @@ fun homeAction() = Action(
 private fun openHomeScreen() {
     try {
         val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-        applicationContext.sendBroadcast(intent)
+        androidApplicationContext.sendBroadcast(intent)
     } catch (e: Exception) {
         e.printStackTrace()
     }

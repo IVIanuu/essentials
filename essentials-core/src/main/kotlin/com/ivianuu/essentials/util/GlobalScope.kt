@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -14,7 +14,7 @@ inline val globalScope: GlobalScope
 
 object GlobalScopeModule {
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)
 
 }

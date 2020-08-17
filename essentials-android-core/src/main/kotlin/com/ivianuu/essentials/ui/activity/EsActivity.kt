@@ -33,7 +33,8 @@ import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.ui.uiScope
-import com.ivianuu.injekt.android.runActivityReader
+import com.ivianuu.injekt.android.activityContext
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.cancel
 
 /**
@@ -63,7 +64,7 @@ abstract class EsActivity : AppCompatActivity() {
     override fun onDestroy() {
         composition.dispose()
         retainedObjects.dispose()
-        runActivityReader {
+        activityContext.runReader {
             uiScope.cancel()
         }
         super.onDestroy()

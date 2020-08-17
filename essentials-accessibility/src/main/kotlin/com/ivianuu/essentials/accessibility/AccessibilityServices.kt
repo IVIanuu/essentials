@@ -18,7 +18,7 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class AccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)

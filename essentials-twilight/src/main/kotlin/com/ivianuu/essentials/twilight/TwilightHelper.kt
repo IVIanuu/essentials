@@ -21,7 +21,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
 import androidx.compose.Immutable
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.ApplicationResources
@@ -91,8 +91,8 @@ private fun configChanges() = callbackFlow<Unit> {
         override fun onTrimMemory(level: Int) {
         }
     }
-    applicationContext.registerComponentCallbacks(callbacks)
-    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
+    androidApplicationContext.registerComponentCallbacks(callbacks)
+    awaitClose { androidApplicationContext.unregisterComponentCallbacks(callbacks) }
 }
 
 @Immutable

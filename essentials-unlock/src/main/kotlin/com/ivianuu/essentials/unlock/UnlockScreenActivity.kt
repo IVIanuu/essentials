@@ -28,8 +28,9 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.activity.EsActivity
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.runActivityReader
+import com.ivianuu.injekt.android.activityContext
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -46,7 +47,7 @@ class UnlockScreenActivity : EsActivity() {
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runActivityReader {
+        activityContext.runReader {
             if (!intent.hasExtra(KEY_REQUEST_ID)) {
                 valid = false
                 finish()
@@ -103,7 +104,7 @@ class UnlockScreenActivity : EsActivity() {
     }
 
     override fun onDestroy() {
-        runActivityReader {
+        activityContext.runReader {
             // just in case we didn't respond yet
             if (valid && !hasResult) {
                 onUnlockScreenResult(requestId, false)

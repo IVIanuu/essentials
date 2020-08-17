@@ -1,19 +1,19 @@
 package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class GivenNotificationWorker {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : suspend () -> Unit> invoke(): NotificationWorkers = setOf(given<T>())
     }
 }
 
 object NotificationModule {
-    @SetElements
+    @GivenSetElements
     fun notificationWorkers(): NotificationWorkers = emptySet()
 }
 

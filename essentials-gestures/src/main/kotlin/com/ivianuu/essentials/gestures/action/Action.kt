@@ -5,8 +5,8 @@ import androidx.compose.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
@@ -26,7 +26,7 @@ typealias ActionIcon = Flow<@Composable () -> Unit>
 @Effect
 annotation class GivenAction {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
     }
 }
@@ -45,7 +45,7 @@ interface ActionFactory {
 @Effect
 annotation class GivenActionFactory {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : ActionFactory> invoke(): Set<ActionFactory> = setOf(given<T>())
     }
 }
@@ -59,7 +59,7 @@ interface ActionPickerDelegate {
 @Effect
 annotation class GivenActionPickerDelegate {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : ActionPickerDelegate> invoke(): Set<ActionPickerDelegate> =
             setOf(given<T>())
     }

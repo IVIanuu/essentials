@@ -6,7 +6,7 @@ import androidx.ui.material.icons.filled.Accessibility
 import androidx.ui.material.icons.filled.Adb
 import androidx.ui.material.icons.filled.SettingsApplications
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
@@ -16,10 +16,10 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 internal class ActionPermissions {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
@@ -37,7 +37,7 @@ internal class ActionPermissions {
         Permission.Icon withValue { Icon(Icons.Default.SettingsApplications) }
     )
     val writeSettings = WriteSettingsPermission(
-        applicationContext,
+        androidApplicationContext,
         Permission.Title withValue "Write Settings", // todo res
         Permission.Desc withValue "Required to change settings", // todo res
         Permission.Icon withValue { Icon(Icons.Default.SettingsApplications) } // todo change icon

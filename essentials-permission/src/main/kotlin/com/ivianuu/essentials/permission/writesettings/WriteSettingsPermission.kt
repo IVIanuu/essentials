@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
@@ -51,6 +51,6 @@ internal class WriteSettingsPermissionStateProvider : PermissionStateProvider {
         Permission.IsWriteSettingsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        Settings.System.canWrite(applicationContext)
+        Settings.System.canWrite(androidApplicationContext)
 
 }

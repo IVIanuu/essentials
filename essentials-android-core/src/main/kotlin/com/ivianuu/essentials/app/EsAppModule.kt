@@ -21,6 +21,6 @@ import com.ivianuu.injekt.Given
 object EsAppModule {
 
     @Given
-    fun packageManager() = applicationContext.packageManager!!
+    fun packageManager() = androidApplicationContext.packageManager!!
 
 }

@@ -1,16 +1,16 @@
 package com.ivianuu.essentials.moshi
 
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 import com.squareup.moshi.Moshi
 
 @Effect
 annotation class GivenJsonAdapter {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : Any> invoke(): JsonAdapters = setOf(given<T>())
     }
 }
@@ -19,7 +19,7 @@ typealias JsonAdapters = Set<Any>
 
 object EsMoshiModule {
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun moshi(): Moshi = Moshi.Builder()
         .apply {
             given<JsonAdapters>()
@@ -27,7 +27,7 @@ object EsMoshiModule {
         }
         .build()
 
-    @SetElements
+    @GivenSetElements
     fun defaultAdapters(): JsonAdapters = emptySet()
 
 }

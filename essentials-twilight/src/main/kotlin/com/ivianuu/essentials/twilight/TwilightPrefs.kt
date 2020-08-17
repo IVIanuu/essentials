@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class TwilightPrefs {
     val twilightMode = given<DiskDataStoreFactory>().create("twilight_mode") { TwilightMode.System }
     val useBlack = given<DiskDataStoreFactory>().create("use_black") { false }

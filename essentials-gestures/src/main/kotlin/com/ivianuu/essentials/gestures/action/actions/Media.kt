@@ -2,7 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.view.KeyEvent
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionPrefs
@@ -26,8 +26,8 @@ fun mediaAction(
 
 @Reader
 private suspend fun doMediaAction(keycode: Int) {
-    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
-    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
+    androidApplicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
+    androidApplicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
 }
 
 @Reader

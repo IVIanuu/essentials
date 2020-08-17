@@ -19,21 +19,21 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.launch
 
 @Effect
 annotation class GivenAppWorker {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
     }
 }
 
 object AppWorkersModule {
-    @SetElements
+    @GivenSetElements
     fun appWorkers(): AppWorkers = emptySet()
 }
 

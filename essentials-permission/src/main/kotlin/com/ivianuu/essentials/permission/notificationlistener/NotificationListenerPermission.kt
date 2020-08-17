@@ -19,7 +19,7 @@ package com.ivianuu.essentials.permission.notificationlistener
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
@@ -53,7 +53,7 @@ internal class NotificationListenerPermissionStateProvider : PermissionStateProv
 
     override suspend fun isGranted(permission: Permission): Boolean {
         return Settings.Secure.getString(
-            applicationContext.contentResolver,
+            androidApplicationContext.contentResolver,
             "enabled_notification_listeners"
         )
             .split(":")

@@ -19,8 +19,9 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.android.runServiceReader
+import com.ivianuu.injekt.android.createServiceContext
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -29,8 +30,10 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsNotificationListenerService : NotificationListenerService() {
 
+    val readerContext by lazy { createServiceContext() }
+
     private val dispatchers: AppCoroutineDispatchers by lazy {
-        runServiceReader { given() }
+        readerContext.runReader { given() }
     }
 
     val scope by lazy {

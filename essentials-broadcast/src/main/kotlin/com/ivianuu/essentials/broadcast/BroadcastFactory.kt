@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -46,13 +46,13 @@ object BroadcastFactory {
             }
         }
         try {
-            applicationContext.registerReceiver(broadcastReceiver, intentFilter)
+            androidApplicationContext.registerReceiver(broadcastReceiver, intentFilter)
         } catch (e: Exception) {
         }
 
         awaitClose {
             try {
-                applicationContext.unregisterReceiver(broadcastReceiver)
+                androidApplicationContext.unregisterReceiver(broadcastReceiver)
             } catch (e: Exception) {
             }
         }

@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.plus
@@ -31,24 +31,24 @@ import java.io.File
 object EsDataModule {
 
     @Given
-    fun dataDir(): DataDir = applicationContext.applicationInfo.dataDir
+    fun dataDir(): DataDir = androidApplicationContext.applicationInfo.dataDir
 
     @Given
     fun prefsDir(): PrefsDir = "${given<DataDir>()}/prefs"
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun moshiSerializerFactory() = MoshiSerializerFactory(given())
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun diskDataStoreFactory() = DiskDataStoreFactory(
         scope = globalScope + dispatchers.io,
         produceBoxDirectory = { File(given<PrefsDir>()) },
         serializerFactory = given()
     )
 
-    @Given(ApplicationStorage::class)
+    @Given(ApplicationContext::class)
     fun settingsDataStoreFactory() = SettingsDataStoreFactory(
-        context = applicationContext,
+        context = androidApplicationContext,
         scope = globalScope + dispatchers.io
     )
 

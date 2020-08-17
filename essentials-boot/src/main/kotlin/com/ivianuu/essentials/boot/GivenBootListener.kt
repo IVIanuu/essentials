@@ -17,20 +17,20 @@
 package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class GivenBootListener {
     companion object {
-        @SetElements
+        @GivenSetElements
         operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
     }
 }
 
 object BootListenersModule {
 
-    @SetElements
+    @GivenSetElements
     fun bootListeners(): BootListeners = emptySet()
 
 }

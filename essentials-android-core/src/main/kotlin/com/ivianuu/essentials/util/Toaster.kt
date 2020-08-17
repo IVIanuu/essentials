@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.widget.Toast
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.launch
 
@@ -47,7 +47,7 @@ object Toaster {
     private fun showToast(message: String, long: Boolean) {
         globalScope.launch(dispatchers.main) {
             Toast.makeText(
-                applicationContext,
+                androidApplicationContext,
                 message,
                 if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
             )

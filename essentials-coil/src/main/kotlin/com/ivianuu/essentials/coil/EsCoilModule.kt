@@ -19,16 +19,16 @@ package com.ivianuu.essentials.coil
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
-import com.ivianuu.essentials.app.applicationContext
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 
 object EsCoilModule {
 
-    @Given(ApplicationStorage::class)
-    fun imageLoader() = ImageLoader.Builder(applicationContext)
+    @Given(ApplicationContext::class)
+    fun imageLoader() = ImageLoader.Builder(androidApplicationContext)
         .componentRegistry {
             given<Set<Decoder>>().forEach { add(it) }
             given<Set<FetcherBinding<*>>>()
@@ -46,16 +46,16 @@ object EsCoilModule {
         }
         .build()
 
-    @SetElements
+    @GivenSetElements
     fun decoders(): Set<Decoder> = emptySet()
 
-    @SetElements
+    @GivenSetElements
     fun fetchers(): Set<FetcherBinding<*>> = emptySet()
 
-    @SetElements
+    @GivenSetElements
     fun mappers(): Set<MapperBinding<*>> = emptySet()
 
-    @SetElements
+    @GivenSetElements
     fun measuredMappers(): Set<MeasuredMapperBinding<*>> = emptySet()
 
 }

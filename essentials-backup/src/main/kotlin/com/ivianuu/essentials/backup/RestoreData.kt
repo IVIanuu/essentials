@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.backup
 
 import android.content.Intent
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.util.dispatchers
@@ -31,7 +30,7 @@ internal suspend fun restoreData() = runCatchingAndLog {
         val buffer = ByteArray(8192)
 
         val zipInputStream = ZipInputStream(
-            applicationContext.contentResolver.openInputStream(uri)!!.buffered()
+            androidApplicationContext.contentResolver.openInputStream(uri)!!.buffered()
         )
 
         val targetDirectory = File(given<PrefsDir>())

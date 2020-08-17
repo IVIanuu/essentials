@@ -19,14 +19,14 @@ package com.ivianuu.essentials.work
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.ivianuu.essentials.app.GivenAppInitializer
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 @GivenAppInitializer
 fun initializeWorkers() {
     WorkManager.initialize(
-        applicationContext,
+        androidApplicationContext,
         Configuration.Builder()
             .setWorkerFactory(given())
             .build()
@@ -36,6 +36,6 @@ fun initializeWorkers() {
 object EsWorkModule {
 
     @Given
-    fun workManager() = WorkManager.getInstance(applicationContext)
+    fun workManager() = WorkManager.getInstance(androidApplicationContext)
 
 }

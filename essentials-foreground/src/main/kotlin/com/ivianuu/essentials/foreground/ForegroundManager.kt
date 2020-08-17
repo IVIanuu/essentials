@@ -19,15 +19,15 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Given(ApplicationStorage::class)
+@Given(ApplicationContext::class)
 class ForegroundManager {
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
@@ -58,8 +58,8 @@ class ForegroundManager {
         if (_jobs.value.isNotEmpty()) {
             d { "start service ${_jobs.value}" }
             ContextCompat.startForegroundService(
-                applicationContext,
-                Intent(applicationContext, ForegroundService::class.java)
+                androidApplicationContext,
+                Intent(androidApplicationContext, ForegroundService::class.java)
             )
         }
     }

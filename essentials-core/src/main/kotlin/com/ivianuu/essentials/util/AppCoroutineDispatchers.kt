@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.ApplicationStorage
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
@@ -36,7 +36,7 @@ data class AppCoroutineDispatchers(
     val io: CoroutineDispatcher
 ) {
     companion object {
-        @Given(ApplicationStorage::class)
+        @Given(ApplicationContext::class)
         fun bind() = AppCoroutineDispatchers(
             default = Dispatchers.Default,
             main = Dispatchers.Main,

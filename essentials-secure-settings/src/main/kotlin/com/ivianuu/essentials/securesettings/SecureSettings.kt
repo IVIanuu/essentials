@@ -18,7 +18,7 @@ package com.ivianuu.essentials.securesettings
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.app.applicationContext
+import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Reader
@@ -27,7 +27,7 @@ import com.ivianuu.injekt.given
 object SecureSettings {
 
     @Reader
-    fun canWrite() = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+    fun canWrite() = androidApplicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
             PackageManager.PERMISSION_GRANTED
 
     @Reader
