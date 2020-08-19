@@ -19,31 +19,31 @@ package com.ivianuu.essentials.ui.core
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.Providers
-import androidx.compose.Stable
-import androidx.compose.getValue
-import androidx.compose.mutableStateListOf
-import androidx.compose.onCommit
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.compose.staticAmbientOf
-import androidx.compose.structuralEqualityPolicy
-import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.composed
-import androidx.ui.core.globalBounds
-import androidx.ui.core.onPositioned
-import androidx.ui.foundation.contentColor
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.toArgb
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.Bounds
-import androidx.ui.unit.Position
-import androidx.ui.unit.PxBounds
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.onPositioned
+import androidx.compose.foundation.contentColor
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.ui.layout.globalBounds
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.unit.Bounds
+import androidx.compose.ui.unit.Position
+import androidx.compose.ui.unit.PxBounds
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isDark
@@ -63,7 +63,7 @@ fun Modifier.systemBarStyle(
     var globalBounds by state<PxBounds?>(structuralEqualityPolicy()) { null }
     val density = DensityAmbient.current
 
-    onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
+    onPreCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
         val dpBounds = with(density) {
             Bounds(
                 left = globalBounds?.left?.toInt()?.toDp() ?: 0.dp,
@@ -108,7 +108,7 @@ private class SystemBarManager {
     @Composable
     fun updateSystemBars() {
         val activity = compositionActivity
-        onCommit(activity) {
+        onPreCommit(activity) {
             activity.window.addFlags(
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
             )
@@ -151,13 +151,13 @@ private class SystemBarManager {
             }
         }
 
-        onCommit(activity, statusBarStyle?.barColor) {
+        onPreCommit(activity, statusBarStyle?.barColor) {
             activity.window.statusBarColor =
                 (statusBarStyle?.barColor ?: Color.Black
                     .copy(alpha = 0.2f)).toArgb()
         }
 
-        onCommit(activity, statusBarStyle?.lightIcons) {
+        onPreCommit(activity, statusBarStyle?.lightIcons) {
             activity.window.decorView.systemUiVisibility =
                 activity.window.decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
@@ -199,13 +199,13 @@ private class SystemBarManager {
                 }
             }
 
-            onCommit(activity, navBarStyle?.barColor) {
+            onPreCommit(activity, navBarStyle?.barColor) {
                 activity.window.navigationBarColor =
                     (navBarStyle?.barColor ?: Color.Black
                         .copy(alpha = 0.2f)).toArgb()
             }
 
-            onCommit(activity, navBarStyle?.lightIcons) {
+            onPreCommit(activity, navBarStyle?.lightIcons) {
                 activity.window.decorView.systemUiVisibility =
                     activity.window.decorView.systemUiVisibility.setFlag(
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
@@ -213,7 +213,7 @@ private class SystemBarManager {
                     )
             }
         } else {
-            onCommit(activity) {
+            onPreCommit(activity) {
                 activity.window.navigationBarColor = Color.Black
                     .copy(alpha = 0.2f)
                     .toArgb()

@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
-import androidx.compose.onPreCommit
-import androidx.compose.remember
+import androidx.compose.animation.core.FloatPropKey
+import androidx.compose.animation.core.transitionDefinition
+import androidx.compose.animation.transition
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.essentials.ui.common.transition
 
 fun OpenCloseStackTransition(
 
@@ -18,7 +18,7 @@ fun OpenCloseStackTransition(
 
     val transitionState = transition(
         definition = remember {
-            transitionDefinition {
+            transitionDefinition<Boolean> {
                 state(false) {
                     if (context.isPush) {
                         /*

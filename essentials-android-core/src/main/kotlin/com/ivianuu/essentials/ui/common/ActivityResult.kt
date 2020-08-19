@@ -3,11 +3,11 @@ package com.ivianuu.essentials.ui.common
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.Composable
-import androidx.compose.currentComposer
-import androidx.compose.key
-import androidx.compose.onDispose
-import androidx.compose.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.key
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.remember
 
 @Composable
 fun <I, O> registerActivityResultCallback(

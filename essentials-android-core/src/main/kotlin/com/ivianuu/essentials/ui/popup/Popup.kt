@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.layout.padding
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Surface
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun Popup(content: @Composable () -> Unit) {

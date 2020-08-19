@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.compose.stateFor
-import androidx.ui.core.Modifier
-import androidx.ui.input.KeyboardType
-import androidx.ui.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Modifier
+import androidx.compose.material.TextButton
+import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text
@@ -35,7 +35,7 @@ fun TextInputDialogListItem(
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    dialogHint: String? = null,
+    dialogLabel: @Composable (() -> Unit)? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true,
     modifier: Modifier = Modifier
@@ -50,7 +50,7 @@ fun TextInputDialogListItem(
         leading = leading,
         trailing = trailing,
         dialogTitle = dialogTitle,
-        dialogHint = dialogHint,
+        dialogLabel = dialogLabel,
         dialogKeyboardType = dialogKeyboardType,
         allowEmpty = allowEmpty
     )
@@ -65,7 +65,7 @@ fun TextInputDialogListItem(
     leading: @Composable (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
-    dialogHint: String? = null,
+    dialogLabel: @Composable (() -> Unit)? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true,
     modifier: Modifier = Modifier
@@ -83,7 +83,7 @@ fun TextInputDialogListItem(
                 value = currentValue.value,
                 onValueChange = { currentValue.value = it },
                 title = dialogTitle,
-                hint = dialogHint,
+                label = dialogLabel,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     TextButton(

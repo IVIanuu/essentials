@@ -19,15 +19,16 @@ package com.ivianuu.essentials.ui.activity
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Composition
-import androidx.compose.Providers
-import androidx.compose.Recomposer
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composition
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
+import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
+import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.ui.core.setContent
-import androidx.ui.savedinstancestate.UiSavedStateRegistry
-import androidx.ui.savedinstancestate.UiSavedStateRegistryAmbient
+import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ProvideInsets
@@ -54,6 +55,7 @@ abstract class EsActivity : AppCompatActivity() {
 
         val container = findViewById<ViewGroup>(containerId)
         ViewTreeLifecycleOwner.set(container, this)
+        ViewTreeSavedStateRegistryOwner.set(container, this)
         ViewTreeViewModelStoreOwner.set(container, this)
 
         composition = container.setContent(Recomposer.current()) {

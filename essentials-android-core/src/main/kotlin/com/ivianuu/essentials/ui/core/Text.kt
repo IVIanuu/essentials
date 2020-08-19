@@ -1,21 +1,21 @@
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.currentTextStyle
-import androidx.ui.graphics.Color
-import androidx.ui.res.stringResource
-import androidx.ui.text.InlineTextContent
-import androidx.ui.text.TextLayoutResult
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontFamily
-import androidx.ui.text.font.FontStyle
-import androidx.ui.text.font.FontWeight
-import androidx.ui.text.style.TextAlign
-import androidx.ui.text.style.TextDecoration
-import androidx.ui.text.style.TextOverflow
-import androidx.ui.unit.TextUnit
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.currentTextStyle
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 
 @Composable
 fun Text(

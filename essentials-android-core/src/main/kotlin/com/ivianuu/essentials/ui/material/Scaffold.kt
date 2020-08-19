@@ -16,24 +16,26 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.staticAmbientOf
-import androidx.ui.core.Constraints
-import androidx.ui.core.Layout
-import androidx.ui.core.Modifier
-import androidx.ui.core.id
-import androidx.ui.core.layoutId
-import androidx.ui.layout.Stack
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.material.DrawerState
-import androidx.ui.material.ModalDrawerLayout
-import androidx.ui.material.Surface
-import androidx.ui.unit.dp
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.DrawerState
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ModalDrawerLayout
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberDrawerState
+import androidx.compose.ui.Layout
+import androidx.compose.ui.layout.id
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsPadding
@@ -128,8 +130,7 @@ fun Scaffold(
             val tmp = layout
             layout = {
                 ModalDrawerLayout(
-                    drawerState = if (state.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
-                    onStateChange = { state.isDrawerOpen = it == DrawerState.Opened },
+                    drawerState = rememberDrawerState(DrawerValue.Closed),// todo if (state.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
                     gesturesEnabled = state.isDrawerGesturesEnabled,
                     drawerContent = {
                         Surface {
@@ -184,7 +185,7 @@ private fun ScaffoldLayout(
     state: ScaffoldState,
     children: @Composable () -> Unit
 ) {
-    Layout(children = children) { measurables, incomingConstraints, _ ->
+    Layout(children = children) { measurables, incomingConstraints ->
         val width = incomingConstraints.maxWidth
         val height = incomingConstraints.maxHeight
 

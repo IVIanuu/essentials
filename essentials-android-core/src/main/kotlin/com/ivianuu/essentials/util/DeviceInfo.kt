@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.os.Build
-import androidx.compose.Immutable
+import androidx.compose.runtime.Immutable
 import com.ivianuu.injekt.Given
 
 @Immutable

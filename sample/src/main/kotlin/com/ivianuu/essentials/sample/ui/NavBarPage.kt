@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.compose.onCommit
-import androidx.compose.onDispose
-import androidx.compose.rememberCoroutineScope
-import androidx.compose.state
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.state
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.onPreCommit
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettings
@@ -65,7 +65,7 @@ fun NavBarPage() {
 
             val hideNavBar = state { false }
 
-            onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+            onPreCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
 
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }

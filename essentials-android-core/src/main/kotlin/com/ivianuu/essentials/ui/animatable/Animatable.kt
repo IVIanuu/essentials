@@ -1,17 +1,17 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.Stable
-import androidx.compose.getValue
-import androidx.compose.mutableStateMapOf
-import androidx.compose.mutableStateOf
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.ui.core.LayoutCoordinates
-import androidx.ui.core.Modifier
-import androidx.ui.core.composed
-import androidx.ui.core.globalBounds
-import androidx.ui.core.onPositioned
-import androidx.ui.unit.PxBounds
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.globalBounds
+import androidx.compose.ui.onPositioned
+import androidx.compose.ui.unit.PxBounds
 
 @Stable
 class Animatable(val tag: Any) {

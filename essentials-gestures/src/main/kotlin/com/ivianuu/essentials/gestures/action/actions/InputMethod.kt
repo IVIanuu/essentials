@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.inputmethod.InputMethodManager
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.KeyboardHide
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardHide
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction

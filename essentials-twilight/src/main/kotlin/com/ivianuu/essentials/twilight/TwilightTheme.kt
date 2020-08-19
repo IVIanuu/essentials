@@ -16,20 +16,19 @@
 
 package com.ivianuu.essentials.twilight
 
-import androidx.animation.TweenSpec
-import androidx.compose.Composable
-import androidx.compose.key
-import androidx.compose.onCommit
-import androidx.compose.remember
-import androidx.ui.animation.animatedFloat
-import androidx.ui.graphics.Color
-import androidx.ui.material.ColorPalette
-import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
+import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material.Colors
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.onPreCommit
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.untrackedState
-import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.collectAsResource
@@ -38,9 +37,9 @@ import com.ivianuu.injekt.Reader
 @Reader
 @Composable
 fun TwilightTheme(
-    lightColors: ColorPalette = lightColorPalette(),
-    darkColors: ColorPalette = darkColorPalette(),
-    blackColors: ColorPalette = darkColors.copy(
+    lightColors: Colors = lightColors(),
+    darkColors: Colors = darkColors(),
+    blackColors: Colors = darkColors.copy(
         background = Color.Black,
         surface = Color.Black
     ),
@@ -56,7 +55,7 @@ fun TwilightTheme(
         val targetColors = colorsForTwilightState()
 
         val animation = key(twilightState) { animatedFloat(0f) }
-        onCommit(animation) {
+        onPreCommit(animation) {
             animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
         }
 

@@ -16,21 +16,19 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.ui.core.Constraints
-import androidx.ui.core.LayoutDirection
-import androidx.ui.core.LayoutModifier
-import androidx.ui.core.Measurable
-import androidx.ui.core.MeasureScope
-import androidx.ui.core.Modifier
-import androidx.ui.core.enforce
+import androidx.compose.ui.LayoutModifier
+import androidx.compose.ui.Measurable
+import androidx.compose.ui.MeasureScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.enforce
 
 fun Modifier.squared(fit: SquareFit) = this + SquaredModifier(fit)
 
 private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
     override fun MeasureScope.measure(
         measurable: Measurable,
-        constraints: Constraints,
-        layoutDirection: LayoutDirection
+        constraints: Constraints
     ): MeasureScope.MeasureResult {
         val size = when (fit) {
             SquareFit.MatchWidth -> constraints.maxWidth
@@ -41,7 +39,7 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
             maxHeight = size
         ).enforce(constraints)
 
-        val placeable = measurable.measure(finalConstraints, layoutDirection)
+        val placeable = measurable.measure(finalConstraints)
 
         return layout(placeable.width, placeable.height) { placeable.place(0, 0) }
     }

@@ -21,25 +21,25 @@ import android.content.res.Configuration
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.Providers
-import androidx.compose.ambientOf
-import androidx.compose.getValue
-import androidx.compose.onCommit
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.compose.structuralEqualityPolicy
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.core.content.getSystemService
-import androidx.ui.core.DensityAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.ViewAmbient
-import androidx.ui.foundation.Box
-import androidx.ui.layout.InnerPadding
-import androidx.ui.layout.absolutePadding
-import androidx.ui.unit.dp
-import androidx.ui.unit.max
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.ViewAmbient
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.util.containsFlag
 import android.view.WindowInsets as AndroidWindowInsets
 
@@ -202,7 +202,7 @@ fun ProvideInsets(children: @Composable () -> Unit) {
         }
     }
 
-    onCommit(ownerView) {
+    onPreCommit(ownerView) {
         ownerView.setOnApplyWindowInsetsListener(insetsListener)
         ownerView.addOnAttachStateChangeListener(attachListener)
 

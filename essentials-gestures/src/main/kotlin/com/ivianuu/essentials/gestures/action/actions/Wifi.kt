@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Wifi
-import androidx.ui.material.icons.filled.WifiOff
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.WifiOff
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action

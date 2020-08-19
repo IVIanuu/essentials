@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.onActive
+import androidx.compose.runtime.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.common.compositionActivity

@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.Stable
+import androidx.compose.runtime.Stable
 
 @Stable
 interface Prop<T>

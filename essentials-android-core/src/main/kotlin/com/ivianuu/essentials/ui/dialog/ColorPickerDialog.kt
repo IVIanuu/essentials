@@ -16,51 +16,53 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.compose.getValue
-import androidx.compose.key
-import androidx.compose.remember
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.compose.stateFor
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.foundation.Border
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ContentGravity
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.ProvideTextStyle
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.clickable
-import androidx.ui.foundation.contentColor
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.height
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredWidthIn
-import androidx.ui.layout.size
-import androidx.ui.layout.wrapContentSize
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Slider
-import androidx.ui.material.Surface
-import androidx.ui.material.TextButton
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.icons.filled.Check
-import androidx.ui.material.ripple.RippleIndication
-import androidx.ui.res.stringResource
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.foundation.Border
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.ScrollerPosition
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.VerticalScroller
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.contentColor
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
+import androidx.compose.material.Surface
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
@@ -151,7 +153,7 @@ fun ColorPickerDialog(
                         ColorGrid(
                             modifier = Modifier.fillMaxSize(),
                             currentColor = currentColor,
-                            colorPalettes = colorPalettes,
+                            colors = colorPalettes,
                             onColorSelected = setCurrentColor
                         )
                     }
@@ -172,7 +174,7 @@ fun ColorPickerDialog(
 @Composable
 private fun ColorGrid(
     currentColor: Color,
-    colorPalettes: List<ColorPickerPalette>,
+    colors: List<ColorPickerPalette>,
     onColorSelected: (Color) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -183,11 +185,11 @@ private fun ColorGrid(
                 ?.colors
                 ?.map { ColorGridItem.Color(it) }
                 ?.let { listOf(ColorGridItem.Back) + it }
-                ?: colorPalettes.map { ColorGridItem.Color(it.front) }
+                ?: colors.map { ColorGridItem.Color(it.front) }
         }
 
         WithConstraints(modifier = modifier) {
-            VerticalScroller(modifier = Modifier.padding(all = 4.dp)) {
+            ScrollableColumn(modifier = Modifier.padding(all = 4.dp), children = {
                 items.chunked(4).forEach { rowItems ->
                     Row(
                         horizontalArrangement = Arrangement.Center,
@@ -209,7 +211,7 @@ private fun ColorGrid(
                                             onClick = {
                                                 if (palette == null) {
                                                     val paletteForItem =
-                                                        colorPalettes.first { it.front == item.color }
+                                                        colors.first { it.front == item.color }
                                                     if (paletteForItem.colors.size > 1) {
                                                         currentPaletteState.value = paletteForItem
                                                     } else {
@@ -226,14 +228,14 @@ private fun ColorGrid(
                         }
                     }
                 }
-            }
+            })
         }
     }
 }
 
 private sealed class ColorGridItem {
     object Back : ColorGridItem()
-    data class Color(val color: androidx.ui.graphics.Color) : ColorGridItem()
+    data class Color(val color: androidx.compose.ui.graphics.Color) : ColorGridItem()
 }
 
 @Composable
@@ -357,7 +359,8 @@ private fun ColorEditorHeader(
                         }
 
                         if (newColor != null) onColorChanged(newColor)
-                    }
+                    },
+                    label = {}
                 )
             }
         }

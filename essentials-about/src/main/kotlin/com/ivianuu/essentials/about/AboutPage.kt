@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

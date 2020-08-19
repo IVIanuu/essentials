@@ -2,31 +2,32 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.drawBackground
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.height
-import androidx.ui.layout.padding
-import androidx.ui.layout.size
-import androidx.ui.material.Button
-import androidx.ui.material.IconButton
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Clear
-import androidx.ui.material.icons.filled.Error
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.drawBackground
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.coroutines.parallelMap
@@ -117,7 +118,7 @@ private fun NotificationsList(
                 leading = {
                     Box(
                         modifier = Modifier.size(40.dp)
-                            .drawBackground(
+                            .background(
                                 color = notification.color,
                                 shape = CircleShape
                             )

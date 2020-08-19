@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.Composable
-import androidx.ui.graphics.Color
-import androidx.ui.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material.MaterialTheme
 import com.ivianuu.essentials.util.isDark
 
 @Composable

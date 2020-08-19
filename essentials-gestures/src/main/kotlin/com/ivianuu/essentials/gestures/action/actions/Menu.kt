@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.MoreVert
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction

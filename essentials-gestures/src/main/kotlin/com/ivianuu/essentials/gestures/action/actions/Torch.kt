@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.FlashOff
-import androidx.ui.material.icons.filled.FlashOn
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FlashOff
+import androidx.compose.material.icons.filled.FlashOn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon

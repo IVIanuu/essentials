@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Border
-import androidx.ui.graphics.Color
-import androidx.ui.layout.size
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Surface
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Border
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog

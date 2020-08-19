@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev589"
+    const val version = "${Build.versionName}-dev590"
 }
 
 object Deps {
@@ -39,7 +39,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.2.0"
 
         object Compose {
-            const val version = "0.1.0-dev15"
+            const val version = "0.1.0-dev16"
             const val compiler = "androidx.compose:compose-compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
@@ -86,7 +86,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev589"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev590"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
@@ -94,7 +94,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev297"
+        private const val version = "0.0.1-dev299"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"
@@ -105,7 +105,7 @@ object Deps {
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.0-rc"
+        private const val version = "1.4.0"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.Composable
-import androidx.compose.remember
-import androidx.ui.core.ConfigurationAmbient
-import androidx.ui.core.Layout
-import androidx.ui.core.Modifier
-import androidx.ui.core.gesture.tapGestureFilter
-import androidx.ui.foundation.Box
-import androidx.ui.unit.PxBounds
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.gesture.tapGestureFilter
+import androidx.compose.foundation.Box
+import androidx.compose.ui.Layout
+import androidx.compose.ui.platform.ConfigurationAmbient
+import androidx.compose.ui.unit.PxBounds
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.untrackedState
@@ -80,7 +80,7 @@ private fun PopupLayout(
     modifier: Modifier,
     children: @Composable () -> Unit
 ) {
-    Layout(children = children, modifier = modifier) { measureables, constraints, _ ->
+    Layout(children = children, modifier = modifier) { measureables, constraints ->
         val childConstraints = constraints.copy(
             minWidth = 0,
             minHeight = 0

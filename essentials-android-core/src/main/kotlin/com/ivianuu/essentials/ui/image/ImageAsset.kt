@@ -5,13 +5,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.FrameLayout
 import androidx.core.graphics.drawable.toBitmap
-import androidx.ui.graphics.AndroidImageAssetAccessor
-import androidx.ui.graphics.BlendMode
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.ColorFilter
-import androidx.ui.graphics.ImageAsset
-import androidx.ui.graphics.vector.VectorAsset
-import androidx.ui.unit.Density
+import androidx.compose.ui.graphics.AndroidImageAssetAccessor
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.unit.Density
 
 
 fun Drawable.toImageAsset(): ImageAsset = toBitmap().toImageAsset()
@@ -22,7 +22,7 @@ fun ImageAsset.toBitmap(): Bitmap = AndroidImageAssetAccessor.getBitmap(this)
 
 fun VectorAsset.toBitmap(
     context: Context,
-    colorFilter: ColorFilter = ColorFilter(Color.White, BlendMode.srcIn)
+    colorFilter: ColorFilter = ColorFilter(Color.White, BlendMode.SrcIn)
 ): Bitmap {
     val view = FrameLayout(context)
 

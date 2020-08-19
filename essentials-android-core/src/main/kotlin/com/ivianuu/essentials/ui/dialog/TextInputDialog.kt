@@ -16,28 +16,27 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.compose.onActive
-import androidx.compose.state
-import androidx.ui.core.Modifier
-import androidx.ui.core.drawOpacity
-import androidx.ui.core.focus.FocusModifier
-import androidx.ui.foundation.Text
-import androidx.ui.input.KeyboardType
-import androidx.ui.layout.Stack
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onActive
+import androidx.compose.runtime.state
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
+import androidx.compose.ui.FocusModifier
+import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.TextField
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 fun TextInputRoute(
     initial: String = "",
-    hint: String? = null,
+    label: @Composable () -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
-    title: String? = null,
+    title: @Composable (() -> Unit)? = null,
     allowEmpty: Boolean = true
 ) = DialogRoute {
     val navigator = NavigatorAmbient.current
@@ -47,13 +46,9 @@ fun TextInputRoute(
     TextInputDialog(
         value = currentValue,
         onValueChange = setCurrentValue,
-        hint = hint,
+        label = label,
         keyboardType = keyboardType,
-        title = title?.let {
-            {
-                Text(it)
-            }
-        },
+        title = title,
         positiveButton = {
             TextButton(
                 enabled = allowEmpty || currentValue.isNotEmpty(),
@@ -72,7 +67,7 @@ fun TextInputRoute(
 fun TextInputDialog(
     value: String,
     onValueChange: (String) -> Unit,
-    hint: String? = null,
+    label: @Composable (() -> Unit)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
@@ -89,13 +84,6 @@ fun TextInputDialog(
         title = title,
         content = {
             Stack {
-                if (value.isEmpty() && hint != null) {
-                    Text(
-                        text = hint,
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.drawOpacity(0.5f)
-                    )
-                }
                 val focusModifier = FocusModifier()
 
                 TextField(
@@ -103,7 +91,8 @@ fun TextInputDialog(
                     onValueChange = onValueChange,
                     keyboardType = keyboardType,
                     textStyle = MaterialTheme.typography.subtitle1,
-                    modifier = focusModifier
+                    modifier = focusModifier,
+                    label = label ?: {}
                 )
 
                 onActive {

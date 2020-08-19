@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.SkipNext
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SkipNext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.GivenAction
 

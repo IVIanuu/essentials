@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
-import androidx.compose.Composable
-import androidx.compose.rememberCoroutineScope
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.material.Button
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Menu
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.ui.platform.ContextAmbient
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc

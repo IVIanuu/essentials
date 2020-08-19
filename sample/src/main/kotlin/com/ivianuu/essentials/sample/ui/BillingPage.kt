@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.compose.collectAsState
-import androidx.compose.remember
-import androidx.compose.rememberCoroutineScope
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.height
-import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.consumePurchase
 import com.ivianuu.essentials.billing.isPurchased

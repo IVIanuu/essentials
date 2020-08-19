@@ -4,31 +4,31 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.drawable.Icon
-import androidx.compose.Composable
-import androidx.compose.getValue
-import androidx.compose.launchInComposition
-import androidx.compose.onActive
-import androidx.compose.onCommit
-import androidx.compose.onDispose
-import androidx.compose.setValue
-import androidx.compose.state
-import androidx.compose.stateFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.onActive
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.runtime.stateFor
 import androidx.core.app.NotificationCompat
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.toArgb
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.height
-import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ChatBubble
-import androidx.ui.unit.dp
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -67,7 +67,7 @@ fun ForegroundJobPage() {
         var count by stateFor(foregroundJob) { 0 }
 
         foregroundJob?.let { currentJob ->
-            onCommit(count) {
+            onPreCommit(count) {
                 currentJob.updateNotification(
                     buildNotification(count, primaryColor)
                 )

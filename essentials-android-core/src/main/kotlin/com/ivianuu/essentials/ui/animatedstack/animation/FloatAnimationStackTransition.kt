@@ -1,12 +1,12 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.AnimationSpec
-import androidx.animation.Easing
-import androidx.animation.FastOutSlowInEasing
-import androidx.animation.TweenSpec
-import androidx.compose.Composable
-import androidx.compose.remember
-import androidx.ui.animation.animatedFloat
+import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatedstack.StackTransition

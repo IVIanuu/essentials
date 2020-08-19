@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.coil
 
-import androidx.compose.Composable
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Modifier
-import androidx.ui.core.WithConstraints
-import androidx.ui.foundation.Image
-import androidx.ui.graphics.painter.ImagePainter
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.platform.ContextAmbient
 import coil.Coil
 import coil.request.GetRequest
 import coil.request.GetRequestBuilder

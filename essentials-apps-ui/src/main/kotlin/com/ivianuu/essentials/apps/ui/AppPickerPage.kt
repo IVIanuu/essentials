@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.key
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.layout.size
-import androidx.ui.res.stringResource
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps

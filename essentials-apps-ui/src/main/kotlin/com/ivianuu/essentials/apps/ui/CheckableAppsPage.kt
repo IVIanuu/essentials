@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.onCommit
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.layout.size
-import androidx.ui.material.Checkbox
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Checkbox
+import androidx.compose.runtime.onPreCommit
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
@@ -67,7 +67,7 @@ fun CheckableAppsPage(
         checkableAppsStore()
     }
 
-    onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
+    onPreCommit(checkedApps, onCheckedAppsChanged, appFilter) {
         dispatch(CheckableAppsAction.UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
     }
 

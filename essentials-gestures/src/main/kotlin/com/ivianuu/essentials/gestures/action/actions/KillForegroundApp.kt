@@ -2,8 +2,8 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Clear
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.Action

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
-import androidx.compose.Immutable
+import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Dp
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Millis

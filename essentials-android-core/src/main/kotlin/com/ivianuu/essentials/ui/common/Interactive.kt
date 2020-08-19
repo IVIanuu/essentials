@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.core.drawOpacity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawOpacity
 
 @Composable
 fun Modifier.interactive(interactive: Boolean): Modifier {

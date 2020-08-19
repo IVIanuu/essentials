@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerPage
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult

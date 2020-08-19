@@ -16,18 +16,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.compose.key
-import androidx.compose.remember
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.graphics.Color
-import androidx.ui.layout.padding
-import androidx.ui.layout.size
-import androidx.ui.savedinstancestate.rememberSavedInstanceState
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.Text
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
 import com.ivianuu.essentials.apps.ui.AppPickerPage
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage

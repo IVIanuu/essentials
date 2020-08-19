@@ -1,8 +1,6 @@
-package androidx.compose;
+package androidx.compose.runtime;
 
-import org.jetbrains.annotations
-        .NotNull;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public final class CompositionReferenceAccessor {

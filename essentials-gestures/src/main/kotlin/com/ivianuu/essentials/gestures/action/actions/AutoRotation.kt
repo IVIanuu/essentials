@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ScreenLockRotation
-import androidx.ui.material.icons.filled.ScreenRotation
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ScreenLockRotation
+import androidx.compose.material.icons.filled.ScreenRotation
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory

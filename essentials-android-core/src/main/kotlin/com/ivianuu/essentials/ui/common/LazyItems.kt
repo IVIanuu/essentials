@@ -1,37 +1,36 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.Applier
-import androidx.compose.Composable
-import androidx.compose.ComposableContract
-import androidx.compose.Composition
-import androidx.compose.CompositionReference
-import androidx.compose.ExperimentalComposeApi
-import androidx.compose.Recomposer
-import androidx.compose.compositionReference
-import androidx.compose.currentComposer
-import androidx.compose.emit
-import androidx.compose.onDispose
-import androidx.ui.core.Constraints
-import androidx.ui.core.ExperimentalLayoutNodeApi
-import androidx.ui.core.LayoutDirection
-import androidx.ui.core.LayoutNode
-import androidx.ui.core.Measurable
-import androidx.ui.core.MeasureScope
-import androidx.ui.core.MeasuringIntrinsicsMeasureBlocks
-import androidx.ui.core.Modifier
-import androidx.ui.core.Placeable
-import androidx.ui.core.Ref
-import androidx.ui.core.clipToBounds
-import androidx.ui.core.gesture.scrollorientationlocking.Orientation
-import androidx.ui.core.materialize
-import androidx.ui.core.subcomposeInto
-import androidx.ui.foundation.gestures.rememberScrollableController
-import androidx.ui.foundation.gestures.scrollable
-import androidx.ui.layout.InnerPadding
-import androidx.ui.layout.Spacer
-import androidx.ui.layout.padding
-import androidx.ui.savedinstancestate.rememberSavedInstanceState
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Applier
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposableContract
+import androidx.compose.runtime.Composition
+import androidx.compose.runtime.CompositionReference
+import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.compositionReference
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.emit
+import androidx.compose.runtime.onDispose
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.Measurable
+import androidx.compose.ui.MeasureScope
+import androidx.compose.ui.MeasuringIntrinsicsMeasureBlocks
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Placeable
+import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
+import androidx.compose.ui.materialize
+import androidx.compose.foundation.gestures.rememberScrollableController
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.node.ExperimentalLayoutNodeApi
+import androidx.compose.ui.node.LayoutNode
+import androidx.compose.ui.node.Ref
+import androidx.compose.ui.platform.subcomposeInto
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -334,7 +333,7 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
 
         val nextItem = composeChildForDataIndex(nextItemIndex)
 
-        val childPlaceable = nextItem.measure(childConstraints, layoutDirection)
+        val childPlaceable = nextItem.measure(childConstraints)
         measuredThisPass[nextItemIndex] = childPlaceable
 
         val childSize = childPlaceable.mainAxisSize
@@ -369,8 +368,7 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
         override fun measure(
             measureScope: MeasureScope,
             measurables: List<Measurable>,
-            constraints: Constraints,
-            layoutDirection: LayoutDirection
+            constraints: Constraints
         ): MeasureScope.MeasureResult {
             measuredThisPass.clear()
             if (forceRecompose) {
@@ -407,7 +405,7 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
             while (mainAxisUsed <= maxMainAxis && index.value < items.size) {
                 val node = getNodeForDataIndex(index)
                 val placeable = measuredThisPass.getOrPut(index) {
-                    node.measure(childConstraints, layoutDirection)
+                    node.measure(childConstraints)
                 }
                 val childMainAxisSize = placeable.mainAxisSize
                 mainAxisUsed += childMainAxisSize

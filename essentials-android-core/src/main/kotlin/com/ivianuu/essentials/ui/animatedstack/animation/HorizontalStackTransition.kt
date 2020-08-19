@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.animation.AnimationSpec
+import androidx.compose.animation.core.AnimationSpec
 import com.ivianuu.essentials.ui.animatable.setFractionTranslationX
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 

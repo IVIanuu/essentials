@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
-import androidx.compose.Composable
-import androidx.ui.foundation.Icon
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Apps
+import androidx.compose.runtime.Composable
+import androidx.compose.foundation.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apps
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo

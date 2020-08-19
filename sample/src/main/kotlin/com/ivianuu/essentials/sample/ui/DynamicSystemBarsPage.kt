@@ -1,18 +1,19 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.core.layoutId
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.graphics.Color
-import androidx.ui.layout.Stack
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.height
-import androidx.ui.savedinstancestate.rememberSavedInstanceState
-import androidx.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.ScrollerPosition
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.VerticalScroller
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -21,9 +22,7 @@ import com.ivianuu.essentials.util.isLight
 @Composable
 fun DynamicSystemBarsPage() {
     Stack {
-        val scrollerPosition = ScrollerPosition()
-
-        VerticalScroller(scrollerPosition = scrollerPosition) {
+        ScrollableColumn {
             val colors: List<Color> = rememberSavedInstanceState {
                 ColorPickerPalette.values()
                     .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }

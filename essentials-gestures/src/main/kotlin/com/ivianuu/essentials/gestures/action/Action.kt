@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.Effect

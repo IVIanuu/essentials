@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.Composable
-import androidx.compose.key
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.material.RadioButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.VerticalScroller
+import androidx.compose.material.RadioButton
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -49,7 +50,7 @@ fun <T> SingleChoiceListDialog(
         buttonLayout = buttonLayout,
         applyContentPadding = false,
         content = {
-            VerticalScroller {
+            ScrollableColumn {
                 items.forEachIndexed { index, item ->
                     key(index) {
                         SingleChoiceDialogListItem(

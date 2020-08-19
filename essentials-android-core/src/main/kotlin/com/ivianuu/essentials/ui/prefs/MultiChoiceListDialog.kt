@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.state
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.state
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Text
+import androidx.compose.material.TextButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text

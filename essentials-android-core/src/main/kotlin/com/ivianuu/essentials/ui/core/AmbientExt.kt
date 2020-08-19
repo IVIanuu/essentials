@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.Ambient
-import androidx.compose.Composable
-import androidx.compose.CompositionReferenceAccessor
-import androidx.compose.compositionReference
+import androidx.compose.runtime.CompositionReferenceAccessor
+import androidx.compose.runtime.Ambient
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionReference
 
 @Composable
 val <T : Any> Ambient<T>.currentOrNull: T?

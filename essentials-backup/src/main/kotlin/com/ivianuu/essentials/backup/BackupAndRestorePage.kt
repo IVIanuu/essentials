@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.backup
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupClicked
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreClicked

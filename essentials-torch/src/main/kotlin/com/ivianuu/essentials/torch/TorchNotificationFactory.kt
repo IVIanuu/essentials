@@ -24,8 +24,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.FlashOn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FlashOn
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.Resources
