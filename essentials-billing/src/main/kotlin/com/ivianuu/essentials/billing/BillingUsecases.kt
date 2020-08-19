@@ -23,6 +23,7 @@ import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -124,8 +125,13 @@ fun isPurchased(sku: Sku): Flow<Boolean> {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) offer(Unit)
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
-        awaitClose { ProcessLifecycleOwner.get().lifecycle.removeObserver(observer) }
+        withContext(dispatchers.main) {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
+        }
+        awaitClose()
+        withContext(dispatchers.main + NonCancellable) {
+            ProcessLifecycleOwner.get().lifecycle.removeObserver(observer)
+        }
     }
 
     return merge(
