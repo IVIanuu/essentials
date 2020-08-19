@@ -16,25 +16,13 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
-import androidx.compose.runtime.stateFor
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.foundation.Border
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.ScrollerPosition
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.VerticalScroller
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.Arrangement
@@ -48,21 +36,31 @@ import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import com.ivianuu.essentials.ui.core.BaseTextField
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
@@ -339,18 +337,18 @@ private fun ColorEditorHeader(
                     color.toHexString(includeAlpha = showAlphaSelector)
                 }
                 Text("#")
-                TextField(
+                BaseTextField(
                     value = hexInput,
                     onValueChange = { newValue ->
                         if ((showAlphaSelector && newValue.length > 8) ||
                             (!showAlphaSelector && newValue.length > 6)
-                        ) return@TextField
+                        ) return@BaseTextField
 
                         hexInput = newValue
 
                         if ((showAlphaSelector && newValue.length < 8) ||
                             (!showAlphaSelector && newValue.length < 6)
-                        ) return@TextField
+                        ) return@BaseTextField
 
                         val newColor = try {
                             newValue.toColor()
@@ -359,8 +357,7 @@ private fun ColorEditorHeader(
                         }
 
                         if (newColor != null) onColorChanged(newColor)
-                    },
-                    label = {}
+                    }
                 )
             }
         }

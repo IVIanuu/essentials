@@ -16,6 +16,14 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.BaseTextField
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,15 +31,8 @@ import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Stack
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextField
 import androidx.compose.ui.FocusModifier
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.text.input.TextFieldValue
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
@@ -41,6 +42,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Reader
 
+@OptIn(ExperimentalFoundationApi::class)
 @Reader
 @Composable
 fun TextInputPage() {
@@ -73,12 +75,11 @@ fun TextInputPage() {
                                         .gravity(Alignment.CenterStart) + focusModifier
                                 )
                             }
-                            TextField(
+                            BaseTextField(
                                 value = state.inputValue,
                                 onValueChange = { state.inputValue = it },
                                 textStyle = MaterialTheme.typography.subtitle1,
-                                modifier = Modifier.gravity(Alignment.CenterStart),
-                                label = {}
+                                modifier = Modifier.gravity(Alignment.CenterStart)
                             )
                         }
 
