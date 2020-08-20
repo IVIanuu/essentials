@@ -16,252 +16,76 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.Stack
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ModalDrawerLayout
-import androidx.compose.material.Surface
-import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.DrawerConstants
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticAmbientOf
-import androidx.compose.ui.Layout
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.id
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.essentials.ui.core.ConsumeInsets
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.ProvideInsets
+import com.ivianuu.essentials.ui.core.currentInsets
 
 @Composable
 fun Scaffold(
-    fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    topBar: @Composable (() -> Unit)? = null,
+    bottomBar: @Composable (() -> Unit)? = null,
+    floatingActionButton: @Composable (() -> Unit)? = null,
+    floatingActionButtonPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
+    isFloatingActionButtonDocked: Boolean = false,
+    drawerContent: @Composable (() -> Unit)? = null,
+    drawerShape: Shape = MaterialTheme.shapes.large,
+    drawerElevation: Dp = DrawerConstants.DefaultElevation,
+    backgroundColor: Color = MaterialTheme.colors.background,
     applyInsets: Boolean = true,
-    drawerContent: @Composable (() -> Unit)? = null,
-    topBar: @Composable (() -> Unit)? = null,
-    bottomBar: @Composable (() -> Unit)? = null,
-    fab: @Composable (() -> Unit)? = null,
-    body: @Composable (() -> Unit)? = null
+    bodyContent: @Composable () -> Unit
 ) {
-    val scaffoldState = remember { ScaffoldState() }
-    scaffoldState.fabPosition = fabPosition
-    scaffoldState.applyInsets = applyInsets
-    Scaffold(
-        state = scaffoldState,
-        drawerContent = drawerContent,
-        topBar = topBar,
-        body = body,
-        bottomBar = bottomBar,
-        fab = fab
-    )
-}
-
-@Composable
-fun Scaffold(
-    state: ScaffoldState,
-    drawerContent: @Composable (() -> Unit)? = null,
-    topBar: @Composable (() -> Unit)? = null,
-    bottomBar: @Composable (() -> Unit)? = null,
-    fab: @Composable (() -> Unit)? = null,
-    body: @Composable (() -> Unit)? = null
-) {
-    // update state
-    state.hasTopBar = topBar != null
-    state.hasDrawer = drawerContent != null
-    state.hasBody = body != null
-    state.hasBottomBar = bottomBar != null
-    state.hasFab = fab != null
-
-    if (state.isDrawerOpen) {
-        onBackPressed { state.isDrawerOpen = false }
-    }
-
-    Providers(ScaffoldAmbient provides state) {
-        var layout: @Composable () -> Unit = {
-            Surface {
-                ScaffoldLayout(state = state) {
-                    if (topBar != null) {
-                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.TopAppBar)) {
-                            topBar()
-                        }
-                    }
-
-                    if (body != null) {
-                        ConsumeInsets(
-                            top = state.applyInsets && state.hasTopBar,
-                            bottom = state.applyInsets && state.hasBottomBar
-                        ) {
-                            Stack(modifier = Modifier.layoutId(ScaffoldSlot.Body)) {
-                                body()
-                            }
-                        }
-                    }
-
-                    if (bottomBar != null) {
-                        Stack(modifier = Modifier.layoutId(ScaffoldSlot.BottomBar)) {
-                            bottomBar()
-                        }
-                    }
-
-                    if (fab != null) {
+    InsetsPadding(
+        start = applyInsets,
+        top = false,
+        end = applyInsets,
+        bottom = false
+    ) {
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = topBar,
+            bottomBar = bottomBar,
+            floatingActionButton = if (floatingActionButton != null) (
+                    {
                         InsetsPadding(
-                            modifier = Modifier.layoutId(ScaffoldSlot.Fab),
-                            top = state.applyInsets && !state.hasTopBar,
-                            bottom = state.applyInsets && !state.hasBottomBar
+                            top = applyInsets && topBar == null,
+                            bottom = applyInsets && bottomBar == null
                         ) {
                             Stack {
-                                fab()
+                                floatingActionButton()
                             }
                         }
                     }
-                }
-            }
-        }
-
-        if (drawerContent != null) {
-            val tmp = layout
-            layout = {
-                ModalDrawerLayout(
-                    drawerState = rememberDrawerState(DrawerValue.Closed),// todo if (state.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
-                    gesturesEnabled = state.isDrawerGesturesEnabled,
-                    drawerContent = {
-                        Surface {
-                            drawerContent()
-                        }
-                    },
-                    bodyContent = tmp
-                )
-            }
-        }
-
-        InsetsPadding(
-            modifier = Modifier.fillMaxSize(),
-            left = state.applyInsets,
-            right = state.applyInsets,
-            top = false,
-            bottom = false,
-            children = layout
-        )
-    }
-}
-
-class ScaffoldState {
-
-    var hasTopBar by mutableStateOf(false)
-        internal set
-    var hasDrawer by mutableStateOf(false)
-        internal set
-    var hasBody by mutableStateOf(false)
-        internal set
-    var hasBottomBar by mutableStateOf(false)
-        internal set
-    var hasFab by mutableStateOf(false)
-        internal set
-
-    var isDrawerOpen by mutableStateOf(false)
-    var isDrawerGesturesEnabled by mutableStateOf(false)
-
-    var fabPosition by mutableStateOf(FabPosition.End)
-
-    var applyInsets by mutableStateOf(true)
-
-    enum class FabPosition { Center, End }
-
-}
-
-val ScaffoldAmbient =
-    staticAmbientOf<ScaffoldState>()
-
-@Composable
-private fun ScaffoldLayout(
-    state: ScaffoldState,
-    children: @Composable () -> Unit
-) {
-    Layout(children = children) { measurables, incomingConstraints ->
-        val width = incomingConstraints.maxWidth
-        val height = incomingConstraints.maxHeight
-
-        val topAppBarMeasureable = measurables.firstOrNull {
-            it.id == ScaffoldSlot.TopAppBar
-        }
-        val bodyMeasureable = measurables.firstOrNull {
-            it.id == ScaffoldSlot.Body
-        }
-        val bottomBarMeasureable = measurables.firstOrNull {
-            it.id == ScaffoldSlot.BottomBar
-        }
-        val fabMeasureable = measurables.firstOrNull {
-            it.id == ScaffoldSlot.Fab
-        }
-
-        var barConstraints = incomingConstraints.copy(
-            minWidth = width,
-            maxWidth = width,
-            minHeight = 0
-        )
-
-        val topAppBarPlaceable = topAppBarMeasureable
-            ?.measure(barConstraints)
-            ?.also { placeable ->
-                barConstraints =
-                    barConstraints.copy(maxHeight = barConstraints.maxHeight - placeable.height)
-            }
-        val topAppBarTop = if (topAppBarPlaceable != null) 0 else null
-        val topAppBarBottom =
-            if (topAppBarPlaceable != null) topAppBarTop!! + topAppBarPlaceable.height else null
-
-        val bottomBarPlaceable = bottomBarMeasureable?.measure(barConstraints)
-        val bottomBarBottom = if (bottomBarPlaceable != null) height else null
-        val bottomBarTop =
-            if (bottomBarPlaceable != null) bottomBarBottom!! - bottomBarPlaceable.height else null
-
-        val bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else 0
-        val bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
-
-        val bodyHeight = if (bodyMeasureable != null) bodyBottom - bodyTop else null
-
-        val bodyPlaceable = if (bodyMeasureable == null) {
-            null
-        } else {
-            val bodyConstraints = Constraints(
-                minWidth = width,
-                maxWidth = width,
-                minHeight = bodyHeight!!,
-                maxHeight = bodyHeight
+                    ) else null,
+            floatingActionButtonPosition = floatingActionButtonPosition,
+            isFloatingActionButtonDocked = isFloatingActionButtonDocked,
+            drawerContent = drawerContent,
+            drawerShape = drawerShape,
+            drawerElevation = drawerElevation,
+            backgroundColor = backgroundColor
+        ) { bodyPadding ->
+            val insets = if (applyInsets) currentInsets() else InnerPadding()
+            ProvideInsets(
+                InnerPadding(
+                    start = max(bodyPadding.start, insets.start),
+                    top = if (topBar == null) insets.top else bodyPadding.top,
+                    end = max(bodyPadding.end, insets.end),
+                    bottom = if (bottomBar == null) insets.bottom else bodyPadding.bottom
+                ),
+                bodyContent
             )
-
-            bodyMeasureable.measure(bodyConstraints)
-        }
-
-        val fabPlaceable =
-            fabMeasureable?.measure(incomingConstraints.copy(minWidth = 0, minHeight = 0))
-
-        val fabPadding = 16.dp.toIntPx()
-
-        val fabTop = if (fabPlaceable != null) {
-            if (bottomBarMeasureable != null) bottomBarTop!! - fabPlaceable.height - fabPadding
-            else height - fabPlaceable.height - fabPadding
-        } else null
-        val fabLeft = if (fabPlaceable != null) {
-            when (state.fabPosition) {
-                ScaffoldState.FabPosition.Center -> width / 2 - fabPlaceable.width / 2
-                ScaffoldState.FabPosition.End -> width - fabPlaceable.width - fabPadding
-            }
-        } else null
-
-        layout(width, height) {
-            bodyPlaceable?.place(0, bodyTop)
-            fabPlaceable?.place(fabLeft!!, fabTop!!)
-            bottomBarPlaceable?.place(0, bottomBarTop!!)
-            topAppBarPlaceable?.place(0, topAppBarTop!!)
         }
     }
 }
-
-private enum class ScaffoldSlot { TopAppBar, Body, BottomBar, Fab }

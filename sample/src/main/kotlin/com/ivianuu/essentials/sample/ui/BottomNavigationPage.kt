@@ -61,7 +61,7 @@ fun BottomNavigationPage() {
                 elevation = 8.dp,
                 color = MaterialTheme.colors.primary
             ) {
-                InsetsPadding(left = false, top = false, right = false) {
+                InsetsPadding(start = false, top = false, end = false) {
                     BottomNavigation(
                         backgroundColor = MaterialTheme.colors.primary,
                         elevation = 0.dp

@@ -35,44 +35,43 @@ fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
     popNavigatorOnceSecureSettingsGranted(toast = true)
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) },
-        body = {
-            InsettingScrollableColumn {
-                SecureSettingsHeader(
-                    stringResource(
-                        if (showHideNavBarHint) {
-                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+        topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
+    ) {
+        InsettingScrollableColumn {
+            SecureSettingsHeader(
+                stringResource(
+                    if (showHideNavBarHint) {
+                        R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                    } else {
+                        R.string.es_pref_secure_settings_header_summary
+                    }
+                )
+            )
+
+            ListItem(
+                title = { Text(R.string.es_pref_use_pc) },
+                subtitle = { Text(R.string.es_pref_use_pc_summary) },
+                onClick = {
+                    navigator.push {
+                        SecureSettingsPcInstructionsPage()
+                    }
+                }
+            )
+
+            val scope = rememberCoroutineScope()
+            ListItem(
+                title = { Text(R.string.es_pref_use_root) },
+                subtitle = { Text(R.string.es_pref_use_root_summary) },
+                onClick = {
+                    scope.launch {
+                        if (SecureSettings.grantPermissionViaRoot()) {
+                            Toaster.toast(R.string.es_secure_settings_permission_granted)
                         } else {
-                            R.string.es_pref_secure_settings_header_summary
-                        }
-                    )
-                )
-
-                ListItem(
-                    title = { Text(R.string.es_pref_use_pc) },
-                    subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                    onClick = {
-                        navigator.push {
-                            SecureSettingsPcInstructionsPage()
+                            Toaster.toast(R.string.es_secure_settings_no_root)
                         }
                     }
-                )
-
-                val scope = rememberCoroutineScope()
-                ListItem(
-                    title = { Text(R.string.es_pref_use_root) },
-                    subtitle = { Text(R.string.es_pref_use_root_summary) },
-                    onClick = {
-                        scope.launch {
-                            if (SecureSettings.grantPermissionViaRoot()) {
-                                Toaster.toast(R.string.es_secure_settings_permission_granted)
-                            } else {
-                                Toaster.toast(R.string.es_secure_settings_no_root)
-                            }
-                        }
-                    }
-                )
-            }
+                }
+            )
         }
-    )
+    }
 }

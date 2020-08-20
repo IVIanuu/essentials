@@ -37,7 +37,7 @@ fun InsettingScrollableColumn(
     ) {
         val insets = InsetsAmbient.current
         Spacer(Modifier.height(insets.top))
-        ConsumeInsets(left = false, right = false) {
+        ConsumeInsets(start = false, end = false) {
             children()
         }
         Spacer(Modifier.height(insets.bottom))
@@ -78,7 +78,7 @@ fun <T> InsettingLazyColumnItems(
     itemContent: @Composable (T) -> Unit
 ) {
     val insets = InsetsAmbient.current
-    ConsumeInsets(left = false, right = false) {
+    ConsumeInsets(start = false, end = false) {
         LazyColumnItems(
             items = remember(items) {
                 buildList {

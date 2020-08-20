@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyend 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,68 +32,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.core.view.WindowInsetsCompat
 import kotlin.math.max
 
 @Composable
 fun InsetsPadding(
     modifier: Modifier = Modifier,
-    left: Boolean = true,
+    start: Boolean = true,
     top: Boolean = true,
-    right: Boolean = true,
+    end: Boolean = true,
     bottom: Boolean = true,
     children: @Composable () -> Unit
 ) {
     val padding = InsetsAmbient.current
     Box(
         modifier = Modifier.absolutePadding(
-            if (left) padding.start else 0.dp,
+            if (start) padding.start else 0.dp,
             if (top) padding.top else 0.dp,
-            if (right) padding.end else 0.dp,
+            if (end) padding.end else 0.dp,
             if (bottom) padding.bottom else 0.dp
         ).then(modifier)
     ) {
-        ConsumeInsets(left, top, right, bottom, children)
+        ConsumeInsets(start, top, end, bottom, children)
     }
 }
 
 internal val InsetsAmbient = ambientOf { InnerPadding() }
 
 @Composable
+fun currentInsets(): InnerPadding = InsetsAmbient.current
+
+@Composable
 fun ConsumeInsets(
-    left: Boolean = true,
+    start: Boolean = true,
     top: Boolean = true,
-    right: Boolean = true,
+    end: Boolean = true,
     bottom: Boolean = true,
     children: @Composable () -> Unit
 ) {
     val currentInsets = InsetsAmbient.current
     ProvideInsets(
         InnerPadding(
-            if (left) 0.dp else currentInsets.start,
+            if (start) 0.dp else currentInsets.start,
             if (top) 0.dp else currentInsets.top,
-            if (right) 0.dp else currentInsets.end,
+            if (end) 0.dp else currentInsets.end,
             if (bottom) 0.dp else currentInsets.bottom
         ),
         children = children
-    )
-}
-
-@Composable
-fun ConsumeInsets(
-    insets: InnerPadding,
-    children: @Composable () -> Unit
-) {
-    val current = InsetsAmbient.current
-    ProvideInsets(
-        InnerPadding(
-            start = max(0.dp, current.start - insets.start),
-            top = max(0.dp, current.top - insets.top),
-            end = max(0.dp, current.end - insets.end),
-            bottom = max(0.dp, current.bottom - insets.bottom)
-        ),
-        children
     )
 }
 

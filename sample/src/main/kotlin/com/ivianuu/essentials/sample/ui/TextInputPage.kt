@@ -90,7 +90,7 @@ fun TextInputPage() {
                 }
             )
         },
-        fab = {
+        floatingActionButton = {
             if (!state.searchVisible) {
                 ExtendedFloatingActionButton(
                     text = { Text("Search") },

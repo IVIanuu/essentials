@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,8 +47,6 @@ import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.ScaffoldState
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
@@ -61,12 +60,12 @@ import kotlin.time.milliseconds
 fun ScaffoldPage() {
     val controls = remember { ScaffoldControls() }
 
-    Scaffold(
+    com.ivianuu.essentials.ui.material.Scaffold(
         topBar = if (controls.showTopBar) ({
             TopAppBar(title = { Text("Scaffold") })
         }) else null,
-        fabPosition = controls.fabPosition,
-        fab = {
+        floatingActionButtonPosition = controls.fabPosition,
+        floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text("Click me") },
                 modifier = Modifier.fabAnimation(controls.showFab),
@@ -82,7 +81,7 @@ fun ScaffoldPage() {
                 elevation = 8.dp,
                 color = MaterialTheme.colors.primary
             ) {
-                InsetsPadding(left = false, top = false, right = false) {
+                InsetsPadding(start = false, top = false, end = false) {
                     Box(
                         modifier = Modifier.height(56.dp)
                             .fillMaxWidth()
@@ -144,7 +143,7 @@ fun ScaffoldPage() {
                     navigator.push(
                         DialogRoute {
                             SingleChoiceListDialog(
-                                items = ScaffoldState.FabPosition.values().toList(),
+                                items = Scaffold.FabPosition.values().toList(),
                                 selectedItem = controls.fabPosition,
                                 onSelect = { controls.fabPosition = it },
                                 item = { Text(it.name) }
@@ -161,7 +160,7 @@ private class ScaffoldControls {
     var showTopBar by mutableStateOf(true)
     var showBottomBar by mutableStateOf(false)
     var showFab by mutableStateOf(false)
-    var fabPosition by mutableStateOf(ScaffoldState.FabPosition.End)
+    var fabPosition by mutableStateOf(Scaffold.FabPosition.End)
 }
 
 fun Modifier.fabAnimation(visible: Boolean): Modifier = composed {

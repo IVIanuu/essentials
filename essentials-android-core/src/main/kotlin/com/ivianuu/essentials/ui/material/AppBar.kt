@@ -116,7 +116,7 @@ fun TopAppBar(
             lightIcons = backgroundColor.isLight
         ) else Modifier).then(modifier)
     ) {
-        InsetsPadding(left = false, right = false, bottom = false) {
+        InsetsPadding(start = false, end = false, bottom = false) {
             Row(
                 modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                     .fillMaxWidth()
