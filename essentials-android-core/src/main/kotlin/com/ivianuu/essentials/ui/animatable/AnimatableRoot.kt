@@ -21,7 +21,7 @@ fun ProvideAnimatableRoot(
 ) {
     val state = remember { AnimatableRoot() }
     Providers(AnimatableRootAmbient provides state) {
-        Stack(modifier = modifier + Modifier.animatable(Root)) {
+        Stack(modifier = modifier.then(Modifier.animatable(Root))) {
             children()
             state.animationOverlayEntries.forEach { overlay ->
                 key(overlay) {

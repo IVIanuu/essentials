@@ -16,75 +16,25 @@
 
 package com.ivianuu.essentials.ui.core
 
-import android.content.Context
-import android.content.res.Configuration
-import android.view.Surface
 import android.view.View
-import android.view.WindowManager
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.ambientOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
-import androidx.core.content.getSystemService
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.state
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
-import com.ivianuu.essentials.util.containsFlag
-import android.view.WindowInsets as AndroidWindowInsets
-
-@Composable
-fun SystemBarsPadding(
-    modifier: Modifier = Modifier,
-    left: Boolean = true,
-    top: Boolean = true,
-    right: Boolean = true,
-    bottom: Boolean = true,
-    children: @Composable () -> Unit
-) {
-    val padding = InsetsAmbient.current.systemBars
-    Box(
-        modifier = Modifier.absolutePadding(
-            if (left) padding.start else 0.dp,
-            if (top) padding.top else 0.dp,
-            if (right) padding.end else 0.dp,
-            if (bottom) padding.bottom else 0.dp
-        ) + modifier
-    ) {
-        ConsumeInsets(left, top, right, bottom, children)
-    }
-}
-
-@Composable
-fun ImePadding(
-    modifier: Modifier = Modifier,
-    left: Boolean = true,
-    top: Boolean = true,
-    right: Boolean = true,
-    bottom: Boolean = true,
-    children: @Composable () -> Unit
-) {
-    val padding = InsetsAmbient.current.ime
-    Box(
-        modifier = Modifier.absolutePadding(
-            if (left) padding.start else 0.dp,
-            if (top) padding.top else 0.dp,
-            if (right) padding.end else 0.dp,
-            if (bottom) padding.bottom else 0.dp
-        ) + modifier
-    ) {
-        ConsumeInsets(left, top, right, bottom, children)
-    }
-}
+import androidx.core.view.WindowInsetsCompat
+import kotlin.math.max
 
 @Composable
 fun InsetsPadding(
@@ -95,30 +45,20 @@ fun InsetsPadding(
     bottom: Boolean = true,
     children: @Composable () -> Unit
 ) {
-    val insets = InsetsAmbient.current
+    val padding = InsetsAmbient.current
     Box(
         modifier = Modifier.absolutePadding(
-            if (left) max(insets.systemBars.start, insets.ime.start) else 0.dp,
-            if (top) max(insets.systemBars.top, insets.ime.top) else 0.dp,
-            if (right) max(insets.systemBars.end, insets.ime.end) else 0.dp,
-            if (bottom) max(insets.systemBars.bottom, insets.ime.bottom) else 0.dp
-        ) + modifier
+            if (left) padding.start else 0.dp,
+            if (top) padding.top else 0.dp,
+            if (right) padding.end else 0.dp,
+            if (bottom) padding.bottom else 0.dp
+        ).then(modifier)
     ) {
         ConsumeInsets(left, top, right, bottom, children)
     }
 }
 
-@Immutable
-data class Insets(
-    val systemBars: InnerPadding,
-    val ime: InnerPadding
-) {
-    companion object {
-        val Empty = Insets(InnerPadding(), InnerPadding())
-    }
-}
-
-val InsetsAmbient = ambientOf { Insets.Empty }
+internal val InsetsAmbient = ambientOf { InnerPadding() }
 
 @Composable
 fun ConsumeInsets(
@@ -129,63 +69,66 @@ fun ConsumeInsets(
     children: @Composable () -> Unit
 ) {
     val currentInsets = InsetsAmbient.current
-    Providers(
-        InsetsAmbient provides Insets(
-            systemBars = currentInsets.systemBars.copy(
-                if (left) 0.dp else currentInsets.systemBars.start,
-                if (top) 0.dp else currentInsets.systemBars.top,
-                if (right) 0.dp else currentInsets.systemBars.end,
-                if (bottom) 0.dp else currentInsets.systemBars.bottom
-            ),
-            ime = currentInsets.ime.copy(
-                if (left) 0.dp else currentInsets.ime.start,
-                if (top) 0.dp else currentInsets.ime.top,
-                if (right) 0.dp else currentInsets.ime.end,
-                if (bottom) 0.dp else currentInsets.ime.bottom
-            )
+    ProvideInsets(
+        InnerPadding(
+            if (left) 0.dp else currentInsets.start,
+            if (top) 0.dp else currentInsets.top,
+            if (right) 0.dp else currentInsets.end,
+            if (bottom) 0.dp else currentInsets.bottom
         ),
         children = children
     )
 }
 
 @Composable
-fun ProvideInsets(children: @Composable () -> Unit) {
+fun ConsumeInsets(
+    insets: InnerPadding,
+    children: @Composable () -> Unit
+) {
+    val current = InsetsAmbient.current
+    ProvideInsets(
+        InnerPadding(
+            start = max(0.dp, current.start - insets.start),
+            top = max(0.dp, current.top - insets.top),
+            end = max(0.dp, current.end - insets.end),
+            bottom = max(0.dp, current.bottom - insets.bottom)
+        ),
+        children
+    )
+}
+
+@Composable
+fun ProvideInsets(
+    insets: InnerPadding,
+    children: @Composable () -> Unit
+) {
+    Providers(InsetsAmbient provides insets, children = children)
+}
+
+@Composable
+fun ProvideWindowInsets(children: @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
-    var insets by state { Insets.Empty }
+    var insets by state { InnerPadding() }
 
     val insetsListener = remember {
-        View.OnApplyWindowInsetsListener { _, androidInsets ->
-            val statusBarHidden =
-                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
-            val navigationBarHidden =
-                ownerView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        View.OnApplyWindowInsetsListener { _, rawInsets ->
+            val currentInsets =
+                WindowInsetsCompat.toWindowInsetsCompat(rawInsets, ownerView)
 
-            val zeroSides = if (navigationBarHidden) calculateZeroSides(ownerView.context)
-            else ZeroSides.None
+            val systemBarInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime())
 
             with(density) {
-                val viewPadding = InnerPadding(
-                    start = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else androidInsets.systemWindowInsetLeft.toDp(),
-                    top = if (statusBarHidden) 0.dp else androidInsets.systemWindowInsetTop.toDp(),
-                    end = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else androidInsets.systemWindowInsetRight.toDp(),
-                    bottom = if (navigationBarHidden) 0.dp else androidInsets.systemWindowInsetBottom.toDp()
+                insets = InnerPadding(
+                    start = max(systemBarInsets.left, imeInsets.left).toDp(),
+                    top = max(systemBarInsets.top, imeInsets.top).toDp(),
+                    end = max(systemBarInsets.right, imeInsets.right).toDp(),
+                    bottom = max(systemBarInsets.bottom, imeInsets.bottom).toDp(),
                 )
-
-                val viewInsets = InnerPadding(
-                    start = 0.dp,
-                    top = 0.dp,
-                    end = 0.dp,
-                    bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
-                        ownerView,
-                        androidInsets
-                    ).toDp() else androidInsets.systemWindowInsetBottom.toDp()
-                )
-
-                insets = Insets(viewPadding, viewInsets)
             }
 
-            return@OnApplyWindowInsetsListener androidInsets
+            return@OnApplyWindowInsetsListener rawInsets
         }
     }
 
@@ -214,36 +157,6 @@ fun ProvideInsets(children: @Composable () -> Unit) {
         }
     }
 
-    Providers(InsetsAmbient provides insets, children = children)
+    ProvideInsets(insets, children)
 }
 
-private fun calculateBottomKeyboardInset(
-    view: View,
-    insets: AndroidWindowInsets
-): Int {
-    val screenHeight = view.rootView.height
-    return if (insets.systemWindowInsetBottom.toDouble() < screenHeight.toDouble() * 0.18) 0 else insets.systemWindowInsetBottom
-}
-
-private enum class ZeroSides {
-    None, Left, Right, Both
-}
-
-private fun calculateZeroSides(
-    context: Context
-): ZeroSides {
-    val orientation = context.resources.configuration.orientation
-    val rotation = context.getSystemService<WindowManager>()!!.defaultDisplay.rotation
-
-    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        if (rotation == Surface.ROTATION_90) {
-            return ZeroSides.Right
-        } else if (rotation == Surface.ROTATION_270) {
-            return ZeroSides.Left
-        } else if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-            return ZeroSides.Both
-        }
-    }
-
-    return ZeroSides.None
-}

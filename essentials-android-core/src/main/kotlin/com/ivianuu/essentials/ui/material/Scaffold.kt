@@ -17,6 +17,11 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ModalDrawerLayout
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.getValue
@@ -24,14 +29,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DrawerState
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ModalDrawerLayout
-import androidx.compose.material.Surface
-import androidx.compose.material.rememberDrawerState
 import androidx.compose.ui.Layout
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.id
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Constraints
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.SystemBarsPadding
 
 @Composable
 fun Scaffold(
@@ -112,7 +110,7 @@ fun Scaffold(
                     }
 
                     if (fab != null) {
-                        SystemBarsPadding(
+                        InsetsPadding(
                             modifier = Modifier.layoutId(ScaffoldSlot.Fab),
                             top = state.applyInsets && !state.hasTopBar,
                             bottom = state.applyInsets && !state.hasBottomBar

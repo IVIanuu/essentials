@@ -17,12 +17,6 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.ProvideTextStyle
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ambientOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,10 +26,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
-import com.ivianuu.essentials.ui.core.SystemBarsPadding
+import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
@@ -114,9 +114,9 @@ fun TopAppBar(
         modifier = (if (applySystemBarStyle) Modifier.systemBarStyle(
             bgColor = overlaySystemBarBgColor(backgroundColor),
             lightIcons = backgroundColor.isLight
-        ) else Modifier) + modifier
+        ) else Modifier).then(modifier)
     ) {
-        SystemBarsPadding(left = false, right = false, bottom = false) {
+        InsetsPadding(left = false, right = false, bottom = false) {
             Row(
                 modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                     .fillMaxWidth()

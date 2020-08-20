@@ -19,25 +19,25 @@ package com.ivianuu.essentials.ui.core
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
+import androidx.compose.foundation.contentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.onPreCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.onPositioned
-import androidx.compose.foundation.contentColor
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.onPreCommit
 import androidx.compose.ui.layout.globalBounds
+import androidx.compose.ui.onPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Position
@@ -136,8 +136,8 @@ private class SystemBarManager {
 
         val statusBarHitPoint = remember(windowInsets) {
             Position(
-                windowInsets.systemBars.start,
-                windowInsets.systemBars.top
+                windowInsets.start,
+                windowInsets.top
             )
         }
 
@@ -167,21 +167,21 @@ private class SystemBarManager {
         if (Build.VERSION.SDK_INT >= 26) {
             val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
                 when {
-                    windowInsets.systemBars.bottom != 0.dp -> {
+                    windowInsets.bottom != 0.dp -> {
                         Position(
-                            windowInsets.systemBars.start,
-                            screenHeight - windowInsets.systemBars.bottom
+                            windowInsets.start,
+                            screenHeight - windowInsets.bottom
                         )
                     }
-                    windowInsets.systemBars.start != 0.dp -> {
+                    windowInsets.start != 0.dp -> {
                         Position(
                             0.dp,
                             screenHeight
                         )
                     }
-                    windowInsets.systemBars.end != 0.dp -> {
+                    windowInsets.end != 0.dp -> {
                         Position(
-                            screenWidth - windowInsets.systemBars.end,
+                            screenWidth - windowInsets.end,
                             screenHeight
                         )
                     }

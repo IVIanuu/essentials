@@ -1,9 +1,5 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.ScrollableRow
@@ -14,6 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsAmbient
 
@@ -36,11 +36,11 @@ fun InsettingScrollableColumn(
         isScrollEnabled = isScrollEnabled
     ) {
         val insets = InsetsAmbient.current
-        Spacer(Modifier.height(insets.systemBars.top))
+        Spacer(Modifier.height(insets.top))
         ConsumeInsets(left = false, right = false) {
             children()
         }
-        Spacer(Modifier.height(insets.systemBars.bottom))
+        Spacer(Modifier.height(insets.bottom))
     }
 }
 
@@ -63,11 +63,11 @@ fun InsettingScrollableRow(
         isScrollEnabled = isScrollEnabled
     ) {
         val insets = InsetsAmbient.current
-        Spacer(Modifier.width(insets.systemBars.start))
+        Spacer(Modifier.width(insets.start))
         ConsumeInsets(top = false, bottom = false) {
             children()
         }
-        Spacer(Modifier.width(insets.systemBars.end))
+        Spacer(Modifier.width(insets.end))
     }
 }
 
@@ -91,10 +91,10 @@ fun <T> InsettingLazyColumnItems(
         ) { item ->
             when (item) {
                 LeadingInsetsItem -> {
-                    Spacer(Modifier.height(insets.systemBars.top))
+                    Spacer(Modifier.height(insets.top))
                 }
                 TrailingInsetsItem -> {
-                    Spacer(Modifier.height(insets.systemBars.bottom))
+                    Spacer(Modifier.height(insets.bottom))
                 }
                 else -> itemContent(item as T)
             }
@@ -122,10 +122,10 @@ fun <T> InsettingRowColumnItems(
         ) { item ->
             when (item) {
                 LeadingInsetsItem -> {
-                    Spacer(Modifier.width(insets.systemBars.start))
+                    Spacer(Modifier.width(insets.start))
                 }
                 TrailingInsetsItem -> {
-                    Spacer(Modifier.width(insets.systemBars.end))
+                    Spacer(Modifier.width(insets.end))
                 }
                 else -> itemContent(item as T)
             }

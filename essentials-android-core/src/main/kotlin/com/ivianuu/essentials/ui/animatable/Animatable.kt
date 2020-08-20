@@ -39,7 +39,7 @@ class Animatable(val tag: Any) {
         if (prop is ModifierProp) {
             modifiersByProps[prop] = prop.asModifier(value)
             modifier = baseModifier + (modifiersByProps.values
-                .reduceOrNull { acc, modifier -> acc + modifier } ?: Modifier)
+                .reduceOrNull { acc, modifier -> acc.then(modifier) } ?: Modifier)
         }
         return this
     }

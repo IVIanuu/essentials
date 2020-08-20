@@ -31,8 +31,8 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.core.ProvideInsets
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
+import com.ivianuu.essentials.ui.core.ProvideWindowInsets
 import com.ivianuu.essentials.ui.uiScope
 import com.ivianuu.injekt.android.activityContext
 import com.ivianuu.injekt.runReader
@@ -74,7 +74,7 @@ abstract class EsActivity : AppCompatActivity() {
 
     @Composable
     protected open fun wrappedContent() {
-        ProvideInsets {
+        ProvideWindowInsets {
             ProvideSystemBarManager {
                 val uiSavedStateRegistry = UiSavedStateRegistry(
                     restoredValues = emptyMap(),

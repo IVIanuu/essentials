@@ -2,6 +2,9 @@ package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -9,9 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawLayer
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.platform.DensityAmbient
@@ -193,7 +193,7 @@ fun SharedElement(
 ) {
     Box(
         modifier = Modifier
-            .animatable(tag, SharedElementComposable withValue children) + modifier,
+            .animatable(tag, SharedElementComposable withValue children).then(modifier),
         children = children
     )
 }

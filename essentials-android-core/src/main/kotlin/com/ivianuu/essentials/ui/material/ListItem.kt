@@ -16,15 +16,11 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.drawBackground
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +33,10 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.material.ripple.RippleThemeAmbient
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -59,11 +59,11 @@ fun ListItem(
     }
 
     Box(
-        modifier = modifier + Modifier
+        modifier = modifier
             .preferredHeightIn(minHeight = minHeight)
             .fillMaxWidth()
-            .drawBackground(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
-            .plus(
+            .background(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
+            .then(
                 if (onClick != null || onLongClick != null)
                     Modifier.clickable(
                         enabled = enabled,

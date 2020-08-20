@@ -19,15 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.animation.animate
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.TransformOrigin
-import androidx.compose.ui.composed
-import androidx.compose.ui.drawLayer
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
@@ -38,10 +29,19 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.TransformOrigin
+import androidx.compose.ui.composed
+import androidx.compose.ui.drawLayer
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.core.SystemBarsPadding
+import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -82,7 +82,7 @@ fun ScaffoldPage() {
                 elevation = 8.dp,
                 color = MaterialTheme.colors.primary
             ) {
-                SystemBarsPadding(left = false, top = false, right = false) {
+                InsetsPadding(left = false, top = false, right = false) {
                     Box(
                         modifier = Modifier.height(56.dp)
                             .fillMaxWidth()

@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev591"
+    const val version = "${Build.versionName}-dev592"
 }
 
 object Deps {
@@ -36,7 +36,7 @@ object Deps {
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
-        const val core = "androidx.core:core-ktx:1.2.0"
+        const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
             const val version = "0.1.0-dev16"
