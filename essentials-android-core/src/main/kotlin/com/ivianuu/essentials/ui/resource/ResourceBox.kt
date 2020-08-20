@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.resource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.lazy.LazyRowItems
 import androidx.compose.material.CircularProgressIndicator
@@ -109,7 +108,7 @@ fun <T> ResourceBox(
 ) {
     // we only wanna animate if the resource 'state' has changed
     val resourceState =
-        remember(resource::class) { mutableStateOf(resource, structuralEqualityPolicy()) }
+        remember(resource::class) { mutableStateOf(resource) }
     resourceState.value = resource
 
     AnimatedBox(

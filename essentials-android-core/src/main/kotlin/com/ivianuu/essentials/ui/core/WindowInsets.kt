@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
-import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.core.content.getSystemService
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
@@ -119,8 +118,7 @@ data class Insets(
     }
 }
 
-val InsetsAmbient =
-    ambientOf(structuralEqualityPolicy()) { Insets.Empty }
+val InsetsAmbient = ambientOf { Insets.Empty }
 
 @Composable
 fun ConsumeInsets(
@@ -154,7 +152,7 @@ fun ConsumeInsets(
 fun ProvideInsets(children: @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
-    var insets by state(structuralEqualityPolicy()) { Insets.Empty }
+    var insets by state { Insets.Empty }
 
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, androidInsets ->

@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
 import androidx.compose.runtime.staticAmbientOf
-import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.onPositioned
@@ -60,7 +59,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = contentColor().isDark
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
-    var globalBounds by state<PxBounds?>(structuralEqualityPolicy()) { null }
+    var globalBounds by state<PxBounds?> { null }
     val density = DensityAmbient.current
 
     onPreCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
