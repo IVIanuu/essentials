@@ -137,7 +137,7 @@ private class SystemBarManager {
         val statusBarHitPoint = remember(windowInsets) {
             Position(
                 windowInsets.start,
-                windowInsets.top
+                0.dp
             )
         }
 
