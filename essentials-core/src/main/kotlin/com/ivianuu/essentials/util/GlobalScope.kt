@@ -12,7 +12,7 @@ typealias GlobalScope = CoroutineScope
 inline val globalScope: GlobalScope
     get() = given()
 
-object GlobalScopeModule {
+object EsGlobalScopeGivens {
 
     @Given(ApplicationContext::class)
     fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)

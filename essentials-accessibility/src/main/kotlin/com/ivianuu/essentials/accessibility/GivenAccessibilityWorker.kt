@@ -12,7 +12,7 @@ annotation class GivenAccessibilityWorker {
     }
 }
 
-object AccessibilityModule {
+object AccessibilityGivens {
     @GivenSetElements
     fun accessibilityWorkers(): AccessibilityWorkers = emptySet()
 }

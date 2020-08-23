@@ -6,7 +6,7 @@ import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
-object EsBillingModule {
+object EsBillingGivens {
 
     @Given(ApplicationContext::class)
     fun billingClient(): BillingClient {

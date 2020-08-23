@@ -32,7 +32,7 @@ annotation class GivenAppWorker {
     }
 }
 
-object AppWorkersModule {
+object EsAppWorkersGivens {
     @GivenSetElements
     fun appWorkers(): AppWorkers = emptySet()
 }

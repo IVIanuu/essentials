@@ -12,7 +12,7 @@ annotation class GivenNotificationWorker {
     }
 }
 
-object NotificationModule {
+object EsNotificationGivens {
     @GivenSetElements
     fun notificationWorkers(): NotificationWorkers = emptySet()
 }

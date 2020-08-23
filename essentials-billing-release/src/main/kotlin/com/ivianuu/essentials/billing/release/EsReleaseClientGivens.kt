@@ -22,7 +22,7 @@ import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 
-object EsReleaseClientModule {
+object EsReleaseClientGivens {
 
     @Given(ApplicationContext::class)
     fun billingClient(updateListener: PurchasesUpdatedListener) = BillingClient

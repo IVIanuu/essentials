@@ -13,7 +13,7 @@ typealias UiScope = CoroutineScope
 inline val uiScope: UiScope
     get() = given()
 
-object EsUiModule {
+object EsUiGivens {
 
     @Given(ActivityContext::class)
     fun uiScope(): UiScope = CoroutineScope(dispatchers.main)

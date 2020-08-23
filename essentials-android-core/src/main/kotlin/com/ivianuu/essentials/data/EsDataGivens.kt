@@ -28,7 +28,7 @@ import com.ivianuu.injekt.given
 import kotlinx.coroutines.plus
 import java.io.File
 
-object EsDataModule {
+object EsDataGivens {
 
     @Given
     fun dataDir(): DataDir = androidApplicationContext.applicationInfo.dataDir

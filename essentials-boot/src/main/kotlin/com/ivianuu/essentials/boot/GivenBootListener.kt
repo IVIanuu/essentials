@@ -28,7 +28,7 @@ annotation class GivenBootListener {
     }
 }
 
-object BootListenersModule {
+object EsBootListenersGivens {
 
     @GivenSetElements
     fun bootListeners(): BootListeners = emptySet()

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.Given
 
-object EsAppModule {
+object EsAppGivens {
 
     @Given
     fun packageManager() = androidApplicationContext.packageManager!!

@@ -30,7 +30,7 @@ annotation class GivenAppInitializer {
     }
 }
 
-object AppInitializerModule {
+object EsAppInitializerGivens {
     @GivenSetElements
     fun appInitializers(): AppInitializers = emptySet()
 }

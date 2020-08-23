@@ -33,7 +33,7 @@ fun initializeWorkers() {
     )
 }
 
-object EsWorkModule {
+object EsWorkGivens {
 
     @Given
     fun workManager() = WorkManager.getInstance(androidApplicationContext)

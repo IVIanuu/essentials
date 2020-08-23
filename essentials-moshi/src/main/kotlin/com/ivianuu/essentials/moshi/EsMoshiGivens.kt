@@ -17,7 +17,7 @@ annotation class GivenJsonAdapter {
 
 typealias JsonAdapters = Set<Any>
 
-object EsMoshiModule {
+object EsMoshiGivens {
 
     @Given(ApplicationContext::class)
     fun moshi(): Moshi = Moshi.Builder()

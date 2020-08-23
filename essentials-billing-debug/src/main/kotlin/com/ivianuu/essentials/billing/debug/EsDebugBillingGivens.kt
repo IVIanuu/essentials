@@ -21,7 +21,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
-object EsDebugBillingModule {
+object EsDebugBillingGivens {
 
     private var debugBillingClient: DebugBillingClient? = null
 

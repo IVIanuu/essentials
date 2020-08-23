@@ -25,7 +25,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 
-object EsCoilModule {
+object EsCoilGivens {
 
     @Given(ApplicationContext::class)
     fun imageLoader() = ImageLoader.Builder(androidApplicationContext)

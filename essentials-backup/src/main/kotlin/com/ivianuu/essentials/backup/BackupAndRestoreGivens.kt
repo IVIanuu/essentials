@@ -4,7 +4,7 @@ import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
-object BackupAndRestoreModule {
+object BackupAndRestoreGivens {
 
     @Given
     fun backupDir(): BackupDir = "${given<DataDir>()}/backups"

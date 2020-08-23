@@ -19,7 +19,7 @@ import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.map
 
-object AutoRotationModule {
+object EsAutoRotationGivens {
 
     @GivenAction
     fun autoRotationAction() = Action(
