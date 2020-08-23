@@ -2,9 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Wifi
-import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -39,11 +37,11 @@ private fun wifiIcon(): ActionIcon = BroadcastFactory.create(WifiManager.WIFI_ST
     }
     .onStart { emit(given<WifiManager>().isWifiEnabled) }
     .map { wifiEnabled ->
-        if (wifiEnabled) Icons.Default.Wifi
-        else Icons.Default.WifiOff
+        if (wifiEnabled) R.drawable.es_ic_network_wifi
+        else R.drawable.es_ic_signal_wifi_off
     }
     .map {
         {
-            Icon(it)
+            Icon(vectorResource(it))
         }
     }

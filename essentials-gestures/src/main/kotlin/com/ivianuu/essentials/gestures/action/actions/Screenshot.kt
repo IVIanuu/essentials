@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhotoAlbum
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction
@@ -18,7 +16,7 @@ fun screenshotAction(): Action {
     return Action(
         key = "screenshot",
         title = Resources.getString(R.string.es_action_screenshot),
-        icon = singleActionIcon(Icons.Default.PhotoAlbum),
+        icon = singleActionIcon(R.drawable.es_ic_photo_album),
         permissions = permissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility

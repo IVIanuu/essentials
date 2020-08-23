@@ -24,20 +24,15 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
@@ -70,7 +65,7 @@ fun BottomNavigationPage() {
                             BottomNavigationItem(
                                 selected = item == selectedItem,
                                 onSelect = { selectedItem = item },
-                                icon = { Icon(item.icon) },
+                                icon = { Icon(vectorResource(item.icon)) },
                                 label = { Text(item.title) }
                             )
                         }
@@ -91,32 +86,32 @@ fun BottomNavigationPage() {
 
 private enum class BottomNavItem(
     val title: String,
-    val icon: VectorAsset,
+    val icon: Int,
     val color: Color
 ) {
     Home(
         title = "Home",
-        icon = Icons.Default.Home,
+        icon = R.drawable.ic_home,
         color = Color.Yellow
     ),
     Mails(
         title = "Mails",
-        icon = Icons.Default.Email,
+        icon = R.drawable.ic_email,
         color = Color.Red
     ),
     Search(
         title = "Search",
-        icon = Icons.Default.Search,
+        icon = R.drawable.ic_search,
         color = Color.Blue
     ),
     Schedule(
         title = "Schedule",
-        icon = Icons.Default.ViewAgenda,
+        icon = R.drawable.ic_view_agenda,
         color = Color.Cyan
     ),
     Settings(
         title = "Settings",
-        icon = Icons.Default.Settings,
+        icon = R.drawable.ic_settings,
         color = Color.Green
     )
 }

@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SettingsPower
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction
@@ -17,7 +15,7 @@ fun lockScreenAction(): Action {
     return Action(
         key = "lock_screen",
         title = Resources.getString(R.string.es_action_lock_screen),
-        icon = singleActionIcon(Icons.Default.SettingsPower),
+        icon = singleActionIcon(R.drawable.es_ic_power_settings),
         permissions = permissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility

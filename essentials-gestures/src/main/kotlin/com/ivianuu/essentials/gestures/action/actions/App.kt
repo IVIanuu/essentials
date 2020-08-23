@@ -1,10 +1,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apps
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo
@@ -46,7 +45,7 @@ internal class AppActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Apps) }
+        get() = { Icon(vectorResource(R.drawable.es_ic_apps)) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {

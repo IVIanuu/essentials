@@ -22,15 +22,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FlashOn
 import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.setSmallIcon
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
 
@@ -52,6 +47,7 @@ internal fun createTorchNotification(): Notification {
     return NotificationCompat.Builder(androidApplicationContext, NOTIFICATION_CHANNEL_ID)
         .apply {
             setAutoCancel(true)
+            setSmallIcon(R.drawable.es_ic_flash_on)
             setContentTitle(Resources.getString(R.string.es_notif_title_torch))
             setContentText(Resources.getString(R.string.es_notif_text_torch))
             setContentIntent(
@@ -64,15 +60,6 @@ internal fun createTorchNotification(): Notification {
             )
         }
         .build()
-        .apply {
-            setSmallIcon(
-                Icon.createWithBitmap(
-                    Icons.Default.FlashOn.toBitmap(
-                        androidApplicationContext
-                    )
-                )
-            )
-        }
 }
 
 private const val NOTIFICATION_CHANNEL_ID = "torch"

@@ -2,9 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material.icons.filled.BluetoothDisabled
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -46,7 +44,7 @@ private fun bluetoothIcon(): ActionIcon =
         }
         .map { it == BluetoothAdapter.STATE_ON || it == BluetoothAdapter.STATE_TURNING_ON }
         .map {
-            if (it) Icons.Default.Bluetooth
-            else Icons.Default.BluetoothDisabled
+            if (it) R.drawable.es_ic_bluetooth
+            else R.drawable.es_ic_bluetooth_disabled
         }
-        .map { { Icon(it) } }
+        .map { { Icon(vectorResource(it)) } }

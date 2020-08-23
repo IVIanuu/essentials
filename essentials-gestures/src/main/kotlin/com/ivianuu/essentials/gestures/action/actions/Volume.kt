@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.media.AudioManager
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.VolumeUp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction
@@ -13,7 +11,7 @@ import com.ivianuu.injekt.given
 fun volumeAction() = Action(
     key = "volume",
     title = Resources.getString(R.string.es_action_volume),
-    icon = singleActionIcon(Icons.Default.VolumeUp),
+    icon = singleActionIcon(R.drawable.es_ic_volume_up),
     execute = {
         given<AudioManager>().adjustStreamVolume(
             AudioManager.STREAM_MUSIC,

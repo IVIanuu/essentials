@@ -1,9 +1,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -27,7 +26,7 @@ internal class KeycodeActionFactory : ActionFactory {
         return Action(
             key = key,
             title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
-            icon = singleActionIcon(Icons.Default.Keyboard),
+            icon = singleActionIcon(R.drawable.es_ic_keyboard),
             permissions = listOf(given<ActionPermissions>().root),
             unlockScreen = false,
             enabled = true,
@@ -41,7 +40,7 @@ internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Keyboard) }
+        get() = { Icon(vectorResource(R.drawable.es_ic_keyboard)) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val keycode = navigator.push<String>(

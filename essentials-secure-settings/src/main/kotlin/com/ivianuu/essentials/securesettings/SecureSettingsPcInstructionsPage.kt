@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Link
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -66,7 +65,7 @@ fun SecureSettingsPcInstructionsPage() {
             )
 
             ListItem(
-                leading = { Icon(Icons.Default.Link) },
+                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
                 onClick = {
                     navigator.push(
@@ -76,7 +75,7 @@ fun SecureSettingsPcInstructionsPage() {
             )
 
             ListItem(
-                leading = { Icon(Icons.Default.Link) },
+                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
                 onClick = {
                     navigator.push(
@@ -86,7 +85,7 @@ fun SecureSettingsPcInstructionsPage() {
             )
 
             ListItem(
-                leading = { Icon(Icons.Default.Link) },
+                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
                 onClick = {
                     navigator.push(

@@ -1,12 +1,10 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.Adb
-import androidx.compose.material.icons.filled.SettingsApplications
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
@@ -25,21 +23,21 @@ internal class ActionPermissions {
         DefaultAccessibilityService::class,
         Permission.Title withValue "Accessibility", // todo res
         Permission.Desc withValue "Required to click buttons", // todo res
-        Permission.Icon withValue { Icon(Icons.Default.Accessibility) }
+        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_accessibility)) }
     )
     val root = RootPermission(
         Permission.Title withValue "Root", // todo res
-        Permission.Icon withValue { Icon(Icons.Default.Adb) }
+        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_adb)) }
     )
     val writeSecureSettings = WriteSecureSettingsPermission(
         Permission.Title withValue "Write secure settings", // todo res
         Permission.Desc withValue "Required to change the navigation bar visibility", // todo res
-        Permission.Icon withValue { Icon(Icons.Default.SettingsApplications) }
+        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) }
     )
     val writeSettings = WriteSettingsPermission(
         androidApplicationContext,
         Permission.Title withValue "Write Settings", // todo res
         Permission.Desc withValue "Required to change settings", // todo res
-        Permission.Icon withValue { Icon(Icons.Default.SettingsApplications) } // todo change icon
+        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) } // todo change icon
     )
 }

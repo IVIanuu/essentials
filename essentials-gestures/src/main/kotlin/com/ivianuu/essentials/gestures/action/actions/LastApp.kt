@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Repeat
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.GivenAction
@@ -16,7 +14,7 @@ fun lastAppAction() = Action(
     title = Resources.getString(R.string.es_action_last_app),
     permissions = permissions { listOf(accessibility) },
     unlockScreen = true,
-    icon = singleActionIcon(Icons.Default.Repeat),
+    icon = singleActionIcon(R.drawable.es_ic_repeat),
     execute = {
         performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
         delay(250)

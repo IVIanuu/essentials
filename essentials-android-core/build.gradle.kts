@@ -36,7 +36,6 @@ dependencies {
 
     api(Deps.AndroidX.Compose.runtime)
     api(Deps.AndroidX.Compose.material)
-    api(Deps.AndroidX.Compose.materialIconsExtended)
 
     api(Deps.Coroutines.android)
 

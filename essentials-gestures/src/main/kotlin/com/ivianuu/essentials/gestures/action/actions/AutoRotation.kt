@@ -2,9 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ScreenLockRotation
-import androidx.compose.material.icons.filled.ScreenRotation
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
@@ -46,9 +44,9 @@ object AutoRotationModule {
 private fun autoRotationIcon(): ActionIcon = given<AutoRotationSetting>().data
     .map { it == 1 }
     .map {
-        if (it) Icons.Default.ScreenRotation
-        else Icons.Default.ScreenLockRotation
+        if (it) R.drawable.es_ic_screen_rotation
+        else R.drawable.es_ic_screen_lock_rotation
     }
-    .map { { Icon(it) } }
+    .map { { Icon(vectorResource(it)) } }
 
 typealias AutoRotationSetting = DataStore<Int>

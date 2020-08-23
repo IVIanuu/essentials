@@ -2,17 +2,11 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.drawBackground
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +18,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Error
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.app.androidApplicationContext
@@ -39,6 +36,7 @@ import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
@@ -129,7 +127,7 @@ private fun NotificationsList(
                 trailing = if (notification.isClearable) {
                     {
                         IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                            Icon(Icons.Default.Clear)
+                            Icon(vectorResource(R.drawable.es_ic_clear))
                         }
                     }
                 } else null
@@ -214,7 +212,7 @@ private fun notifications() = given<NotificationStore>().notifications
                             }
                         },
                         failure = {
-                            { Icon(Icons.Default.Error) }
+                            { Icon(vectorResource(R.drawable.es_ic_error)) }
                         }
                     ),
                     color = Color(sbn.notification.color),

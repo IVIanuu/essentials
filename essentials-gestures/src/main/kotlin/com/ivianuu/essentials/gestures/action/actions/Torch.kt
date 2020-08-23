@@ -1,9 +1,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.foundation.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FlashOff
-import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
@@ -25,11 +23,11 @@ fun torchAction() = Action(
 @Reader
 private fun torchIcon(): ActionIcon = given<TorchManager>().torchState
     .map {
-        if (it) Icons.Default.FlashOn
-        else Icons.Default.FlashOff
+        if (it) R.drawable.es_ic_flash_on
+        else R.drawable.es_ic_flash_off
     }
     .map {
         {
-            Icon(it)
+            Icon(vectorResource(it))
         }
     }
