@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.Border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Icon
@@ -247,8 +248,8 @@ private fun ColorGridItem(
             modifier = Modifier.fillMaxSize(),
             color = color,
             shape = RoundedCornerShape(50),
-            border = Border(
-                size = 1.dp,
+            border = BorderStroke(
+                width = 1.dp,
                 color = MaterialTheme.colors.onSurface
             ),
             elevation = 0.dp
@@ -382,7 +383,7 @@ private fun ColorComponentItem(
         Slider(
             value = value,
             onValueChange = onValueChanged,
-            color = component.color(),
+            thumbColor = component.color(), // todo
             modifier = Modifier.padding(horizontal = 8.dp)
                 .weight(1f)
         )

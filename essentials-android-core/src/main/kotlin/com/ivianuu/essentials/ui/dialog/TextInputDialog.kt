@@ -20,12 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
 import androidx.compose.runtime.state
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
-import androidx.compose.ui.FocusModifier
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
@@ -84,22 +85,20 @@ fun TextInputDialog(
         title = title,
         content = {
             Stack {
-                val focusModifier = FocusModifier()
+                val focusRequester = remember { FocusRequester() }
 
                 TextField(
                     value = value,
                     onValueChange = onValueChange,
                     keyboardType = keyboardType,
                     textStyle = MaterialTheme.typography.subtitle1,
-                    modifier = focusModifier,
+                    modifier = Modifier.focusRequester(focusRequester),
                     label = label ?: {}
                 )
 
                 onActive {
-                    focusModifier.requestFocus()
-                    onDispose {
-                        focusModifier.freeFocus()
-                    }
+                    focusRequester.requestFocus()
+                    onDispose { focusRequester.freeFocus() }
                 }
             }
         },

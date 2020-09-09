@@ -20,13 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerId
+import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.PointerInputFilter
 import androidx.compose.ui.input.pointer.PointerInputModifier
-import androidx.compose.ui.platform.PointerEventPass
-import androidx.compose.ui.platform.PointerId
-import androidx.compose.ui.platform.PointerInputChange
-import androidx.compose.ui.platform.changedToDown
-import androidx.compose.ui.platform.consumeDownChange
 import androidx.compose.ui.unit.IntSize
 
 @Composable
@@ -51,7 +49,9 @@ private class AbsorbPointerGestureFilter : PointerInputFilter(), PointerInputMod
         pass: PointerEventPass,
         bounds: IntSize
     ): List<PointerInputChange> {
-        return if (absorb && (pass == PointerEventPass.InitialDown ||
+        // todo
+        return changes
+        /*return if (absorb && (pass == PointerEventPass.Initial ||
                     pass == PointerEventPass.PreDown ||
                     pass == PointerEventPass.PostDown)
         ) {
@@ -73,7 +73,7 @@ private class AbsorbPointerGestureFilter : PointerInputFilter(), PointerInputMod
                     change
                 }
             }
-        }
+        }*/
     }
 
     override fun onCancel() {

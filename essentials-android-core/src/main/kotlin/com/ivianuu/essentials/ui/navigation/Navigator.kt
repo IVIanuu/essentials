@@ -204,7 +204,7 @@ class Navigator {
         var resultToSend: Any? = null
 
         private var savedState =
-            mutableMapOf<Any, Map<String, Any>>()
+            mutableMapOf<Any, Map<String, List<Any?>>>()
 
         private val retainedObjects = RetainedObjects()
 

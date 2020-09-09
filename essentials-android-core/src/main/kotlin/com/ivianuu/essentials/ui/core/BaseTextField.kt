@@ -5,6 +5,8 @@ import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.currentTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
 import androidx.compose.ui.Modifier
@@ -30,13 +32,12 @@ fun BaseTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
     onImeActionPerformed: (ImeAction) -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
     cursorColor: Color = contentColor()
 ) {
-    var textFieldValue by state { TextFieldValue() }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
     if (textFieldValue.text != value) {
         @OptIn(InternalTextApi::class)
         textFieldValue = TextFieldValue(
@@ -59,7 +60,6 @@ fun BaseTextField(
         keyboardType = keyboardType,
         imeAction = imeAction,
         onImeActionPerformed = onImeActionPerformed,
-        onFocusChanged = onFocusChanged,
         visualTransformation = visualTransformation,
         onTextLayout = onTextLayout,
         onTextInputStarted = onTextInputStarted,

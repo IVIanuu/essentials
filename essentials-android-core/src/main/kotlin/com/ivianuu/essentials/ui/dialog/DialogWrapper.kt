@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
-import androidx.compose.foundation.drawBackground
+import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -59,7 +59,7 @@ fun DialogWrapper(
                 }
             })
             .fillMaxSize()
-            .drawBackground(Color.Black.copy(alpha = 0.6f)),
+            .background(Color.Black.copy(alpha = 0.6f)),
         gravity = ContentGravity.Center
     ) {
         InsetsPadding {

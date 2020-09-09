@@ -23,7 +23,7 @@ import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.foundation.Box
 import androidx.compose.ui.Layout
 import androidx.compose.ui.platform.ConfigurationAmbient
-import androidx.compose.ui.unit.PxBounds
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 
 fun PopupRoute(
-    position: PxBounds,
+    position: Rect,
     onCancel: (() -> Unit)? = null,
     popup: @Composable () -> Unit
 ) = Route(
@@ -76,7 +76,7 @@ private val PopupTag = Any()
 
 @Composable
 private fun PopupLayout(
-    position: PxBounds,
+    position: Rect,
     modifier: Modifier,
     children: @Composable () -> Unit
 ) {

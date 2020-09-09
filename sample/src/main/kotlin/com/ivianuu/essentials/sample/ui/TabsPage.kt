@@ -48,12 +48,14 @@ fun TabsPage() {
                         title = { Text("Tabs") },
                         elevation = 0.dp
                     )
-                    TabRow(items = TabItems, selectedIndex = selectedIndex) { index, _ ->
-                        Tab(
-                            selected = selectedIndex == index,
-                            onSelected = { selectedIndex = index },
-                            text = { Text("Item: $index") }
-                        )
+                    TabRow(selectedTabIndex = selectedIndex) {
+                        TabItems.forEachIndexed { index, color ->
+                            Tab(
+                                selected = selectedIndex == index,
+                                onClick = { selectedIndex = index },
+                                text = { Text("Item: $index") }
+                            )
+                        }
                     }
                 }
             }

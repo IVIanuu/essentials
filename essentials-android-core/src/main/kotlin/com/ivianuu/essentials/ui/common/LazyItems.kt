@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.foundation.gestures.ScrollableController
 import androidx.compose.runtime.Applier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableContract
@@ -22,121 +23,310 @@ import androidx.compose.ui.materialize
 import androidx.compose.foundation.gestures.rememberScrollableController
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumnForIndexed
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.LazyRowForIndexed
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Remeasurement
+import androidx.compose.ui.RemeasurementModifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.ExperimentalSubcomposeLayoutApi
+import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.layout.SubcomposeMeasureScope
 import androidx.compose.ui.node.ExperimentalLayoutNodeApi
 import androidx.compose.ui.node.LayoutNode
 import androidx.compose.ui.node.Ref
+import androidx.compose.ui.platform.LayoutDirectionAmbient
 import androidx.compose.ui.platform.subcomposeInto
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.constrainHeight
+import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastSumBy
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /**
  * A vertically scrolling list that only composes and lays out the currently visible items.
  *
- * @param items the backing list of data to display
- * @param modifier the modifier to apply to this layout
- * @param contentPadding convenience param to specify a padding around the whole content. This will
- * add padding for the content after it has been clipped, which is not possible via [modifier]
- * param. Note that it is *not* a padding applied for each item's content
- * @param itemContent emits the UI for an item from [items] list. May emit any number of components,
- * which will be stacked vertically. Note that [LazyColumnItems] can start scrolling incorrectly
- * if you emit nothing and then lazily recompose with the real content, so even if you load the
- * content asynchronously please reserve some space for the item, for example using [Spacer].
- */
-@Composable
-fun <T> LazyColumnItems(
-    items: List<T>,
-    modifier: Modifier = Modifier,
-    contentPadding: InnerPadding = InnerPadding(0.dp),
-    itemContent: @Composable (T) -> Unit
-) {
-    LazyItems(items, modifier, contentPadding, itemContent, isVertical = true)
-}
-
-/**
- * A horizontally scrolling list that only composes and lays out the currently visible items.
+ * See [LazyColumnForIndexed] if you need to have both item and index params in [itemContent].
+ * See [LazyRowFor] if you are looking for a horizontally scrolling version.
+ *
+ * @sample androidx.compose.foundation.samples.LazyColumnForSample
  *
  * @param items the backing list of data to display
  * @param modifier the modifier to apply to this layout
  * @param contentPadding convenience param to specify a padding around the whole content. This will
  * add padding for the content after it has been clipped, which is not possible via [modifier]
  * param. Note that it is *not* a padding applied for each item's content
+ * @param horizontalGravity the horizontal gravity applied to the items
  * @param itemContent emits the UI for an item from [items] list. May emit any number of components,
- * which will be stacked horizontally. Note that [LazyRowItems] can start scrolling incorrectly
+ * which will be stacked vertically. Note that [LazyColumnFor] can start scrolling incorrectly
  * if you emit nothing and then lazily recompose with the real content, so even if you load the
  * content asynchronously please reserve some space for the item, for example using [Spacer].
+ * Use [LazyColumnForIndexed] if you need to have both index and item params.
  */
+@Composable
+fun <T> LazyColumnFor(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding = InnerPadding(0.dp),
+    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    itemContent: @Composable LazyItemScope.(T) -> Unit
+) {
+    LazyFor(
+        itemsCount = items.size,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        horizontalGravity = horizontalGravity,
+        isVertical = true
+    ) { index ->
+        val item = items[index]
+        {
+            key(index) {
+                itemContent(item)
+            }
+        }
+    }
+}
+
+/**
+ * A vertically scrolling list that only composes and lays out the currently visible items.
+ *
+ * It is the variant of [LazyColumnFor] which provides both index and item as params for
+ * [itemContent].
+ *
+ * See [LazyRowForIndexed] if you are looking for a horizontally scrolling version.
+ *
+ * @sample androidx.compose.foundation.samples.LazyColumnForIndexedSample
+ *
+ * @param items the backing list of data to display
+ * @param modifier the modifier to apply to this layout
+ * @param contentPadding convenience param to specify a padding around the whole content. This will
+ * add padding for the content after it has been clipped, which is not possible via [modifier]
+ * param. Note that it is *not* a padding applied for each item's content
+ * @param horizontalGravity the horizontal gravity applied to the items
+ * @param itemContent emits the UI for an item from [items] list. It has two params: first one is
+ * an index in the [items] list, and the second one is the item at this index from [items] list.
+ * May emit any number of components, which will be stacked vertically. Note that
+ * [LazyColumnForIndexed] can start scrolling incorrectly if you emit nothing and then lazily
+ * recompose with the real content, so even if you load the content asynchronously please reserve
+ * some space for the item, for example using [Spacer].
+ */
+@Composable
+fun <T> LazyColumnForIndexed(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding = InnerPadding(0.dp),
+    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
+) {
+    LazyFor(
+        itemsCount = items.size,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        horizontalGravity = horizontalGravity,
+        isVertical = true
+    ) { index ->
+        val item = items[index]
+        {
+            key(index) {
+                itemContent(index, item)
+            }
+        }
+    }
+}
+
+@Deprecated(
+    "LazyColumnItems was renamed to LazyColumnFor",
+    ReplaceWith("LazyColumnFor(items, modifier, contentPadding, horizontalGravity, itemContent)")
+)
+@Composable
+fun <T> LazyColumnItems(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding = InnerPadding(0.dp),
+    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    itemContent: @Composable (T) -> Unit
+) {
+    LazyColumnFor(
+        items = items,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        horizontalGravity = horizontalGravity
+    ) {
+        itemContent(it)
+    }
+}
+
+/**
+ * A horizontally scrolling list that only composes and lays out the currently visible items.
+ *
+ * See [LazyRowForIndexed] if you need to have both item and index params in [itemContent].
+ * See [LazyColumnFor] if you are looking for a vertically scrolling version.
+ *
+ * @sample androidx.compose.foundation.samples.LazyRowForSample
+ *
+ * @param items the backing list of data to display
+ * @param modifier the modifier to apply to this layout
+ * @param contentPadding convenience param to specify a padding around the whole content. This will
+ * add padding for the content after it has been clipped, which is not possible via [modifier]
+ * param. Note that it is *not* a padding applied for each item's content
+ * @param verticalGravity the vertical gravity applied to the items
+ * @param itemContent emits the UI for an item from [items] list. May emit any number of components,
+ * which will be stacked horizontally. Note that [LazyRowFor] can start scrolling incorrectly
+ * if you emit nothing and then lazily recompose with the real content, so even if you load the
+ * content asynchronously please reserve some space for the item, for example using [Spacer].
+ * Use [LazyRowForIndexed] if you need to have both index and item params.
+ */
+@Composable
+fun <T> LazyRowFor(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding = InnerPadding(0.dp),
+    verticalGravity: Alignment.Vertical = Alignment.Top,
+    itemContent: @Composable LazyItemScope.(T) -> Unit
+) {
+    LazyFor(
+        itemsCount = items.size,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        verticalGravity = verticalGravity,
+        isVertical = false
+    ) { index ->
+        val item = items[index]
+        {
+            key(index) {
+                itemContent(item)
+            }
+        }
+    }
+}
+
+/**
+ * A horizontally scrolling list that only composes and lays out the currently visible items.
+ *
+ * It is the variant of [LazyRowFor] which provides both index and item as params for [itemContent].
+ *
+ * See [LazyColumnForIndexed] if you are looking for a vertically scrolling version.
+ *
+ * @sample androidx.compose.foundation.samples.LazyRowForIndexedSample
+ *
+ * @param items the backing list of data to display
+ * @param modifier the modifier to apply to this layout
+ * @param contentPadding convenience param to specify a padding around the whole content. This will
+ * add padding for the content after it has been clipped, which is not possible via [modifier]
+ * param. Note that it is *not* a padding applied for each item's content
+ * @param verticalGravity the vertical gravity applied to the items
+ * @param itemContent emits the UI for an item from [items] list. It has two params: first one is
+ * an index in the [items] list, and the second one is the item at this index from [items] list.
+ * May emit any number of components, which will be stacked horizontally. Note that
+ * [LazyRowForIndexed] can start scrolling incorrectly if you emit nothing and then lazily
+ * recompose with the real content, so even if you load the content asynchronously please reserve
+ * some space for the item, for example using [Spacer].
+ */
+@Composable
+fun <T> LazyRowForIndexed(
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding = InnerPadding(0.dp),
+    verticalGravity: Alignment.Vertical = Alignment.Top,
+    itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
+) {
+    LazyFor(
+        itemsCount = items.size,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        verticalGravity = verticalGravity,
+        isVertical = false
+    ) { index ->
+        val item = items[index]
+        {
+            key(index) {
+                itemContent(index, item)
+            }
+        }
+    }
+}
+
+@Deprecated(
+    "LazyRowItems was renamed to LazyRowFor",
+    ReplaceWith("LazyRowFor(items, modifier, contentPadding, horizontalGravity, itemContent)")
+)
 @Composable
 fun <T> LazyRowItems(
     items: List<T>,
     modifier: Modifier = Modifier,
     contentPadding: InnerPadding = InnerPadding(0.dp),
+    verticalGravity: Alignment.Vertical = Alignment.Top,
     itemContent: @Composable (T) -> Unit
 ) {
-    LazyItems(items, modifier, contentPadding, itemContent, isVertical = false)
-}
-
-@Composable
-@OptIn(ExperimentalLayoutNodeApi::class)
-private fun <T> LazyItems(
-    items: List<T>,
-    modifier: Modifier = Modifier,
-    contentPadding: InnerPadding,
-    itemContent: @Composable (T) -> Unit,
-    isVertical: Boolean
-) {
-    val state = rememberSavedInstanceState { LazyItemsState<T>(isVertical = isVertical) }
-    @OptIn(ExperimentalComposeApi::class)
-    state.recomposer = currentComposer.recomposer
-    state.itemContent = itemContent
-    state.items = items
-    state.compositionRef = compositionReference()
-    state.forceRecompose = true
-
-    val materialized = currentComposer.materialize(
-        modifier
-            .scrollable(
-                orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
-                controller = rememberScrollableController(consumeScrollDelta = state.onScrollDelta)
-            )
-            .clipToBounds()
-            .padding(contentPadding)
-    )
-    @OptIn(ExperimentalComposeApi::class)
-    (emit<LayoutNode, Applier<Any>>(
-        ctor = LayoutEmitHelper.constructor,
-        update = {
-            set(materialized, LayoutEmitHelper.setModifier)
-            set(state.rootNodeRef, LayoutEmitHelper.setRef)
-            set(state.measureBlocks, LayoutEmitHelper.setMeasureBlocks)
-        }
-    ))
-    state.recomposeIfAttached()
-    onDispose {
-        state.disposeAllChildren()
+    LazyRowFor(
+        items = items,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        verticalGravity = verticalGravity
+    ) {
+        itemContent(it)
     }
 }
 
-/**
- * Object of pre-allocated lambdas used to make emits to LayoutNodes allocation-less.
- */
-@OptIn(ExperimentalLayoutNodeApi::class)
-private object LayoutEmitHelper {
-    val constructor: () -> LayoutNode = { LayoutNode() }
-    val setModifier: LayoutNode.(Modifier) -> Unit = { this.modifier = it }
-    val setMeasureBlocks: LayoutNode.(LayoutNode.MeasureBlocks) -> Unit =
-        { this.measureBlocks = it }
-    val setRef: LayoutNode.(Ref<LayoutNode>) -> Unit = { it.value = this }
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+@OptIn(ExperimentalSubcomposeLayoutApi::class)
+internal inline fun LazyFor(
+    itemsCount: Int,
+    modifier: Modifier = Modifier,
+    contentPadding: InnerPadding,
+    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    verticalGravity: Alignment.Vertical = Alignment.Top,
+    isVertical: Boolean,
+    noinline itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
+) {
+    val state = rememberRetained { LazyForState(isVertical = isVertical) }
+    val scrollController = rememberScrollableController(consumeScrollDelta = state.onScrollDelta)
+    state.scrollableController = scrollController
+    val reverseDirection = LayoutDirectionAmbient.current == LayoutDirection.Rtl && !isVertical
+    SubcomposeLayout<DataIndex>(
+        modifier
+            .scrollable(
+                orientation = if (isVertical) Orientation.Vertical else Orientation.Horizontal,
+                reverseDirection = reverseDirection,
+                controller = scrollController
+            )
+            .clipToBounds()
+            .padding(contentPadding)
+            .then(state.remeasurementModifier)
+    ) { constraints ->
+        state.measure(
+            this,
+            constraints,
+            horizontalGravity,
+            verticalGravity,
+            itemsCount,
+            itemContentFactory
+        )
+    }
 }
 
 private inline class ScrollDirection(val isForward: Boolean)
 
 @Suppress("NOTHING_TO_INLINE")
-private inline class DataIndex(val value: Int) {
+internal inline class DataIndex(val value: Int) {
     inline operator fun inc(): DataIndex = DataIndex(value + 1)
     inline operator fun dec(): DataIndex = DataIndex(value - 1)
     inline operator fun plus(i: Int): DataIndex = DataIndex(value + i)
@@ -145,68 +335,34 @@ private inline class DataIndex(val value: Int) {
     inline operator fun compareTo(other: DataIndex): Int = value - other.value
 }
 
-private inline class LayoutIndex(val value: Int)
-
-@OptIn(ExperimentalLayoutNodeApi::class)
-internal class LazyItemsState<T>(val isVertical: Boolean) {
-    lateinit var recomposer: Recomposer
-    lateinit var itemContent: @Composable (T) -> Unit
-    lateinit var items: List<T>
-
-    var forceRecompose = false
-    var compositionRef: CompositionReference? = null
-
-    /**
-     * Used to get the reference to populate [rootNode]
-     */
-    val rootNodeRef = Ref<LayoutNode>()
-
-    /**
-     * The root [LayoutNode]
-     */
-    private val rootNode get() = rootNodeRef.value!!
-
-    /**
-     * The measure blocks for [rootNode]
-     */
-    val measureBlocks: LayoutNode.MeasureBlocks = ListMeasureBlocks()
-
-    /**
-     * The layout direction
-     */
-    private var layoutDirection: LayoutDirection = LayoutDirection.Ltr
-
+@OptIn(ExperimentalSubcomposeLayoutApi::class)
+internal class LazyForState(val isVertical: Boolean) {
     /**
      * The index of the first item that is composed into the layout tree
      */
     private var firstComposedItem = DataIndex(0)
-
     /**
      * The index of the last item that is composed into the layout tree
      */
     private var lastComposedItem = DataIndex(-1) // obviously-bogus sentinel value
-
     /**
      * Scrolling forward is positive - i.e., the amount that the item is offset backwards
      */
     private var firstItemScrollOffset = 0f
-
     /**
      * The amount of space remaining in the last item
      */
     private var lastItemRemainingSpace = 0f
-
     /**
      * The amount of scroll to be consumed in the next layout pass.  Scrolling forward is negative
      * - that is, it is the amount that the items are offset in y
      */
     private var scrollToBeConsumed = 0f
-
     /**
      * The children that have been measured this measure pass.
      * Used to avoid measuring twice in a single pass, which is illegal
      */
-    private val measuredThisPass: MutableMap<DataIndex, Placeable> = mutableMapOf()
+    private val measuredThisPass: MutableMap<DataIndex, List<Placeable>> = mutableMapOf()
 
     /**
      * The listener to be passed to onScrollDeltaConsumptionRequested.
@@ -215,23 +371,41 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
     val onScrollDelta: (Float) -> Float = { onScroll(it) }
 
     /**
-     * Tracks the correspondence between the child layout nodes and their compositions, so that
-     * they can be disposed later
+     * The ScrollableController instance. We keep it as we need to call stopAnimation on it once
+     * we reached the end of the list.
      */
-    private val compositionsForLayoutNodes = mutableMapOf<LayoutNode, Composition>()
+    var scrollableController: ScrollableController? = null
+
+    /**
+     * The [Remeasurement] object associated with our layout. It allows us to remeasure
+     * synchronously during scroll.
+     */
+    private lateinit var remeasurement: Remeasurement
+
+    /**
+     * The modifier which provides [remeasurement].
+     */
+    val remeasurementModifier = object : RemeasurementModifier {
+        override fun onRemeasurementAvailable(remeasurement: Remeasurement) {
+            this@LazyForState.remeasurement = remeasurement
+        }
+    }
+
+    /**
+     * The cached instance of the scope to be used for composing items.
+     */
+    private var itemScope = InitialLazyItemsScopeImpl
 
     private val Placeable.mainAxisSize get() = if (isVertical) height else width
     private val Placeable.crossAxisSize get() = if (!isVertical) height else width
 
     // TODO: really want an Int here
-    @OptIn(ExperimentalLayoutNodeApi::class)
     private fun onScroll(distance: Float): Float {
         check(abs(scrollToBeConsumed) < 0.5f) {
             "entered drag with non-zero pending scroll: $scrollToBeConsumed"
         }
         scrollToBeConsumed = distance
-        rootNode.requestRemeasure()
-        rootNode.owner!!.measureAndLayout()
+        remeasurement.forceRemeasure()
         val scrollConsumed = distance - scrollToBeConsumed
 
         if (abs(scrollToBeConsumed) < 0.5) {
@@ -242,11 +416,16 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
             // We did not consume all of it - return the rest to be consumed elsewhere (e.g.,
             // nested scrolling)
             scrollToBeConsumed = 0f // We're not consuming the rest, give it back
+            scrollableController!!.stopAnimation()
             return scrollConsumed
         }
     }
 
-    private fun consumePendingScroll(childConstraints: Constraints) {
+    private fun SubcomposeMeasureScope<DataIndex>.consumePendingScroll(
+        childConstraints: Constraints,
+        itemsCount: Int,
+        itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
+    ) {
         val scrollDirection = ScrollDirection(isForward = scrollToBeConsumed < 0f)
 
         while (true) {
@@ -259,7 +438,13 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
             // Allow up to half a pixel of scroll to remain unconsumed
             if (abs(scrollToBeConsumed) >= 0.5f) {
                 // We need to bring another item onscreen. Can we?
-                if (!composeAndMeasureNextItem(childConstraints, scrollDirection)) {
+                if (!composeAndMeasureNextItem(
+                        childConstraints,
+                        scrollDirection,
+                        itemsCount,
+                        itemContentFactory
+                    )
+                ) {
                     // Nope. Break out and return the rest of the drag
                     break
                 }
@@ -313,30 +498,33 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
      * @return `true` if an item was composed and measured, `false` if there are no more items in
      * the scroll direction
      */
-    private fun composeAndMeasureNextItem(
+    private fun SubcomposeMeasureScope<DataIndex>.composeAndMeasureNextItem(
         childConstraints: Constraints,
-        scrollDirection: ScrollDirection
+        scrollDirection: ScrollDirection,
+        itemsCount: Int,
+        itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
     ): Boolean {
         val nextItemIndex = if (scrollDirection.isForward) {
-            if (items.size > lastComposedItem.value + 1) {
-                lastComposedItem + 1
+            if (itemsCount > lastComposedItem.value + 1) {
+                ++lastComposedItem
             } else {
                 return false
             }
         } else {
             if (firstComposedItem.value > 0) {
-                firstComposedItem - 1
+                --firstComposedItem
             } else {
                 return false
             }
         }
 
-        val nextItem = composeChildForDataIndex(nextItemIndex)
+        val nextItems = composeChildForDataIndex(nextItemIndex, itemContentFactory).map {
+            it.measure(childConstraints)
+        }
 
-        val childPlaceable = nextItem.measure(childConstraints)
-        measuredThisPass[nextItemIndex] = childPlaceable
+        measuredThisPass[nextItemIndex] = nextItems
 
-        val childSize = childPlaceable.mainAxisSize
+        val childSize = nextItems.fastSumBy { it.mainAxisSize }
 
         // Add in our newly composed space so that it may be consumed
         if (scrollDirection.isForward) {
@@ -357,255 +545,134 @@ internal class LazyItemsState<T>(val isVertical: Boolean) {
         lastItemRemainingSpace += delta
         // Scrolling forward is negative delta and adds offset, so subtract the negative
         firstItemScrollOffset -= delta
-        @OptIn(ExperimentalLayoutNodeApi::class)
-        rootNode.requestRemeasure()
-    }
-
-    @OptIn(ExperimentalLayoutNodeApi::class)
-    private inner class ListMeasureBlocks : LayoutNode.NoIntrinsicsMeasureBlocks(
-        error = "Intrinsic measurements are not supported by AdapterList (yet)"
-    ) {
-        override fun measure(
-            measureScope: MeasureScope,
-            measurables: List<Measurable>,
-            constraints: Constraints
-        ): MeasureScope.MeasureResult {
-            measuredThisPass.clear()
-            if (forceRecompose) {
-                rootNode.ignoreModelReads { recomposeAllChildren() }
-            }
-
-            this@LazyItemsState.layoutDirection = layoutDirection
-
-            val maxMainAxis = if (isVertical) constraints.maxHeight else constraints.maxWidth
-            val childConstraints = Constraints(
-                maxWidth = if (isVertical) constraints.maxWidth else Constraints.Infinity,
-                maxHeight = if (!isVertical) constraints.maxHeight else Constraints.Infinity
-            )
-
-            // We're being asked to consume scroll by the Scrollable
-            if (abs(scrollToBeConsumed) >= 0.5f) {
-                // Consume it in advance, because it simplifies the rest of this method if we
-                // know exactly how much scroll we've consumed - for instance, we can safely
-                // discard anything off the start of the viewport, because we know we can fill
-                // it, assuming nothing has shrunken on us (which has to be handled separately
-                // anyway)
-                consumePendingScroll(childConstraints)
-            }
-
-            var mainAxisUsed = (-firstItemScrollOffset).roundToInt()
-
-            // The index of the first item that should be displayed, regardless of what is
-            // currently displayed.  Will be moved forward as we determine what's offscreen
-            var itemIndexOffset = firstComposedItem
-
-            // TODO: handle the case where we can't fill the viewport due to children shrinking,
-            //  but there are more items at the start that we could fill with
-            var index = itemIndexOffset
-            while (mainAxisUsed <= maxMainAxis && index.value < items.size) {
-                val node = getNodeForDataIndex(index)
-                val placeable = measuredThisPass.getOrPut(index) {
-                    node.measure(childConstraints)
-                }
-                val childMainAxisSize = placeable.mainAxisSize
-                mainAxisUsed += childMainAxisSize
-
-                if (mainAxisUsed < 0f) {
-                    // this item is offscreen, remove it and the offset it took up
-                    itemIndexOffset = index + 1
-                    firstItemScrollOffset -= childMainAxisSize
-                }
-
-                index++
-            }
-            lastComposedItem = index - 1 // index is incremented after the last iteration
-
-            // The number of layout children that we want to have, not including any offscreen
-            // items at the start or end
-            val numDesiredChildren = (lastComposedItem - itemIndexOffset + 1).value
-
-            // Remove no-longer-needed items from the start of the list
-            if (itemIndexOffset > firstComposedItem) {
-                val count = (itemIndexOffset - firstComposedItem).value
-                removeAndDisposeChildren(fromIndex = LayoutIndex(0), count = count)
-            }
-            firstComposedItem = itemIndexOffset
-
-            lastItemRemainingSpace = if (mainAxisUsed > maxMainAxis) {
-                (mainAxisUsed - maxMainAxis).toFloat()
-            } else {
-                0f
-            }
-
-            // Remove no-longer-needed items from the end of the list
-            val layoutChildrenInNode = rootNode.children.size
-            if (layoutChildrenInNode > numDesiredChildren) {
-                val count = layoutChildrenInNode - numDesiredChildren
-                removeAndDisposeChildren(
-                    // We've already removed the extras at the start, so the desired children
-                    // start at index 0
-                    fromIndex = LayoutIndex(numDesiredChildren),
-                    count = count
-                )
-            }
-
-            return measureScope.layout(constraints.maxWidth, constraints.maxHeight) {
-                val currentMainAxis = (-firstItemScrollOffset).roundToInt()
-                var x = if (isVertical) 0 else currentMainAxis
-                var y = if (!isVertical) 0 else currentMainAxis
-                rootNode.children.forEach {
-                    it.place(x = x, y = y)
-                    if (isVertical) {
-                        y += it.height
-                    } else {
-                        x += it.width
-                    }
-                }
-            }
-        }
-    }
-
-    private fun removeAndDisposeChildren(
-        fromIndex: LayoutIndex,
-        count: Int
-    ) {
-        for (i in 1..count) {
-            val node = rootNode.children[fromIndex.value]
-            rootNode.removeAt(
-                index = fromIndex.value,
-                // remove one at a time to avoid creating unnecessary data structures
-                // to store the nodes we're about to dispose
-                count = 1
-            )
-            compositionFor(node).dispose()
-            compositionsForLayoutNodes.remove(node)
-        }
-    }
-
-    fun disposeAllChildren() {
-        removeAndDisposeChildren(LayoutIndex(0), rootNode.children.size)
-    }
-
-    fun recomposeIfAttached() {
-        if (rootNode.owner != null) {
-            // TODO: run this in an `onPreCommit` callback for multithreaded/deferred composition
-            //  safety
-            recomposeAllChildren()
-        }
-    }
-
-    private fun recomposeAllChildren() {
-        for (idx in rootNode.children.indices) {
-            val dataIdx = LayoutIndex(idx).toDataIndex()
-            // Make sure that we're only recomposing items that still exist in the data.
-            // Excess layout children will be removed in the next measure/layout pass
-            if (dataIdx.value < items.size && dataIdx.value >= 0) {
-                composeChildForDataIndex(dataIdx)
-            }
-        }
-        forceRecompose = false
-    }
-
-    private fun compositionFor(childNode: LayoutNode): Composition {
-        return compositionsForLayoutNodes[childNode] ?: throw IllegalStateException(
-            "No composition found for child $childNode"
-        )
-    }
-
-    private fun getNodeForDataIndex(dataIndex: DataIndex): LayoutNode {
-        val layoutIndex = dataIndex.toLayoutIndex()
-        val layoutChildren = rootNode.children
-        val numLayoutChildren = layoutChildren.size
-        check(layoutIndex.value <= numLayoutChildren) {
-            "Index too high: $dataIndex, firstComposedItem: $firstComposedItem, " +
-                    "layout index: $layoutIndex, current children: $numLayoutChildren"
-        }
-        return if (layoutIndex.value < numLayoutChildren) {
-            layoutChildren[layoutIndex.value]
-        } else {
-            composeChildForDataIndex(dataIndex)
-        }
-    }
-
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun DataIndex.toLayoutIndex(): LayoutIndex {
-        return LayoutIndex(value - firstComposedItem.value)
-    }
-
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun LayoutIndex.toDataIndex(): DataIndex {
-        return DataIndex(value + firstComposedItem.value)
     }
 
     /**
-     * Contract: this must be either a data index that is already in the LayoutNode, or one
-     * immediately on either side of those.
+     * Updates the [itemScope] with the last [constraints] we got from the parent
      */
-    private fun composeChildForDataIndex(dataIndex: DataIndex): LayoutNode {
-        val layoutIndex = dataIndex.toLayoutIndex()
-
-        check(layoutIndex.value >= -1 && layoutIndex.value <= rootNode.children.size) {
-            "composeChildForDataIndex called with invalid index, data index: $dataIndex," +
-                    " layout index: $layoutIndex"
+    private fun Density.updateItemScope(constraints: Constraints) {
+        val width = constraints.maxWidth.toDp()
+        val height = constraints.maxHeight.toDp()
+        if (width != itemScope.maxWidth || height != itemScope.maxHeight) {
+            itemScope = LazyItemScopeImpl(width, height)
         }
-
-        val node: LayoutNode
-        val atStart = layoutIndex.value == -1
-        val atEnd = rootNode.children.size == layoutIndex.value
-        if (atEnd || atStart) {
-            // This is a new node, either at the end or the start
-            node = LayoutNode()
-            node.measureBlocks = ListItemMeasureBlocks
-
-            // If it's at the end, then the value is already correct, because we don't need to
-            // move any existing LayoutNodes.
-            // If it's at the beginning, it has a layout index of -1 because it's being inserted
-            // _before_ index 0, but this means that we need to insert it at index 0 and then
-            // the others will be shifted forward.  This accounts for these different methods of
-            // tracking.
-            val newLayoutIndex = if (atStart) 0 else layoutIndex.value
-            rootNode.insertAt(newLayoutIndex, node)
-            if (atEnd) {
-                lastComposedItem++
-            } else {
-                // atStart
-                firstComposedItem--
-            }
-        } else {
-            node = rootNode.children[layoutIndex.value]
-        }
-        // TODO(b/150390669): Review use of @ComposableContract(tracked = false)
-        @OptIn(ExperimentalComposeApi::class)
-        val composition = subcomposeInto(
-            node,
-            recomposer,
-            compositionRef
-        ) @ComposableContract(tracked = false) {
-            itemContent(items[dataIndex.value])
-        }
-        compositionsForLayoutNodes[node] = composition
-        return node
     }
 
-    private val ListItemMeasureBlocks =
-        MeasuringIntrinsicsMeasureBlocks { measurables, constraints ->
-            val placeables = measurables.map { it.measure(constraints) }
-            val mainAxisSize = placeables.sumBy { it.mainAxisSize }
-            val crossAxisSize = placeables.maxByOrNull { it.crossAxisSize }?.crossAxisSize ?: 0
-            layout(
-                width = if (!isVertical) mainAxisSize else crossAxisSize,
-                height = if (isVertical) mainAxisSize else crossAxisSize
-            ) {
-                var y = 0
-                var x = 0
-                placeables.forEach { placeable ->
-                    placeable.placeAbsolute(x, y)
-                    if (isVertical) {
-                        y += placeable.mainAxisSize
-                    } else {
-                        x += placeable.mainAxisSize
+    /**
+     * Measures and positions currently visible items using [itemContentFactory] for subcomposing.
+     */
+    fun measure(
+        scope: SubcomposeMeasureScope<DataIndex>,
+        constraints: Constraints,
+        horizontalAlignment: Alignment.Horizontal,
+        verticalAlignment: Alignment.Vertical,
+        itemsCount: Int,
+        itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
+    ): MeasureScope.MeasureResult = with(scope) {
+        updateItemScope(constraints)
+        measuredThisPass.clear()
+        val maxMainAxis = if (isVertical) constraints.maxHeight else constraints.maxWidth
+        val childConstraints = Constraints(
+            maxWidth = if (isVertical) constraints.maxWidth else Constraints.Infinity,
+            maxHeight = if (!isVertical) constraints.maxHeight else Constraints.Infinity
+        )
+
+        // We're being asked to consume scroll by the Scrollable
+        if (abs(scrollToBeConsumed) >= 0.5f) {
+            // Consume it in advance, because it simplifies the rest of this method if we
+            // know exactly how much scroll we've consumed - for instance, we can safely
+            // discard anything off the start of the viewport, because we know we can fill
+            // it, assuming nothing has shrunken on us (which has to be handled separately
+            // anyway)
+            consumePendingScroll(childConstraints, itemsCount, itemContentFactory)
+        }
+
+        var mainAxisUsed = (-firstItemScrollOffset).roundToInt()
+        var maxCrossAxis = 0
+
+        // The index of the first item that should be displayed, regardless of what is
+        // currently displayed.  Will be moved forward as we determine what's offscreen
+        var index = firstComposedItem
+
+        // TODO: handle the case where we can't fill the viewport due to children shrinking,
+        //  but there are more items at the start that we could fill with
+        val allPlaceables = mutableListOf<Placeable>()
+        while (mainAxisUsed <= maxMainAxis && index.value < itemsCount) {
+            val placeables = measuredThisPass.getOrPut(index) {
+                composeChildForDataIndex(index, itemContentFactory).fastMap {
+                    it.measure(childConstraints)
+                }
+            }
+            var size = 0
+            placeables.fastForEach {
+                size += it.mainAxisSize
+                maxCrossAxis = maxOf(maxCrossAxis, it.crossAxisSize)
+            }
+            mainAxisUsed += size
+
+            if (mainAxisUsed < 0f) {
+                // this item is offscreen, remove it and the offset it took up
+                firstComposedItem = index + 1
+                firstItemScrollOffset -= size
+            } else {
+                allPlaceables.addAll(placeables)
+            }
+
+            index++
+        }
+        lastComposedItem = index - 1 // index is incremented after the last iteration
+
+        lastItemRemainingSpace = if (mainAxisUsed > maxMainAxis) {
+            (mainAxisUsed - maxMainAxis).toFloat()
+        } else {
+            0f
+        }
+
+        // Wrap the content of the children
+        val layoutWidth = constraints.constrainWidth(
+            if (isVertical) maxCrossAxis else mainAxisUsed
+        )
+        val layoutHeight = constraints.constrainHeight(
+            if (!isVertical) maxCrossAxis else mainAxisUsed
+        )
+
+        return layout(layoutWidth, layoutHeight) {
+            var currentMainAxis = (-firstItemScrollOffset).roundToInt()
+            allPlaceables.fastForEach {
+                if (isVertical) {
+                    val x = horizontalAlignment.align(layoutWidth - it.width, layoutDirection)
+                    if (currentMainAxis + it.height > 0 && currentMainAxis < layoutHeight) {
+                        it.place(x, currentMainAxis)
                     }
+                    currentMainAxis += it.height
+                } else {
+                    val y = verticalAlignment.align(layoutHeight - it.height)
+                    if (currentMainAxis + it.width > 0 && currentMainAxis < layoutWidth) {
+                        it.placeRelative(currentMainAxis, y)
+                    }
+                    currentMainAxis += it.width
                 }
             }
         }
+    }
+
+    private fun SubcomposeMeasureScope<DataIndex>.composeChildForDataIndex(
+        dataIndex: DataIndex,
+        itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
+    ): List<Measurable> = subcompose(dataIndex, itemScope.itemContentFactory(dataIndex.value))
+}
+
+/**
+ * Pre-allocated initial value for [LazyItemScopeImpl] to not have it nullable and avoid using
+ * late init.
+ */
+private val InitialLazyItemsScopeImpl = LazyItemScopeImpl(0.dp, 0.dp)
+
+private data class LazyItemScopeImpl(
+    val maxWidth: Dp,
+    val maxHeight: Dp
+) : LazyItemScope {
+    override fun Modifier.fillParentMaxSize() = size(maxWidth, maxHeight)
+    override fun Modifier.fillParentMaxWidth() = width(maxWidth)
+    override fun Modifier.fillParentMaxHeight() = height(maxHeight)
 }

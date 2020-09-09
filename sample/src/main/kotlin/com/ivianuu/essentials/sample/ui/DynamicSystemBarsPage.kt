@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.ScrollerPosition
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.VerticalScroller
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.fillMaxWidth

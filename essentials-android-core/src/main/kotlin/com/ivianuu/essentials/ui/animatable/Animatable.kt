@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.globalBounds
 import androidx.compose.ui.onPositioned
-import androidx.compose.ui.unit.PxBounds
 
 @Stable
 class Animatable(val tag: Any) {
@@ -54,7 +54,7 @@ class Animatable(val tag: Any) {
 
 }
 
-val Animatable.bounds: PxBounds?
+val Animatable.bounds: Rect?
     get() = layoutCoordinates
         ?.takeIf { it.isAttached }
         ?.globalBounds

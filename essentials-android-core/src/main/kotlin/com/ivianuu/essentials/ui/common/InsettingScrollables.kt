@@ -5,6 +5,7 @@ import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.InternalLayoutApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsAmbient
 
+@OptIn(InternalLayoutApi::class)
 @Composable
 fun InsettingScrollableColumn(
     modifier: Modifier = Modifier,
@@ -44,6 +46,7 @@ fun InsettingScrollableColumn(
     }
 }
 
+@OptIn(InternalLayoutApi::class)
 @Composable
 fun InsettingScrollableRow(
     modifier: Modifier = Modifier,

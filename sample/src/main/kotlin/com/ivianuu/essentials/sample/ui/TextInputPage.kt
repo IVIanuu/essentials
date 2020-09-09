@@ -31,9 +31,10 @@ import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.FocusModifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawOpacity
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
 import com.ivianuu.essentials.ui.layout.center
@@ -61,18 +62,19 @@ fun TextInputPage() {
             TopAppBar(
                 title = {
                     if (state.searchVisible) {
-                        val focusModifier = FocusModifier()
+                        val focusRequester = remember { FocusRequester() }
 
                         Stack(
                             modifier = Modifier.fillMaxSize()
-                                .clickable { focusModifier.requestFocus() }
+                                .clickable { focusRequester.requestFocus() }
                         ) {
                             if (state.inputValue.text.isEmpty()) {
                                 Text(
                                     text = "Search..",
                                     style = MaterialTheme.typography.subtitle1,
                                     modifier = Modifier.drawOpacity(0.5f)
-                                        .gravity(Alignment.CenterStart) + focusModifier
+                                        .gravity(Alignment.CenterStart)
+                                        .focusRequester(focusRequester)
                                 )
                             }
                             BaseTextField(
@@ -83,7 +85,7 @@ fun TextInputPage() {
                             )
                         }
 
-                        onActive { focusModifier.requestFocus() }
+                        onActive { focusRequester.requestFocus() }
                     } else {
                         Text("Text input")
                     }

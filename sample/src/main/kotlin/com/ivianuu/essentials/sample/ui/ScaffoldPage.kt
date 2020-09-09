@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -143,7 +144,7 @@ fun ScaffoldPage() {
                     navigator.push(
                         DialogRoute {
                             SingleChoiceListDialog(
-                                items = Scaffold.FabPosition.values().toList(),
+                                items = FabPosition.values().toList(),
                                 selectedItem = controls.fabPosition,
                                 onSelect = { controls.fabPosition = it },
                                 item = { Text(it.name) }
@@ -160,7 +161,7 @@ private class ScaffoldControls {
     var showTopBar by mutableStateOf(true)
     var showBottomBar by mutableStateOf(false)
     var showFab by mutableStateOf(false)
-    var fabPosition by mutableStateOf(Scaffold.FabPosition.End)
+    var fabPosition by mutableStateOf(FabPosition.End)
 }
 
 fun Modifier.fabAnimation(visible: Boolean): Modifier = composed {

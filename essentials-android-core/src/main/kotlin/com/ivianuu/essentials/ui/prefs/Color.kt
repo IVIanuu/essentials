@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
@@ -78,8 +79,8 @@ fun ColorDialogListItem(
             Surface(
                 modifier = Modifier.size(40.dp),
                 color = value,
-                border = Border(
-                    size = 1.dp,
+                border = BorderStroke(
+                    width = 1.dp,
                     color = MaterialTheme.colors.onSurface
                 )
             ) {}

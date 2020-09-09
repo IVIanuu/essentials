@@ -21,8 +21,8 @@ import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Icon
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.VerticalScroller
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -186,7 +186,7 @@ fun DialogsPage() {
                     Dialog(
                         title = { Text("List") },
                         content = {
-                            VerticalScroller {
+                            ScrollableColumn {
                                 (1..100).forEach {
                                     ListItem(
                                         title = {

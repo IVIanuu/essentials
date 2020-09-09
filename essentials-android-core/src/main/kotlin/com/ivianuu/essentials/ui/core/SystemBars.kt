@@ -41,7 +41,7 @@ import androidx.compose.ui.onPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Position
-import androidx.compose.ui.unit.PxBounds
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.addFlag
@@ -59,7 +59,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = contentColor().isDark
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
-    var globalBounds by state<PxBounds?> { null }
+    var globalBounds by state<Rect?> { null }
     val density = DensityAmbient.current
 
     onPreCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {

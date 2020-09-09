@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.material.DrawerConstants
+import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
@@ -38,9 +40,9 @@ fun Scaffold(
     topBar: @Composable (() -> Unit)? = null,
     bottomBar: @Composable (() -> Unit)? = null,
     floatingActionButton: @Composable (() -> Unit)? = null,
-    floatingActionButtonPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
-    drawerContent: @Composable (() -> Unit)? = null,
+    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
     drawerShape: Shape = MaterialTheme.shapes.large,
     drawerElevation: Dp = DrawerConstants.DefaultElevation,
     backgroundColor: Color = MaterialTheme.colors.background,
