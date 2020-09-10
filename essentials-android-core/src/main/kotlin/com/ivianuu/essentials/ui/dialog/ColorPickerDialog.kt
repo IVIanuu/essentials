@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.Border
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
@@ -380,13 +379,20 @@ private fun ColorComponentItem(
             style = MaterialTheme.typography.subtitle1
         )
 
-        Slider(
-            value = value,
-            onValueChange = onValueChanged,
-            thumbColor = component.color(), // todo
-            modifier = Modifier.padding(horizontal = 8.dp)
-                .weight(1f)
-        )
+        MaterialTheme(
+            colors = MaterialTheme.colors.copy(
+                primary = component.color()
+            ),
+            typography = MaterialTheme.typography,
+            shapes = MaterialTheme.shapes
+        ) {
+            Slider(
+                value = value,
+                onValueChange = onValueChanged,
+                modifier = Modifier.padding(horizontal = 8.dp)
+                    .weight(1f)
+            )
+        }
 
         Text(
             text = (255 * value).toInt().toString(),

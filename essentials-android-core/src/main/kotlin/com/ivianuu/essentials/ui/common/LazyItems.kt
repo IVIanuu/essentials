@@ -1,26 +1,8 @@
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.animation.asDisposableClock
+import androidx.compose.foundation.animation.defaultFlingConfig
 import androidx.compose.foundation.gestures.ScrollableController
-import androidx.compose.runtime.Applier
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposableContract
-import androidx.compose.runtime.Composition
-import androidx.compose.runtime.CompositionReference
-import androidx.compose.runtime.ExperimentalComposeApi
-import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.compositionReference
-import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.emit
-import androidx.compose.runtime.onDispose
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.Measurable
-import androidx.compose.ui.MeasureScope
-import androidx.compose.ui.MeasuringIntrinsicsMeasureBlocks
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Placeable
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
-import androidx.compose.ui.materialize
-import androidx.compose.foundation.gestures.rememberScrollableController
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.Spacer
@@ -33,21 +15,23 @@ import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.foundation.lazy.LazyRowForIndexed
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Measurable
+import androidx.compose.ui.MeasureScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Placeable
 import androidx.compose.ui.Remeasurement
 import androidx.compose.ui.RemeasurementModifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.layout.ExperimentalSubcomposeLayoutApi
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.SubcomposeMeasureScope
-import androidx.compose.ui.node.ExperimentalLayoutNodeApi
-import androidx.compose.ui.node.LayoutNode
-import androidx.compose.ui.node.Ref
+import androidx.compose.ui.platform.AnimationClockAmbient
 import androidx.compose.ui.platform.LayoutDirectionAmbient
-import androidx.compose.ui.platform.subcomposeInto
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -298,7 +282,11 @@ internal inline fun LazyFor(
     noinline itemContentFactory: LazyItemScope.(Int) -> @Composable () -> Unit
 ) {
     val state = rememberRetained { LazyForState(isVertical = isVertical) }
-    val scrollController = rememberScrollableController(consumeScrollDelta = state.onScrollDelta)
+    val clocks = AnimationClockAmbient.current.asDisposableClock()
+    val flingConfig = defaultFlingConfig()
+    val scrollController = rememberRetained(clocks, flingConfig) {
+        ScrollableController(state.onScrollDelta, flingConfig, clocks)
+    }
     state.scrollableController = scrollController
     val reverseDirection = LayoutDirectionAmbient.current == LayoutDirection.Rtl && !isVertical
     SubcomposeLayout<DataIndex>(
