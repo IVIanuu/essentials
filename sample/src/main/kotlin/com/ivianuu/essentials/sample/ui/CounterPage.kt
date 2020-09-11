@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +23,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
 @Reader
@@ -52,7 +53,7 @@ fun CounterPage() {
             verticalArrangement = Arrangement.Center,
             horizontalGravity = Alignment.CenterHorizontally
         ) {
-            val (state, dispatch) = rememberStore { counterStore() }
+            val (state, dispatch) = rememberStore<CounterState, CounterAction>()
 
             Text(
                 text = "Count: ${state.count}",
@@ -76,16 +77,15 @@ fun CounterPage() {
     }
 }
 
-@Reader
-private fun counterStore() =
-    store<CounterState, CounterAction>(CounterState(0)) {
-        onEachAction { action ->
-            when (action) {
-                Inc -> setState { copy(count = count + 1) }
-                Dec -> setState { copy(count = count - 1) }
-            }.exhaustive
-        }
+@Given
+internal fun counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
+    onEachAction { action ->
+        when (action) {
+            Inc -> setState { copy(count = count + 1) }
+            Dec -> setState { copy(count = count - 1) }
+        }.exhaustive
     }
+}
 
-private data class CounterState(val count: Int)
-private enum class CounterAction { Inc, Dec }
+internal data class CounterState(val count: Int)
+internal enum class CounterAction { Inc, Dec }

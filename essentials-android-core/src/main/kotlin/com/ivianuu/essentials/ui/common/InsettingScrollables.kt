@@ -82,7 +82,7 @@ fun <T> InsettingLazyColumnItems(
 ) {
     val insets = InsetsAmbient.current
     ConsumeInsets(start = false, end = false) {
-        LazyColumnItems(
+        LazyColumnFor(
             items = remember(items) {
                 buildList {
                     add(LeadingInsetsItem)

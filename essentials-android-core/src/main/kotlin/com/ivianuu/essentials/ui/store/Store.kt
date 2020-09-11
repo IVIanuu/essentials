@@ -10,12 +10,12 @@ import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.ContextName
+import com.ivianuu.injekt.ForKey
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.childContext
 import com.ivianuu.injekt.common.instance
 import com.ivianuu.injekt.currentContext
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -57,22 +57,20 @@ val <S> Store<S, *>.observedState: S
 // todo remove overload once compiler is fixed
 @Reader
 @Composable
-fun <S, A> rememberStore(
-    init: @Reader () -> Store<S, A>
+fun <@ForKey S, @ForKey A> rememberStore(
+    init: @Reader () -> Store<S, A> = { given() }
 ): Store<S, A> = rememberStore(inputs = *emptyArray(), init = init)
 
 @Reader
 @Composable
-fun <S, A> rememberStore(
+fun <@ForKey S, @ForKey A> rememberStore(
     vararg inputs: Any?,
-    init: @Reader () -> Store<S, A>
+    init: @Reader () -> Store<S, A> = { given() }
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { dispatchers.default }
     return rememberRetained(*inputs) {
-        currentContext.childContext(keyOf<RememberStoreContext>()) {
+        currentContext.childContext {
             instance(scope)
         }.runReader { init() }
     }
 }
-
-object RememberStoreContext : ContextName

@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.ui.graphics.painter.ImagePainter
-import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.onEachAction
@@ -42,12 +42,13 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startActivityForResult
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
 @Reader
 @Composable
 fun ShortcutPickerPage(title: String? = null) {
-    val (state, dispatch) = rememberStore { shortcutPickerStore() }
+    val (state, dispatch) = rememberStore<ShortcutPickerState, ShortcutPickerAction>()
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -84,8 +85,8 @@ private fun Shortcut(
     }
 }
 
-@Reader
-private fun shortcutPickerStore() =
+@Given
+internal fun shortcutPickerStore() =
     store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
         execute(
             block = { getShortcuts() },
@@ -113,10 +114,10 @@ private fun shortcutPickerStore() =
 
 
 @Immutable
-private data class ShortcutPickerState(
+internal data class ShortcutPickerState(
     val shortcuts: Resource<List<Shortcut>> = Idle
 )
 
-private sealed class ShortcutPickerAction {
+internal sealed class ShortcutPickerAction {
     data class ShortcutClicked(val shortcut: Shortcut) : ShortcutPickerAction()
 }

@@ -16,12 +16,13 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 
 @Reader
 @Composable
 fun BackupAndRestorePage() {
-    val (_, dispatch) = rememberStore { backupAndRestorePage() }
+    val (_, dispatch) = rememberStore<BackupAndRestoreState, BackupAndRestoreAction>()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {
@@ -41,8 +42,8 @@ fun BackupAndRestorePage() {
     }
 }
 
-@Reader
-private fun backupAndRestorePage() =
+@Given
+internal fun backupAndRestorePage() =
     store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
         onEachAction { action ->
             when (action) {
@@ -64,9 +65,9 @@ private fun backupAndRestorePage() =
         }
     }
 
-private object BackupAndRestoreState
+internal object BackupAndRestoreState
 
-private sealed class BackupAndRestoreAction {
+internal sealed class BackupAndRestoreAction {
     object BackupClicked : BackupAndRestoreAction()
     object RestoreClicked : BackupAndRestoreAction()
 }

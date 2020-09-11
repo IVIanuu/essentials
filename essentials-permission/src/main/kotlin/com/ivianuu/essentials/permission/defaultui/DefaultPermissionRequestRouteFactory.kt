@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
-import androidx.compose.foundation.Text
-import androidx.compose.material.Button
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.GivenPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Icon
@@ -45,7 +45,9 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.first
 
 @GivenPermissionRequestRouteFactory
@@ -59,8 +61,8 @@ internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFact
 @Reader
 @Composable
 private fun DefaultPermissionPage(request: PermissionRequest) {
-    val (state, dispatch) = rememberStore {
-        defaultPermissionStore(request)
+    val (state, dispatch) = rememberStore<PermissionState, PermissionAction> {
+        given(request)
     }
     Scaffold(
         topBar = {
@@ -100,8 +102,8 @@ private fun Permission(
     }
 }
 
-@Reader
-private fun defaultPermissionStore(
+@Given
+internal fun defaultPermissionStore(
     request: PermissionRequest
 ) = store<PermissionState, PermissionAction>(
     PermissionState()
@@ -134,10 +136,10 @@ private fun defaultPermissionStore(
 
 
 @Immutable
-private data class PermissionState(
+internal data class PermissionState(
     val permissionsToProcess: List<Permission> = emptyList()
 )
 
-private sealed class PermissionAction {
+internal sealed class PermissionAction {
     data class PermissionClicked(val permission: Permission) : PermissionAction()
 }

@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.apps.ui
 
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
@@ -43,7 +43,9 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -51,7 +53,7 @@ fun AppPickerPage(
     appFilter: AppFilter = DefaultAppFilter,
     title: String? = null
 ) {
-    val (state, dispatch) = rememberStore { appPickerStore(appFilter) }
+    val (state, dispatch) = rememberStore<AppPickerState, AppPickerAction> { given(appFilter) }
 
     Scaffold(
         topBar = {
@@ -88,8 +90,8 @@ private fun AppInfo(
     )
 }
 
-@Reader
-private fun appPickerStore(
+@Given
+internal fun appPickerStore(
     appFilter: AppFilter
 ) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
     execute(
@@ -108,9 +110,9 @@ private fun appPickerStore(
 }
 
 @Immutable
-private data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
+internal data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
 
-private sealed class AppPickerAction {
+internal sealed class AppPickerAction {
     data class AppClicked(val app: AppInfo) : AppPickerAction()
 }
 

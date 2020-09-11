@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Text
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -12,6 +12,7 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.given
 
 @Reader
 @Composable
@@ -22,9 +23,9 @@ fun ActionPickerPage(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
-        val (state, dispatch) = rememberStore(
+        val (state, dispatch) = rememberStore<ActionPickerState, ActionPickerAction>(
             showDefaultOption, showNoneOption
-        ) { actionPickerStore(showDefaultOption, showNoneOption) }
+        ) { given(showDefaultOption, showNoneOption) }
         ResourceLazyColumnItems(state.items) { item ->
             ActionPickerItem(
                 item = item,

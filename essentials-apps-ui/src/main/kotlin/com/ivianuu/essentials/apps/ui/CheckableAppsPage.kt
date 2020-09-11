@@ -50,6 +50,7 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -63,9 +64,7 @@ fun CheckableAppsPage(
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) {
-    val (state, dispatch) = rememberStore {
-        checkableAppsStore()
-    }
+    val (state, dispatch) = rememberStore<CheckableAppsState, CheckableAppsAction>()
 
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
         dispatch(CheckableAppsAction.UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
@@ -122,21 +121,20 @@ private fun CheckableApp(
     )
 }
 
-@Reader
-private fun checkableAppsStore() =
-    store<CheckableAppsState, CheckableAppsAction>(
-        CheckableAppsState()
-    ) {
-        state
-            .map { it.appFilter }
-            .distinctUntilChanged()
-            .mapLatest { getInstalledApps().filter(it) }
-            .executeIn(this) { copy(apps = it) }
+@Given
+internal fun checkableAppsStore() = store<CheckableAppsState, CheckableAppsAction>(
+    CheckableAppsState()
+) {
+    state
+        .map { it.appFilter }
+        .distinctUntilChanged()
+        .mapLatest { getInstalledApps().filter(it) }
+        .executeIn(this) { copy(apps = it) }
 
-        onEachAction { action ->
-            suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-                val currentState = state.value
-                val newCheckedApps = currentState.checkableApps()!!
+    onEachAction { action ->
+        suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
+            val currentState = state.value
+            val newCheckedApps = currentState.checkableApps()!!
                     .filter { it.isChecked }
                     .map { it.info.packageName }
                     .toMutableSet()
@@ -178,13 +176,13 @@ private fun checkableAppsStore() =
     }
 
 @Immutable
-private data class CheckableApp(
+internal data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )
 
 @Immutable
-private data class CheckableAppsState(
+internal data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
     val onCheckedAppsChanged: suspend (Set<String>) -> Unit = {},
@@ -200,7 +198,7 @@ private data class CheckableAppsState(
     }
 }
 
-private sealed class CheckableAppsAction {
+internal sealed class CheckableAppsAction {
     data class UpdateRefs(
         val checkedApps: Set<String>,
         val onCheckedAppsChanged: suspend (Set<String>) -> Unit,
