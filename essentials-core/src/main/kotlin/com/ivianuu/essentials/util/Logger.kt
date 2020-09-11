@@ -3,6 +3,7 @@ package com.ivianuu.essentials.util
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.givenOrNull
 import java.util.regex.Pattern
 
 interface Logger {
@@ -25,27 +26,27 @@ interface Logger {
 
 @Reader
 inline fun v(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.v(message(), throwable, tag)
+    givenOrNull<Logger?>()?.v(message(), throwable, tag)
 }
 
 @Reader
 inline fun d(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.d(message(), throwable, tag)
+    givenOrNull<Logger?>()?.d(message(), throwable, tag)
 }
 
 @Reader
 inline fun i(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.i(message(), throwable, tag)
+    givenOrNull<Logger?>()?.i(message(), throwable, tag)
 }
 
 @Reader
 inline fun w(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.w(message(), throwable, tag)
+    givenOrNull<Logger?>()?.w(message(), throwable, tag)
 }
 
 @Reader
 inline fun e(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.e(message(), throwable, tag)
+    givenOrNull<Logger?>()?.e(message(), throwable, tag)
 }
 
 @Reader

@@ -2,6 +2,7 @@ package com.ivianuu.essentials.util
 
 import android.util.Log
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 @Given
@@ -32,7 +33,7 @@ class AndroidLogger : Logger {
     }
 
     companion object {
-        @Given
+        @Given(ApplicationContext::class)
         fun bind(): Logger? = if (given<BuildInfo>().isDebug) given<AndroidLogger>() else null
     }
 }
