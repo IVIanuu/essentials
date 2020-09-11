@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.material.Switch
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState
@@ -62,10 +62,10 @@ fun SwitchListItem(
             Box(modifier = Modifier.absorbPointer()) {
                 Switch(
                     checked = value,
-                    onCheckedChange = { onValueChange(!value); Unit }
+                    onCheckedChange = { onValueChange(it) }
                 )
             }
         },
-        onClick = { onValueChange(!value); Unit }
+        onClick = { onValueChange(!value) }
     )
 }

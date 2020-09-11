@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.prefs
 
+import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.material.Checkbox
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState
@@ -60,10 +60,10 @@ fun CheckboxListItem(
         trailing = {
             Checkbox(
                 checked = value,
-                onCheckedChange = { onValueChange(!value); Unit },
+                onCheckedChange = { onValueChange(it) },
                 modifier = Modifier.absorbPointer()
             )
         },
-        onClick = { onValueChange(!value); Unit }
+        onClick = { onValueChange(!value) }
     )
 }

@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.material.RadioButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState
@@ -62,10 +62,10 @@ fun RadioButtonListItem(
             Box(modifier = Modifier.absorbPointer()) {
                 RadioButton(
                     selected = value,
-                    onClick = { onValueChange(!value); Unit }
+                    onClick = { onValueChange(!value) }
                 )
             }
         },
-        onClick = { onValueChange(!value); Unit }
+        onClick = { onValueChange(!value) }
     )
 }
