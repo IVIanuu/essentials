@@ -3,14 +3,14 @@ package com.ivianuu.essentials.ui.animatedstack.animation
 import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.transition
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 fun OpenCloseStackTransition(
 
 ): StackTransition = { context ->
-    onPreCommit(true) { context.addTo() }
+    onCommit(true) { context.addTo() }
 
     val fromPropsKeys =
         if (context.fromAnimatable != null) remember { OpenClosePropKeys() } else null

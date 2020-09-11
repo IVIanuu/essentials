@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.common.ApplicationContext
@@ -67,6 +68,8 @@ fun PrefsPage() {
                     value = true
                 )
             )
+
+            d { "recompose" }
 
             Subheader(modifier = dependenciesModifier) { Text("Category") }
 

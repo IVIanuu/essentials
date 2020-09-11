@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.onActive
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.onPreCommit
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
 import androidx.compose.runtime.stateFor
@@ -63,7 +63,7 @@ fun ForegroundJobPage() {
         var count by stateFor(foregroundJob) { 0 }
 
         foregroundJob?.let { currentJob ->
-            onPreCommit(count) {
+            onCommit(count) {
                 currentJob.updateNotification(
                     buildNotification(count, primaryColor)
                 )

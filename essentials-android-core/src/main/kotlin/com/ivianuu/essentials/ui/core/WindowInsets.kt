@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.state
@@ -128,7 +128,7 @@ fun ProvideWindowInsets(children: @Composable () -> Unit) {
         }
     }
 
-    onPreCommit(ownerView) {
+    onCommit(ownerView) {
         ownerView.setOnApplyWindowInsetsListener(insetsListener)
         ownerView.addOnAttachStateChangeListener(attachListener)
 

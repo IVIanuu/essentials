@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 
 @Composable
@@ -33,14 +33,14 @@ fun onBackPressed(
             }
         }
     }
-    onPreCommit(enabled) {
+    onCommit(enabled) {
         onBackPressedCallback.isEnabled = enabled
     }
 
     // todo use OnBackPressedDispatcherOwnerAmbient once available
     val onBackPressedDispatcher = compositionActivity
         .onBackPressedDispatcher
-    onPreCommit(onBackPressedCallback) {
+    onCommit(onBackPressedCallback) {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
         onDispose { onBackPressedCallback.remove() }
     }

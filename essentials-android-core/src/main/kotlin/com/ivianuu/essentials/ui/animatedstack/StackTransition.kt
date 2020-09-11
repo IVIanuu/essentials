@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.animatable.Animatable
@@ -39,7 +39,7 @@ val NoOpStackTransition: StackTransition = { context ->
         if (context.toAnimatable != null) context.addTo()
         if (context.fromAnimatable != null) context.removeFrom()
     }
-    onPreCommit(true) {
+    onCommit(true) {
         context.onComplete()
     }
 }

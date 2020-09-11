@@ -16,12 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.state
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
@@ -30,7 +24,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.onPreCommit
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.state
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettings
@@ -65,7 +65,7 @@ fun NavBarPage() {
 
             val hideNavBar = state { false }
 
-            onPreCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+            onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
 
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }

@@ -1,12 +1,8 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SnapshotMutationPolicy
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.staticAmbientOf
 import kotlinx.coroutines.DisposableHandle
 
@@ -65,24 +61,6 @@ inline fun <T> rememberRetained(
 
     return value.value
 }
-
-@Composable
-inline fun <T> retainedState(
-    key: Any = currentComposer.currentCompoundKeyHash,
-    areEquivalent: SnapshotMutationPolicy<T> = referentialEqualityPolicy(),
-    noinline init: () -> T
-): MutableState<T> = rememberRetained(key) { mutableStateOf(init(), areEquivalent) }
-
-@Composable
-inline fun <T> retainedStateFor(
-    vararg inputs: Any?,
-    key: Any = currentComposer.currentCompoundKeyHash,
-    areEquivalent: SnapshotMutationPolicy<T> = referentialEqualityPolicy(),
-    noinline init: () -> T
-): MutableState<T> = rememberRetained(
-    key,
-    *inputs
-) { mutableStateOf(init(), areEquivalent) }
 
 @PublishedApi
 internal class ValueWithInputs<T>(
