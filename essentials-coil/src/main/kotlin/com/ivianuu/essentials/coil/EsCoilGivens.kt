@@ -20,9 +20,8 @@ import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 object EsCoilGivens {
@@ -46,16 +45,16 @@ object EsCoilGivens {
         }
         .build()
 
-    @GivenSetElements
+    @Given
     fun decoders(): Set<Decoder> = emptySet()
 
-    @GivenSetElements
+    @Given
     fun fetchers(): Set<FetcherBinding<*>> = emptySet()
 
-    @GivenSetElements
+    @Given
     fun mappers(): Set<MapperBinding<*>> = emptySet()
 
-    @GivenSetElements
+    @Given
     fun measuredMappers(): Set<MeasuredMapperBinding<*>> = emptySet()
 
 }

@@ -17,21 +17,30 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.Adapter
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.keyOf
 
-@Effect
+@Adapter
 annotation class GivenAppInitializer {
-    companion object {
-        @GivenSetElements
-        operator fun <T : () -> Unit> invoke(): AppInitializers = setOf(given<T>())
+    companion object : Adapter.Impl<() -> Unit> {
+        override fun ContextBuilder.configure(
+            key: Key<() -> Unit>,
+            provider: @Reader () -> () -> Unit
+        ) {
+            set(keyOf<AppInitializers>()) {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
 object EsAppInitializerGivens {
-    @GivenSetElements
+    @Given
     fun appInitializers(): AppInitializers = emptySet()
 }
 

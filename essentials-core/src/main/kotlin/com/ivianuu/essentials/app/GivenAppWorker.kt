@@ -18,22 +18,31 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.Adapter
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.keyOf
 import kotlinx.coroutines.launch
 
-@Effect
+@Adapter
 annotation class GivenAppWorker {
-    companion object {
-        @GivenSetElements
-        operator fun <T : suspend () -> Unit> invoke(): AppWorkers = setOf(given<T>())
+    companion object : Adapter.Impl<suspend () -> Unit> {
+        override fun ContextBuilder.configure(
+            key: Key<suspend () -> Unit>,
+            provider: @Reader () -> suspend () -> Unit
+        ) {
+            set(keyOf<AppWorkers>()) {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
 object EsAppWorkersGivens {
-    @GivenSetElements
+    @Given
     fun appWorkers(): AppWorkers = emptySet()
 }
 

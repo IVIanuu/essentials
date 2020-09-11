@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Key
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.Adapter
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.flow.Flow
 
@@ -23,11 +24,17 @@ data class Action(
 
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
-@Effect
+@Adapter
 annotation class GivenAction {
-    companion object {
-        @GivenSetElements
-        operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
+    companion object : Adapter.Impl<() -> Action> {
+        override fun ContextBuilder.configure(
+            key: Key<() -> Action>,
+            provider: @Reader () -> () -> Action
+        ) {
+            set<() -> Action> {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
@@ -42,11 +49,17 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-@Effect
+@Adapter
 annotation class GivenActionFactory {
-    companion object {
-        @GivenSetElements
-        operator fun <T : ActionFactory> invoke(): Set<ActionFactory> = setOf(given<T>())
+    companion object : Adapter.Impl<ActionFactory> {
+        override fun ContextBuilder.configure(
+            key: Key<ActionFactory>,
+            provider: @Reader () -> ActionFactory
+        ) {
+            set<ActionFactory> {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
@@ -56,11 +69,16 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@Effect
+@Adapter
 annotation class GivenActionPickerDelegate {
-    companion object {
-        @GivenSetElements
-        operator fun <T : ActionPickerDelegate> invoke(): Set<ActionPickerDelegate> =
-            setOf(given<T>())
+    companion object : Adapter.Impl<ActionPickerDelegate> {
+        override fun ContextBuilder.configure(
+            key: Key<ActionPickerDelegate>,
+            provider: @Reader () -> ActionPickerDelegate
+        ) {
+            set<ActionPickerDelegate> {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }

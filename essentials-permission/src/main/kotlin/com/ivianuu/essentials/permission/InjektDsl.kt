@@ -16,34 +16,47 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElements
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.Adapter
 
-@Effect
+@Adapter
 annotation class GivenPermissionStateProvider {
-    companion object {
-        @GivenSetElements
-        operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
-            setOf(given<T>())
+    companion object : Adapter.Impl<PermissionStateProvider> {
+        override fun ContextBuilder.configure(
+            key: Key<PermissionStateProvider>,
+            provider: @Reader () -> PermissionStateProvider
+        ) {
+            set<PermissionStateProvider> {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
-@Effect
+@Adapter
 annotation class GivenPermissionRequestHandler {
-    companion object {
-        @GivenSetElements
-        operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
-            setOf(given<T>())
+    companion object : Adapter.Impl<PermissionRequestHandler> {
+        override fun ContextBuilder.configure(
+            key: Key<PermissionRequestHandler>,
+            provider: @Reader () -> PermissionRequestHandler
+        ) {
+            set<PermissionRequestHandler> {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
-@Effect
+@Adapter
 annotation class GivenPermissionRequestRouteFactory {
-    companion object {
-        @Given
-        operator fun <T : PermissionRequestRouteFactory> invoke(): PermissionRequestRouteFactory =
-            given<T>()
+    companion object : Adapter.Impl<PermissionRequestRouteFactory> {
+        override fun ContextBuilder.configure(
+            key: Key<PermissionRequestRouteFactory>,
+            provider: @Reader () -> PermissionRequestRouteFactory
+        ) {
+            unscoped<PermissionRequestRouteFactory>(provider = provider)
+        }
     }
 }

@@ -20,8 +20,8 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 @Immutable

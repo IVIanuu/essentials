@@ -14,8 +14,8 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 
 @Given(ApplicationContext::class)
 internal class ActionPermissions {

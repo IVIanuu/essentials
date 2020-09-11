@@ -27,8 +27,8 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job

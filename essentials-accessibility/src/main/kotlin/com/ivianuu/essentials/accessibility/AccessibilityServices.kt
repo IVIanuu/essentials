@@ -18,8 +18,8 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -10,9 +10,12 @@ import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.Context
+import com.ivianuu.injekt.ContextName
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.childContext
+import com.ivianuu.injekt.common.instance
+import com.ivianuu.injekt.currentContext
+import com.ivianuu.injekt.keyOf
 import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -66,11 +69,10 @@ fun <S, A> rememberStore(
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { dispatchers.default }
     return rememberRetained(*inputs) {
-        childContext<RememberStoreContext>(scope).runReader {
-            init()
-        }
+        currentContext.childContext(keyOf<RememberStoreContext>()) {
+            instance(scope)
+        }.runReader { init() }
     }
 }
 
-@Context
-interface RememberStoreContext
+object RememberStoreContext : ContextName

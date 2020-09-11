@@ -27,8 +27,9 @@ import coil.fetch.Fetcher
 import coil.size.Size
 import com.ivianuu.essentials.coil.FetcherBinding
 import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.injekt.ContextBuilder
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
@@ -51,12 +52,16 @@ internal class AppIconFetcher : Fetcher<AppIcon> {
     }
 
     companion object {
-        @GivenSetElements
-        fun appIconFetcherIntoMap(): Set<FetcherBinding<*>> = setOf(
-            FetcherBinding(
-                given<AppIconFetcher>(),
-                AppIcon::class
-            )
-        )
+        @Module
+        fun ContextBuilder.appIconFetcherIntoMap() {
+            set<FetcherBinding<*>> {
+                add {
+                    FetcherBinding(
+                        given<AppIconFetcher>(),
+                        AppIcon::class
+                    )
+                }
+            }
+        }
     }
 }

@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.color
@@ -40,9 +40,9 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 import kotlin.time.hours
 import kotlin.time.milliseconds

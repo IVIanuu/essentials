@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 
 object EsNavigatorGivens {
 

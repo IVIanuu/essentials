@@ -19,8 +19,8 @@ package com.ivianuu.essentials.billing.release
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.ApplicationContext
 
 object EsReleaseClientGivens {
 

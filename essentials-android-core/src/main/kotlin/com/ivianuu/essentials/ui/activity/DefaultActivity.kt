@@ -20,13 +20,12 @@ import android.os.Bundle
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.core.AppUiMarker
 import com.ivianuu.injekt.android.activityContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.givenOrNull
 
 class DefaultActivity : EsActivity() {
 
     private val appUi: AppUiMarker? by lazy {
-        activityContext.runReader { given() }
+        activityContext.givenOrNull<AppUiMarker>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

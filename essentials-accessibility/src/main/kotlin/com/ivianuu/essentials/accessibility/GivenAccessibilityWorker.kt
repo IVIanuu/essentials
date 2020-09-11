@@ -1,19 +1,28 @@
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSetElements
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Key
+import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.common.Adapter
+import com.ivianuu.injekt.keyOf
 
-@Effect
+@Adapter
 annotation class GivenAccessibilityWorker {
-    companion object {
-        @GivenSetElements
-        operator fun <T : suspend () -> Unit> invoke(): AccessibilityWorkers = setOf(given<T>())
+    companion object : Adapter.Impl<suspend () -> Unit> {
+        override fun ContextBuilder.configure(
+            key: Key<suspend () -> Unit>,
+            provider: @Reader () -> suspend () -> Unit
+        ) {
+            set(keyOf<AccessibilityWorkers>()) {
+                add(key, elementProvider = provider)
+            }
+        }
     }
 }
 
 object AccessibilityGivens {
-    @GivenSetElements
+    @Given
     fun accessibilityWorkers(): AccessibilityWorkers = emptySet()
 }
 

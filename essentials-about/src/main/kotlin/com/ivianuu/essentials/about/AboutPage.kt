@@ -27,7 +27,9 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.currentContext
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.givenOrNull
 
 @Reader
 @Composable
@@ -37,7 +39,7 @@ fun AboutPage() {
             AboutSection(
                 showHeader = false,
                 packageName = given<BuildInfo>().packageName,
-                privacyPolicyUrl = given<PrivacyPolicyUrl?>()
+                privacyPolicyUrl = currentContext.givenOrNull<PrivacyPolicyUrl>()
             )
         }
     }
