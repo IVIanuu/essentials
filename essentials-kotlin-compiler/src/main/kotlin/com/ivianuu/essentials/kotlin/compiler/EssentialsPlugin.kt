@@ -37,7 +37,7 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
                     moduleFragment: IrModuleFragment,
                     pluginContext: IrPluginContext
                 ) {
-                    (0..100).forEach {
+                    (0..15).forEach {
                         pluginContext.irBuiltIns.function(it)
                         pluginContext.irBuiltIns.suspendFunction(it)
                         pluginContext.irBuiltIns.kFunction(it)

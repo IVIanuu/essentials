@@ -29,11 +29,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun <T> DataStore<T>.asState(): MutableState<T> = key(this) {
     val scope = rememberCoroutineScope()
-    val state = data.collectAsState(defaultData)
+    val state = remember { data }.collectAsState(remember { defaultData })
     remember(state) {
         ObservableState(state) { newData ->
-            scope.launch {
-                updateData { newData }
+            if (newData != state.value) {
+                scope.launch {
+                    updateData { newData }
+                }
             }
         }
     }

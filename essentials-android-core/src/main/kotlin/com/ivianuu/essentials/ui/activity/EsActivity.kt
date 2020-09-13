@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.ui.core.ProvideWindowInsets
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.uiScope
 import com.ivianuu.injekt.android.activityContext
 import com.ivianuu.injekt.runReader
@@ -64,6 +65,9 @@ abstract class EsActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        activityContext.runReader {
+            navigator.setBackStack(emptyList())
+        }
         composition.dispose()
         retainedObjects.dispose()
         activityContext.runReader {

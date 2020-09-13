@@ -62,7 +62,7 @@ fun SwitchListItem(
             Box(modifier = Modifier.absorbPointer()) {
                 Switch(
                     checked = value,
-                    onCheckedChange = { onValueChange(it) }
+                    onCheckedChange = onValueChange
                 )
             }
         },
