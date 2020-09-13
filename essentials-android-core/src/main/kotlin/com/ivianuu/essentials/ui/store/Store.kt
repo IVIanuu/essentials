@@ -14,7 +14,6 @@ import com.ivianuu.injekt.ForKey
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.childContext
 import com.ivianuu.injekt.common.instance
-import com.ivianuu.injekt.currentContext
 import com.ivianuu.injekt.given
 import com.ivianuu.injekt.runReader
 import kotlinx.coroutines.Job
@@ -69,7 +68,7 @@ fun <@ForKey S, @ForKey A> rememberStore(
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { dispatchers.default }
     return rememberRetained(*inputs) {
-        currentContext.childContext {
+        childContext {
             instance(scope)
         }.runReader { init() }
     }
