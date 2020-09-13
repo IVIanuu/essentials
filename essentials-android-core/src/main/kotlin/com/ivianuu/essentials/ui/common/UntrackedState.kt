@@ -18,38 +18,39 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.ReferentiallyEqual
+import androidx.compose.runtime.SnapshotMutationPolicy
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.structuralEqualityPolicy
 
 @Composable
 inline fun <T> untrackedState(
-    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
+    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
     crossinline init: () -> T
-): MutableState<T> = remember { untrackedStateOf(init(), areEquivalent) }
+): MutableState<T> = remember { untrackedStateOf(init(), policy) }
 
 @Composable
 inline fun <T> untrackedStateFor(
     vararg inputs: Any?,
-    noinline areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual,
+    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
     crossinline init: () -> T
 ): MutableState<T> = remember(*inputs) {
-    untrackedStateOf(init(), areEquivalent)
+    untrackedStateOf(init(), policy)
 }
 
 fun <T> untrackedStateOf(
     value: T,
-    areEquivalent: (old: T, new: T) -> Boolean = ReferentiallyEqual
-): MutableState<T> = UntrackedState(value, areEquivalent)
+    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy()
+): MutableState<T> = UntrackedState(value, policy)
 
 private class UntrackedState<T>(
     value: T,
-    val areEquivalent: (old: T, new: T) -> Boolean
+    val policy: SnapshotMutationPolicy<T>
 ) : MutableState<T> {
     override var value: T = value
         get() = synchronized(this) { field }
         set(value) {
             val oldValue = synchronized(this) { field }
-            if (!areEquivalent(oldValue, value)) {
+            if (!policy.equivalent(oldValue, value)) {
                 synchronized(this) { field = value }
             }
         }

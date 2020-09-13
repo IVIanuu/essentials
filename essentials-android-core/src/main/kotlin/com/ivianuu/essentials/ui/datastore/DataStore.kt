@@ -32,10 +32,8 @@ fun <T> DataStore<T>.asState(): MutableState<T> = key(this) {
     val state = remember { data }.collectAsState(remember { defaultData })
     remember(state) {
         ObservableState(state) { newData ->
-            if (newData != state.value) {
-                scope.launch {
-                    updateData { newData }
-                }
+            scope.launch {
+                updateData { newData }
             }
         }
     }
