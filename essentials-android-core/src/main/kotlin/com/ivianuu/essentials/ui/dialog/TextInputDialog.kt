@@ -16,15 +16,14 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
-import androidx.compose.runtime.state
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.state
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
@@ -96,10 +95,11 @@ fun TextInputDialog(
                     label = label ?: {}
                 )
 
-                onActive {
+                // todo auto show keyboard
+                /*onActive {
                     focusRequester.requestFocus()
                     onDispose { focusRequester.freeFocus() }
-                }
+                }*/
             }
         },
         positiveButton = positiveButton,

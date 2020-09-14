@@ -27,7 +27,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -74,7 +73,6 @@ fun TextInputPage() {
                                     style = MaterialTheme.typography.subtitle1,
                                     modifier = Modifier.drawOpacity(0.5f)
                                         .gravity(Alignment.CenterStart)
-                                        .focusRequester(focusRequester)
                                 )
                             }
                             BaseTextField(
@@ -82,10 +80,11 @@ fun TextInputPage() {
                                 onValueChange = { state.inputValue = it },
                                 textStyle = MaterialTheme.typography.subtitle1,
                                 modifier = Modifier.gravity(Alignment.CenterStart)
+                                    .focusRequester(focusRequester)
                             )
                         }
 
-                        onActive { focusRequester.requestFocus() }
+                        // todo onActive { focusRequester.requestFocus() }
                     } else {
                         Text("Text input")
                     }
