@@ -50,22 +50,23 @@ class Navigator {
     var popsLastRoute by mutableStateOf(false)
 
     private val _backStack = mutableStateListOf<RouteState>()
-    val backStack: List<Route> get() = _backStack.map { it.route }
+    val backStack: List<Route> get() = synchronized(this) { _backStack }.map { it.route }
 
     val hasRoot: Boolean
-        get() = _backStack.isNotEmpty()
+        get() = synchronized(this) { _backStack }.isNotEmpty()
 
     @Composable
     fun content() {
+        val backStack = synchronized(this) { _backStack }
         val backPressEnabled = handleBack &&
                 backStack.isNotEmpty() &&
                 (popsLastRoute || backStack.size > 1)
         onBackPressed(enabled = backPressEnabled) {
-            if (_backStack.none { it.stackChild.isAnimating }) popTop()
+            if (backStack.none { it.stackChild.isAnimating }) popTop()
         }
 
         Providers(NavigatorAmbient provides this) {
-            AnimatedStack(children = _backStack.map { it.stackChild })
+            AnimatedStack(children = backStack.map { it.stackChild })
         }
     }
 
@@ -82,10 +83,7 @@ class Navigator {
     }
 
     fun push(route: Route) {
-        val routeState = RouteState(route)
-        val newBackStack = _backStack.toMutableList()
-        newBackStack += routeState
-        setBackStackInternal(newBackStack)
+        pushInternal(route)
     }
 
     @JvmName("pushForResult")
@@ -93,12 +91,14 @@ class Navigator {
         push<T>(Route(content = content))
 
     @JvmName("pushForResult")
-    suspend fun <T : Any> push(route: Route): T? {
+    suspend fun <T : Any> push(route: Route): T? = pushInternal(route).result.await() as? T
+
+    private fun pushInternal(route: Route): RouteState = synchronized(this) {
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
         setBackStackInternal(newBackStack)
-        return (routeState.result as Deferred<T?>).await()
+        routeState
     }
 
     fun replace(content: @Composable () -> Unit) {
@@ -106,11 +106,7 @@ class Navigator {
     }
 
     fun replace(route: Route) {
-        val routeState = RouteState(route)
-        val newBackStack = _backStack.toMutableList()
-            .also { it.removeAt(it.lastIndex) }
-        newBackStack += routeState
-        setBackStackInternal(newBackStack)
+        replaceInternal(route)
     }
 
     @JvmName("replaceForResult")
@@ -118,42 +114,44 @@ class Navigator {
         replace<T>(Route(content = content))
 
     @JvmName("replaceForResult")
-    suspend fun <T : Any> replace(route: Route): T? {
+    suspend fun <T : Any> replace(route: Route): T? = replaceInternal(route).result.await() as? T
+
+    private fun replaceInternal(route: Route): RouteState = synchronized(this) {
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
             .also { it.removeAt(it.lastIndex) }
         newBackStack += routeState
         setBackStackInternal(newBackStack)
-        return (routeState.result as Deferred<T>).await()
+        routeState
     }
 
-    fun popTop(result: Any? = null) {
+    fun popTop(result: Any? = null) = synchronized(this) {
         popInternal(route = _backStack.last(), result = result)
     }
 
-    fun popToRoot() {
+    fun popToRoot() = synchronized(this) {
         val newTopRoute = _backStack.first()
         setBackStackInternal(listOf(newTopRoute))
     }
 
-    fun popTo(route: Route) {
+    fun popTo(route: Route) = synchronized(this) {
         val index = _backStack.indexOfFirst { it.route == route }
         val newBackStack = _backStack.subList(0, index)
         setBackStackInternal(newBackStack)
     }
 
-    fun pop(route: Route, result: Any? = null) {
+    fun pop(route: Route, result: Any? = null) = synchronized(this) {
         popInternal(route = _backStack.first { it.route == route }, result = result)
     }
 
-    private fun popInternal(route: RouteState, result: Any? = null) {
+    private fun popInternal(route: RouteState, result: Any? = null) = synchronized(this) {
         route.resultToSend = result
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
         setBackStackInternal(newBackStack)
     }
 
-    fun setBackStack(newBackStack: List<Route>) {
+    fun setBackStack(newBackStack: List<Route>) = synchronized(this) {
         setBackStackInternal(
             newBackStack.map { route ->
                 _backStack.firstOrNull { it.route == route } ?: RouteState(route)
@@ -161,7 +159,7 @@ class Navigator {
         )
     }
 
-    private fun setBackStackInternal(newBackStack: List<RouteState>) {
+    private fun setBackStackInternal(newBackStack: List<RouteState>) = synchronized(this) {
         val oldBackStack = _backStack.toList()
         _backStack.clear()
         _backStack += newBackStack
