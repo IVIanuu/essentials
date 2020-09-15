@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev609"
+    const val version = "${Build.versionName}-dev611"
 }
 
 object Deps {
@@ -75,7 +75,7 @@ object Deps {
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
-        private const val version = "1.3.7-SNAPSHOT"
+        private const val version = "1.3.9-SNAPSHOT"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -92,7 +92,7 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev315"
+        private const val version = "0.0.1-dev316"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"

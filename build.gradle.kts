@@ -61,9 +61,9 @@ allprojects {
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
         resolutionStrategy.force("com.squareup:kotlinpoet:1.5.0")
-        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7-SNAPSHOT")
-        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7-SNAPSHOT")
-        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.7-SNAPSHOT")
+        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-SNAPSHOT")
+        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9-SNAPSHOT")
+        resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9-SNAPSHOT")
     }
 
     // todo remove once compose runtime is up to date
