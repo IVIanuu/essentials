@@ -16,20 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
 import com.ivianuu.essentials.apps.ui.AppPickerPage
+import com.ivianuu.essentials.backup.BackupAndRestorePage
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.twilight.TwilightSettingsPage
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
@@ -91,6 +92,7 @@ fun HomePage() {
                         HomeItem.About -> Route { AboutPage() }
                         HomeItem.Actions -> Route { ActionsPage() }
                         HomeItem.AppPicker -> Route { AppPickerPage() }
+                        HomeItem.BackupRestore -> Route { BackupAndRestorePage() }
                         HomeItem.Billing -> Route { BillingPage() }
                         HomeItem.BottomNavigation -> Route { BottomNavigationPage() }
                         HomeItem.CheckApps -> Route { CheckAppsPage() }
@@ -169,6 +171,7 @@ enum class HomeItem(val title: String) {
     About(title = "About"),
     Actions(title = "Actions"),
     AppPicker(title = "App picker"),
+    BackupRestore(title = "Backup/Restore"),
     Billing(title = "Billing"),
     BottomNavigation(title = "Bottom navigation"),
     CheckApps(title = "Check apps"),

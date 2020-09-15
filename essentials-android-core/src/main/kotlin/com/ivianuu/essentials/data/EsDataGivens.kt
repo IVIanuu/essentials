@@ -31,10 +31,10 @@ import java.io.File
 object EsDataGivens {
 
     @Given
-    fun dataDir(): DataDir = androidApplicationContext.applicationInfo.dataDir
+    fun dataDir(): DataDir = File(androidApplicationContext.applicationInfo.dataDir)
 
     @Given
-    fun prefsDir(): PrefsDir = "${given<DataDir>()}/prefs"
+    fun prefsDir(): PrefsDir = given<DataDir>().resolve("prefs")
 
     @Given(ApplicationContext::class)
     fun moshiSerializerFactory() = MoshiSerializerFactory(given())
@@ -42,7 +42,7 @@ object EsDataGivens {
     @Given(ApplicationContext::class)
     fun diskDataStoreFactory() = DiskDataStoreFactory(
         scope = globalScope + dispatchers.io,
-        produceBoxDirectory = { File(given<PrefsDir>()) },
+        produceBoxDirectory = { given<PrefsDir>() },
         serializerFactory = given()
     )
 
@@ -54,6 +54,6 @@ object EsDataGivens {
 
 }
 
-typealias DataDir = String
+typealias DataDir = File
 
-typealias PrefsDir = String
+typealias PrefsDir = File

@@ -33,7 +33,7 @@ internal suspend fun restoreData() = runCatchingAndLog {
             androidApplicationContext.contentResolver.openInputStream(uri)!!.buffered()
         )
 
-        val targetDirectory = File(given<PrefsDir>())
+        val targetDirectory = given<PrefsDir>()
 
         var entry: ZipEntry? = zipInputStream.nextEntry
         while (entry != null) {

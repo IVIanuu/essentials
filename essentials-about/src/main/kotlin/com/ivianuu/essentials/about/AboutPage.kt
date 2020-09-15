@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.currentContext
@@ -54,7 +55,6 @@ fun AboutSection(
     showHeader: Boolean = false,
     privacyPolicyUrl: String? = null
 ) {
-    val navigator = given<Navigator>()
     if (showHeader) {
         Subheader {
             Text(R.string.about_title)

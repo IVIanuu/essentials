@@ -7,10 +7,9 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -25,7 +24,6 @@ suspend fun <I, O> startActivityForResult(
 ): O {
     startUi()
     return suspendCancellableCoroutine { continuation ->
-        val navigator = given<Navigator>()
         var popped = false
         fun popIfNeeded() {
             if (!popped) {
