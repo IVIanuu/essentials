@@ -36,6 +36,7 @@ internal suspend fun backupData() = runCatchingAndLog {
         given<BackupFiles>()
             .map { it() }
             .flatMap { it.walkTopDown() }
+            .filterNot { it.isDirectory }
             .forEach { file ->
                 val content = file.bufferedReader()
                 val entry = ZipEntry(file.name)
