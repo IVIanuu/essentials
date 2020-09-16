@@ -19,6 +19,7 @@ package com.ivianuu.essentials.kotlin.compiler
 import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
+import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -30,6 +31,10 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         project: MockProject,
         configuration: CompilerConfiguration
     ) {
+        ClassBuilderInterceptorExtension.registerExtension(
+            project,
+            SourceKeyClassBuilderInterceptorExtension()
+        )
         IrGenerationExtension.registerExtension(
             project,
             object : IrGenerationExtension {
