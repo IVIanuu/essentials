@@ -16,30 +16,21 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.ContextBuilder
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.common.Adapter
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.GivenSetElements
+import com.ivianuu.injekt.given
 
-@Adapter
+@Effect
 annotation class GivenBootListener {
-    companion object : Adapter.Impl<() -> Unit> {
-        override fun ContextBuilder.configure(
-            key: Key<() -> Unit>,
-            provider: @Reader () -> () -> Unit
-        ) {
-            set(keyOf<BootListeners>()) {
-                add(key, elementProvider = provider)
-            }
-        }
+    companion object {
+        @GivenSetElements
+        operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
     }
 }
 
 object EsBootListenersGivens {
 
-    @Given
+    @GivenSetElements
     fun bootListeners(): BootListeners = emptySet()
 
 }

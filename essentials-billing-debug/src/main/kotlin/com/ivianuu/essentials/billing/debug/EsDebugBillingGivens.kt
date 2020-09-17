@@ -32,10 +32,8 @@ object EsDebugBillingGivens {
     }
 
     @Given
-    fun billingClient(listener: PurchasesUpdatedListener): BillingClient {
-        val client: DebugBillingClient = given(listener)
-        debugBillingClient = client
-        return client
-    }
+    fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
+        given<DebugBillingClient>(listener)
+            .also { debugBillingClient = it }
 
 }

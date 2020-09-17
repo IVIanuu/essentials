@@ -22,8 +22,8 @@ import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.globalScope
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.plus
 import java.io.File

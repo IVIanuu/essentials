@@ -48,6 +48,7 @@ import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 
 @GivenPermissionRequestRouteFactory
@@ -62,7 +63,7 @@ internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFact
 @Composable
 private fun DefaultPermissionPage(request: PermissionRequest) {
     val (state, dispatch) = rememberStore<PermissionState, PermissionAction> {
-        given(request)
+        given(this, request)
     }
     Scaffold(
         topBar = {
@@ -103,7 +104,7 @@ private fun Permission(
 }
 
 @Given
-internal fun defaultPermissionStore(
+internal fun CoroutineScope.defaultPermissionStore(
     request: PermissionRequest
 ) = store<PermissionState, PermissionAction>(
     PermissionState()

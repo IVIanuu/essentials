@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -78,7 +79,7 @@ fun CounterPage() {
 }
 
 @Given
-internal fun counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
+internal fun CoroutineScope.counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
     onEachAction { action ->
         when (action) {
             Inc -> setState { copy(count = count + 1) }

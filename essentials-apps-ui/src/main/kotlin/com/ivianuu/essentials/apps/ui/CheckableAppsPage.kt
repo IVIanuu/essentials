@@ -52,6 +52,7 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -122,7 +123,7 @@ private fun CheckableApp(
 }
 
 @Given
-internal fun checkableAppsStore() = store<CheckableAppsState, CheckableAppsAction>(
+internal fun CoroutineScope.checkableAppsStore() = store<CheckableAppsState, CheckableAppsAction>(
     CheckableAppsState()
 ) {
     state
