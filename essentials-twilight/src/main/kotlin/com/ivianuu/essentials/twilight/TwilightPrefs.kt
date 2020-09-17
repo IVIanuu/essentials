@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 @Given(ApplicationContext::class)

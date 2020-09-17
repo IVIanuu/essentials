@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 @Given

@@ -46,6 +46,7 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import kotlinx.coroutines.CoroutineScope
 
 @Reader
 @Composable
@@ -53,7 +54,9 @@ fun AppPickerPage(
     appFilter: AppFilter = DefaultAppFilter,
     title: String? = null
 ) {
-    val (state, dispatch) = rememberStore<AppPickerState, AppPickerAction> { given(appFilter) }
+    val (state, dispatch) = rememberStore<AppPickerState, AppPickerAction> {
+        given(this, appFilter)
+    }
 
     Scaffold(
         topBar = {
@@ -91,7 +94,7 @@ private fun AppInfo(
 }
 
 @Given
-internal fun appPickerStore(
+internal fun CoroutineScope.appPickerStore(
     appFilter: AppFilter
 ) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
     execute(

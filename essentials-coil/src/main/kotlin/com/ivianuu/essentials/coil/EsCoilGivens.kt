@@ -20,8 +20,8 @@ import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ApplicationContext
 import com.ivianuu.injekt.given
 
 object EsCoilGivens {

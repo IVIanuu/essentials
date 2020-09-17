@@ -24,7 +24,9 @@ import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.GivenAppUi
 import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.injekt.InitializeInjekt
 
+@InitializeInjekt
 @GivenAppUi
 @Composable
 fun SampleUi() {

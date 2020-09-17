@@ -21,8 +21,8 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger

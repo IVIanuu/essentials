@@ -2,26 +2,17 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.injekt.ContextBuilder
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.common.Adapter
+import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
-import com.ivianuu.injekt.keyOf
 import java.io.File
 
-@Adapter
+@Effect
 annotation class BackupFile {
-    companion object : Adapter.Impl<() -> File> {
-        override fun ContextBuilder.configure(
-            key: Key<() -> File>,
-            provider: @Reader () -> () -> File
-        ) {
-            set(keyOf<BackupFiles>()) {
-                add(key, elementProvider = provider)
-            }
-        }
+    companion object {
+        @GivenSetElements
+        fun <T : () -> File> intoSet(): BackupFiles = setOf(given<T>())
     }
 }
 

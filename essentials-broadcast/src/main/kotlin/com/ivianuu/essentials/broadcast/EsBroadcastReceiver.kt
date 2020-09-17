@@ -18,8 +18,8 @@ package com.ivianuu.essentials.broadcast
 
 import android.content.BroadcastReceiver
 import android.content.Intent
-import com.ivianuu.injekt.Context
 import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.android.ReceiverContext
 import com.ivianuu.injekt.android.createReceiverContext
 import com.ivianuu.injekt.runReader
 
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.runReader
  */
 abstract class EsBroadcastReceiver : BroadcastReceiver() {
 
-    lateinit var readerContext: Context
+    lateinit var readerContext: ReceiverContext
 
     override fun onReceive(context: android.content.Context, intent: Intent) {
         readerContext = createReceiverContext(context, intent)

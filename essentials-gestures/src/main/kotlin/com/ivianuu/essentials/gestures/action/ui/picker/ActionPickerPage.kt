@@ -25,7 +25,7 @@ fun ActionPickerPage(
     ) {
         val (state, dispatch) = rememberStore<ActionPickerState, ActionPickerAction>(
             showDefaultOption, showNoneOption
-        ) { given(showDefaultOption, showNoneOption) }
+        ) { given(this, showDefaultOption, showNoneOption) }
         ResourceLazyColumnItems(state.items) { item ->
             ActionPickerItem(
                 item = item,

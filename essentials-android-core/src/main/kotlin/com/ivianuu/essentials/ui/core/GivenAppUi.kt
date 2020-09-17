@@ -17,21 +17,16 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.ContextBuilder
-import com.ivianuu.injekt.Key
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.common.Adapter
-import com.ivianuu.injekt.keyOf
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.given
 
-@Adapter
+@Effect
 annotation class GivenAppUi {
-    companion object : Adapter.Impl<@Composable () -> Unit> {
-        override fun ContextBuilder.configure(
-            key: Key<@Composable () -> Unit>,
-            provider: @Reader () -> @Composable () -> Unit
-        ) {
-            unscoped(keyOf<AppUiMarker>(), provider = provider)
-        }
+    companion object {
+        @Given
+        operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
+            given<T>() as @Composable () -> Unit
     }
 }
 
