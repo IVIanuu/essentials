@@ -64,7 +64,7 @@ fun BottomNavigationPage() {
                         BottomNavItem.values().forEach { item ->
                             BottomNavigationItem(
                                 selected = item == selectedItem,
-                                onSelect = { selectedItem = item },
+                                onClick = { selectedItem = item },
                                 icon = { Icon(vectorResource(item.icon)) },
                                 label = { Text(item.title) }
                             )

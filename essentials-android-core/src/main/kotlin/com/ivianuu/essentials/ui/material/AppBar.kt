@@ -87,7 +87,7 @@ fun TopAppBar(
         if (actions != null) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalGravity = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 actions()
             }
@@ -121,7 +121,7 @@ fun TopAppBar(
                 modifier = Modifier.preferredHeight(DefaultAppBarHeight)
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
-                verticalGravity = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 children = content
             )
         }

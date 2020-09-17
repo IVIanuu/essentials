@@ -24,7 +24,7 @@ fun InsettingScrollableColumn(
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(0f),
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    horizontalGravity: Alignment.Horizontal = Alignment.Start,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     reverseScrollDirection: Boolean = false,
     isScrollEnabled: Boolean = true,
     children: @Composable ColumnScope.() -> Unit
@@ -33,7 +33,7 @@ fun InsettingScrollableColumn(
         modifier = modifier,
         scrollState = scrollState,
         verticalArrangement = verticalArrangement,
-        horizontalGravity = horizontalGravity,
+        horizontalAlignment = horizontalAlignment,
         reverseScrollDirection = reverseScrollDirection,
         isScrollEnabled = isScrollEnabled
     ) {
@@ -52,7 +52,7 @@ fun InsettingScrollableRow(
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(0f),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    verticalGravity: Alignment.Vertical = Alignment.Top,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
     reverseScrollDirection: Boolean = false,
     isScrollEnabled: Boolean = true,
     children: @Composable RowScope.() -> Unit
@@ -61,7 +61,7 @@ fun InsettingScrollableRow(
         modifier = modifier,
         scrollState = scrollState,
         horizontalArrangement = horizontalArrangement,
-        verticalGravity = verticalGravity,
+        verticalAlignment = verticalAlignment,
         reverseScrollDirection = reverseScrollDirection,
         isScrollEnabled = isScrollEnabled
     ) {

@@ -60,7 +60,7 @@ fun ListItem(
 
     Box(
         modifier = modifier
-            .preferredHeightIn(minHeight = minHeight)
+            .preferredHeightIn(min = minHeight)
             .fillMaxWidth()
             .background(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
             .then(
@@ -74,7 +74,7 @@ fun ListItem(
             ),
         gravity = Alignment.CenterStart
     ) {
-        Row(verticalGravity = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             // leading
             if (leading != null) {
                 Box(

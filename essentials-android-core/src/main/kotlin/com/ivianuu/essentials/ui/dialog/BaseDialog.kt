@@ -18,10 +18,10 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredWidthIn
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -32,8 +32,8 @@ fun BaseDialog(
     Surface(
         modifier = Modifier
             .padding(all = 32.dp)
-            .preferredWidthIn(minWidth = 280.dp, maxWidth = 356.dp)
-            .plus(modifier),
+            .preferredWidthIn(min = 280.dp, max = 356.dp)
+            .then(modifier),
         color = MaterialTheme.colors.surface,
         elevation = 24.dp,
         shape = MaterialTheme.shapes.medium,

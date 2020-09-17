@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.enforce
 
-fun Modifier.squared(fit: SquareFit) = this + SquaredModifier(fit)
+fun Modifier.squared(fit: SquareFit) = this.then(SquaredModifier(fit))
 
 private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
     override fun MeasureScope.measure(

@@ -39,7 +39,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-alpha02"
+            const val version = "1.0.0-alpha03"
             const val compiler = "androidx.compose:compose-compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

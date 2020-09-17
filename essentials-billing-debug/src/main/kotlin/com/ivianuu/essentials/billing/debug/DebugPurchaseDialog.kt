@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.billing.debug
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -37,7 +37,7 @@ internal fun DebugPurchaseDialog(
 ) {
     Dialog(
         title = {
-            Row(verticalGravity = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = skuDetails.title)
 
                 Spacer(Modifier.weight(1f))

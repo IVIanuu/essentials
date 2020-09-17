@@ -52,7 +52,7 @@ fun CounterPage() {
         Column(
             modifier = Modifier.center(),
             verticalArrangement = Arrangement.Center,
-            horizontalGravity = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val (state, dispatch) = rememberStore<CounterState, CounterAction>()
 

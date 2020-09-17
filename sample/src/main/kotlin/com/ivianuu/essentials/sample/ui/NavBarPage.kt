@@ -52,7 +52,7 @@ fun NavBarPage() {
         Column(
             modifier = Modifier.center(),
             verticalArrangement = Arrangement.Center,
-            horizontalGravity = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val scope = rememberCoroutineScope()
             fun updateNavBarState(navBarHidden: Boolean) {

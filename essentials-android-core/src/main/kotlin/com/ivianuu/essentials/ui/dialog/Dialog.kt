@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Measurable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Placeable
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +30,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.EmphasisAmbient
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Layout
+import androidx.compose.ui.Measurable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Placeable
 import androidx.compose.ui.layout.id
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
@@ -112,7 +112,7 @@ private fun DialogBody(
             }
 
             if (styledIcon != null && styledTitle != null) {
-                Row(verticalGravity = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     styledIcon()
                     Spacer(Modifier.width(16.dp))
                     styledTitle()
@@ -287,7 +287,7 @@ private fun DialogButtons(
                     .preferredHeight(52.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
-                verticalGravity = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
                 neutralButton?.invoke()
@@ -300,7 +300,7 @@ private fun DialogButtons(
             Column(
                 modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalGravity = Alignment.End
+                horizontalAlignment = Alignment.End
             ) {
                 positiveButton?.invoke()
                 negativeButton?.invoke()

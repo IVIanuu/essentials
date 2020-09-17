@@ -191,7 +191,7 @@ private fun ColorGrid(
                 items.chunked(4).forEach { rowItems ->
                     Row(
                         horizontalArrangement = Arrangement.Center,
-                        verticalGravity = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         rowItems.forEach { item ->
                             key(item) {
@@ -331,7 +331,7 @@ private fun ColorEditorHeader(
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 horizontalArrangement = Arrangement.Center,
-                verticalGravity = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 var hexInput by stateFor(color) {
                     color.toHexString(includeAlpha = showAlphaSelector)
@@ -372,7 +372,7 @@ private fun ColorComponentItem(
 ) {
     Row(
         modifier = Modifier.height(48.dp).fillMaxWidth(),
-        verticalGravity = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = component.title,
@@ -396,7 +396,7 @@ private fun ColorComponentItem(
 
         Text(
             text = (255 * value).toInt().toString(),
-            modifier = Modifier.preferredWidthIn(minWidth = 56.dp),
+            modifier = Modifier.preferredWidthIn(min = 56.dp),
             style = MaterialTheme.typography.subtitle1
         )
     }

@@ -1,9 +1,5 @@
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.onPositioned
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Icon
@@ -14,8 +10,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.onPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -34,7 +34,7 @@ fun PopupMenuButton(
                 onCancel = onCancel,
                 indicationFactory = { RippleIndication(bounded = false) }
             )
-            .plus(modifier),
+            .then(modifier),
         gravity = ContentGravity.Center
     ) {
         Icon(Icons.Default.MoreVert)

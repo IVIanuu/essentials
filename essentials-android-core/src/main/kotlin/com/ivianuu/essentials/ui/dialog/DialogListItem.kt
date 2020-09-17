@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.clickable
@@ -30,6 +27,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.EmphasisAmbient
 import androidx.compose.material.ProvideEmphasis
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -40,13 +40,13 @@ fun SimpleDialogListItem(
 ) {
     Box(
         modifier = Modifier.fillMaxWidth()
-            .heightIn(minHeight = 48.dp)
+            .heightIn(min = 48.dp)
             .clickable(onClick = onClick),
         gravity = ContentGravity.CenterStart
     ) {
         Row(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-            verticalGravity = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ProvideEmphasis(emphasis = EmphasisAmbient.current.high) {
                 if (leading != null) {

@@ -25,7 +25,7 @@ class Animatable(val tag: Any) {
         layoutCoordinates = it
     }
     private val drawLayerModifier = MutableDrawLayerModifier()
-    private val baseModifier = onPositioned + drawLayerModifier
+    private val baseModifier = onPositioned.then(drawLayerModifier)
 
     internal var modifier by mutableStateOf(baseModifier)
 
@@ -38,8 +38,8 @@ class Animatable(val tag: Any) {
         }
         if (prop is ModifierProp) {
             modifiersByProps[prop] = prop.asModifier(value)
-            modifier = baseModifier + (modifiersByProps.values
-                .reduceOrNull { acc, modifier -> acc.then(modifier) } ?: Modifier)
+            modifier = baseModifier.then((modifiersByProps.values
+                .reduceOrNull { acc, modifier -> acc.then(modifier) } ?: Modifier))
         }
         return this
     }

@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.stateFor
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
@@ -30,12 +25,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.stateFor
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
-import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import kotlin.time.Duration
@@ -398,7 +397,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     start = 12.dp, // make the slider pretty
                     end = 16.dp
                 ),
-            verticalGravity = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             val sliderState = stateFor(value) { toFloat(value) }
 
@@ -419,7 +418,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
 
             if (valueText != null) {
                 Box(
-                    modifier = Modifier.widthIn(minWidth = 72.dp),
+                    modifier = Modifier.widthIn(min = 72.dp),
                     gravity = ContentGravity.CenterEnd
                 ) {
                     valueText(fromFloat(sliderState.value))
