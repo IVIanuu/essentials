@@ -4,12 +4,14 @@ import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSet
 import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 import java.io.File
 
 @Effect
 annotation class BackupFile {
+    @GivenSet
     companion object {
         @GivenSetElements
         fun <T : () -> File> intoSet(): BackupFiles = setOf(given<T>())

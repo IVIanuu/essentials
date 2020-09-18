@@ -3,12 +3,14 @@ package com.ivianuu.essentials.moshi
 import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSet
 import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 import com.squareup.moshi.Moshi
 
 @Effect
 annotation class GivenJsonAdapter {
+    @GivenSet
     companion object {
         @GivenSetElements
         operator fun <T : Any> invoke(): JsonAdapters = setOf(given<T>())

@@ -19,10 +19,12 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSet
 import com.ivianuu.injekt.given
 
 @Effect
 annotation class GivenAppUi {
+    @GivenSet
     companion object {
         @Given
         operator fun <T : @Composable () -> Unit> invoke(): AppUiMarker =
