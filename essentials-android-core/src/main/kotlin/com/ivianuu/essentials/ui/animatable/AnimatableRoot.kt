@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
@@ -58,7 +58,7 @@ class AnimatableRoot {
 
         @Composable
         fun refCount() {
-            onCommit(true) {
+            onActive {
                 refCount++
                 onDispose {
                     refCount--
@@ -83,7 +83,7 @@ fun animationOverlay(overlayContent: @Composable () -> Unit) {
     val entry = remember { AnimationOverlayEntry(overlayContent) }
     entry.content = overlayContent
     val root = AnimatableRootAmbient.current
-    onCommit(true) {
+    onActive {
         root.animationOverlayEntries += entry
         onDispose { root.animationOverlayEntries -= entry }
     }
