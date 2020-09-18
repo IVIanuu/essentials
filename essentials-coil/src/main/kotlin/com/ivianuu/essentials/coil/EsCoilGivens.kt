@@ -19,6 +19,7 @@ package com.ivianuu.essentials.coil
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
+import coil.intercept.Interceptor
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
@@ -30,15 +31,12 @@ object EsCoilGivens {
     fun imageLoader() = ImageLoader.Builder(androidApplicationContext)
         .componentRegistry {
             given<Set<Decoder>>().forEach { add(it) }
+            given<Set<Interceptor>>().forEach { add(it) }
             given<Set<FetcherBinding<*>>>()
                 .forEach { binding ->
                     CoilAccessor.add(this, binding.type.java, binding.fetcher)
                 }
             given<Set<MapperBinding<*>>>()
-                .forEach { binding ->
-                    CoilAccessor.add(this, binding.type.java, binding.mapper)
-                }
-            given<Set<MeasuredMapperBinding<*>>>()
                 .forEach { binding ->
                     CoilAccessor.add(this, binding.type.java, binding.mapper)
                 }
@@ -52,9 +50,9 @@ object EsCoilGivens {
     fun fetchers(): Set<FetcherBinding<*>> = emptySet()
 
     @Given
-    fun mappers(): Set<MapperBinding<*>> = emptySet()
+    fun interceptors(): Set<Interceptor> = emptySet()
 
     @Given
-    fun measuredMappers(): Set<MeasuredMapperBinding<*>> = emptySet()
+    fun mappers(): Set<MapperBinding<*>> = emptySet()
 
 }

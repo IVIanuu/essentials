@@ -18,7 +18,7 @@ package com.ivianuu.essentials.apps.coil
 
 import android.content.pm.PackageManager
 import androidx.compose.runtime.Immutable
-import coil.bitmappool.BitmapPool
+import coil.bitmap.BitmapPool
 import coil.decode.DataSource
 import coil.decode.Options
 import coil.fetch.DrawableResult

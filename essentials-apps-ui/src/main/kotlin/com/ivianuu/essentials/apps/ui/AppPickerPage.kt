@@ -28,7 +28,6 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppPickerAction.AppClicked
-import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.material.ListItem
@@ -46,6 +45,7 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 
 @Reader

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.coil
 
 import coil.fetch.Fetcher
 import coil.map.Mapper
-import coil.map.MeasuredMapper
 import kotlin.reflect.KClass
 
 data class FetcherBinding<T : Any>(
@@ -28,10 +27,5 @@ data class FetcherBinding<T : Any>(
 
 data class MapperBinding<T : Any>(
     val mapper: Mapper<T, *>,
-    val type: KClass<T>
-)
-
-data class MeasuredMapperBinding<T : Any>(
-    val mapper: MeasuredMapper<T, *>,
     val type: KClass<T>
 )

@@ -30,7 +30,6 @@ import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.AppClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
-import com.ivianuu.essentials.coil.CoilImage
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.store
@@ -52,6 +51,7 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Reader
+import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
