@@ -18,6 +18,7 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.Toaster
@@ -72,7 +73,7 @@ class TorchManager {
                     tryOrToast {
                         given<CameraManager>().unregisterTorchCallback(this)
                         given<CameraManager>().setTorchMode(cameraId, !enabled)
-                        stateActor.offer(!enabled)
+                        stateActor.offerSafe(!enabled)
                     }
                 }
 
@@ -80,7 +81,7 @@ class TorchManager {
                     tryOrToast {
                         given<CameraManager>().unregisterTorchCallback(this)
                         Toaster.toast(R.string.es_failed_to_toggle_torch)
-                        stateActor.offer(false)
+                        stateActor.offerSafe(false)
                     }
                 }
             }, null)
@@ -90,8 +91,8 @@ class TorchManager {
     private inline fun tryOrToast(action: () -> Unit) {
         try {
             action()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (t: Throwable) {
+            t.printStackTrace()
             Toaster.toast(R.string.es_failed_to_toggle_torch)
         }
     }

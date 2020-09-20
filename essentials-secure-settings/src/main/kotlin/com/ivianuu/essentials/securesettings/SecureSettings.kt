@@ -35,7 +35,7 @@ object SecureSettings {
         return try {
             Shell.run("pm grant ${given<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS")
             canWrite()
-        } catch (e: Exception) {
+        } catch (t: Throwable) {
             false
         }
     }

@@ -104,8 +104,8 @@ internal fun CoroutineScope.shortcutPickerStore() =
                         val shortcut = extractShortcut(shortcutRequestResult)
 
                         navigator.popTop(result = shortcut)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
                         Toaster.toast(R.string.es_failed_to_pick_shortcut)
                     }
                 }

@@ -25,7 +25,7 @@ class NotificationStore {
             check(isConnected)
             try {
                 notification.contentIntent.send()
-            } catch (e: Exception) {
+            } catch (t: Throwable) {
             }
         }
 

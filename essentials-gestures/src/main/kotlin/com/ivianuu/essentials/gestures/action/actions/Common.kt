@@ -29,8 +29,8 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(
 internal suspend fun runRootCommand(command: String) {
     try {
         Shell.run(command)
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (t: Throwable) {
+        t.printStackTrace()
         Toaster.toast(R.string.es_no_root)
     }
 }
@@ -42,8 +42,8 @@ internal fun Intent.send() {
         PendingIntent.getActivity(
             androidApplicationContext, 99, this, 0, null
         ).send()
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (t: Throwable) {
+        t.printStackTrace()
         Toaster.toast(R.string.es_activity_not_found)
     }
 }

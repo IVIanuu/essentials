@@ -61,7 +61,7 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
     override fun getActiveNotifications(): Array<StatusBarNotification> {
         return try {
             super.getActiveNotifications() ?: emptyArray()
-        } catch (e: Exception) {
+        } catch (t: Throwable) {
             emptyArray()
         }
     }

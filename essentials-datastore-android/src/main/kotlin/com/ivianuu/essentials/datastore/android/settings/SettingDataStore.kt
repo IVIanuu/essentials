@@ -21,6 +21,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
+import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +82,7 @@ class SettingDataStoreImpl<T>(
             object : ContentObserver(MainHandler) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
-                    offer(Unit)
+                    offerSafe(Unit)
                 }
             }
         }
@@ -107,16 +108,16 @@ class SettingDataStoreImpl<T>(
                     adapter.set(name, newData, contentResolver, type)
                     newData
                 }
-            } catch (e: Exception) {
-                throw RuntimeException("Couldn't write data for name: $name", e)
+            } catch (t: Throwable) {
+                throw RuntimeException("Couldn't write data for name: $name", t)
             }
         }
 
     private suspend fun get(): T = withContext(scope.coroutineContext) {
         try {
             adapter.get(name, defaultData, contentResolver, type)
-        } catch (e: Exception) {
-            throw RuntimeException("Couldn't read data for name: $name", e)
+        } catch (t: Throwable) {
+            throw RuntimeException("Couldn't read data for name: $name", t)
         }
     }
 }

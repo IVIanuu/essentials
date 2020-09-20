@@ -92,22 +92,22 @@ internal class DiskDataStoreImpl<T>(
             file.bufferedReader().use {
                 it.readText()
             }
-        } catch (e: Exception) {
-            throw IOException("Couldn't read file at '$file'", e)
+        } catch (t: Throwable) {
+            throw IOException("Couldn't read file at '$file'", t)
         }
 
         val deserializedData = try {
             serializer.deserialize(serializedData)
-        } catch (e: Exception) {
-            val newData = corruptionHandler.onCorruption(this@DiskDataStoreImpl, serializedData, e)
+        } catch (t: Throwable) {
+            val newData = corruptionHandler.onCorruption(this@DiskDataStoreImpl, serializedData, t)
 
             try {
                 writeData(newData)
             } catch (writeEx: IOException) {
                 // If we fail to write the handled data, add the new exception as a suppressed
                 // exception.
-                e.addSuppressed(writeEx)
-                throw e
+                t.addSuppressed(writeEx)
+                throw t
             }
 
             // If we reach this point, we've successfully replaced the data on disk with newData.
@@ -133,10 +133,10 @@ internal class DiskDataStoreImpl<T>(
 
             val serializedData = try {
                 serializer.serialize(newData)
-            } catch (e: Exception) {
+            } catch (t: Throwable) {
                 throw RuntimeException(
                     "Couldn't serialize data '$newData' for file '$file'",
-                    e
+                    t
                 )
             }
 

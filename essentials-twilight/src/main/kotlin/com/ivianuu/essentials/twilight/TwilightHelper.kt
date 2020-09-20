@@ -23,6 +23,7 @@ import android.os.PowerManager
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.given
@@ -82,7 +83,7 @@ private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
 private fun configChanges() = callbackFlow<Unit> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
-            offer(Unit)
+            offerSafe(Unit)
         }
 
         override fun onLowMemory() {

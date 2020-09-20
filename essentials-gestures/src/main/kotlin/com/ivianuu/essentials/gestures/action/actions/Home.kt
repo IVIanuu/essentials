@@ -33,8 +33,8 @@ private fun openHomeScreen() {
     try {
         val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         androidApplicationContext.sendBroadcast(intent)
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (t: Throwable) {
+        t.printStackTrace()
     }
 
     Intent(Intent.ACTION_MAIN).apply {

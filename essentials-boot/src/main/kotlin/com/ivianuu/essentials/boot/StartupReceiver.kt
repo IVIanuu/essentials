@@ -16,19 +16,22 @@
 
 package com.ivianuu.essentials.boot
 
+import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Reader
 import com.ivianuu.injekt.given
+import com.ivianuu.injekt.runReader
 
 class StartupReceiver : EsBroadcastReceiver() {
 
-    @Reader
-    override fun onReceive(intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        d { "on system boot" }
-        given<BootListeners>().forEach { it() }
+        readerContext.runReader {
+            d { "on system boot" }
+            given<BootListeners>().forEach { it() }
+        }
     }
 
 }

@@ -132,15 +132,15 @@ class NavBarManager {
             try {
                 // ensure that we can access non sdk interfaces
                 disableNonSdkInterfaceDetection()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (t: Throwable) {
+                t.printStackTrace()
             }
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             setOverscan(rect)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (t: Throwable) {
+            t.printStackTrace()
         }
     }
 

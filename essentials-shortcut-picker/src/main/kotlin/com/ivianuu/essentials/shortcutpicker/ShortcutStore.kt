@@ -29,7 +29,7 @@ suspend fun getShortcuts(): List<Shortcut> = withContext(dispatchers.io) {
                     name = resolveInfo.loadLabel(pm).toString(),
                     icon = resolveInfo.loadIcon(pm).toImageAsset()
                 )
-            } catch (e: Exception) {
+            } catch (t: Throwable) {
                 null
             }
         }

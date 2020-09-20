@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.Reader
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -42,18 +43,18 @@ object BroadcastFactory {
     fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                offer(intent)
+                offerSafe(intent)
             }
         }
         try {
             androidApplicationContext.registerReceiver(broadcastReceiver, intentFilter)
-        } catch (e: Exception) {
+        } catch (t: Throwable) {
         }
 
         awaitClose {
             try {
                 androidApplicationContext.unregisterReceiver(broadcastReceiver)
-            } catch (e: Exception) {
+            } catch (t: Throwable) {
             }
         }
     }

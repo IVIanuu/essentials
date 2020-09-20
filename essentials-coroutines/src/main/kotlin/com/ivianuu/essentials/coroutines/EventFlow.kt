@@ -42,6 +42,6 @@ private class EventFlowImpl<T> : AbstractFlow<T>(),
     }
 
     override fun offer(value: T) {
-        channel.offer(value)
+        channel.offerSafe(value)
     }
 }

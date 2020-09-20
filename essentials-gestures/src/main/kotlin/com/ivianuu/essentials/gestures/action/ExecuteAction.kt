@@ -30,8 +30,8 @@ suspend fun executeAction(key: String) = withContext(dispatchers.default) {
     // fire
     try {
         action.execute()
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (t: Throwable) {
+        t.printStackTrace()
         Toaster.toast("Failed to execute '${action.title}'") // todo res
     }
 }

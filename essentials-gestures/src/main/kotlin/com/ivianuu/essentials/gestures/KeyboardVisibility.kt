@@ -63,8 +63,8 @@ private fun getKeyboardHeight(): Int {
         val inputMethodManager = given<InputMethodManager>()
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (t: Throwable) {
+        t.printStackTrace()
         -1
     }
 }

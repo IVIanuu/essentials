@@ -352,7 +352,7 @@ private fun ColorEditorHeader(
 
                         val newColor = try {
                             newValue.toColor()
-                        } catch (e: Exception) {
+                        } catch (t: Throwable) {
                             null
                         }
 

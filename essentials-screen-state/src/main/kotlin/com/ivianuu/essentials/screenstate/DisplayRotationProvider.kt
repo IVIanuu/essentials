@@ -23,6 +23,7 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.dispatchers
@@ -85,7 +86,7 @@ class DisplayRotationProvider {
         val listener = object :
             OrientationEventListener(androidApplicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
             override fun onOrientationChanged(orientation: Int) {
-                offer(Unit)
+                offerSafe(Unit)
             }
         }
         listener.enable()
@@ -95,7 +96,7 @@ class DisplayRotationProvider {
     private fun configChanges() = callbackFlow<Unit> {
         val callbacks = object : ComponentCallbacks2 {
             override fun onConfigurationChanged(newConfig: Configuration) {
-                offer(Unit)
+                offerSafe(Unit)
             }
 
             override fun onLowMemory() {
