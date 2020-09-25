@@ -20,7 +20,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ImagePainter
@@ -87,7 +86,7 @@ private fun Shortcut(
 }
 
 @Given
-internal fun CoroutineScope.shortcutPickerStore() =
+fun CoroutineScope.shortcutPickerStore() =
     store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
         execute(
             block = { getShortcuts() },
@@ -113,12 +112,10 @@ internal fun CoroutineScope.shortcutPickerStore() =
         }
     }
 
-
-@Immutable
-internal data class ShortcutPickerState(
+data class ShortcutPickerState(
     val shortcuts: Resource<List<Shortcut>> = Idle
 )
 
-internal sealed class ShortcutPickerAction {
+sealed class ShortcutPickerAction {
     data class ShortcutClicked(val shortcut: Shortcut) : ShortcutPickerAction()
 }

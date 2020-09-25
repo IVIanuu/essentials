@@ -20,7 +20,6 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -123,7 +122,7 @@ private fun CheckableApp(
 }
 
 @Given
-internal fun CoroutineScope.checkableAppsStore() = store<CheckableAppsState, CheckableAppsAction>(
+fun CoroutineScope.checkableAppsStore() = store<CheckableAppsState, CheckableAppsAction>(
     CheckableAppsState()
 ) {
     state
@@ -176,14 +175,12 @@ internal fun CoroutineScope.checkableAppsStore() = store<CheckableAppsState, Che
         }
     }
 
-@Immutable
-internal data class CheckableApp(
+data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )
 
-@Immutable
-internal data class CheckableAppsState(
+data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
     val onCheckedAppsChanged: suspend (Set<String>) -> Unit = {},
@@ -199,7 +196,7 @@ internal data class CheckableAppsState(
     }
 }
 
-internal sealed class CheckableAppsAction {
+sealed class CheckableAppsAction {
     data class UpdateRefs(
         val checkedApps: Set<String>,
         val onCheckedAppsChanged: suspend (Set<String>) -> Unit,

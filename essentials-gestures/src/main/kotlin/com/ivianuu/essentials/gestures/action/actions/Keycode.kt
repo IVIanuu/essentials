@@ -19,7 +19,7 @@ import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.given
 
 @GivenActionFactory
-internal class KeycodeActionFactory : ActionFactory {
+class KeycodeActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
@@ -36,7 +36,7 @@ internal class KeycodeActionFactory : ActionFactory {
 }
 
 @GivenActionPickerDelegate
-internal class KeycodeActionPickerDelegate : ActionPickerDelegate {
+class KeycodeActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit

@@ -51,7 +51,7 @@ val Permission.Companion.DeviceAdminComponent by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class DeviceAdminPermissionStateProvider : PermissionStateProvider {
+class DeviceAdminPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.DeviceAdminComponent in permission

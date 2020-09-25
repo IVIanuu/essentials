@@ -49,7 +49,7 @@ val Permission.Companion.IgnoreBatteryOptimizationsPermission by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class IgnoreBatteryOptimizationsPermissionStateProvider : PermissionStateProvider {
+class IgnoreBatteryOptimizationsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IgnoreBatteryOptimizationsPermission in permission

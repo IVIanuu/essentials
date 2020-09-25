@@ -47,7 +47,7 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class AccessibilityServicePermissionStateProvider : PermissionStateProvider {
+class AccessibilityServicePermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.AccessibilityServiceClass in permission

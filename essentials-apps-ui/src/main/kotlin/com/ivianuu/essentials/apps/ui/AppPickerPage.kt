@@ -19,7 +19,6 @@ package com.ivianuu.essentials.apps.ui
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -94,7 +93,7 @@ private fun AppInfo(
 }
 
 @Given
-internal fun CoroutineScope.appPickerStore(
+fun CoroutineScope.appPickerStore(
     appFilter: AppFilter
 ) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
     execute(
@@ -112,10 +111,9 @@ internal fun CoroutineScope.appPickerStore(
     }
 }
 
-@Immutable
-internal data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
+data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
 
-internal sealed class AppPickerAction {
+sealed class AppPickerAction {
     data class AppClicked(val app: AppInfo) : AppPickerAction()
 }
 

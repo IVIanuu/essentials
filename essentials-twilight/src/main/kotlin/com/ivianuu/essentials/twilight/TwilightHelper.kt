@@ -20,7 +20,6 @@ import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
-import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.offerSafe
@@ -96,7 +95,6 @@ private fun configChanges() = callbackFlow<Unit> {
     awaitClose { androidApplicationContext.unregisterComponentCallbacks(callbacks) }
 }
 
-@Immutable
 data class TwilightState(
     val isDark: Boolean,
     val useBlack: Boolean

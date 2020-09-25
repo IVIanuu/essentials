@@ -4,8 +4,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Icon
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
@@ -25,7 +25,7 @@ import com.ivianuu.essentials.util.d
 import java.io.ByteArrayOutputStream
 
 @GivenActionFactory
-internal class ShortcutActionFactory : ActionFactory {
+class ShortcutActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         d { "create action from $key" }
@@ -47,7 +47,7 @@ internal class ShortcutActionFactory : ActionFactory {
 
 
 @GivenActionPickerDelegate
-internal class ShortcutActionPickerDelegate : ActionPickerDelegate {
+class ShortcutActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {

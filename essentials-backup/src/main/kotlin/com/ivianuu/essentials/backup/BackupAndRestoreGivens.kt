@@ -31,6 +31,6 @@ object BackupAndRestoreGivens {
 
 }
 
-internal typealias BackupDir = File
+typealias BackupDir = File
 
 typealias BackupFiles = Set<() -> File>

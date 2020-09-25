@@ -41,7 +41,7 @@ val Permission.Companion.RuntimePermissionName by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class RuntimePermissionStateProvider : PermissionStateProvider {
+class RuntimePermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission
@@ -53,7 +53,7 @@ internal class RuntimePermissionStateProvider : PermissionStateProvider {
 }
 
 @GivenPermissionRequestHandler
-internal class RuntimePermissionRequestHandler : PermissionRequestHandler {
+class RuntimePermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission

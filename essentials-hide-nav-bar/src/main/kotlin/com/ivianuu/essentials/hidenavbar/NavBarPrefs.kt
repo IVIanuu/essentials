@@ -22,6 +22,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 @Given(ApplicationContext::class)
-internal class NavBarPrefs {
+class NavBarPrefs {
     val wasNavBarHidden = given<DiskDataStoreFactory>().create("was_nav_bar_hidden") { false }
 }

@@ -21,7 +21,7 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvider {
+class WriteSecureSettingsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission
@@ -32,7 +32,7 @@ internal class WriteSecureSettingsPermissionStateProvider : PermissionStateProvi
 }
 
 @GivenPermissionRequestHandler
-internal class WriteSecureSettingsPermissionRequestHandler : PermissionRequestHandler {
+class WriteSecureSettingsPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission

@@ -9,7 +9,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.given
 
 @Given(ApplicationContext::class)
-internal class BillingPrefs {
+class BillingPrefs {
     private val factory = given<DiskDataStoreFactory>()
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(

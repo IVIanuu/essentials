@@ -38,7 +38,7 @@ val Permission.Companion.Intent by lazy {
 }
 
 @GivenPermissionRequestHandler
-internal class IntentPermissionRequestHandler : PermissionRequestHandler {
+class IntentPermissionRequestHandler : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.Intent in permission

@@ -42,7 +42,7 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
+class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsPackageUsageStatsPermission in permission

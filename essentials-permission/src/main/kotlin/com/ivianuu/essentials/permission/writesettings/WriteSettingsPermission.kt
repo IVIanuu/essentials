@@ -45,7 +45,7 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class WriteSettingsPermissionStateProvider : PermissionStateProvider {
+class WriteSettingsPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSettingsPermission in permission

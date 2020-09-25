@@ -18,7 +18,7 @@ import com.ivianuu.injekt.ApplicationContext
 import com.ivianuu.injekt.Given
 
 @Given(ApplicationContext::class)
-internal class ActionPermissions {
+class ActionPermissions {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
         Permission.Title withValue "Accessibility", // todo res

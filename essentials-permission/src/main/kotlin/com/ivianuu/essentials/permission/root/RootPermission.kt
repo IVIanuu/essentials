@@ -21,7 +21,7 @@ val Permission.Companion.IsRootPermission by lazy {
 }
 
 @GivenPermissionStateProvider
-internal class RootPermissionStateProvider : PermissionStateProvider {
+class RootPermissionStateProvider : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
@@ -30,7 +30,7 @@ internal class RootPermissionStateProvider : PermissionStateProvider {
 }
 
 @GivenPermissionRequestHandler
-internal class RootPermissionRequestHandler : PermissionRequestHandler {
+class RootPermissionRequestHandler : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 

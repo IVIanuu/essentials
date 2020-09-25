@@ -79,7 +79,7 @@ fun CounterPage() {
 }
 
 @Given
-internal fun CoroutineScope.counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
+fun CoroutineScope.counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
     onEachAction { action ->
         when (action) {
             Inc -> setState { copy(count = count + 1) }
@@ -88,5 +88,5 @@ internal fun CoroutineScope.counterStore() = store<CounterState, CounterAction>(
     }
 }
 
-internal data class CounterState(val count: Int)
-internal enum class CounterAction { Inc, Dec }
+data class CounterState(val count: Int)
+enum class CounterAction { Inc, Dec }

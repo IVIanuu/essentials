@@ -19,7 +19,6 @@ package com.ivianuu.essentials.permission.defaultui
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.GivenPermissionRequestRouteFactory
@@ -52,7 +51,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 
 @GivenPermissionRequestRouteFactory
-internal class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
+class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
 
     override fun createRoute(request: PermissionRequest): Route =
         Route { DefaultPermissionPage(request) }
@@ -104,7 +103,7 @@ private fun Permission(
 }
 
 @Given
-internal fun CoroutineScope.defaultPermissionStore(
+fun CoroutineScope.defaultPermissionStore(
     request: PermissionRequest
 ) = store<PermissionState, PermissionAction>(
     PermissionState()
@@ -135,12 +134,10 @@ internal fun CoroutineScope.defaultPermissionStore(
     }
 }
 
-
-@Immutable
-internal data class PermissionState(
+data class PermissionState(
     val permissionsToProcess: List<Permission> = emptyList()
 )
 
-internal sealed class PermissionAction {
+sealed class PermissionAction {
     data class PermissionClicked(val permission: Permission) : PermissionAction()
 }

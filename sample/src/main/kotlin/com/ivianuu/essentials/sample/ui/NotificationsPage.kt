@@ -19,7 +19,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -158,7 +157,7 @@ private fun NotificationPermissions(
 }
 
 @Reader
-private fun CoroutineScope.notificationStore(): Store<NotificationsState, NotificationsAction> {
+fun CoroutineScope.notificationStore(): Store<NotificationsState, NotificationsAction> {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
         Permission.Title withValue "Notifications"
@@ -189,7 +188,7 @@ private fun CoroutineScope.notificationStore(): Store<NotificationsState, Notifi
 }
 
 @Reader
-private fun notifications() = given<NotificationStore>().notifications
+fun notifications() = given<NotificationStore>().notifications
     .map { notifications ->
         notifications
             .parallelMap { sbn ->
@@ -223,20 +222,18 @@ private fun notifications() = given<NotificationStore>().notifications
             }
     }
 
-@Immutable
-private data class NotificationsState(
+data class NotificationsState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle
 )
 
-private sealed class NotificationsAction {
+sealed class NotificationsAction {
     object RequestPermissionsClicked : NotificationsAction()
     data class NotificationClicked(val notification: UiNotification) : NotificationsAction()
     data class DismissNotificationClicked(val notification: UiNotification) : NotificationsAction()
 }
 
-@Immutable
-private data class UiNotification(
+data class UiNotification(
     val title: String,
     val text: String,
     val icon: @Composable () -> Unit,

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.apps.coil
 
 import android.content.pm.PackageManager
-import androidx.compose.runtime.Immutable
 import coil.bitmap.BitmapPool
 import coil.decode.DataSource
 import coil.decode.Options
@@ -32,11 +31,10 @@ import com.ivianuu.injekt.GivenSetElements
 import com.ivianuu.injekt.given
 import kotlinx.coroutines.withContext
 
-@Immutable
 data class AppIcon(val packageName: String)
 
 @Given
-internal class AppIconFetcher : Fetcher<AppIcon> {
+class AppIconFetcher : Fetcher<AppIcon> {
 
     override fun key(data: AppIcon): String? = data.packageName
 

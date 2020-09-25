@@ -44,7 +44,7 @@ fun BackupAndRestorePage() {
 }
 
 @Given
-internal fun CoroutineScope.backupAndRestorePage() =
+fun CoroutineScope.backupAndRestorePage() =
     store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
         onEachAction { action ->
             when (action) {
@@ -66,9 +66,9 @@ internal fun CoroutineScope.backupAndRestorePage() =
         }
     }
 
-internal object BackupAndRestoreState
+object BackupAndRestoreState
 
-internal sealed class BackupAndRestoreAction {
+sealed class BackupAndRestoreAction {
     object BackupClicked : BackupAndRestoreAction()
     object RestoreClicked : BackupAndRestoreAction()
 }

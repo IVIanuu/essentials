@@ -21,7 +21,7 @@ import com.ivianuu.essentials.util.Resources
 import com.ivianuu.injekt.given
 
 @GivenActionFactory
-internal class AppActionFactory : ActionFactory {
+class AppActionFactory : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val packageName = key.removePrefix(ACTION_KEY_PREFIX)
@@ -41,7 +41,7 @@ internal class AppActionFactory : ActionFactory {
 }
 
 @GivenActionPickerDelegate
-internal class AppActionPickerDelegate : ActionPickerDelegate {
+class AppActionPickerDelegate : ActionPickerDelegate {
     override val title: String
         get() = Resources.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
