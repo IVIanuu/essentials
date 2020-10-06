@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 
 @BindingModule(ApplicationComponent::class)
 annotation class AppWorkerBinding {
+    @Module
     class ModuleImpl<T : suspend () -> Unit> {
         @SetElements
         operator fun invoke(instance: T): AppWorkers = setOf(instance)

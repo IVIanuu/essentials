@@ -8,6 +8,7 @@ import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ServiceComponent::class)
 annotation class AccessibilityWorkerBinding {
+    @Module
     class ModuleImpl<T : suspend () -> Unit> {
         @SetElements
         fun intoSet(instance: T): AccessibilityWorkers = setOf(instance)

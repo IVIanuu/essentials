@@ -24,6 +24,7 @@ import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ApplicationComponent::class)
 annotation class BootListenerBinding {
+    @Module
     class ModuleImpl<T : () -> Unit> {
         @SetElements
         operator fun invoke(instance: T): BootListeners = setOf(instance)

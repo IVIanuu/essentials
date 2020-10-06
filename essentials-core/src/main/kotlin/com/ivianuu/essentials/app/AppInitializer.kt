@@ -26,7 +26,8 @@ import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ApplicationComponent::class)
 annotation class AppInitializerBinding {
-    class Impl<T : () -> Unit> {
+    @Module
+    class ModuleImpl<T : () -> Unit> {
         @SetElements
         fun intoSet(instance: T): AppInitializers = setOf(instance)
     }

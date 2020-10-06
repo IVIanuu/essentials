@@ -10,6 +10,7 @@ import com.squareup.moshi.Moshi
 
 @BindingModule(ApplicationComponent::class)
 annotation class JsonAdapterBinding {
+    @Module
     class ModuleImpl<T : Any> {
         @SetElements
         fun invoke(instance: T): JsonAdapters = setOf(instance)
