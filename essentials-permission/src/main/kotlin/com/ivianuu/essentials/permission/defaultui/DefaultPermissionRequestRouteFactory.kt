@@ -64,6 +64,7 @@ fun DefaultPermissionPage(
     request: @Assisted PermissionRequest,
 ) {
     val (state, dispatch) = store(request)
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
@@ -129,6 +130,7 @@ fun defaultPermissionStore(
         when (action) {
             is PermissionAction.PermissionClicked -> {
                 permissionManager.requestHandlerForPermission(action.permission)
+                    .request(action.permission)
                 startUi()
                 updatePermissionsToProcessOrFinish()
             }
