@@ -41,23 +41,29 @@ import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSE
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.ui.navigation.DialogRoute
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.essentials.util.globalScope
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Date
 
-@Given
+@Binding
 class DebugBillingClient(
-    private val purchasesUpdatedListener: PurchasesUpdatedListener
+    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
+    private val billingStore: BillingStore,
+    private val buildInfo: BuildInfo,
+    private val dispatchers: AppCoroutineDispatchers,
+    private val globalScope: GlobalScope,
+    private val startUi: startUi,
+    private val navigator: Navigator,
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -121,12 +127,9 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase =
-                getPurchaseByToken(
-                    purchaseToken
-                )
+            val purchase = billingStore.getPurchaseByToken(purchaseToken)
             if (purchase != null) {
-                removePurchase(purchase.purchaseToken)
+                billingStore.removePurchase(purchase.purchaseToken)
                 listener.onConsumeResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -166,7 +169,7 @@ class DebugBillingClient(
                     ResourceBox(
                         resource = produceResource {
                             withContext(dispatchers.default) {
-                                getSkuDetails(
+                                billingStore.getSkuDetails(
                                     SkuDetailsParams.newBuilder()
                                         .setType(params.skuType)
                                         .setSkusList(listOf(params.sku))
@@ -184,9 +187,7 @@ class DebugBillingClient(
                                     globalScope.launch {
                                         val purchases = listOf(skuDetails.toPurchaseData())
                                         purchases.forEach {
-                                            addPurchase(
-                                                it
-                                            )
+                                            billingStore.addPurchase(it)
                                         }
 
                                         purchasesUpdatedListener.onPurchasesUpdated(
@@ -245,7 +246,7 @@ class DebugBillingClient(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
                 ).build(),
-                getSkuDetails(params)
+                billingStore.getSkuDetails(params)
             )
         }
     }
@@ -266,7 +267,7 @@ class DebugBillingClient(
             )
         }
         return runBlocking {
-            getPurchases(
+            billingStore.getPurchases(
                 skuType
             )
         }
@@ -299,10 +300,8 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase =
-                getPurchaseByToken(
-                    purchaseToken
-                )
+            val purchase = billingStore.getPurchaseByToken(purchaseToken
+            )
             if (purchase != null) {
                 val updated = Purchase(
                     orderId = purchase.orderId,
@@ -315,7 +314,7 @@ class DebugBillingClient(
                     isAutoRenewing = purchase.isAutoRenewing,
                     developerPayload = purchase.developerPayload
                 )
-                addPurchase(updated)
+                billingStore.addPurchase(updated)
                 listener?.onAcknowledgePurchaseResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
@@ -333,7 +332,7 @@ class DebugBillingClient(
 
     private fun SkuDetails.toPurchaseData(): Purchase {
         val json =
-            """{"orderId":"$sku","packageName":"${given<BuildInfo>().packageName}","productId":
+            """{"orderId":"$sku","packageName":"${buildInfo.packageName}","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
       |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")

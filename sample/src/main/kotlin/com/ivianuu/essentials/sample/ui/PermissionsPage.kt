@@ -17,24 +17,24 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
@@ -43,12 +43,12 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun PermissionsPage() {
+fun PermissionsPage(permissionManager: PermissionManager) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {
@@ -105,7 +105,7 @@ fun PermissionsPage() {
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    requestPermissions(
+                    permissionManager.requestPermissions(
                         camera,
                         phone,
                         accessibility,

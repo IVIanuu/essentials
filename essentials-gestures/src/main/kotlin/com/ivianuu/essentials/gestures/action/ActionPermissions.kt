@@ -3,7 +3,6 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.foundation.Icon
 import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -14,11 +13,12 @@ import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
 
-@Given(ApplicationContext::class)
-class ActionPermissions {
+@Binding(ApplicationComponent::class)
+class ActionPermissions(applicationContext: ApplicationContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
         Permission.Title withValue "Accessibility", // todo res
@@ -35,7 +35,7 @@ class ActionPermissions {
         Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) }
     )
     val writeSettings = WriteSettingsPermission(
-        androidApplicationContext,
+        applicationContext,
         Permission.Title withValue "Write Settings", // todo res
         Permission.Desc withValue "Required to change settings", // todo res
         Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) } // todo change icon

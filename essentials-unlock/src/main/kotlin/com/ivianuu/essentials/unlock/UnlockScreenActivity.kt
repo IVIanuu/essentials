@@ -26,11 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.ui.activity.EsActivity
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.activityContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -44,58 +45,60 @@ class UnlockScreenActivity : EsActivity() {
     private var valid = true
     private lateinit var requestId: String
 
+    private val component by lazy {
+        activityComponent.mergeComponent<UnlockScreenActivityComponent>()
+    }
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityContext.runReader {
-            if (!intent.hasExtra(KEY_REQUEST_ID)) {
-                valid = false
-                finish()
-                return
-            }
+        if (!intent.hasExtra(KEY_REQUEST_ID)) {
+            valid = false
+            finish()
+            return
+        }
 
-            requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
+        requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-            d { "unlock screen for $requestId" }
+        component.logger.d("unlock screen for $requestId")
 
-            fun finishWithResult(success: Boolean) {
-                d { "finish with result $success" }
-                hasResult = true
-                onUnlockScreenResult(requestId, success)
-                finish()
-            }
+        fun finishWithResult(success: Boolean) {
+            component.logger.d("finish with result $success")
+            hasResult = true
+            onUnlockScreenResult(requestId, success)
+            finish()
+        }
 
-            if (given<SystemBuildInfo>().sdk >= 26) {
-                given<KeyguardManager>().requestDismissKeyguard(this, object :
-                    KeyguardManager.KeyguardDismissCallback() {
-                    override fun onDismissSucceeded() {
-                        super.onDismissSucceeded()
-                        finishWithResult(true)
-                    }
+        if (component.systemBuildInfo.sdk >= 26) {
+            component.keyguardManager.requestDismissKeyguard(this, object :
+                KeyguardManager.KeyguardDismissCallback() {
+                override fun onDismissSucceeded() {
+                    super.onDismissSucceeded()
+                    finishWithResult(true)
+                }
 
-                    override fun onDismissCancelled() {
-                        super.onDismissCancelled()
-                        finishWithResult(false)
-                    }
+                override fun onDismissCancelled() {
+                    super.onDismissCancelled()
+                    finishWithResult(false)
+                }
 
-                    override fun onDismissError() {
-                        super.onDismissError()
-                        finishWithResult(false)
-                    }
-                })
-            } else {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-                BroadcastFactory.create(
-                    Intent.ACTION_SCREEN_OFF,
-                    Intent.ACTION_SCREEN_ON,
-                    Intent.ACTION_USER_PRESENT
-                )
-                    .take(1)
-                    .onEach {
-                        finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
-                    }
-                    .launchIn(lifecycleScope)
-            }
+                override fun onDismissError() {
+                    super.onDismissError()
+                    finishWithResult(false)
+                }
+            })
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+            component.broadcastFactory.create(
+                Intent.ACTION_SCREEN_OFF,
+                Intent.ACTION_SCREEN_ON,
+                Intent.ACTION_USER_PRESENT
+            )
+                .take(1)
+                .onEach {
+                    finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
+                }
+                .launchIn(lifecycleScope)
         }
     }
 
@@ -104,11 +107,9 @@ class UnlockScreenActivity : EsActivity() {
     }
 
     override fun onDestroy() {
-        activityContext.runReader {
-            // just in case we didn't respond yet
-            if (valid && !hasResult) {
-                onUnlockScreenResult(requestId, false)
-            }
+        // just in case we didn't respond yet
+        if (valid && !hasResult) {
+            onUnlockScreenResult(requestId, false)
         }
         super.onDestroy()
     }
@@ -122,4 +123,12 @@ class UnlockScreenActivity : EsActivity() {
             })
         }
     }
+}
+
+@MergeInto(ActivityComponent::class)
+interface UnlockScreenActivityComponent {
+    val broadcastFactory: BroadcastFactory
+    val keyguardManager: KeyguardManager
+    val logger: Logger
+    val systemBuildInfo: SystemBuildInfo
 }

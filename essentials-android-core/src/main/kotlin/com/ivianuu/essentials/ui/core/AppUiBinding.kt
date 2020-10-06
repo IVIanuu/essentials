@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.ui.core
 
-import com.ivianuu.injekt.Given
+import androidx.compose.runtime.Composable
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.merge.BindingModule
 
-object EsAppGivens {
-
-    @Given
-    fun packageManager() = androidApplicationContext.packageManager!!
-
+@BindingModule(ActivityComponent::class)
+annotation class AppUiBinding {
+    class ModuleImpl<T : @Composable () -> Unit> {
+        @Binding
+        fun appUiMarker(instance: T): AppUiMarker = instance as @Composable () -> Unit
+    }
 }
+
+typealias AppUiMarker = @Composable () -> Unit

@@ -16,38 +16,37 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSet
-import com.ivianuu.injekt.GivenSetElements
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.BindingModule
 
-@Effect
-annotation class GivenPermissionStateProvider {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : PermissionStateProvider> invoke(): Set<PermissionStateProvider> =
-            setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class PermissionStateProviderBinding {
+    @Module
+    class ModuleImpl<T : PermissionStateProvider> {
+        @SetElements
+        operator fun invoke(instance: T): Set<PermissionStateProvider> = setOf(instance)
     }
 }
 
-@Effect
-annotation class GivenPermissionRequestHandler {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : PermissionRequestHandler> invoke(): Set<PermissionRequestHandler> =
-            setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class PermissionRequestHandlerBinding {
+    @Module
+    class ModuleImpl<T : PermissionRequestHandler> {
+        @SetElements
+        operator fun invoke(instance: T): Set<PermissionRequestHandler> =
+            setOf(instance)
     }
 }
 
-@Effect
-annotation class GivenPermissionRequestRouteFactory {
-    @GivenSet
-    companion object {
-        @Given
-        operator fun <T : PermissionRequestRouteFactory> invoke(): PermissionRequestRouteFactory =
-            given<T>()
+@BindingModule(ApplicationComponent::class)
+annotation class PermissionRequestRouteFactoryBinding {
+    @Module
+    class ModuleImpl<T : PermissionRequestRouteFactory> {
+        @Binding
+        val T.permissionRequestRouteFactory: PermissionRequestRouteFactory
+            get() = this
     }
 }

@@ -1,11 +1,15 @@
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.MergeInto
 
-object EsNavigatorGivens {
+@MergeInto(ApplicationComponent::class)
+@Module
+object EsNavigatorModule {
 
-    @Given(ApplicationContext::class)
+    @Binding(ApplicationComponent::class)
     fun navigator() = Navigator()
 
 }

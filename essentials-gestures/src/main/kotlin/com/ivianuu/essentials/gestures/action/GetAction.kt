@@ -1,22 +1,26 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
-@Reader
-suspend fun getActions(): List<Action> = withContext(dispatchers.default) {
-    given<Set<() -> Action>>()
-        .map { it() }
-}
+@FunBinding
+suspend fun getActions(
+    actions: Set<Action>,
+    dispatchers: AppCoroutineDispatchers,
+): List<Action> = withContext(dispatchers.default) { actions.toList() }
 
-@Reader
-suspend fun getAction(key: String): Action = withContext(dispatchers.default) {
-    given<Set<() -> Action>>()
-        .map { it() }
+@FunBinding
+suspend fun getAction(
+    actions: Set<Action>,
+    actionFactories: () -> Set<ActionFactory>,
+    dispatchers: AppCoroutineDispatchers,
+    key: @Assisted String,
+): Action = withContext(dispatchers.default) {
+    actions
         .firstOrNull { it.key == key }
-        ?: given<Set<ActionFactory>>()
+        ?: actionFactories()
             .firstOrNull { it.handles(key) }
             ?.createAction(key)
         ?: error("Unsupported action key $key")

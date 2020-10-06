@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.material.Colors
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.TextStyle
 import com.ivianuu.essentials.util.isDark
 
@@ -43,7 +43,12 @@ inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
     )
 }
 
-fun Colors(
+fun blackColors() = darkColors().copy(
+    background = Color.Black,
+    surface = Color.Black
+)
+
+fun colors(
     isLight: Boolean = true,
     primary: Color = if (isLight) Color(0xFF6200EE) else Color(0xFFBB86FC),
     primaryVariant: Color = if (isLight) Color(0xFF3700B3) else Color(0xFF3700B3),
@@ -56,7 +61,7 @@ fun Colors(
     onSecondary: Color = if (secondary.isDark) Color.White else Color.Black,
     onBackground: Color = if (background.isDark) Color.White else Color.Black,
     onSurface: Color = if (surface.isDark) Color.White else Color.Black,
-    onError: Color = if (error.isDark) Color.White else Color.Black
+    onError: Color = if (error.isDark) Color.White else Color.Black,
 ): Colors = if (isLight) {
     lightColors(
         primary = primary,

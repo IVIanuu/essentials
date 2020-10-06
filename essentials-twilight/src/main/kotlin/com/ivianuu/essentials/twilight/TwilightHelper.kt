@@ -20,12 +20,11 @@ import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.android.ApplicationResources
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -37,39 +36,55 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.util.Calendar
 
-@Reader
-val twilightState: Flow<TwilightState>
-    get() = given<TwilightPrefs>().twilightMode.data
+@FunBinding
+fun twilightState(
+    prefs: TwilightPrefs,
+    batteryTwilightState: batteryTwilightState,
+    systemTwilightState: systemTwilightState,
+    timeTwilightState: timeTwilightState,
+): Flow<TwilightState> {
+    return prefs.twilightMode.data
         .flatMapLatest { mode ->
             when (mode) {
-                TwilightMode.System -> system()
+                TwilightMode.System -> systemTwilightState()
                 TwilightMode.Light -> flowOf(false)
                 TwilightMode.Dark -> flowOf(true)
-                TwilightMode.Battery -> battery()
-                TwilightMode.Time -> time()
+                TwilightMode.Battery -> batteryTwilightState()
+                TwilightMode.Time -> timeTwilightState()
             }
         }
-        .combine(given<TwilightPrefs>().useBlack.data) { isDark, useBlack ->
+        .combine(prefs.useBlack.data) { isDark, useBlack ->
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
+}
 
-@Reader
-private fun battery() = BroadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
-    .map { Unit }
-    .onStart { emit(Unit) }
-    .map { given<PowerManager>().isPowerSaveMode }
+@FunBinding
+fun batteryTwilightState(
+    broadcastFactory: BroadcastFactory,
+    powerManager: PowerManager,
+): Flow<Boolean> {
+    return broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+        .map { Unit }
+        .onStart { emit(Unit) }
+        .map { powerManager.isPowerSaveMode }
+}
 
-@Reader
-private fun system() = configChanges()
+@FunBinding
+fun systemTwilightState(
+    configChanges: configChanges,
+    applicationResources: ApplicationResources,
+): Flow<Boolean> = configChanges()
     .onStart { emit(Unit) }
     .map {
-        (given<ApplicationResources>().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
+        (applicationResources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
             .UI_MODE_NIGHT_YES
     }
 
-@Reader
-private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
+@FunBinding
+fun timeTwilightState(
+    broadcastFactory: BroadcastFactory,
+): Flow<Boolean> = broadcastFactory.create(Intent.ACTION_TIME_TICK)
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
@@ -78,8 +93,8 @@ private fun time() = BroadcastFactory.create(Intent.ACTION_TIME_TICK)
         hour < 6 || hour >= 22
     }
 
-@Reader
-private fun configChanges() = callbackFlow<Unit> {
+@FunBinding
+fun configChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow<Unit> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
             offerSafe(Unit)
@@ -91,8 +106,8 @@ private fun configChanges() = callbackFlow<Unit> {
         override fun onTrimMemory(level: Int) {
         }
     }
-    androidApplicationContext.registerComponentCallbacks(callbacks)
-    awaitClose { androidApplicationContext.unregisterComponentCallbacks(callbacks) }
+    applicationContext.registerComponentCallbacks(callbacks)
+    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
 }
 
 data class TwilightState(

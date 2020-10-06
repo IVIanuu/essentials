@@ -18,22 +18,24 @@ package com.ivianuu.essentials.securesettings
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ApplicationContext
 
-object SecureSettings {
+@Binding
+class SecureSettings(
+    private val applicationContext: ApplicationContext,
+    private val buildInfo: BuildInfo,
+    private val shell: Shell,
+) {
 
-    @Reader
-    fun canWrite() = androidApplicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+    fun canWrite() = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
             PackageManager.PERMISSION_GRANTED
 
-    @Reader
     suspend fun grantPermissionViaRoot(): Boolean {
         return try {
-            Shell.run("pm grant ${given<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS")
+            shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
             canWrite()
         } catch (t: Throwable) {
             false

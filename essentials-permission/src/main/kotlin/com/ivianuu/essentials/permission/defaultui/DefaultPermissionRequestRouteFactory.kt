@@ -21,49 +21,49 @@ import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.GivenPermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
+import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.ui.store.rememberStore1
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
-@GivenPermissionRequestRouteFactory
-class DefaultPermissionRequestRouteFactory : PermissionRequestRouteFactory {
+@PermissionRequestRouteFactoryBinding
+class DefaultPermissionRequestRouteFactory(
+    private val defaultPermissionPage: DefaultPermissionPage,
+) : PermissionRequestRouteFactory {
 
     override fun createRoute(request: PermissionRequest): Route =
-        Route { DefaultPermissionPage(request) }
-
+        Route { defaultPermissionPage(request) }
 }
 
-@Reader
+@FunBinding
 @Composable
-private fun DefaultPermissionPage(request: PermissionRequest) {
-    val (state, dispatch) = rememberStore<PermissionState, PermissionAction> {
-        given(this, request)
-    }
+fun DefaultPermissionPage(
+    store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
+    request: @Assisted PermissionRequest,
+) {
+    val (state, dispatch) = store(request)
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
@@ -102,17 +102,19 @@ private fun Permission(
     }
 }
 
-@Given
-fun CoroutineScope.defaultPermissionStore(
-    request: PermissionRequest
-) = store<PermissionState, PermissionAction>(
-    PermissionState()
-) {
+@Binding
+fun defaultPermissionStore(
+    logger: Logger,
+    navigator: Navigator,
+    permissionManager: PermissionManager,
+    startUi: startUi,
+    request: @Assisted PermissionRequest,
+) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions
-            .filterNot { hasPermissions(it).first() }
+            .filterNot { permissionManager.hasPermissions(it).first() }
 
-        d { "update permissions to process or finish not granted $permissionsToProcess" }
+        logger.d("update permissions to process or finish not granted $permissionsToProcess")
 
         if (permissionsToProcess.isEmpty()) {
             navigator.popTop()
@@ -126,7 +128,7 @@ fun CoroutineScope.defaultPermissionStore(
     onEachAction { action ->
         when (action) {
             is PermissionAction.PermissionClicked -> {
-                action.permission.requestHandler.request(action.permission)
+                permissionManager.requestHandlerForPermission(action.permission)
                 startUi()
                 updatePermissionsToProcessOrFinish()
             }

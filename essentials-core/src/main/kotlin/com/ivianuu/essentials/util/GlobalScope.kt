@@ -1,20 +1,19 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.MergeInto
 import kotlinx.coroutines.CoroutineScope
 
 typealias GlobalScope = CoroutineScope
 
-@Reader
-inline val globalScope: GlobalScope
-    get() = given()
+@MergeInto(ApplicationComponent::class)
+@Module
+object EsGlobalScopeModule {
 
-object EsGlobalScopeGivens {
-
-    @Given(ApplicationContext::class)
-    fun globalScope(): GlobalScope = CoroutineScope(dispatchers.default)
+    @Binding(ApplicationComponent::class)
+    fun globalScope(dispatchers: AppCoroutineDispatchers): GlobalScope =
+        CoroutineScope(dispatchers.default)
 
 }

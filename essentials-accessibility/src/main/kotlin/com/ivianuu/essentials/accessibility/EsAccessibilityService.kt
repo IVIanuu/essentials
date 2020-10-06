@@ -19,9 +19,10 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.android.createServiceContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -30,10 +31,11 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsAccessibilityService : AccessibilityService() {
 
-    val readerContext by lazy { createServiceContext() }
+    val serviceComponent by lazy { createServiceComponent() }
 
     private val dispatchers: AppCoroutineDispatchers by lazy {
-        readerContext.runReader { given() }
+        serviceComponent.mergeComponent<EsAccessibilityServiceComponent>()
+            .dispatchers
     }
 
     val scope by lazy { CoroutineScope(dispatchers.default) }
@@ -58,4 +60,9 @@ abstract class EsAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
     }
 
+}
+
+@MergeInto(ServiceComponent::class)
+interface EsAccessibilityServiceComponent {
+    val dispatchers: AppCoroutineDispatchers
 }

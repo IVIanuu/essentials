@@ -20,8 +20,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,11 +30,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
 
-@Reader
-val keyboardVisible: Flow<Boolean>
-    get() = given<AccessibilityServices>().events
+@FunBinding
+fun keyboardVisible(
+    accessibilityServices: AccessibilityServices,
+    getKeyboardHeight: getKeyboardHeight,
+): Flow<Boolean> {
+    return accessibilityServices.events
         .onEach {
-            given<AccessibilityServices>().applyConfig(
+            accessibilityServices.applyConfig(
                 AccessibilityConfig(
                     eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 )
@@ -56,11 +58,11 @@ val keyboardVisible: Flow<Boolean>
         .map { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
+}
 
-@Reader
-private fun getKeyboardHeight(): Int {
+@FunBinding
+internal fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int {
     return try {
-        val inputMethodManager = given<InputMethodManager>()
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
     } catch (t: Throwable) {

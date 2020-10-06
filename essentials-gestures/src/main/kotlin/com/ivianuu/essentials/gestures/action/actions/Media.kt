@@ -2,45 +2,52 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.view.KeyEvent
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionPrefs
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.first
 
-@Reader
+@FunBinding
 fun mediaAction(
-    key: String,
-    keycode: Int,
-    titleRes: Int,
-    icon: ActionIcon
-) = Action(
+    doMediaAction: doMediaAction,
+    resources: Resources,
+    key: @Assisted String,
+    keycode: @Assisted Int,
+    titleRes: @Assisted Int,
+    icon: @Assisted ActionIcon,
+): Action = Action(
     key = key,
-    title = Resources.getString(titleRes),
+    title = resources.getString(titleRes),
     icon = icon,
     execute = { doMediaAction(keycode) }
 )
 
-@Reader
-private suspend fun doMediaAction(keycode: Int) {
-    androidApplicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
-    androidApplicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
+@FunBinding
+suspend fun doMediaAction(
+    applicationContext: ApplicationContext,
+    mediaIntent: mediaIntent,
+    keycode: @Assisted Int,
+) {
+    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
+    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
 }
 
-@Reader
-private suspend fun mediaIntent(
-    keyEvent: Int,
-    keycode: Int
-) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+@FunBinding
+suspend fun mediaIntent(
+    prefs: ActionPrefs,
+    keyEvent: @Assisted Int,
+    keycode: @Assisted Int,
+): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
         Intent.EXTRA_KEY_EVENT,
         KeyEvent(keyEvent, keycode)
     )
 
-    val mediaApp = given<ActionPrefs>().actionMediaApp.data.first()
+    val mediaApp = prefs.actionMediaApp.data.first()
     if (mediaApp != null) {
         `package` = mediaApp
     }

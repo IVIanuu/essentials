@@ -20,9 +20,10 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.android.createServiceContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -31,10 +32,11 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsService : Service() {
 
-    val readerContext by lazy { createServiceContext() }
+    val serviceComponent by lazy { createServiceComponent() }
 
     private val dispatchers: AppCoroutineDispatchers by lazy {
-        readerContext.runReader { given() }
+        serviceComponent.mergeComponent<EsServiceComponent>()
+            .dispatchers
     }
 
     val scope by lazy { CoroutineScope(dispatchers.default) }
@@ -46,4 +48,9 @@ abstract class EsService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
+}
+
+@MergeInto(ServiceComponent::class)
+interface EsServiceComponent {
+    val dispatchers: AppCoroutineDispatchers
 }

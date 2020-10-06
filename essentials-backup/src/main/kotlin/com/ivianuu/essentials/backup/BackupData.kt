@@ -2,14 +2,14 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.core.content.FileProvider
-import com.ivianuu.essentials.app.androidApplicationContext
+import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.dispatchers
 import com.ivianuu.essentials.util.runCatchingAndLog
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
@@ -18,13 +18,20 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@Reader
-internal suspend fun backupData() = runCatchingAndLog {
+@FunBinding
+suspend fun backupData(
+    applicationContext: ApplicationContext,
+    backupDir: BackupDir,
+    backupFiles: () -> BackupFiles,
+    buildInfo: BuildInfo,
+    dispatchers: AppCoroutineDispatchers,
+    navigator: Navigator,
+): Result<Unit, Throwable> = runCatchingAndLog {
     withContext(dispatchers.io) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
         val backupFileName = "backup_${dateFormat.format(Date())}"
 
-        val backupFile = given<BackupDir>().resolve("$backupFileName.zip")
+        val backupFile = backupDir.resolve("$backupFileName.zip")
             .also {
                 it.parentFile.mkdirs()
                 it.createNewFile()
@@ -33,8 +40,7 @@ internal suspend fun backupData() = runCatchingAndLog {
         val dest = FileOutputStream(backupFile)
         val out = ZipOutputStream(BufferedOutputStream(dest))
 
-        given<BackupFiles>()
-            .map { it() }
+        backupFiles()
             .flatMap { it.walkTopDown() }
             .filterNot { it.isDirectory }
             .forEach { file ->
@@ -51,8 +57,8 @@ internal suspend fun backupData() = runCatchingAndLog {
 
         val uri =
             FileProvider.getUriForFile(
-                androidApplicationContext,
-                given<BuildInfo>().packageName,
+                applicationContext,
+                buildInfo.packageName,
                 backupFile
             )
         val intent = Intent(Intent.ACTION_SEND)

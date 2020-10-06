@@ -16,17 +16,18 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.launchInComposition
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.launchInComposition
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,15 +39,20 @@ internal fun SecureSettingsHeader(text: String) {
     )
 }
 
-@Reader
+@FunBinding
 @Composable
-internal fun popNavigatorOnceSecureSettingsGranted(toast: Boolean) {
+fun popNavigatorOnceSecureSettingsGranted(
+    toaster: Toaster,
+    navigator: Navigator,
+    secureSettings: SecureSettings,
+    toast: @Assisted Boolean,
+) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
     launchInComposition {
         while (true) {
-            if (SecureSettings.canWrite()) {
-                if (toast) Toaster.toast(R.string.es_secure_settings_permission_granted)
+            if (secureSettings.canWrite()) {
+                if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
                 navigator.popTop(result = true)
                 break
             }

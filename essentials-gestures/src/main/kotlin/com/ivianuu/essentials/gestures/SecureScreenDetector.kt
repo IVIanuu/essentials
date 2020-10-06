@@ -19,11 +19,10 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -31,14 +30,17 @@ import kotlinx.coroutines.flow.onEach
 
 // todo make this class a single shared flow
 
-@Given(ApplicationContext::class)
-class SecureScreenDetector {
+@Binding(ApplicationComponent::class)
+class SecureScreenDetector(
+    private val globalScope: GlobalScope,
+    private val logger: Logger,
+    private val services: AccessibilityServices,
+) {
 
     private val _isOnSecureScreen = MutableStateFlow(false)
     val isOnSecureScreen: StateFlow<Boolean> get() = _isOnSecureScreen
 
     init {
-        val services = given<AccessibilityServices>()
         services.applyConfig(
             AccessibilityConfig(
                 eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -70,7 +72,7 @@ class SecureScreenDetector {
         }
 
         // distinct
-        d { "on secure screen changed: $isOnSecureScreen" }
+        logger.d("on secure screen changed: $isOnSecureScreen")
         _isOnSecureScreen.value = isOnSecureScreen
     }
 }

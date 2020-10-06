@@ -16,26 +16,41 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.essentials.ui.core.GivenAppUi
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.injekt.InitializeInjekt
+import com.ivianuu.essentials.ui.core.AppUiBinding
+import com.ivianuu.essentials.ui.material.blackColors
+import com.ivianuu.essentials.ui.material.colors
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.GenerateMergeComponents
 
-@InitializeInjekt
-@GivenAppUi
+@GenerateMergeComponents
+@AppUiBinding
+@FunBinding
 @Composable
-fun SampleUi() {
-    TwilightTheme {
+fun SampleUi(
+    homePage: HomePage,
+    navigator: Navigator,
+    twilightTheme: TwilightTheme,
+) {
+    twilightTheme(
+        colors(),
+        darkColors(),
+        blackColors(),
+        Typography()
+    ) {
         Providers(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
         ) {
             if (!navigator.hasRoot) {
-                navigator.setRoot { HomePage() }
+                navigator.setRoot { homePage() }
             }
             navigator.content()
         }

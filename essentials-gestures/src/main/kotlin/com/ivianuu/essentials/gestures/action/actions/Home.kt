@@ -3,21 +3,26 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.GivenAction
-import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
 
-@GivenAction
-fun homeAction() = Action(
+@ActionBinding
+fun homeAction(
+    choosePermissions: choosePermissions,
+    openHomeScreen: openHomeScreen,
+    performGlobalAction: performGlobalAction,
+    resources: Resources,
+) = Action(
     key = "home",
-    title = Resources.getString(R.string.es_action_home),
-    permissions = permissions {
+    title = resources.getString(R.string.es_action_home),
+    permissions = choosePermissions {
         if (needsHomeIntentWorkaround) emptyList()
         else listOf(accessibility)
     },
@@ -28,18 +33,23 @@ fun homeAction() = Action(
     }
 )
 
-@Reader
-private fun openHomeScreen() {
+@FunBinding
+fun openHomeScreen(
+    applicationContext: ApplicationContext,
+    sendIntent: sendIntent,
+) {
     try {
         val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-        androidApplicationContext.sendBroadcast(intent)
+        applicationContext.sendBroadcast(intent)
     } catch (t: Throwable) {
         t.printStackTrace()
     }
 
-    Intent(Intent.ACTION_MAIN).apply {
-        addCategory(
-            Intent.CATEGORY_HOME
-        )
-    }.send()
+    sendIntent(
+        Intent(Intent.ACTION_MAIN).apply {
+            addCategory(
+                Intent.CATEGORY_HOME
+            )
+        }
+    )
 }

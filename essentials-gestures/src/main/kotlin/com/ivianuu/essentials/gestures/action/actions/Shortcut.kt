@@ -11,24 +11,27 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GivenActionFactory
-import com.ivianuu.essentials.gestures.action.GivenActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.essentials.util.d
 import java.io.ByteArrayOutputStream
 
-@GivenActionFactory
-class ShortcutActionFactory : ActionFactory {
+@ActionFactoryBinding
+class ShortcutActionFactory(
+    private val logger: Logger,
+    private val sendIntent: sendIntent,
+) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
-        d { "create action from $key" }
+        logger.d("create action from $key")
         val tmp = key.split(DELIMITER)
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
@@ -40,22 +43,25 @@ class ShortcutActionFactory : ActionFactory {
             unlockScreen = true,
             enabled = true,
             icon = singleActionIcon { Icon(ImagePainter(icon)) },
-            execute = { intent.send() }
+            execute = { sendIntent(intent) }
         )
     }
 }
 
-
-@GivenActionPickerDelegate
-class ShortcutActionPickerDelegate : ActionPickerDelegate {
+@ActionPickerDelegateBinding
+class ShortcutActionPickerDelegate(
+    private val navigator: Navigator,
+    private val resources: Resources,
+    private val shortcutPickerPage: ShortcutPickerPage,
+) : ActionPickerDelegate {
     override val title: String
-        get() = Resources.getString(R.string.es_action_shortcut)
+        get() = resources.getString(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
         Icon(vectorResource(R.drawable.es_ic_content_cut))
     }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val shortcut = navigator.push<Shortcut> { ShortcutPickerPage() }
+        val shortcut = navigator.push<Shortcut> { shortcutPickerPage(null) }
             ?: return null
 
         val label = shortcut.name

@@ -17,18 +17,26 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injekt.android.applicationReaderContext
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 /**
  * App
  */
 abstract class EsApp : Application() {
     override fun onCreate() {
-        applicationReaderContext.runReader {
+        with(applicationComponent.mergeComponent<EsAppComponent>()) {
             runInitializers()
             runAppWorkers()
         }
         super.onCreate()
     }
+}
+
+@MergeInto(ApplicationComponent::class)
+interface EsAppComponent {
+    val runInitializers: runInitializers
+    val runAppWorkers: runAppWorkers
 }

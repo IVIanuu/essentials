@@ -16,24 +16,25 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSet
-import com.ivianuu.injekt.GivenSetElements
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.BindingModule
+import com.ivianuu.injekt.merge.MergeInto
 
-@Effect
-annotation class GivenBootListener {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : () -> Unit> invoke(): BootListeners = setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class BootListenerBinding {
+    class ModuleImpl<T : () -> Unit> {
+        @SetElements
+        operator fun invoke(instance: T): BootListeners = setOf(instance)
     }
 }
 
-object EsBootListenersGivens {
-
-    @GivenSetElements
-    fun bootListeners(): BootListeners = emptySet()
+@MergeInto(ApplicationComponent::class)
+@Module
+object EsBootListenersModule {
+    @SetElements
+    fun defaultBootListeners(): BootListeners = emptySet()
 
 }
 

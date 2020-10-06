@@ -18,11 +18,11 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.coroutines.parallelForEach
-import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.util.startActivityForResult
+import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
+import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -37,8 +37,11 @@ val Permission.Companion.Intent by lazy {
     )
 }
 
-@GivenPermissionRequestHandler
-class IntentPermissionRequestHandler : PermissionRequestHandler {
+@PermissionRequestHandlerBinding
+class IntentPermissionRequestHandler(
+    private val permissionManager: PermissionManager,
+    private val startActivityForIntentResult: startActivityForIntentResult,
+) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.Intent in permission
@@ -46,10 +49,10 @@ class IntentPermissionRequestHandler : PermissionRequestHandler {
     override suspend fun request(permission: Permission) = coroutineScope {
         select<Unit> {
             async {
-                startActivityForResult(permission[Permission.Intent])
+                startActivityForIntentResult(permission[Permission.Intent])
             }.onAwait {}
             async {
-                while (!hasPermissions(permission).first()) {
+                while (!permissionManager.hasPermissions(permission).first()) {
                     delay(100)
                 }
             }.onAwait {}

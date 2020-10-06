@@ -17,12 +17,18 @@
 package com.ivianuu.essentials.tile
 
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 /**
  * Stateful tile service
  */
 abstract class StateTileService<T> : EsTileService() {
+
+    private val component by lazy {
+        serviceComponent.mergeComponent<StateTileServiceComponent>()
+    }
 
     abstract fun createTile(state: T): Tile
 
@@ -31,26 +37,29 @@ abstract class StateTileService<T> : EsTileService() {
     }
 
     fun setTile(tile: Tile) {
-        readerContext.runReader {
-            val qsTile = qsTile ?: return
+        val qsTile = qsTile ?: return
 
-            qsTile.state = when (tile.state) {
-                Tile.State.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
-                Tile.State.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
-                Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
-            }
-            qsTile.icon = tile.icon
-            qsTile.label = when {
-                tile.label != null -> tile.label
-                tile.labelRes != null -> Resources.getString(tile.labelRes)
-                else -> null
-            }
-            qsTile.contentDescription = when {
-                tile.description != null -> tile.description
-                tile.descriptionRes != null -> Resources.getString(tile.descriptionRes)
-                else -> null
-            }
-            qsTile.updateTile()
+        qsTile.state = when (tile.state) {
+            Tile.State.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
+            Tile.State.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
+            Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
         }
+        qsTile.icon = tile.icon
+        qsTile.label = when {
+            tile.label != null -> tile.label
+            tile.labelRes != null -> component.resources.getString(tile.labelRes)
+            else -> null
+        }
+        qsTile.contentDescription = when {
+            tile.description != null -> tile.description
+            tile.descriptionRes != null -> component.resources.getString(tile.descriptionRes)
+            else -> null
+        }
+        qsTile.updateTile()
     }
+}
+
+@MergeInto(ServiceComponent::class)
+interface StateTileServiceComponent {
+    val resources: Resources
 }

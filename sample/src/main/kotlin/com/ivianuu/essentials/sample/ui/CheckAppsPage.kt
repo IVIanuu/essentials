@@ -24,19 +24,22 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.ui.datastore.asState
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun CheckAppsPage() {
+fun CheckAppsPage(
+    checkableAppsPage: CheckableAppsPage,
+    factory: DiskDataStoreFactory,
+    launchableAppFilter: LaunchableAppFilter,
+) {
     var checkedApps by remember {
-        given<DiskDataStoreFactory>().create("checked_apps") { emptySet<String>() }
+        factory.create("checked_apps") { emptySet<String>() }
     }.asState()
-    CheckableAppsPage(
-        checkedApps = checkedApps,
-        onCheckedAppsChanged = { newCheckedApps -> checkedApps = newCheckedApps },
-        appBarTitle = "Send check apps",
-        appFilter = remember { given<LaunchableAppFilter>() }
+    checkableAppsPage(
+        checkedApps,
+        { newCheckedApps -> checkedApps = newCheckedApps },
+        "Send check apps",
+        launchableAppFilter
     )
 }

@@ -40,18 +40,16 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
 
-@Reader
+@FunBinding
 @Composable
-fun PrefsPage() {
-    val prefs = given<Prefs>()
+fun PrefsPage(prefs: Prefs) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
@@ -156,9 +154,8 @@ fun PrefsPage() {
     }
 }
 
-@Given(ApplicationContext::class)
-class Prefs {
-    private val factory = given<DiskDataStoreFactory>()
+@Binding(ApplicationComponent::class)
+class Prefs(factory: DiskDataStoreFactory) {
     val switch = factory.create("switch") { false }
     val checkbox = factory.create("checkbox") { false }
     val radioButton = factory.create("radio_button") { false }

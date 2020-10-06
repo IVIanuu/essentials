@@ -19,14 +19,16 @@ package com.ivianuu.essentials.ui.activity
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.core.AppUiMarker
-import com.ivianuu.injekt.android.activityContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 class DefaultActivity : EsActivity() {
 
     private val appUi: AppUiMarker? by lazy {
-        activityContext.runReader { given() }
+        activityComponent.mergeComponent<DefaultActivityComponent>()
+            .appUi
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,4 +43,9 @@ class DefaultActivity : EsActivity() {
         appUi!!()
     }
 
+}
+
+@MergeInto(ActivityComponent::class)
+interface DefaultActivityComponent {
+    val appUi: AppUiMarker
 }

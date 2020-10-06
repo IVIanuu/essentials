@@ -19,15 +19,14 @@ package com.ivianuu.essentials.permission.notificationlistener
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
@@ -45,15 +44,18 @@ val Permission.Companion.NotificationListenerClass by lazy {
     )
 }
 
-@GivenPermissionStateProvider
-class NotificationListenerPermissionStateProvider : PermissionStateProvider {
+@PermissionStateProviderBinding
+class NotificationListenerPermissionStateProvider(
+    private val applicationContext: ApplicationContext,
+    private val buildInfo: BuildInfo,
+) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
         return Settings.Secure.getString(
-            androidApplicationContext.contentResolver,
+            applicationContext.contentResolver,
             "enabled_notification_listeners"
         )
             .split(":")
@@ -62,7 +64,7 @@ class NotificationListenerPermissionStateProvider : PermissionStateProvider {
                 tmp[0] to tmp[1]
             }
             .any { (packageName, listenerName) ->
-                packageName == given<BuildInfo>().packageName &&
+                packageName == buildInfo.packageName &&
                         listenerName == permission[Permission.NotificationListenerClass].java.canonicalName
             }
     }

@@ -29,7 +29,6 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,14 +50,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.isLight
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlin.time.milliseconds
 
-@Reader
+@FunBinding
 @Composable
-fun ScaffoldPage() {
+fun ScaffoldPage(navigator: Navigator) {
     val controls = remember { ScaffoldControls() }
 
     com.ivianuu.essentials.ui.material.Scaffold(

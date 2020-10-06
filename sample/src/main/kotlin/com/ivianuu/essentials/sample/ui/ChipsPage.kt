@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
@@ -33,17 +28,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 
 @OptIn(ExperimentalLayout::class)
-@Reader
+@FunBinding
 @Composable
-fun ChipsPage() {
+fun ChipsPage(toaster: Toaster) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Chips") }) }
     ) {
@@ -58,7 +58,7 @@ fun ChipsPage() {
                 remember { Names.shuffled() }.forEach { name ->
                     Chip(
                         name = name,
-                        onClick = { Toaster.toast("Clicked $name") }
+                        onClick = { toaster.toast("Clicked $name") }
                     )
                 }
             }

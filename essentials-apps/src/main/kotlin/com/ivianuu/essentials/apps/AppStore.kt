@@ -18,18 +18,20 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
-@Reader
-suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.io) {
-    val pm = given<PackageManager>()
-    pm.getInstalledApplications(0)
+@FunBinding
+suspend fun getInstalledApps(
+    dispatchers: AppCoroutineDispatchers,
+    packageManager: PackageManager,
+): List<AppInfo> = withContext(dispatchers.io) {
+    packageManager.getInstalledApplications(0)
         .parallelMap {
             AppInfo(
-                appName = it.loadLabel(pm).toString(),
+                appName = it.loadLabel(packageManager).toString(),
                 packageName = it.packageName
             )
         }
@@ -38,12 +40,15 @@ suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.io) {
         .toList()
 }
 
-@Reader
-suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.io) {
-    val pm = given<PackageManager>()
+@FunBinding
+suspend fun getAppInfo(
+    dispatchers: AppCoroutineDispatchers,
+    packageManager: PackageManager,
+    packageName: @Assisted String,
+): AppInfo = withContext(dispatchers.io) {
     AppInfo(
         packageName,
-        pm.getApplicationInfo(packageName, 0).loadLabel(pm)
+        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
             .toString()
     )
 }

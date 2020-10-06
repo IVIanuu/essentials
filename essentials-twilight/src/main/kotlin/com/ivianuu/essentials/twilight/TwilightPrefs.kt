@@ -17,12 +17,13 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 
-@Given(ApplicationContext::class)
-class TwilightPrefs {
-    val twilightMode = given<DiskDataStoreFactory>().create("twilight_mode") { TwilightMode.System }
-    val useBlack = given<DiskDataStoreFactory>().create("use_black") { false }
+@Binding(ApplicationComponent::class)
+class TwilightPrefs(
+    factory: DiskDataStoreFactory,
+) {
+    val twilightMode = factory.create("twilight_mode") { TwilightMode.System }
+    val useBlack = factory.create("use_black") { false }
 }

@@ -22,14 +22,13 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.given
 
 @SuppressLint("BatteryLife")
 fun IgnoreBatteryOptimizationsPermission(
@@ -48,13 +47,16 @@ val Permission.Companion.IgnoreBatteryOptimizationsPermission by lazy {
     Permission.Key<Unit>("IgnoreBatteryOptimizationsPermission")
 }
 
-@GivenPermissionStateProvider
-class IgnoreBatteryOptimizationsPermissionStateProvider : PermissionStateProvider {
+@PermissionStateProviderBinding
+class IgnoreBatteryOptimizationsPermissionStateProvider(
+    private val powerManager: PowerManager,
+    private val buildInfo: BuildInfo,
+) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IgnoreBatteryOptimizationsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        given<PowerManager>().isIgnoringBatteryOptimizations(given<BuildInfo>().packageName)
+        powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 
 }

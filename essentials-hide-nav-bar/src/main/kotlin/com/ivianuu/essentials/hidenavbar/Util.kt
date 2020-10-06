@@ -6,24 +6,26 @@ import android.view.Display
 import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.datastore.android.settings.int
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 
-@Reader
-internal suspend fun disableNonSdkInterfaceDetection() {
-    val systemBuildInfo = given<SystemBuildInfo>()
-    val settingsDataStoreFactory = given<SettingsDataStoreFactory>()
+@FunBinding
+suspend fun disableNonSdkInterfaceDetection(
+    logger: Logger,
+    systemBuildInfo: SystemBuildInfo,
+    settingsDataStoreFactory: SettingsDataStoreFactory,
+) {
     if (systemBuildInfo.sdk >= 29) {
-        d { "disable non sdk on 29" }
+        logger.d("disable non sdk on 29")
 
-        val hiddenApiPolicy = given<SettingsDataStoreFactory>().int(
+        val hiddenApiPolicy = settingsDataStoreFactory.int(
             "hidden_api_policy", SettingDataStore.Type.Global
         )
         hiddenApiPolicy.updateData { 1 }
     } else if (systemBuildInfo.sdk >= 28) {
-        d { "disable non sdk on p" }
+        logger.d("disable non sdk on p")
 
         val hiddenApiPrePieAppsSetting = settingsDataStoreFactory.int(
             "hidden_api_policy_pre_p_apps",
@@ -39,9 +41,9 @@ internal suspend fun disableNonSdkInterfaceDetection() {
     }
 }
 
-@Reader
-internal fun setOverscan(rect: Rect) {
-    d { "set overscan $rect" }
+@FunBinding
+fun setOverscan(logger: Logger, rect: @Assisted Rect) {
+    logger.d("set overscan $rect")
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")
     val invoke = Class.forName("android.os.ServiceManager")

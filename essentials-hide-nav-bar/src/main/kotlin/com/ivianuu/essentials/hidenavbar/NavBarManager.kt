@@ -18,18 +18,17 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.screenState
 import com.ivianuu.essentials.ui.core.DisplayRotation
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -50,17 +49,25 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
-@Given(ApplicationContext::class)
-class NavBarManager {
+@Binding(ApplicationComponent::class)
+class NavBarManager(
+    private val applicationContext: ApplicationContext,
+    private val broadcastFactory: BroadcastFactory,
+    private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
+    private val dispatchers: AppCoroutineDispatchers,
+    private val displayRotationProvider: DisplayRotationProvider,
+    private val globalScope: GlobalScope,
+    private val logger: Logger,
+    private val prefs: NavBarPrefs,
+    private val screenState: screenState,
+    private val setOverscan: setOverscan,
+) {
 
     private var job: Job? = null
     private val mutex = Mutex()
 
-    private val displayRotationProvider = given<DisplayRotationProvider>()
-    private val prefs = given<NavBarPrefs>()
-
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(dispatchers.default) {
-        d { "set nav bar config $config" }
+        logger.d("set nav bar config $config")
 
         mutex.withLock {
             job?.cancel()
@@ -68,13 +75,13 @@ class NavBarManager {
         }
 
         if (!config.hidden) {
-            d { "not hidden" }
+            logger.d("not hidden")
             if (prefs.wasNavBarHidden.data.first()) {
-                d { "was hidden" }
+                logger.d("was hidden")
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.updateData { false }
             } else {
-                d { "was not hidden" }
+                logger.d("was not hidden")
             }
 
             return@withContext
@@ -88,7 +95,7 @@ class NavBarManager {
                     }
 
                     if (config.showWhileScreenOff) {
-                        this += screenState.drop(1)
+                        this += screenState().drop(1)
                     }
                 }
 
@@ -98,7 +105,7 @@ class NavBarManager {
                         .onStart { emit(Unit) }
                         .map {
                             !config.showWhileScreenOff ||
-                                    screenState.first() == ScreenState.Unlocked
+                                    screenState().first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             prefs.wasNavBarHidden.updateData { navBarHidden }
@@ -108,14 +115,14 @@ class NavBarManager {
                 }
                 this += async {
                     // force show on shut downs
-                    BroadcastFactory.create(Intent.ACTION_SHUTDOWN)
+                    broadcastFactory.create(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             mutex.withLock {
                                 job?.cancel()
                                 job = null
                             }
 
-                            d { "show nav bar because of shutdown" }
+                            logger.d("show nav bar because of shutdown")
                             setNavBarConfigInternal(false, config)
                         }
                         .collect()
@@ -127,7 +134,7 @@ class NavBarManager {
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        d { "set nav bar hidden config $config hidden $hidden" }
+        logger.d("set nav bar hidden config $config hidden $hidden")
         try {
             try {
                 // ensure that we can access non sdk interfaces
@@ -148,8 +155,8 @@ class NavBarManager {
         val name =
             if (displayRotationProvider.displayRotation.first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
-        val id = androidApplicationContext.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) androidApplicationContext.resources.getDimensionPixelSize(id) else 0
+        val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
+        return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
     }
 
     private suspend fun getOverscanRect(

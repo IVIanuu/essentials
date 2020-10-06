@@ -16,20 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.Text
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
-import androidx.compose.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-@Reader
+@FunBinding
 @Composable
 fun TimerPage() {
     Scaffold(

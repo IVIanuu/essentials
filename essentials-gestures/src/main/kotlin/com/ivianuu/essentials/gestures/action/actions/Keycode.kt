@@ -7,27 +7,30 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GivenActionFactory
-import com.ivianuu.essentials.gestures.action.GivenActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.given
 
-@GivenActionFactory
-class KeycodeActionFactory : ActionFactory {
+@ActionFactoryBinding
+class KeycodeActionFactory(
+    private val permissions: ActionPermissions,
+    private val runRootCommand: runRootCommand,
+    private val resources: Resources,
+) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             key = key,
-            title = Resources.getString(R.string.es_action_keycode_suffix, keycode),
+            title = resources.getString(R.string.es_action_keycode_suffix, keycode),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
-            permissions = listOf(given<ActionPermissions>().root),
+            permissions = listOf(permissions.root),
             unlockScreen = false,
             enabled = true,
             execute = { runRootCommand("input keyevent $keycode") }
@@ -35,10 +38,13 @@ class KeycodeActionFactory : ActionFactory {
     }
 }
 
-@GivenActionPickerDelegate
-class KeycodeActionPickerDelegate : ActionPickerDelegate {
+@ActionPickerDelegateBinding
+class KeycodeActionPickerDelegate(
+    private val navigator: Navigator,
+    private val resources: Resources,
+) : ActionPickerDelegate {
     override val title: String
-        get() = Resources.getString(R.string.es_action_keycode)
+        get() = resources.getString(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
         get() = { Icon(vectorResource(R.drawable.es_ic_keyboard)) }
 

@@ -26,11 +26,11 @@ import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
@@ -40,15 +40,18 @@ import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.essentials.util.startActivityForIntentResult
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun ShortcutPickerPage(title: String? = null) {
-    val (state, dispatch) = rememberStore<ShortcutPickerState, ShortcutPickerAction>()
+fun ShortcutPickerPage(
+    store: rememberStore<ShortcutPickerState, ShortcutPickerAction>,
+    title: @Assisted String? = null,
+) {
+    val (state, dispatch) = store()
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -85,32 +88,35 @@ private fun Shortcut(
     }
 }
 
-@Given
-fun CoroutineScope.shortcutPickerStore() =
-    store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
-        execute(
-            block = { getShortcuts() },
-            reducer = { copy(shortcuts = it) }
-        )
+@Binding
+fun shortcutPickerStore(
+    navigator: Navigator,
+    getShortcuts: getShortcuts,
+    extractShortcut: extractShortcut,
+    startActivityForIntentResult: startActivityForIntentResult,
+    toaster: Toaster,
+) = storeProvider<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
+    execute(
+        block = { getShortcuts() },
+        reducer = { copy(shortcuts = it) }
+    )
 
-        onEachAction { action ->
-            when (action) {
-                is ShortcutPickerAction.ShortcutClicked -> {
-                    try {
-                        val shortcutRequestResult = startActivityForResult(action.shortcut.intent)
-                            .data ?: return@onEachAction
-
-                        val shortcut = extractShortcut(shortcutRequestResult)
-
-                        navigator.popTop(result = shortcut)
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
-                        Toaster.toast(R.string.es_failed_to_pick_shortcut)
-                    }
+    onEachAction { action ->
+        when (action) {
+            is ShortcutPickerAction.ShortcutClicked -> {
+                try {
+                    val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
+                        .data ?: return@onEachAction
+                    val shortcut = extractShortcut(shortcutRequestResult)
+                    navigator.popTop(result = shortcut)
+                } catch (t: Throwable) {
+                    t.printStackTrace()
+                    toaster.toast(R.string.es_failed_to_pick_shortcut)
                 }
-            }.exhaustive
-        }
+            }
+        }.exhaustive
     }
+}
 
 data class ShortcutPickerState(
     val shortcuts: Resource<List<Shortcut>> = Idle

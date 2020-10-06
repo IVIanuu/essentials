@@ -19,40 +19,39 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.addFlag
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.launch
 
 class DefaultAccessibilityService : EsAccessibilityService() {
 
+    private val component by lazy {
+        serviceComponent.mergeComponent<DefaultAccessibilityServiceComponent>()
+    }
+
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        readerContext.runReader {
-            d { "connected" }
-            given<AccessibilityServices>().onServiceConnected(this)
-            given<AccessibilityWorkers>().forEach { worker ->
-                connectedScope.launch {
-                    scope.launch { worker() }
-                }
+        component.logger.d("connected")
+        component.accessibilityServices.onServiceConnected(this)
+        component.accessibilityWorkers.forEach { worker ->
+            connectedScope.launch {
+                scope.launch { worker() }
             }
         }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        readerContext.runReader {
-            d { "on accessibility event $event" }
-            given<AccessibilityServices>().onAccessibilityEvent(event)
-        }
+        component.logger.d("on accessibility event $event")
+        component.accessibilityServices.onAccessibilityEvent(event)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        readerContext.runReader {
-            d { "on unbind" }
-            given<AccessibilityServices>().onServiceDisconnected()
-        }
+        component.logger.d("on unbind")
+        component.accessibilityServices.onServiceDisconnected()
 
         return super.onUnbind(intent)
     }
@@ -77,9 +76,14 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
             packageNames = null
 
-            readerContext.runReader {
-                d { "update service info $this" }
-            }
+            component.logger.d("update service info $this")
         }
     }
+}
+
+@MergeInto(ServiceComponent::class)
+interface DefaultAccessibilityServiceComponent {
+    val accessibilityServices: AccessibilityServices
+    val accessibilityWorkers: AccessibilityWorkers
+    val logger: Logger
 }

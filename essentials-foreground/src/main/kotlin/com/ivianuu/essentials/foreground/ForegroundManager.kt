@@ -19,16 +19,19 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Given(ApplicationContext::class)
-class ForegroundManager {
+@Binding(ApplicationComponent::class)
+class ForegroundManager(
+    private val applicationContext: ApplicationContext,
+    private val logger: Logger,
+) {
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
     internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
@@ -36,7 +39,7 @@ class ForegroundManager {
     fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(notification)
         _jobs.value += job
-        d { "start job $job" }
+        logger.d("start job $job")
         startServiceIfNeeded()
         dispatchUpdate()
         return job
@@ -45,7 +48,7 @@ class ForegroundManager {
     fun stopJob(job: ForegroundJob) {
         if (job !in _jobs.value) return
         _jobs.value -= job
-        d { "stop job $job" }
+        logger.d("stop job $job")
         startServiceIfNeeded()
         dispatchUpdate()
     }
@@ -56,10 +59,10 @@ class ForegroundManager {
 
     private fun startServiceIfNeeded() {
         if (_jobs.value.isNotEmpty()) {
-            d { "start service ${_jobs.value}" }
+            logger.d("start service ${_jobs.value}")
             ContextCompat.startForegroundService(
-                androidApplicationContext,
-                Intent(androidApplicationContext, ForegroundService::class.java)
+                applicationContext,
+                Intent(applicationContext, ForegroundService::class.java)
             )
         }
     }
