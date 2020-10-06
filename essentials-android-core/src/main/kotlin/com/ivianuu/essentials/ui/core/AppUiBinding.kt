@@ -22,13 +22,19 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.merge.BindingModule
 
+// todo target function once compose is fixed
 @BindingModule(ActivityComponent::class)
 annotation class AppUiBinding {
     @Module
-    class ModuleImpl<T : @Composable () -> Unit> {
+    class ModuleImpl<T : TmpAppUi> {
         @Binding
-        fun appUiMarker(instance: T): AppUiMarker = instance as @Composable () -> Unit
+        fun appUiMarker(instance: T): AppUiMarker = instance
     }
 }
 
-typealias AppUiMarker = @Composable () -> Unit
+fun interface TmpAppUi {
+    @Composable
+    operator fun invoke()
+}
+
+typealias AppUiMarker = TmpAppUi
