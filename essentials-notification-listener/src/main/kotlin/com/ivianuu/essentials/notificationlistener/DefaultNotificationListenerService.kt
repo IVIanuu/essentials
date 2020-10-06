@@ -18,6 +18,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.launch
@@ -70,7 +71,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 }
 
 
-@MergeInto(DefaultNotificationListenerService::class)
+@MergeInto(ServiceComponent::class)
 interface DefaultNotificationListenerServiceComponent {
     val logger: Logger
     val notificationStore: NotificationStore
