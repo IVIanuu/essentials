@@ -10,7 +10,7 @@ import com.ivianuu.essentials.util.Resources
 fun volumeAction(
     audioManager: AudioManager,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "volume",
     title = resources.getString(R.string.es_action_volume),
     icon = singleActionIcon(R.drawable.es_ic_volume_up),

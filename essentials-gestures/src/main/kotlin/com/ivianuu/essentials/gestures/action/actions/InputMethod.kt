@@ -10,7 +10,7 @@ import com.ivianuu.essentials.util.Resources
 fun inputMethodAction(
     inputMethodManager: InputMethodManager,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "input_method",
     title = resources.getString(R.string.es_action_input_method),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide),

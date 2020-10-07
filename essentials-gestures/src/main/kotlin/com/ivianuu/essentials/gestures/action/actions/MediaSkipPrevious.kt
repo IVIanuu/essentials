@@ -2,10 +2,11 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
 @ActionBinding
-fun mediaSkipPreviousAction(mediaAction: mediaAction) = mediaAction(
+fun mediaSkipPreviousAction(mediaAction: mediaAction): Action = mediaAction(
     "media_skip_previous",
     KeyEvent.KEYCODE_MEDIA_PREVIOUS,
     R.string.es_action_media_skip_previous,

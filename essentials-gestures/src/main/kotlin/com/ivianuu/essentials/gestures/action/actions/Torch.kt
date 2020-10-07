@@ -16,7 +16,7 @@ fun torchAction(
     resources: Resources,
     torchIcon: torchIcon,
     torchManager: TorchManager,
-) = Action(
+): Action = Action(
     key = "torch",
     title = resources.getString(R.string.es_action_torch),
     icon = torchIcon(),
