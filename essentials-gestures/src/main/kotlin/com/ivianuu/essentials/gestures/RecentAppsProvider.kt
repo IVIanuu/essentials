@@ -42,10 +42,6 @@ class RecentAppsProvider(
     private val services: AccessibilityServices,
 ) {
 
-    val currentApp: Flow<String?>
-        get() = recentsApps
-            .map { it.firstOrNull() }
-
     private val _recentApps = MutableStateFlow(emptyList<String>())
     val recentsApps: StateFlow<List<String>> get() = _recentApps
 
@@ -110,3 +106,7 @@ class RecentAppsProvider(
         _recentApps.value = finalRecentApps
     }
 }
+
+val RecentAppsProvider.currentApp: Flow<String?>
+    get() = recentsApps
+        .map { it.firstOrNull() }
