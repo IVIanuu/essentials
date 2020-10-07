@@ -20,7 +20,7 @@ fun killForegroundAction(
     choosePermissions: choosePermissions,
     killApp: killApp,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "kill_foreground_action",
     title = resources.getString(R.string.es_action_kill_foreground_app),
     icon = singleActionIcon(Icons.Default.Clear),

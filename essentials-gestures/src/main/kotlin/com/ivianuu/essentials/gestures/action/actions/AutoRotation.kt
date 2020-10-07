@@ -30,7 +30,7 @@ object EsAutoRotationModule {
         choosePermissions: choosePermissions,
         setting: AutoRotationSetting,
         resources: Resources,
-    ) = Action(
+    ): Action = Action(
         key = "auto_rotation",
         title = resources.getString(R.string.es_action_auto_rotation),
         permissions = choosePermissions { listOf(writeSettings) },

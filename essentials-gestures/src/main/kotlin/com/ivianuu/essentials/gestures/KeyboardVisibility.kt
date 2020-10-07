@@ -61,7 +61,7 @@ fun keyboardVisible(
 }
 
 @FunBinding
-internal fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int {
+fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int {
     return try {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int

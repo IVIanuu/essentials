@@ -11,7 +11,7 @@ import com.ivianuu.essentials.util.Resources
 fun cameraAction(
     resources: Resources,
     sendIntent: sendIntent,
-) = Action(
+): Action = Action(
     key = "camera",
     title = resources.getString(R.string.es_action_camera),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),

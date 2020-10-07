@@ -2,10 +2,11 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
 @ActionBinding
-fun splitScreenAction(accessibilityAction: accessibilityAction) = accessibilityAction(
+fun splitScreenAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "split_screen",
     AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN,
     R.string.es_action_split_screen,

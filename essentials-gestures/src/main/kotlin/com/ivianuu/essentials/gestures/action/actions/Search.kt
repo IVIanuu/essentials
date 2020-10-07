@@ -13,7 +13,7 @@ import com.ivianuu.essentials.util.Resources
 fun searchAction(
     resources: Resources,
     sendIntent: sendIntent,
-) = Action(
+): Action = Action(
     key = "search",
     title = resources.getString(R.string.es_action_search),
     icon = singleActionIcon(Icons.Default.Search),

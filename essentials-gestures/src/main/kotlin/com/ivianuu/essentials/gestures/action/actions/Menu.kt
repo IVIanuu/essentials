@@ -13,7 +13,7 @@ fun menuAction(
     choosePermissions: choosePermissions,
     runRootCommand: runRootCommand,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "menu",
     title = resources.getString(R.string.es_action_menu),
     icon = singleActionIcon(Icons.Default.MoreVert),

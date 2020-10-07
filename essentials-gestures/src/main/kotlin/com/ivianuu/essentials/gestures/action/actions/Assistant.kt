@@ -11,7 +11,7 @@ import com.ivianuu.essentials.util.Resources
 fun assistantAction(
     resources: Resources,
     searchManager: SearchManager,
-) = Action(
+): Action = Action(
     key = "assistant",
     title = resources.getString(R.string.es_action_assistant),
     unlockScreen = true,

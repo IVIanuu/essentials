@@ -19,7 +19,7 @@ fun homeAction(
     openHomeScreen: openHomeScreen,
     performGlobalAction: performGlobalAction,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "home",
     title = resources.getString(R.string.es_action_home),
     permissions = choosePermissions {

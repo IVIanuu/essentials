@@ -18,7 +18,7 @@ fun wifiAction(
     resources: Resources,
     toggleWifi: toggleWifi,
     wifiIcon: wifiIcon,
-) = Action(
+): Action = Action(
     key = "wifi",
     title = resources.getString(R.string.es_action_wifi),
     icon = wifiIcon(),

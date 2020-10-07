@@ -13,7 +13,7 @@ fun lastAppAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "last_app",
     title = resources.getString(R.string.es_action_last_app),
     permissions = choosePermissions { listOf(accessibility) },

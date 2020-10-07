@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.onStart
 fun bluetoothAction(
     bluetoothIcon: bluetoothIcon,
     resources: Resources,
-) = Action(
+): Action = Action(
     key = "bluetooth",
     title = resources.getString(R.string.es_action_bluetooth),
     icon = bluetoothIcon(),
