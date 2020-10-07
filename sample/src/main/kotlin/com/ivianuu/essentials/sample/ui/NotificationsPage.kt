@@ -25,24 +25,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.fold
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
@@ -58,20 +55,21 @@ import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.runCatchingAndLog
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@Reader
+@FunBinding
 @Composable
-fun NotificationsPage() {
+fun NotificationsPage(store: rememberStore<NotificationsState, NotificationsAction>) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
     ) {
-        val (state, dispatch) = rememberStore { notificationStore() }
+        val (state, dispatch) = store()
 
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
@@ -156,71 +154,78 @@ private fun NotificationPermissions(
     }
 }
 
-@Reader
-fun CoroutineScope.notificationStore(): Store<NotificationsState, NotificationsAction> {
+@Binding
+fun notificationStore(
+    notifications: notifications,
+    notificationStore: NotificationStore,
+    permissionManager: PermissionManager,
+) = storeProvider<NotificationsState, NotificationsAction>(NotificationsState()) {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
         Permission.Title withValue "Notifications"
     )
-    val notificationStore = given<NotificationStore>()
-    return store(NotificationsState()) {
-        hasPermissions(permission)
-            .onEach { setState { copy(hasPermissions = it) } }
-            .launchIn(scope)
 
-        notifications()
-            .executeIn(this) { copy(notifications = it) }
+    permissionManager.hasPermissions(permission)
+        .onEach { setState { copy(hasPermissions = it) } }
+        .launchIn(this)
 
-        onEachAction { action ->
-            when (action) {
-                is RequestPermissionsClicked -> {
-                    requestPermissions(permission)
-                }
-                is NotificationClicked -> {
-                    notificationStore.openNotification(action.notification.sbn.notification)
-                }
-                is DismissNotificationClicked -> {
-                    notificationStore.dismissNotification(action.notification.sbn.key)
-                }
-            }.exhaustive
-        }
+    notifications()
+        .executeIn(this) { copy(notifications = it) }
+
+    onEachAction { action ->
+        when (action) {
+            is RequestPermissionsClicked -> {
+                permissionManager.requestPermissions(permission)
+            }
+            is NotificationClicked -> {
+                notificationStore.openNotification(action.notification.sbn.notification)
+            }
+            is DismissNotificationClicked -> {
+                notificationStore.dismissNotification(action.notification.sbn.key)
+            }
+        }.exhaustive
     }
 }
 
-@Reader
-fun notifications() = given<NotificationStore>().notifications
-    .map { notifications ->
-        notifications
-            .parallelMap { sbn ->
-                UiNotification(
-                    title = sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
-                        ?.toString() ?: "",
-                    text = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
-                        ?.toString() ?: "",
-                    icon = runCatchingAndLog {
-                        sbn.notification.smallIcon
-                            .loadDrawable(androidApplicationContext)
-                            .toImageAsset();
+@FunBinding
+fun notifications(
+    applicationContext: ApplicationContext,
+    notificationStore: NotificationStore,
+): Flow<List<UiNotification>> {
+    return notificationStore.notifications
+        .map { notifications ->
+            notifications
+                .parallelMap { sbn ->
+                    UiNotification(
+                        title = sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+                            ?.toString() ?: "",
+                        text = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+                            ?.toString() ?: "",
+                        icon = runCatchingAndLog {
+                            sbn.notification.smallIcon
+                                .loadDrawable(applicationContext)
+                                .toImageAsset();
 
-                    }.fold(
-                        success = { asset ->
-                            {
-                                Image(
-                                    modifier = Modifier.size(24.dp),
-                                    asset = asset
-                                )
+                        }.fold(
+                            success = { asset ->
+                                {
+                                    Image(
+                                        modifier = Modifier.size(24.dp),
+                                        asset = asset
+                                    )
+                                }
+                            },
+                            failure = {
+                                { Icon(vectorResource(R.drawable.es_ic_error)) }
                             }
-                        },
-                        failure = {
-                            { Icon(vectorResource(R.drawable.es_ic_error)) }
-                        }
-                    ),
-                    color = Color(sbn.notification.color),
-                    isClearable = sbn.isClearable,
-                    sbn = sbn
-                )
-            }
-    }
+                        ),
+                        color = Color(sbn.notification.color),
+                        isClearable = sbn.isClearable,
+                        sbn = sbn
+                    )
+                }
+        }
+}
 
 data class NotificationsState(
     val hasPermissions: Boolean = false,

@@ -3,20 +3,24 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.GivenAction
-import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.given
 
-@GivenAction
-fun lockScreenAction(): Action {
-    val systemBuildInfo = given<SystemBuildInfo>()
+@ActionBinding
+fun lockScreenAction(
+    choosePermissions: choosePermissions,
+    resources: Resources,
+    performGlobalAction: performGlobalAction,
+    runRootCommand: runRootCommand,
+    systemBuildInfo: SystemBuildInfo,
+): Action {
     return Action(
         key = "lock_screen",
-        title = Resources.getString(R.string.es_action_lock_screen),
+        title = resources.getString(R.string.es_action_lock_screen),
         icon = singleActionIcon(R.drawable.es_ic_power_settings),
-        permissions = permissions {
+        permissions = choosePermissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility
                 else root

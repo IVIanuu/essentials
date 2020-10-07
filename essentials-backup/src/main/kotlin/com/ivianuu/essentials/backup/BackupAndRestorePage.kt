@@ -5,7 +5,7 @@ import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupClicked
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreClicked
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -16,14 +16,15 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun BackupAndRestorePage() {
-    val (_, dispatch) = rememberStore<BackupAndRestoreState, BackupAndRestoreAction>()
+fun BackupAndRestorePage(
+    store: rememberStore<BackupAndRestoreState, BackupAndRestoreAction>,
+) {
+    val (_, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {
@@ -43,25 +44,28 @@ fun BackupAndRestorePage() {
     }
 }
 
-@Given
-fun CoroutineScope.backupAndRestorePage() =
-    store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
-        onEachAction { action ->
-            when (action) {
-                BackupClicked -> {
-                    backupData()
-                        .onFailure {
-                            it.printStackTrace()
-                            Toaster.toast(R.string.es_backup_error)
-                        }
-                }
-                RestoreClicked -> {
-                    restoreData()
-                        .onFailure {
-                            it.printStackTrace()
-                            Toaster.toast(R.string.es_restore_error)
-                        }
-                }
+@Binding
+fun backupAndRestorePage(
+    backupData: backupData,
+    restoreData: restoreData,
+    toaster: Toaster,
+) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
+    onEachAction { action ->
+        when (action) {
+            BackupClicked -> {
+                backupData()
+                    .onFailure {
+                        it.printStackTrace()
+                        toaster.toast(R.string.es_backup_error)
+                    }
+            }
+            RestoreClicked -> {
+                restoreData()
+                    .onFailure {
+                        it.printStackTrace()
+                        toaster.toast(R.string.es_restore_error)
+                    }
+            }
             }.exhaustive
         }
     }

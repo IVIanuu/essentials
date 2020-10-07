@@ -1,14 +1,14 @@
 package com.ivianuu.essentials.backup
 
 import android.content.Intent
-import com.ivianuu.essentials.app.androidApplicationContext
+import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
-import com.ivianuu.essentials.util.dispatchers
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.runCatchingAndLog
-import com.ivianuu.essentials.util.startActivityForResult
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.startActivityForIntentResult
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -16,10 +16,16 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@Reader
-internal suspend fun restoreData() = runCatchingAndLog {
+@FunBinding
+suspend fun restoreData(
+    applicationContext: ApplicationContext,
+    dispatchers: AppCoroutineDispatchers,
+    prefsDir: PrefsDir,
+    restartProcess: restartProcess,
+    startActivityForIntentResult: startActivityForIntentResult,
+): Result<Unit, Throwable> = runCatchingAndLog {
     withContext(dispatchers.io) {
-        val uri = startActivityForResult(
+        val uri = startActivityForIntentResult(
             Intent.createChooser(
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     type = "application/zip"
@@ -30,14 +36,12 @@ internal suspend fun restoreData() = runCatchingAndLog {
         val buffer = ByteArray(8192)
 
         val zipInputStream = ZipInputStream(
-            androidApplicationContext.contentResolver.openInputStream(uri)!!.buffered()
+            applicationContext.contentResolver.openInputStream(uri)!!.buffered()
         )
-
-        val targetDirectory = given<PrefsDir>()
 
         var entry: ZipEntry? = zipInputStream.nextEntry
         while (entry != null) {
-            val file = File(targetDirectory, entry.name)
+            val file = File(prefsDir, entry.name)
             val dir = if (entry.isDirectory) file else file.parentFile
             if (!dir.isDirectory && !dir.mkdirs())
                 throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)

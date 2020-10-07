@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
-import androidx.compose.material.Button
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.screenState
 import com.ivianuu.essentials.ui.layout.center
@@ -28,14 +28,18 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun UnlockPage() {
+fun UnlockPage(
+    screenState: screenState,
+    toaster: Toaster,
+    unlockScreen: unlockScreen,
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {
@@ -44,14 +48,14 @@ fun UnlockPage() {
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    Toaster.toast("Turn the screen off and on")
+                    toaster.toast("Turn the screen off and on")
 
-                    screenState
+                    screenState()
                         .filter { it == ScreenState.Locked }
                         .first()
 
                     val unlocked = unlockScreen()
-                    Toaster.toast("Screen unlocked $unlocked")
+                    toaster.toast("Screen unlocked $unlocked")
                 }
             }
         ) { Text("Unlock") }

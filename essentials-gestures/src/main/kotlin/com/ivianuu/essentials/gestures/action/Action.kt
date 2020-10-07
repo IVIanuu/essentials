@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.GivenSet
-import com.ivianuu.injekt.GivenSetElements
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.BindingModule
 import kotlinx.coroutines.flow.Flow
 
 @Immutable
@@ -24,18 +25,20 @@ data class Action(
 
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
-@Effect
-annotation class GivenAction {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : () -> Action> invoke(): Set<() -> Action> = setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class ActionBinding {
+    @Module
+    class ModuleImpl<T : Action> {
+        @SetElements
+        fun actionIntoSet(instance: T): Set<Action> = setOf(instance)
     }
 }
 
-@Reader
-internal inline fun permissions(block: ActionPermissions.() -> List<Permission>) =
-    given<ActionPermissions>().block()
+@FunBinding
+inline fun choosePermissions(
+    permissions: ActionPermissions,
+    block: @Assisted ActionPermissions.() -> List<Permission>,
+): List<Permission> = permissions.block()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
@@ -44,12 +47,12 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-@Effect
-annotation class GivenActionFactory {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : ActionFactory> invoke(): Set<ActionFactory> = setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class ActionFactoryBinding {
+    @Module
+    class ModuleImpl<T : ActionFactory> {
+        @SetElements
+        fun actionFactoryIntoSet(instance: T): Set<ActionFactory> = setOf(instance)
     }
 }
 
@@ -59,12 +62,11 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@Effect
-annotation class GivenActionPickerDelegate {
-    @GivenSet
-    companion object {
-        @GivenSetElements
-        operator fun <T : ActionPickerDelegate> invoke(): Set<ActionPickerDelegate> =
-            setOf(given<T>())
+@BindingModule(ApplicationComponent::class)
+annotation class ActionPickerDelegateBinding {
+    @Module
+    class ModuleImpl<T : ActionPickerDelegate> {
+        @SetElements
+        fun actionPickerDelegate(instance: T): Set<ActionPickerDelegate> = setOf(instance)
     }
 }

@@ -18,19 +18,17 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ForegroundService : EsService() {
 
-    private val foregroundManager: ForegroundManager by lazy {
-        readerContext.runReader { given() }
-    }
-    private val notificationManager: NotificationManager by lazy {
-        readerContext.runReader { given() }
+    private val component by lazy {
+        serviceComponent.mergeComponent<ForegroundServiceComponent>()
     }
 
     private var lastJobs = listOf<ForegroundJob>()
@@ -39,31 +37,25 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
-        readerContext.runReader {
-            d { "started foreground service" }
-        }
+        component.logger.d("started foreground service")
 
-        foregroundManager.jobs
+        component.foregroundManager.jobs
             .onEach { update(it) }
             .launchIn(scope)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        readerContext.runReader {
-            d { "stopped foreground service" }
-        }
+        component.logger.d("stopped foreground service")
     }
 
     private fun update(newJobs: List<ForegroundJob>) = synchronized(this) {
-        readerContext.runReader {
-            d { "update jobs $newJobs" }
-        }
+        component.logger.d("update jobs $newJobs")
 
         lastJobs
             .filter { it !in newJobs }
             .forEach { job ->
-                notificationManager.cancel(job.id)
+                component.notificationManager.cancel(job.id)
                 if (job.id == foregroundId) {
                     foregroundId = null
                 }
@@ -76,7 +68,7 @@ class ForegroundService : EsService() {
                 if (index == 0) {
                     startForeground(job.id, job.notification)
                 } else {
-                    notificationManager.notify(job.id, job.notification)
+                    component.notificationManager.notify(job.id, job.notification)
                 }
             }
         } else {
@@ -85,4 +77,11 @@ class ForegroundService : EsService() {
         }
     }
 
+}
+
+@MergeInto(ServiceComponent::class)
+interface ForegroundServiceComponent {
+    val foregroundManager: ForegroundManager
+    val notificationManager: NotificationManager
+    val logger: Logger
 }

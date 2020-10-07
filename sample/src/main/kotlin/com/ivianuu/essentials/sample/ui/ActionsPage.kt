@@ -1,23 +1,28 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerPage
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.uiScope
-import com.ivianuu.injekt.Reader
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun ActionsPage() {
+fun ActionsPage(
+    actionPickerPage: ActionPickerPage,
+    executeAction: executeAction,
+    navigator: Navigator,
+    uiScope: UiScope,
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }
     ) {
@@ -26,10 +31,7 @@ fun ActionsPage() {
             onClick = {
                 uiScope.launch {
                     val action = navigator.push<ActionPickerResult> {
-                        ActionPickerPage(
-                            showDefaultOption = false,
-                            showNoneOption = false
-                        )
+                        actionPickerPage(false, false)
                     }
                         ?.let { it as? ActionPickerResult.Action }
                         ?.actionKey ?: return@launch

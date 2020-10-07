@@ -17,15 +17,16 @@
 package com.ivianuu.essentials.analytics
 
 import com.crashlytics.android.Crashlytics
-import com.ivianuu.essentials.app.GivenAppInitializer
-import com.ivianuu.essentials.app.androidApplicationContext
+import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import io.fabric.sdk.android.Fabric
 
-@GivenAppInitializer
-fun initializeAnalytics() {
-    if (!given<BuildInfo>().isDebug) {
-        Fabric.with(androidApplicationContext, Crashlytics())
+@AppInitializerBinding
+@FunBinding
+fun initializeAnalytics(applicationContext: ApplicationContext, buildInfo: BuildInfo) {
+    if (!buildInfo.isDebug) {
+        Fabric.with(applicationContext, Crashlytics())
     }
 }

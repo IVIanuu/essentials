@@ -18,15 +18,15 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
-@Given(ApplicationContext::class)
+@Binding(ApplicationComponent::class)
 class AccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)

@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.flowOf
 
@@ -25,30 +25,41 @@ internal fun singleActionIcon(icon: VectorAsset) = singleActionIcon { Icon(icon)
 
 internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(id)) }
 
-@Reader
-internal suspend fun runRootCommand(command: String) {
+@FunBinding
+suspend fun runRootCommand(
+    shell: Shell,
+    toaster: Toaster,
+    command: @Assisted String,
+) {
     try {
-        Shell.run(command)
+        shell.run(command)
     } catch (t: Throwable) {
         t.printStackTrace()
-        Toaster.toast(R.string.es_no_root)
+        toaster.toast(R.string.es_no_root)
     }
 }
 
-@Reader
-internal fun Intent.send() {
-    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+@FunBinding
+fun sendIntent(
+    applicationContext: ApplicationContext,
+    toaster: Toaster,
+    intent: @Assisted Intent,
+) {
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
         PendingIntent.getActivity(
-            androidApplicationContext, 99, this, 0, null
+            applicationContext, 99, intent, 0, null
         ).send()
     } catch (t: Throwable) {
         t.printStackTrace()
-        Toaster.toast(R.string.es_activity_not_found)
+        toaster.toast(R.string.es_activity_not_found)
     }
 }
 
-@Reader
-internal suspend fun performGlobalAction(action: Int) {
-    given<AccessibilityServices>().performGlobalAction(action)
+@FunBinding
+suspend fun performGlobalAction(
+    services: AccessibilityServices,
+    action: @Assisted Int,
+) {
+    services.performGlobalAction(action)
 }

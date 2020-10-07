@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
 import java.util.regex.Pattern
 
 interface Logger {
@@ -21,43 +19,7 @@ interface Logger {
 
 }
 
-// todo swap throwable and tag once we can be sure that no every usage has been migrated
-
-@Reader
-inline fun v(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.v(message(), throwable, tag)
-}
-
-@Reader
-inline fun d(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.d(message(), throwable, tag)
-}
-
-@Reader
-inline fun i(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.i(message(), throwable, tag)
-}
-
-@Reader
-inline fun w(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.w(message(), throwable, tag)
-}
-
-@Reader
-inline fun e(throwable: Throwable? = null, tag: String? = null, message: () -> String? = { null }) {
-    given<Logger?>()?.e(message(), throwable, tag)
-}
-
-@Reader
-inline fun wtf(
-    throwable: Throwable? = null,
-    tag: String? = null,
-    message: () -> String? = { null }
-) {
-    given<Logger?>()?.wtf(message(), throwable, tag)
-}
-
-@Given
+@Binding
 class DefaultLogger : Logger {
 
     override fun v(message: String?, throwable: Throwable?, tag: String?) {

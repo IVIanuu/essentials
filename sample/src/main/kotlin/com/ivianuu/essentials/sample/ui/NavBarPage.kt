@@ -38,14 +38,18 @@ import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun NavBarPage() {
+fun NavBarPage(
+    navBarManager: NavBarManager,
+    navigator: Navigator,
+    secureSettings: SecureSettings,
+    secureSettingsPage: SecureSettingsPage,
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
     ) {
@@ -57,7 +61,7 @@ fun NavBarPage() {
             val scope = rememberCoroutineScope()
             fun updateNavBarState(navBarHidden: Boolean) {
                 scope.launch {
-                    given<NavBarManager>().setNavBarConfig(
+                    navBarManager.setNavBarConfig(
                         NavBarConfig(navBarHidden)
                     )
                 }
@@ -75,7 +79,7 @@ fun NavBarPage() {
                 gravity = ContentGravity.Center
             ) {
                 Text(
-                    text = if (SecureSettings.canWrite()) {
+                    text = if (secureSettings.canWrite()) {
                         if (hideNavBar.value) {
                             "Nav bar hidden"
                         } else {
@@ -90,10 +94,10 @@ fun NavBarPage() {
 
             Button(
                 onClick = {
-                    if (SecureSettings.canWrite()) {
+                    if (secureSettings.canWrite()) {
                         hideNavBar.value = !hideNavBar.value
                     } else {
-                        navigator.push { SecureSettingsPage() }
+                        navigator.push { secureSettingsPage(true) }
                     }
                 }
             ) {

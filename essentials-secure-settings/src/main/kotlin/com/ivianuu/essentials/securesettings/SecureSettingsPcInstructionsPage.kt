@@ -26,20 +26,23 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
 
 /**
  * Asks the user for the secure settings permission
  */
-@Reader
+@FunBinding
 @Composable
-fun SecureSettingsPcInstructionsPage() {
-    popNavigatorOnceSecureSettingsGranted(toast = false)
+fun SecureSettingsPcInstructionsPage(
+    buildInfo: BuildInfo,
+    navigator: Navigator,
+    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
+) {
+    popNavigatorOnceSecureSettingsGranted(false)
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
@@ -100,12 +103,12 @@ fun SecureSettingsPcInstructionsPage() {
                     Text(
                         stringResource(
                             R.string.es_pref_secure_settings_step_4_summary,
-                            given<BuildInfo>().packageName
+                            buildInfo.packageName
                         )
                     )
                 },
                 clipboardText = {
-                    "adb shell pm grant ${given<BuildInfo>().packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
                 }
             )
         }

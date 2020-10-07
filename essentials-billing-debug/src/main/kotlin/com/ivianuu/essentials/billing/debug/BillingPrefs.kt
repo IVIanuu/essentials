@@ -4,13 +4,11 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 
-@Given(ApplicationContext::class)
-class BillingPrefs {
-    private val factory = given<DiskDataStoreFactory>()
+@Binding(ApplicationComponent::class)
+class BillingPrefs(factory: DiskDataStoreFactory) {
     val products = factory.create("billing_products") { emptySet<String>() }
         .map(
             fromRaw = { productsJson ->

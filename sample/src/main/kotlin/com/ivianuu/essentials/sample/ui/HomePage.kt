@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
 import com.ivianuu.essentials.apps.ui.AppPickerPage
+import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.backup.BackupAndRestorePage
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.twilight.TwilightSettingsPage
@@ -41,16 +42,47 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun HomePage() {
+fun HomePage(
+    aboutPage: AboutPage,
+    actionsPage: ActionsPage,
+    appPickerPage: AppPickerPage,
+    backupAndRestorePage: BackupAndRestorePage,
+    billingPage: BillingPage,
+    bottomNavigationPage: BottomNavigationPage,
+    checkAppsPage: CheckAppsPage,
+    chipsPage: ChipsPage,
+    counterPage: CounterPage,
+    dialogsPage: DialogsPage,
+    drawerPage: DrawerPage,
+    dynamicSystemBarsPage: DynamicSystemBarsPage,
+    foregroundJobPage: ForegroundJobPage,
+    navBarPage: NavBarPage,
+    notificationsPage: NotificationsPage,
+    permissionsPage: PermissionsPage,
+    prefsPage: PrefsPage,
+    restartProcessPage: RestartProcessPage,
+    scaffoldPage: ScaffoldPage,
+    sharedElementPage: SharedElementPage,
+    shortcutPickerPage: ShortcutPickerPage,
+    tabsPage: TabsPage,
+    textInputPage: TextInputPage,
+    timerPage: TimerPage,
+    torchPage: TorchPage,
+    twilightSettingsPage: TwilightSettingsPage,
+    unlockPage: UnlockPage,
+    workPage: WorkPage,
+    navigator: Navigator,
+    toaster: Toaster,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,7 +94,7 @@ fun HomePage() {
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            PopupMenu.Item(onSelected = { Toaster.toast("Selected $title") }) {
+                            PopupMenu.Item(onSelected = { toaster.toast("Selected $title") }) {
                                 Text(title)
                             }
                         }
@@ -89,39 +121,39 @@ fun HomePage() {
                 color = color,
                 onClick = {
                     val route = when (item) {
-                        HomeItem.About -> Route { AboutPage() }
-                        HomeItem.Actions -> Route { ActionsPage() }
-                        HomeItem.AppPicker -> Route { AppPickerPage() }
-                        HomeItem.BackupRestore -> Route { BackupAndRestorePage() }
-                        HomeItem.Billing -> Route { BillingPage() }
-                        HomeItem.BottomNavigation -> Route { BottomNavigationPage() }
-                        HomeItem.CheckApps -> Route { CheckAppsPage() }
-                        HomeItem.Chips -> Route { ChipsPage() }
-                        HomeItem.Counter -> Route { CounterPage() }
-                        HomeItem.Dialogs -> Route { DialogsPage() }
-                        HomeItem.Drawer -> Route { DrawerPage() }
-                        HomeItem.DynamicSystemBars -> Route { DynamicSystemBarsPage() }
-                        HomeItem.ForegroundJob -> Route { ForegroundJobPage() }
-                        HomeItem.NavBar -> Route { NavBarPage() }
-                        HomeItem.Notifications -> Route { NotificationsPage() }
-                        HomeItem.Permission -> Route { PermissionsPage() }
-                        HomeItem.Prefs -> Route { PrefsPage() }
-                        HomeItem.RestartProcess -> Route { RestartProcessPage() }
-                        HomeItem.Scaffold -> Route { ScaffoldPage() }
+                        HomeItem.About -> Route { aboutPage() }
+                        HomeItem.Actions -> Route { actionsPage() }
+                        HomeItem.AppPicker -> Route { appPickerPage(DefaultAppFilter, null) }
+                        HomeItem.BackupRestore -> Route { backupAndRestorePage() }
+                        HomeItem.Billing -> Route { billingPage() }
+                        HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
+                        HomeItem.CheckApps -> Route { checkAppsPage() }
+                        HomeItem.Chips -> Route { chipsPage() }
+                        HomeItem.Counter -> Route { counterPage() }
+                        HomeItem.Dialogs -> Route { dialogsPage() }
+                        HomeItem.Drawer -> Route { drawerPage() }
+                        HomeItem.DynamicSystemBars -> Route { dynamicSystemBarsPage() }
+                        HomeItem.ForegroundJob -> Route { foregroundJobPage() }
+                        HomeItem.NavBar -> Route { navBarPage() }
+                        HomeItem.Notifications -> Route { notificationsPage() }
+                        HomeItem.Permission -> Route { permissionsPage() }
+                        HomeItem.Prefs -> Route { prefsPage() }
+                        HomeItem.RestartProcess -> Route { restartProcessPage() }
+                        HomeItem.Scaffold -> Route { scaffoldPage() }
                         HomeItem.SharedElement -> Route(
                             enterTransition = SharedElementStackTransition(item to "b"),
                             exitTransition = SharedElementStackTransition(item to "b")
                         ) {
-                            SharedElementPage(color)
+                            sharedElementPage(color)
                         }
-                        HomeItem.ShortcutPicker -> Route { ShortcutPickerPage() }
-                        HomeItem.Tabs -> Route { TabsPage() }
-                        HomeItem.TextInput -> Route { TextInputPage() }
-                        HomeItem.Timer -> Route { TimerPage() }
-                        HomeItem.Torch -> Route { TorchPage() }
-                        HomeItem.Twilight -> Route { TwilightSettingsPage() }
-                        HomeItem.Unlock -> Route { UnlockPage() }
-                        HomeItem.Work -> Route { WorkPage() }
+                        HomeItem.ShortcutPicker -> Route { shortcutPickerPage(null) }
+                        HomeItem.Tabs -> Route { tabsPage() }
+                        HomeItem.TextInput -> Route { textInputPage() }
+                        HomeItem.Timer -> Route { timerPage() }
+                        HomeItem.Torch -> Route { torchPage() }
+                        HomeItem.Twilight -> Route { twilightSettingsPage() }
+                        HomeItem.Unlock -> Route { unlockPage() }
+                        HomeItem.Work -> Route { workPage() }
                     }
 
                     navigator.push(route)

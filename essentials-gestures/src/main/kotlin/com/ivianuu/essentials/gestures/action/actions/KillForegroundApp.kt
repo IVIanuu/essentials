@@ -7,44 +7,54 @@ import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.GivenAction
-import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
-@GivenAction
-fun killForegroundAction() = Action(
+@ActionBinding
+fun killForegroundAction(
+    choosePermissions: choosePermissions,
+    killApp: killApp,
+    resources: Resources,
+) = Action(
     key = "kill_foreground_action",
-    title = Resources.getString(R.string.es_action_kill_foreground_app),
+    title = resources.getString(R.string.es_action_kill_foreground_app),
     icon = singleActionIcon(Icons.Default.Clear),
-    permissions = permissions { accessibility + root },
+    permissions = choosePermissions { accessibility + root },
     execute = { killApp() }
 )
 
-@Reader
-private suspend fun killApp() {
-    val currentApp = given<RecentAppsProvider>().currentApp.first()
+@FunBinding
+suspend fun killApp(
+    buildInfo: BuildInfo,
+    getHomePackage: getHomePackage,
+    recentAppsProvider: RecentAppsProvider,
+    runRootCommand: runRootCommand,
+) {
+    val currentApp = recentAppsProvider.currentApp.first()
 
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&
-        currentApp != given<BuildInfo>().packageName && // we have no suicidal intentions :D
+        currentApp != buildInfo.packageName && // we have no suicidal intentions :D
         currentApp != getHomePackage()
     ) {
         runRootCommand("am force-stop $currentApp")
     }
 }
 
-@Reader
-private fun getHomePackage(): String {
+@FunBinding
+fun getHomePackage(
+    packageManager: PackageManager,
+): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }
 
-    return given<PackageManager>().resolveActivity(
+    return packageManager.resolveActivity(
         intent,
         PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""

@@ -23,36 +23,38 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 
 @SuppressLint("NewApi")
-@Reader
-internal fun createTorchNotification(): Notification {
-    val notificationManager = given<NotificationManager>()
-    val systemBuildInfo = given<SystemBuildInfo>()
+@FunBinding
+fun createTorchNotification(
+    applicationContext: ApplicationContext,
+    notificationManager: NotificationManager,
+    resources: Resources,
+    systemBuildInfo: SystemBuildInfo,
+): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                Resources.getString(R.string.es_notif_channel_torch),
+                resources.getString(R.string.es_notif_channel_torch),
                 NotificationManager.IMPORTANCE_LOW
             )
         )
     }
 
-    return NotificationCompat.Builder(androidApplicationContext, NOTIFICATION_CHANNEL_ID)
+    return NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)
-            setContentTitle(Resources.getString(R.string.es_notif_title_torch))
-            setContentText(Resources.getString(R.string.es_notif_text_torch))
+            setContentTitle(resources.getString(R.string.es_notif_title_torch))
+            setContentText(resources.getString(R.string.es_notif_text_torch))
             setContentIntent(
                 PendingIntent.getBroadcast(
-                    androidApplicationContext,
+                    applicationContext,
                     1,
                     Intent(TorchManager.ACTION_TOGGLE_TORCH),
                     PendingIntent.FLAG_UPDATE_CURRENT

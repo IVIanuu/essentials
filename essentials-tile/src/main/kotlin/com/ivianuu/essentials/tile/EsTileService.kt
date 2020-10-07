@@ -18,9 +18,10 @@ package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.android.createServiceContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -29,10 +30,11 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsTileService : TileService() {
 
-    val readerContext by lazy { createServiceContext() }
+    val serviceComponent by lazy { createServiceComponent() }
 
     private val dispatchers: AppCoroutineDispatchers by lazy {
-        readerContext.runReader { given() }
+        serviceComponent.mergeComponent<EsTileServiceComponent>()
+            .dispatchers
     }
 
     val scope by lazy { CoroutineScope(dispatchers.default) }
@@ -55,4 +57,9 @@ abstract class EsTileService : TileService() {
         super.onDestroy()
     }
 
+}
+
+@MergeInto(ServiceComponent::class)
+interface EsTileServiceComponent {
+    val dispatchers: AppCoroutineDispatchers
 }

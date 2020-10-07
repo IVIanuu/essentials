@@ -16,7 +16,7 @@ dependencies {
     compile(project(":essentials-moshi"))
 
     compile(Deps.Injekt.core)
-    compile(Deps.Injekt.common)
+    compile(Deps.Injekt.merge)
 
     compile(Deps.Kotlin.stdlib)
 

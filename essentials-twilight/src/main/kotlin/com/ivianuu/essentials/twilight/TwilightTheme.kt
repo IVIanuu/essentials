@@ -32,29 +32,31 @@ import com.ivianuu.essentials.ui.common.untrackedState
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.collectAsResource
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
 fun TwilightTheme(
-    lightColors: Colors = lightColors(),
-    darkColors: Colors = darkColors(),
-    blackColors: Colors = darkColors.copy(
+    twilightState: twilightState,
+    lightColors: @Assisted Colors = lightColors(),
+    darkColors: @Assisted Colors = darkColors(),
+    blackColors: @Assisted Colors = darkColors.copy(
         background = Color.Black,
         surface = Color.Black
     ),
-    typography: Typography = Typography(),
-    content: @Composable () -> Unit
+    typography: @Assisted Typography = Typography(),
+    content: @Assisted @Composable () -> Unit,
 ) {
-    ResourceBox(resource = remember { twilightState }.collectAsResource()) { twilightState ->
-        fun colorsForTwilightState() = if (twilightState.isDark) {
-            if (twilightState.useBlack) blackColors else darkColors
+    ResourceBox(resource = remember { twilightState() }.collectAsResource()) { currentTwilightState ->
+        fun colorsForTwilightState() = if (currentTwilightState.isDark) {
+            if (currentTwilightState.useBlack) blackColors else darkColors
         } else lightColors
 
         val lastColors = untrackedState { colorsForTwilightState() }
         val targetColors = colorsForTwilightState()
 
-        val animation = key(twilightState) { animatedFloat(0f) }
+        val animation = key(currentTwilightState) { animatedFloat(0f) }
         onCommit(animation) {
             animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
         }

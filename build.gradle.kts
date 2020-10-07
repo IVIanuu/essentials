@@ -66,13 +66,6 @@ allprojects {
         resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9-SNAPSHOT")
     }
 
-    // todo remove once compose runtime is up to date
-    configurations.all {
-        resolutionStrategy {
-            force(Deps.AndroidX.Compose.runtime)
-        }
-    }
-
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")

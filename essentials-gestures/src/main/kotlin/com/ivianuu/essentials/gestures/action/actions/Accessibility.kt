@@ -2,21 +2,25 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 
-@Reader
-internal fun accessibilityAction(
-    key: String,
-    accessibilityAction: Int,
-    titleRes: Int,
-    icon: ActionIcon
-) = Action(
+@FunBinding
+fun accessibilityAction(
+    choosePermissions: choosePermissions,
+    performGlobalAction: performGlobalAction,
+    resources: Resources,
+    key: @Assisted String,
+    accessibilityAction: @Assisted Int,
+    titleRes: @Assisted Int,
+    icon: @Assisted ActionIcon,
+): Action = Action(
     key = key,
-    title = Resources.getString(titleRes),
+    title = resources.getString(titleRes),
     icon = icon,
-    permissions = permissions { listOf(accessibility) },
+    permissions = choosePermissions { listOf(accessibility) },
     execute = {
         performGlobalAction(accessibilityAction)
     }

@@ -34,14 +34,8 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.common.onBackPressed
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
-
-@Reader
-inline val navigator: Navigator
-    get() = given()
 
 @Stable
 class Navigator {

@@ -18,15 +18,15 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.startActivityForResult
+import com.ivianuu.injekt.android.ApplicationContext
 
 fun RuntimePermission(
     name: String,
@@ -40,20 +40,24 @@ val Permission.Companion.RuntimePermissionName by lazy {
     Permission.Key<String>("RuntimePermissionName")
 }
 
-@GivenPermissionStateProvider
-class RuntimePermissionStateProvider : PermissionStateProvider {
+@PermissionStateProviderBinding
+class RuntimePermissionStateProvider(
+    private val applicationContext: ApplicationContext,
+) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        androidApplicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
+        applicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
 
 }
 
-@GivenPermissionRequestHandler
-class RuntimePermissionRequestHandler : PermissionRequestHandler {
+@PermissionRequestHandlerBinding
+class RuntimePermissionRequestHandler(
+    private val startActivityForResult: startActivityForResult<String, Boolean>,
+) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission

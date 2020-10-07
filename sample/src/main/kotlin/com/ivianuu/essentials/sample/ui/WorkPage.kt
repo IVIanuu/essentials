@@ -16,19 +16,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.sample.work.scheduleTasks
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun WorkPage() {
+fun WorkPage(scheduleTasks: scheduleTasks) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Work") }) }
     ) {

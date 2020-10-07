@@ -17,37 +17,38 @@
 package com.ivianuu.essentials.util
 
 import android.widget.Toast
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.launch
 
-object Toaster {
+@Binding
+class Toaster(
+    private val applicationContext: ApplicationContext,
+    private val dispatchers: AppCoroutineDispatchers,
+    private val globalScope: GlobalScope,
+    private val resources: Resources,
+) {
 
-    @Reader
     fun toast(message: String) {
         showToast(message, false)
     }
 
-    @Reader
     fun toast(messageId: Int, vararg args: Any?) {
-        showToast(Resources.getString(messageId, *args), false)
+        showToast(resources.getString(messageId, *args), false)
     }
 
-    @Reader
     fun toastLong(message: String) {
         showToast(message, true)
     }
 
-    @Reader
     fun toastLong(messageId: Int, vararg args: Any?) {
-        showToast(Resources.getString(messageId, *args), true)
+        showToast(resources.getString(messageId, *args), true)
     }
 
-    @Reader
     private fun showToast(message: String, long: Boolean) {
         globalScope.launch(dispatchers.main) {
             Toast.makeText(
-                androidApplicationContext,
+                applicationContext,
                 message,
                 if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
             )

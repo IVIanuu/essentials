@@ -7,20 +7,27 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-@Reader
-suspend fun startActivityForResult(intent: Intent): ActivityResult =
-    startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
+@FunBinding
+suspend fun startActivityForIntentResult(
+    startActivityForResult: startActivityForResult<Intent, ActivityResult>,
+    intent: @Assisted Intent,
+): ActivityResult {
+    return startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
+}
 
-@Reader
+@FunBinding
 suspend fun <I, O> startActivityForResult(
-    contract: ActivityResultContract<I, O>,
-    input: I
+    startUi: startUi,
+    navigator: Navigator,
+    contract: @Assisted ActivityResultContract<I, O>,
+    input: @Assisted I,
 ): O {
     startUi()
     return suspendCancellableCoroutine { continuation ->

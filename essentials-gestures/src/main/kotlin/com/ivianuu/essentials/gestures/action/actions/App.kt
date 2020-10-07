@@ -12,16 +12,19 @@ import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GivenActionFactory
-import com.ivianuu.essentials.gestures.action.GivenActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.given
 
-@GivenActionFactory
-class AppActionFactory : ActionFactory {
+@ActionFactoryBinding
+class AppActionFactory(
+    private val getAppInfo: getAppInfo,
+    private val packageManager: PackageManager,
+    private val sendIntent: sendIntent,
+) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val packageName = key.removePrefix(ACTION_KEY_PREFIX)
@@ -32,24 +35,31 @@ class AppActionFactory : ActionFactory {
             enabled = true,
             icon = coilActionIcon(AppIcon(packageName)),
             execute = {
-                given<PackageManager>().getLaunchIntentForPackage(
-                    packageName
-                )!!.send()
+                sendIntent(
+                    packageManager.getLaunchIntentForPackage(
+                        packageName
+                    )!!
+                )
             }
         )
     }
 }
 
-@GivenActionPickerDelegate
-class AppActionPickerDelegate : ActionPickerDelegate {
+@ActionPickerDelegateBinding
+class AppActionPickerDelegate(
+    private val appPickerPage: AppPickerPage,
+    private val launchableAppFilter: LaunchableAppFilter,
+    private val navigator: Navigator,
+    private val resources: Resources,
+) : ActionPickerDelegate {
     override val title: String
-        get() = Resources.getString(R.string.es_action_app)
+        get() = resources.getString(R.string.es_action_app)
     override val icon: @Composable () -> Unit
         get() = { Icon(vectorResource(R.drawable.es_ic_apps)) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
-            AppPickerPage(appFilter = given<LaunchableAppFilter>())
+            appPickerPage(launchableAppFilter, null)
         } ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }

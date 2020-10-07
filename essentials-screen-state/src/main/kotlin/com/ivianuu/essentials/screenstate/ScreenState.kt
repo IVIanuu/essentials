@@ -20,10 +20,9 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -31,25 +30,34 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-@Reader
-val screenState: Flow<ScreenState>
-    get() = BroadcastFactory.create(
+@FunBinding
+fun screenState(
+    broadcastFactory: BroadcastFactory,
+    getCurrentScreenState: getCurrentScreenState,
+    logger: Logger,
+): Flow<ScreenState> {
+    return broadcastFactory.create(
         Intent.ACTION_SCREEN_OFF,
         Intent.ACTION_SCREEN_ON,
         Intent.ACTION_USER_PRESENT
     )
-        .onStart { d { "sub for screen state" } }
-        .onCompletion { d { "dispose screen state" } }
+        .onStart { logger.d("sub for screen state") }
+        .onCompletion { logger.d("dispose screen state") }
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
+}
 
-@Reader
-private suspend fun getCurrentScreenState(): ScreenState =
+@FunBinding
+suspend fun getCurrentScreenState(
+    dispatchers: AppCoroutineDispatchers,
+    keyguardManager: KeyguardManager,
+    powerManager: PowerManager,
+): ScreenState =
     withContext(dispatchers.default) {
-        if (given<PowerManager>().isInteractive) {
-            if (given<KeyguardManager>().isDeviceLocked) {
+        if (powerManager.isInteractive) {
+            if (keyguardManager.isDeviceLocked) {
                 ScreenState.Locked
             } else {
                 ScreenState.Unlocked

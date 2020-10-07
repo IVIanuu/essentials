@@ -6,24 +6,27 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.GivenAction
 import com.ivianuu.essentials.util.Resources
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@GivenAction
-fun bluetoothAction() = Action(
+@ActionBinding
+fun bluetoothAction(
+    bluetoothIcon: bluetoothIcon,
+    resources: Resources,
+) = Action(
     key = "bluetooth",
-    title = Resources.getString(R.string.es_action_bluetooth),
+    title = resources.getString(R.string.es_action_bluetooth),
     icon = bluetoothIcon(),
     enabled = BluetoothAdapter.getDefaultAdapter() != null,
     execute = { toggleBluetooth() }
 )
 
-@Reader
-private fun toggleBluetooth() {
+@FunBinding
+internal fun toggleBluetooth() {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
             it.disable()
@@ -33,9 +36,11 @@ private fun toggleBluetooth() {
     }
 }
 
-@Reader
-private fun bluetoothIcon(): ActionIcon =
-    BroadcastFactory.create(BluetoothAdapter.ACTION_STATE_CHANGED)
+@FunBinding
+fun bluetoothIcon(
+    broadcastFactory: BroadcastFactory,
+): ActionIcon {
+    return broadcastFactory.create(BluetoothAdapter.ACTION_STATE_CHANGED)
         .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
         .onStart {
             emit(
@@ -48,3 +53,4 @@ private fun bluetoothIcon(): ActionIcon =
             else R.drawable.es_ic_bluetooth_disabled
         }
         .map { { Icon(vectorResource(it)) } }
+}

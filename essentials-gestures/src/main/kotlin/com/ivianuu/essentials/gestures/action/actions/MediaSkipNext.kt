@@ -2,12 +2,12 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.GivenAction
+import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@GivenAction
-fun mediaSkipNextAction() = mediaAction(
-    key = "media_skip_next",
-    keycode = KeyEvent.KEYCODE_MEDIA_NEXT,
-    titleRes = R.string.es_action_media_skip_next,
-    icon = singleActionIcon(R.drawable.es_ic_skip_next)
+@ActionBinding
+fun mediaSkipNextAction(mediaAction: mediaAction) = mediaAction(
+    "media_skip_next",
+    KeyEvent.KEYCODE_MEDIA_NEXT,
+    R.string.es_action_media_skip_next,
+    singleActionIcon(R.drawable.es_ic_skip_next)
 )

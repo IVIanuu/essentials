@@ -24,15 +24,23 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
-    popNavigatorOnceSecureSettingsGranted(toast = true)
+fun SecureSettingsPage(
+    navigator: Navigator,
+    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
+    secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
+    secureSettings: SecureSettings,
+    toaster: Toaster,
+    showHideNavBarHint: @Assisted Boolean = false,
+) {
+    popNavigatorOnceSecureSettingsGranted(true)
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
@@ -53,7 +61,7 @@ fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
                 subtitle = { Text(R.string.es_pref_use_pc_summary) },
                 onClick = {
                     navigator.push {
-                        SecureSettingsPcInstructionsPage()
+                        secureSettingsPcInstructionsPage()
                     }
                 }
             )
@@ -64,10 +72,10 @@ fun SecureSettingsPage(showHideNavBarHint: Boolean = false) {
                 subtitle = { Text(R.string.es_pref_use_root_summary) },
                 onClick = {
                     scope.launch {
-                        if (SecureSettings.grantPermissionViaRoot()) {
-                            Toaster.toast(R.string.es_secure_settings_permission_granted)
+                        if (secureSettings.grantPermissionViaRoot()) {
+                            toaster.toast(R.string.es_secure_settings_permission_granted)
                         } else {
-                            Toaster.toast(R.string.es_secure_settings_no_root)
+                            toaster.toast(R.string.es_secure_settings_no_root)
                         }
                     }
                 }

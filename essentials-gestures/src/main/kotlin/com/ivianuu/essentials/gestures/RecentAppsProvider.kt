@@ -19,11 +19,10 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,8 +35,12 @@ import kotlinx.coroutines.flow.onEach
 /**
  * Recent apps provider
  */
-@Given(ApplicationContext::class)
-class RecentAppsProvider {
+@Binding(ApplicationComponent::class)
+class RecentAppsProvider(
+    private val globalScope: GlobalScope,
+    private val logger: Logger,
+    private val services: AccessibilityServices,
+) {
 
     val currentApp: Flow<String?>
         get() = recentsApps
@@ -47,7 +50,6 @@ class RecentAppsProvider {
     val recentsApps: StateFlow<List<String>> get() = _recentApps
 
     init {
-        val services = given<AccessibilityServices>()
         services.applyConfig(
             AccessibilityConfig(
                 eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -102,7 +104,7 @@ class RecentAppsProvider {
         // make sure that were not getting bigger than the limit
         val finalRecentApps = recentApps.chunked(10).first()
 
-        d { "recent apps changed $finalRecentApps" }
+        logger.d("recent apps changed $finalRecentApps")
 
         // push
         _recentApps.value = finalRecentApps

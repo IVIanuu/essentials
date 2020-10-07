@@ -18,22 +18,29 @@ package com.ivianuu.essentials.billing.debug
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.MergeInto
 
-object EsDebugBillingGivens {
+@MergeInto(ApplicationComponent::class)
+@Module
+object EsDebugBillingModule {
 
     private var debugBillingClient: DebugBillingClient? = null
 
-    @Given
-    fun debugBillingClient(): DebugBillingClient {
-        given<BillingClient>()
+    @Binding
+    fun debugBillingClient(billingClient: BillingClient): DebugBillingClient {
         return debugBillingClient!!
     }
 
-    @Given
-    fun billingClient(listener: PurchasesUpdatedListener): BillingClient =
-        given<DebugBillingClient>(listener)
+    @Binding
+    fun billingClient(
+        listener: @Assisted PurchasesUpdatedListener,
+        debugBillingClientFactory: (PurchasesUpdatedListener) -> DebugBillingClient,
+    ): BillingClient =
+        debugBillingClientFactory(listener)
             .also { debugBillingClient = it }
 
 }

@@ -18,24 +18,35 @@ package com.ivianuu.essentials.work
 
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.ivianuu.essentials.app.GivenAppInitializer
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import androidx.work.WorkerFactory
+import com.ivianuu.essentials.app.AppInitializerBinding
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.MergeInto
 
-@GivenAppInitializer
-fun initializeWorkers() {
+@AppInitializerBinding
+@FunBinding
+fun initializeWorkers(
+    applicationContext: ApplicationContext,
+    workerFactory: WorkerFactory,
+) {
     WorkManager.initialize(
-        androidApplicationContext,
+        applicationContext,
         Configuration.Builder()
-            .setWorkerFactory(given())
+            .setWorkerFactory(workerFactory)
             .build()
     )
 }
 
-object EsWorkGivens {
+@MergeInto(ApplicationComponent::class)
+@Module
+object EsWorkModule {
 
-    @Given
-    fun workManager() = WorkManager.getInstance(androidApplicationContext)
+    @Binding
+    fun workManager(applicationContext: ApplicationContext) =
+        WorkManager.getInstance(applicationContext)
 
 }

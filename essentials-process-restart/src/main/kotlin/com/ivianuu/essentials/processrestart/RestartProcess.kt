@@ -18,17 +18,21 @@ package com.ivianuu.essentials.processrestart
 
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 
-@Reader
-suspend fun restartProcess() {
-    val intent = given<PackageManager>().getLaunchIntentForPackage(given<BuildInfo>().packageName)!!
+@FunBinding
+suspend fun restartProcess(
+    applicationContext: ApplicationContext,
+    buildInfo: BuildInfo,
+    logger: Logger,
+    packageManager: PackageManager,
+) {
+    val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
-    d { "restart process %$intent" }
-    ProcessRestartActivity.launch(androidApplicationContext, intent)
+    logger.d("restart process $intent")
+    ProcessRestartActivity.launch(applicationContext, intent)
     Runtime.getRuntime().exit(0)
 }

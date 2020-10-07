@@ -28,34 +28,32 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppPickerAction.AppClicked
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
-import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.CoroutineScope
 
-@Reader
+@FunBinding
 @Composable
 fun AppPickerPage(
-    appFilter: AppFilter = DefaultAppFilter,
-    title: String? = null
+    store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>,
+    appFilter: @Assisted AppFilter,
+    title: @Assisted String?,
 ) {
-    val (state, dispatch) = rememberStore<AppPickerState, AppPickerAction> {
-        given(this, appFilter)
-    }
+    val (state, dispatch) = store(appFilter)
 
     Scaffold(
         topBar = {
@@ -92,10 +90,12 @@ private fun AppInfo(
     )
 }
 
-@Given
-fun CoroutineScope.appPickerStore(
-    appFilter: AppFilter
-) = store<AppPickerState, AppPickerAction>(AppPickerState()) {
+@Binding
+fun appPickerStore(
+    navigator: Navigator,
+    getInstalledApps: getInstalledApps,
+    appFilter: @Assisted AppFilter,
+) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState()) {
     execute(
         block = {
             getInstalledApps()
@@ -116,4 +116,3 @@ data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
 sealed class AppPickerAction {
     data class AppClicked(val app: AppInfo) : AppPickerAction()
 }
-

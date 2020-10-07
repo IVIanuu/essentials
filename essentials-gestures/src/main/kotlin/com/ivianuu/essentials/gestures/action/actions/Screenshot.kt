@@ -3,21 +3,25 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.GivenAction
-import com.ivianuu.essentials.gestures.action.permissions
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.given
 import kotlinx.coroutines.delay
 
-@GivenAction
-fun screenshotAction(): Action {
-    val systemBuildInfo = given<SystemBuildInfo>()
+@ActionBinding
+fun screenshotAction(
+    choosePermissions: choosePermissions,
+    performGlobalAction: performGlobalAction,
+    resources: Resources,
+    runRootCommand: runRootCommand,
+    systemBuildInfo: SystemBuildInfo,
+): Action {
     return Action(
         key = "screenshot",
-        title = Resources.getString(R.string.es_action_screenshot),
+        title = resources.getString(R.string.es_action_screenshot),
         icon = singleActionIcon(R.drawable.es_ic_photo_album),
-        permissions = permissions {
+        permissions = choosePermissions {
             listOf(
                 if (systemBuildInfo.sdk >= 28) accessibility
                 else root

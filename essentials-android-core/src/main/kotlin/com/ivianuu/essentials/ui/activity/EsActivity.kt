@@ -29,14 +29,16 @@ import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.ui.core.ProvideWindowInsets
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.uiScope
-import com.ivianuu.injekt.android.activityContext
-import com.ivianuu.injekt.runReader
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.cancel
 
 /**
@@ -65,12 +67,10 @@ abstract class EsActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        activityContext.runReader {
+        activityComponent.mergeComponent<EsActivityComponent>().run {
             navigator.setBackStack(emptyList())
-        }
-        composition.dispose()
-        retainedObjects.dispose()
-        activityContext.runReader {
+            composition.dispose()
+            retainedObjects.dispose()
             uiScope.cancel()
         }
         super.onDestroy()
@@ -96,4 +96,10 @@ abstract class EsActivity : AppCompatActivity() {
 
     @Composable
     protected abstract fun content()
+}
+
+@MergeInto(ActivityComponent::class)
+interface EsActivityComponent {
+    val navigator: Navigator
+    val uiScope: UiScope
 }

@@ -20,13 +20,13 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.app.androidApplicationContext
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.injekt.android.ApplicationContext
 
 fun WriteSettingsPermission(
     context: Context,
@@ -44,13 +44,15 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
     Permission.Key<Unit>("IsWriteSettingsPermission")
 }
 
-@GivenPermissionStateProvider
-class WriteSettingsPermissionStateProvider : PermissionStateProvider {
+@PermissionStateProviderBinding
+class WriteSettingsPermissionStateProvider(
+    private val applicationContext: ApplicationContext,
+) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSettingsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        Settings.System.canWrite(androidApplicationContext)
+        Settings.System.canWrite(applicationContext)
 
 }

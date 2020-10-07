@@ -21,13 +21,12 @@ import com.ivianuu.essentials.broadcast.BroadcastFactory
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.essentials.util.globalScope
-import com.ivianuu.injekt.ApplicationContext
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,8 +37,17 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-@Given(ApplicationContext::class)
-class TorchManager {
+@Binding(ApplicationComponent::class)
+class TorchManager(
+    private val broadcastFactory: BroadcastFactory,
+    private val cameraManager: CameraManager,
+    private val createTorchNotification: createTorchNotification,
+    private val dispatchers: AppCoroutineDispatchers,
+    private val foregroundManager: ForegroundManager,
+    private val globalScope: GlobalScope,
+    private val logger: Logger,
+    private val toaster: Toaster,
+) {
 
     private val _torchState = MutableStateFlow(false)
     val torchState: StateFlow<Boolean> get() = _torchState
@@ -48,9 +56,9 @@ class TorchManager {
 
     private val stateActor = globalScope.actor<Boolean> {
         for (enabled in this) {
-            d { "update state $enabled" }
+            logger.d("update state $enabled")
             foregroundJob = if (enabled) {
-                given<ForegroundManager>().startJob(createTorchNotification())
+                foregroundManager.startJob(createTorchNotification())
             } else {
                 // todo use foregroundJob?.stop() once compiler is fixed
                 if (foregroundJob != null) foregroundJob!!.stop()
@@ -61,26 +69,26 @@ class TorchManager {
     }
 
     init {
-        BroadcastFactory.create(ACTION_TOGGLE_TORCH)
+        broadcastFactory.create(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
             .launchIn(globalScope)
     }
 
     suspend fun toggleTorch() = withContext(dispatchers.main) {
         tryOrToast {
-            given<CameraManager>().registerTorchCallback(object : CameraManager.TorchCallback() {
+            cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                     tryOrToast {
-                        given<CameraManager>().unregisterTorchCallback(this)
-                        given<CameraManager>().setTorchMode(cameraId, !enabled)
+                        cameraManager.unregisterTorchCallback(this)
+                        cameraManager.setTorchMode(cameraId, !enabled)
                         stateActor.offerSafe(!enabled)
                     }
                 }
 
                 override fun onTorchModeUnavailable(cameraId: String) {
                     tryOrToast {
-                        given<CameraManager>().unregisterTorchCallback(this)
-                        Toaster.toast(R.string.es_failed_to_toggle_torch)
+                        cameraManager.unregisterTorchCallback(this)
+                        toaster.toast(R.string.es_failed_to_toggle_torch)
                         stateActor.offerSafe(false)
                     }
                 }
@@ -93,7 +101,7 @@ class TorchManager {
             action()
         } catch (t: Throwable) {
             t.printStackTrace()
-            Toaster.toast(R.string.es_failed_to_toggle_torch)
+            toaster.toast(R.string.es_failed_to_toggle_torch)
         }
     }
 

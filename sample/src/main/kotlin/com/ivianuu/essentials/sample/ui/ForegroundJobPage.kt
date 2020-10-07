@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.foundation.Text
@@ -26,24 +27,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.app.androidApplicationContext
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.delay
 
 @SuppressLint("NewApi")
-@Reader
+@FunBinding
 @Composable
-fun ForegroundJobPage() {
-    if (given<SystemBuildInfo>().sdk >= 26) {
+fun ForegroundJobPage(
+    buildForegroundNotification: buildForegroundNotification,
+    foregroundManager: ForegroundManager,
+    notificationManager: NotificationManager,
+    systemBuildInfo: SystemBuildInfo,
+) {
+    if (systemBuildInfo.sdk >= 26) {
         onActive {
-            given<NotificationManager>().createNotificationChannel(
+            notificationManager.createNotificationChannel(
                 NotificationChannel(
                     "foreground", "Foreground",
                     NotificationManager.IMPORTANCE_LOW
@@ -54,8 +60,6 @@ fun ForegroundJobPage() {
 
     val primaryColor = MaterialTheme.colors.primary
 
-    val foregroundManager = given<ForegroundManager>()
-
     Scaffold(
         topBar = { TopAppBar(title = { Text("Foreground") }) }
     ) {
@@ -65,7 +69,7 @@ fun ForegroundJobPage() {
         foregroundJob?.let { currentJob ->
             onCommit(count) {
                 currentJob.updateNotification(
-                    buildNotification(count, primaryColor)
+                    buildForegroundNotification(count, primaryColor)
                 )
             }
 
@@ -98,7 +102,7 @@ fun ForegroundJobPage() {
                         null
                     } else {
                         foregroundManager.startJob(
-                            buildNotification(count, primaryColor)
+                            buildForegroundNotification(count, primaryColor)
                         )
                     }
                 }
@@ -115,12 +119,13 @@ fun ForegroundJobPage() {
     }
 }
 
-@Reader
-private fun buildNotification(
-    count: Int,
-    color: Color
-) = NotificationCompat.Builder(
-    androidApplicationContext,
+@FunBinding
+internal fun buildForegroundNotification(
+    applicationContext: ApplicationContext,
+    count: @Assisted Int,
+    color: @Assisted Color,
+): Notification = NotificationCompat.Builder(
+    applicationContext,
     "foreground"
 )
     .setSmallIcon(R.drawable.ic_home)

@@ -31,7 +31,7 @@ import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -39,13 +39,12 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Reader
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun CounterPage() {
+fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -54,7 +53,7 @@ fun CounterPage() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val (state, dispatch) = rememberStore<CounterState, CounterAction>()
+            val (state, dispatch) = store()
 
             Text(
                 text = "Count: ${state.count}",
@@ -78,8 +77,8 @@ fun CounterPage() {
     }
 }
 
-@Given
-fun CoroutineScope.counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
+@Binding
+fun counterStore() = storeProvider<CounterState, CounterAction>(CounterState(0)) {
     onEachAction { action ->
         when (action) {
             Inc -> setState { copy(count = count + 1) }

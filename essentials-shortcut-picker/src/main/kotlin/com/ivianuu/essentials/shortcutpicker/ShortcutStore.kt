@@ -6,16 +6,18 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.dispatchers
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
-@Reader
-suspend fun getShortcuts(): List<Shortcut> = withContext(dispatchers.io) {
-    val pm = given<PackageManager>()
+@FunBinding
+suspend fun getShortcuts(
+    dispatchers: AppCoroutineDispatchers,
+    packageManager: PackageManager,
+): List<Shortcut> = withContext(dispatchers.io) {
     val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-    pm.queryIntentActivities(shortcutsIntent, 0)
+    packageManager.queryIntentActivities(shortcutsIntent, 0)
         .parallelMap { resolveInfo ->
             try {
                 Shortcut(
@@ -26,8 +28,8 @@ suspend fun getShortcuts(): List<Shortcut> = withContext(dispatchers.io) {
                             resolveInfo.activityInfo.name
                         )
                     },
-                    name = resolveInfo.loadLabel(pm).toString(),
-                    icon = resolveInfo.loadIcon(pm).toImageAsset()
+                    name = resolveInfo.loadLabel(packageManager).toString(),
+                    icon = resolveInfo.loadIcon(packageManager).toImageAsset()
                 )
             } catch (t: Throwable) {
                 null
@@ -37,8 +39,12 @@ suspend fun getShortcuts(): List<Shortcut> = withContext(dispatchers.io) {
         .sortedBy { it.name }
 }
 
-@Reader
-internal suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut =
+@FunBinding
+suspend fun extractShortcut(
+    dispatchers: AppCoroutineDispatchers,
+    packageManager: PackageManager,
+    shortcutRequestResult: @Assisted Intent,
+): Shortcut =
     withContext(dispatchers.default) {
         val intent =
             shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
@@ -52,7 +58,7 @@ internal suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut =
             bitmapIcon != null -> bitmapIcon.toImageAsset()
             iconResource != null -> {
                 val resources =
-                    given<PackageManager>().getResourcesForApplication(iconResource.packageName)
+                    packageManager.getResourcesForApplication(iconResource.packageName)
                 val id =
                     resources.getIdentifier(iconResource.resourceName, null, null)
                 resources.getDrawable(id).toImageAsset()

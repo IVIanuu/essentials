@@ -17,62 +17,63 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.launch
 
 class DefaultNotificationListenerService : EsNotificationListenerService() {
 
+    private val component by lazy {
+        serviceComponent.mergeComponent<DefaultNotificationListenerServiceComponent>()
+    }
+
     override fun onListenerConnected() {
         super.onListenerConnected()
-        readerContext.runReader {
-            d { "listener connected" }
-            given<NotificationStore>().onServiceConnected(this)
-            given<NotificationWorkers>().forEach { worker ->
-                connectedScope.launch {
-                    scope.launch { worker() }
-                }
+        component.logger.d("listener connected")
+        component.notificationStore.onServiceConnected(this)
+        component.notificationWorkers.forEach { worker ->
+            connectedScope.launch {
+                scope.launch { worker() }
             }
-            notifyUpdate()
         }
+        notifyUpdate()
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        readerContext.runReader {
-            d { "listener disconnected" }
-            given<NotificationStore>().onServiceDisconnected()
-        }
+        component.logger.d("listener disconnected")
+        component.notificationStore.onServiceDisconnected()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        readerContext.runReader {
-            d { "notification posted $sbn" }
-            notifyUpdate()
-        }
+        component.logger.d("notification posted $sbn")
+        notifyUpdate()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        readerContext.runReader {
-            d { "notification removed $sbn" }
-            notifyUpdate()
-        }
+        component.logger.d("notification removed $sbn")
+        notifyUpdate()
     }
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
-        readerContext.runReader {
-            d { "ranking update $rankingMap" }
-            notifyUpdate()
-        }
+        component.logger.d("ranking update $rankingMap")
+        notifyUpdate()
     }
 
-    @Reader
     private fun notifyUpdate() {
-        given<NotificationStore>().onNotificationsChanged(activeNotifications.toList())
+        component.notificationStore.onNotificationsChanged(activeNotifications.toList())
     }
+}
+
+
+@MergeInto(ServiceComponent::class)
+interface DefaultNotificationListenerServiceComponent {
+    val logger: Logger
+    val notificationStore: NotificationStore
+    val notificationWorkers: NotificationWorkers
 }

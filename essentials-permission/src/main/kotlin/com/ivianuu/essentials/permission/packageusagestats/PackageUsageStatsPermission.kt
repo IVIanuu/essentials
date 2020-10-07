@@ -20,14 +20,13 @@ import android.app.AppOpsManager
 import android.content.Intent
 import android.os.Process
 import android.provider.Settings
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.given
 
 fun PackageUsageStatsPermission(
     vararg metadata: KeyWithValue<*>
@@ -41,17 +40,20 @@ val Permission.Companion.IsPackageUsageStatsPermission by lazy {
     Permission.Key<Unit>("IsPackageUsageStatsPermission")
 }
 
-@GivenPermissionStateProvider
-class PackageUsageStatsPermissionStateProvider : PermissionStateProvider {
+@PermissionStateProviderBinding
+class PackageUsageStatsPermissionStateProvider(
+    private val appOpsManager: AppOpsManager,
+    private val buildInfo: BuildInfo,
+) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsPackageUsageStatsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        val mode = given<AppOpsManager>().checkOpNoThrow(
+        val mode = appOpsManager.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
             Process.myUid(),
-            given<BuildInfo>().packageName
+            buildInfo.packageName
         )
 
         return mode == AppOpsManager.MODE_ALLOWED

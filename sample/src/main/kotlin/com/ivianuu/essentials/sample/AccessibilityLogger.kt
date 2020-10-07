@@ -1,17 +1,19 @@
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.accessibility.GivenAccessibilityWorker
+import com.ivianuu.essentials.accessibility.AccessibilityWorkerBinding
 import com.ivianuu.essentials.coroutines.awaitCancellation
 import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.FunBinding
 
-@GivenAccessibilityWorker
-suspend fun logAccessibility() = runWithCleanup(
+@AccessibilityWorkerBinding
+@FunBinding
+suspend fun logAccessibility(logger: Logger): Unit = runWithCleanup(
     block = {
-        d { "hello from accessibility" }
+        logger.d("hello from accessibility")
         awaitCancellation()
     },
     cleanup = {
-        d { "bye from accessibility" }
+        logger.d("bye from accessibility")
     }
 )

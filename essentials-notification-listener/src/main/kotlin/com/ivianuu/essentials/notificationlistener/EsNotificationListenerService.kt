@@ -19,9 +19,10 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.android.createServiceContext
-import com.ivianuu.injekt.given
-import com.ivianuu.injekt.runReader
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -30,14 +31,14 @@ import kotlinx.coroutines.cancel
  */
 abstract class EsNotificationListenerService : NotificationListenerService() {
 
-    val readerContext by lazy { createServiceContext() }
+    val serviceComponent by lazy { createServiceComponent() }
 
-    private val dispatchers: AppCoroutineDispatchers by lazy {
-        readerContext.runReader { given() }
+    private val component by lazy {
+        serviceComponent.mergeComponent<EsNotificationListenerServiceComponent>()
     }
 
     val scope by lazy {
-        CoroutineScope(dispatchers.default)
+        CoroutineScope(component.dispatchers.default)
     }
 
     private var _connectedScope: CoroutineScope? = null
@@ -45,7 +46,7 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        _connectedScope = CoroutineScope(dispatchers.default)
+        _connectedScope = CoroutineScope(component.dispatchers.default)
     }
 
     override fun onListenerDisconnected() {
@@ -65,4 +66,9 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
             emptyArray()
         }
     }
+}
+
+@MergeInto(ServiceComponent::class)
+interface EsNotificationListenerServiceComponent {
+    val dispatchers: AppCoroutineDispatchers
 }

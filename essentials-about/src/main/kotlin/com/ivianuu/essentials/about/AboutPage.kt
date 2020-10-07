@@ -25,33 +25,35 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Reader
-import com.ivianuu.injekt.given
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 
-@Reader
+@FunBinding
 @Composable
-fun AboutPage() {
+fun AboutPage(
+    buildInfo: BuildInfo,
+    privacyPolicyUrl: PrivacyPolicyUrl?,
+    aboutSection: AboutSection,
+) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
         InsettingScrollableColumn {
-            AboutSection(
-                showHeader = false,
-                packageName = given<BuildInfo>().packageName,
-                privacyPolicyUrl = given<PrivacyPolicyUrl?>()
+            aboutSection(
+                buildInfo.packageName,
+                false,
+                privacyPolicyUrl
             )
         }
     }
 }
 
-typealias PrivacyPolicyUrl = String
-
-@Reader
+@FunBinding
 @Composable
 fun AboutSection(
-    packageName: String,
-    showHeader: Boolean = false,
-    privacyPolicyUrl: String? = null
+    navigator: Navigator,
+    packageName: @Assisted String,
+    showHeader: @Assisted Boolean = false,
+    privacyPolicyUrl: @Assisted String? = null,
 ) {
     if (showHeader) {
         Subheader {

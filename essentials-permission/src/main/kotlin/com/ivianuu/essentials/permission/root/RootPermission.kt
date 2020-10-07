@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.permission.root
 
-import com.ivianuu.essentials.permission.GivenPermissionRequestHandler
-import com.ivianuu.essentials.permission.GivenPermissionStateProvider
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.Shell
@@ -20,22 +20,26 @@ val Permission.Companion.IsRootPermission by lazy {
     Permission.Key<Unit>("IsRootPermission")
 }
 
-@GivenPermissionStateProvider
-class RootPermissionStateProvider : PermissionStateProvider {
-
+@PermissionStateProviderBinding
+class RootPermissionStateProvider(
+    private val shell: Shell,
+) : PermissionStateProvider {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
-    override suspend fun isGranted(permission: Permission): Boolean = Shell.isAvailable()
+    override suspend fun isGranted(permission: Permission): Boolean = shell.isAvailable()
 }
 
-@GivenPermissionRequestHandler
-class RootPermissionRequestHandler : PermissionRequestHandler {
+@PermissionRequestHandlerBinding
+class RootPermissionRequestHandler(
+    private val shell: Shell,
+    private val toaster: Toaster,
+) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
     override suspend fun request(permission: Permission) {
-        val isOk = Shell.isAvailable()
-        if (!isOk) Toaster.toast(R.string.es_no_root)
+        val isOk = shell.isAvailable()
+        if (!isOk) toaster.toast(R.string.es_no_root)
     }
 }

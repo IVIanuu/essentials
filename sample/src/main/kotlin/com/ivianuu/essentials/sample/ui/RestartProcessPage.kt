@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.Text
+import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Text
-import androidx.compose.material.Button
 import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Reader
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@Reader
+@FunBinding
 @Composable
-fun RestartProcessPage() {
+fun RestartProcessPage(restartProcess: restartProcess) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Restart process") }) }
     ) {

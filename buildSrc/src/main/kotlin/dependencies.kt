@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev618"
+    const val version = "${Build.versionName}-dev621"
 }
 
 object Deps {
@@ -85,7 +85,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev618"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev621"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
@@ -93,18 +93,18 @@ object Deps {
     }
 
     object Injekt {
-        private const val version = "0.0.1-dev350"
+        private const val version = "0.0.1-dev375"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"
-        const val common = "com.ivianuu.injekt:injekt-common:$version"
+        const val merge = "com.ivianuu.injekt:injekt-merge:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
     const val junit = "junit:junit:4.13"
 
     object Kotlin {
-        private const val version = "1.4.10"
+        private const val version = "1.4.255-SNAPSHOT"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
