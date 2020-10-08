@@ -83,7 +83,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
 @MergeInto(ServiceComponent::class)
 interface DefaultAccessibilityServiceComponent {
-    val accessibilityServices: AccessibilityServices
+    val accessibilityServices: RealAccessibilityServices
     val accessibilityWorkers: AccessibilityWorkers
     val logger: Logger
 }

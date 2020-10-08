@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-interface IAccessibilityServices {
+interface AccessibilityServices {
     val isConnected: Flow<Boolean>
 
     val events: Flow<AccessibilityEvent>
@@ -38,7 +38,7 @@ interface IAccessibilityServices {
 }
 
 @Binding(ApplicationComponent::class)
-class AccessibilityServices : IAccessibilityServices {
+class RealAccessibilityServices : AccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)
     val service: StateFlow<DefaultAccessibilityService?> get() = _service
