@@ -21,8 +21,6 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 @Binding(ApplicationComponent::class)
-class NavBarPrefs(
-    factory: DiskDataStoreFactory,
-) {
+class NavBarPrefs(factory: DiskDataStoreFactory) {
     val wasNavBarHidden = factory.create("was_nav_bar_hidden") { false }
 }

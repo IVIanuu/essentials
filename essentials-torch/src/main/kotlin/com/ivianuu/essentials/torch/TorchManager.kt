@@ -25,7 +25,7 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,8 +37,18 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-@Binding(ApplicationComponent::class)
-class TorchManager(
+interface TorchManager {
+    val torchState: StateFlow<Boolean>
+
+    suspend fun toggleTorch()
+
+    companion object {
+        const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
+    }
+}
+
+@ImplBinding(ApplicationComponent::class)
+class RealTorchManager(
     private val broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
@@ -47,10 +57,10 @@ class TorchManager(
     private val globalScope: GlobalScope,
     private val logger: Logger,
     private val toaster: Toaster,
-) {
+) : TorchManager {
 
     private val _torchState = MutableStateFlow(false)
-    val torchState: StateFlow<Boolean> get() = _torchState
+    override val torchState: StateFlow<Boolean> get() = _torchState
 
     private var foregroundJob: ForegroundJob? = null
 
@@ -69,12 +79,12 @@ class TorchManager(
     }
 
     init {
-        broadcasts(ACTION_TOGGLE_TORCH)
+        broadcasts(TorchManager.ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
             .launchIn(globalScope)
     }
 
-    suspend fun toggleTorch() = withContext(dispatchers.main) {
+    override suspend fun toggleTorch() = withContext(dispatchers.main) {
         tryOrToast {
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
@@ -103,9 +113,5 @@ class TorchManager(
             t.printStackTrace()
             toaster.toast(R.string.es_failed_to_toggle_torch)
         }
-    }
-
-    companion object {
-        const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
     }
 }

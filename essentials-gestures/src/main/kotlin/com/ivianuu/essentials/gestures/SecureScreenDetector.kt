@@ -23,56 +23,47 @@ import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
 
-// todo make this class a single shared flow
+typealias IsOnSecureScreen = Flow<Boolean>
 
 @Binding(ApplicationComponent::class)
-class SecureScreenDetector(
-    private val globalScope: GlobalScope,
-    private val logger: Logger,
-    private val services: AccessibilityServices,
-) {
-
-    private val _isOnSecureScreen = MutableStateFlow(false)
-    val isOnSecureScreen: StateFlow<Boolean> get() = _isOnSecureScreen
-
-    init {
-        services.applyConfig(
-            AccessibilityConfig(
-                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-            )
+fun isOnSecureScreen(
+    globalScope: GlobalScope,
+    logger: Logger,
+    services: AccessibilityServices,
+): IsOnSecureScreen {
+    services.applyConfig(
+        AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
+    )
+    return services.events
+        .filter { it.packageName != null && it.className != null }
+        .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
+        .map { event ->
+            val packageName = event.packageName!!.toString()
+            val className = event.className!!.toString()
 
-        services.events
-            .onEach { onAccessibilityEvent(it) }
-            .launchIn(globalScope)
-    }
+            // val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
+            // val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
 
-    private fun onAccessibilityEvent(event: AccessibilityEvent) {
-        // ignore keyboards
-        if (event.className == "android.inputmethodservice.SoftInputWindow") {
-            return
+            var isOnSecureScreen = "packageinstaller" in packageName
+
+            if (!isOnSecureScreen) {
+                isOnSecureScreen = packageName == "com.android.settings" &&
+                        className == "android.app.MaterialDialog"
+            }
+
+            isOnSecureScreen
         }
-
-        val packageName = event.packageName?.toString() ?: return
-        val className = event.className?.toString() ?: return
-
-        // val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
-        // val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
-
-        var isOnSecureScreen = "packageinstaller" in packageName
-
-        if (!isOnSecureScreen) {
-            isOnSecureScreen = packageName == "com.android.settings" &&
-                    className == "android.app.MaterialDialog"
-        }
-
-        // distinct
-        logger.d("on secure screen changed: $isOnSecureScreen")
-        _isOnSecureScreen.value = isOnSecureScreen
-    }
+        .distinctUntilChanged()
+        .onEach { logger.d("on secure screen changed: $it") }
+        .shareIn(globalScope, 1, SharingStarted.WhileSubscribed(1000))
 }

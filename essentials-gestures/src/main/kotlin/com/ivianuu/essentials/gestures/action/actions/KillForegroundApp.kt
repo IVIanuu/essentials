@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.RecentAppsProvider
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
@@ -32,12 +31,11 @@ fun killForegroundAction(
 @FunBinding
 suspend fun killApp(
     buildInfo: BuildInfo,
+    currentAppFlow: currentApp,
     getHomePackage: getHomePackage,
-    recentAppsProvider: RecentAppsProvider,
     runRootCommand: runRootCommand,
 ) {
-    val currentApp = recentAppsProvider.currentApp.first()
-
+    val currentApp = currentAppFlow().first()
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&
         currentApp != buildInfo.packageName && // we have no suicidal intentions :D

@@ -22,91 +22,62 @@ import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.flow.shareIn
 
-// todo make this class a single shared flow
+typealias RecentApps = Flow<List<String>>
 
-/**
- * Recent apps provider
- */
 @Binding(ApplicationComponent::class)
-class RecentAppsProvider(
-    private val globalScope: GlobalScope,
-    private val logger: Logger,
-    private val services: AccessibilityServices,
-) {
-
-    private val _recentApps = MutableStateFlow(emptyList<String>())
-    val recentsApps: StateFlow<List<String>> get() = _recentApps
-
-    init {
-        services.applyConfig(
-            AccessibilityConfig(
-                eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-            )
+fun recentApps(
+    globalScope: GlobalScope,
+    logger: Logger,
+    services: AccessibilityServices,
+): RecentApps {
+    services.applyConfig(
+        AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
+    )
 
-        services
-            .events
-            .onEach { handleEvent(it) }
-            .launchIn(globalScope)
-    }
+    return services.events
+        .filter { !it.isFullScreen }
+        .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
+        .filter { it.packageName != null && it.packageName != "android" }
+        .map { it.packageName!!.toString() }
+        .scan(emptyList<String>()) { recentApps, currentApp ->
+            val index = recentApps.indexOf(currentApp)
 
-    private fun handleEvent(event: AccessibilityEvent) {
-        // indicates that its a activity
-        if (!event.isFullScreen) {
-            return
+            // app has not changed
+            if (index == 0) return@scan recentApps
+
+            val newRecentApps = recentApps.toMutableList()
+
+            // remove the app from the list
+            if (index != -1) {
+                newRecentApps.removeAt(index)
+            }
+
+            // add the package to the first position
+            newRecentApps.add(0, currentApp)
+
+            // make sure that were not getting bigger than the limit
+            while (newRecentApps.size > 10) {
+                newRecentApps.removeAt(newRecentApps.lastIndex)
+            }
+            newRecentApps
         }
-
-        // nope we don't wanna keyboards in our recent apps list :D
-        if (event.className == "android.inputmethodservice.SoftInputWindow") {
-            return
-        }
-
-        val packageName = event.packageName?.toString()
-
-        if (packageName == null ||
-            packageName == "android"
-        ) {
-            return
-        }
-
-        handlePackage(packageName)
-    }
-
-    private fun handlePackage(packageName: String) {
-        val recentApps = _recentApps.value.toMutableList()
-        val index = recentApps.indexOf(packageName)
-
-        // app has not changed
-        if (index == 0) {
-            return
-        }
-
-        // remove the app from the list
-        if (index != -1) {
-            recentApps.removeAt(index)
-        }
-
-        // add the package to the first position
-        recentApps.add(0, packageName)
-
-        // make sure that were not getting bigger than the limit
-        val finalRecentApps = recentApps.chunked(10).first()
-
-        logger.d("recent apps changed $finalRecentApps")
-
-        // push
-        _recentApps.value = finalRecentApps
-    }
+        .distinctUntilChanged()
+        .onEach { logger.d("recent apps changed $it") }
+        .shareIn(globalScope, 1)
 }
 
-val RecentAppsProvider.currentApp: Flow<String?>
-    get() = recentsApps
-        .map { it.firstOrNull() }
+@FunBinding
+fun currentApp(recentApps: RecentApps): Flow<String?> =
+    recentApps.map { it.firstOrNull() }.distinctUntilChanged()

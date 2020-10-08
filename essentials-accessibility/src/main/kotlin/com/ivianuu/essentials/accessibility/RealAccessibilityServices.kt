@@ -18,7 +18,7 @@ package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +37,7 @@ interface AccessibilityServices {
     suspend fun performGlobalAction(action: Int): Boolean
 }
 
-@Binding(ApplicationComponent::class)
+@ImplBinding(ApplicationComponent::class)
 class RealAccessibilityServices : AccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)

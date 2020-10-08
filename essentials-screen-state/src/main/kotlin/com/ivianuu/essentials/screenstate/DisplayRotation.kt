@@ -25,13 +25,11 @@ import android.view.WindowManager
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -40,14 +38,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 @FunBinding
 fun displayRotation(
     configChanges: configChanges,
     getCurrentDisplayRotation: getCurrentDisplayRotation,
-    globalScope: GlobalScope,
     logger: Logger,
     rotationChanges: rotationChanges,
     screenState: screenState,
@@ -69,12 +65,6 @@ fun displayRotation(
         .onStart { emit(Unit) }
         .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
-        .shareIn(
-            scope = globalScope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
-        )
-
 }
 
 @FunBinding
