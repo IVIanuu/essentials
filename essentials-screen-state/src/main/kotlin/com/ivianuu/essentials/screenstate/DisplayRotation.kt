@@ -27,9 +27,8 @@ import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,19 +43,18 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Binding(ApplicationComponent::class)
-class DisplayRotationProvider(
-    private val applicationContext: ApplicationContext,
-    private val dispatchers: AppCoroutineDispatchers,
-    private val globalScope: GlobalScope,
-    private val logger: Logger,
-    private val screenState: screenState,
-    private val windowManager: WindowManager,
-) {
-
-    val displayRotation: Flow<DisplayRotation> = screenState()
-        .flatMapLatest { screenState ->
-            if (screenState.isOn) {
+@FunBinding
+fun displayRotation(
+    configChanges: configChanges,
+    getCurrentDisplayRotation: getCurrentDisplayRotation,
+    globalScope: GlobalScope,
+    logger: Logger,
+    rotationChanges: rotationChanges,
+    screenState: screenState,
+): Flow<DisplayRotation> {
+    return screenState()
+        .flatMapLatest { currentScreenState ->
+            if (currentScreenState.isOn) {
                 merge(
                     rotationChanges(),
                     configChanges()
@@ -77,41 +75,47 @@ class DisplayRotationProvider(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000)
         )
 
-    private suspend fun getCurrentDisplayRotation(): DisplayRotation =
-        withContext(dispatchers.default) {
-            when (windowManager.defaultDisplay.rotation) {
-                Surface.ROTATION_0 -> DisplayRotation.PortraitUp
-                Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
-                Surface.ROTATION_180 -> DisplayRotation.PortraitDown
-                Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
-                else -> error("unexpected rotation")
-            }
-        }
+}
 
-    private fun rotationChanges() = callbackFlow<Unit> {
-        val listener = object :
-            OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
-            override fun onOrientationChanged(orientation: Int) {
-                offerSafe(Unit)
-            }
-        }
-        listener.enable()
-        awaitClose { listener.disable() }
+@FunBinding
+suspend fun getCurrentDisplayRotation(
+    dispatchers: AppCoroutineDispatchers,
+    windowManager: WindowManager,
+): DisplayRotation = withContext(dispatchers.io) {
+    when (windowManager.defaultDisplay.rotation) {
+        Surface.ROTATION_0 -> DisplayRotation.PortraitUp
+        Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
+        Surface.ROTATION_180 -> DisplayRotation.PortraitDown
+        Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
+        else -> error("unexpected rotation")
     }
+}
 
-    private fun configChanges() = callbackFlow<Unit> {
-        val callbacks = object : ComponentCallbacks2 {
-            override fun onConfigurationChanged(newConfig: Configuration) {
-                offerSafe(Unit)
-            }
-
-            override fun onLowMemory() {
-            }
-
-            override fun onTrimMemory(level: Int) {
-            }
+@FunBinding
+fun rotationChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow {
+    val listener = object :
+        OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
+        override fun onOrientationChanged(orientation: Int) {
+            offerSafe(Unit)
         }
-        applicationContext.registerComponentCallbacks(callbacks)
-        awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
     }
+    listener.enable()
+    awaitClose { listener.disable() }
+}
+
+@FunBinding
+fun configChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow {
+    val callbacks = object : ComponentCallbacks2 {
+        override fun onConfigurationChanged(newConfig: Configuration) {
+            offerSafe(Unit)
+        }
+
+        override fun onLowMemory() {
+        }
+
+        override fun onTrimMemory(level: Int) {
+        }
+    }
+    applicationContext.registerComponentCallbacks(callbacks)
+    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
 }

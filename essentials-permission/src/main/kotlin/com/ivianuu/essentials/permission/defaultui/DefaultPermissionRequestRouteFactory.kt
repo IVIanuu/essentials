@@ -23,11 +23,12 @@ import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
+import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.storeProvider
@@ -105,15 +106,16 @@ private fun Permission(
 
 @Binding
 fun defaultPermissionStore(
+    hasPermissions: hasPermissions,
     logger: Logger,
     navigator: Navigator,
-    permissionManager: PermissionManager,
+    requestHandler: requestHandler,
     startUi: startUi,
     request: @Assisted PermissionRequest,
 ) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions
-            .filterNot { permissionManager.hasPermissions(it).first() }
+            .filterNot { hasPermissions(listOf(it)).first() }
 
         logger.d("update permissions to process or finish not granted $permissionsToProcess")
 
@@ -129,8 +131,7 @@ fun defaultPermissionStore(
     onEachAction { action ->
         when (action) {
             is PermissionAction.PermissionClicked -> {
-                permissionManager.requestHandlerForPermission(action.permission)
-                    .request(action.permission)
+                action.permission.requestHandler().request(action.permission)
                 startUi()
                 updatePermissionsToProcessOrFinish()
             }

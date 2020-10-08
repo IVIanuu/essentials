@@ -19,8 +19,8 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.Intent
 import android.graphics.Rect
 import com.ivianuu.essentials.broadcast.BroadcastFactory
-import com.ivianuu.essentials.screenstate.DisplayRotationProvider
 import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.essentials.screenstate.displayRotation
 import com.ivianuu.essentials.screenstate.screenState
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -55,7 +55,7 @@ class NavBarManager(
     private val broadcastFactory: BroadcastFactory,
     private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
     private val dispatchers: AppCoroutineDispatchers,
-    private val displayRotationProvider: DisplayRotationProvider,
+    private val displayRotation: displayRotation,
     private val globalScope: GlobalScope,
     private val logger: Logger,
     private val prefs: NavBarPrefs,
@@ -91,7 +91,7 @@ class NavBarManager(
             buildList<Deferred<*>> {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
-                        this += displayRotationProvider.displayRotation.drop(1)
+                        this += displayRotation().drop(1)
                     }
 
                     if (config.showWhileScreenOff) {
@@ -153,7 +153,7 @@ class NavBarManager(
 
     private suspend fun getNavigationBarHeight(): Int {
         val name =
-            if (displayRotationProvider.displayRotation.first().isPortrait) "navigation_bar_height"
+            if (displayRotation().first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
         val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
         return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
@@ -161,28 +161,31 @@ class NavBarManager(
 
     private suspend fun getOverscanRect(
         navBarHeight: Int,
-        config: NavBarConfig
-    ) = when (config.rotationMode) {
-        NavBarRotationMode.Marshmallow -> {
-            when (displayRotationProvider.displayRotation.first()) {
-                DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-                DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
-                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
+        config: NavBarConfig,
+    ): Rect {
+        val currentRotation = displayRotation().first()
+        return when (config.rotationMode) {
+            NavBarRotationMode.Marshmallow -> {
+                when (currentRotation) {
+                    DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+                    DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
+                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+                    DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
+                }
             }
-        }
-        NavBarRotationMode.Nougat -> {
-            when (displayRotationProvider.displayRotation.first()) {
-                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                else -> Rect(0, 0, 0, navBarHeight)
+            NavBarRotationMode.Nougat -> {
+                when (currentRotation) {
+                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+                    else -> Rect(0, 0, 0, navBarHeight)
+                }
             }
-        }
-        NavBarRotationMode.Tablet -> {
-            when (displayRotationProvider.displayRotation.first()) {
-                DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-                DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
-                DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
+            NavBarRotationMode.Tablet -> {
+                when (currentRotation) {
+                    DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+                    DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
+                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+                    DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
+                }
             }
         }
     }

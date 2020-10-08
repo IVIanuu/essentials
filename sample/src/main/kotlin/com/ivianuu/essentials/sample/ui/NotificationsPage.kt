@@ -29,9 +29,10 @@ import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
@@ -156,16 +157,17 @@ private fun NotificationPermissions(
 
 @Binding
 fun notificationStore(
+    hasPermissions: hasPermissions,
     notifications: notifications,
     notificationStore: NotificationStore,
-    permissionManager: PermissionManager,
+    requestPermissions: requestPermissions,
 ) = storeProvider<NotificationsState, NotificationsAction>(NotificationsState()) {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
         Permission.Title withValue "Notifications"
     )
 
-    permissionManager.hasPermissions(permission)
+    hasPermissions(listOf(permission))
         .onEach { setState { copy(hasPermissions = it) } }
         .launchIn(this)
 
@@ -175,7 +177,7 @@ fun notificationStore(
     onEachAction { action ->
         when (action) {
             is RequestPermissionsClicked -> {
-                permissionManager.requestPermissions(permission)
+                requestPermissions(listOf(permission))
             }
             is NotificationClicked -> {
                 notificationStore.openNotification(action.notification.sbn.notification)

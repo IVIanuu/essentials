@@ -31,10 +31,10 @@ import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerSe
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.withValue
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @FunBinding
 @Composable
-fun PermissionsPage(permissionManager: PermissionManager) {
+fun PermissionsPage(requestPermissions: requestPermissions) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {
@@ -105,14 +105,16 @@ fun PermissionsPage(permissionManager: PermissionManager) {
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    permissionManager.requestPermissions(
-                        camera,
-                        phone,
-                        accessibility,
-                        notificationListener,
-                        systemOverlay,
-                        writeSecureSettings,
-                        writeSettings
+                    requestPermissions(
+                        listOf(
+                            camera,
+                            phone,
+                            accessibility,
+                            notificationListener,
+                            systemOverlay,
+                            writeSecureSettings,
+                            writeSettings
+                        )
                     )
                 }
             }

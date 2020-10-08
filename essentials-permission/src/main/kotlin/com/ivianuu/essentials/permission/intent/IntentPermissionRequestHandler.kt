@@ -19,9 +19,9 @@ package com.ivianuu.essentials.permission.intent
 import android.content.Intent
 import com.ivianuu.essentials.coroutines.parallelForEach
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -39,7 +39,7 @@ val Permission.Companion.Intent by lazy {
 
 @PermissionRequestHandlerBinding
 class IntentPermissionRequestHandler(
-    private val permissionManager: PermissionManager,
+    private val hasPermissions: hasPermissions,
     private val startActivityForIntentResult: startActivityForIntentResult,
 ) : PermissionRequestHandler {
 
@@ -52,7 +52,7 @@ class IntentPermissionRequestHandler(
                 startActivityForIntentResult(permission[Permission.Intent])
             }.onAwait {}
             async {
-                while (!permissionManager.hasPermissions(permission).first()) {
+                while (!hasPermissions(listOf(permission)).first()) {
                     delay(100)
                 }
             }.onAwait {}

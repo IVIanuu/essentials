@@ -16,7 +16,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemC
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
-import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -34,7 +34,7 @@ fun actionPickerStore(
     getAction: getAction,
     getActions: getActions,
     actionPickerDelegates: Set<ActionPickerDelegate>,
-    permissionManager: PermissionManager,
+    requestPermissions: requestPermissions,
     resources: Resources,
     showDefaultOption: @Assisted Boolean,
     showNoneOption: @Assisted Boolean,
@@ -77,7 +77,7 @@ fun actionPickerStore(
                 val result = action.item.getResult() ?: return@onEachAction
                 if (result is ActionPickerResult.Action) {
                     val pickedAction = getAction(result.actionKey)
-                    if (!permissionManager.requestPermissions(pickedAction.permissions)) return@onEachAction
+                    if (!requestPermissions(pickedAction.permissions)) return@onEachAction
                 }
 
                 navigator.popTop(result = result)

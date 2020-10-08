@@ -65,11 +65,9 @@ interface PermissionRequestHandler {
 }
 
 interface PermissionRequestRouteFactory {
-
     fun createRoute(
         request: PermissionRequest
     ): Route
-
 }
 
 data class PermissionRequest(val permissions: List<Permission>)

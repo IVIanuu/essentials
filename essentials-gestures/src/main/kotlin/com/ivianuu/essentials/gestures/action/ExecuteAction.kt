@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
@@ -13,8 +13,8 @@ import kotlinx.coroutines.withContext
 suspend fun executeAction(
     dispatchers: AppCoroutineDispatchers,
     logger: Logger,
-    permissionManager: PermissionManager,
     getAction: getAction,
+    requestPermissions: requestPermissions,
     unlockScreen: unlockScreen,
     toaster: Toaster,
     key: @Assisted String,
@@ -23,7 +23,7 @@ suspend fun executeAction(
     val action = getAction(key)
 
     // check permissions
-    if (!permissionManager.requestPermissions(action.permissions)) {
+    if (!requestPermissions(action.permissions)) {
         logger.d("couldn't get permissions for $key")
         return@withContext
     }
