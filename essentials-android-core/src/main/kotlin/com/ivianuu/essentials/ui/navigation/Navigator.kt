@@ -34,6 +34,8 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
@@ -207,6 +209,10 @@ class Navigator {
 
     }
 
+    companion object {
+        @Binding(ApplicationComponent::class)
+        fun binding() = Navigator()
+    }
 }
 
 val NavigatorAmbient =
