@@ -37,10 +37,10 @@ import kotlinx.coroutines.withContext
 /**
  * Provides the torch state
  */
-interface TorchManager {
+interface Torch {
     val torchState: StateFlow<Boolean>
 
-    suspend fun toggleTorch()
+    suspend fun toggle()
 
     companion object {
         const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
@@ -48,7 +48,7 @@ interface TorchManager {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealTorchManager(
+class RealTorch(
     private val broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
@@ -57,7 +57,7 @@ class RealTorchManager(
     private val globalScope: GlobalScope,
     private val logger: Logger,
     private val toaster: Toaster,
-) : TorchManager {
+) : Torch {
 
     private val _torchState = MutableStateFlow(false)
     override val torchState: StateFlow<Boolean> get() = _torchState
@@ -79,12 +79,12 @@ class RealTorchManager(
     }
 
     init {
-        broadcasts(TorchManager.ACTION_TOGGLE_TORCH)
-            .onEach { toggleTorch() }
+        broadcasts(Torch.ACTION_TOGGLE_TORCH)
+            .onEach { toggle() }
             .launchIn(globalScope)
     }
 
-    override suspend fun toggleTorch() = withContext(dispatchers.main) {
+    override suspend fun toggle() = withContext(dispatchers.main) {
         tryOrToast {
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {

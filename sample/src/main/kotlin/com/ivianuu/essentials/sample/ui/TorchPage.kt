@@ -28,7 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.torch.TorchManager
+import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -37,9 +37,9 @@ import kotlinx.coroutines.launch
 
 @FunBinding
 @Composable
-fun TorchPage(torchManager: TorchManager) {
+fun TorchPage(torch: Torch) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
-        val torchState = torchManager.torchState.collectAsState()
+        val torchState = torch.torchState.collectAsState()
 
         Column(
             modifier = Modifier.center(),
@@ -54,7 +54,7 @@ fun TorchPage(torchManager: TorchManager) {
             Button(
                 onClick = {
                     scope.launch {
-                        torchManager.toggleTorch()
+                        torch.toggle()
                     }
                 }
             ) {
