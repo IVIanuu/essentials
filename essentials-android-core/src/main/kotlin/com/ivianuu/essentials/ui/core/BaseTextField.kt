@@ -5,8 +5,6 @@ import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.currentTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +34,7 @@ fun BaseTextField(
     onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
     cursorColor: Color = contentColor()
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
+    var textFieldValue by rememberState { TextFieldValue() }
     if (textFieldValue.text != value) {
         @OptIn(InternalTextApi::class)
         textFieldValue = TextFieldValue(

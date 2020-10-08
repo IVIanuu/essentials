@@ -16,16 +16,17 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.lazy.LazyRowItems
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
@@ -107,20 +108,19 @@ fun <T> ResourceBox(
     success: @Composable (T) -> Unit
 ) {
     // we only wanna animate if the resource 'state' has changed
-    val resourceState =
-        remember(resource::class) { mutableStateOf(resource) }
-    resourceState.value = resource
+    var resourceState by rememberState(resource::class) { resource }
+    resourceState = resource
 
     AnimatedBox(
         current = resourceState,
         modifier = modifier,
         transition = transition
     ) { currentState ->
-        when (val currentResourceState = currentState.value) {
+        when (currentState) {
             is Idle -> idle()
             is Loading -> loading()
-            is Success -> success(currentResourceState.value)
-            is Error -> error(currentResourceState.error)
+            is Success -> success(currentState.value)
+            is Error -> error(currentState.error)
         }
     }
 }

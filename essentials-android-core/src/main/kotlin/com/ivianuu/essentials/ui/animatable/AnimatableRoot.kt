@@ -46,13 +46,13 @@ class AnimatableRoot {
     fun animatableFor(tag: Any): Animatable {
         val state = animatables.getOrPut(tag) { AnimatableState(tag) }
         state.refCount()
-        return state.state.value
+        return state.animatable
     }
 
     @Stable
     private inner class AnimatableState(private val tag: Any) {
 
-        val state = mutableStateOf(Animatable(tag))
+        val animatable by mutableStateOf(Animatable(tag))
 
         private var refCount = 0
 
