@@ -42,16 +42,16 @@ internal fun SecureSettingsHeader(text: String) {
 @FunBinding
 @Composable
 fun popNavigatorOnceSecureSettingsGranted(
+    hasSecureSettingsPermission: hasSecureSettingsPermission,
     toaster: Toaster,
     navigator: Navigator,
-    secureSettings: SecureSettings,
     toast: @Assisted Boolean,
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
     launchInComposition {
         while (true) {
-            if (secureSettings.canWrite()) {
+            if (hasSecureSettingsPermission()) {
                 if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
                 navigator.popTop(result = true)
                 break

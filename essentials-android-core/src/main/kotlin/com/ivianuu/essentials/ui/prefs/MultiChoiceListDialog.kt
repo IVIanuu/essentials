@@ -16,15 +16,17 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.state
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 
@@ -39,10 +41,10 @@ fun <T> MultiChoiceDialogListItem(
     items: List<MultiChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     MultiChoiceDialogListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -72,21 +74,21 @@ fun <T> MultiChoiceDialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
-            val selectedItems = state {
+            var selectedItems by rememberState {
                 value
                     .map { value -> items.first { it.value == value } }
             }
 
             MultiChoiceListDialog(
                 items = items,
-                selectedItems = selectedItems.value,
-                onSelectionsChanged = { selectedItems.value = it },
+                selectedItems = selectedItems,
+                onSelectionsChanged = { selectedItems = it },
                 item = { Text(it.title) },
                 title = dialogTitle,
                 positiveButton = {
                     TextButton(
                         onClick = {
-                            val newValue = selectedItems.value.map { it.value }.toSet()
+                            val newValue = selectedItems.map { it.value }.toSet()
                             onValueChange(newValue)
                             dismiss()
                         }

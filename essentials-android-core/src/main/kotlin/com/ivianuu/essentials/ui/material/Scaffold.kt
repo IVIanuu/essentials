@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.material.DrawerConstants
 import androidx.compose.material.FabPosition
@@ -78,9 +78,9 @@ fun Scaffold(
             drawerElevation = drawerElevation,
             backgroundColor = backgroundColor
         ) { bodyPadding ->
-            val insets = if (applyInsets) currentInsets() else InnerPadding()
+            val insets = if (applyInsets) currentInsets() else PaddingValues()
             ProvideInsets(
-                InnerPadding(
+                PaddingValues(
                     start = max(bodyPadding.start, insets.start),
                     top = if (topBar == null) insets.top else bodyPadding.top,
                     end = max(bodyPadding.end, insets.end),

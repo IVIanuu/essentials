@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.core
 import android.view.View
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -27,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.ViewAmbient
@@ -94,7 +94,7 @@ fun ProvideInsets(
 fun ProvideWindowInsets(children: @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
-    var insets by state { InnerPadding() }
+    var insets by rememberState { PaddingValues() }
 
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, rawInsets ->

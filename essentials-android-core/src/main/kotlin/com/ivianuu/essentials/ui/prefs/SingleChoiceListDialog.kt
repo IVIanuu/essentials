@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Text
 import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text
@@ -38,10 +40,10 @@ fun <T> SingleChoiceDialogListItem(
     items: List<SingleChoiceDialogListItem.Item<T>>,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     SingleChoiceDialogListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,

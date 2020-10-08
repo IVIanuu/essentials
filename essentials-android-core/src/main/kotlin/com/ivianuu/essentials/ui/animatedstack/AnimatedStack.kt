@@ -1,5 +1,7 @@
 package com.ivianuu.essentials.ui.animatedstack
 
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Stack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -10,13 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.layout.Stack
 import com.ivianuu.essentials.ui.animatable.ProvideAnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.common.rememberUntrackedState
 
 @Composable
 fun <T> AnimatedBox(
@@ -40,7 +40,7 @@ fun <T> AnimatedStack(
     transition: StackTransition = FadeStackTransition(),
     item: @Composable (T) -> Unit
 ) {
-    val lastChildren = untrackedState {
+    val lastChildren = rememberUntrackedState {
         emptyList<AnimatedStackChild<T>>()
     }
     val children = remember(items, item) {

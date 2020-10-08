@@ -23,9 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.stateFor
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.util.unwrap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -155,7 +155,7 @@ fun <T> produceResource(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): Resource<T> {
-    var state by stateFor<Resource<T>>(*inputs) { Idle }
+    var state by rememberState<Resource<T>>(*inputs) { Idle }
 
     launchInComposition(*inputs) {
         state = Loading

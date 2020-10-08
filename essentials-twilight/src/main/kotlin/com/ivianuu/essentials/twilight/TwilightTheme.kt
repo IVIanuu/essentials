@@ -28,7 +28,7 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
-import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.collectAsResource
@@ -53,7 +53,7 @@ fun TwilightTheme(
             if (currentTwilightState.useBlack) blackColors else darkColors
         } else lightColors
 
-        val lastColors = untrackedState { colorsForTwilightState() }
+        val lastColors = rememberUntrackedState { colorsForTwilightState() }
         val targetColors = colorsForTwilightState()
 
         val animation = key(currentTwilightState) { animatedFloat(0f) }

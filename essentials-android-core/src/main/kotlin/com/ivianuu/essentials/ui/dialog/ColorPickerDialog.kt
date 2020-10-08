@@ -49,8 +49,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
-import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
@@ -61,6 +59,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.BaseTextField
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
@@ -100,8 +99,8 @@ fun ColorPickerDialog(
     title: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val (currentColor, setCurrentColor) = state { initialColor }
-    val (currentPage, setCurrentPage) = state { ColorPickerPage.Colors }
+    val (currentColor, setCurrentColor) = rememberState { initialColor }
+    val (currentPage, setCurrentPage) = rememberState { ColorPickerPage.Colors }
     val otherPage = when (currentPage) {
         ColorPickerPage.Colors -> ColorPickerPage.Editor
         ColorPickerPage.Editor -> ColorPickerPage.Colors
@@ -176,8 +175,8 @@ private fun ColorGrid(
     onColorSelected: (Color) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val currentPaletteState = state<ColorPickerPalette?> { null }
-    AnimatedBox(current = currentPaletteState.value) { palette ->
+    var currentPalette by rememberState<ColorPickerPalette?> { null }
+    AnimatedBox(current = currentPalette) { palette ->
         val items = remember {
             palette
                 ?.colors
@@ -201,7 +200,7 @@ private fun ColorGrid(
                                 ) {
                                     when (item) {
                                         is ColorGridItem.Back -> ColorGridBackButton(
-                                            onClick = { currentPaletteState.value = null }
+                                            onClick = { currentPalette = null }
                                         )
                                         is ColorGridItem.Color -> ColorGridItem(
                                             color = item.color,
@@ -211,7 +210,7 @@ private fun ColorGrid(
                                                     val paletteForItem =
                                                         colors.first { it.front == item.color }
                                                     if (paletteForItem.colors.size > 1) {
-                                                        currentPaletteState.value = paletteForItem
+                                                        currentPalette = paletteForItem
                                                     } else {
                                                         onColorSelected(item.color)
                                                     }
@@ -333,7 +332,7 @@ private fun ColorEditorHeader(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                var hexInput by stateFor(color) {
+                var hexInput by rememberState(color) {
                     color.toHexString(includeAlpha = showAlphaSelector)
                 }
                 Text("#")

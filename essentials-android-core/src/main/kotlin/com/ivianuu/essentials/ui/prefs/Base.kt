@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -28,9 +29,10 @@ fun Modifier.preferenceDependencies(
     vararg dependencies: Dependency<*>
 ): Modifier = composed {
     val dependenciesSatisfied = dependencies
-        .map {
-            key(it) {
-                it.dataStore.asState().value == it.value
+        .map { dependency ->
+            key(dependency) {
+                val currentValue by dependency.dataStore.asState()
+                currentValue == dependency.requiredValue
             }
         }
         .all { it }
@@ -39,4 +41,6 @@ fun Modifier.preferenceDependencies(
 }
 
 @Immutable
-data class Dependency<T>(val dataStore: DataStore<T>, val value: T)
+data class Dependency<T>(val dataStore: DataStore<T>, val requiredValue: T)
+
+infix fun <T> DataStore<T>.requiresValue(requiredValue: T) = Dependency(this, requiredValue)

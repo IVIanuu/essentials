@@ -7,8 +7,8 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
+import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun WriteSecureSettingsPermission(vararg metadata: KeyWithValue<*>) = Permission(
@@ -22,14 +22,14 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
 
 @PermissionStateProviderBinding
 class WriteSecureSettingsPermissionStateProvider(
-    private val secureSettings: SecureSettings,
+    private val hasSecureSettingsPermission: hasSecureSettingsPermission,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission
 
     override suspend fun isGranted(permission: Permission): Boolean =
-        secureSettings.canWrite()
+        hasSecureSettingsPermission()
 
 }
 

@@ -16,18 +16,20 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.foundation.Box
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Layout
-import androidx.compose.ui.platform.ConfigurationAmbient
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.gesture.tapGestureFilter
+import androidx.compose.ui.platform.ConfigurationAmbient
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 
@@ -48,11 +50,11 @@ fun PopupRoute(
         navigator.popTop()
     }
 
-    val dismissed = untrackedState { false }
+    var dismissed by rememberUntrackedState { false }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
-        if (!dismissed.value) {
-            dismissed.value = true
+        if (!dismissed) {
+            dismissed = true
             navigator.popTop()
             if (cancelled) onCancel?.invoke()
         }

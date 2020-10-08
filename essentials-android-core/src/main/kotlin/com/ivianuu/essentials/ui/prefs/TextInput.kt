@@ -16,14 +16,16 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.stateFor
-import androidx.compose.ui.Modifier
 import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 
@@ -40,10 +42,10 @@ fun TextInputDialogListItem(
     allowEmpty: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var state by dataStore.asState()
     TextInputDialogListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = state,
+        onValueChange = { state = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -77,19 +79,19 @@ fun TextInputDialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
-            val currentValue = stateFor(value) { value }
+            var currentValue by rememberState(value) { value }
 
             TextInputDialog(
-                value = currentValue.value,
-                onValueChange = { currentValue.value = it },
+                value = currentValue,
+                onValueChange = { currentValue = it },
                 title = dialogTitle,
                 label = dialogLabel,
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     TextButton(
-                        enabled = allowEmpty || currentValue.value.isNotEmpty(),
+                        enabled = allowEmpty || currentValue.isNotEmpty(),
                         onClick = {
-                            onValueChange(currentValue.value)
+                            onValueChange(currentValue)
                             dismiss()
                         }
                     ) { Text(R.string.es_ok) }

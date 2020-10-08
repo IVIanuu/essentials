@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Border
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.datastore.asState
@@ -42,10 +43,10 @@ fun ColorDialogListItem(
     allowCustomArgb: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     ColorDialogListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,

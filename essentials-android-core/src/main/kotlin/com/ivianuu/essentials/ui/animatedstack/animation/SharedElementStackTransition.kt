@@ -15,8 +15,6 @@ import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.platform.DensityAmbient
-import androidx.compose.ui.unit.height
-import androidx.compose.ui.unit.width
 import androidx.compose.ui.util.lerp
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.MetaProp
@@ -26,7 +24,7 @@ import com.ivianuu.essentials.ui.animatable.animationOverlay
 import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
-import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.coroutines.produceState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
@@ -65,8 +63,8 @@ fun SharedElementStackTransition(
     }
 
     if (bounds.all { it.first != null && it.second != null } || forceRun) {
-        var otherComplete by untrackedState { false }
-        var sharedElementComplete by untrackedState { false }
+        var otherComplete by rememberUntrackedState { false }
+        var sharedElementComplete by rememberUntrackedState { false }
 
         fun completeIfPossible() {
             if (otherComplete && (sharedElementComplete || forceRun)) {

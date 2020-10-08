@@ -21,14 +21,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.state
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
@@ -41,11 +43,11 @@ fun TextInputRoute(
 ) = DialogRoute {
     val navigator = NavigatorAmbient.current
 
-    val (currentValue, setCurrentValue) = state { initial }
+    var currentValue by rememberState { initial }
 
     TextInputDialog(
         value = currentValue,
-        onValueChange = setCurrentValue,
+        onValueChange = { currentValue = it },
         label = label,
         keyboardType = keyboardType,
         title = title,

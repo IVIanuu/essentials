@@ -18,6 +18,8 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
@@ -33,10 +35,10 @@ fun SwitchListItem(
     leading: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     SwitchListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,

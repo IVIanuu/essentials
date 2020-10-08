@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.coroutines
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.launchInComposition
-import androidx.compose.runtime.state
 import com.ivianuu.essentials.ui.common.rememberRetained
+import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.cancel
@@ -39,7 +39,7 @@ fun <T> produceState(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> T
 ): State<T> {
-    val state = state { initial }
+    val state = rememberState { initial }
     launchInComposition(*inputs) { state.value = block() }
     return state
 }

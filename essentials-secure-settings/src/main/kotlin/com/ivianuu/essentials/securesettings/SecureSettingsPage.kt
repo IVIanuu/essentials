@@ -33,10 +33,10 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun SecureSettingsPage(
+    grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    secureSettings: SecureSettings,
     toaster: Toaster,
     showHideNavBarHint: @Assisted Boolean = false,
 ) {
@@ -72,7 +72,7 @@ fun SecureSettingsPage(
                 subtitle = { Text(R.string.es_pref_use_root_summary) },
                 onClick = {
                     scope.launch {
-                        if (secureSettings.grantPermissionViaRoot()) {
+                        if (grantSecureSettingsPermissionViaRoot()) {
                             toaster.toast(R.string.es_secure_settings_permission_granted)
                         } else {
                             toaster.toast(R.string.es_secure_settings_no_root)

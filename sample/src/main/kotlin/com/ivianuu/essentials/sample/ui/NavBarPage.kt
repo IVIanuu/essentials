@@ -25,16 +25,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.state
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
-import com.ivianuu.essentials.securesettings.SecureSettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
+import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
+import com.ivianuu.essentials.ui.core.rememberState
+import com.ivianuu.essentials.ui.coroutines.produceState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -45,9 +47,9 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun NavBarPage(
+    hasSecureSettingsPermission: hasSecureSettingsPermission,
     navBarManager: NavBarManager,
     navigator: Navigator,
-    secureSettings: SecureSettings,
     secureSettingsPage: SecureSettingsPage,
 ) {
     Scaffold(
@@ -67,19 +69,21 @@ fun NavBarPage(
                 }
             }
 
-            val hideNavBar = state { false }
+            val hideNavBar = rememberState { false }
 
             onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
 
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }
 
+            val hasPermission by produceState(false) { hasSecureSettingsPermission() }
+
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 gravity = ContentGravity.Center
             ) {
                 Text(
-                    text = if (secureSettings.canWrite()) {
+                    text = if (hasPermission) {
                         if (hideNavBar.value) {
                             "Nav bar hidden"
                         } else {
@@ -94,7 +98,7 @@ fun NavBarPage(
 
             Button(
                 onClick = {
-                    if (secureSettings.canWrite()) {
+                    if (hasPermission) {
                         hideNavBar.value = !hideNavBar.value
                     } else {
                         navigator.push { secureSettingsPage(true) }

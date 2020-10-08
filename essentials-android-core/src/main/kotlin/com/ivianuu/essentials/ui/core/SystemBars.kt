@@ -30,7 +30,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -59,7 +58,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = contentColor().isDark
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
-    var globalBounds by state<Rect?> { null }
+    var globalBounds by rememberState<Rect?> { null }
     val density = DensityAmbient.current
 
     onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {

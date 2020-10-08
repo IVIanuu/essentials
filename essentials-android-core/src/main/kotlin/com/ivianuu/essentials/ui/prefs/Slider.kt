@@ -26,14 +26,16 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.stateFor
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.datastore.DataStore
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.util.UnitValueTextProvider
@@ -50,10 +52,10 @@ fun DoubleSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     DoubleSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -102,10 +104,10 @@ fun FloatSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     FloatSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -154,10 +156,10 @@ fun IntSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     IntSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -206,10 +208,10 @@ fun LongSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     LongSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -258,10 +260,10 @@ fun DpSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     DpSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -310,10 +312,10 @@ fun DurationSliderListItem(
     steps: Int = 0,
     modifier: Modifier = Modifier
 ) {
-    val state = dataStore.asState()
+    var value by dataStore.asState()
     DurationSliderListItem(
-        value = state.value,
-        onValueChange = { state.value = it },
+        value = value,
+        onValueChange = { value = it },
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -399,17 +401,17 @@ fun <T : Comparable<T>> BaseSliderListItem(
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val sliderState = stateFor(value) { toFloat(value) }
+            var sliderState by rememberState(value) { toFloat(value) }
 
             val floatRange = remember(toFloat, valueRange) {
                 toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
             }
 
             Slider(
-                value = sliderState.value,
-                onValueChange = { sliderState.value = it },
+                value = sliderState,
+                onValueChange = { sliderState = it },
                 onValueChangeEnd = {
-                    onValueChange(fromFloat(sliderState.value))
+                    onValueChange(fromFloat(sliderState))
                 },
                 valueRange = floatRange,
                 steps = steps,
@@ -421,7 +423,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     modifier = Modifier.widthIn(min = 72.dp),
                     gravity = ContentGravity.CenterEnd
                 ) {
-                    valueText(fromFloat(sliderState.value))
+                    valueText(fromFloat(sliderState))
                 }
             }
         }

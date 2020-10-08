@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
-import com.ivianuu.essentials.ui.prefs.Dependency
 import com.ivianuu.essentials.ui.prefs.DurationSliderListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
@@ -40,6 +39,7 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
+import com.ivianuu.essentials.ui.prefs.requiresValue
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -60,10 +60,7 @@ fun PrefsPage(prefs: Prefs) {
             )
 
             val dependenciesModifier = Modifier.preferenceDependencies(
-                Dependency(
-                    dataStore = prefs.switch,
-                    value = true
-                )
+                prefs.switch requiresValue true
             )
 
             Subheader(modifier = dependenciesModifier) { Text("Category") }

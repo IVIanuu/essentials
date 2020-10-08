@@ -23,16 +23,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.structuralEqualityPolicy
 
 @Composable
-inline fun <T> untrackedState(
+inline fun <T> rememberUntrackedState(
     policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    crossinline init: () -> T
+    crossinline init: () -> T,
 ): MutableState<T> = remember { untrackedStateOf(init(), policy) }
 
 @Composable
-inline fun <T> untrackedStateFor(
+inline fun <T> rememberUntrackedState(
     vararg inputs: Any?,
     policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    crossinline init: () -> T
+    crossinline init: () -> T,
 ): MutableState<T> = remember(*inputs) {
     untrackedStateOf(init(), policy)
 }

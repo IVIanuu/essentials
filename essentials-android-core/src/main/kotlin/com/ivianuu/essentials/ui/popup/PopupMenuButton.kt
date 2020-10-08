@@ -11,13 +11,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.RippleIndication
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.onPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.untrackedState
+import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 
 @Composable
@@ -49,14 +51,13 @@ fun Modifier.popupClickable(
 ) = composed {
     val navigator = NavigatorAmbient.current
 
-    val coordinates =
-        untrackedState<LayoutCoordinates?> { null }
+    var coordinates by rememberUntrackedState<LayoutCoordinates?> { null }
 
-    onPositioned { coordinates.value = it }
+    onPositioned { coordinates = it }
         .clickable(indication = indicationFactory()) {
             navigator.push(
                 PopupRoute(
-                    position = coordinates.value!!.boundsInRoot,
+                    position = coordinates!!.boundsInRoot,
                     onCancel = onCancel
                 ) {
                     PopupMenu(items = items)
