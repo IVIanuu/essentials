@@ -25,21 +25,32 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+
+interface IAccessibilityServices {
+    val isConnected: Flow<Boolean>
+
+    val events: Flow<AccessibilityEvent>
+
+    fun applyConfig(config: AccessibilityConfig): DisposableHandle
+
+    suspend fun performGlobalAction(action: Int): Boolean
+}
 
 @Binding(ApplicationComponent::class)
-class AccessibilityServices {
+class AccessibilityServices : IAccessibilityServices {
 
     private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)
     val service: StateFlow<DefaultAccessibilityService?> get() = _service
 
-    val isConnected: Boolean get() = _service.value != null
+    override val isConnected: Flow<Boolean> get() = _service.map { it != null }
 
     private val _events = EventFlow<AccessibilityEvent>()
-    val events: Flow<AccessibilityEvent> get() = _events
+    override val events: Flow<AccessibilityEvent> get() = _events
 
     internal val configs = mutableListOf<AccessibilityConfig>()
 
-    fun applyConfig(config: AccessibilityConfig): DisposableHandle {
+    override fun applyConfig(config: AccessibilityConfig): DisposableHandle {
         synchronized(configs) { configs += config }
         updateServiceConfig()
         return object : DisposableHandle {
@@ -50,7 +61,7 @@ class AccessibilityServices {
         }
     }
 
-    suspend fun performGlobalAction(action: Int): Boolean =
+    override suspend fun performGlobalAction(action: Int): Boolean =
         service.first { it != null }!!.performGlobalAction(action)
 
     internal fun onServiceConnected(service: DefaultAccessibilityService) {

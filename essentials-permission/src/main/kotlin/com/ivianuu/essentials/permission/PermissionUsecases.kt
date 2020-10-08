@@ -22,9 +22,7 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -34,12 +32,11 @@ import kotlinx.coroutines.withContext
 
 @FunBinding
 fun hasPermissions(
-    changes: PermissionChanges,
     dispatchers: AppCoroutineDispatchers,
     stateProvider: stateProvider,
     permissions: @Assisted List<Permission>,
 ): Flow<Boolean> {
-    return changes
+    return permissionChanges
         .map { Unit }
         .onStart { emit(Unit) }
         .map {
@@ -79,7 +76,6 @@ fun @Assisted Permission.stateProvider(
 
 @FunBinding
 fun @Assisted Permission.requestHandler(
-    changes: PermissionChanges,
     requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }
@@ -88,12 +84,9 @@ fun @Assisted Permission.requestHandler(
         override fun handles(permission: Permission): Boolean = original.handles(permission)
         override suspend fun request(permission: Permission) {
             original.request(permission)
-            changes.offer(Unit)
+            permissionChanges.offer(Unit)
         }
     }
 }
 
-internal typealias PermissionChanges = EventFlow<Unit>
-
-@Binding(ApplicationComponent::class)
-fun permissionsChanges(): PermissionChanges = EventFlow()
+internal val permissionChanges = EventFlow<Unit>()

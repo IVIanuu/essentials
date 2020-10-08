@@ -19,27 +19,28 @@ package com.ivianuu.essentials.screenstate
 import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 @FunBinding
 fun screenState(
-    broadcastFactory: BroadcastFactory,
+    broadcasts: broadcasts,
     getCurrentScreenState: getCurrentScreenState,
     logger: Logger,
 ): Flow<ScreenState> {
-    return broadcastFactory.create(
-        Intent.ACTION_SCREEN_OFF,
-        Intent.ACTION_SCREEN_ON,
-        Intent.ACTION_USER_PRESENT
+    return merge(
+        broadcasts(Intent.ACTION_SCREEN_OFF),
+        broadcasts(Intent.ACTION_SCREEN_ON),
+        broadcasts(Intent.ACTION_USER_PRESENT)
     )
         .onStart { logger.d("sub for screen state") }
         .onCompletion { logger.d("dispose screen state") }

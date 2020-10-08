@@ -26,7 +26,7 @@ class Toaster(
     private val applicationContext: ApplicationContext,
     private val dispatchers: AppCoroutineDispatchers,
     private val globalScope: GlobalScope,
-    private val resources: Resources,
+    private val stringResourceWithArguments: stringResourceWithArguments,
 ) {
 
     fun toast(message: String) {
@@ -34,7 +34,7 @@ class Toaster(
     }
 
     fun toast(messageId: Int, vararg args: Any?) {
-        showToast(resources.getString(messageId, *args), false)
+        showToast(stringResourceWithArguments(messageId, args.toList()), false)
     }
 
     fun toastLong(message: String) {
@@ -42,7 +42,7 @@ class Toaster(
     }
 
     fun toastLong(messageId: Int, vararg args: Any?) {
-        showToast(resources.getString(messageId, *args), true)
+        showToast(stringResourceWithArguments(messageId, args.toList()), true)
     }
 
     private fun showToast(message: String, long: Boolean) {

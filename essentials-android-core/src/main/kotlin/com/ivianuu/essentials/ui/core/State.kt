@@ -14,7 +14,7 @@ inline fun <T> rememberState(
 ) = remember { mutableStateOf(init(), policy) }
 
 @Composable
-inline fun <T, /*reified*/ V1> rememberState(
+inline fun <T, V1> rememberState(
     v1: V1,
     init: @ComposableContract(preventCapture = true) () -> T,
 ) = remember(v1) { mutableStateOf(init()) }

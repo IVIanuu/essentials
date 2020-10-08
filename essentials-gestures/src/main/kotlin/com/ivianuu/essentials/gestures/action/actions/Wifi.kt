@@ -3,24 +3,24 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.net.wifi.WifiManager
 import androidx.compose.foundation.Icon
 import androidx.compose.ui.res.vectorResource
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @ActionBinding
 fun wifiAction(
-    resources: Resources,
+    stringResource: stringResource,
     toggleWifi: toggleWifi,
     wifiIcon: wifiIcon,
 ): Action = Action(
     key = "wifi",
-    title = resources.getString(R.string.es_action_wifi),
+    title = stringResource(R.string.es_action_wifi),
     icon = wifiIcon(),
     execute = { toggleWifi() }
 )
@@ -32,9 +32,9 @@ fun toggleWifi(wifiManager: WifiManager) {
 
 @FunBinding
 fun wifiIcon(
-    broadcastFactory: BroadcastFactory,
+    broadcasts: broadcasts,
     wifiManager: WifiManager,
-): ActionIcon = broadcastFactory.create(WifiManager.WIFI_STATE_CHANGED_ACTION)
+): ActionIcon = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =
             it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)

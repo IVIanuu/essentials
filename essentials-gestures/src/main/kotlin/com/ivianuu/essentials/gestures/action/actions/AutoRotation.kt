@@ -12,7 +12,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -23,10 +23,10 @@ fun autoRotationAction(
     autoRotationIcon: autoRotationIcon,
     choosePermissions: choosePermissions,
     setting: AutoRotationSetting,
-    resources: Resources,
+    stringResource: stringResource,
 ): Action = Action(
     key = "auto_rotation",
-    title = resources.getString(R.string.es_action_auto_rotation),
+    title = stringResource(R.string.es_action_auto_rotation),
     permissions = choosePermissions { listOf(writeSettings) },
     unlockScreen = true,
     icon = autoRotationIcon(),

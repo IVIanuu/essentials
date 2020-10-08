@@ -20,23 +20,28 @@ import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-@Binding(ApplicationComponent::class)
-class ForegroundManager(
+interface ForegroundManager {
+    fun startJob(notification: Notification): ForegroundJob
+    fun stopJob(job: ForegroundJob)
+}
+
+@ImplBinding(ApplicationComponent::class)
+class RealForegroundManager(
     private val applicationContext: ApplicationContext,
     private val logger: Logger,
-) {
+) : ForegroundManager {
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
     internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
 
-    fun startJob(notification: Notification): ForegroundJob {
+    override fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(notification)
         _jobs.value += job
         logger.d("start job $job")
@@ -45,7 +50,7 @@ class ForegroundManager(
         return job
     }
 
-    fun stopJob(job: ForegroundJob) {
+    override fun stopJob(job: ForegroundJob) {
         if (job !in _jobs.value) return
         _jobs.value -= job
         logger.d("stop job $job")

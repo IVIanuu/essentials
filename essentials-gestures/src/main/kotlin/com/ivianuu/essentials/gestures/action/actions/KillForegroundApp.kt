@@ -12,7 +12,7 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.gestures.currentApp
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
@@ -20,10 +20,10 @@ import kotlinx.coroutines.flow.first
 fun killForegroundAction(
     choosePermissions: choosePermissions,
     killApp: killApp,
-    resources: Resources,
+    stringResource: stringResource,
 ): Action = Action(
     key = "kill_foreground_action",
-    title = resources.getString(R.string.es_action_kill_foreground_app),
+    title = stringResource(R.string.es_action_kill_foreground_app),
     icon = singleActionIcon(Icons.Default.Clear),
     permissions = choosePermissions { accessibility + root },
     execute = { killApp() }

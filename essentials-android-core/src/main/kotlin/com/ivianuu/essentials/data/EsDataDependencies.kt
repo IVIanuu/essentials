@@ -63,3 +63,6 @@ fun settingsDataStoreFactory(
     context = applicationContext,
     scope = globalScope + dispatchers.io
 )
+
+@Binding
+fun packageManager(applicationContext: ApplicationContext) = applicationContext.packageManager!!

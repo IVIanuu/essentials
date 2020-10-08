@@ -5,20 +5,20 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.essentials.util.stringResource
 import kotlinx.coroutines.delay
 
 @ActionBinding
 fun screenshotAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,
-    resources: Resources,
     runRootCommand: runRootCommand,
     systemBuildInfo: SystemBuildInfo,
+    stringResource: stringResource,
 ): Action = Action(
     key = "screenshot",
-    title = resources.getString(R.string.es_action_screenshot),
+    title = stringResource(R.string.es_action_screenshot),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
     permissions = choosePermissions {
         listOf(

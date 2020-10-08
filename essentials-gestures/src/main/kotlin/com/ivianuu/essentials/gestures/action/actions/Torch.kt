@@ -7,18 +7,18 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.torch.TorchManager
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 
 @ActionBinding
 fun torchAction(
-    resources: Resources,
+    stringResource: stringResource,
     torchIcon: torchIcon,
     torchManager: TorchManager,
 ): Action = Action(
     key = "torch",
-    title = resources.getString(R.string.es_action_torch),
+    title = stringResource(R.string.es_action_torch),
     icon = torchIcon(),
     execute = { torchManager.toggleTorch() }
 )

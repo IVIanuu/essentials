@@ -7,15 +7,15 @@ import androidx.compose.material.icons.filled.Search
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 
 @ActionBinding
 fun searchAction(
-    resources: Resources,
     sendIntent: sendIntent,
+    stringResource: stringResource,
 ): Action = Action(
     key = "search",
-    title = resources.getString(R.string.es_action_search),
+    title = stringResource(R.string.es_action_search),
     icon = singleActionIcon(Icons.Default.Search),
     execute = {
         sendIntent(

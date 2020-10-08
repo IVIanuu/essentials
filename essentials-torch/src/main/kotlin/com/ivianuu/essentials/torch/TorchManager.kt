@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
  */
 @Binding(ApplicationComponent::class)
 class TorchManager(
-    private val broadcastFactory: BroadcastFactory,
+    private val broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
     private val dispatchers: AppCoroutineDispatchers,
@@ -69,7 +69,7 @@ class TorchManager(
     }
 
     init {
-        broadcastFactory.create(ACTION_TOGGLE_TORCH)
+        broadcasts(ACTION_TOGGLE_TORCH)
             .onEach { toggleTorch() }
             .launchIn(globalScope)
     }

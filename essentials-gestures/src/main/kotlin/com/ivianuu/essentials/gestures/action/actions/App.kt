@@ -17,7 +17,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 
 @ActionFactoryBinding
 class AppActionFactory(
@@ -50,10 +50,10 @@ class AppActionPickerDelegate(
     private val appPickerPage: AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
     private val navigator: Navigator,
-    private val resources: Resources,
+    private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = resources.getString(R.string.es_action_app)
+        get() = stringResource(R.string.es_action_app)
     override val icon: @Composable () -> Unit
         get() = { Icon(vectorResource(R.drawable.es_ic_apps)) }
 

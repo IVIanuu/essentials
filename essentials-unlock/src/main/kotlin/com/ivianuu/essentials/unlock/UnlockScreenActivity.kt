@@ -24,7 +24,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.ui.activity.EsActivity
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
@@ -33,6 +33,7 @@ import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 
@@ -89,10 +90,10 @@ class UnlockScreenActivity : EsActivity() {
             })
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-            component.broadcastFactory.create(
-                Intent.ACTION_SCREEN_OFF,
-                Intent.ACTION_SCREEN_ON,
-                Intent.ACTION_USER_PRESENT
+            merge(
+                component.broadcasts(Intent.ACTION_SCREEN_OFF),
+                component.broadcasts(Intent.ACTION_SCREEN_ON),
+                component.broadcasts(Intent.ACTION_USER_PRESENT)
             )
                 .take(1)
                 .onEach {
@@ -127,7 +128,7 @@ class UnlockScreenActivity : EsActivity() {
 
 @MergeInto(ActivityComponent::class)
 interface UnlockScreenActivityComponent {
-    val broadcastFactory: BroadcastFactory
+    val broadcasts: broadcasts
     val keyguardManager: KeyguardManager
     val logger: Logger
     val systemBuildInfo: SystemBuildInfo

@@ -7,7 +7,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
@@ -18,10 +18,10 @@ fun homeAction(
     choosePermissions: choosePermissions,
     openHomeScreen: openHomeScreen,
     performGlobalAction: performGlobalAction,
-    resources: Resources,
+    stringResource: stringResource,
 ): Action = Action(
     key = "home",
-    title = resources.getString(R.string.es_action_home),
+    title = stringResource(R.string.es_action_home),
     permissions = choosePermissions {
         if (needsHomeIntentWorkaround) emptyList()
         else listOf(accessibility)

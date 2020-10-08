@@ -81,7 +81,7 @@ class ForegroundService : EsService() {
 
 @MergeInto(ServiceComponent::class)
 interface ForegroundServiceComponent {
-    val foregroundManager: ForegroundManager
+    val foregroundManager: RealForegroundManager
     val notificationManager: NotificationManager
     val logger: Logger
 }

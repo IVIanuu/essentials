@@ -5,7 +5,7 @@ import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionPrefs
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -14,14 +14,14 @@ import kotlinx.coroutines.flow.first
 @FunBinding
 fun mediaAction(
     doMediaAction: doMediaAction,
-    resources: Resources,
+    stringResource: stringResource,
     key: @Assisted String,
     keycode: @Assisted Int,
     titleRes: @Assisted Int,
     icon: @Assisted ActionIcon,
 ): Action = Action(
     key = key,
-    title = resources.getString(titleRes),
+    title = stringResource(titleRes),
     icon = icon,
     execute = { doMediaAction(keycode) }
 )

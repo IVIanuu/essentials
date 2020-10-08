@@ -18,7 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.displayRotation
 import com.ivianuu.essentials.screenstate.screenState
@@ -52,7 +52,7 @@ import kotlinx.coroutines.withContext
 @Binding(ApplicationComponent::class)
 class NavBarManager(
     private val applicationContext: ApplicationContext,
-    private val broadcastFactory: BroadcastFactory,
+    private val broadcasts: broadcasts,
     private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
     private val dispatchers: AppCoroutineDispatchers,
     private val displayRotation: displayRotation,
@@ -115,7 +115,7 @@ class NavBarManager(
                 }
                 this += async {
                     // force show on shut downs
-                    broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+                    broadcasts(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             mutex.withLock {
                                 job?.cancel()

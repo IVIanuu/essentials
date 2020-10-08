@@ -16,10 +16,17 @@
 
 package com.ivianuu.essentials.util
 
+import android.os.Build
 import androidx.compose.runtime.Immutable
+import com.ivianuu.injekt.Binding
 
 @Immutable
 data class DeviceInfo(
     val model: String,
     val manufacturer: String,
-)
+) {
+    companion object {
+        @Binding
+        fun binding() = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+    }
+}

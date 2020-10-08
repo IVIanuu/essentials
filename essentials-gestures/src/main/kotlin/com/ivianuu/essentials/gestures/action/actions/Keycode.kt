@@ -15,20 +15,21 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.stringResourceWithArguments
 
 @ActionFactoryBinding
 class KeycodeActionFactory(
     private val permissions: ActionPermissions,
     private val runRootCommand: runRootCommand,
-    private val resources: Resources,
+    private val stringResourceWithArguments: stringResourceWithArguments,
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             key = key,
-            title = resources.getString(R.string.es_action_keycode_suffix, keycode),
+            title = stringResourceWithArguments(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
             permissions = listOf(permissions.root),
             unlockScreen = false,
@@ -41,10 +42,10 @@ class KeycodeActionFactory(
 @ActionPickerDelegateBinding
 class KeycodeActionPickerDelegate(
     private val navigator: Navigator,
-    private val resources: Resources,
+    private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = resources.getString(R.string.es_action_keycode)
+        get() = stringResource(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
         get() = { Icon(vectorResource(R.drawable.es_ic_keyboard)) }
 

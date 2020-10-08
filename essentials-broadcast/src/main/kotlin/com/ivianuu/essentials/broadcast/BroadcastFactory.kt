@@ -21,34 +21,28 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-/**
- * A factory for broadcast receiver observables
- */
-@Binding
-class BroadcastFactory(
-    private val applicationContext: ApplicationContext,
-) {
-
-    fun create(vararg actions: String): Flow<Intent> = create(
-        IntentFilter().apply {
-            actions.forEach { addAction(it) }
-        }
-    )
-
-    fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
+@FunBinding
+fun broadcasts(
+    applicationContext: ApplicationContext,
+    action: @Assisted String,
+): Flow<Intent> {
+    return callbackFlow {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 offerSafe(intent)
             }
         }
         try {
-            applicationContext.registerReceiver(broadcastReceiver, intentFilter)
+            applicationContext.registerReceiver(broadcastReceiver, IntentFilter().apply {
+                addAction(action)
+            })
         } catch (t: Throwable) {
         }
 
@@ -59,5 +53,4 @@ class BroadcastFactory(
             }
         }
     }
-
 }

@@ -23,8 +23,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute
-import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
@@ -35,7 +35,7 @@ fun actionPickerStore(
     getActions: getActions,
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
-    resources: Resources,
+    stringResource: stringResource,
     showDefaultOption: @Assisted Boolean,
     showNoneOption: @Assisted Boolean,
 ) = storeProvider<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
@@ -45,14 +45,14 @@ fun actionPickerStore(
 
             if (showDefaultOption) {
                 specialOptions += SpecialOption(
-                    title = resources.getString(R.string.es_default),
+                    title = stringResource(R.string.es_default),
                     getResult = { ActionPickerResult.Default }
                 )
             }
 
             if (showNoneOption) {
                 specialOptions += SpecialOption(
-                    title = resources.getString(R.string.es_none),
+                    title = stringResource(R.string.es_none),
                     getResult = { ActionPickerResult.None }
                 )
             }

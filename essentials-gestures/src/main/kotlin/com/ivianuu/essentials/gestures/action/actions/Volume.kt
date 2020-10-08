@@ -4,15 +4,15 @@ import android.media.AudioManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 
 @ActionBinding
 fun volumeAction(
     audioManager: AudioManager,
-    resources: Resources,
+    stringResource: stringResource,
 ): Action = Action(
     key = "volume",
-    title = resources.getString(R.string.es_action_volume),
+    title = stringResource(R.string.es_action_volume),
     icon = singleActionIcon(R.drawable.es_ic_volume_up),
     execute = {
         audioManager.adjustStreamVolume(

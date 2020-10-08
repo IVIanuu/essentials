@@ -20,7 +20,7 @@ import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
-import com.ivianuu.essentials.broadcast.BroadcastFactory
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -61,10 +61,10 @@ fun twilightState(
 
 @FunBinding
 fun batteryTwilightState(
-    broadcastFactory: BroadcastFactory,
+    broadcasts: broadcasts,
     powerManager: PowerManager,
 ): Flow<Boolean> {
-    return broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+    return broadcasts(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
         .onStart { emit(Unit) }
         .map { powerManager.isPowerSaveMode }
@@ -83,8 +83,8 @@ fun systemTwilightState(
 
 @FunBinding
 fun timeTwilightState(
-    broadcastFactory: BroadcastFactory,
-): Flow<Boolean> = broadcastFactory.create(Intent.ACTION_TIME_TICK)
+    broadcasts: broadcasts,
+): Flow<Boolean> = broadcasts(Intent.ACTION_TIME_TICK)
     .map { Unit }
     .onStart { emit(Unit) }
     .map {

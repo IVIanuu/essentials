@@ -20,7 +20,7 @@ import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.awaitClose
@@ -39,13 +39,31 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@Binding(ApplicationComponent::class)
-class BillingManager(
-    private val billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
+interface BillingManager {
+
+    suspend fun purchase(
+        sku: Sku,
+        acknowledge: Boolean = true,
+        consumeOldPurchaseIfUnspecified: Boolean = true,
+    ): Boolean
+
+    suspend fun consumePurchase(sku: Sku): Boolean
+
+    suspend fun acknowledgePurchase(sku: Sku): Boolean
+
+    fun isPurchased(sku: Sku): Flow<Boolean>
+
+    suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
+
+}
+
+@ImplBinding(ApplicationComponent::class)
+class RealBillingManager(
+    billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
     private val dispatchers: AppCoroutineDispatchers,
     private val logger: Logger,
     private val startUi: startUi,
-) {
+) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
         refreshes.offer(Unit)
@@ -54,10 +72,10 @@ class BillingManager(
     private val refreshes = EventFlow<Unit>()
     private val connecting = AtomicBoolean(false)
 
-    suspend fun purchase(
+    override suspend fun purchase(
         sku: Sku,
-        acknowledge: Boolean = true,
-        consumeOldPurchaseIfUnspecified: Boolean = true,
+        acknowledge: Boolean,
+        consumeOldPurchaseIfUnspecified: Boolean,
     ): Boolean = withContext(dispatchers.default) {
         logger.d("purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified")
 
@@ -92,7 +110,7 @@ class BillingManager(
         return@withContext if (success) acknowledgePurchase(sku) else return@withContext false
     }
 
-    suspend fun consumePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
+    override suspend fun consumePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
         ensureConnected()
 
         val purchase = getPurchase(sku) ?: return@withContext false
@@ -110,7 +128,7 @@ class BillingManager(
         return@withContext success
     }
 
-    suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
+    override suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
 
@@ -129,7 +147,7 @@ class BillingManager(
         return@withContext success
     }
 
-    fun isPurchased(sku: Sku): Flow<Boolean> {
+    override fun isPurchased(sku: Sku): Flow<Boolean> {
         val appMovedToForegroundFlow = callbackFlow<Unit> {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_START) offerSafe(Unit)
@@ -153,7 +171,7 @@ class BillingManager(
             .onEach { logger.d("is purchased flow for $sku -> $it") }
     }
 
-    suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
+    override suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
         withContext(dispatchers.default) {
             ensureConnected()
             val result = billingClient.isFeatureSupported(feature.value)

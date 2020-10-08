@@ -23,8 +23,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.util.Resources
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
@@ -33,14 +33,14 @@ import com.ivianuu.injekt.android.ApplicationContext
 fun createTorchNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
-    resources: Resources,
+    stringResource: stringResource,
     systemBuildInfo: SystemBuildInfo,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                resources.getString(R.string.es_notif_channel_torch),
+                stringResource(R.string.es_notif_channel_torch),
                 NotificationManager.IMPORTANCE_LOW
             )
         )
@@ -50,8 +50,8 @@ fun createTorchNotification(
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)
-            setContentTitle(resources.getString(R.string.es_notif_title_torch))
-            setContentText(resources.getString(R.string.es_notif_text_torch))
+            setContentTitle(stringResource(R.string.es_notif_title_torch))
+            setContentText(stringResource(R.string.es_notif_text_torch))
             setContentIntent(
                 PendingIntent.getBroadcast(
                     applicationContext,

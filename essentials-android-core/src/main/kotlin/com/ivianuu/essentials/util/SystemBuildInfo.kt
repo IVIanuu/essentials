@@ -16,7 +16,14 @@
 
 package com.ivianuu.essentials.util
 
+import android.os.Build
 import androidx.compose.runtime.Immutable
+import com.ivianuu.injekt.Binding
 
 @Immutable
-data class SystemBuildInfo(val sdk: Int)
+data class SystemBuildInfo(val sdk: Int) {
+    companion object {
+        @Binding
+        fun binding() = SystemBuildInfo(Build.VERSION.SDK_INT)
+    }
+}

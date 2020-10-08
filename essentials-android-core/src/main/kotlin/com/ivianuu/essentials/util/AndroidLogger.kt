@@ -2,6 +2,7 @@ package com.ivianuu.essentials.util
 
 import android.util.Log
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.merge.ApplicationComponent
 
 @Binding
 class AndroidLogger : Logger {
@@ -28,5 +29,15 @@ class AndroidLogger : Logger {
 
     override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
         Log.wtf(tag ?: stackTraceTag, message, throwable)
+    }
+
+    companion object {
+        @Binding(ApplicationComponent::class)
+        fun binding(
+            buildInfo: BuildInfo,
+            androidLoggerProvider: () -> AndroidLogger,
+        ): Logger? {
+            return if (buildInfo.isDebug) androidLoggerProvider() else null
+        }
     }
 }

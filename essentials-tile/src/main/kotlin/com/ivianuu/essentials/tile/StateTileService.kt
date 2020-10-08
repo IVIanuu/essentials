@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tile
 
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -47,12 +47,12 @@ abstract class StateTileService<T> : EsTileService() {
         qsTile.icon = tile.icon
         qsTile.label = when {
             tile.label != null -> tile.label
-            tile.labelRes != null -> component.resources.getString(tile.labelRes)
+            tile.labelRes != null -> component.stringResource(tile.labelRes)
             else -> null
         }
         qsTile.contentDescription = when {
             tile.description != null -> tile.description
-            tile.descriptionRes != null -> component.resources.getString(tile.descriptionRes)
+            tile.descriptionRes != null -> component.stringResource(tile.descriptionRes)
             else -> null
         }
         qsTile.updateTile()
@@ -61,5 +61,5 @@ abstract class StateTileService<T> : EsTileService() {
 
 @MergeInto(ServiceComponent::class)
 interface StateTileServiceComponent {
-    val resources: Resources
+    val stringResource: stringResource
 }

@@ -5,15 +5,15 @@ import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 
 @ActionBinding
 fun assistantAction(
-    resources: Resources,
+    stringResource: stringResource,
     searchManager: SearchManager,
 ): Action = Action(
     key = "assistant",
-    title = resources.getString(R.string.es_action_assistant),
+    title = stringResource(R.string.es_action_assistant),
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_google),
     execute = {

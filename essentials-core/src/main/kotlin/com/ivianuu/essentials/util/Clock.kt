@@ -16,14 +16,9 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-/**
- * Provides the current time
- */
-@Binding
-class Clock {
-    val now: Duration get() = System.currentTimeMillis().milliseconds
-}
+@FunBinding
+fun now(): Duration = System.currentTimeMillis().milliseconds

@@ -5,17 +5,17 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.Resources
+import com.ivianuu.essentials.util.stringResource
 import kotlinx.coroutines.delay
 
 @ActionBinding
 fun lastAppAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,
-    resources: Resources,
+    stringResource: stringResource,
 ): Action = Action(
     key = "last_app",
-    title = resources.getString(R.string.es_action_last_app),
+    title = stringResource(R.string.es_action_last_app),
     permissions = choosePermissions { listOf(accessibility) },
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_repeat),
