@@ -23,7 +23,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 import kotlinx.coroutines.launch
 
 @BindingModule(ApplicationComponent::class)
@@ -35,14 +34,10 @@ annotation class AppWorkerBinding {
     }
 }
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object EsAppWorkersModule {
-    @SetElements
-    fun defaultAppWorkers(): AppWorkers = emptySet()
-}
-
 typealias AppWorkers = Set<suspend () -> Unit>
+
+@SetElements
+fun defaultAppWorkers(): AppWorkers = emptySet()
 
 @FunBinding
 fun runAppWorkers(

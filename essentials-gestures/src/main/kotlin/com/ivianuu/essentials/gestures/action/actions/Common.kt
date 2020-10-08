@@ -9,7 +9,7 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
@@ -27,12 +27,12 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(
 
 @FunBinding
 suspend fun runRootCommand(
-    shell: Shell,
+    runShellCommand: runShellCommand,
     toaster: Toaster,
     command: @Assisted String,
 ) {
     try {
-        shell.run(command)
+        runShellCommand(command)
     } catch (t: Throwable) {
         t.printStackTrace()
         toaster.toast(R.string.es_no_root)

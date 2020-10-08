@@ -7,7 +7,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 import java.io.File
 
 @BindingModule(ApplicationComponent::class)
@@ -19,21 +18,15 @@ annotation class BackupFile {
     }
 }
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object BackupAndRestoreModule {
-
-    @Binding
-    fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
-
-    @BackupFile
-    fun backupPrefs(prefsDir: PrefsDir) = prefsDir
-
-    @BackupFile
-    fun backupDatabases(dataDir: DataDir) = dataDir.resolve("databases")
-
-}
-
 typealias BackupDir = File
 
+@Binding
+fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+
 typealias BackupFiles = Set<File>
+
+@BackupFile
+fun backupPrefs(prefsDir: PrefsDir) = prefsDir
+
+@BackupFile
+fun backupDatabases(dataDir: DataDir) = dataDir.resolve("databases")

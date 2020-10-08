@@ -5,7 +5,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 import com.squareup.moshi.Moshi
 
 @BindingModule(ApplicationComponent::class)
@@ -19,19 +18,14 @@ annotation class JsonAdapterBinding {
 
 typealias JsonAdapters = Set<Any>
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object EsMoshiModule {
+@Binding(ApplicationComponent::class)
+fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
+    .apply {
+        jsonAdapters
+            .forEach { adapter -> add(adapter) }
+    }
+    .build()
 
-    @Binding(ApplicationComponent::class)
-    fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
-        .apply {
-            jsonAdapters
-                .forEach { adapter -> add(adapter) }
-        }
-        .build()
+@SetElements
+fun defaultAdapters(): JsonAdapters = emptySet()
 
-    @SetElements
-    fun defaultAdapters(): JsonAdapters = emptySet()
-
-}

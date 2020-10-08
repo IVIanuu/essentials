@@ -22,10 +22,7 @@ import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.MergeInto
 
 @AppInitializerBinding
 @FunBinding
@@ -41,12 +38,6 @@ fun initializeWorkers(
     )
 }
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object EsWorkModule {
-
-    @Binding
-    fun workManager(applicationContext: ApplicationContext) =
-        WorkManager.getInstance(applicationContext)
-
-}
+@Binding
+fun workManager(applicationContext: ApplicationContext) =
+    WorkManager.getInstance(applicationContext)

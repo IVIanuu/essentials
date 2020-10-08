@@ -22,7 +22,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ApplicationComponent::class)
 annotation class AppInitializerBinding {
@@ -33,14 +32,10 @@ annotation class AppInitializerBinding {
     }
 }
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object EsAppInitializerModule {
-    @SetElements
-    fun defaultAppInitializers(): AppInitializers = emptySet()
-}
-
 typealias AppInitializers = Set<() -> Unit>
+
+@SetElements
+fun defaultAppInitializers(): AppInitializers = emptySet()
 
 @FunBinding
 fun runInitializers(

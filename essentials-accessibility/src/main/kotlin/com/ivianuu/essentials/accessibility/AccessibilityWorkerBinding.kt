@@ -4,7 +4,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ServiceComponent::class)
 annotation class AccessibilityWorkerBinding {
@@ -15,11 +14,7 @@ annotation class AccessibilityWorkerBinding {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-@Module
-object EsAccessibilityModule {
-    @SetElements
-    fun defaultAccessibilityWorkers(): AccessibilityWorkers = emptySet()
-}
+@SetElements
+fun defaultAccessibilityWorkers(): AccessibilityWorkers = emptySet()
 
 typealias AccessibilityWorkers = Set<suspend () -> Unit>

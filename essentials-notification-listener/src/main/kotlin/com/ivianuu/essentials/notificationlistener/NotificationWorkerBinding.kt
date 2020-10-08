@@ -4,7 +4,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ServiceComponent::class)
 annotation class NotificationWorkerBinding {
@@ -15,11 +14,7 @@ annotation class NotificationWorkerBinding {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-@Module
-object EsNotificationModule {
-    @SetElements
-    fun notificationWorkers(): NotificationWorkers = emptySet()
-}
-
 typealias NotificationWorkers = Set<suspend () -> Unit>
+
+@SetElements
+fun defaultNotificationWorkers(): NotificationWorkers = emptySet()

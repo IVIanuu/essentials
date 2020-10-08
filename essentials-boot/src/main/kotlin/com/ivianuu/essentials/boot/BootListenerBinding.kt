@@ -20,7 +20,6 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
-import com.ivianuu.injekt.merge.MergeInto
 
 @BindingModule(ApplicationComponent::class)
 annotation class BootListenerBinding {
@@ -31,12 +30,7 @@ annotation class BootListenerBinding {
     }
 }
 
-@MergeInto(ApplicationComponent::class)
-@Module
-object EsBootListenersModule {
-    @SetElements
-    fun defaultBootListeners(): BootListeners = emptySet()
-
-}
-
 typealias BootListeners = Set<() -> Unit>
+
+@SetElements
+fun defaultBootListeners(): BootListeners = emptySet()
