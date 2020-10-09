@@ -16,21 +16,13 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.content.ComponentCallbacks2
-import android.content.res.Configuration
-import android.hardware.SensorManager
-import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -81,31 +73,3 @@ suspend fun getCurrentDisplayRotation(
     }
 }
 
-@FunBinding
-fun rotationChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow {
-    val listener = object :
-        OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
-        override fun onOrientationChanged(orientation: Int) {
-            offerSafe(Unit)
-        }
-    }
-    listener.enable()
-    awaitClose { listener.disable() }
-}
-
-@FunBinding
-fun configChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow {
-    val callbacks = object : ComponentCallbacks2 {
-        override fun onConfigurationChanged(newConfig: Configuration) {
-            offerSafe(Unit)
-        }
-
-        override fun onLowMemory() {
-        }
-
-        override fun onTrimMemory(level: Int) {
-        }
-    }
-    applicationContext.registerComponentCallbacks(callbacks)
-    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
-}

@@ -37,13 +37,13 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 
 @OptIn(ExperimentalLayout::class)
 @FunBinding
 @Composable
-fun ChipsPage(toaster: Toaster) {
+fun ChipsPage(showToast: showToast) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Chips") }) }
     ) {
@@ -58,7 +58,7 @@ fun ChipsPage(toaster: Toaster) {
                 remember { Names.shuffled() }.forEach { name ->
                     Chip(
                         name = name,
-                        onClick = { toaster.toast("Clicked $name") }
+                        onClick = { showToast("Clicked $name") }
                     )
                 }
             }

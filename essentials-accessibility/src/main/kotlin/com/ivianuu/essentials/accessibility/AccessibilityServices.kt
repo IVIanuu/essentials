@@ -23,7 +23,6 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -40,10 +39,8 @@ interface AccessibilityServices {
 @ImplBinding(ApplicationComponent::class)
 class RealAccessibilityServices : AccessibilityServices {
 
-    private val _service = MutableStateFlow<DefaultAccessibilityService?>(null)
-    val service: StateFlow<DefaultAccessibilityService?> get() = _service
-
-    override val isConnected: Flow<Boolean> get() = _service.map { it != null }
+    private val service = MutableStateFlow<DefaultAccessibilityService?>(null)
+    override val isConnected: Flow<Boolean> get() = service.map { it != null }
 
     private val _events = EventFlow<AccessibilityEvent>()
     override val events: Flow<AccessibilityEvent> get() = _events
@@ -65,7 +62,7 @@ class RealAccessibilityServices : AccessibilityServices {
         service.first { it != null }!!.performGlobalAction(action)
 
     internal fun onServiceConnected(service: DefaultAccessibilityService) {
-        _service.value = service
+        this.service.value = service
         updateServiceConfig()
     }
 
@@ -74,7 +71,7 @@ class RealAccessibilityServices : AccessibilityServices {
     }
 
     internal fun onServiceDisconnected() {
-        _service.value = null
+        service.value = null
     }
 
     private fun updateServiceConfig() {

@@ -14,8 +14,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
@@ -48,7 +48,7 @@ fun BackupAndRestorePage(
 fun backupAndRestorePage(
     backupData: backupData,
     restoreData: restoreData,
-    toaster: Toaster,
+    showToastRes: showToastRes,
 ) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
     onEachAction { action ->
         when (action) {
@@ -56,14 +56,14 @@ fun backupAndRestorePage(
                 backupData()
                     .onFailure {
                         it.printStackTrace()
-                        toaster.toast(R.string.es_backup_error)
+                        showToastRes(R.string.es_backup_error)
                     }
             }
             RestoreClicked -> {
                 restoreData()
                     .onFailure {
                         it.printStackTrace()
-                        toaster.toast(R.string.es_restore_error)
+                        showToastRes(R.string.es_restore_error)
                     }
             }
             }.exhaustive

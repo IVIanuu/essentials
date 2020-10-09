@@ -25,7 +25,7 @@ import androidx.compose.runtime.launchInComposition
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
@@ -43,7 +43,7 @@ internal fun SecureSettingsHeader(text: String) {
 @Composable
 fun popNavigatorOnceSecureSettingsGranted(
     hasSecureSettingsPermission: hasSecureSettingsPermission,
-    toaster: Toaster,
+    showToastRes: showToastRes,
     navigator: Navigator,
     toast: @Assisted Boolean,
 ) {
@@ -52,7 +52,7 @@ fun popNavigatorOnceSecureSettingsGranted(
     launchInComposition {
         while (true) {
             if (hasSecureSettingsPermission()) {
-                if (toast) toaster.toast(R.string.es_secure_settings_permission_granted)
+                if (toast) showToastRes(R.string.es_secure_settings_permission_granted)
                 navigator.popTop(result = true)
                 break
             }

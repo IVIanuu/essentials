@@ -9,7 +9,7 @@ import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.shell.isShellAvailable
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToastRes
 
 fun RootPermission(vararg metadata: KeyWithValue<*>) = Permission(
     Permission.IsRootPermission withValue Unit,
@@ -33,13 +33,13 @@ class RootPermissionStateProvider(
 @PermissionRequestHandlerBinding
 class RootPermissionRequestHandler(
     private val isShellAvailable: isShellAvailable,
-    private val toaster: Toaster,
+    private val showToastRes: showToastRes,
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
 
     override suspend fun request(permission: Permission) {
         val isOk = isShellAvailable()
-        if (!isOk) toaster.toast(R.string.es_no_root)
+        if (!isOk) showToastRes(R.string.es_no_root)
     }
 }

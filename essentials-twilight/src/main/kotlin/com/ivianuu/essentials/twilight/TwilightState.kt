@@ -16,18 +16,14 @@
 
 package com.ivianuu.essentials.twilight
 
-import android.content.ComponentCallbacks2
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
-import com.ivianuu.essentials.coroutines.offerSafe
+import com.ivianuu.essentials.screenstate.configChanges
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.android.ApplicationResources
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -92,23 +88,6 @@ fun timeTwilightState(
         val hour = calendar[Calendar.HOUR_OF_DAY]
         hour < 6 || hour >= 22
     }
-
-@FunBinding
-fun configChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow<Unit> {
-    val callbacks = object : ComponentCallbacks2 {
-        override fun onConfigurationChanged(newConfig: Configuration) {
-            offerSafe(Unit)
-        }
-
-        override fun onLowMemory() {
-        }
-
-        override fun onTrimMemory(level: Int) {
-        }
-    }
-    applicationContext.registerComponentCallbacks(callbacks)
-    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
-}
 
 data class TwilightState(
     val isDark: Boolean,

@@ -38,8 +38,8 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
@@ -94,7 +94,7 @@ fun shortcutPickerStore(
     getShortcuts: getShortcuts,
     extractShortcut: extractShortcut,
     startActivityForIntentResult: startActivityForIntentResult,
-    toaster: Toaster,
+    showToastRes: showToastRes,
 ) = storeProvider<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
     execute(
         block = { getShortcuts() },
@@ -111,7 +111,7 @@ fun shortcutPickerStore(
                     navigator.popTop(result = shortcut)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    toaster.toast(R.string.es_failed_to_pick_shortcut)
+                    showToastRes(R.string.es_failed_to_pick_shortcut)
                 }
             }
         }.exhaustive

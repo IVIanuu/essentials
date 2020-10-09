@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.unlockScreen
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UnlockPage(
     screenState: screenState,
-    toaster: Toaster,
+    showToast: showToast,
     unlockScreen: unlockScreen,
 ) {
     Scaffold(
@@ -48,14 +48,14 @@ fun UnlockPage(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    toaster.toast("Turn the screen off and on")
+                    showToast("Turn the screen off and on")
 
                     screenState()
                         .filter { it == ScreenState.Locked }
                         .first()
 
                     val unlocked = unlockScreen()
-                    toaster.toast("Screen unlocked $unlocked")
+                    showToast("Screen unlocked $unlocked")
                 }
             }
         ) { Text("Unlock") }

@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
@@ -65,6 +65,7 @@ fun HomePage(
     drawerPage: DrawerPage,
     dynamicSystemBarsPage: DynamicSystemBarsPage,
     foregroundJobPage: ForegroundJobPage,
+    navigator: Navigator,
     navBarPage: NavBarPage,
     notificationsPage: NotificationsPage,
     permissionsPage: PermissionsPage,
@@ -73,6 +74,7 @@ fun HomePage(
     scaffoldPage: ScaffoldPage,
     sharedElementPage: SharedElementPage,
     shortcutPickerPage: ShortcutPickerPage,
+    showToast: showToast,
     tabsPage: TabsPage,
     textInputPage: TextInputPage,
     timerPage: TimerPage,
@@ -80,8 +82,6 @@ fun HomePage(
     twilightSettingsPage: TwilightSettingsPage,
     unlockPage: UnlockPage,
     workPage: WorkPage,
-    navigator: Navigator,
-    toaster: Toaster,
 ) {
     Scaffold(
         topBar = {
@@ -94,7 +94,7 @@ fun HomePage(
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            PopupMenu.Item(onSelected = { toaster.toast("Selected $title") }) {
+                            PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
                                 Text(title)
                             }
                         }

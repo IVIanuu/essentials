@@ -24,7 +24,7 @@ import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.actor
@@ -34,9 +34,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
-/**
- * Provides the torch state
- */
 interface Torch {
     val torchState: StateFlow<Boolean>
 
@@ -56,7 +53,7 @@ class RealTorch(
     private val foregroundManager: ForegroundManager,
     private val globalScope: GlobalScope,
     private val logger: Logger,
-    private val toaster: Toaster,
+    private val showToastRes: showToastRes,
 ) : Torch {
 
     private val _torchState = MutableStateFlow(false)
@@ -98,7 +95,7 @@ class RealTorch(
                 override fun onTorchModeUnavailable(cameraId: String) {
                     tryOrToast {
                         cameraManager.unregisterTorchCallback(this)
-                        toaster.toast(R.string.es_failed_to_toggle_torch)
+                        showToastRes(R.string.es_failed_to_toggle_torch)
                         stateActor.offerSafe(false)
                     }
                 }
@@ -111,7 +108,7 @@ class RealTorch(
             action()
         } catch (t: Throwable) {
             t.printStackTrace()
-            toaster.toast(R.string.es_failed_to_toggle_torch)
+            showToastRes(R.string.es_failed_to_toggle_torch)
         }
     }
 }

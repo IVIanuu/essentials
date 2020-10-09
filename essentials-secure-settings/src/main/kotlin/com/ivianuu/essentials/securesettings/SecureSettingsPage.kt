@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ fun SecureSettingsPage(
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    toaster: Toaster,
+    showToastRes: showToastRes,
     showHideNavBarHint: @Assisted Boolean = false,
 ) {
     popNavigatorOnceSecureSettingsGranted(true)
@@ -73,9 +73,9 @@ fun SecureSettingsPage(
                 onClick = {
                     scope.launch {
                         if (grantSecureSettingsPermissionViaRoot()) {
-                            toaster.toast(R.string.es_secure_settings_permission_granted)
+                            showToastRes(R.string.es_secure_settings_permission_granted)
                         } else {
-                            toaster.toast(R.string.es_secure_settings_no_root)
+                            showToastRes(R.string.es_secure_settings_no_root)
                         }
                     }
                 }

@@ -10,7 +10,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -28,21 +28,21 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(
 @FunBinding
 suspend fun runRootCommand(
     runShellCommand: runShellCommand,
-    toaster: Toaster,
+    showToastRes: showToastRes,
     command: @Assisted String,
 ) {
     try {
         runShellCommand(command)
     } catch (t: Throwable) {
         t.printStackTrace()
-        toaster.toast(R.string.es_no_root)
+        showToastRes(R.string.es_no_root)
     }
 }
 
 @FunBinding
 fun sendIntent(
     applicationContext: ApplicationContext,
-    toaster: Toaster,
+    showToastRes: showToastRes,
     intent: @Assisted Intent,
 ) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -52,7 +52,7 @@ fun sendIntent(
         ).send()
     } catch (t: Throwable) {
         t.printStackTrace()
-        toaster.toast(R.string.es_activity_not_found)
+        showToastRes(R.string.es_activity_not_found)
     }
 }
 

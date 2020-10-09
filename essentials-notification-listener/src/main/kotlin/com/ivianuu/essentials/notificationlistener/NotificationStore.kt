@@ -3,46 +3,57 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-@Binding(ApplicationComponent::class)
-class NotificationStore(
+interface NotificationStore {
+    val isConnected: Flow<Boolean>
+
+    val notifications: StateFlow<List<StatusBarNotification>>
+
+    suspend fun openNotification(notification: Notification)
+
+    suspend fun dismissNotification(key: String)
+
+    suspend fun dismissAllNotifications()
+}
+
+@ImplBinding(ApplicationComponent::class)
+class RealNotificationStore(
     private val dispatchers: AppCoroutineDispatchers,
-) {
+) : NotificationStore {
 
-    private var service: DefaultNotificationListenerService? = null
-        private set
-
-    val isConnected: Boolean get() = service != null
+    private val service = MutableStateFlow<DefaultNotificationListenerService?>(null)
+    override val isConnected: Flow<Boolean> get() = service.map { it != null }
 
     private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
-    val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
+    override val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
 
-    suspend fun openNotification(notification: Notification) =
+    override suspend fun openNotification(notification: Notification) =
         withContext(dispatchers.default) {
-            check(isConnected)
+            service.first { it != null }
             try {
                 notification.contentIntent.send()
             } catch (t: Throwable) {
             }
         }
 
-    suspend fun dismissNotification(key: String) = withContext(dispatchers.default) {
-        check(isConnected)
-        service?.cancelNotification(key)
+    override suspend fun dismissNotification(key: String): Unit = withContext(dispatchers.default) {
+        service.first { it != null }!!.cancelNotification(key)
     }
 
-    suspend fun dismissAllNotifications() = withContext(dispatchers.default) {
-        check(isConnected)
-        service?.cancelAllNotifications()
+    override suspend fun dismissAllNotifications(): Unit = withContext(dispatchers.default) {
+        service.first { it != null }!!.cancelAllNotifications()
     }
 
     internal fun onServiceConnected(service: DefaultNotificationListenerService) {
-        this.service = service
+        this.service.value = service
     }
 
     internal fun onNotificationsChanged(notifications: List<StatusBarNotification>) {
@@ -50,7 +61,7 @@ class NotificationStore(
     }
 
     internal fun onServiceDisconnected() {
-        service = null
+        this.service.value = null
     }
 
 }
