@@ -21,22 +21,30 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@FunBinding
-fun screenState(
+typealias ScreenStateFlow = Flow<ScreenState>
+
+@Binding(ApplicationComponent::class)
+fun screenStateFlow(
     broadcasts: broadcasts,
     getCurrentScreenState: getCurrentScreenState,
+    globalScope: GlobalScope,
     logger: Logger,
-): Flow<ScreenState> {
+): ScreenStateFlow {
     return merge(
         broadcasts(Intent.ACTION_SCREEN_OFF),
         broadcasts(Intent.ACTION_SCREEN_ON),
@@ -48,6 +56,7 @@ fun screenState(
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
+        .shareIn(globalScope, 1, SharingStarted.WhileSubscribed())
 }
 
 @FunBinding

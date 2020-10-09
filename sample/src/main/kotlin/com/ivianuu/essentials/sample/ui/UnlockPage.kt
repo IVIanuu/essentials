@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.screenstate.screenState
+import com.ivianuu.essentials.screenstate.ScreenStateFlow
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun UnlockPage(
-    screenState: screenState,
+    screenStateFlow: ScreenStateFlow,
     showToast: showToast,
     unlockScreen: unlockScreen,
 ) {
@@ -50,7 +50,7 @@ fun UnlockPage(
                 scope.launch {
                     showToast("Turn the screen off and on")
 
-                    screenState()
+                    screenStateFlow
                         .filter { it == ScreenState.Locked }
                         .first()
 

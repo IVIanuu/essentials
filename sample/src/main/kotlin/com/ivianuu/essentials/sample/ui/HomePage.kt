@@ -62,6 +62,7 @@ fun HomePage(
     chipsPage: ChipsPage,
     counterPage: CounterPage,
     dialogsPage: DialogsPage,
+    displayRotationPage: DisplayRotationPage,
     drawerPage: DrawerPage,
     dynamicSystemBarsPage: DynamicSystemBarsPage,
     foregroundJobPage: ForegroundJobPage,
@@ -131,6 +132,7 @@ fun HomePage(
                         HomeItem.Chips -> Route { chipsPage() }
                         HomeItem.Counter -> Route { counterPage() }
                         HomeItem.Dialogs -> Route { dialogsPage() }
+                        HomeItem.DisplayRotation -> Route { displayRotationPage() }
                         HomeItem.Drawer -> Route { drawerPage() }
                         HomeItem.DynamicSystemBars -> Route { dynamicSystemBarsPage() }
                         HomeItem.ForegroundJob -> Route { foregroundJobPage() }
@@ -210,6 +212,7 @@ enum class HomeItem(val title: String) {
     Chips(title = "Chips"),
     Counter(title = "Counter"),
     Dialogs(title = "Dialogs"),
+    DisplayRotation(title = "Display Rotation"),
     Drawer(title = "Drawer"),
     DynamicSystemBars(title = "Dynamic system bars"),
     ForegroundJob(title = "Foreground job"),
