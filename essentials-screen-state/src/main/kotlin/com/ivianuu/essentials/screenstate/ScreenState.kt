@@ -20,7 +20,7 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
@@ -52,11 +52,11 @@ fun screenState(
 
 @FunBinding
 suspend fun getCurrentScreenState(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     keyguardManager: KeyguardManager,
     powerManager: PowerManager,
 ): ScreenState =
-    withContext(dispatchers.default) {
+    withContext(defaultDispatcher) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
                 ScreenState.Locked

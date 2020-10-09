@@ -25,11 +25,11 @@ import kotlinx.coroutines.launch
 @FunBinding
 fun showToast(
     applicationContext: ApplicationContext,
-    dispatchers: AppCoroutineDispatchers,
     globalScope: GlobalScope,
+    mainDispatcher: MainDispatcher,
     message: @Assisted String,
 ) {
-    globalScope.launch(dispatchers.main) {
+    globalScope.launch(mainDispatcher) {
         Toast.makeText(
             applicationContext,
             message,

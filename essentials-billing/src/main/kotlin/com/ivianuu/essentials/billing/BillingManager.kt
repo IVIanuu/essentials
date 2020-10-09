@@ -17,8 +17,10 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.MainDispatcher
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -60,8 +62,10 @@ interface BillingManager {
 @ImplBinding(ApplicationComponent::class)
 class RealBillingManager(
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
-    private val dispatchers: AppCoroutineDispatchers,
+    private val defaultDispatcher: DefaultDispatcher,
+    private val ioDispatcher: IODispatcher,
     private val logger: Logger,
+    private val mainDispatcher: MainDispatcher,
     private val startUi: startUi,
 ) : BillingManager {
 
@@ -76,7 +80,7 @@ class RealBillingManager(
         sku: Sku,
         acknowledge: Boolean,
         consumeOldPurchaseIfUnspecified: Boolean,
-    ): Boolean = withContext(dispatchers.default) {
+    ): Boolean = withContext(defaultDispatcher) {
         logger.d("purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified")
 
         if (consumeOldPurchaseIfUnspecified) {
@@ -110,7 +114,7 @@ class RealBillingManager(
         return@withContext if (success) acknowledgePurchase(sku) else return@withContext false
     }
 
-    override suspend fun consumePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
+    override suspend fun consumePurchase(sku: Sku): Boolean = withContext(defaultDispatcher) {
         ensureConnected()
 
         val purchase = getPurchase(sku) ?: return@withContext false
@@ -128,7 +132,7 @@ class RealBillingManager(
         return@withContext success
     }
 
-    override suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(dispatchers.default) {
+    override suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(defaultDispatcher) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
 
@@ -152,11 +156,11 @@ class RealBillingManager(
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_START) offerSafe(Unit)
             }
-            withContext(dispatchers.main) {
+            withContext(mainDispatcher) {
                 ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
             }
             awaitClose()
-            withContext(dispatchers.main + NonCancellable) {
+            withContext(mainDispatcher + NonCancellable) {
                 ProcessLifecycleOwner.get().lifecycle.removeObserver(observer)
             }
         }
@@ -172,14 +176,14 @@ class RealBillingManager(
     }
 
     override suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
-        withContext(dispatchers.default) {
+        withContext(defaultDispatcher) {
             ensureConnected()
             val result = billingClient.isFeatureSupported(feature.value)
             logger.d("is feature supported $feature ? ${result.responseCode} ${result.debugMessage}")
             return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
         }
 
-    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(dispatchers.default) {
+    private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(defaultDispatcher) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
         val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
@@ -187,7 +191,7 @@ class RealBillingManager(
         return@withContext isPurchased
     }
 
-    private suspend fun getPurchase(sku: Sku): Purchase? = withContext(dispatchers.io) {
+    private suspend fun getPurchase(sku: Sku): Purchase? = withContext(ioDispatcher) {
         ensureConnected()
         billingClient.queryPurchases(sku.type.value)
             .purchasesList
@@ -195,7 +199,7 @@ class RealBillingManager(
             .also { logger.d("got purchase $it for $sku") }
     }
 
-    private suspend fun getSkuDetails(sku: Sku): SkuDetails? = withContext(dispatchers.io) {
+    private suspend fun getSkuDetails(sku: Sku): SkuDetails? = withContext(ioDispatcher) {
         ensureConnected()
         billingClient.querySkuDetails(sku.toSkuDetailsParams())
             .skuDetailsList
@@ -203,7 +207,7 @@ class RealBillingManager(
             .also { logger.d("got sku details $it for $sku") }
     }
 
-    private suspend fun ensureConnected() = withContext(dispatchers.io) {
+    private suspend fun ensureConnected() = withContext(ioDispatcher) {
         if (billingClient.isReady) return@withContext
         if (connecting.getAndSet(true)) return@withContext
         suspendCoroutine<Unit> { continuation ->

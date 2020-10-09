@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
@@ -8,16 +8,16 @@ import kotlinx.coroutines.withContext
 @FunBinding
 suspend fun getActions(
     actions: Set<Action>,
-    dispatchers: AppCoroutineDispatchers,
-): List<Action> = withContext(dispatchers.default) { actions.toList() }
+    defaultDispatcher: DefaultDispatcher,
+): List<Action> = withContext(defaultDispatcher) { actions.toList() }
 
 @FunBinding
 suspend fun getAction(
     actions: Set<Action>,
     actionFactories: () -> Set<ActionFactory>,
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     key: @Assisted String,
-): Action = withContext(dispatchers.default) {
+): Action = withContext(defaultDispatcher) {
     actions
         .firstOrNull { it.key == key }
         ?: actionFactories()

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.unlock.unlockScreen
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Assisted
@@ -11,14 +11,14 @@ import kotlinx.coroutines.withContext
 
 @FunBinding
 suspend fun executeAction(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     logger: Logger,
     getAction: getAction,
     requestPermissions: requestPermissions,
     unlockScreen: unlockScreen,
     showToast: showToast,
     key: @Assisted String,
-): Unit = withContext(dispatchers.default) {
+): Unit = withContext(defaultDispatcher) {
     logger.d("execute $key")
     val action = getAction(key)
 

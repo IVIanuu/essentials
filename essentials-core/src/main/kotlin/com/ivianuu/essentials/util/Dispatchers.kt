@@ -17,24 +17,20 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-/**
- * App coroutine dispatchers
- */
-data class AppCoroutineDispatchers(
-    val default: CoroutineDispatcher,
-    val main: CoroutineDispatcher,
-    val io: CoroutineDispatcher
-) {
-    companion object {
-        @Binding(ApplicationComponent::class)
-        fun appCoroutineDispatchers() = AppCoroutineDispatchers(
-            default = Dispatchers.Default,
-            main = Dispatchers.Main,
-            io = Dispatchers.IO
-        )
-    }
-}
+typealias DefaultDispatcher = CoroutineDispatcher
+
+@Binding
+fun defaultDispatcher(): DefaultDispatcher = Dispatchers.Default
+
+typealias MainDispatcher = CoroutineDispatcher
+
+@Binding
+fun mainDispatcher(): MainDispatcher = Dispatchers.Main
+
+typealias IODispatcher = CoroutineDispatcher
+
+@Binding
+fun ioDispatcher(): IODispatcher = Dispatchers.IO

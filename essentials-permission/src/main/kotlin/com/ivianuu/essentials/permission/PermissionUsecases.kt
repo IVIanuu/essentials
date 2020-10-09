@@ -18,7 +18,7 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
@@ -32,7 +32,7 @@ import kotlinx.coroutines.withContext
 
 @FunBinding
 fun hasPermissions(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     stateProvider: stateProvider,
     permissions: @Assisted List<Permission>,
 ): Flow<Boolean> {
@@ -40,7 +40,7 @@ fun hasPermissions(
         .map { Unit }
         .onStart { emit(Unit) }
         .map {
-            withContext(dispatchers.default) {
+            withContext(defaultDispatcher) {
                 permissions.all { it.stateProvider().isGranted(it) }
             }
         }.distinctUntilChanged()
@@ -48,14 +48,14 @@ fun hasPermissions(
 
 @FunBinding
 suspend fun requestPermissions(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     hasPermissions: hasPermissions,
     logger: Logger,
     navigator: Navigator,
     permissionRequestRouteFactory: PermissionRequestRouteFactory,
     startUi: startUi,
     permissions: @Assisted List<Permission>,
-): Boolean = withContext(dispatchers.default) {
+): Boolean = withContext(defaultDispatcher) {
     logger.d("request permissions $permissions")
     if (hasPermissions(permissions).first()) return@withContext true
 

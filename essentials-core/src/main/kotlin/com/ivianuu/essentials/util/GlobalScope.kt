@@ -7,5 +7,5 @@ import kotlinx.coroutines.CoroutineScope
 typealias GlobalScope = CoroutineScope
 
 @Binding(ApplicationComponent::class)
-fun globalScope(dispatchers: AppCoroutineDispatchers): GlobalScope =
-    CoroutineScope(dispatchers.default)
+fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
+    CoroutineScope(defaultDispatcher)

@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
+internal typealias WasNavBarHiddenPref = DataStore<Boolean>
+
 @Binding(ApplicationComponent::class)
-class NavBarPrefs(factory: DiskDataStoreFactory) {
-    val wasNavBarHidden = factory.create("was_nav_bar_hidden") { false }
-}
+fun wasNavBarHiddenPref(factory: DiskDataStoreFactory): WasNavBarHiddenPref =
+    factory.create("was_nav_bar_hidden") { false }

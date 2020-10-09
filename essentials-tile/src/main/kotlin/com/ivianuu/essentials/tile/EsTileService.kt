@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -32,19 +32,19 @@ abstract class EsTileService : TileService() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val dispatchers: AppCoroutineDispatchers by lazy {
+    private val defaultDispatcher: DefaultDispatcher by lazy {
         serviceComponent.mergeComponent<EsTileServiceComponent>()
-            .dispatchers
+            .defaultDispatcher
     }
 
-    val scope by lazy { CoroutineScope(dispatchers.default) }
+    val scope by lazy { CoroutineScope(defaultDispatcher) }
 
     lateinit var listeningCoroutineScope: CoroutineScope
         private set
 
     override fun onStartListening() {
         super.onStartListening()
-        listeningCoroutineScope = CoroutineScope(dispatchers.default)
+        listeningCoroutineScope = CoroutineScope(defaultDispatcher)
     }
 
     override fun onStopListening() {
@@ -61,5 +61,5 @@ abstract class EsTileService : TileService() {
 
 @MergeInto(ServiceComponent::class)
 interface EsTileServiceComponent {
-    val dispatchers: AppCoroutineDispatchers
+    val defaultDispatcher: DefaultDispatcher
 }

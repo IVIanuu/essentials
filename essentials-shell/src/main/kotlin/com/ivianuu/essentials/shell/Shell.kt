@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import eu.chainfire.libsuperuser.Shell.SU
@@ -30,11 +30,11 @@ suspend fun runShellCommand(
 
 @FunBinding
 suspend fun runShellCommands(
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     commands: @Assisted List<String>,
-): List<String> = withContext(dispatchers.io) { SU.run(commands) }
+): List<String> = withContext(ioDispatcher) { SU.run(commands) }
 
 @FunBinding
 suspend fun isShellAvailable(
-    dispatchers: AppCoroutineDispatchers,
-): Boolean = withContext(dispatchers.io) { SU.available() }
+    ioDispatcher: IODispatcher,
+): Boolean = withContext(ioDispatcher) { SU.available() }

@@ -16,14 +16,19 @@
 
 package com.ivianuu.essentials.twilight
 
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
+typealias TwilightModePref = DataStore<TwilightMode>
+
 @Binding(ApplicationComponent::class)
-class TwilightPrefs(
-    factory: DiskDataStoreFactory,
-) {
-    val twilightMode = factory.create("twilight_mode") { TwilightMode.System }
-    val useBlack = factory.create("use_black") { false }
-}
+fun twilightModePref(factory: DiskDataStoreFactory): TwilightModePref =
+    factory.create("twilight_mode") { TwilightMode.System }
+
+typealias UseBlackInDarkModePref = DataStore<Boolean>
+
+@Binding(ApplicationComponent::class)
+fun useBlackInDarkModePref(factory: DiskDataStoreFactory): UseBlackInDarkModePref =
+    factory.create("use_black") { false }

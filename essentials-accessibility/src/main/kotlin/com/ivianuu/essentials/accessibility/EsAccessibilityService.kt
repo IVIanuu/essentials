@@ -18,7 +18,7 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -33,19 +33,19 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val dispatchers: AppCoroutineDispatchers by lazy {
+    private val defaultDispatcher: DefaultDispatcher by lazy {
         serviceComponent.mergeComponent<EsAccessibilityServiceComponent>()
-            .dispatchers
+            .defaultDispatcher
     }
 
-    val scope by lazy { CoroutineScope(dispatchers.default) }
+    val scope by lazy { CoroutineScope(defaultDispatcher) }
 
     private var _connectedScope: CoroutineScope? = null
     val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        _connectedScope = CoroutineScope(dispatchers.default)
+        _connectedScope = CoroutineScope(defaultDispatcher)
     }
 
     override fun onInterrupt() {
@@ -64,5 +64,5 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
 @MergeInto(ServiceComponent::class)
 interface EsAccessibilityServiceComponent {
-    val dispatchers: AppCoroutineDispatchers
+    val defaultDispatcher: DefaultDispatcher
 }

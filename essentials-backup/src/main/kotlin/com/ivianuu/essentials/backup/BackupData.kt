@@ -5,8 +5,8 @@ import androidx.core.content.FileProvider
 import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -24,10 +24,10 @@ suspend fun backupData(
     backupDir: BackupDir,
     backupFiles: () -> BackupFiles,
     buildInfo: BuildInfo,
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     navigator: Navigator,
 ): Result<Unit, Throwable> = runCatchingAndLog {
-    withContext(dispatchers.io) {
+    withContext(ioDispatcher) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
         val backupFileName = "backup_${dateFormat.format(Date())}"
 

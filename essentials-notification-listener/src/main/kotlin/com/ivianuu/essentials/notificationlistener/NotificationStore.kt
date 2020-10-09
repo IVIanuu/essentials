@@ -2,7 +2,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ interface NotificationStore {
 
 @ImplBinding(ApplicationComponent::class)
 class RealNotificationStore(
-    private val dispatchers: AppCoroutineDispatchers,
+    private val defaultDispatcher: DefaultDispatcher,
 ) : NotificationStore {
 
     private val service = MutableStateFlow<DefaultNotificationListenerService?>(null)
@@ -36,7 +36,7 @@ class RealNotificationStore(
     override val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
 
     override suspend fun openNotification(notification: Notification) =
-        withContext(dispatchers.default) {
+        withContext(defaultDispatcher) {
             service.first { it != null }
             try {
                 notification.contentIntent.send()
@@ -44,11 +44,11 @@ class RealNotificationStore(
             }
         }
 
-    override suspend fun dismissNotification(key: String): Unit = withContext(dispatchers.default) {
+    override suspend fun dismissNotification(key: String): Unit = withContext(defaultDispatcher) {
         service.first { it != null }!!.cancelNotification(key)
     }
 
-    override suspend fun dismissAllNotifications(): Unit = withContext(dispatchers.default) {
+    override suspend fun dismissAllNotifications(): Unit = withContext(defaultDispatcher) {
         service.first { it != null }!!.cancelAllNotifications()
     }
 

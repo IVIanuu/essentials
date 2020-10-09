@@ -34,13 +34,14 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TwilightSettingsPage(
-    prefs: TwilightPrefs,
+    twilightModePref: TwilightModePref,
+    useBlackInDarkModePref: UseBlackInDarkModePref,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
         InsettingScrollableColumn {
-            var twilightMode by prefs.twilightMode.asState()
+            var twilightMode by twilightModePref.asState()
             TwilightMode.values().toList().forEach { mode ->
                 TwilightModeItem(
                     mode = mode,
@@ -52,7 +53,7 @@ fun TwilightSettingsPage(
             Subheader { Text(R.string.es_twilight_pref_category_more) }
 
             CheckboxListItem(
-                dataStore = prefs.useBlack,
+                dataStore = useBlackInDarkModePref,
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }

@@ -10,7 +10,7 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
@@ -122,9 +122,9 @@ fun <S, A, P1, P2, P3, P4, P5> rememberStore5(
 @FunBinding
 @Composable
 fun <S, A> rememberStoreViaFactory(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     init: @Assisted CoroutineScope.() -> Store<S, A>,
 ): Store<S, A> {
-    val scope = rememberRetainedCoroutinesScope { dispatchers.default }
+    val scope = rememberRetainedCoroutinesScope { defaultDispatcher }
     return rememberRetained { init(scope) }
 }

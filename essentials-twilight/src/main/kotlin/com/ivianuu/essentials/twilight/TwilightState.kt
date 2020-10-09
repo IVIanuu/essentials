@@ -34,12 +34,13 @@ import java.util.Calendar
 
 @FunBinding
 fun twilightState(
-    prefs: TwilightPrefs,
     batteryTwilightState: batteryTwilightState,
     systemTwilightState: systemTwilightState,
     timeTwilightState: timeTwilightState,
+    twilightModePref: TwilightModePref,
+    useBlackInDarkModePref: UseBlackInDarkModePref,
 ): Flow<TwilightState> {
-    return prefs.twilightMode.data
+    return twilightModePref.data
         .flatMapLatest { mode ->
             when (mode) {
                 TwilightMode.System -> systemTwilightState()
@@ -49,7 +50,7 @@ fun twilightState(
                 TwilightMode.Time -> timeTwilightState()
             }
         }
-        .combine(prefs.useBlack.data) { isDark, useBlack ->
+        .combine(useBlackInDarkModePref.data) { isDark, useBlack ->
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()

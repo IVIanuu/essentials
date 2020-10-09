@@ -21,9 +21,9 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.MainDispatcher
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -49,10 +49,10 @@ class RealTorch(
     private val broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
-    private val dispatchers: AppCoroutineDispatchers,
     private val foregroundManager: ForegroundManager,
     private val globalScope: GlobalScope,
     private val logger: Logger,
+    private val mainDispatcher: MainDispatcher,
     private val showToastRes: showToastRes,
 ) : Torch {
 
@@ -81,7 +81,7 @@ class RealTorch(
             .launchIn(globalScope)
     }
 
-    override suspend fun toggle() = withContext(dispatchers.main) {
+    override suspend fun toggle() = withContext(mainDispatcher) {
         tryOrToast {
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {

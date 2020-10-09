@@ -19,7 +19,7 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -34,12 +34,12 @@ abstract class EsService : Service() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val dispatchers: AppCoroutineDispatchers by lazy {
+    private val defaultDispatcher: DefaultDispatcher by lazy {
         serviceComponent.mergeComponent<EsServiceComponent>()
-            .dispatchers
+            .defaultDispatcher
     }
 
-    val scope by lazy { CoroutineScope(dispatchers.default) }
+    val scope by lazy { CoroutineScope(defaultDispatcher) }
 
     override fun onDestroy() {
         scope.cancel()
@@ -52,5 +52,5 @@ abstract class EsService : Service() {
 
 @MergeInto(ServiceComponent::class)
 interface EsServiceComponent {
-    val dispatchers: AppCoroutineDispatchers
+    val defaultDispatcher: DefaultDispatcher
 }

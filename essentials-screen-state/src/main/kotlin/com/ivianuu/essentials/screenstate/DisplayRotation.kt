@@ -19,7 +19,7 @@ package com.ivianuu.essentials.screenstate
 import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.ui.core.DisplayRotation
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
@@ -61,9 +61,9 @@ fun displayRotation(
 
 @FunBinding
 suspend fun getCurrentDisplayRotation(
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     windowManager: WindowManager,
-): DisplayRotation = withContext(dispatchers.io) {
+): DisplayRotation = withContext(ioDispatcher) {
     when (windowManager.defaultDisplay.rotation) {
         Surface.ROTATION_0 -> DisplayRotation.PortraitUp
         Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft

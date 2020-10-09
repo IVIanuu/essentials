@@ -18,16 +18,16 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
 @FunBinding
 suspend fun getInstalledApps(
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-): List<AppInfo> = withContext(dispatchers.io) {
+): List<AppInfo> = withContext(ioDispatcher) {
     packageManager.getInstalledApplications(0)
         .parallelMap {
             AppInfo(
@@ -42,10 +42,10 @@ suspend fun getInstalledApps(
 
 @FunBinding
 suspend fun getAppInfo(
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     packageManager: PackageManager,
     packageName: @Assisted String,
-): AppInfo = withContext(dispatchers.io) {
+): AppInfo = withContext(ioDispatcher) {
     AppInfo(
         packageName,
         packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)

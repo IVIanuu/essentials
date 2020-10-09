@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionPrefs
+import com.ivianuu.essentials.gestures.action.ActionMediaAppPref
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
@@ -38,7 +38,7 @@ suspend fun doMediaAction(
 
 @FunBinding
 suspend fun mediaIntent(
-    prefs: ActionPrefs,
+    mediaAppPref: ActionMediaAppPref,
     keyEvent: @Assisted Int,
     keycode: @Assisted Int,
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
@@ -47,7 +47,7 @@ suspend fun mediaIntent(
         KeyEvent(keyEvent, keycode)
     )
 
-    val mediaApp = prefs.actionMediaApp.data.first()
+    val mediaApp = mediaAppPref.data.first()
     if (mediaApp != null) {
         `package` = mediaApp
     }

@@ -24,7 +24,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -53,64 +53,65 @@ interface BillingStore {
 
 @ImplBinding(ApplicationComponent::class)
 class RealBillingStore(
-    private val billingPrefs: BillingPrefs,
-    private val dispatchers: AppCoroutineDispatchers,
+    private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,
+    private val productsPref: DebugProductsPref,
+    private val purchasesPref: DebugPurchasesPref,
 ) : BillingStore {
 
     override suspend fun getSkuDetails(params: SkuDetailsParams): List<SkuDetails> =
-        withContext(dispatchers.default) {
-            billingPrefs.products.data.first()
+        withContext(defaultDispatcher) {
+            productsPref.data.first()
                 .filter { it.sku in params.skusList && it.type == params.skuType }
         }
 
     override suspend fun addProduct(skuDetails: SkuDetails): Unit =
-        withContext(dispatchers.default) {
-            billingPrefs.products.updateData { it + skuDetails }
+        withContext(defaultDispatcher) {
+            productsPref.updateData { it + skuDetails }
         }
 
-    override suspend fun removeProduct(sku: String): Unit = withContext(dispatchers.default) {
-        billingPrefs.products.updateData { products ->
+    override suspend fun removeProduct(sku: String): Unit = withContext(defaultDispatcher) {
+        productsPref.updateData { products ->
             products.filter { it.sku != sku }
         }
     }
 
-    override suspend fun clearProducts(): Unit = withContext(dispatchers.default) {
-        billingPrefs.products.updateData { emptyList() }
+    override suspend fun clearProducts(): Unit = withContext(defaultDispatcher) {
+        productsPref.updateData { emptyList() }
     }
 
     override suspend fun getPurchases(@SkuType skuType: String): PurchasesResult =
-        withContext(dispatchers.default) {
+        withContext(defaultDispatcher) {
             InternalPurchasesResult(
                 BillingResult.newBuilder()
                     .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
-                billingPrefs.purchases.data.first().filter { it.signature.endsWith(skuType) })
+                purchasesPref.data.first().filter { it.signature.endsWith(skuType) })
         }.also {
             logger.d("got purchase result for $skuType -> ${it.responseCode} ${it.purchasesList}")
         }
 
     override suspend fun getPurchaseByToken(purchaseToken: String): Purchase? =
-        withContext(dispatchers.default) {
-            billingPrefs.purchases.data.first()
+        withContext(defaultDispatcher) {
+            purchasesPref.data.first()
                 .firstOrNull { it.purchaseToken == purchaseToken }
         }
 
-    override suspend fun addPurchase(purchase: Purchase): Unit = withContext(dispatchers.default) {
-        billingPrefs.purchases.updateData { it + purchase }
+    override suspend fun addPurchase(purchase: Purchase): Unit = withContext(defaultDispatcher) {
+        purchasesPref.updateData { it + purchase }
     }
 
     override suspend fun removePurchase(purchaseToken: String): Unit =
-        withContext(dispatchers.default) {
-            billingPrefs.purchases.updateData { purchases ->
+        withContext(defaultDispatcher) {
+            purchasesPref.updateData { purchases ->
                 purchases.filter { it.purchaseToken != purchaseToken }
             }
-            billingPrefs.purchases.data.first()
+            purchasesPref.data.first()
                 .filter { it.purchaseToken != purchaseToken }
-                .let { billingPrefs.purchases.updateData { it } }
+                .let { purchasesPref.updateData { it } }
         }
 
-    override suspend fun clearPurchases(): Unit = withContext(dispatchers.default) {
-        billingPrefs.purchases.updateData { emptyList() }
+    override suspend fun clearPurchases(): Unit = withContext(defaultDispatcher) {
+        purchasesPref.updateData { emptyList() }
     }
 
 }

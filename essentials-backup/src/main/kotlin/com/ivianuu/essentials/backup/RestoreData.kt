@@ -4,7 +4,7 @@ import android.content.Intent
 import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.FunBinding
@@ -19,12 +19,12 @@ import java.util.zip.ZipInputStream
 @FunBinding
 suspend fun restoreData(
     applicationContext: ApplicationContext,
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     prefsDir: PrefsDir,
     restartProcess: restartProcess,
     startActivityForIntentResult: startActivityForIntentResult,
 ): Result<Unit, Throwable> = runCatchingAndLog {
-    withContext(dispatchers.io) {
+    withContext(ioDispatcher) {
         val uri = startActivityForIntentResult(
             Intent.createChooser(
                 Intent(Intent.ACTION_GET_CONTENT).apply {

@@ -44,8 +44,8 @@ import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
@@ -60,7 +60,7 @@ class DebugBillingClient(
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore,
     private val buildInfo: BuildInfo,
-    private val dispatchers: AppCoroutineDispatchers,
+    private val defaultDispatcher: DefaultDispatcher,
     private val globalScope: GlobalScope,
     private val startUi: startUi,
     private val navigator: Navigator,
@@ -168,7 +168,7 @@ class DebugBillingClient(
                 ) {
                     ResourceBox(
                         resource = produceResource {
-                            withContext(dispatchers.default) {
+                            withContext(defaultDispatcher) {
                                 billingStore.getSkuDetails(
                                     SkuDetailsParams.newBuilder()
                                         .setType(params.skuType)

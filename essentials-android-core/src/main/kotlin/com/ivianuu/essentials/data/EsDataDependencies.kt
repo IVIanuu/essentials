@@ -19,8 +19,8 @@ package com.ivianuu.essentials.data
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.MoshiSerializerFactory
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -45,11 +45,11 @@ fun moshiSerializerFactory(moshi: Moshi) = MoshiSerializerFactory(moshi)
 @Binding(ApplicationComponent::class)
 fun diskDataStoreFactory(
     globalScope: GlobalScope,
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     prefsDir: () -> PrefsDir,
     serializerFactory: MoshiSerializerFactory,
 ) = DiskDataStoreFactory(
-    scope = globalScope + dispatchers.io,
+    scope = globalScope + ioDispatcher,
     produceBoxDirectory = prefsDir,
     serializerFactory = serializerFactory
 )
@@ -57,11 +57,11 @@ fun diskDataStoreFactory(
 @Binding(ApplicationComponent::class)
 fun settingsDataStoreFactory(
     applicationContext: ApplicationContext,
+    ioDispatcher: IODispatcher,
     globalScope: GlobalScope,
-    dispatchers: AppCoroutineDispatchers,
 ) = SettingsDataStoreFactory(
     context = applicationContext,
-    scope = globalScope + dispatchers.io
+    scope = globalScope + ioDispatcher
 )
 
 @Binding

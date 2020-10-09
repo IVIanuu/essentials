@@ -6,16 +6,17 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
 @FunBinding
 suspend fun getShortcuts(
-    dispatchers: AppCoroutineDispatchers,
+    ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-): List<Shortcut> = withContext(dispatchers.io) {
+): List<Shortcut> = withContext(ioDispatcher) {
     val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
     packageManager.queryIntentActivities(shortcutsIntent, 0)
         .parallelMap { resolveInfo ->
@@ -41,11 +42,11 @@ suspend fun getShortcuts(
 
 @FunBinding
 suspend fun extractShortcut(
-    dispatchers: AppCoroutineDispatchers,
+    defaultDispatcher: DefaultDispatcher,
     packageManager: PackageManager,
     shortcutRequestResult: @Assisted Intent,
 ): Shortcut =
-    withContext(dispatchers.default) {
+    withContext(defaultDispatcher) {
         val intent =
             shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
         val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
