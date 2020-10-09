@@ -45,12 +45,11 @@ fun isOnSecureScreen(
         )
     )
     return services.events
-        .filter { it.packageName != null && it.className != null }
-        .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
-        .map { event ->
-            val packageName = event.packageName!!.toString()
-            val className = event.className!!.toString()
-
+        .map { it.packageName?.toString() to it.className?.toString() }
+        .filter { it.first != null && it.second != null }
+        .map { it.first!! to it.second!! }
+        .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
+        .map { (packageName, className) ->
             // val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
             // val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
 

@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.shareIn
@@ -49,8 +50,8 @@ fun recentApps(
     return services.events
         .filter { !it.isFullScreen }
         .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
-        .filter { it.packageName != null && it.packageName != "android" }
-        .map { it.packageName!!.toString() }
+        .mapNotNull { it.packageName?.toString() }
+        .filter { it != "android" }
         .scan(emptyList<String>()) { recentApps, currentApp ->
             val index = recentApps.indexOf(currentApp)
 
