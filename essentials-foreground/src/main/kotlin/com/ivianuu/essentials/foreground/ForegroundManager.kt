@@ -29,7 +29,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 interface ForegroundManager {
     fun startJob(notification: Notification): ForegroundJob
-    fun stopJob(job: ForegroundJob)
 }
 
 @ImplBinding(ApplicationComponent::class)
@@ -48,14 +47,6 @@ class RealForegroundManager(
         startServiceIfNeeded()
         dispatchUpdate()
         return job
-    }
-
-    override fun stopJob(job: ForegroundJob) {
-        if (job !in _jobs.value) return
-        _jobs.value -= job
-        logger.d("stop job $job")
-        startServiceIfNeeded()
-        dispatchUpdate()
     }
 
     private fun dispatchUpdate() {
@@ -87,7 +78,10 @@ class RealForegroundManager(
         }
 
         override fun stop() {
-            stopJob(this)
+            if (this !in _jobs.value) return
+            _jobs.value -= this
+            logger.d("stop job $this")
+            dispatchUpdate()
         }
 
         override fun equals(other: Any?): Boolean {
