@@ -52,9 +52,7 @@ import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun HomePage(
-    dependencies: HomePageDependencies,
-) {
+fun HomePage(dependencies: HomePageDependencies) {
     Scaffold(
         topBar = {
             TopAppBar(
