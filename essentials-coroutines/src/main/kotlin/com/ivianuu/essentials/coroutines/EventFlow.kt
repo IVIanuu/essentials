@@ -35,7 +35,7 @@ fun <T> EventFlow(): EventFlow<T> =
 private class EventFlowImpl<T> : AbstractFlow<T>(),
     EventFlow<T> {
 
-    private val channel = BroadcastChannel<T>(1)
+    private val channel = BroadcastChannel<T>(DEFAULT_BUFFER_SIZE)
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
         collector.emitAll(channel.asFlow())

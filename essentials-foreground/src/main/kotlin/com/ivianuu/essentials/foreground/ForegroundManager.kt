@@ -19,10 +19,13 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
@@ -32,8 +35,9 @@ interface ForegroundManager {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealForegroundManager(
+class ForegroundManagerImpl(
     private val applicationContext: ApplicationContext,
+    private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,
 ) : ForegroundManager {
 
@@ -67,6 +71,8 @@ class RealForegroundManager(
         override var notification: Notification
     ) : ForegroundJob {
 
+        override val scope = CoroutineScope(defaultDispatcher)
+
         override val id: Int = ids.incrementAndGet()
 
         override val isActive: Boolean
@@ -79,6 +85,7 @@ class RealForegroundManager(
 
         override fun stop() {
             if (this !in _jobs.value) return
+            scope.cancel()
             _jobs.value -= this
             logger.d("stop job $this")
             dispatchUpdate()

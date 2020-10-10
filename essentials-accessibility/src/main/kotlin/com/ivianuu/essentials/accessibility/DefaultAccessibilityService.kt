@@ -72,7 +72,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
             notificationTimeout = configs
                 .map { it.notificationTimeout }
-                .max() ?: 0L
+                .maxOrNull() ?: 0L
 
             packageNames = null
 
@@ -83,7 +83,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
 @MergeInto(ServiceComponent::class)
 interface DefaultAccessibilityServiceComponent {
-    val accessibilityServices: RealAccessibilityServices
+    val accessibilityServices: AccessibilityServicesImpl
     val accessibilityWorkers: AccessibilityWorkers
     val logger: Logger
 }

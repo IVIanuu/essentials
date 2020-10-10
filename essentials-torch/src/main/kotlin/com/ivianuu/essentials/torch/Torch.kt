@@ -45,7 +45,7 @@ interface Torch {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealTorch(
+class TorchImpl(
     private val broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,

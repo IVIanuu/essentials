@@ -48,9 +48,9 @@ fun recentApps(
     )
 
     return services.events
-        .filter { !it.isFullScreen }
+        .filter { it.isFullScreen }
         .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
-        .mapNotNull { it.packageName?.toString() }
+        .mapNotNull { it.packageName }
         .filter { it != "android" }
         .scan(emptyList<String>()) { recentApps, currentApp ->
             val index = recentApps.indexOf(currentApp)

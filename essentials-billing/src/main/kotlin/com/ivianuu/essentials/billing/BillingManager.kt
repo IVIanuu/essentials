@@ -60,7 +60,7 @@ interface BillingManager {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealBillingManager(
+class BillingManagerImpl(
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
     private val defaultDispatcher: DefaultDispatcher,
     private val ioDispatcher: IODispatcher,

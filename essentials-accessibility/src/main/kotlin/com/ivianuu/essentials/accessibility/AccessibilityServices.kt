@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
@@ -37,7 +37,9 @@ interface AccessibilityServices {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealAccessibilityServices : AccessibilityServices {
+class AccessibilityServicesImpl(
+    private val logger: Logger,
+) : AccessibilityServices {
 
     private val service = MutableStateFlow<DefaultAccessibilityService?>(null)
     override val isConnected: Flow<Boolean> get() = service.map { it != null }
@@ -66,8 +68,15 @@ class RealAccessibilityServices : AccessibilityServices {
         updateServiceConfig()
     }
 
-    internal fun onAccessibilityEvent(event: AccessibilityEvent) {
-        _events.offer(event)
+    internal fun onAccessibilityEvent(event: AndroidAccessibilityEvent) {
+        _events.offer(
+            AccessibilityEvent(
+                type = event.eventType,
+                packageName = event.packageName?.toString(),
+                className = event.className?.toString(),
+                isFullScreen = event.isFullScreen
+            )
+        )
     }
 
     internal fun onServiceDisconnected() {

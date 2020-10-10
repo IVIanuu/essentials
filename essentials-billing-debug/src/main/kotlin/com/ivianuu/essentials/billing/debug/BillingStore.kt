@@ -52,7 +52,7 @@ interface BillingStore {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealBillingStore(
+class BillingStoreImpl(
     private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,
     private val productsPref: DebugProductsPref,

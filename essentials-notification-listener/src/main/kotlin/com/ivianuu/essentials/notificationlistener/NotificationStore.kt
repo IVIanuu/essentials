@@ -25,7 +25,7 @@ interface NotificationStore {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class RealNotificationStore(
+class NotificationStoreImpl(
     private val defaultDispatcher: DefaultDispatcher,
 ) : NotificationStore {
 

@@ -74,6 +74,6 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 @MergeInto(ServiceComponent::class)
 interface DefaultNotificationListenerServiceComponent {
     val logger: Logger
-    val notificationStore: RealNotificationStore
+    val notificationStore: NotificationStoreImpl
     val notificationWorkers: NotificationWorkers
 }
