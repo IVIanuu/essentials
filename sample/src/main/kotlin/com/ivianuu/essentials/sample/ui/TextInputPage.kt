@@ -35,7 +35,7 @@ import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
+import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -114,7 +114,7 @@ fun TextInputPage() {
                 }
             }*/
 
-            InsettingLazyColumnItems(items = items) { item ->
+            InsettingLazyColumnFor(items = items) { item ->
                 ListItem(
                     title = { Text(item) }
                 )

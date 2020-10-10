@@ -36,7 +36,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.twilight.TwilightSettingsPage
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
+import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -77,7 +77,7 @@ fun HomePage(
     ) {
         val items = remember { HomeItem.values().toList().sortedBy { it.name } }
 
-        InsettingLazyColumnItems(items = items) { item ->
+        InsettingLazyColumnFor(items = items) { item ->
             val color = key(item) {
                 rememberSavedInstanceState(item) {
                     ColorPickerPalette.values()

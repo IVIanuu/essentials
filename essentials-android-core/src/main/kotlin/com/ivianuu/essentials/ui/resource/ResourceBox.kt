@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.foundation.lazy.LazyRowItems
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,9 +24,10 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnItems
+import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.lazy.LazyRowItems
 
 @Composable
 fun <T> ResourceLazyColumnItems(
@@ -51,7 +51,7 @@ fun <T> ResourceLazyColumnItems(
         idle = idle
     ) { items ->
         if (items.isNotEmpty()) {
-            InsettingLazyColumnItems(
+            InsettingLazyColumnFor(
                 items = items,
                 itemContent = successItemContent
             )
@@ -107,7 +107,7 @@ fun <T> ResourceBox(
     idle: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {
-    // we only wanna animate if the resource 'state' has changed
+    // we only wanna animate if the resource type has changed
     var resourceState by rememberState(resource::class) { resource }
     resourceState = resource
 

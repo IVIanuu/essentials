@@ -20,6 +20,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -176,11 +177,13 @@ fun checkableAppsStore(
     }
 }
 
+@Immutable
 data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )
 
+@Immutable
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),

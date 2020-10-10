@@ -42,13 +42,13 @@ fun <S, V> Flow<V>.executeIn(
 }
 
 @Composable
-operator fun <S> Store<S, *>.component1() = observedState
+operator fun <S> Store<S, *>.component1() = snapshotState
 
 @Composable
 operator fun <A> Store<*, A>.component2(): (A) -> Unit = { dispatch(it) }
 
 @Composable
-val <S> Store<S, *>.observedState: S
+val <S> Store<S, *>.snapshotState: S
     get() = state.collectAsState().value
 
 @FunBinding
