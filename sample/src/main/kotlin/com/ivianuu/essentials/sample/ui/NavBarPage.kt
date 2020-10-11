@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
@@ -79,7 +79,7 @@ fun NavBarPage(
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                gravity = Alignment.Center
+                alignment = Alignment.Center
             ) {
                 Text(
                     text = if (hasPermission) {

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -85,7 +85,7 @@ fun TextInputDialog(
         icon = icon,
         title = title,
         content = {
-            Stack {
+            Box {
                 val focusRequester = remember { FocusRequester() }
 
                 TextField(

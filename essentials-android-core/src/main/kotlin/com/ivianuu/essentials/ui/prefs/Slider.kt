@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
@@ -381,9 +380,9 @@ fun <T : Comparable<T>> BaseSliderListItem(
     valueText: @Composable ((T) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    Stack(modifier = modifier) {
+    Box(modifier = modifier) {
         ListItem(
-            modifier = Modifier.gravity(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter)
                 .padding(bottom = 32.dp),
             title = title,
             subtitle = subtitle,
@@ -393,7 +392,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
 
         Row(
             modifier = Modifier
-                .gravity(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter)
                 .padding(
                     start = 12.dp, // make the slider pretty
                     end = 16.dp

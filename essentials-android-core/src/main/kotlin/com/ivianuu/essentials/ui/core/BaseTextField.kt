@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.ui.core
 
+import androidx.compose.foundation.AmbientContentColor
+import androidx.compose.foundation.AmbientTextStyle
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.contentColor
-import androidx.compose.foundation.currentTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -24,15 +24,15 @@ fun BaseTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    textColor: Color = Color.Unset,
-    textStyle: TextStyle = currentTextStyle(),
+    textColor: Color = Color.Unspecified,
+    textStyle: TextStyle = AmbientTextStyle.current,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Unspecified,
     onImeActionPerformed: (ImeAction) -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
-    cursorColor: Color = contentColor()
+    cursorColor: Color = AmbientContentColor.current,
 ) {
     var textFieldValue by rememberState { TextFieldValue() }
     if (textFieldValue.text != value) {

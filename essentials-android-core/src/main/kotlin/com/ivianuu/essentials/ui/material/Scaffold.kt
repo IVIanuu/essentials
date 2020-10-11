@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Stack
 import androidx.compose.material.DrawerConstants
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
@@ -67,7 +67,7 @@ fun Scaffold(
                             top = applyInsets && topBar == null,
                             bottom = applyInsets && bottomBar == null
                         ) {
-                            Stack {
+                            Box {
                                 floatingActionButton()
                             }
                         }

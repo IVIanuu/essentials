@@ -13,14 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.onActive
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.state
-import androidx.compose.runtime.stateFor
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +28,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
@@ -63,8 +62,8 @@ fun ForegroundJobPage(
     Scaffold(
         topBar = { TopAppBar(title = { Text("Foreground") }) }
     ) {
-        var foregroundJob by state<ForegroundJob?> { null }
-        var count by stateFor(foregroundJob) { 0 }
+        var foregroundJob by rememberState<ForegroundJob?> { null }
+        var count by rememberState(foregroundJob) { 0 }
 
         foregroundJob?.let { currentJob ->
             onCommit(count) {
@@ -73,7 +72,7 @@ fun ForegroundJobPage(
                 )
             }
 
-            launchInComposition(currentJob) {
+            LaunchedTask(currentJob) {
                 while (true) {
                     delay(1000)
                     count++

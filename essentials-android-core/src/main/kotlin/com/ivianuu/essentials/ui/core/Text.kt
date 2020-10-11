@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.TextUnit
 fun Text(
     textRes: Int,
     modifier: Modifier = Modifier,
-    color: Color = Color.Unset,
+    color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Inherit,
     fontStyle: FontStyle? = null,
     fontWeight: FontWeight? = null,

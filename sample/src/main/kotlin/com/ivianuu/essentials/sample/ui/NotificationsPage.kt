@@ -2,12 +2,12 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -118,9 +118,10 @@ private fun NotificationsList(
                                 color = notification.color,
                                 shape = CircleShape
                             )
-                            .padding(all = 8.dp),
-                        children = notification.icon
-                    )
+                            .padding(all = 8.dp)
+                    ) {
+                        notification.icon()
+                    }
                 },
                 trailing = if (notification.isClearable) {
                     {

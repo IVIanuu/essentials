@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
@@ -174,7 +173,7 @@ private fun DialogContentLayout(
 ) {
     val children: @Composable () -> Unit = {
         if (header != null) {
-            Stack(
+            Box(
                 modifier = Modifier.padding(
                     start = 24.dp,
                     top = 24.dp,
@@ -189,7 +188,7 @@ private fun DialogContentLayout(
                 HorizontalDivider(modifier = Modifier.layoutId(DialogContentSlot.TopDivider))
             }
 
-            Stack(
+            Box(
                 modifier = Modifier.padding(
                     start = if (applyContentPadding) 24.dp else 0.dp,
                     top = if (header == null) 24.dp else 0.dp,

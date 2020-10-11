@@ -1,10 +1,9 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -22,7 +21,7 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun DynamicSystemBarsPage() {
-    Stack {
+    Box {
         ScrollableColumn {
             val colors: List<Color> = rememberSavedInstanceState {
                 ColorPickerPalette.values()

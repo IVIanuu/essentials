@@ -11,7 +11,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.globalBounds
-import androidx.compose.ui.onPositioned
+import androidx.compose.ui.onGloballyPositioned
 
 @Stable
 class Animatable(val tag: Any) {
@@ -21,11 +21,11 @@ class Animatable(val tag: Any) {
 
     private val modifiersByProps = mutableMapOf<Prop<*>, Modifier>()
 
-    private val onPositioned = Modifier.onPositioned {
+    private val onGloballyPositioned = Modifier.onGloballyPositioned {
         layoutCoordinates = it
     }
     private val drawLayerModifier = MutableDrawLayerModifier()
-    private val baseModifier = onPositioned.then(drawLayerModifier)
+    private val baseModifier = onGloballyPositioned.then(drawLayerModifier)
 
     internal var modifier by mutableStateOf(baseModifier)
 

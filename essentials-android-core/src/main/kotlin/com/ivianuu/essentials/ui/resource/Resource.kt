@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.github.michaelbull.result.Result
@@ -157,7 +157,7 @@ fun <T> produceResource(
 ): Resource<T> {
     var state by rememberState<Resource<T>>(*inputs) { Idle }
 
-    launchInComposition(*inputs) {
+    LaunchedTask(*inputs) {
         state = Loading
         state = try {
             Success(block())

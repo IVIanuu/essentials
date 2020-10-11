@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -34,7 +34,7 @@ import kotlinx.coroutines.delay
 internal fun SecureSettingsHeader(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.body2.copy(color = contentColor().copy(alpha = 0.6f)),
+        style = MaterialTheme.typography.body2.copy(color = AmbientContentColor.current.copy(alpha = 0.6f)),
         modifier = Modifier.padding(all = 16.dp)
     )
 }
@@ -49,7 +49,7 @@ fun popNavigatorOnceSecureSettingsGranted(
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
-    launchInComposition {
+    LaunchedTask {
         while (true) {
             if (hasSecureSettingsPermission()) {
                 if (toast) showToastRes(R.string.es_secure_settings_permission_granted)

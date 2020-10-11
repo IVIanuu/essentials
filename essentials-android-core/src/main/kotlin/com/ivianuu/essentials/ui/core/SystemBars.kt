@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.core
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
-import androidx.compose.foundation.contentColor
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -37,7 +37,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.globalBounds
-import androidx.compose.ui.onPositioned
+import androidx.compose.ui.onGloballyPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Position
@@ -55,7 +55,7 @@ fun overlaySystemBarBgColor(color: Color) =
 @Composable
 fun Modifier.systemBarStyle(
     bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
-    lightIcons: Boolean = contentColor().isDark
+    lightIcons: Boolean = AmbientContentColor.current.isDark,
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
     var globalBounds by rememberState<Rect?> { null }
@@ -76,7 +76,7 @@ fun Modifier.systemBarStyle(
         onDispose { systemBarManager.unregisterStyle(style) }
     }
 
-    onPositioned { globalBounds = it.globalBounds }
+    onGloballyPositioned { globalBounds = it.globalBounds }
 }
 
 @Composable

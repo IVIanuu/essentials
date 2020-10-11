@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -22,7 +22,7 @@ fun DisplayRotationPage(displayRotationFlow: DisplayRotationFlow) {
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)
             .systemBarStyle(MaterialTheme.colors.primary),
-        gravity = Alignment.Center
+        alignment = Alignment.Center
     ) {
         val displayRotation by displayRotationFlow.collectAsState(null)
         Text(

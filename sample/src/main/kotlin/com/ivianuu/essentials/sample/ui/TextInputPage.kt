@@ -20,7 +20,7 @@ import androidx.compose.foundation.BaseTextField
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
@@ -63,7 +63,7 @@ fun TextInputPage() {
                     if (state.searchVisible) {
                         val focusRequester = remember { FocusRequester() }
 
-                        Stack(
+                        Box(
                             modifier = Modifier.fillMaxSize()
                                 .clickable { focusRequester.requestFocus() }
                         ) {
@@ -72,14 +72,14 @@ fun TextInputPage() {
                                     text = "Search..",
                                     style = MaterialTheme.typography.subtitle1,
                                     modifier = Modifier.drawOpacity(0.5f)
-                                        .gravity(Alignment.CenterStart)
+                                        .align(Alignment.CenterStart)
                                 )
                             }
                             BaseTextField(
                                 value = state.inputValue,
                                 onValueChange = { state.inputValue = it },
                                 textStyle = MaterialTheme.typography.subtitle1,
-                                modifier = Modifier.gravity(Alignment.CenterStart)
+                                modifier = Modifier.align(Alignment.CenterStart)
                                     .focusRequester(focusRequester)
                             )
                         }

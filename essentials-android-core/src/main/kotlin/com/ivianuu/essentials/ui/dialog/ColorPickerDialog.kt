@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.dialog
 
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -407,7 +407,7 @@ private enum class ColorComponent(
 ) {
     Alpha(
         title = "A",
-        color = { contentColor() }
+        color = { AmbientContentColor.current }
     ) {
         override fun extract(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)

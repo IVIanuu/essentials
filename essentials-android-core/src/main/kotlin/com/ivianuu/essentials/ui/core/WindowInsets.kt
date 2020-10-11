@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.core
 
 import android.view.View
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.runtime.Composable
@@ -57,10 +56,10 @@ fun InsetsPadding(
     }
 }
 
-internal val InsetsAmbient = ambientOf { InnerPadding() }
+internal val InsetsAmbient = ambientOf { PaddingValues() }
 
 @Composable
-fun currentInsets(): InnerPadding = InsetsAmbient.current
+fun currentInsets(): PaddingValues = InsetsAmbient.current
 
 @Composable
 fun ConsumeInsets(
@@ -72,7 +71,7 @@ fun ConsumeInsets(
 ) {
     val currentInsets = InsetsAmbient.current
     ProvideInsets(
-        InnerPadding(
+        PaddingValues(
             if (start) 0.dp else currentInsets.start,
             if (top) 0.dp else currentInsets.top,
             if (end) 0.dp else currentInsets.end,
@@ -84,8 +83,8 @@ fun ConsumeInsets(
 
 @Composable
 fun ProvideInsets(
-    insets: InnerPadding,
-    children: @Composable () -> Unit
+    insets: PaddingValues,
+    children: @Composable () -> Unit,
 ) {
     Providers(InsetsAmbient provides insets, children = children)
 }
@@ -105,7 +104,7 @@ fun ProvideWindowInsets(children: @Composable () -> Unit) {
             val imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime())
 
             with(density) {
-                insets = InnerPadding(
+                insets = PaddingValues(
                     start = max(systemBarInsets.left, imeInsets.left).toDp(),
                     top = max(systemBarInsets.top, imeInsets.top).toDp(),
                     end = max(systemBarInsets.right, imeInsets.right).toDp(),
@@ -144,4 +143,3 @@ fun ProvideWindowInsets(children: @Composable () -> Unit) {
 
     ProvideInsets(insets, children)
 }
-

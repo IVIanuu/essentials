@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.TmpSwitch
 
 @Composable
 fun SwitchListItem(
@@ -62,7 +62,7 @@ fun SwitchListItem(
         leading = leading,
         trailing = {
             Box(modifier = Modifier.absorbPointer()) {
-                TmpSwitch(
+                Switch(
                     checked = value,
                     onCheckedChange = onValueChange
                 )

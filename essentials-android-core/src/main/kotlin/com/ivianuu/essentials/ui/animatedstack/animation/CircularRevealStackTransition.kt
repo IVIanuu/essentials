@@ -7,8 +7,8 @@ import kotlin.time.milliseconds
 
 fun CircularRevealStackTransition(
     origin: Any,
-    color: Color = Color.Unset,
-    duration: Duration = 300.milliseconds
+    color: Color = Color.Unspecified,
+    duration: Duration = 300.milliseconds,
 ): StackTransition = { context ->
     /*if (context.toAnimatable != null) onActive { context.addTo() }
 

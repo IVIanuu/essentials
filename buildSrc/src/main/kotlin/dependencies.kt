@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev630"
+    const val version = "${Build.versionName}-dev635"
 }
 
 object Deps {
@@ -42,12 +42,12 @@ object Deps {
 
         object Compose {
             const val version = "1.0.0-SNAPSHOT"
-            const val snapshot = "6886729"
+            const val snapshot = "6896760"
 
             val snapshotUrl =
                 "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository"
 
-            const val compiler = "androidx.compose:compose-compiler:$version"
+            const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
             const val runtime = "androidx.compose.runtime:runtime:$version"
@@ -91,7 +91,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev625"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev635"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
