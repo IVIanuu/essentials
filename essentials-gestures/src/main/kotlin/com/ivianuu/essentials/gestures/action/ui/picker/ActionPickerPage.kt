@@ -7,7 +7,7 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore2
@@ -25,7 +25,7 @@ fun ActionPickerPage(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
         val (state, dispatch) = store(showDefaultOption, showNoneOption)
-        ResourceLazyColumnItems(state.items) { item ->
+        ResourceLazyColumnFor(state.items) { item ->
             ActionPickerItem(
                 item = item,
                 onClick = { dispatch(ActionPickerAction.ItemClicked(item)) }

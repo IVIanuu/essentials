@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
@@ -62,7 +62,7 @@ fun AppPickerPage(
             )
         }
     ) {
-        ResourceLazyColumnItems(state.apps) { app ->
+        ResourceLazyColumnFor(state.apps) { app ->
             key(app.packageName) {
                 AppInfo(
                     onClick = { dispatch(AppClicked(app)) },

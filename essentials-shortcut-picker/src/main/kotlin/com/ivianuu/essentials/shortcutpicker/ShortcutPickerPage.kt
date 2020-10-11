@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
@@ -61,7 +61,7 @@ fun ShortcutPickerPage(
             })
         }
     ) {
-        ResourceLazyColumnItems(state.shortcuts) { shortcut ->
+        ResourceLazyColumnFor(state.shortcuts) { shortcut ->
             Shortcut(
                 info = shortcut,
                 onClick = { dispatch(ShortcutPickerAction.ShortcutClicked(shortcut)) })

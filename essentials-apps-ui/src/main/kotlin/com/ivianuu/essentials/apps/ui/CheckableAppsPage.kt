@@ -30,6 +30,8 @@ import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.AppClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.UpdateRefs
+import com.ivianuu.essentials.store.enableLogging
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.storeProvider
@@ -41,7 +43,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.invoke
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
@@ -69,7 +71,7 @@ fun CheckableAppsPage(
     val (state, dispatch) = store()
 
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
-        dispatch(CheckableAppsAction.UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
+        dispatch(UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
     }
 
     Scaffold(
@@ -91,7 +93,7 @@ fun CheckableAppsPage(
             )
         }
     ) {
-        ResourceLazyColumnItems(state.checkableApps) { app ->
+        ResourceLazyColumnFor(state.checkableApps) { app ->
             CheckableApp(
                 app = app,
                 onClick = { dispatch(AppClicked(app)) }
@@ -125,8 +127,10 @@ private fun CheckableApp(
 
 @Binding
 fun checkableAppsStore(
+    enableLogging: enableLogging,
     getInstalledApps: getInstalledApps,
 ) = storeProvider<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
+    enableLogging()
     state
         .map { it.appFilter }
         .distinctUntilChanged()
@@ -145,7 +149,7 @@ fun checkableAppsStore(
         }
 
         when (action) {
-            is CheckableAppsAction.UpdateRefs -> {
+            is UpdateRefs -> {
                 setState {
                     copy(
                         checkedApps = action.checkedApps,

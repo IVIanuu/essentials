@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnItems
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.executeIn
@@ -98,7 +98,7 @@ private fun NotificationsList(
     onDismissNotificationClick: (UiNotification) -> Unit,
     notifications: Resource<List<UiNotification>>
 ) {
-    ResourceLazyColumnItems(
+    ResourceLazyColumnFor(
         resource = notifications,
         successEmpty = {
             Text(

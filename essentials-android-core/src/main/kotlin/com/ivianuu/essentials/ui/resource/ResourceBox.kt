@@ -20,8 +20,6 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
@@ -31,7 +29,7 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
-fun <T> ResourceLazyColumnItems(
+fun <T> ResourceLazyColumnFor(
     resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
@@ -63,7 +61,7 @@ fun <T> ResourceLazyColumnItems(
 }
 
 @Composable
-fun <T> ResourceLazyRowItems(
+fun <T> ResourceLazyRowFor(
     resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeStackTransition(),
@@ -109,19 +107,19 @@ fun <T> ResourceBox(
     success: @Composable (T) -> Unit
 ) {
     // we only wanna animate if the resource type has changed
-    var resourceState by rememberState(resource::class) { resource }
-    resourceState = resource
+    val resourceState = rememberState(resource::class) { resource }
+    resourceState.value = resource
 
     AnimatedBox(
         current = resourceState,
         modifier = modifier,
         transition = transition
     ) { currentState ->
-        when (currentState) {
+        when (val currentValue = currentState.value) {
             is Idle -> idle()
             is Loading -> loading()
-            is Success -> success(currentState.value)
-            is Error -> error(currentState.error)
+            is Success -> success(currentValue.value)
+            is Error -> error(currentValue.error)
         }
     }
 }
