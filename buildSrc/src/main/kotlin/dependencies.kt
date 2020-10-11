@@ -45,7 +45,7 @@ object Deps {
             const val snapshot = "6886729"
 
             val snapshotUrl =
-                "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository/"
+                "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository"
 
             const val compiler = "androidx.compose:compose-compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
