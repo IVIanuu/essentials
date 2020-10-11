@@ -1,7 +1,8 @@
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.contentColor
+import androidx.compose.foundation.AmbientContentColor
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,21 +15,21 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HorizontalDivider(
     modifier: Modifier = Modifier,
-    color: Color = contentColor().copy(alpha = 0.12f)
+    color: Color = AmbientContentColor.current.copy(alpha = 0.12f),
 ) {
     Box(
-        backgroundColor = color,
-        modifier = Modifier.fillMaxWidth().height(1.dp).then(modifier)
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color)
+            .height(1.dp)
+            .then(modifier)
     )
 }
 
 @Composable
 fun VerticalDivider(
     modifier: Modifier = Modifier,
-    color: Color = contentColor().copy(alpha = 0.12f)
+    color: Color = AmbientContentColor.current.copy(alpha = 0.12f),
 ) {
-    Box(
-        backgroundColor = color,
-        modifier = Modifier.fillMaxHeight().width(1.dp).then(modifier)
-    )
+    Box(modifier = Modifier.fillMaxHeight().width(1.dp).then(modifier))
 }

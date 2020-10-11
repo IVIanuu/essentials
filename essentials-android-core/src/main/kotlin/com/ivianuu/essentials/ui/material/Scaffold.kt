@@ -26,6 +26,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.emptyContent
+import androidx.compose.runtime.orEmpty
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
@@ -57,8 +59,8 @@ fun Scaffold(
     ) {
         Scaffold(
             scaffoldState = scaffoldState,
-            topBar = topBar,
-            bottomBar = bottomBar,
+            topBar = topBar.orEmpty(),
+            bottomBar = bottomBar.orEmpty(),
             floatingActionButton = if (floatingActionButton != null) (
                     {
                         InsetsPadding(
@@ -70,7 +72,7 @@ fun Scaffold(
                             }
                         }
                     }
-                    ) else null,
+                    ) else emptyContent(),
             floatingActionButtonPosition = floatingActionButtonPosition,
             isFloatingActionButtonDocked = isFloatingActionButtonDocked,
             drawerContent = drawerContent,

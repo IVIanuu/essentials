@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.ScrollableColumn
@@ -26,6 +24,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.contentColor
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -196,7 +195,7 @@ private fun ColorGrid(
                             key(item) {
                                 Box(
                                     modifier = Modifier.size(maxWidth / 4),
-                                    gravity = ContentGravity.Center
+                                    alignment = Alignment.Center
                                 ) {
                                     when (item) {
                                         is ColorGridItem.Back -> ColorGridBackButton(
@@ -284,9 +283,10 @@ private fun BaseColorGridItem(
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
             .clickable(onClick = onClick, indication = RippleIndication(bounded = false)),
-        gravity = ContentGravity.Center,
-        children = children
-    )
+        alignment = Alignment.Center
+    ) {
+        children()
+    }
 }
 
 @Composable

@@ -15,11 +15,6 @@
  */
 
 buildscript {
-    // todo remove
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
-    }
-
     repositories {
         mavenLocal()
         maven("https://dl.bintray.com/ivianuu/maven/")
@@ -29,6 +24,7 @@ buildscript {
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        maven(Deps.AndroidX.Compose.snapshotUrl)
         maven("https://plugins.gradle.org/m2")
         maven("https://maven.fabric.io/public")
     }
@@ -54,13 +50,6 @@ allprojects {
 
     // todo remove
     configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(0, java.util.concurrent.TimeUnit.SECONDS)
-    }
-
-    // todo remove
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
-        resolutionStrategy.force("com.squareup:kotlinpoet:1.5.0")
         resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-SNAPSHOT")
         resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9-SNAPSHOT")
         resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9-SNAPSHOT")
@@ -74,6 +63,7 @@ allprojects {
         mavenCentral()
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven(Deps.AndroidX.Compose.snapshotUrl)
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://maven.fabric.io/public")
     }

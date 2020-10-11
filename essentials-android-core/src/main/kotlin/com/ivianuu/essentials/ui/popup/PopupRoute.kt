@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -68,9 +68,10 @@ fun PopupRoute(
     ) {
         Box(
             modifier = Modifier.tapGestureFilter(onTap = {})
-                .animatable(PopupTag),
-            children = popup
-        )
+                .animatable(PopupTag)
+        ) {
+            popup()
+        }
     }
 }
 

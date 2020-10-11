@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerId
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -44,13 +45,13 @@ private class AbsorbPointerGestureFilter : PointerInputFilter(), PointerInputMod
 
     private val consumedIds = mutableSetOf<PointerId>()
 
-    override fun onPointerInput(
-        changes: List<PointerInputChange>,
+    override fun onPointerEvent(
+        pointerEvent: PointerEvent,
         pass: PointerEventPass,
-        bounds: IntSize
+        bounds: IntSize,
     ): List<PointerInputChange> {
         // todo
-        return changes
+        return pointerEvent.changes
         /*return if (absorb && (pass == PointerEventPass.Initial ||
                     pass == PointerEventPass.PreDown ||
                     pass == PointerEventPass.PostDown)

@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.ui.resource
 
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +29,6 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.lazy.LazyRowItems
 
 @Composable
 fun <T> ResourceLazyColumnItems(
@@ -40,7 +41,7 @@ fun <T> ResourceLazyColumnItems(
     },
     idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItemContent: @Composable (T) -> Unit
+    successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     ResourceBox(
         resource = resource,
@@ -72,7 +73,7 @@ fun <T> ResourceLazyRowItems(
     },
     idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
-    successItemContent: @Composable (T) -> Unit
+    successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     ResourceBox(
         resource = resource,
@@ -83,7 +84,7 @@ fun <T> ResourceLazyRowItems(
         idle = idle
     ) { items ->
         if (items.isNotEmpty()) {
-            LazyRowItems(
+            LazyRowFor(
                 items = items,
                 itemContent = successItemContent
             )

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.core
 
 import android.view.View
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.absolutePadding

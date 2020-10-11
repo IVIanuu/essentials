@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
@@ -95,7 +95,7 @@ private fun DialogBody(
                 {
                     ProvideTextStyle(MaterialTheme.typography.h6) {
                         ProvideEmphasis(
-                            emphasis = EmphasisAmbient.current.high,
+                            emphasis = AmbientEmphasisLevels.current.high,
                             content = title
                         )
                     }
@@ -105,7 +105,7 @@ private fun DialogBody(
             val styledIcon: @Composable (() -> Unit)? = icon?.let {
                 {
                     ProvideEmphasis(
-                        emphasis = EmphasisAmbient.current.high,
+                        emphasis = AmbientEmphasisLevels.current.high,
                         content = icon
                     )
                 }
@@ -131,7 +131,7 @@ private fun DialogBody(
         {
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
                 ProvideEmphasis(
-                    emphasis = EmphasisAmbient.current.medium,
+                    emphasis = AmbientEmphasisLevels.current.medium,
                     content = content
                 )
             }
@@ -204,17 +204,14 @@ private fun DialogContentLayout(
                 HorizontalDivider(modifier = Modifier.layoutId(DialogContentSlot.BottomDivider))
             }
 
-            if (!showBottomDivider && content != null) {
-                Box(
-                    modifier = Modifier.padding(top = 28.dp)
-                        .layoutId(DialogContentSlot.Buttons),
-                    children = buttons
-                )
+            val buttonsModifier = if (!showBottomDivider && content != null) {
+                Modifier.padding(top = 28.dp)
+                    .layoutId(DialogContentSlot.Buttons)
             } else {
-                Box(
-                    modifier = Modifier.layoutId(DialogContentSlot.Buttons),
-                    children = buttons
-                )
+                Modifier.layoutId(DialogContentSlot.Buttons)
+            }
+            Box(modifier = buttonsModifier) {
+                buttons()
             }
         }
     }

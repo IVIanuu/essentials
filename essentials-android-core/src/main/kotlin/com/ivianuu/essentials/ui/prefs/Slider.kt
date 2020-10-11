@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.padding
@@ -421,7 +420,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
             if (valueText != null) {
                 Box(
                     modifier = Modifier.widthIn(min = 72.dp),
-                    gravity = ContentGravity.CenterEnd
+                    alignment = Alignment.CenterEnd
                 ) {
                     valueText(fromFloat(sliderState))
                 }

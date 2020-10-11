@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -78,8 +79,8 @@ fun BottomNavigationPage() {
     ) {
         AnimatedBox(current = selectedItem) { item ->
             Box(
-                modifier = Modifier.fillMaxSize(),
-                backgroundColor = item.color
+                modifier = Modifier.fillMaxSize()
+                    .background(item.color)
             )
         }
     }

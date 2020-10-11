@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ExperimentalLayout
@@ -49,7 +48,7 @@ fun ChipsPage(showToast: showToast) {
     ) {
         Box(
             modifier = Modifier.padding(all = 8.dp),
-            gravity = ContentGravity.TopStart
+            gravity = Alignment.TopStart
         ) {
             FlowRow(
                 mainAxisSpacing = 8.dp,

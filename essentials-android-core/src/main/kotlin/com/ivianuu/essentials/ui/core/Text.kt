@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.ui.core
 
+import androidx.compose.foundation.AmbientTextStyle
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.currentTextStyle
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,9 +32,8 @@ fun Text(
     overflow: TextOverflow = TextOverflow.Clip,
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
-    inlineContent: Map<String, InlineTextContent> = mapOf(),
     onTextLayout: (TextLayoutResult) -> Unit = {},
-    style: TextStyle = currentTextStyle(),
+    style: TextStyle = AmbientTextStyle.current,
 ) {
     Text(
         stringResource(textRes),
@@ -52,7 +50,6 @@ fun Text(
         overflow,
         softWrap,
         maxLines,
-        inlineContent,
         onTextLayout,
         style
     )

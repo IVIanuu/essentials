@@ -19,9 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.animation.animate
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.TransformOrigin
 import androidx.compose.ui.composed
@@ -47,6 +47,7 @@ import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DialogRoute
@@ -60,7 +61,7 @@ import kotlin.time.milliseconds
 fun ScaffoldPage(navigator: Navigator) {
     val controls = remember { ScaffoldControls() }
 
-    com.ivianuu.essentials.ui.material.Scaffold(
+    Scaffold(
         topBar = if (controls.showTopBar) ({
             TopAppBar(title = { Text("Scaffold") })
         }) else null,
@@ -86,7 +87,7 @@ fun ScaffoldPage(navigator: Navigator) {
                         modifier = Modifier.height(56.dp)
                             .fillMaxWidth()
                             .padding(start = 16.dp, end = 16.dp),
-                        gravity = ContentGravity.CenterStart
+                        alignment = Alignment.CenterStart
                     ) {
                         Text(
                             text = "Bottom bar",

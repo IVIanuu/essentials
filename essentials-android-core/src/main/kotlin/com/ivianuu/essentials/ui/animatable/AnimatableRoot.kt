@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
@@ -21,7 +21,7 @@ fun ProvideAnimatableRoot(
 ) {
     val state = remember { AnimatableRoot() }
     Providers(AnimatableRootAmbient provides state) {
-        Stack(modifier = modifier.then(Modifier.animatable(Root))) {
+        Box(modifier = modifier.then(Modifier.animatable(Root))) {
             children()
             state.animationOverlayEntries.forEach { overlay ->
                 key(overlay) {

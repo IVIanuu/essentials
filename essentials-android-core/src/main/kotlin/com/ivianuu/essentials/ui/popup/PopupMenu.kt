@@ -16,15 +16,16 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
@@ -66,13 +67,13 @@ private fun PopupMenuItem(
         modifier = Modifier.preferredWidthIn(min = 200.dp)
             .height(48.dp)
             .clickable(onClick = onSelected),
-        gravity = ContentGravity.CenterStart
+        alignment = Alignment.CenterStart
     ) {
         Box(
-            gravity = ContentGravity.CenterStart,
-            paddingStart = 16.dp,
-            paddingEnd = 16.dp,
-            children = children
-        )
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            alignment = Alignment.CenterStart
+        ) {
+            children()
+        }
     }
 }

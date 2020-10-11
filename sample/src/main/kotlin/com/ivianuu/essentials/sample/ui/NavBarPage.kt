@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -80,7 +79,7 @@ fun NavBarPage(
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                gravity = ContentGravity.Center
+                gravity = Alignment.Center
             ) {
                 Text(
                     text = if (hasPermission) {

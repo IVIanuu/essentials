@@ -3,6 +3,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Stack
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,12 +35,12 @@ fun DynamicSystemBarsPage() {
                 Box(
                     modifier = Modifier.fillMaxWidth()
                         .height(300.dp)
+                        .background(color)
                         .layoutId(color)
                         .systemBarStyle(
                             bgColor = Color.Black.copy(alpha = 0.2f),
                             lightIcons = color.isLight
-                        ),
-                    backgroundColor = color
+                        )
                 )
             }
         }

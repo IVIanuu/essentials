@@ -32,7 +32,8 @@ object Publishing {
 }
 
 object Deps {
-    const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.2.2"
+    const val accompanistCoil =
+        "dev.chrisbanes.accompanist:accompanist-coil:0.3.1.compose-6886729-SNAPSHOT"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
 
     object AndroidX {
@@ -40,7 +41,12 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-alpha03"
+            const val version = "1.0.0-SNAPSHOT"
+            const val snapshot = "6886729"
+
+            val snapshotUrl =
+                "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository/"
+
             const val compiler = "androidx.compose:compose-compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"

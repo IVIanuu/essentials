@@ -16,23 +16,22 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.preferredHeightIn
-import androidx.compose.material.EmphasisAmbient
+import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideEmphasis
-import androidx.compose.material.ripple.RippleThemeAmbient
+import androidx.compose.material.ripple.AmbientRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +61,7 @@ fun ListItem(
         modifier = modifier
             .preferredHeightIn(min = minHeight)
             .fillMaxWidth()
-            .background(color = if (selected) RippleThemeAmbient.current.defaultColor() else Color.Transparent)
+            .background(color = if (selected) AmbientRippleTheme.current.defaultColor() else Color.Transparent)
             .then(
                 if (onClick != null || onLongClick != null)
                     Modifier.clickable(
@@ -72,7 +71,7 @@ fun ListItem(
                     )
                 else Modifier
             ),
-        gravity = Alignment.CenterStart
+        alignment = Alignment.CenterStart
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // leading
@@ -80,16 +79,19 @@ fun ListItem(
                 Box(
                     modifier = Modifier
                         .preferredHeight(minHeight),
-                    gravity = ContentGravity.CenterStart
+                    alignment = Alignment.CenterStart
                 ) {
                     Box(
-                        paddingStart = 16.dp,
-                        paddingTop = 8.dp,
-                        paddingBottom = 8.dp,
-                        gravity = ContentGravity.Center
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp,
+                                top = 8.dp,
+                                bottom = 8.dp
+                            ),
+                        alignment = Alignment.Center
                     ) {
                         ProvideEmphasis(
-                            emphasis = EmphasisAmbient.current.high,
+                            emphasis = AmbientEmphasisLevels.current.high,
                             content = leading
                         )
                     }
@@ -101,7 +103,7 @@ fun ListItem(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = HorizontalTextPadding),
-                gravity = ContentGravity.CenterStart
+                alignment = Alignment.CenterStart
             ) {
                 Column(
                     modifier = Modifier
@@ -114,7 +116,7 @@ fun ListItem(
                     if (title != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
                             ProvideEmphasis(
-                                emphasis = EmphasisAmbient.current.high,
+                                emphasis = AmbientEmphasisLevels.current.high,
                                 content = title
                             )
                         }
@@ -122,7 +124,7 @@ fun ListItem(
                     if (subtitle != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.body2) {
                             ProvideEmphasis(
-                                emphasis = EmphasisAmbient.current.medium,
+                                emphasis = AmbientEmphasisLevels.current.medium,
                                 content = subtitle
                             )
                         }
@@ -135,16 +137,18 @@ fun ListItem(
                 Box(
                     modifier = Modifier
                         .preferredHeight(minHeight),
-                    gravity = ContentGravity.CenterEnd
+                    alignment = Alignment.CenterEnd
                 ) {
                     Box(
-                        paddingTop = 8.dp,
-                        paddingEnd = 16.dp,
-                        paddingBottom = 8.dp,
-                        gravity = ContentGravity.Center
+                        modifier = Modifier.padding(
+                            top = 8.dp,
+                            end = 16.dp,
+                            bottom = 8.dp
+                        ),
+                        alignment = Alignment.Center
                     ) {
                         ProvideEmphasis(
-                            emphasis = EmphasisAmbient.current.high,
+                            emphasis = AmbientEmphasisLevels.current.high,
                             content = trailing
                         )
                     }

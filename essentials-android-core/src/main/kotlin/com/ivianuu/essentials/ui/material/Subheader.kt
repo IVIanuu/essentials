@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentColorAmbient
-import androidx.compose.foundation.ContentGravity
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -39,9 +39,9 @@ fun Subheader(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
             .then(modifier),
-        gravity = ContentGravity.CenterStart
+        alignment = Alignment.CenterStart
     ) {
-        Providers(ContentColorAmbient provides MaterialTheme.colors.secondary) {
+        Providers(AmbientContentColor provides MaterialTheme.colors.secondary) {
             ProvideTextStyle(value = MaterialTheme.typography.body2, children = text)
         }
     }

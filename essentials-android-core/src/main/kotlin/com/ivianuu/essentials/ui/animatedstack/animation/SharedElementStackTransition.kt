@@ -2,7 +2,7 @@ package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.Composable
@@ -168,9 +168,10 @@ fun SharedElementStackTransition(
                                 x = currentProps.position.x.toDp(),
                                 y = currentProps.position.y.toDp()
                             )
-                            .drawLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY),
-                        children = sharedElementComposable
-                    )
+                            .drawLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
+                    ) {
+                        sharedElementComposable()
+                    }
                 }
             }
         }
@@ -191,7 +192,8 @@ fun SharedElement(
 ) {
     Box(
         modifier = Modifier
-            .animatable(tag, SharedElementComposable withValue children).then(modifier),
-        children = children
-    )
+            .animatable(tag, SharedElementComposable withValue children).then(modifier)
+    ) {
+        children()
+    }
 }

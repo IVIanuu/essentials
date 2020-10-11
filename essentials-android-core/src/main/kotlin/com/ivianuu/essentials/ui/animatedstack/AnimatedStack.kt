@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -73,7 +72,7 @@ fun <T> AnimatedStack(
                 it.run()
             }
         }
-        Stack(modifier = modifier) {
+        Box(modifier = modifier) {
             state.visibleChildren.toList().forEach {
                 key(it.key) {
                     it.content()
@@ -221,10 +220,9 @@ class AnimatedStackChild<T>(
 
     @Composable
     internal fun content() {
-        Box(
-            modifier = Modifier.animatable(this),
-            children = content
-        )
+        Box(modifier = Modifier.animatable(this)) {
+            content.invoke()
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -22,13 +22,12 @@ fun SharedElementPage(color: @Assisted Color) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
-        Stack {
+        Box {
             SharedElement(tag = "b", modifier = Modifier.center()) {
                 Box(
-                    backgroundColor = color,
-                    shape = CircleShape,
                     modifier = Modifier
                         .size(150.dp)
+                        .background(color, CircleShape)
                 )
             }
         }

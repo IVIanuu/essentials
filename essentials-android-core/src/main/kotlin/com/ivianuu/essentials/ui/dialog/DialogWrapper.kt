@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.Box
-import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -60,15 +59,16 @@ fun DialogWrapper(
             })
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.6f)),
-        gravity = ContentGravity.Center
+        alignment = Alignment.Center
     ) {
         InsetsPadding {
             Box(
                 modifier = Modifier.tapGestureFilter(onTap = {})
                     .wrapContentSize(align = Alignment.Center),
-                gravity = ContentGravity.Center,
-                children = dialog
-            )
+                alignment = Alignment.Center
+            ) {
+                dialog()
+            }
         }
     }
 }

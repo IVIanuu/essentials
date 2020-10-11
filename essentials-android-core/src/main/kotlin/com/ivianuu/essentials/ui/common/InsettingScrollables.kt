@@ -10,6 +10,11 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -17,8 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.ConsumeInsets
 import com.ivianuu.essentials.ui.core.InsetsAmbient
-import com.ivianuu.essentials.ui.lazy.LazyColumnFor
-import com.ivianuu.essentials.ui.lazy.LazyRowFor
 
 @OptIn(InternalLayoutApi::class)
 @Composable
@@ -80,7 +83,8 @@ fun InsettingScrollableRow(
 fun <T> InsettingLazyColumnFor(
     items: List<T>,
     modifier: Modifier = Modifier,
-    itemContent: @Composable (T) -> Unit,
+    state: LazyListState = rememberLazyListState(),
+    itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val insets = InsetsAmbient.current
     ConsumeInsets(start = false, end = false) {
@@ -92,7 +96,8 @@ fun <T> InsettingLazyColumnFor(
                     add(TrailingInsetsItem)
                 }
             },
-            modifier = modifier
+            modifier = modifier,
+            state = state
         ) { item ->
             when (item) {
                 LeadingInsetsItem -> {
@@ -111,7 +116,8 @@ fun <T> InsettingLazyColumnFor(
 fun <T> InsettingLazyRowFor(
     items: List<T>,
     modifier: Modifier = Modifier,
-    itemContent: @Composable (T) -> Unit,
+    state: LazyListState = rememberLazyListState(),
+    itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val insets = InsetsAmbient.current
     ConsumeInsets(top = false, bottom = false) {
@@ -123,7 +129,8 @@ fun <T> InsettingLazyRowFor(
                     add(TrailingInsetsItem)
                 }
             },
-            modifier = modifier
+            modifier = modifier,
+            state = state
         ) { item ->
             when (item) {
                 LeadingInsetsItem -> {
