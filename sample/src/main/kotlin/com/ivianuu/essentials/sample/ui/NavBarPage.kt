@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
 import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.ui.coroutines.produceState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -75,7 +75,7 @@ fun NavBarPage(
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }
 
-            val hasPermission by produceState(false) { hasSecureSettingsPermission() }
+            val hasPermission by produceState(false) { value = hasSecureSettingsPermission() }
 
             Box(
                 modifier = Modifier.fillMaxWidth(),

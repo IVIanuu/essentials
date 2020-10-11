@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.ui.animatable.withValue
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
-import com.ivianuu.essentials.ui.coroutines.produceState
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.milliseconds
@@ -59,7 +59,7 @@ fun SharedElementStackTransition(
 
     val forceRun by produceState(false) {
         delay(waitingTimeout.toLongMilliseconds())
-        true
+        value = true
     }
 
     if (bounds.all { it.first != null && it.second != null } || forceRun) {

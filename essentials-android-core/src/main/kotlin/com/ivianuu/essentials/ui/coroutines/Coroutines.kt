@@ -17,32 +17,12 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedTask
-import androidx.compose.runtime.State
 import com.ivianuu.essentials.ui.common.rememberRetained
-import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-
-@Composable
-fun <T> produceState(
-    initial: T,
-    block: suspend CoroutineScope.() -> T
-): State<T> = produceState(initial = initial, inputs = *emptyArray(), block = block)
-
-@Composable
-fun <T> produceState(
-    initial: T,
-    vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> T
-): State<T> {
-    val state = rememberState { initial }
-    LaunchedTask(*inputs) { state.value = block() }
-    return state
-}
 
 @Composable
 fun rememberRetainedCoroutinesScope(
