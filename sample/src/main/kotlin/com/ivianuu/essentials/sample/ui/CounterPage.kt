@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold

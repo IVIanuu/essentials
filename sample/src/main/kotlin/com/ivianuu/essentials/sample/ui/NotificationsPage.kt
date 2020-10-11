@@ -39,7 +39,6 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationC
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageAsset

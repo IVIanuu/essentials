@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.emitAll
 
 interface EventFlow<T> : Flow<T> {
     fun offer(value: T)
+    suspend fun send(value: T)
 }
 
 fun <T> EventFlow(): EventFlow<T> =
@@ -43,5 +44,9 @@ private class EventFlowImpl<T> : AbstractFlow<T>(),
 
     override fun offer(value: T) {
         channel.offerSafe(value)
+    }
+
+    override suspend fun send(value: T) {
+        channel.send(value)
     }
 }

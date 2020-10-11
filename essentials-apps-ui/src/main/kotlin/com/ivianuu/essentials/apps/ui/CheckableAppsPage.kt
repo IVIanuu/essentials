@@ -31,9 +31,8 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsAction.AppClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.UpdateRefs
-import com.ivianuu.essentials.store.enableLogging
+import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.setState
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -127,10 +126,8 @@ private fun CheckableApp(
 
 @Binding
 fun checkableAppsStore(
-    enableLogging: enableLogging,
     getInstalledApps: getInstalledApps,
 ) = storeProvider<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
-    enableLogging()
     state
         .map { it.appFilter }
         .distinctUntilChanged()
@@ -139,13 +136,13 @@ fun checkableAppsStore(
 
     onEachAction { action ->
         suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-            val currentState = state.value
+            val currentState = currentState()
             val newCheckedApps = currentState.checkableApps()!!
                 .filter { it.isChecked }
                 .map { it.info.packageName }
                 .toMutableSet()
                 .apply(reducer)
-            currentState.onCheckedAppsChanged(newCheckedApps)
+            currentState.onCheckedAppsChanged!!(newCheckedApps)
         }
 
         when (action) {
@@ -168,7 +165,7 @@ fun checkableAppsStore(
                 }
             }
             SelectAllClicked -> {
-                state.value.apps()?.let { allApps ->
+                currentState().apps()?.let { allApps ->
                     pushNewCheckedApps { newApps ->
                         newApps += allApps.map { it.packageName }
                     }
@@ -191,8 +188,8 @@ data class CheckableApp(
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
-    val onCheckedAppsChanged: suspend (Set<String>) -> Unit = {},
-    val appFilter: AppFilter = DefaultAppFilter
+    val onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null,
+    val appFilter: AppFilter = DefaultAppFilter,
 ) {
     val checkableApps = apps.map { apps ->
         apps.map { app ->
