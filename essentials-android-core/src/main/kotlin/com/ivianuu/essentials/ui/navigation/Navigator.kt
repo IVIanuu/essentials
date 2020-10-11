@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import android.os.Looper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
@@ -38,6 +39,9 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Stable
 class Navigator {
@@ -155,13 +159,23 @@ class Navigator {
         )
     }
 
-    private fun setBackStackInternal(newBackStack: List<RouteState>) = synchronized(this) {
-        val oldBackStack = _backStack.toList()
-        _backStack.clear()
-        _backStack += newBackStack
-        oldBackStack
-            .filterNot { it in newBackStack }
-            .forEach { it.detach() }
+    private fun setBackStackInternal(newBackStack: List<RouteState>) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            GlobalScope.launch(Dispatchers.Main) { setBackStackImpl(newBackStack) }
+        } else {
+            setBackStackImpl(newBackStack)
+        }
+    }
+
+    private fun setBackStackImpl(newBackStack: List<RouteState>) {
+        synchronized(this) {
+            val oldBackStack = _backStack.toList()
+            _backStack.clear()
+            _backStack += newBackStack
+            oldBackStack
+                .filterNot { it in newBackStack }
+                .forEach { it.detach() }
+        }
     }
 
     private class RouteState(val route: Route) {
