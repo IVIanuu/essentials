@@ -32,9 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
+import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CompletableDeferred
@@ -61,7 +61,7 @@ class Navigator {
         val backPressEnabled = handleBack &&
                 backStack.isNotEmpty() &&
                 (popsLastRoute || backStack.size > 1)
-        onBackPressed(enabled = backPressEnabled) {
+        OnBackPressed(enabled = backPressEnabled) {
             if (backStack.none { it.stackChild.isAnimating }) popTop()
         }
 

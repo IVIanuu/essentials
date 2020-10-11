@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,6 +35,9 @@ import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.datastore.asState
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
+import com.ivianuu.essentials.ui.material.Slider
+import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import kotlin.time.Duration
 
@@ -46,9 +48,9 @@ fun DoubleSliderListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Double) -> Unit)? = null,
-    valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    valueRange: ClosedRange<Double> = 0.0..1.0,
+    stepPolicy: StepPolicy<Double>,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     DoubleSliderListItem(
@@ -59,7 +61,7 @@ fun DoubleSliderListItem(
         subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
-        steps = steps,
+        stepPolicy = stepPolicy,
         valueText = valueText
     )
 }
@@ -72,9 +74,9 @@ fun DoubleSliderListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Double) -> Unit)? = null,
-    valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    valueRange: ClosedRange<Double> = 0.0..1.0,
+    stepPolicy: StepPolicy<Double> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -86,7 +88,7 @@ fun DoubleSliderListItem(
         subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
-        steps = steps,
+        stepPolicy = stepPolicy,
         valueText = valueText
     )
 }
@@ -98,9 +100,9 @@ fun FloatSliderListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Float) -> Unit)? = null,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    valueRange: ClosedRange<Float> = 0f..1f,
+    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     FloatSliderListItem(
@@ -112,7 +114,7 @@ fun FloatSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -124,9 +126,9 @@ fun FloatSliderListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Float) -> Unit)? = null,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    valueRange: ClosedRange<Float> = 0f..1f,
+    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -138,7 +140,7 @@ fun FloatSliderListItem(
         subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
-        steps = steps,
+        stepPolicy = stepPolicy,
         valueText = valueText
     )
 }
@@ -151,8 +153,8 @@ fun IntSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Int> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     IntSliderListItem(
@@ -164,7 +166,7 @@ fun IntSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -177,8 +179,8 @@ fun IntSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Int) -> Unit)? = null,
     valueRange: IntRange = 0..100,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Int> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -191,7 +193,7 @@ fun IntSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -203,8 +205,8 @@ fun LongSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Long> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     LongSliderListItem(
@@ -216,7 +218,7 @@ fun LongSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -229,8 +231,8 @@ fun LongSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Long) -> Unit)? = null,
     valueRange: LongRange = 0L..100L,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Long> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -243,7 +245,7 @@ fun LongSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -255,8 +257,8 @@ fun DpSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Dp> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     DpSliderListItem(
@@ -268,7 +270,7 @@ fun DpSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -281,8 +283,8 @@ fun DpSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Dp) -> Unit)? = null,
     valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Dp> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -295,7 +297,7 @@ fun DpSliderListItem(
         leading = leading,
         valueText = valueText,
         valueRange = valueRange,
-        steps = steps
+        stepPolicy = stepPolicy
     )
 }
 
@@ -307,8 +309,8 @@ fun DurationSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Duration> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     var value by dataStore.asState()
     DurationSliderListItem(
@@ -319,7 +321,7 @@ fun DurationSliderListItem(
         subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
-        steps = steps,
+        stepPolicy = stepPolicy,
         valueText = valueText
     )
 }
@@ -333,8 +335,8 @@ fun DurationSliderListItem(
     leading: @Composable (() -> Unit)? = null,
     valueText: @Composable ((Duration) -> Unit)? = null,
     valueRange: ClosedRange<Duration>,
-    steps: Int = 0,
-    modifier: Modifier = Modifier
+    stepPolicy: StepPolicy<Duration> = NoStepsStepPolicy,
+    modifier: Modifier = Modifier,
 ) {
     BaseSliderListItem(
         value = value,
@@ -346,7 +348,7 @@ fun DurationSliderListItem(
         subtitle = subtitle,
         leading = leading,
         valueRange = valueRange,
-        steps = steps,
+        stepPolicy = stepPolicy,
         valueText = valueText
     )
 }
@@ -376,9 +378,9 @@ fun <T : Comparable<T>> BaseSliderListItem(
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
     valueRange: ClosedRange<T>,
-    steps: Int = 0,
+    stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
     valueText: @Composable ((T) -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         ListItem(
@@ -412,7 +414,11 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     onValueChange(fromFloat(sliderState))
                 },
                 valueRange = floatRange,
-                steps = steps,
+                stepPolicy = remember(stepPolicy) {
+                    { valueRange ->
+                        stepPolicy(fromFloat(valueRange.start)..fromFloat(valueRange.endInclusive))
+                    }
+                },
                 modifier = Modifier.weight(1f)
             )
 

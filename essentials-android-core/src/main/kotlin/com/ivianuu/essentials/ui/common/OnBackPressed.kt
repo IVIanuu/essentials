@@ -22,9 +22,9 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 
 @Composable
-fun onBackPressed(
+fun OnBackPressed(
     enabled: Boolean = true,
-    callback: () -> Unit
+    callback: () -> Unit,
 ) {
     val onBackPressedCallback = remember(callback) {
         object : OnBackPressedCallback(enabled) {

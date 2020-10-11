@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
@@ -84,7 +85,7 @@ fun PrefsPage(prefs: Prefs) {
                 modifier = dependenciesModifier,
                 title = { Text("Slider") },
                 subtitle = { Text("This is a slider preference") },
-                steps = 10,
+                stepPolicy = incrementingStepPolicy(5),
                 valueRange = 0..100,
                 valueText = { SliderValueText(it) }
             )
@@ -94,7 +95,7 @@ fun PrefsPage(prefs: Prefs) {
                 modifier = dependenciesModifier,
                 title = { Text("Slider duration") },
                 subtitle = { Text("This is a slider preference") },
-                steps = 10,
+                stepPolicy = incrementingStepPolicy(1.minutes),
                 valueRange = 1.minutes..1.hours
             )
 

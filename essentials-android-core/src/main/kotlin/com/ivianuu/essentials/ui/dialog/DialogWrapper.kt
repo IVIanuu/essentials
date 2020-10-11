@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.common.onBackPressed
+import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.rememberState
 
@@ -38,7 +38,7 @@ fun DialogWrapper(
     dialog: @Composable () -> Unit
 ) {
     if (!dismissible) {
-        onBackPressed { }
+        OnBackPressed { }
     }
 
     var dismissed by rememberState { false }

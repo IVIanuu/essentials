@@ -36,7 +36,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -62,6 +61,7 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
+import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.util.toColor
