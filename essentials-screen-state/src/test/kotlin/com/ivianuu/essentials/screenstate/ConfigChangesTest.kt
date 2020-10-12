@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.injekt.android.ApplicationContext
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -13,6 +12,8 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -34,7 +35,7 @@ class ConfigChangesTest {
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
-        assertEquals(3, eventCount)
+        expectThat(eventCount).isEqualTo(3)
         collectorJob.cancelAndJoin()
     }
 

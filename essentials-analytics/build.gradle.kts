@@ -30,6 +30,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-android-core"))
-    api(project(":essentials-android-test"))
     api(Deps.Fabric.crashlytics)
+    testImplementation(project(":essentials-test"))
+    testImplementation(project(":essentials-android-test"))
 }
