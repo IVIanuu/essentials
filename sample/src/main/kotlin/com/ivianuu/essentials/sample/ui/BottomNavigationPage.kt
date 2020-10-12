@@ -54,7 +54,8 @@ fun BottomNavigationPage() {
             Surface(
                 modifier = Modifier.systemBarStyle(
                     bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-                    lightIcons = MaterialTheme.colors.primary.isLight
+                    lightIcons = MaterialTheme.colors.primary.isLight,
+                    elevation = 8.dp
                 ),
                 elevation = 8.dp,
                 color = MaterialTheme.colors.primary

@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.globalBounds
 import androidx.compose.ui.onGloballyPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Bounds
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.compositionActivity
@@ -56,12 +57,13 @@ fun overlaySystemBarBgColor(color: Color) =
 fun Modifier.systemBarStyle(
     bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
     lightIcons: Boolean = AmbientContentColor.current.isDark,
+    elevation: Dp = 0.dp,
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
     var globalBounds by rememberState<Rect?> { null }
     val density = DensityAmbient.current
 
-    onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons) {
+    onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
         val dpBounds = with(density) {
             Bounds(
                 left = globalBounds?.left?.toInt()?.toDp() ?: 0.dp,
@@ -71,7 +73,7 @@ fun Modifier.systemBarStyle(
             )
         }
 
-        val style = SystemBarStyle(bgColor, lightIcons, dpBounds)
+        val style = SystemBarStyle(bgColor, lightIcons, dpBounds, elevation)
         systemBarManager.registerStyle(style)
         onDispose { systemBarManager.unregisterStyle(style) }
     }
@@ -95,7 +97,8 @@ private val SystemBarManagerAmbient = staticAmbientOf<SystemBarManager>()
 data class SystemBarStyle(
     val barColor: Color,
     val lightIcons: Boolean,
-    val bounds: Bounds
+    val bounds: Bounds,
+    val elevation: Dp,
 )
 
 @Stable
@@ -141,12 +144,14 @@ private class SystemBarManager {
         }
 
         val statusBarStyle = remember(statusBarHitPoint, styles.toList()) {
-            styles.lastOrNull {
-                statusBarHitPoint.x >= it.bounds.left &&
-                        statusBarHitPoint.y >= it.bounds.top &&
-                        statusBarHitPoint.x <= it.bounds.right &&
-                        statusBarHitPoint.y <= it.bounds.bottom
-            }
+            styles
+                .sortedBy { it.elevation }
+                .lastOrNull {
+                    statusBarHitPoint.x >= it.bounds.left &&
+                            statusBarHitPoint.y >= it.bounds.top &&
+                            statusBarHitPoint.x <= it.bounds.right &&
+                            statusBarHitPoint.y <= it.bounds.bottom
+                }
         }
 
         onCommit(activity, statusBarStyle?.barColor) {
@@ -162,6 +167,8 @@ private class SystemBarManager {
                     statusBarStyle?.lightIcons ?: false
                 )
         }
+
+        println("apply status bar style $statusBarStyle")
 
         if (Build.VERSION.SDK_INT >= 26) {
             val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
@@ -189,12 +196,14 @@ private class SystemBarManager {
             }
 
             val navBarStyle = remember(navBarHitPoint, styles.toList()) {
-                styles.lastOrNull {
-                    navBarHitPoint.x >= it.bounds.left &&
-                            navBarHitPoint.y >= it.bounds.top &&
-                            navBarHitPoint.x <= it.bounds.right &&
-                            navBarHitPoint.y <= it.bounds.bottom
-                }
+                styles
+                    .sortedBy { it.elevation }
+                    .lastOrNull {
+                        navBarHitPoint.x >= it.bounds.left &&
+                                navBarHitPoint.y >= it.bounds.top &&
+                                navBarHitPoint.x <= it.bounds.right &&
+                                navBarHitPoint.y <= it.bounds.bottom
+                    }
             }
 
             onCommit(activity, navBarStyle?.barColor) {

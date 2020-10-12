@@ -113,7 +113,8 @@ fun TopAppBar(
         elevation = elevation,
         modifier = (if (applySystemBarStyle) Modifier.systemBarStyle(
             bgColor = overlaySystemBarBgColor(backgroundColor),
-            lightIcons = backgroundColor.isLight
+            lightIcons = backgroundColor.isLight,
+            elevation = elevation
         ) else Modifier).then(modifier)
     ) {
         InsetsPadding(start = false, end = false, bottom = false) {
