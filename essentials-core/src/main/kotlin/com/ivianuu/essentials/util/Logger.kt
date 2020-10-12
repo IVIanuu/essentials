@@ -4,7 +4,6 @@ import com.ivianuu.injekt.Binding
 import java.util.regex.Pattern
 
 interface Logger {
-
     fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
     fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null)
@@ -16,12 +15,30 @@ interface Logger {
     fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
     fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+}
 
+object NoopLogger : Logger {
+    override fun v(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    override fun d(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    override fun i(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    override fun w(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    override fun e(message: String?, throwable: Throwable?, tag: String?) {
+    }
+
+    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
+    }
 }
 
 @Binding
 class DefaultLogger : Logger {
-
     override fun v(message: String?, throwable: Throwable?, tag: String?) {
         println("[VERBOSE] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
@@ -55,7 +72,6 @@ class DefaultLogger : Logger {
             append(throwable?.toString().orEmpty())
         }
     }
-
 }
 
 val Logger.stackTraceTag: String

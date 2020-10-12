@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.analytics
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.util.BuildInfo
 import io.fabric.sdk.android.Fabric
 import io.mockk.mockk
@@ -7,9 +8,10 @@ import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [24])
 class InitializeAnalyticsTest {
 
     @Test

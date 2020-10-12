@@ -25,4 +25,6 @@ dependencies {
     compile(Deps.kotlinFlowExtensions)
 
     compile(Deps.kotlinResult)
+
+    testCompile(project(":essentials-test"))
 }
