@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
@@ -37,9 +36,7 @@ interface AccessibilityServices {
 }
 
 @ImplBinding(ApplicationComponent::class)
-class AccessibilityServicesImpl(
-    private val logger: Logger,
-) : AccessibilityServices {
+class AccessibilityServicesImpl : AccessibilityServices {
 
     private val service = MutableStateFlow<DefaultAccessibilityService?>(null)
     override val isConnected: Flow<Boolean> get() = service.map { it != null }
