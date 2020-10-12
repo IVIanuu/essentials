@@ -64,7 +64,7 @@ import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.navigation.DialogRoute
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.util.toColor
+import com.ivianuu.essentials.util.toColorOrNull
 import com.ivianuu.essentials.util.toHexString
 
 fun ColorPickerRoute(
@@ -349,11 +349,7 @@ private fun ColorEditorHeader(
                             (!showAlphaSelector && newValue.length < 6)
                         ) return@BaseTextField
 
-                        val newColor = try {
-                            newValue.toColor()
-                        } catch (t: Throwable) {
-                            null
-                        }
+                        val newColor = newValue.toColorOrNull()
 
                         if (newColor != null) onColorChanged(newColor)
                     }

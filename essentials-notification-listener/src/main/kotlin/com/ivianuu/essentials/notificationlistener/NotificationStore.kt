@@ -17,7 +17,7 @@ interface NotificationStore {
 
     val notifications: StateFlow<List<StatusBarNotification>>
 
-    suspend fun openNotification(notification: Notification)
+    suspend fun openNotification(notification: Notification): Boolean
 
     suspend fun dismissNotification(key: String)
 
@@ -35,14 +35,17 @@ class NotificationStoreImpl(
     private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
     override val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
 
-    override suspend fun openNotification(notification: Notification) =
-        withContext(defaultDispatcher) {
+    override suspend fun openNotification(notification: Notification): Boolean {
+        return withContext(defaultDispatcher) {
             service.first { it != null }
             try {
                 notification.contentIntent.send()
+                true
             } catch (t: Throwable) {
+                false
             }
         }
+    }
 
     override suspend fun dismissNotification(key: String): Unit = withContext(defaultDispatcher) {
         service.first { it != null }!!.cancelNotification(key)

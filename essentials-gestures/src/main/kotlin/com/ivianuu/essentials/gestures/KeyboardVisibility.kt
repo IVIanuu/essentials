@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
@@ -55,18 +56,17 @@ fun keyboardVisible(
                 delay(100)
             }
         }
-        .map { getKeyboardHeight() }
+        .mapNotNull { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
 }
 
 @FunBinding
-fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int {
+fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
     return try {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
     } catch (t: Throwable) {
-        t.printStackTrace()
-        -1
+        null
     }
 }
