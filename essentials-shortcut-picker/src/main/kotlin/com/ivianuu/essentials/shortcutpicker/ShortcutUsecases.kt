@@ -45,27 +45,26 @@ suspend fun extractShortcut(
     defaultDispatcher: DefaultDispatcher,
     packageManager: PackageManager,
     shortcutRequestResult: @Assisted Intent,
-): Shortcut =
-    withContext(defaultDispatcher) {
-        val intent =
-            shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
-        val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
-        val bitmapIcon =
-            shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
-        val iconResource =
-            shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
+): Shortcut = withContext(defaultDispatcher) {
+    val intent =
+        shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
+    val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
+    val bitmapIcon =
+        shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
+    val iconResource =
+        shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
-        val icon = when {
-            bitmapIcon != null -> bitmapIcon.toImageAsset()
-            iconResource != null -> {
-                val resources =
-                    packageManager.getResourcesForApplication(iconResource.packageName)
-                val id =
-                    resources.getIdentifier(iconResource.resourceName, null, null)
-                resources.getDrawable(id).toImageAsset()
-            }
-            else -> error("no icon provided $shortcutRequestResult")
+    val icon = when {
+        bitmapIcon != null -> bitmapIcon.toImageAsset()
+        iconResource != null -> {
+            val resources =
+                packageManager.getResourcesForApplication(iconResource.packageName)
+            val id =
+                resources.getIdentifier(iconResource.resourceName, null, null)
+            resources.getDrawable(id).toImageAsset()
         }
-
-        Shortcut(intent, name, icon)
+        else -> error("no icon provided $shortcutRequestResult")
     }
+
+    Shortcut(intent, name, icon)
+}

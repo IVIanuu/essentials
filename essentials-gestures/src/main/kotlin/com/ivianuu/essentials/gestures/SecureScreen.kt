@@ -45,7 +45,7 @@ fun isOnSecureScreen(
         )
     )
     return services.events
-        .map { it.packageName?.toString() to it.className?.toString() }
+        .map { it.packageName to it.className }
         .filter { it.first != null && it.second != null }
         .map { it.first!! to it.second!! }
         .filter { it.second != "android.inputmethodservice.SoftInputWindow" }

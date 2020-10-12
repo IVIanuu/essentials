@@ -24,6 +24,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    testCompile(project(":essentials-test"))
     compile(Deps.Coroutines.core)
     compile(Deps.Kotlin.stdlib)
 }

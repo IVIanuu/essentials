@@ -27,6 +27,7 @@ buildscript {
         maven(Deps.AndroidX.Compose.snapshotUrl)
         maven("https://plugins.gradle.org/m2")
         maven("https://maven.fabric.io/public")
+        maven("https://kotlin.bintray.com/kotlinx")
     }
 
     dependencies {
@@ -66,5 +67,6 @@ allprojects {
         maven(Deps.AndroidX.Compose.snapshotUrl)
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://maven.fabric.io/public")
+        maven("https://kotlin.bintray.com/kotlinx")
     }
 }

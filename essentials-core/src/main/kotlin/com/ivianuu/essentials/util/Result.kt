@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
+typealias DefaultResult<V> = Result<V, Throwable>
+
 fun <V> Flow<V>.flowCatching(): Flow<Result<V, Throwable>> {
     return map<V, Result<V, Throwable>> { Ok(it) }
         .catch {

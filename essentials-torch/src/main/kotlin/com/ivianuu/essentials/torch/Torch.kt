@@ -17,10 +17,13 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.util.DefaultResult
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.MainDispatcher
@@ -32,12 +35,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 
 interface Torch {
     val torchState: StateFlow<Boolean>
 
-    suspend fun toggle()
+    suspend fun toggle(): DefaultResult<Boolean>
 
     companion object {
         const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
@@ -46,11 +51,11 @@ interface Torch {
 
 @ImplBinding(ApplicationComponent::class)
 class TorchImpl(
-    private val broadcasts: broadcasts,
+    broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
     private val foregroundManager: ForegroundManager,
-    private val globalScope: GlobalScope,
+    globalScope: GlobalScope,
     private val logger: Logger,
     private val mainDispatcher: MainDispatcher,
     private val showToastRes: showToastRes,
@@ -81,34 +86,29 @@ class TorchImpl(
             .launchIn(globalScope)
     }
 
-    override suspend fun toggle() = withContext(mainDispatcher) {
-        tryOrToast {
-            cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
-                override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                    tryOrToast {
+    override suspend fun toggle(): DefaultResult<Boolean> = runCatching {
+        withContext(mainDispatcher) {
+            suspendCancellableCoroutine<Boolean> { continuation ->
+                cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
+                    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                         cameraManager.unregisterTorchCallback(this)
                         cameraManager.setTorchMode(cameraId, !enabled)
                         stateActor.offerSafe(!enabled)
+                        continuation.resume(!enabled)
                     }
-                }
 
-                override fun onTorchModeUnavailable(cameraId: String) {
-                    tryOrToast {
+                    override fun onTorchModeUnavailable(cameraId: String) {
                         cameraManager.unregisterTorchCallback(this)
                         showToastRes(R.string.es_failed_to_toggle_torch)
                         stateActor.offerSafe(false)
+                        continuation.resume(false)
                     }
-                }
-            }, null)
+                }, null)
+            }
         }
+    }.onFailure {
+        it.printStackTrace()
+        showToastRes(R.string.es_failed_to_toggle_torch)
     }
 
-    private inline fun tryOrToast(action: () -> Unit) {
-        try {
-            action()
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            showToastRes(R.string.es_failed_to_toggle_torch)
-        }
-    }
 }

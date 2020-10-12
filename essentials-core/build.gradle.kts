@@ -20,6 +20,8 @@ dependencies {
 
     compile(Deps.Kotlin.stdlib)
 
+    compile(Deps.kotlinDateTime)
+
     compile(Deps.kotlinFlowExtensions)
 
     compile(Deps.kotlinResult)
