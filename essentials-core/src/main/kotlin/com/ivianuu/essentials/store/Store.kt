@@ -84,7 +84,6 @@ internal class StoreImpl<S, A>(
     override val actions = EventFlow<A>()
 
     private val actor = actor<StoreMessage<S, A>>(capacity = DEFAULT_BUFFER_SIZE) {
-        launch { block() }
         for (msg in channel) {
             when (msg) {
                 is DispatchAction -> actions.send(msg.action)
@@ -96,6 +95,10 @@ internal class StoreImpl<S, A>(
                 }
             }.exhaustive
         }
+    }
+
+    init {
+        launch { block() }
     }
 
     override fun dispatch(action: A) {
