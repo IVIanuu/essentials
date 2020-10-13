@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.gestures
 
-import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 
 typealias IsOnSecureScreen = Flow<Boolean>
@@ -41,10 +42,11 @@ fun isOnSecureScreen(
 ): IsOnSecureScreen {
     services.applyConfig(
         AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
     )
     return services.events
+        .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .map { it.packageName to it.className }
         .filter { it.first != null && it.second != null }
         .map { it.first!! to it.second!! }
@@ -62,6 +64,7 @@ fun isOnSecureScreen(
 
             isOnSecureScreen
         }
+        .onStart { emit(false) }
         .distinctUntilChanged()
         .onEach { logger.d("on secure screen changed: $it") }
         .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
