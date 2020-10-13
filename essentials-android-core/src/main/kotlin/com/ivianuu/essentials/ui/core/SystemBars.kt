@@ -168,8 +168,6 @@ private class SystemBarManager {
                 )
         }
 
-        println("apply status bar style $statusBarStyle")
-
         if (Build.VERSION.SDK_INT >= 26) {
             val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
                 when {
