@@ -3,7 +3,7 @@ package com.ivianuu.essentials.screenstate
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.childScope
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.util.NoopLogger
 import io.mockk.every
 import io.mockk.mockk
@@ -29,7 +29,7 @@ class ScreenStateTest {
         val broadcasts = EventFlow<Intent>()
         var currentScreenState = ScreenState.Off
         val globalScopeDispatcher = TestCoroutineDispatcher()
-        val globalScope = childScope(globalScopeDispatcher)
+        val globalScope = childCoroutineScope(globalScopeDispatcher)
         val screenStateFlow = screenStateFlow(
             broadcasts = { broadcasts },
             getCurrentScreenState = { currentScreenState },

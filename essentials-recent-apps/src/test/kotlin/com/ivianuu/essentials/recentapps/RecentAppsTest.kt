@@ -6,7 +6,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.childScope
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.util.NoopLogger
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.cancel
@@ -30,7 +30,7 @@ class RecentAppsTest {
     @Test
     fun testRecentApps() = runBlockingTest {
         val recentAppsScopeDispatcher = TestCoroutineDispatcher()
-        val recentAppsScope = childScope(recentAppsScopeDispatcher)
+        val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
         val services = object : AccessibilityServices {
             override val events: Flow<AccessibilityEvent>
