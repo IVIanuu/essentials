@@ -17,6 +17,7 @@ interface Logger {
     fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null)
 }
 
+@Binding
 object NoopLogger : Logger {
     override fun v(message: String?, throwable: Throwable?, tag: String?) {
     }

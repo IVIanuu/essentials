@@ -16,14 +16,9 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
-import kotlinx.datetime.Clock
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-@Binding
-fun clock(): Clock = Clock.System
-
 @FunBinding
-fun now(clock: Clock): Duration = clock.now().toEpochMilliseconds().milliseconds
+fun now(): Duration = System.currentTimeMillis().milliseconds

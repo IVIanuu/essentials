@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev649"
+    const val version = "${Build.versionName}-dev654"
 }
 
 object Deps {
@@ -117,8 +117,6 @@ object Deps {
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"
     }
-
-    const val kotlinDateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.1.0"
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 

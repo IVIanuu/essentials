@@ -36,8 +36,9 @@ class AndroidLogger : Logger {
         fun binding(
             buildInfo: BuildInfo,
             androidLoggerProvider: () -> AndroidLogger,
-        ): Logger? {
-            return if (buildInfo.isDebug) androidLoggerProvider() else null
+            noopLoggerProvider: () -> NoopLogger,
+        ): Logger {
+            return if (buildInfo.isDebug) androidLoggerProvider() else noopLoggerProvider()
         }
     }
 }

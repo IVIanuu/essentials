@@ -30,9 +30,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import java.util.Calendar
 
 @FunBinding
 fun twilightState(
@@ -83,14 +81,12 @@ fun systemTwilightState(
 @FunBinding
 fun timeTwilightState(
     broadcasts: broadcasts,
-    clock: Clock,
 ): Flow<Boolean> = broadcasts(Intent.ACTION_TIME_TICK)
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
-        val now = clock.now()
-        val date = now.toLocalDateTime(TimeZone.currentSystemDefault())
-        val hour = date.hour
+        val calendar = Calendar.getInstance()
+        val hour = calendar[Calendar.HOUR_OF_DAY]
         hour < 6 || hour >= 22
     }
 
