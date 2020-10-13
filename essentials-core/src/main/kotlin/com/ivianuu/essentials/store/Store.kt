@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.awaitCancellation
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.store.StoreImpl.StoreMessage.DispatchAction
 import com.ivianuu.essentials.store.StoreImpl.StoreMessage.SetState
@@ -12,6 +11,7 @@ import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

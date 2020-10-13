@@ -56,7 +56,7 @@ fun screenStateFlow(
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }
         .distinctUntilChanged()
-        .shareIn(globalScope, 1, SharingStarted.WhileSubscribed())
+        .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 }
 
 @FunBinding

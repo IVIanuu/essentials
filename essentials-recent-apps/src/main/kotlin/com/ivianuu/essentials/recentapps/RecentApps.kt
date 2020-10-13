@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -77,7 +78,7 @@ fun recentApps(
         }
         .distinctUntilChanged()
         .onEach { logger.d("recent apps changed $it") }
-        .shareIn(globalScope, 1)
+        .shareIn(globalScope, SharingStarted.Eagerly, 1)
 }
 
 @FunBinding

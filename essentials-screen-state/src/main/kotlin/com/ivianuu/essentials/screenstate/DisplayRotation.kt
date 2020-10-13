@@ -68,7 +68,7 @@ fun displayRotationFlow(
         .onStart { emit(Unit) }
         .map { getCurrentDisplayRotation() }
         .distinctUntilChanged()
-        .shareIn(globalScope, 1, SharingStarted.WhileSubscribed(1000))
+        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
 @FunBinding

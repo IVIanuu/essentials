@@ -64,5 +64,5 @@ fun isOnSecureScreen(
         }
         .distinctUntilChanged()
         .onEach { logger.d("on secure screen changed: $it") }
-        .shareIn(globalScope, 1, SharingStarted.WhileSubscribed(1000))
+        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
