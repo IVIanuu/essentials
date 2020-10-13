@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
+import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
@@ -16,8 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 fun <S, V> StoreScope<S, *>.execute(
     block: suspend () -> V,
@@ -28,17 +27,9 @@ fun <S, V> StoreScope<S, *>.execute(
 }
 
 fun <S, V> Flow<V>.executeIn(
-    storeScope: StoreScope<S, *>,
-    reducer: suspend S.(Resource<V>) -> S
-): Job {
-    return flowAsResource()
-        .onEach {
-            storeScope.setState {
-                reducer(it)
-            }
-        }
-        .launchIn(storeScope)
-}
+    scope: StoreScope<S, *>,
+    reducer: suspend S.(Resource<V>) -> S,
+): Job = flowAsResource().setStateIn(scope, reducer)
 
 @Composable
 operator fun <S> Store<S, *>.component1() = snapshotState

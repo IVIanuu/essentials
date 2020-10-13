@@ -39,6 +39,7 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationC
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
 import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -59,9 +60,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 @FunBinding
 @Composable
@@ -168,8 +167,7 @@ fun notificationStore(
     )
 
     hasPermissions(listOf(permission))
-        .onEach { setState { copy(hasPermissions = it) } }
-        .launchIn(this)
+        .setStateIn(this) { copy(hasPermissions = it) }
 
     notifications()
         .executeIn(this) { copy(notifications = it) }

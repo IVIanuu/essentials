@@ -11,6 +11,7 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,6 +73,18 @@ suspend fun @Assisted StoreScope<*, *>.enableLogging(logger: Logger) {
             cleanup = { logger.d("cancel") }
         )
     }
+}
+
+fun <S, A, T> Flow<T>.setStateIn(
+    scope: StoreScope<S, A>,
+    reducer: suspend S.(T) -> S,
+): Job {
+    return onEach {
+        scope.setState {
+            reducer(it)
+        }
+    }
+        .launchIn(scope)
 }
 
 internal class StoreImpl<S, A>(
