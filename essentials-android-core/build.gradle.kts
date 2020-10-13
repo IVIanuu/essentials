@@ -44,4 +44,5 @@ dependencies {
     api(project(":essentials-core"))
     api(project(":essentials-datastore-android"))
     api(project(":essentials-moshi"))
+    testImplementation(project(":essentials-android-test"))
 }
