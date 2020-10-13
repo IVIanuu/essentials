@@ -96,7 +96,8 @@ fun PrefsPage(prefs: Prefs) {
                 title = { Text("Slider duration") },
                 subtitle = { Text("This is a slider preference") },
                 stepPolicy = incrementingStepPolicy(1.minutes),
-                valueRange = 1.minutes..1.hours
+                valueRange = 1.minutes..1.hours,
+                valueText = { SliderValueText(it) }
             )
 
             Subheader(modifier = dependenciesModifier) {

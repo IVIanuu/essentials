@@ -4,6 +4,7 @@ import androidx.compose.foundation.InteractionState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SliderConstants
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,18 +51,21 @@ fun Slider(
     activeTickColor: Color = MaterialTheme.colors.onPrimary.copy(alpha = SliderConstants.TickColorAlpha),
     inactiveTickColor: Color = activeTrackColor.copy(alpha = SliderConstants.TickColorAlpha),
 ) {
-    androidx.compose.material.Slider(
-        value,
-        onValueChange,
-        modifier,
-        valueRange,
-        remember(valueRange) { stepPolicy(valueRange) },
-        onValueChangeEnd,
-        interactionState,
-        thumbColor,
-        activeTrackColor,
-        inactiveTrackColor,
-        activeTickColor,
-        inactiveTickColor
-    )
+    // todo tmp workaround because slider is broken after the first onValueChangeEnd
+    key(value) {
+        androidx.compose.material.Slider(
+            value,
+            onValueChange,
+            modifier,
+            valueRange,
+            remember(valueRange) { stepPolicy(valueRange) },
+            onValueChangeEnd,
+            interactionState,
+            thumbColor,
+            activeTrackColor,
+            inactiveTrackColor,
+            activeTickColor,
+            inactiveTickColor
+        )
+    }
 }
