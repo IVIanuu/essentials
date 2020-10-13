@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -78,19 +79,21 @@ fun DoubleSliderListItem(
     stepPolicy: StepPolicy<Double> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it.toFloat() },
-        fromFloat = { it.toDouble() },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy,
-        valueText = valueText
-    )
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it.toFloat() },
+            fromFloat = { it.toDouble() },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy,
+            valueText = valueText
+        )
+    }
 }
 
 @Composable
@@ -130,19 +133,21 @@ fun FloatSliderListItem(
     stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it },
-        fromFloat = { it },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy,
-        valueText = valueText
-    )
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it },
+            fromFloat = { it },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy,
+            valueText = valueText
+        )
+    }
 }
 
 @Composable
@@ -182,19 +187,21 @@ fun IntSliderListItem(
     stepPolicy: StepPolicy<Int> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it.toFloat() },
-        fromFloat = { it.toInt() },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it.toFloat() },
+            fromFloat = { it.toInt() },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy
+        )
+    }
 }
 
 @Composable
@@ -234,19 +241,21 @@ fun LongSliderListItem(
     stepPolicy: StepPolicy<Long> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it.toFloat() },
-        fromFloat = { it.toLong() },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it.toFloat() },
+            fromFloat = { it.toLong() },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy
+        )
+    }
 }
 
 @Composable
@@ -286,19 +295,21 @@ fun DpSliderListItem(
     stepPolicy: StepPolicy<Dp> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it.value },
-        fromFloat = { it.dp },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it.value },
+            fromFloat = { it.dp },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueText = valueText,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy
+        )
+    }
 }
 
 @Composable
@@ -338,19 +349,22 @@ fun DurationSliderListItem(
     stepPolicy: StepPolicy<Duration> = NoStepsStepPolicy,
     modifier: Modifier = Modifier,
 ) {
-    BaseSliderListItem(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        toFloat = { it.toFloat() },
-        fromFloat = { it.toDuration() },
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy,
-        valueText = valueText
-    )
+    // todo tmp workaround because slider is broken after the first onValueChangeEnd
+    key(value) {
+        BaseSliderListItem(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            toFloat = { it.toFloat() },
+            fromFloat = { it.toDuration() },
+            title = title,
+            subtitle = subtitle,
+            leading = leading,
+            valueRange = valueRange,
+            stepPolicy = stepPolicy,
+            valueText = valueText
+        )
+    }
 }
 
 private fun Float.toDuration(): Duration {
