@@ -9,11 +9,9 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
-import com.ivianuu.essentials.gestures.currentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.first
 
 @ActionBinding
 fun killForegroundAction(

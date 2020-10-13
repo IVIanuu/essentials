@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.gestures.currentApp
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
@@ -32,8 +31,6 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @FunBinding

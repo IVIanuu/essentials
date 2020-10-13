@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.recentapps
 
-import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
@@ -43,11 +43,12 @@ fun recentApps(
 ): RecentApps {
     services.applyConfig(
         AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
     )
 
     return services.events
+        .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .filter { it.isFullScreen }
         .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
         .mapNotNull { it.packageName }
@@ -81,4 +82,6 @@ fun recentApps(
 
 @FunBinding
 fun currentApp(recentApps: RecentApps): Flow<String?> =
-    recentApps.map { it.firstOrNull() }.distinctUntilChanged()
+    recentApps
+        .map { it.firstOrNull() }
+        .distinctUntilChanged()

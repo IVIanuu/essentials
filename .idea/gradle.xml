@@ -41,6 +41,7 @@
             <option value="$PROJECT_DIR$/essentials-notification-listener" />
             <option value="$PROJECT_DIR$/essentials-permission" />
             <option value="$PROJECT_DIR$/essentials-process-restart" />
+            <option value="$PROJECT_DIR$/essentials-recent-apps" />
             <option value="$PROJECT_DIR$/essentials-screen-state" />
             <option value="$PROJECT_DIR$/essentials-secure-settings" />
             <option value="$PROJECT_DIR$/essentials-service" />

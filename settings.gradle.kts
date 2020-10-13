@@ -28,6 +28,7 @@ include(
     ":essentials-notification-listener",
     ":essentials-permission",
     ":essentials-process-restart",
+    ":essentials-recent-apps",
     ":essentials-screen-state",
     ":essentials-secure-settings",
     ":essentials-service",

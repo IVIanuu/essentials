@@ -31,13 +31,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials-android-core"))
     api(project(":essentials-accessibility"))
-    api(project(":essentials-apps-ui"))
-    api(project(":essentials-hide-nav-bar"))
-    api(project(":essentials-permission"))
-    api(project(":essentials-recent-apps"))
-    api(project(":essentials-screen-state"))
-    api(project(":essentials-shortcut-picker"))
-    api(project(":essentials-torch"))
-    api(project(":essentials-unlock"))
     testImplementation(project(":essentials-android-test"))
 }
