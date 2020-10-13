@@ -54,18 +54,18 @@ class NotificationListenerPermissionStateProvider(
         Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return Settings.Secure.getString(
+        return (Settings.Secure.getString(
             applicationContext.contentResolver,
             "enabled_notification_listeners"
-        )
-            .split(":")
-            .map {
+        ) ?: null)
+            ?.split(":")
+            ?.map {
                 val tmp = it.split("/")
                 tmp[0] to tmp[1]
             }
-            .any { (packageName, listenerName) ->
+            ?.any { (packageName, listenerName) ->
                 packageName == buildInfo.packageName &&
                         listenerName == permission[Permission.NotificationListenerClass].java.canonicalName
-            }
+            } ?: false
     }
 }
