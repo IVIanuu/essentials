@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 @AppInitializerBinding
 @FunBinding
-fun startTwilightModeLoading(
+fun initializeTwilightStateFlow(
     globalScope: GlobalScope,
     twilightStateFlow: TwilightStateFlow,
 ) {
