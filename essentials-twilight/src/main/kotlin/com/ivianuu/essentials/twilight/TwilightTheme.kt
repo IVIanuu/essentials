@@ -18,7 +18,6 @@ package com.ivianuu.essentials.twilight
 
 import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
@@ -40,7 +39,7 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TwilightTheme(
-    twilightState: twilightState,
+    twilightStateFlow: TwilightStateFlow,
     lightColors: @Assisted Colors = lightColors(),
     darkColors: @Assisted Colors = darkColors(),
     blackColors: @Assisted Colors = darkColors.copy(
@@ -50,10 +49,7 @@ fun TwilightTheme(
     typography: @Assisted Typography = Typography(),
     content: @Assisted @Composable () -> Unit,
 ) {
-    val isDark = isSystemInDarkTheme()
-    val twilightState by remember { twilightState() }.collectAsState(
-        remember { TwilightState(isDark, false) }
-    )
+    val twilightState by twilightStateFlow.collectAsState()
     AnimatedBox(current = twilightState) { currentTwilightState ->
         fun colorsForTwilightState() = if (currentTwilightState.isDark) {
             if (currentTwilightState.useBlack) blackColors else darkColors

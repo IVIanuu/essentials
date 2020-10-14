@@ -21,25 +21,34 @@ import android.content.res.Configuration
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.screenstate.configChanges
+import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationResources
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
 
-@FunBinding
+typealias TwilightStateFlow = StateFlow<TwilightState>
+
+@Binding(ApplicationComponent::class)
 fun twilightState(
+    globalScope: GlobalScope,
     batteryTwilightState: batteryTwilightState,
     systemTwilightState: systemTwilightState,
     timeTwilightState: timeTwilightState,
     twilightModePref: TwilightModePref,
     useBlackInDarkModePref: UseBlackInDarkModePref,
-): Flow<TwilightState> {
+): TwilightStateFlow {
     return twilightModePref.data
         .flatMapLatest { mode ->
             when (mode) {
@@ -54,6 +63,7 @@ fun twilightState(
             TwilightState(isDark, useBlack)
         }
         .distinctUntilChanged()
+        .stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
 }
 
 @FunBinding
