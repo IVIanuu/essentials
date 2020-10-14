@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.permission.installunknownapps
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.permission.KeyWithValue
@@ -47,6 +48,7 @@ class InstallUnknownAppsPermissionStateProvider(
     override fun handles(permission: Permission): Boolean =
         Permission.IsUnknownAppsPermission in permission
 
+    @SuppressLint("NewApi")
     override suspend fun isGranted(permission: Permission): Boolean =
         systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
 
