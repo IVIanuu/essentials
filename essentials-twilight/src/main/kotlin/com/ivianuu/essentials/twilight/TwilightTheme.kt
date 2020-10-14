@@ -18,20 +18,22 @@ package com.ivianuu.essentials.twilight
 
 import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.essentials.ui.resource.ResourceBox
-import com.ivianuu.essentials.ui.resource.collectAsResource
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 
@@ -48,7 +50,11 @@ fun TwilightTheme(
     typography: @Assisted Typography = Typography(),
     content: @Assisted @Composable () -> Unit,
 ) {
-    ResourceBox(resource = remember { twilightState() }.collectAsResource()) { currentTwilightState ->
+    val isDark = isSystemInDarkTheme()
+    val twilightState by remember { twilightState() }.collectAsState(
+        remember { TwilightState(isDark, false) }
+    )
+    AnimatedBox(current = twilightState) { currentTwilightState ->
         fun colorsForTwilightState() = if (currentTwilightState.isDark) {
             if (currentTwilightState.useBlack) blackColors else darkColors
         } else lightColors
