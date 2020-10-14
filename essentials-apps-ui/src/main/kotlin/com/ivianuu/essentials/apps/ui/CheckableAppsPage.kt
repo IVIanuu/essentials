@@ -193,14 +193,16 @@ data class CheckableAppsState(
     val onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null,
     val appFilter: AppFilter = DefaultAppFilter,
 ) {
-    val checkableApps = apps.map { apps ->
-        apps.map { app ->
-            CheckableApp(
-                info = app,
-                isChecked = app.packageName in checkedApps
-            )
+    val checkableApps = apps
+        .map { it.filter(appFilter) }
+        .map { apps ->
+            apps.map { app ->
+                CheckableApp(
+                    info = app,
+                    isChecked = app.packageName in checkedApps
+                )
+            }
         }
-    }
 }
 
 sealed class CheckableAppsAction {

@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
@@ -45,7 +46,6 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.async
 
 @FunBinding
 @Composable
@@ -63,7 +63,7 @@ fun AppPickerPage(
             )
         }
     ) {
-        ResourceLazyColumnFor(state.apps) { app ->
+        ResourceLazyColumnFor(state.filteredApps) { app ->
             key(app.packageName) {
                 AppInfo(
                     onClick = { dispatch(AppClicked(app)) },
@@ -96,14 +96,10 @@ fun appPickerStore(
     navigator: Navigator,
     getInstalledApps: getInstalledApps,
     appFilter: @Assisted AppFilter,
-) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState()) {
-    val installedApps = async { getInstalledApps() }
+) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
     execute(
-        block = {
-            installedApps.await()
-                .filter(appFilter)
-        },
-        reducer = { copy(apps = it) }
+        block = { getInstalledApps() },
+        reducer = { copy(allApps = it) }
     )
 
     onEachAction {
@@ -113,7 +109,13 @@ fun appPickerStore(
     }
 }
 
-data class AppPickerState(val apps: Resource<List<AppInfo>> = Idle)
+data class AppPickerState(
+    val allApps: Resource<List<AppInfo>> = Idle,
+    val appFilter: AppFilter = DefaultAppFilter,
+) {
+    val filteredApps = allApps
+        .map { it.filter(appFilter) }
+}
 
 sealed class AppPickerAction {
     data class AppClicked(val app: AppInfo) : AppPickerAction()
