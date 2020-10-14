@@ -54,6 +54,7 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -128,10 +129,11 @@ private fun CheckableApp(
 fun checkableAppsStore(
     getInstalledApps: getInstalledApps,
 ) = storeProvider<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
+    val installedApps = async { getInstalledApps() }
     state
         .map { it.appFilter }
         .distinctUntilChanged()
-        .mapLatest { getInstalledApps().filter(it) }
+        .mapLatest { installedApps.await().filter(it) }
         .executeIn(this) { copy(apps = it) }
 
     onEachAction { action ->

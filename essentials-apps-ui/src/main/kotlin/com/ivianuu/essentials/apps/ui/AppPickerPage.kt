@@ -45,6 +45,7 @@ import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.async
 
 @FunBinding
 @Composable
@@ -96,9 +97,10 @@ fun appPickerStore(
     getInstalledApps: getInstalledApps,
     appFilter: @Assisted AppFilter,
 ) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState()) {
+    val installedApps = async { getInstalledApps() }
     execute(
         block = {
-            getInstalledApps()
+            installedApps.await()
                 .filter(appFilter)
         },
         reducer = { copy(apps = it) }
