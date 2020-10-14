@@ -5,8 +5,8 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
 suspend inline fun runWithCleanup(
-    crossinline cleanup: () -> Unit,
-    block: () -> Unit,
+    crossinline cleanup: suspend () -> Unit,
+    block: suspend () -> Unit,
 ) {
     try {
         block()
