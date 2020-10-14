@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
@@ -55,7 +56,7 @@ fun TwilightTheme(
             if (currentTwilightState.useBlack) blackColors else darkColors
         } else lightColors
 
-        val lastColors = rememberUntrackedState { colorsForTwilightState() }
+        var lastColors by rememberUntrackedState { colorsForTwilightState() }
         val targetColors = colorsForTwilightState()
 
         val animation = key(currentTwilightState) { animatedFloat(0f) }
@@ -65,12 +66,12 @@ fun TwilightTheme(
 
         val currentColors = remember(animation.value) {
             lerp(
-                lastColors.value,
+                lastColors,
                 targetColors,
                 animation.value
             )
         }
-        lastColors.value = currentColors
+        lastColors = currentColors
 
         EsMaterialTheme(
             colors = currentColors,

@@ -15,7 +15,6 @@ import com.ivianuu.essentials.ui.animatable.ProvideAnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
 
 @Composable
 fun <T> AnimatedBox(
@@ -39,9 +38,6 @@ fun <T> AnimatedStack(
     transition: StackTransition = FadeStackTransition(),
     item: @Composable (T) -> Unit
 ) {
-    val lastChildren = rememberUntrackedState {
-        emptyList<AnimatedStackChild<T>>()
-    }
     val children = remember(items, item) {
         items
             .map { item ->
@@ -54,7 +50,6 @@ fun <T> AnimatedStack(
                 }
             }
     }
-    lastChildren.value = children
     AnimatedStack(modifier = modifier, children = children)
 }
 

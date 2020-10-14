@@ -96,15 +96,15 @@ fun ColorPickerDialog(
     title: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val (currentColor, setCurrentColor) = rememberState { initialColor }
-    val (currentPage, setCurrentPage) = rememberState { ColorPickerPage.Colors }
+    var currentColor by rememberState { initialColor }
+    var currentPage by rememberState { ColorPickerPage.Colors }
     val otherPage = when (currentPage) {
         ColorPickerPage.Colors -> ColorPickerPage.Editor
         ColorPickerPage.Editor -> ColorPickerPage.Colors
     }
 
     if (!allowCustomArgb && currentPage == ColorPickerPage.Editor) {
-        setCurrentPage(ColorPickerPage.Colors)
+        currentPage = ColorPickerPage.Colors
     }
 
     Dialog(
@@ -126,9 +126,7 @@ fun ColorPickerDialog(
         neutralButton = {
             if (allowCustomArgb) {
                 TextButton(
-                    onClick = {
-                        setCurrentPage(otherPage)
-                    },
+                    onClick = { currentPage = otherPage },
                     contentColor = currentColor
                 ) {
                     Text(otherPage.title)
@@ -148,14 +146,14 @@ fun ColorPickerDialog(
                             modifier = Modifier.fillMaxSize(),
                             currentColor = currentColor,
                             colors = colorPalettes,
-                            onColorSelected = setCurrentColor
+                            onColorSelected = { currentColor = it }
                         )
                     }
                     ColorPickerPage.Editor -> {
                         ColorEditor(
                             modifier = Modifier.fillMaxSize(),
                             color = currentColor,
-                            onColorChanged = setCurrentColor,
+                            onColorChanged = { currentColor = it },
                             showAlphaSelector = showAlphaSelector
                         )
                     }
