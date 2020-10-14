@@ -34,11 +34,11 @@ interface StoreScope<S, A> : CoroutineScope {
     suspend fun setState(block: suspend S.() -> S)
 }
 
-suspend fun <S, A> StoreScope<S, A>.onEachAction(block: suspend (A) -> Unit) {
+suspend inline fun <S, A> StoreScope<S, A>.onEachAction(crossinline block: suspend (A) -> Unit) {
     actions.collect(block)
 }
 
-suspend fun <S, A> StoreScope<S, A>.currentState(): S = state.first()
+suspend inline fun <S, A> StoreScope<S, A>.currentState(): S = state.first()
 
 @BuilderInference
 fun <S, A> CoroutineScope.store(
@@ -75,9 +75,9 @@ suspend fun @Assisted StoreScope<*, *>.enableLogging(logger: Logger) {
     }
 }
 
-fun <S, A, T> Flow<T>.setStateIn(
+inline fun <S, A, T> Flow<T>.setStateIn(
     scope: StoreScope<S, A>,
-    reducer: suspend S.(T) -> S,
+    crossinline reducer: suspend S.(T) -> S,
 ): Job {
     return onEach {
         scope.setState {
@@ -85,6 +85,14 @@ fun <S, A, T> Flow<T>.setStateIn(
         }
     }
         .launchIn(scope)
+}
+
+suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reduce: suspend S.(A) -> S) {
+    onEachAction { action ->
+        setState {
+            reduce(this, action)
+        }
+    }
 }
 
 internal class StoreImpl<S, A>(
