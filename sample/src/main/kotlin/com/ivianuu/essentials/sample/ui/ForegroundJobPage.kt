@@ -31,7 +31,6 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -44,7 +43,7 @@ fun ForegroundJobPage(
     buildForegroundNotification: buildForegroundNotification,
     foregroundManager: ForegroundManager,
     notificationManager: NotificationManager,
-    systemBuildInfo: SystemBuildInfo,
+    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
 ) {
     if (systemBuildInfo.sdk >= 26) {
         onActive {

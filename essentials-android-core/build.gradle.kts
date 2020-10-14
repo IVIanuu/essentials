@@ -34,15 +34,10 @@ dependencies {
     api(Deps.AndroidX.Lifecycle.extensions)
     api(Deps.AndroidX.Lifecycle.runtime)
 
-    api(Deps.AndroidX.Compose.runtime)
-    api(Deps.AndroidX.Compose.material)
-
     api(Deps.Coroutines.android)
-
     api(Deps.Injekt.android)
 
+    api(project(":essentials-ui"))
     api(project(":essentials-core"))
-    api(project(":essentials-datastore-android"))
-    api(project(":essentials-moshi"))
     testImplementation(project(":essentials-android-test"))
 }

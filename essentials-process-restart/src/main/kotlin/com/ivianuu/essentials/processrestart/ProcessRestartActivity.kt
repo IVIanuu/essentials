@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.activity.EsActivity
+import com.ivianuu.essentials.activity.EsActivity
 
 class ProcessRestartActivity : EsActivity() {
 

@@ -5,7 +5,6 @@ import androidx.core.content.FileProvider
 import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.FunBinding
@@ -23,7 +22,7 @@ suspend fun backupData(
     applicationContext: ApplicationContext,
     backupDir: BackupDir,
     backupFiles: () -> BackupFiles,
-    buildInfo: BuildInfo,
+    buildInfo: com.ivianuu.essentials.util.BuildInfo,
     ioDispatcher: IODispatcher,
     navigator: Navigator,
 ): Result<Unit, Throwable> = runCatchingAndLog {

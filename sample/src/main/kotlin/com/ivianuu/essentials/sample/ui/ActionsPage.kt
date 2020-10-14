@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerPage
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -21,7 +20,7 @@ fun ActionsPage(
     actionPickerPage: ActionPickerPage,
     executeAction: executeAction,
     navigator: Navigator,
-    uiScope: UiScope,
+    uiScope: com.ivianuu.essentials.ui.coroutines.UiScope,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }

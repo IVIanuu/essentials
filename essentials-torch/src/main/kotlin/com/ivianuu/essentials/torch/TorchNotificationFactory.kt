@@ -23,7 +23,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -34,7 +33,7 @@ fun createTorchNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
     stringResource: stringResource,
-    systemBuildInfo: SystemBuildInfo,
+    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(

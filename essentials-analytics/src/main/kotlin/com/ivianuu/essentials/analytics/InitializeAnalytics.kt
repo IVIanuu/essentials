@@ -25,7 +25,7 @@ import io.fabric.sdk.android.Fabric
 
 @AppInitializerBinding
 @FunBinding
-fun initializeAnalytics(applicationContext: ApplicationContext, buildInfo: BuildInfo) {
+fun initializeAnalytics(applicationContext: ApplicationContext, buildInfo: com.ivianuu.essentials.util.BuildInfo) {
     if (!buildInfo.isDebug) {
         Fabric.with(applicationContext, Crashlytics())
     }

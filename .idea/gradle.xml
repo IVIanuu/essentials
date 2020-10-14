@@ -15,8 +15,11 @@
             <option value="$PROJECT_DIR$/essentials-about" />
             <option value="$PROJECT_DIR$/essentials-accessibility" />
             <option value="$PROJECT_DIR$/essentials-analytics" />
+            <option value="$PROJECT_DIR$/essentials-android" />
             <option value="$PROJECT_DIR$/essentials-android-core" />
+            <option value="$PROJECT_DIR$/essentials-android-data" />
             <option value="$PROJECT_DIR$/essentials-android-test" />
+            <option value="$PROJECT_DIR$/essentials-android-util" />
             <option value="$PROJECT_DIR$/essentials-apps" />
             <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />
@@ -51,6 +54,13 @@
             <option value="$PROJECT_DIR$/essentials-tile" />
             <option value="$PROJECT_DIR$/essentials-torch" />
             <option value="$PROJECT_DIR$/essentials-twilight" />
+            <option value="$PROJECT_DIR$/essentials-ui" />
+            <option value="$PROJECT_DIR$/essentials-ui-animation" />
+            <option value="$PROJECT_DIR$/essentials-ui-core" />
+            <option value="$PROJECT_DIR$/essentials-ui-dialog" />
+            <option value="$PROJECT_DIR$/essentials-ui-navigation" />
+            <option value="$PROJECT_DIR$/essentials-ui-popup" />
+            <option value="$PROJECT_DIR$/essentials-ui-prefs" />
             <option value="$PROJECT_DIR$/essentials-unlock" />
             <option value="$PROJECT_DIR$/essentials-work" />
             <option value="$PROJECT_DIR$/sample" />

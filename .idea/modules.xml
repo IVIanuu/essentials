@@ -7,8 +7,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-about/essentials.essentials-about.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-about/essentials.essentials-about.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-accessibility/essentials.essentials-accessibility.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-accessibility/essentials.essentials-accessibility.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-analytics/essentials.essentials-analytics.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-analytics/essentials.essentials-analytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-android/essentials.essentials-android.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-android/essentials.essentials-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-android-core/essentials.essentials-android-core.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-android-core/essentials.essentials-android-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-android-data/essentials.essentials-android-data.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-android-data/essentials.essentials-android-data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-android-test/essentials.essentials-android-test.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-android-test/essentials.essentials-android-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-android-util/essentials.essentials-android-util.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-android-util/essentials.essentials-android-util.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps/essentials.essentials-apps.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps/essentials.essentials-apps.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials.essentials-apps-coil.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-coil/essentials.essentials-apps-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials.essentials-apps-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials.essentials-apps-ui.iml" />
@@ -43,6 +46,13 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-twilight/essentials.essentials-twilight.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-twilight/essentials.essentials-twilight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui/essentials.essentials-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui/essentials.essentials-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-animation/essentials.essentials-ui-animation.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-animation/essentials.essentials-ui-animation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-core/essentials.essentials-ui-core.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-core/essentials.essentials-ui-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-dialog/essentials.essentials-ui-dialog.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-dialog/essentials.essentials-ui-dialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-navigation/essentials.essentials-ui-navigation.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-navigation/essentials.essentials-ui-navigation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-popup/essentials.essentials-ui-popup.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-popup/essentials.essentials-ui-popup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-prefs/essentials.essentials-ui-prefs.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-prefs/essentials.essentials-ui-prefs.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-unlock/essentials.essentials-unlock.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-unlock/essentials.essentials-unlock.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-work/essentials.essentials-work.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-work/essentials.essentials-work.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/essentials.sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/essentials.sample.iml" />

@@ -5,7 +5,6 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 
 @ActionBinding
@@ -14,7 +13,7 @@ fun lockScreenAction(
     performGlobalAction: performGlobalAction,
     runRootCommand: runRootCommand,
     stringResource: stringResource,
-    systemBuildInfo: SystemBuildInfo,
+    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
 ): Action = Action(
     key = "lock_screen",
     title = stringResource(R.string.es_action_lock_screen),

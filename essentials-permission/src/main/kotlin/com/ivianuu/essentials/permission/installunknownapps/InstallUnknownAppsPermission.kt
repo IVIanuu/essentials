@@ -25,7 +25,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
-import com.ivianuu.essentials.util.SystemBuildInfo
 
 fun InstallUnknownAppsPermission(
     vararg metadata: KeyWithValue<*>
@@ -42,7 +41,7 @@ val Permission.Companion.IsUnknownAppsPermission by lazy {
 @PermissionStateProviderBinding
 class InstallUnknownAppsPermissionStateProvider(
     private val packageManager: PackageManager,
-    private val systemBuildInfo: SystemBuildInfo,
+    private val systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

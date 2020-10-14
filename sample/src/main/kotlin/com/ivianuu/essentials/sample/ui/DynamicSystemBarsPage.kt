@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

@@ -21,7 +21,6 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.Logger
@@ -42,6 +41,17 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
+
+enum class DisplayRotation(val isPortrait: Boolean) {
+    // 0 degrees
+    PortraitUp(true),
+    // 90 degrees
+    LandscapeLeft(false),
+    // 180 degrees
+    PortraitDown(true),
+    // 270 degrees
+    LandscapeRight(false)
+}
 
 typealias DisplayRotationFlow = Flow<DisplayRotation>
 

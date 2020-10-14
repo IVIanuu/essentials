@@ -28,5 +28,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials-android-core"))
+    api(project(":essentials-android-util"))
+    api(project(":essentials-ui"))
 }

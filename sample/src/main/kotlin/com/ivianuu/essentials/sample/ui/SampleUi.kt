@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.core.TmpAppUi
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
 
 @GenerateMergeComponents

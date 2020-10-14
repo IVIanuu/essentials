@@ -28,12 +28,11 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev658"
+    const val version = "${Build.versionName}-dev659"
 }
 
 object Deps {
-    const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.3.1.compose-6886729-SNAPSHOT"
+    const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.1"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
 
     object AndroidX {
@@ -41,11 +40,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-SNAPSHOT"
-            const val snapshot = "6896760"
-
-            val snapshotUrl =
-                "https://androidx.dev/snapshots/builds/$snapshot/artifacts/ui/repository"
+            const val version = "1.0.0-alpha05"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
@@ -91,7 +86,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev649"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev659"
 
     object Fabric {
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"

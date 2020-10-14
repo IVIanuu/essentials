@@ -40,11 +40,10 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
-import com.ivianuu.essentials.ui.navigation.DialogRoute
+import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.startUi
@@ -59,7 +58,7 @@ import java.util.Date
 class DebugBillingClient(
     private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener,
     private val billingStore: BillingStore,
-    private val buildInfo: BuildInfo,
+    private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
     private val defaultDispatcher: DefaultDispatcher,
     private val globalScope: GlobalScope,
     private val startUi: startUi,

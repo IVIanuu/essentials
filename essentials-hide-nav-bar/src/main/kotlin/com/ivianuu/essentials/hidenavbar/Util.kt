@@ -7,14 +7,13 @@ import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 suspend fun disableNonSdkInterfaceDetection(
     logger: Logger,
-    systemBuildInfo: SystemBuildInfo,
+    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
     settingsDataStoreFactory: SettingsDataStoreFactory,
 ) {
     if (systemBuildInfo.sdk >= 29) {

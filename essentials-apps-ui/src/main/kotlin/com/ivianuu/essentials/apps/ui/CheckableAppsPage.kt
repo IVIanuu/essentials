@@ -38,8 +38,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
@@ -79,12 +77,16 @@ fun CheckableAppsPage(
             TopAppBar(
                 title = { Text(appBarTitle) },
                 actions = {
-                    PopupMenuButton(
+                    com.ivianuu.essentials.ui.popup.PopupMenuButton(
                         items = listOf(
-                            PopupMenu.Item(onSelected = { dispatch(SelectAllClicked) }) {
+                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
+                                dispatch(SelectAllClicked)
+                            }) {
                                 Text(R.string.es_select_all)
                             },
-                            PopupMenu.Item(onSelected = { dispatch(DeselectAllClicked) }) {
+                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
+                                dispatch(DeselectAllClicked)
+                            }) {
                                 Text(R.string.es_deselect_all)
                             }
                         )

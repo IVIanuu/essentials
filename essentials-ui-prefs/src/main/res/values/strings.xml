@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="es_seek_bar_pref_format_dp">%s dp</string>
+    <string name="es_seek_bar_pref_format_millis">%s ms</string>
+    <string name="es_seek_bar_pref_format_percentage">%s%%</string>
+    <string name="es_seek_bar_pref_format_px">%s px</string>
+    <string name="es_seek_bar_pref_format_seconds">%s seconds</string>
+
+    <string name="es_copied_to_clipboard">Copied to clipboard!</string>
+</resources>

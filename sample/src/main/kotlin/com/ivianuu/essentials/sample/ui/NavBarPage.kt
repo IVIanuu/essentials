@@ -29,6 +29,7 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
@@ -68,9 +69,8 @@ fun NavBarPage(
                 }
             }
 
-            val hideNavBar = rememberState { false }
-
-            onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+            var hideNavBar by rememberState { false }
+            onCommit(hideNavBar) { updateNavBarState(hideNavBar) }
 
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }
@@ -83,7 +83,7 @@ fun NavBarPage(
             ) {
                 Text(
                     text = if (hasPermission) {
-                        if (hideNavBar.value) {
+                        if (hideNavBar) {
                             "Nav bar hidden"
                         } else {
                             "Nav bar shown"
@@ -98,7 +98,7 @@ fun NavBarPage(
             Button(
                 onClick = {
                     if (hasPermission) {
-                        hideNavBar.value = !hideNavBar.value
+                        hideNavBar = !hideNavBar
                     } else {
                         navigator.push { secureSettingsPage(true) }
                     }

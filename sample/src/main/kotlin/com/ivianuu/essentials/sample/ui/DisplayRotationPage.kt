@@ -10,8 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.DisplayRotationFlow
-import com.ivianuu.essentials.ui.core.DisplayRotation
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.injekt.FunBinding
 

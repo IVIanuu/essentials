@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.essentials.ui.datastore.asState
+import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

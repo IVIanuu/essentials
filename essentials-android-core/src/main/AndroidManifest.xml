@@ -20,7 +20,7 @@
 
     <application android:name=".app.DefaultApp">
         <activity
-            android:name="com.ivianuu.essentials.ui.activity.DefaultActivity"
+            android:name="com.ivianuu.essentials.activity.DefaultActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">

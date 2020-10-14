@@ -36,11 +36,11 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.util.isLight
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

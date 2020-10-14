@@ -29,8 +29,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials-android-core"))
     api(project(":essentials-accessibility"))
+    api(project(":essentials-android-util"))
     api(project(":essentials-apps-ui"))
     api(project(":essentials-hide-nav-bar"))
     api(project(":essentials-permission"))

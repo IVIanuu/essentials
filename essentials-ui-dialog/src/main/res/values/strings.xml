@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dialogs -->
+    <string name="es_cancel">Cancel</string>
+    <string name="es_action_close">Close</string>
+    <string name="es_ok">OK</string>
+
+    <!-- Color picker -->
+    <string name="es_color_picker_title">Pick a color</string>
+</resources>

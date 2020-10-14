@@ -20,7 +20,7 @@ class InitializeAnalyticsTest {
         val called = try {
             initializeAnalytics(
                 mockk(),
-                BuildInfo(
+                com.ivianuu.essentials.util.BuildInfo(
                     isDebug = false,
                     packageName = "",
                     versionCode = 0
@@ -37,7 +37,7 @@ class InitializeAnalyticsTest {
     fun testDoesNotInitializeInDebugMode() {
         initializeAnalytics(
             mockk(),
-            BuildInfo(
+            com.ivianuu.essentials.util.BuildInfo(
                 isDebug = true,
                 packageName = "",
                 versionCode = 0

@@ -27,7 +27,6 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
@@ -93,7 +92,7 @@ fun AppTrackerPage(
 fun createAppTrackerNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
-    systemBuildInfo: SystemBuildInfo,
+    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
     currentApp: @Assisted String?,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
