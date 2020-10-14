@@ -23,7 +23,6 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.util.DefaultResult
 import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.MainDispatcher
@@ -42,11 +41,15 @@ import kotlin.coroutines.resume
 interface Torch {
     val torchState: StateFlow<Boolean>
 
-    suspend fun toggle(): DefaultResult<Boolean>
+    suspend fun setTorchState(newState: Boolean)
 
     companion object {
         const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
     }
+}
+
+suspend fun Torch.toggle() {
+    setTorchState(!torchState.value)
 }
 
 @ImplBinding(ApplicationComponent::class)
@@ -86,29 +89,31 @@ class TorchImpl(
             .launchIn(globalScope)
     }
 
-    override suspend fun toggle(): DefaultResult<Boolean> = runCatching {
-        withContext(mainDispatcher) {
-            suspendCancellableCoroutine<Boolean> { continuation ->
-                cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
-                    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                        cameraManager.unregisterTorchCallback(this)
-                        cameraManager.setTorchMode(cameraId, !enabled)
-                        stateActor.offerSafe(!enabled)
-                        continuation.resume(!enabled)
-                    }
+    override suspend fun setTorchState(newState: Boolean) {
+        runCatching {
+            withContext(mainDispatcher) {
+                suspendCancellableCoroutine<Boolean> { continuation ->
+                    cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
+                        override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                            cameraManager.unregisterTorchCallback(this)
+                            cameraManager.setTorchMode(cameraId, newState)
+                            stateActor.offerSafe(newState)
+                            continuation.resume(newState)
+                        }
 
-                    override fun onTorchModeUnavailable(cameraId: String) {
-                        cameraManager.unregisterTorchCallback(this)
-                        showToastRes(R.string.es_failed_to_toggle_torch)
-                        stateActor.offerSafe(false)
-                        continuation.resume(false)
-                    }
-                }, null)
+                        override fun onTorchModeUnavailable(cameraId: String) {
+                            cameraManager.unregisterTorchCallback(this)
+                            showToastRes(R.string.es_failed_to_toggle_torch)
+                            stateActor.offerSafe(false)
+                            continuation.resume(false)
+                        }
+                    }, null)
+                }
             }
+        }.onFailure {
+            it.printStackTrace()
+            showToastRes(R.string.es_failed_to_toggle_torch)
         }
-    }.onFailure {
-        it.printStackTrace()
-        showToastRes(R.string.es_failed_to_toggle_torch)
     }
 
 }
