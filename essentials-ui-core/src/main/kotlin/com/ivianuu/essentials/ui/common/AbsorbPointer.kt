@@ -24,11 +24,11 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 
 @Composable
 fun Modifier.absorbPointer(
-    absorb: Boolean = true,
+    enabled: Boolean = true,
 ): Modifier = composed {
     rawPressStartGestureFilter(
         onPressStart = {},
-        enabled = absorb,
+        enabled = enabled,
         executionPass = PointerEventPass.Initial
     )
 }
