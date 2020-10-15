@@ -45,6 +45,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-test/essentials.essentials-test.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-test/essentials.essentials-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tuples/essentials.essentials-tuples.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tuples/essentials.essentials-tuples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tuples/generator/essentials.essentials-tuples.generator.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tuples/generator/essentials.essentials-tuples.generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-twilight/essentials.essentials-twilight.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-twilight/essentials.essentials-twilight.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui/essentials.essentials-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui/essentials.essentials-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-ui-animation/essentials.essentials-ui-animation.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-ui-animation/essentials.essentials-ui-animation.iml" />

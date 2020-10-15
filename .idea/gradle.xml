@@ -53,6 +53,8 @@
             <option value="$PROJECT_DIR$/essentials-test" />
             <option value="$PROJECT_DIR$/essentials-tile" />
             <option value="$PROJECT_DIR$/essentials-torch" />
+            <option value="$PROJECT_DIR$/essentials-tuples" />
+            <option value="$PROJECT_DIR$/essentials-tuples/generator" />
             <option value="$PROJECT_DIR$/essentials-twilight" />
             <option value="$PROJECT_DIR$/essentials-ui" />
             <option value="$PROJECT_DIR$/essentials-ui-animation" />
