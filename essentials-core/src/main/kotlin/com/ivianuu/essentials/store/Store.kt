@@ -28,6 +28,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -120,7 +121,7 @@ internal class StoreImpl<S, A>(
     override val state = MutableStateFlow(initial)
     override val actions = EventFlow<A>()
 
-    private val actor = actor<StoreMessage<S, A>>(capacity = DEFAULT_BUFFER_SIZE) {
+    private val actor = actor<StoreMessage<S, A>>(capacity = Channel.UNLIMITED) {
         for (msg in channel) {
             when (msg) {
                 is DispatchAction -> actions.send(msg.action)
