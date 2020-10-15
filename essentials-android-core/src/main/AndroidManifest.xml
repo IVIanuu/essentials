@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2019 Manuel Wrage
+  ~ Copyright 2020 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,22 +13,4 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials">
-
-    <application android:name=".app.DefaultApp">
-        <activity
-            android:name="com.ivianuu.essentials.activity.DefaultActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
+<manifest package="com.ivianuu.essentials" />

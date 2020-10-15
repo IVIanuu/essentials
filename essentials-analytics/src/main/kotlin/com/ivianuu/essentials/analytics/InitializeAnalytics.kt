@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.ivianuu.essentials.analytics
 
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import io.fabric.sdk.android.Fabric

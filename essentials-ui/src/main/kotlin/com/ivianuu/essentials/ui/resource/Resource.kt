@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,6 @@ class Success<T>(val value: T) : Resource<T>() {
     override fun hashCode(): Int = value.hashCode()
 
     override fun toString(): String = "Ok(value=$value)"
-
 }
 
 @Immutable
@@ -83,7 +82,6 @@ class Error(val error: Throwable) : Resource<Nothing>() {
     override fun hashCode(): Int = error.hashCode()
 
     override fun toString(): String = "Err(value=$error)"
-
 }
 
 operator fun <T> Resource<T>.invoke(): T? = (this as? Success)?.value

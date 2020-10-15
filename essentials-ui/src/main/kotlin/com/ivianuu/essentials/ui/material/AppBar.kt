@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,11 +111,13 @@ fun TopAppBar(
         color = backgroundColor,
         contentColor = contentColor,
         elevation = elevation,
-        modifier = (if (applySystemBarStyle) Modifier.systemBarStyle(
-            bgColor = overlaySystemBarBgColor(backgroundColor),
-            lightIcons = backgroundColor.isLight,
-            elevation = elevation
-        ) else Modifier).then(modifier)
+        modifier = (
+                if (applySystemBarStyle) Modifier.systemBarStyle(
+                    bgColor = overlaySystemBarBgColor(backgroundColor),
+                    lightIcons = backgroundColor.isLight,
+                    elevation = elevation
+                ) else Modifier
+                ).then(modifier)
     ) {
         InsetsPadding(start = false, end = false, bottom = false) {
             Row(

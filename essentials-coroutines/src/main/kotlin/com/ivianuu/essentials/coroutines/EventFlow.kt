@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ interface EventFlow<T> : Flow<T> {
 fun <T> EventFlow(): EventFlow<T> =
     EventFlowImpl()
 
-private class EventFlowImpl<T> : AbstractFlow<T>(),
+private class EventFlowImpl<T> :
+    AbstractFlow<T>(),
     EventFlow<T> {
 
     private val channel = BroadcastChannel<T>(DEFAULT_BUFFER_SIZE)

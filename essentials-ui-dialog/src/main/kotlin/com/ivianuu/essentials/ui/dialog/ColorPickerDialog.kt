@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,46 +181,49 @@ private fun ColorGrid(
         }
 
         WithConstraints(modifier = modifier) {
-            ScrollableColumn(modifier = Modifier.padding(all = 4.dp), children = {
-                items.chunked(4).forEach { rowItems ->
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        rowItems.forEach { item ->
-                            key(item) {
-                                Box(
-                                    modifier = Modifier.size(maxWidth / 4),
-                                    alignment = Alignment.Center
-                                ) {
-                                    when (item) {
-                                        is ColorGridItem.Back -> ColorGridBackButton(
-                                            onClick = { currentPalette = null }
-                                        )
-                                        is ColorGridItem.Color -> ColorGridItem(
-                                            color = item.color,
-                                            isSelected = item.color == currentColor,
-                                            onClick = {
-                                                if (palette == null) {
-                                                    val paletteForItem =
-                                                        colors.first { it.front == item.color }
-                                                    if (paletteForItem.colors.size > 1) {
-                                                        currentPalette = paletteForItem
+            ScrollableColumn(
+                modifier = Modifier.padding(all = 4.dp),
+                children = {
+                    items.chunked(4).forEach { rowItems ->
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            rowItems.forEach { item ->
+                                key(item) {
+                                    Box(
+                                        modifier = Modifier.size(maxWidth / 4),
+                                        alignment = Alignment.Center
+                                    ) {
+                                        when (item) {
+                                            is ColorGridItem.Back -> ColorGridBackButton(
+                                                onClick = { currentPalette = null }
+                                            )
+                                            is ColorGridItem.Color -> ColorGridItem(
+                                                color = item.color,
+                                                isSelected = item.color == currentColor,
+                                                onClick = {
+                                                    if (palette == null) {
+                                                        val paletteForItem =
+                                                            colors.first { it.front == item.color }
+                                                        if (paletteForItem.colors.size > 1) {
+                                                            currentPalette = paletteForItem
+                                                        } else {
+                                                            onColorSelected(item.color)
+                                                        }
                                                     } else {
                                                         onColorSelected(item.color)
                                                     }
-                                                } else {
-                                                    onColorSelected(item.color)
                                                 }
-                                            }
-                                        )
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            })
+            )
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,21 +93,24 @@ class TorchImpl(
         runCatching {
             withContext(mainDispatcher) {
                 suspendCancellableCoroutine<Boolean> { continuation ->
-                    cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
-                        override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                            cameraManager.unregisterTorchCallback(this)
-                            cameraManager.setTorchMode(cameraId, newState)
-                            stateActor.offerSafe(newState)
-                            continuation.resume(newState)
-                        }
+                    cameraManager.registerTorchCallback(
+                        object : CameraManager.TorchCallback() {
+                            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                                cameraManager.unregisterTorchCallback(this)
+                                cameraManager.setTorchMode(cameraId, newState)
+                                stateActor.offerSafe(newState)
+                                continuation.resume(newState)
+                            }
 
-                        override fun onTorchModeUnavailable(cameraId: String) {
-                            cameraManager.unregisterTorchCallback(this)
-                            showToastRes(R.string.es_failed_to_toggle_torch)
-                            stateActor.offerSafe(false)
-                            continuation.resume(false)
-                        }
-                    }, null)
+                            override fun onTorchModeUnavailable(cameraId: String) {
+                                cameraManager.unregisterTorchCallback(this)
+                                showToastRes(R.string.es_failed_to_toggle_torch)
+                                stateActor.offerSafe(false)
+                                continuation.resume(false)
+                            }
+                        },
+                        null
+                    )
                 }
             }
         }.onFailure {
@@ -115,5 +118,4 @@ class TorchImpl(
             showToastRes(R.string.es_failed_to_toggle_torch)
         }
     }
-
 }

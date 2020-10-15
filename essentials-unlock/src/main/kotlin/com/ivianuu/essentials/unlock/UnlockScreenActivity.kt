@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,23 +70,26 @@ class UnlockScreenActivity : EsActivity() {
         }
 
         if (component.systemBuildInfo.sdk >= 26) {
-            component.keyguardManager.requestDismissKeyguard(this, object :
-                KeyguardManager.KeyguardDismissCallback() {
-                override fun onDismissSucceeded() {
-                    super.onDismissSucceeded()
-                    finishWithResult(true)
-                }
+            component.keyguardManager.requestDismissKeyguard(
+                this,
+                object :
+                    KeyguardManager.KeyguardDismissCallback() {
+                    override fun onDismissSucceeded() {
+                        super.onDismissSucceeded()
+                        finishWithResult(true)
+                    }
 
-                override fun onDismissCancelled() {
-                    super.onDismissCancelled()
-                    finishWithResult(false)
-                }
+                    override fun onDismissCancelled() {
+                        super.onDismissCancelled()
+                        finishWithResult(false)
+                    }
 
-                override fun onDismissError() {
-                    super.onDismissError()
-                    finishWithResult(false)
+                    override fun onDismissError() {
+                        super.onDismissError()
+                        finishWithResult(false)
+                    }
                 }
-            })
+            )
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
             merge(
@@ -117,10 +120,12 @@ class UnlockScreenActivity : EsActivity() {
     internal companion object {
         private const val KEY_REQUEST_ID = "request_id"
         fun unlock(context: Context, requestId: String) {
-            context.startActivity(Intent(context, UnlockScreenActivity::class.java).apply {
-                putExtra(KEY_REQUEST_ID, requestId)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            })
+            context.startActivity(
+                Intent(context, UnlockScreenActivity::class.java).apply {
+                    putExtra(KEY_REQUEST_ID, requestId)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            )
         }
     }
 }

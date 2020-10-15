@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,8 +154,10 @@ private class SystemBarManager {
 
         onCommit(activity, statusBarStyle?.barColor) {
             activity.window.statusBarColor =
-                (statusBarStyle?.barColor ?: Color.Black
-                    .copy(alpha = 0.2f)).toArgb()
+                (
+                        statusBarStyle?.barColor ?: Color.Black
+                            .copy(alpha = 0.2f)
+                        ).toArgb()
         }
 
         onCommit(activity, statusBarStyle?.lightIcons) {
@@ -204,8 +206,10 @@ private class SystemBarManager {
 
             onCommit(activity, navBarStyle?.barColor) {
                 activity.window.navigationBarColor =
-                    (navBarStyle?.barColor ?: Color.Black
-                        .copy(alpha = 0.2f)).toArgb()
+                    (
+                            navBarStyle?.barColor ?: Color.Black
+                                .copy(alpha = 0.2f)
+                            ).toArgb()
             }
 
             onCommit(activity, navBarStyle?.lightIcons) {
@@ -231,5 +235,4 @@ private class SystemBarManager {
     fun unregisterStyle(style: SystemBarStyle) {
         styles -= style
     }
-
 }

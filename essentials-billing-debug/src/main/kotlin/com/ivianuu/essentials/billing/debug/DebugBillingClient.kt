@@ -1,10 +1,10 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -120,7 +120,8 @@ class DebugBillingClient(
             listener.onConsumeResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
-                ).build(), purchaseToken
+                ).build(),
+                purchaseToken
             )
             return
         }
@@ -132,13 +133,15 @@ class DebugBillingClient(
                 listener.onConsumeResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
-                    ).build(), purchaseToken
+                    ).build(),
+                    purchaseToken
                 )
             } else {
                 listener.onConsumeResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.ITEM_NOT_OWNED
-                    ).build(), purchaseToken
+                    ).build(),
+                    purchaseToken
                 )
             }
         }
@@ -158,7 +161,8 @@ class DebugBillingClient(
                             purchasesUpdatedListener.onPurchasesUpdated(
                                 BillingResult.newBuilder().setResponseCode(
                                     BillingResponseCode.USER_CANCELED
-                                ).build(), null
+                                ).build(),
+                                null
                             )
 
                             navigator.popTop()
@@ -192,7 +196,8 @@ class DebugBillingClient(
                                         purchasesUpdatedListener.onPurchasesUpdated(
                                             BillingResult.newBuilder().setResponseCode(
                                                 BillingResponseCode.OK
-                                            ).build(), purchases
+                                            ).build(),
+                                            purchases
                                         )
 
                                         navigator.popTop()
@@ -216,15 +221,18 @@ class DebugBillingClient(
             listener.onPurchaseHistoryResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.SERVICE_DISCONNECTED
-                ).build(), null
+                ).build(),
+                null
             )
             return
         }
         globalScope.launch {
             val history = queryPurchases(skuType)
-            listener.onPurchaseHistoryResponse(BillingResult.newBuilder()
-                .setResponseCode(history.responseCode).build(),
-                history.purchasesList.map { PurchaseHistoryRecord(it.originalJson, it.signature) })
+            listener.onPurchaseHistoryResponse(
+                BillingResult.newBuilder()
+                    .setResponseCode(history.responseCode).build(),
+                history.purchasesList.map { PurchaseHistoryRecord(it.originalJson, it.signature) }
+            )
         }
     }
 
@@ -236,7 +244,8 @@ class DebugBillingClient(
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.SERVICE_DISCONNECTED
-                ).build(), null
+                ).build(),
+                null
             )
             return
         }
@@ -255,14 +264,16 @@ class DebugBillingClient(
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.SERVICE_DISCONNECTED
-                ).build(), null
+                ).build(),
+                null
             )
         }
         if (skuType == null || skuType.isBlank()) {
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
-                ).build(), null
+                ).build(),
+                null
             )
         }
         return runBlocking {
@@ -299,7 +310,8 @@ class DebugBillingClient(
         }
 
         globalScope.launch {
-            val purchase = billingStore.getPurchaseByToken(purchaseToken
+            val purchase = billingStore.getPurchaseByToken(
+                purchaseToken
             )
             if (purchase != null) {
                 val updated = Purchase(
@@ -336,5 +348,4 @@ class DebugBillingClient(
       |"0987654321", "purchaseState":1}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")
     }
-
 }

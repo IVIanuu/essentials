@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,11 @@ fun DialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         onClick = {
-            navigator.push(DialogRoute {
-                dialog { navigator.popTop() }
-            })
+            navigator.push(
+                DialogRoute {
+                    dialog { navigator.popTop() }
+                }
+            )
         }
     )
 }

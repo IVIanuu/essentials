@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ object Publishing {
 
 object Deps {
     const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.1"
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0"
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"

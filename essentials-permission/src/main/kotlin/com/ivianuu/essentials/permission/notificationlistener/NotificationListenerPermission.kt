@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,10 +53,12 @@ class NotificationListenerPermissionStateProvider(
         Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return (Settings.Secure.getString(
-            applicationContext.contentResolver,
-            "enabled_notification_listeners"
-        ) ?: null)
+        return (
+                Settings.Secure.getString(
+                    applicationContext.contentResolver,
+                    "enabled_notification_listeners"
+                ) ?: null
+                )
             ?.split(":")
             ?.map {
                 val tmp = it.split("/")

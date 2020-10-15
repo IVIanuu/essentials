@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,5 +28,4 @@ abstract class DataStoreTileService<T> : FlowTileService<T>() {
 
     final override val state: Flow<T>
         get() = dataStore.data
-
 }

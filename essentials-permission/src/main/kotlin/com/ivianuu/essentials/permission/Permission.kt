@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ import kotlin.reflect.KProperty
 
 class Permission(private val metadata: Map<Key<*>, Any?>) {
 
-    constructor(vararg metadata: KeyWithValue<*>) : this(metadata.associate {
-        it.key to it.value
-    })
+    constructor(vararg metadata: KeyWithValue<*>) : this(
+        metadata.associate {
+            it.key to it.value
+        }
+    )
 
     operator fun <T> get(key: Key<T>): T =
         metadata[key] as? T ?: error("missing value for $key")

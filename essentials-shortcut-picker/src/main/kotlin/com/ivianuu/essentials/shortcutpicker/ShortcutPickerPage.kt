@@ -1,10 +1,10 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -54,17 +54,20 @@ fun ShortcutPickerPage(
     val (state, dispatch) = store()
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    title ?: stringResource(R.string.es_title_shortcut_picker)
-                )
-            })
+            TopAppBar(
+                title = {
+                    Text(
+                        title ?: stringResource(R.string.es_title_shortcut_picker)
+                    )
+                }
+            )
         }
     ) {
         ResourceLazyColumnFor(state.shortcuts) { shortcut ->
             Shortcut(
                 info = shortcut,
-                onClick = { dispatch(ShortcutPickerAction.ShortcutClicked(shortcut)) })
+                onClick = { dispatch(ShortcutPickerAction.ShortcutClicked(shortcut)) }
+            )
         }
     }
 }

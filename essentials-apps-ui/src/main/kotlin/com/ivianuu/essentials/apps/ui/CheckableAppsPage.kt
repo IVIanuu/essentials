@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Manuel Wrage
+ * Copyright 2020 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,14 +79,18 @@ fun CheckableAppsPage(
                 actions = {
                     com.ivianuu.essentials.ui.popup.PopupMenuButton(
                         items = listOf(
-                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
-                                dispatch(SelectAllClicked)
-                            }) {
+                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(
+                                onSelected = {
+                                    dispatch(SelectAllClicked)
+                                }
+                            ) {
                                 Text(R.string.es_select_all)
                             },
-                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
-                                dispatch(DeselectAllClicked)
-                            }) {
+                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(
+                                onSelected = {
+                                    dispatch(DeselectAllClicked)
+                                }
+                            ) {
                                 Text(R.string.es_deselect_all)
                             }
                         )
