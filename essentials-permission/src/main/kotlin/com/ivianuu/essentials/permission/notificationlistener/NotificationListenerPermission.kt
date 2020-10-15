@@ -19,12 +19,14 @@ package com.ivianuu.essentials.permission.notificationlistener
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
+import androidx.core.app.NotificationManagerCompat
 import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.reflect.KClass
 
@@ -46,27 +48,14 @@ val Permission.Companion.NotificationListenerClass by lazy {
 @PermissionStateProviderBinding
 class NotificationListenerPermissionStateProvider(
     private val applicationContext: ApplicationContext,
-    private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    private val buildInfo: BuildInfo,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return (
-                Settings.Secure.getString(
-                    applicationContext.contentResolver,
-                    "enabled_notification_listeners"
-                ) ?: null
-                )
-            ?.split(":")
-            ?.map {
-                val tmp = it.split("/")
-                tmp[0] to tmp[1]
-            }
-            ?.any { (packageName, listenerName) ->
-                packageName == buildInfo.packageName &&
-                        listenerName == permission[Permission.NotificationListenerClass].java.canonicalName
-            } ?: false
+        return NotificationManagerCompat.getEnabledListenerPackages(applicationContext)
+            .any { it == buildInfo.packageName }
     }
 }
