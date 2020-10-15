@@ -26,7 +26,7 @@ import com.ivianuu.injekt.android.ApplicationContext
 suspend fun hasSecureSettingsPermission(
     applicationContext: ApplicationContext,
 ): Boolean = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
-        PackageManager.PERMISSION_GRANTED
+    PackageManager.PERMISSION_GRANTED
 
 @FunBinding
 suspend fun grantSecureSettingsPermissionViaRoot(

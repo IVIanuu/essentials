@@ -57,7 +57,7 @@ class AccessibilityServicePermissionStateProvider(
         return accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             .any {
                 it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
-                        it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
+                    it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
             }
     }
 }

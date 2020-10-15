@@ -46,7 +46,7 @@ fun keyboardVisible(
         }
         .filter {
             it.isFullScreen &&
-                    it.className == "android.inputmethodservice.SoftInputWindow"
+                it.className == "android.inputmethodservice.SoftInputWindow"
         }
         .map { Unit }
         .onStart { emit(Unit) }

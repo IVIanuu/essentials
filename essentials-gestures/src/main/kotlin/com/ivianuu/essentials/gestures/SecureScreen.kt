@@ -59,7 +59,7 @@ fun isOnSecureScreen(
 
             if (!isOnSecureScreen) {
                 isOnSecureScreen = packageName == "com.android.settings" &&
-                        className == "android.app.MaterialDialog"
+                    className == "android.app.MaterialDialog"
             }
 
             isOnSecureScreen

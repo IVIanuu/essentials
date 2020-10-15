@@ -105,7 +105,7 @@ class NavBarManager(
                         .onStart { emit(Unit) }
                         .map {
                             !config.showWhileScreenOff ||
-                                    screenStateFlow.first() == ScreenState.Unlocked
+                                screenStateFlow.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             wasNavBarHiddenPref.updateData { navBarHidden }

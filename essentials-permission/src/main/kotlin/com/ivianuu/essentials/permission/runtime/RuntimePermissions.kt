@@ -50,7 +50,7 @@ class RuntimePermissionStateProvider(
 
     override suspend fun isGranted(permission: Permission): Boolean =
         applicationContext.checkSelfPermission(permission[Permission.RuntimePermissionName]) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
 }
 
 @PermissionRequestHandlerBinding
