@@ -54,7 +54,6 @@ dependencies {
     implementation(Deps.autoService)
     kapt(Deps.autoService)
 
-    implementation(Deps.Fabric.gradlePlugin)
     implementation(Deps.Kotlin.gradlePlugin)
     implementation(Deps.Kotlin.gradlePluginApi)
     implementation(Deps.Injekt.gradlePlugin)

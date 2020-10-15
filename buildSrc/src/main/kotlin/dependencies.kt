@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev659"
+    const val version = "${Build.versionName}-dev662"
 }
 
 object Deps {
@@ -88,10 +88,7 @@ object Deps {
     const val essentialsGradlePlugin =
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev659"
 
-    object Fabric {
-        const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
-        const val gradlePlugin = "io.fabric.tools:gradle:1.31.2"
-    }
+    const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
         private const val version = "0.0.1-dev383"
