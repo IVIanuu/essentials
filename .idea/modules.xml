@@ -42,6 +42,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-service/essentials.essentials-service.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-service/essentials.essentials-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-shell/essentials.essentials-shell.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-shell/essentials.essentials-shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-shortcut-picker/essentials.essentials-shortcut-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-shortcut-picker/essentials.essentials-shortcut-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-store/essentials.essentials-store.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-store/essentials.essentials-store.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-test/essentials.essentials-test.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-test/essentials.essentials-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-tile/essentials.essentials-tile.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-torch/essentials.essentials-torch.iml" />

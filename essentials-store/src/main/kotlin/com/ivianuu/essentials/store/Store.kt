@@ -17,24 +17,17 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.store.StoreImpl.StoreMessage.DispatchAction
 import com.ivianuu.essentials.store.StoreImpl.StoreMessage.SetState
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -69,27 +62,6 @@ fun <S, A> storeProvider(
     block: suspend StoreScope<S, A>.() -> Unit,
 ): (CoroutineScope) -> Store<S, A> = {
     it.store(initial, block)
-}
-
-@FunBinding
-suspend fun @Assisted StoreScope<*, *>.enableLogging(logger: Logger) {
-    logger.d("initialize with state ${currentState()}")
-
-    state
-        .drop(1)
-        .onEach { logger.d("new state -> $it") }
-        .launchIn(this)
-
-    actions
-        .onEach { logger.d("on action -> $it") }
-        .launchIn(this)
-
-    launch {
-        runWithCleanup(
-            block = { awaitCancellation() },
-            cleanup = { logger.d("cancel") }
-        )
-    }
 }
 
 inline fun <S, A, T> Flow<T>.setStateIn(
@@ -131,7 +103,7 @@ internal class StoreImpl<S, A>(
                     state.value = newState
                     msg.acknowledged.complete(Unit)
                 }
-            }.exhaustive
+            }.let {}
         }
     }
 

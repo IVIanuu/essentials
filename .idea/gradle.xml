@@ -50,6 +50,7 @@
             <option value="$PROJECT_DIR$/essentials-service" />
             <option value="$PROJECT_DIR$/essentials-shell" />
             <option value="$PROJECT_DIR$/essentials-shortcut-picker" />
+            <option value="$PROJECT_DIR$/essentials-store" />
             <option value="$PROJECT_DIR$/essentials-test" />
             <option value="$PROJECT_DIR$/essentials-tile" />
             <option value="$PROJECT_DIR$/essentials-torch" />
