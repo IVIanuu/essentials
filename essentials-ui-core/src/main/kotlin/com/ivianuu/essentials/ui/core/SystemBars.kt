@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.core
 
 import android.os.Build
 import android.view.View
-import android.view.WindowManager
 import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,8 +42,8 @@ import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.ui.common.compositionActivity
-import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.setFlag
 
 @Composable
@@ -108,20 +107,10 @@ private class SystemBarManager {
     fun updateSystemBars() {
         val activity = compositionActivity
         onCommit(activity) {
-            activity.window.addFlags(
-                WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-            )
-
-            activity.window.decorView.systemUiVisibility =
-                activity.window.decorView.systemUiVisibility.addFlag(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                )
-
+            WindowCompat.setDecorFitsSystemWindows(activity.window, false)
             if (Build.VERSION.SDK_INT >= 29) {
-                activity.window.isNavigationBarContrastEnforced = false
                 activity.window.isStatusBarContrastEnforced = false
+                activity.window.isNavigationBarContrastEnforced = false
             }
         }
 
