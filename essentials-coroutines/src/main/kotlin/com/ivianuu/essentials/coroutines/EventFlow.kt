@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -37,7 +38,7 @@ private class EventFlowImpl<T> :
     AbstractFlow<T>(),
     EventFlow<T> {
 
-    private val channel = BroadcastChannel<T>(DEFAULT_BUFFER_SIZE)
+    private val channel = BroadcastChannel<T>(Channel.UNLIMITED)
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
         collector.emitAll(channel.asFlow())
