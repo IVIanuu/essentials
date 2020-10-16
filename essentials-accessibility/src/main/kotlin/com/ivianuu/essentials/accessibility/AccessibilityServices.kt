@@ -66,7 +66,7 @@ class AccessibilityServicesImpl : AccessibilityServices {
     }
 
     internal fun onAccessibilityEvent(event: AndroidAccessibilityEvent) {
-        _events.offer(
+        _events.emit(
             AccessibilityEvent(
                 type = event.eventType,
                 packageName = event.packageName?.toString(),

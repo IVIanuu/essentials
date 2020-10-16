@@ -16,39 +16,79 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
 
 // todo replace with original once available
 
 interface EventFlow<T> : Flow<T> {
-    fun offer(value: T)
-    suspend fun send(value: T)
+    fun emit(value: T)
 }
 
-fun <T> EventFlow(): EventFlow<T> =
-    EventFlowImpl()
+fun <T> EventFlow(bufferSize: Int = 0): EventFlow<T> = EventFlowImpl(bufferSize)
 
-private class EventFlowImpl<T> :
-    AbstractFlow<T>(),
-    EventFlow<T> {
+private class EventFlowImpl<T>(private val bufferSize: Int) : AbstractFlow<T>(), EventFlow<T> {
 
-    private val channel = BroadcastChannel<T>(Channel.UNLIMITED)
+    private val collectors = mutableListOf<EventCollector>()
+    private var bufferedValues: MutableList<T>? = null
 
     override suspend fun collectSafely(collector: FlowCollector<T>) {
-        collector.emitAll(channel.asFlow())
+        val eventCollector = EventCollector(collector)
+        try {
+            val bufferedValues = synchronized(collectors) {
+                collectors += eventCollector
+                bufferedValues?.also { bufferedValues = null }
+            }
+            if (bufferedValues != null)
+                eventCollector.emitBufferedValues(bufferedValues)
+            eventCollector.collect()
+        } finally {
+            synchronized(collectors) {
+                collectors -= eventCollector
+            }
+        }
     }
 
-    override fun offer(value: T) {
-        channel.offerSafe(value)
+    override fun emit(value: T) {
+        synchronized(collectors) {
+            if (collectors.isNotEmpty()) {
+                collectors.toList().forEach { it.emit(value) }
+            } else if (bufferSize != 0) {
+                val bufferedValues = bufferedValues ?: mutableListOf<T>()
+                    .also { bufferedValues = it }
+                bufferedValues += value
+                while (bufferedValues.size > bufferSize) {
+                    bufferedValues.removeAt(0)
+                }
+            }
+        }
     }
 
-    override suspend fun send(value: T) {
-        channel.send(value)
+    private inner class EventCollector(private val flowCollector: FlowCollector<T>) {
+        private var valueAwaiter: Continuation<T>? = null
+
+        suspend fun collect() {
+            while (coroutineContext.isActive) {
+                val value = suspendCancellableCoroutine<T> { cont ->
+                    synchronized(this) { valueAwaiter = cont }
+                }
+                flowCollector.emit(value)
+            }
+        }
+
+        suspend fun emitBufferedValues(values: List<T>) {
+            values.forEach { flowCollector.emit(it) }
+        }
+
+        fun emit(value: T) {
+            synchronized(this) { valueAwaiter?.also { valueAwaiter = null } }
+                ?.resume(value)
+        }
     }
 }

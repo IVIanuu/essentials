@@ -61,9 +61,9 @@ class ScreenStateTest {
         globalScopeDispatcher.runCurrent()
 
         currentScreenState = ScreenState.Locked
-        broadcasts.offer(Intent())
+        broadcasts.emit(Intent())
         currentScreenState = ScreenState.Unlocked
-        broadcasts.offer(Intent())
+        broadcasts.emit(Intent())
 
         expectThat(values)
             .containsExactly(

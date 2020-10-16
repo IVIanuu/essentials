@@ -84,7 +84,7 @@ fun @Assisted Permission.requestHandler(
         override fun handles(permission: Permission): Boolean = original.handles(permission)
         override suspend fun request(permission: Permission) {
             original.request(permission)
-            permissionChanges.offer(Unit)
+            permissionChanges.emit(Unit)
         }
     }
 }

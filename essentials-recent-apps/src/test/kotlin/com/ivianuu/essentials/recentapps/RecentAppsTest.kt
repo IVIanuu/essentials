@@ -72,7 +72,7 @@ class RecentAppsTest {
         }
         recentAppsScopeDispatcher.runCurrent()
 
-        accessibilityEvents.offer(
+        accessibilityEvents.emit(
             AccessibilityEvent(
                 AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
                 "a",
@@ -81,7 +81,7 @@ class RecentAppsTest {
             )
         )
 
-        accessibilityEvents.offer(
+        accessibilityEvents.emit(
             AccessibilityEvent(
                 AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
                 "b",
@@ -90,7 +90,7 @@ class RecentAppsTest {
             )
         )
 
-        accessibilityEvents.offer(
+        accessibilityEvents.emit(
             AccessibilityEvent(
                 AndroidAccessibilityEvent.TYPE_ANNOUNCEMENT,
                 "c",
@@ -99,7 +99,7 @@ class RecentAppsTest {
             )
         )
 
-        accessibilityEvents.offer(
+        accessibilityEvents.emit(
             AccessibilityEvent(
                 AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
                 "b",
@@ -108,7 +108,7 @@ class RecentAppsTest {
             )
         )
 
-        accessibilityEvents.offer(
+        accessibilityEvents.emit(
             AccessibilityEvent(
                 AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
                 "c",
@@ -138,11 +138,11 @@ class RecentAppsTest {
                 .collect { currentApps += it }
         }
 
-        recentApps.offer(listOf("a", "b", "c"))
-        recentApps.offer(listOf("a", "b", "c"))
-        recentApps.offer(listOf("c", "a", "b"))
-        recentApps.offer(listOf("a", "b", "c"))
-        recentApps.offer(listOf("b", "c", "a"))
+        recentApps.emit(listOf("a", "b", "c"))
+        recentApps.emit(listOf("a", "b", "c"))
+        recentApps.emit(listOf("c", "a", "b"))
+        recentApps.emit(listOf("a", "b", "c"))
+        recentApps.emit(listOf("b", "c", "a"))
 
         expectThat(currentApps)
             .containsExactly(

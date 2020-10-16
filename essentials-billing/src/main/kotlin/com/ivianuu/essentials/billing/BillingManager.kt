@@ -85,7 +85,7 @@ class BillingManagerImpl(
 ) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
-        refreshes.offer(Unit)
+        refreshes.emit(Unit)
     }
 
     private val refreshes = EventFlow<Unit>()
@@ -143,7 +143,7 @@ class BillingManagerImpl(
         logger.d("consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}")
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) refreshes.offer(Unit)
+        if (success) refreshes.emit(Unit)
         return@withContext success
     }
 
@@ -162,7 +162,7 @@ class BillingManagerImpl(
         logger.d("acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}")
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) refreshes.offer(Unit)
+        if (success) refreshes.emit(Unit)
         return@withContext success
     }
 

@@ -159,7 +159,7 @@ internal class DiskDataStoreImpl<T>(
             }
 
             cachedDataMutex.withLock { cachedData = newData }
-            changeNotifier.offer(newData)
+            changeNotifier.emit(newData)
         } finally {
             writeLock.endWrite()
         }

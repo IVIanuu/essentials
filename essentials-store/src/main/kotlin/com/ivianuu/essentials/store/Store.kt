@@ -96,7 +96,7 @@ internal class StoreImpl<S, A>(
     private val actor = actor<StoreMessage<S, A>>(capacity = Channel.UNLIMITED) {
         for (msg in channel) {
             when (msg) {
-                is DispatchAction -> actions.send(msg.action)
+                is DispatchAction -> actions.emit(msg.action)
                 is SetState -> {
                     val currentState = state.value
                     val newState = msg.block(currentState)
