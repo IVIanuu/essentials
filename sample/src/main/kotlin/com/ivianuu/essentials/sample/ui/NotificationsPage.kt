@@ -57,6 +57,7 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsCl
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
@@ -66,9 +67,9 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.runCatchingAndLog
@@ -182,11 +183,12 @@ fun notificationStore(
         Permission.Title withValue "Notifications"
     )
 
-    hasPermissions(listOf(permission))
-        .setStateIn(this) { copy(hasPermissions = it) }
-
-    notifications()
-        .executeIn(this) { copy(notifications = it) }
+    combine(
+        hasPermissions(listOf(permission)),
+        notifications().flowAsResource()
+    ).setStateIn(this) { (hasPermissions: Boolean, notifications) ->
+        copy(hasPermissions = hasPermissions, notifications = notifications)
+    }
 
     onEachAction { action ->
         when (action) {
