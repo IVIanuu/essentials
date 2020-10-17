@@ -21,24 +21,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.coroutines.UiScope
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
-import kotlinx.coroutines.cancel
 
 /**
  * Base activity
@@ -50,8 +42,6 @@ abstract class EsActivity : AppCompatActivity() {
 
     private lateinit var composition: Composition
 
-    private val retainedObjects = RetainedObjects()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,34 +51,15 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeViewModelStoreOwner.set(container, this)
 
         composition = container.setContent(Recomposer.current()) {
-            wrappedContent()
+            activityComponent.mergeComponent<EsActivityComponent>().decorateUi {
+                content()
+            }
         }
     }
 
     override fun onDestroy() {
-        activityComponent.mergeComponent<EsActivityComponent>().run {
-            navigator.setBackStack(emptyList())
-            composition.dispose()
-            retainedObjects.dispose()
-            uiScope.cancel()
-        }
+        composition.dispose()
         super.onDestroy()
-    }
-
-    @Composable
-    protected open fun wrappedContent() {
-        activityComponent.mergeComponent<EsActivityComponent>().decorateUi {
-            val uiSavedStateRegistry = UiSavedStateRegistry(
-                restoredValues = emptyMap(),
-                canBeSaved = { true }
-            )
-            Providers(
-                UiSavedStateRegistryAmbient provides uiSavedStateRegistry,
-                RetainedObjectsAmbient provides retainedObjects
-            ) {
-                content()
-            }
-        }
     }
 
     @Composable
@@ -98,6 +69,4 @@ abstract class EsActivity : AppCompatActivity() {
 @MergeInto(ActivityComponent::class)
 interface EsActivityComponent {
     val decorateUi: DecorateUi
-    val navigator: Navigator
-    val uiScope: UiScope
 }

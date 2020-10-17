@@ -16,13 +16,39 @@
 
 package com.ivianuu.essentials.ui.coroutines
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.ui.UiDecoratorBinding
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 
 typealias UiScope = CoroutineScope
 
+// todo should be scoped to the UiComponent but @UiDecoratorBinding installs in ActivityComponent
+// so we also have to scope to ActivityComponent
 @Binding(ActivityComponent::class)
 fun uiScope(mainDispatcher: MainDispatcher): UiScope =
     CoroutineScope(mainDispatcher)
+
+@UiDecoratorBinding
+@FunBinding
+@Composable
+fun CancelUiScope(
+    logger: Logger,
+    uiScope: UiScope,
+    children: @Assisted @Composable () -> Unit
+) {
+    onActive {
+        onDispose {
+            logger.d("Cancelling ui scope")
+            uiScope.cancel()
+        }
+    }
+    children()
+}

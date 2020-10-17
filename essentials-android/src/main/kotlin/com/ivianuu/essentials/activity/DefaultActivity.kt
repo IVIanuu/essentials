@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.activity
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.android.ActivityComponent
@@ -25,22 +24,10 @@ import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 
 class DefaultActivity : EsActivity() {
-
-    private val appUi: AppUi? by lazy {
-        activityComponent.mergeComponent<DefaultActivityComponent>()
-            .appUi
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        checkNotNull(appUi) {
-            "Cannot use DefaultActivity without a AppUi"
-        }
-    }
-
     @Composable
     override fun content() {
-        appUi!!()
+        activityComponent.mergeComponent<DefaultActivityComponent>()
+            .appUi()
     }
 }
 
