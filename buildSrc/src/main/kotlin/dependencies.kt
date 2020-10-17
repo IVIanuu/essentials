@@ -33,7 +33,7 @@ object Publishing {
 
 object Deps {
     const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.1"
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"

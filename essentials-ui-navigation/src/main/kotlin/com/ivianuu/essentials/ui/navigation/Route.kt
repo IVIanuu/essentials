@@ -18,8 +18,13 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticAmbientOf
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiComponentAmbient
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 @Immutable
 class Route(
@@ -37,7 +42,9 @@ class Route(
 
     @Composable
     operator fun invoke() {
-        content()
+        val uiComponent = UiComponentAmbient.current
+        remember(uiComponent) { uiComponent.mergeComponent<RouteComponent>() }
+            .decorateRoute(this, content)
     }
 
     fun copy(
@@ -49,3 +56,8 @@ class Route(
 }
 
 val RouteAmbient = staticAmbientOf<Route>()
+
+@MergeInto(UiComponent::class)
+interface RouteComponent {
+    val decorateRoute: DecorateRoute
+}

@@ -29,10 +29,9 @@ import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
+import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
-import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
-import com.ivianuu.essentials.ui.core.ProvideWindowInsets
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.android.ActivityComponent
@@ -78,18 +77,16 @@ abstract class EsActivity : AppCompatActivity() {
 
     @Composable
     protected open fun wrappedContent() {
-        ProvideWindowInsets {
-            ProvideSystemBarManager {
-                val uiSavedStateRegistry = UiSavedStateRegistry(
-                    restoredValues = emptyMap(),
-                    canBeSaved = { true }
-                )
-                Providers(
-                    UiSavedStateRegistryAmbient provides uiSavedStateRegistry,
-                    RetainedObjectsAmbient provides retainedObjects
-                ) {
-                    content()
-                }
+        activityComponent.mergeComponent<EsActivityComponent>().decorateUi {
+            val uiSavedStateRegistry = UiSavedStateRegistry(
+                restoredValues = emptyMap(),
+                canBeSaved = { true }
+            )
+            Providers(
+                UiSavedStateRegistryAmbient provides uiSavedStateRegistry,
+                RetainedObjectsAmbient provides retainedObjects
+            ) {
+                content()
             }
         }
     }
@@ -100,6 +97,7 @@ abstract class EsActivity : AppCompatActivity() {
 
 @MergeInto(ActivityComponent::class)
 interface EsActivityComponent {
+    val decorateUi: DecorateUi
     val navigator: Navigator
     val uiScope: UiScope
 }

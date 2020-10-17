@@ -25,35 +25,34 @@ import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.AppUiBinding
-import com.ivianuu.essentials.ui.core.TmpAppUi
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
 
 @GenerateMergeComponents
 @AppUiBinding
-class SampleUi(
-    private val homePage: HomePage,
-    private val navigator: Navigator,
-    private val twilightTheme: TwilightTheme,
-) : TmpAppUi {
-    @Composable
-    override fun invoke() {
-        twilightTheme(
-            colors(),
-            darkColors(),
-            blackColors(),
-            Typography()
+@FunBinding
+@Composable
+fun invoke(
+    homePage: HomePage,
+    navigator: Navigator,
+    twilightTheme: TwilightTheme,
+) {
+    twilightTheme(
+        colors(),
+        darkColors(),
+        blackColors(),
+        Typography()
+    ) {
+        Providers(
+            DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
         ) {
-            Providers(
-                DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
-            ) {
-                if (!navigator.hasRoot) {
-                    navigator.setRoot { homePage() }
-                }
-                navigator.content()
+            if (!navigator.hasRoot) {
+                navigator.setRoot { homePage() }
             }
+            navigator.content()
         }
     }
 }

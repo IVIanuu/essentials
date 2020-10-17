@@ -18,7 +18,7 @@ package com.ivianuu.essentials.activity
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.core.AppUiMarker
+import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.merge.mergeComponent
 
 class DefaultActivity : EsActivity() {
 
-    private val appUi: AppUiMarker? by lazy {
+    private val appUi: AppUi? by lazy {
         activityComponent.mergeComponent<DefaultActivityComponent>()
             .appUi
     }
@@ -46,5 +46,5 @@ class DefaultActivity : EsActivity() {
 
 @MergeInto(ActivityComponent::class)
 interface DefaultActivityComponent {
-    val appUi: AppUiMarker
+    val appUi: AppUi
 }

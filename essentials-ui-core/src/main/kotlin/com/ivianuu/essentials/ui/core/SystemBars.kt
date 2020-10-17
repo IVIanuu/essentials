@@ -43,8 +43,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.setFlag
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 
 @Composable
 fun overlaySystemBarBgColor(color: Color) =
@@ -78,8 +81,10 @@ fun Modifier.systemBarStyle(
     onGloballyPositioned { globalBounds = it.globalBounds }
 }
 
+@UiDecoratorBinding
+@FunBinding
 @Composable
-fun ProvideSystemBarManager(children: @Composable () -> Unit) {
+fun ProvideSystemBarManager(children: @Assisted @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
