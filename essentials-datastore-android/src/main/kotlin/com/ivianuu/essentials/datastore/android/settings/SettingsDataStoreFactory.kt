@@ -19,12 +19,14 @@ package com.ivianuu.essentials.datastore.android.settings
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 
 class SettingsDataStoreFactory(
     private val context: Context,
-    private val scope: CoroutineScope
+    private val mainDispatcher: MainDispatcher,
+    private val scope: CoroutineScope,
 ) {
 
     fun <T> create(
@@ -38,6 +40,7 @@ class SettingsDataStoreFactory(
         defaultData = defaultData,
         adapter = adapter,
         contentResolver = context.contentResolver,
+        mainDispatcher = mainDispatcher,
         scope = scope
     )
 }

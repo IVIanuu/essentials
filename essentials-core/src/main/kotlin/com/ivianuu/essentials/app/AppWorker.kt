@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Module

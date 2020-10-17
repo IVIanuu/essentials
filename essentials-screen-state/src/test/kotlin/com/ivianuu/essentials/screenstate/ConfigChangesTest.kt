@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.injekt.android.ApplicationContext
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ class ConfigChangesTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val configChanges = configChanges(applicationContext)
+        val configChanges = configChanges(applicationContext, Dispatchers.Main)
         var eventCount = 0
         val collectorJob = launch { configChanges.collect { eventCount++ } }
         callback.onConfigurationChanged(mockk())

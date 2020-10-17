@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
-import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext

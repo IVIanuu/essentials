@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.IODispatcher
+import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import eu.chainfire.libsuperuser.Shell.SU

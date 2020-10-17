@@ -21,6 +21,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.Settings
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
@@ -66,7 +68,8 @@ class SettingDataStoreImpl<T>(
     override val defaultData: T,
     private val adapter: SettingDataStore.Adapter<T>,
     private val contentResolver: ContentResolver,
-    private val scope: CoroutineScope
+    private val mainDispatcher: MainDispatcher,
+    private val scope: CoroutineScope,
 ) : DataStore<T> {
 
     private val uri: Uri by lazy {
@@ -89,6 +92,7 @@ class SettingDataStoreImpl<T>(
         contentResolver.registerContentObserver(uri, false, observer)
         awaitClose { contentResolver.unregisterContentObserver(observer) }
     }
+        .flowOn(mainDispatcher)
         .onStart { emit(Unit) }
         .map { get() }
         .distinctUntilChanged()

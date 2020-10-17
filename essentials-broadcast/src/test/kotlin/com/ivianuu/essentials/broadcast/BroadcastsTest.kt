@@ -22,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.injekt.android.ApplicationContext
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class BroadcastsTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val broadcasts = broadcasts(applicationContext, "action")
+        val broadcasts = broadcasts(applicationContext, Dispatchers.Main, "action")
         var eventCount = 0
         val collectorJob = launch { broadcasts.collect { eventCount++ } }
         receiver.onReceive(applicationContext, Intent("action"))

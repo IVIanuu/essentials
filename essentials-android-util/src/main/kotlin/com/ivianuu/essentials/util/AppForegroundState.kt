@@ -18,14 +18,17 @@ package com.ivianuu.essentials.util
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationLifecycleOwner
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 
 @FunBinding
 fun appForegroundState(
+    mainDispatcher: MainDispatcher,
     lifecycleOwner: ApplicationLifecycleOwner,
 ): Flow<Boolean> = callbackFlow {
     var wasInForeground = false
@@ -39,4 +42,4 @@ fun appForegroundState(
     offer(wasInForeground)
     lifecycleOwner.lifecycle.addObserver(observer)
     awaitClose { lifecycleOwner.lifecycle.removeObserver(observer) }
-}
+}.flowOn(mainDispatcher)

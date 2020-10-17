@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ class AppForegroundStateTest {
 
         val events = mutableListOf<Boolean>()
         val collectorJob = launch {
-            appForegroundState(lifecycleOwner)
+            appForegroundState(Dispatchers.Main, lifecycleOwner)
                 .collect { events += it }
         }
 

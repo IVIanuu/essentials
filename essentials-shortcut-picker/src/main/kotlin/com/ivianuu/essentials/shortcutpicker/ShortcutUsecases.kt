@@ -20,10 +20,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.essentials.util.DefaultDispatcher
-import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.merge.MergeInto

@@ -20,8 +20,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.configChanges
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationResources

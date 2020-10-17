@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.coroutines
 
-import com.ivianuu.essentials.util.MainDispatcher
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ActivityComponent
 import kotlinx.coroutines.CoroutineScope

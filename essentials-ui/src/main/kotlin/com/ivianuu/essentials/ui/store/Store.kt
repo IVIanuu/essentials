@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.store
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setStateIn
@@ -26,7 +27,6 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.util.DefaultDispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope

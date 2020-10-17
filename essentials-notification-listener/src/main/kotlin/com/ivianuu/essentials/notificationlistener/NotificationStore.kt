@@ -18,7 +18,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow

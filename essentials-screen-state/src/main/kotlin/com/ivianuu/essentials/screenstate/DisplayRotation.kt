@@ -20,9 +20,10 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.essentials.util.GlobalScope
-import com.ivianuu.essentials.util.IODispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
@@ -96,7 +98,10 @@ suspend fun getCurrentDisplayRotation(
 }
 
 @FunBinding
-fun rotationChanges(applicationContext: ApplicationContext): Flow<Unit> = callbackFlow {
+fun rotationChanges(
+    applicationContext: ApplicationContext,
+    mainDispatcher: MainDispatcher,
+): Flow<Unit> = callbackFlow<Unit> {
     val listener = object :
         OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
         override fun onOrientationChanged(orientation: Int) {
@@ -105,4 +110,4 @@ fun rotationChanges(applicationContext: ApplicationContext): Flow<Unit> = callba
     }
     listener.enable()
     awaitClose { listener.disable() }
-}
+}.flowOn(mainDispatcher)

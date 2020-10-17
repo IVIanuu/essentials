@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding

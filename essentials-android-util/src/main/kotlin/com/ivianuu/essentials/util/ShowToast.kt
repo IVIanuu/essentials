@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.util
 
 import android.widget.Toast
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext

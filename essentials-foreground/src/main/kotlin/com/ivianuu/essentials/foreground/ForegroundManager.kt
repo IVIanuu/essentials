@@ -19,7 +19,7 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.util.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.android.ApplicationContext

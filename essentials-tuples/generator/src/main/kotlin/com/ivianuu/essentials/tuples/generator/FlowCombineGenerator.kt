@@ -39,7 +39,7 @@ fun generateFlowCombine(genDir: File) {
             append("> combine(")
             (1..tuple).forEachIndexed { index, arg ->
                 val char = ALPHABET[index]
-                append("flow${char}: Flow<$char>")
+                append("flow$char: Flow<$char>")
                 if (index != tuple - 1) append(", ")
             }
             append("): Flow<Tuple$tuple<")

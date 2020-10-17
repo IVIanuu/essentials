@@ -40,12 +40,12 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.essentials.util.DefaultDispatcher
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding

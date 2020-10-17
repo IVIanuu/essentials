@@ -20,8 +20,8 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
-import com.ivianuu.essentials.util.DefaultDispatcher
-import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding

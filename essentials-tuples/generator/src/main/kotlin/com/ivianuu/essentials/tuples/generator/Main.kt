@@ -24,4 +24,3 @@ fun main() {
     generateTuples(genDir)
     generateFlowCombine(genDir)
 }
-

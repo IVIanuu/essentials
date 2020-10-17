@@ -15,16 +15,19 @@
  */
 
 plugins {
+    id("com.ivianuu.essentials")
     kotlin("jvm")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
     testCompile(project(":essentials-test"))
     compile(Deps.Coroutines.core)
+    compile(Deps.Injekt.core)
+    compile(Deps.Injekt.merge)
     compile(Deps.Kotlin.stdlib)
 }

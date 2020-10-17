@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.billing
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -31,21 +28,18 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.essentials.util.DefaultDispatcher
-import com.ivianuu.essentials.util.IODispatcher
+import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.MainDispatcher
+import com.ivianuu.essentials.util.appForegroundState
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -76,11 +70,11 @@ interface BillingManager {
 
 @ImplBinding(ApplicationComponent::class)
 class BillingManagerImpl(
+    private val appForegroundState: appForegroundState,
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
     private val defaultDispatcher: DefaultDispatcher,
     private val ioDispatcher: IODispatcher,
     private val logger: Logger,
-    private val mainDispatcher: MainDispatcher,
     private val startUi: startUi,
 ) : BillingManager {
 
@@ -167,21 +161,9 @@ class BillingManagerImpl(
     }
 
     override fun isPurchased(sku: Sku): Flow<Boolean> {
-        val appMovedToForegroundFlow = callbackFlow<Unit> {
-            val observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_START) offerSafe(Unit)
-            }
-            withContext(mainDispatcher) {
-                ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
-            }
-            awaitClose()
-            withContext(mainDispatcher + NonCancellable) {
-                ProcessLifecycleOwner.get().lifecycle.removeObserver(observer)
-            }
-        }
-
         return merge(
-            appMovedToForegroundFlow,
+            appForegroundState()
+                .filter { it },
             refreshes
         )
             .onStart { emit(Unit) }

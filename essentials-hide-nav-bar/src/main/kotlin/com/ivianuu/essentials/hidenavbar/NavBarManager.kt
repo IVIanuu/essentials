@@ -19,12 +19,12 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.Intent
 import android.graphics.Rect
 import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.DisplayRotationFlow
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.screenstate.ScreenStateFlow
-import com.ivianuu.essentials.util.DefaultDispatcher
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext

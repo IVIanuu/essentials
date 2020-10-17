@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.essentials.util.GlobalScope
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

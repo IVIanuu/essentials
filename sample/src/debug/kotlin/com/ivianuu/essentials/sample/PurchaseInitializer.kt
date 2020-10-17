@@ -19,8 +19,8 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.billing.debug.BillingStore
 import com.ivianuu.essentials.billing.debug.SkuDetails
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.sample.ui.DummySku
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 

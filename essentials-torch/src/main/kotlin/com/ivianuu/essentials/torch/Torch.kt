@@ -20,12 +20,12 @@ import android.hardware.camera2.CameraManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.util.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.MainDispatcher
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
