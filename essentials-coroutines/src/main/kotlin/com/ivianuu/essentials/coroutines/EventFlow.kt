@@ -71,14 +71,21 @@ private class EventFlowImpl<T>(private val bufferSize: Int) : AbstractFlow<T>(),
     }
 
     private inner class EventCollector(private val flowCollector: FlowCollector<T>) {
-        private var valueAwaiter: Continuation<T>? = null
+        private var valueAwaiter: Continuation<Unit>? = null
+        private val values = mutableListOf<T>()
 
         suspend fun collect() {
             while (coroutineContext.isActive) {
-                val value = suspendCancellableCoroutine<T> { cont ->
+                suspendCancellableCoroutine<Unit> { cont ->
                     synchronized(this) { valueAwaiter = cont }
                 }
-                flowCollector.emit(value)
+                emitValues@ while (true) {
+                    val newValues = synchronized(this) {
+                        values.toList().also { values.clear() }
+                    }
+                    if (newValues.isEmpty()) break@emitValues
+                    newValues.forEach { flowCollector.emit(it) }
+                }
             }
         }
 
@@ -87,8 +94,10 @@ private class EventFlowImpl<T>(private val bufferSize: Int) : AbstractFlow<T>(),
         }
 
         fun emit(value: T) {
-            synchronized(this) { valueAwaiter?.also { valueAwaiter = null } }
-                ?.resume(value)
+            synchronized(this) {
+                values += value
+                valueAwaiter?.also { valueAwaiter = null }
+            }?.resume(Unit)
         }
     }
 }

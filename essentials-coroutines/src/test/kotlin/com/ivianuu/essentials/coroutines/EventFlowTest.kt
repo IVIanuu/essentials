@@ -72,7 +72,7 @@ class EventFlowTest {
     }
 
     @Test
-    fun testDropsEventsOnSlowCollector() = runBlockingTest {
+    fun testDoesNotDropEvents() = runBlockingTest {
         val eventFlow = EventFlow<Int>()
         val values = mutableListOf<Int>()
         val collectorJob = launch {
@@ -84,8 +84,11 @@ class EventFlowTest {
 
         eventFlow.emit(1)
         eventFlow.emit(2)
+        eventFlow.emit(3)
 
-        expectThat(values).containsExactly(1)
+        advanceUntilIdle()
+
+        expectThat(values).containsExactly(1, 2, 3)
 
         collectorJob.cancelAndJoin()
     }
