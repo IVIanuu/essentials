@@ -67,6 +67,7 @@ inline fun <T> rememberRetained(
     val retainedObjects = RetainedObjectsAmbient.current
     var value: ValueWithInputs<T>? = retainedObjects.getOrNull(key)
     if (value != null && !value.inputs.contentEquals(inputs)) {
+        (value as? DisposableHandle)?.dispose()
         value = null
     }
 
@@ -82,4 +83,8 @@ inline fun <T> rememberRetained(
 internal class ValueWithInputs<T>(
     val value: T,
     val inputs: Array<out Any?>
-)
+) : DisposableHandle {
+    override fun dispose() {
+        (value as? DisposableHandle)?.dispose()
+    }
+}
