@@ -58,6 +58,7 @@ suspend fun backupData(
         backupFiles()
             .flatMap { it.walkTopDown() }
             .filterNot { it.isDirectory }
+            .filterNot { it.absolutePath in BACKUP_BLACKLIST }
             .forEach { file ->
                 val content = file.bufferedReader()
                 val entry = ZipEntry(file.name)
@@ -84,3 +85,8 @@ suspend fun backupData(
         navigator.push(ActivityRoute { Intent.createChooser(intent, "Share File") })
     }
 }
+
+internal val BACKUP_BLACKLIST = listOf(
+    "com.google.android.datatransport.events",
+    "com.google.android.datatransport.events-journal"
+)

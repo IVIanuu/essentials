@@ -59,6 +59,7 @@ suspend fun restoreData(
         var entry: ZipEntry? = zipInputStream.nextEntry
         while (entry != null) {
             val file = File(prefsDir, entry.name)
+            if (file.absolutePath in BACKUP_BLACKLIST) continue
             val dir = if (entry.isDirectory) file else file.parentFile
             if (!dir.isDirectory && !dir.mkdirs())
                 throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
