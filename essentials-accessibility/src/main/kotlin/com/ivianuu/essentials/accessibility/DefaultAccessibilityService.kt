@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -36,7 +34,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
         super.onServiceConnected()
 
         component.logger.d("connected")
-        component.accessibilityServices.onServiceConnected(this)
+        component.serviceHolder.value = this
         component.accessibilityWorkers.forEach { worker ->
             connectedScope.launch {
                 scope.launch { worker() }
@@ -46,44 +44,28 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         component.logger.d("on accessibility event $event")
-        component.accessibilityServices.onAccessibilityEvent(event)
+        component.accessibilityEvents.emit(
+            AccessibilityEvent(
+                type = event.eventType,
+                packageName = event.packageName?.toString(),
+                className = event.className?.toString(),
+                isFullScreen = event.isFullScreen
+            )
+        )
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         component.logger.d("on unbind")
-        component.accessibilityServices.onServiceDisconnected()
-
+        component.serviceHolder.value = null
         return super.onUnbind(intent)
     }
 
-    fun updateConfig(configs: List<AccessibilityConfig>) {
-        serviceInfo = serviceInfo.apply {
-            eventTypes = configs
-                .map { it.eventTypes }
-                .fold(0) { acc, events -> acc.addFlag(events) }
-
-            flags = configs
-                .map { it.flags }
-                .fold(0) { acc, flags -> acc.addFlag(flags) }
-
-            // last one wins
-            configs.lastOrNull()?.feedbackType?.let { feedbackType = it }
-            feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-
-            notificationTimeout = configs
-                .map { it.notificationTimeout }
-                .maxOrNull() ?: 0L
-
-            packageNames = null
-
-            component.logger.d("update service info $this")
-        }
-    }
 }
 
 @MergeInto(ServiceComponent::class)
 interface DefaultAccessibilityServiceComponent {
-    val accessibilityServices: AccessibilityServicesImpl
+    val accessibilityEvents: MutableAccessibilityEvents
     val accessibilityWorkers: AccessibilityWorkers
     val logger: Logger
+    val serviceHolder: MutableAccessibilityServiceHolder
 }

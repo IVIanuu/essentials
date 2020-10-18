@@ -22,7 +22,6 @@ import androidx.compose.foundation.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.res.vectorResource
-import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
@@ -70,12 +69,4 @@ fun sendIntent(
         t.printStackTrace()
         showToastRes(R.string.es_activity_not_found)
     }
-}
-
-@FunBinding
-suspend fun performGlobalAction(
-    services: AccessibilityServices,
-    action: @Assisted Int,
-) {
-    services.performGlobalAction(action)
 }

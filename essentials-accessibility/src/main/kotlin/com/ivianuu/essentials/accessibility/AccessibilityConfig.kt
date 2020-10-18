@@ -17,6 +17,15 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.essentials.tuples.combine
+import com.ivianuu.essentials.util.addFlag
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 
 data class AccessibilityConfig(
     val eventTypes: Int = 0,
@@ -25,3 +34,50 @@ data class AccessibilityConfig(
     val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
     val notificationTimeout: Long = 0L
 )
+
+internal typealias AccessibilityConfigs = MutableStateFlow<List<AccessibilityConfig>>
+@Binding(ApplicationComponent::class)
+fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
+
+@FunBinding
+fun applyAccessibilityConfig(
+    configs: AccessibilityConfigs,
+    config: @Assisted AccessibilityConfig
+): DisposableHandle {
+    synchronized(configs) { configs.value += config }
+    return object : DisposableHandle {
+        override fun dispose() {
+            synchronized(configs) { configs.value -= config }
+        }
+    }
+}
+
+@AccessibilityWorkerBinding
+@FunBinding
+suspend fun manageAccessibilityConfig(
+    configs: AccessibilityConfigs,
+    serviceHolder: MutableAccessibilityServiceHolder
+) {
+    combine(serviceHolder, configs)
+        .collect { (service, configs) ->
+            service?.serviceInfo = service?.serviceInfo?.apply {
+                eventTypes = configs
+                    .map { it.eventTypes }
+                    .fold(0) { acc, events -> acc.addFlag(events) }
+
+                flags = configs
+                    .map { it.flags }
+                    .fold(0) { acc, flags -> acc.addFlag(flags) }
+
+                // first one wins
+                configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+                feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+
+                notificationTimeout = configs
+                    .map { it.notificationTimeout }
+                    .maxOrNull() ?: 0L
+
+                packageNames = null
+            }
+        }
+}

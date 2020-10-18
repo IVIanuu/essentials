@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.recentapps
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
@@ -38,17 +39,18 @@ typealias RecentApps = Flow<List<String>>
 
 @Binding(ApplicationComponent::class)
 fun recentApps(
+    accessibilityEvents: AccessibilityEvents,
+    applyAccessibilityConfig: applyAccessibilityConfig,
     globalScope: GlobalScope,
-    logger: Logger,
-    services: AccessibilityServices,
+    logger: Logger
 ): RecentApps {
-    services.applyConfig(
+    applyAccessibilityConfig(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
     )
 
-    return services.events
+    return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .filter { it.isFullScreen }
         .filter { it.className != "android.inputmethodservice.SoftInputWindow" }

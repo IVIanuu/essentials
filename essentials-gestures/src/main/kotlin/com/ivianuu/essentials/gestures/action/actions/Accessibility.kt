@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
+import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions

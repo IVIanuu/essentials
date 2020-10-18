@@ -19,31 +19,38 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.accessibility.AccessibilityEvents
+import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
 
-@FunBinding
+typealias KeyboardVisible = Flow<Boolean>
+
+@Binding(ApplicationComponent::class)
 fun keyboardVisible(
-    accessibilityServices: AccessibilityServices,
+    accessibilityEvents: AccessibilityEvents,
+    applyAccessibilityConfig: applyAccessibilityConfig,
     getKeyboardHeight: getKeyboardHeight,
-): Flow<Boolean> {
-    return accessibilityServices.events
-        .onEach {
-            accessibilityServices.applyConfig(
-                AccessibilityConfig(
-                    eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                )
-            )
-        }
+    globalScope: GlobalScope
+): KeyboardVisible {
+    applyAccessibilityConfig(
+        AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
+    )
+    return accessibilityEvents
         .filter {
             it.isFullScreen &&
                 it.className == "android.inputmethodservice.SoftInputWindow"
@@ -59,6 +66,7 @@ fun keyboardVisible(
         .mapNotNull { getKeyboardHeight() }
         .map { it > 0 }
         .distinctUntilChanged()
+        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
 @FunBinding

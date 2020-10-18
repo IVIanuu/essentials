@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityServices
+import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
@@ -36,16 +37,17 @@ typealias IsOnSecureScreen = Flow<Boolean>
 
 @Binding(ApplicationComponent::class)
 fun isOnSecureScreen(
+    accessibilityEvents: AccessibilityEvents,
+    applyAccessibilityConfig: applyAccessibilityConfig,
     globalScope: GlobalScope,
     logger: Logger,
-    services: AccessibilityServices,
 ): IsOnSecureScreen {
-    services.applyConfig(
+    applyAccessibilityConfig(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
     )
-    return services.events
+    return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .map { it.packageName to it.className }
         .filter { it.first != null && it.second != null }
