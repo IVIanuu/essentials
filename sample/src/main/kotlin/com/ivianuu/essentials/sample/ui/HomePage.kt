@@ -45,26 +45,61 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
 
 typealias HomePage = @Composable () -> Unit
 
 @Binding
-fun HomePage(dependencies: HomePageDependencies): HomePage = {
+fun HomePage(
+    aboutPage: AboutPage,
+    actionsPage: ActionsPage,
+    appPickerPage: AppPickerPage,
+    appTrackerPage: AppTrackerPage,
+    backupAndRestorePage: BackupAndRestorePage,
+    billingPage: BillingPage,
+    bottomNavigationPage: BottomNavigationPage,
+    checkAppsPage: CheckAppsPage,
+    chipsPage: ChipsPage,
+    counterPage: CounterPage,
+    dialogsPage: DialogsPage,
+    displayRotationPage: DisplayRotationPage,
+    drawerPage: DrawerPage,
+    dynamicSystemBarsPage: DynamicSystemBarsPage,
+    foregroundJobPage: ForegroundJobPage,
+    navigator: Navigator,
+    navBarPage: NavBarPage,
+    notificationsPage: NotificationsPage,
+    permissionsPage: PermissionsPage,
+    prefsPage: PrefsPage,
+    restartProcessPage: RestartProcessPage,
+    scaffoldPage: ScaffoldPage,
+    sharedElementPage: SharedElementPage,
+    shortcutPickerPage: ShortcutPickerPage,
+    showToast: showToast,
+    tabsPage: TabsPage,
+    textInputPage: TextInputPage,
+    timerPage: TimerPage,
+    torchPage: TorchPage,
+    twilightSettingsPage: TwilightSettingsPage,
+    unlockPage: UnlockPage,
+    workPage: WorkPage,
+): HomePage = {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Home") },
                 actions = {
-                    com.ivianuu.essentials.ui.popup.PopupMenuButton(
+                    PopupMenuButton(
                         items = listOf(
                             "Option 1",
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
-                                dependencies.showToast("Selected $title")
+                            PopupMenu.Item(onSelected = {
+                                showToast("Selected $title")
                             }) {
                                 Text(title)
                             }
@@ -92,47 +127,47 @@ fun HomePage(dependencies: HomePageDependencies): HomePage = {
                 color = color,
                 onClick = {
                     val route = when (item) {
-                        HomeItem.About -> Route { dependencies.aboutPage() }
-                        HomeItem.Actions -> Route { dependencies.actionsPage() }
+                        HomeItem.About -> Route { aboutPage() }
+                        HomeItem.Actions -> Route { actionsPage() }
                         HomeItem.AppPicker -> Route {
-                            dependencies.appPickerPage(DefaultAppFilter,
+                            appPickerPage(DefaultAppFilter,
                                 null)
                         }
-                        HomeItem.AppTracker -> Route { dependencies.appTrackerPage() }
-                        HomeItem.BackupRestore -> Route { dependencies.backupAndRestorePage() }
-                        HomeItem.Billing -> Route { dependencies.billingPage() }
-                        HomeItem.BottomNavigation -> Route { dependencies.bottomNavigationPage() }
-                        HomeItem.CheckApps -> Route { dependencies.checkAppsPage() }
-                        HomeItem.Chips -> Route { dependencies.chipsPage() }
-                        HomeItem.Counter -> Route { dependencies.counterPage() }
-                        HomeItem.Dialogs -> Route { dependencies.dialogsPage() }
-                        HomeItem.DisplayRotation -> Route { dependencies.displayRotationPage() }
-                        HomeItem.Drawer -> Route { dependencies.drawerPage() }
-                        HomeItem.DynamicSystemBars -> Route { dependencies.dynamicSystemBarsPage() }
-                        HomeItem.ForegroundJob -> Route { dependencies.foregroundJobPage() }
-                        HomeItem.NavBar -> Route { dependencies.navBarPage() }
-                        HomeItem.Notifications -> Route { dependencies.notificationsPage() }
-                        HomeItem.Permission -> Route { dependencies.permissionsPage() }
-                        HomeItem.Prefs -> Route { dependencies.prefsPage() }
-                        HomeItem.RestartProcess -> Route { dependencies.restartProcessPage() }
-                        HomeItem.Scaffold -> Route { dependencies.scaffoldPage() }
+                        HomeItem.AppTracker -> Route { appTrackerPage() }
+                        HomeItem.BackupRestore -> Route { backupAndRestorePage() }
+                        HomeItem.Billing -> Route { billingPage() }
+                        HomeItem.BottomNavigation -> Route { bottomNavigationPage() }
+                        HomeItem.CheckApps -> Route { checkAppsPage() }
+                        HomeItem.Chips -> Route { chipsPage() }
+                        HomeItem.Counter -> Route { counterPage() }
+                        HomeItem.Dialogs -> Route { dialogsPage() }
+                        HomeItem.DisplayRotation -> Route { displayRotationPage() }
+                        HomeItem.Drawer -> Route { drawerPage() }
+                        HomeItem.DynamicSystemBars -> Route { dynamicSystemBarsPage() }
+                        HomeItem.ForegroundJob -> Route { foregroundJobPage() }
+                        HomeItem.NavBar -> Route { navBarPage() }
+                        HomeItem.Notifications -> Route { notificationsPage() }
+                        HomeItem.Permission -> Route { permissionsPage() }
+                        HomeItem.Prefs -> Route { prefsPage() }
+                        HomeItem.RestartProcess -> Route { restartProcessPage() }
+                        HomeItem.Scaffold -> Route { scaffoldPage() }
                         HomeItem.SharedElement -> Route(
                             enterTransition = SharedElementStackTransition(item to "b"),
                             exitTransition = SharedElementStackTransition(item to "b")
                         ) {
-                            dependencies.sharedElementPage(color)
+                            sharedElementPage(color)
                         }
-                        HomeItem.ShortcutPicker -> Route { dependencies.shortcutPickerPage(null) }
-                        HomeItem.Tabs -> Route { dependencies.tabsPage() }
-                        HomeItem.TextInput -> Route { dependencies.textInputPage() }
-                        HomeItem.Timer -> Route { dependencies.timerPage() }
-                        HomeItem.Torch -> Route { dependencies.torchPage() }
-                        HomeItem.Twilight -> Route { dependencies.twilightSettingsPage() }
-                        HomeItem.Unlock -> Route { dependencies.unlockPage() }
-                        HomeItem.Work -> Route { dependencies.workPage() }
+                        HomeItem.ShortcutPicker -> Route { shortcutPickerPage(null) }
+                        HomeItem.Tabs -> Route { tabsPage() }
+                        HomeItem.TextInput -> Route { textInputPage() }
+                        HomeItem.Timer -> Route { timerPage() }
+                        HomeItem.Torch -> Route { torchPage() }
+                        HomeItem.Twilight -> Route { twilightSettingsPage() }
+                        HomeItem.Unlock -> Route { unlockPage() }
+                        HomeItem.Work -> Route { workPage() }
                     }
 
-                    dependencies.navigator.push(route)
+                    navigator.push(route)
                 }
             )
 
@@ -142,43 +177,6 @@ fun HomePage(dependencies: HomePageDependencies): HomePage = {
         }
     }
 }
-
-// todo @Composable functions with > 30 parameters causes a crash
-@Binding
-class HomePageDependencies(
-    val aboutPage: AboutPage,
-    val actionsPage: ActionsPage,
-    val appPickerPage: AppPickerPage,
-    val appTrackerPage: AppTrackerPage,
-    val backupAndRestorePage: BackupAndRestorePage,
-    val billingPage: BillingPage,
-    val bottomNavigationPage: BottomNavigationPage,
-    val checkAppsPage: CheckAppsPage,
-    val chipsPage: ChipsPage,
-    val counterPage: CounterPage,
-    val dialogsPage: DialogsPage,
-    val displayRotationPage: DisplayRotationPage,
-    val drawerPage: DrawerPage,
-    val dynamicSystemBarsPage: DynamicSystemBarsPage,
-    val foregroundJobPage: ForegroundJobPage,
-    val navigator: Navigator,
-    val navBarPage: NavBarPage,
-    val notificationsPage: NotificationsPage,
-    val permissionsPage: PermissionsPage,
-    val prefsPage: PrefsPage,
-    val restartProcessPage: RestartProcessPage,
-    val scaffoldPage: ScaffoldPage,
-    val sharedElementPage: SharedElementPage,
-    val shortcutPickerPage: ShortcutPickerPage,
-    val showToast: showToast,
-    val tabsPage: TabsPage,
-    val textInputPage: TextInputPage,
-    val timerPage: TimerPage,
-    val torchPage: TorchPage,
-    val twilightSettingsPage: TwilightSettingsPage,
-    val unlockPage: UnlockPage,
-    val workPage: WorkPage,
-)
 
 @Composable
 private fun HomeItem(
@@ -198,10 +196,10 @@ private fun HomeItem(
             }
         },
         trailing = {
-            com.ivianuu.essentials.ui.popup.PopupMenuButton(
+            PopupMenuButton(
                 items = listOf(1, 2, 3)
                     .map { index ->
-                        com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {}) {
+                        PopupMenu.Item(onSelected = {}) {
                             Text(index.toString())
                         }
                     }
