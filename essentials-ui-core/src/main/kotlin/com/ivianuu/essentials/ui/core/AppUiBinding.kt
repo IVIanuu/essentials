@@ -22,14 +22,4 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ActivityComponent::class)
-annotation class AppUiBinding {
-    @Module
-    class ModuleImpl<T : @Composable () -> Unit> {
-        @Binding
-        fun <T : @Composable () -> Unit> appUiMarker(instance: T): AppUi =
-            instance as @Composable () -> Unit
-    }
-}
-
 typealias AppUi = @Composable () -> Unit

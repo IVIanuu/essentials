@@ -24,7 +24,6 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -59,12 +58,13 @@ fun screenStateFlow(
         .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 }
 
-@FunBinding
-suspend fun getCurrentScreenState(
+typealias getCurrentScreenState = suspend () -> ScreenState
+@Binding
+fun getCurrentScreenState(
     defaultDispatcher: DefaultDispatcher,
     keyguardManager: KeyguardManager,
     powerManager: PowerManager,
-): ScreenState =
+): getCurrentScreenState = {
     withContext(defaultDispatcher) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
@@ -76,6 +76,7 @@ suspend fun getCurrentScreenState(
             ScreenState.Off
         }
     }
+}
 
 enum class ScreenState(val isOn: Boolean) {
     Off(false), Locked(true), Unlocked(true)

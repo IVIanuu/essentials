@@ -42,18 +42,14 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@FunBinding
-@Composable
+typealias AppPickerPage = @Composable (AppFilter, String?) -> Unit
+@Binding
 fun AppPickerPage(
-    store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>,
-    appFilter: @Assisted AppFilter,
-    title: @Assisted String?,
-) {
+    store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>
+): AppPickerPage = { appFilter, title ->
     val (state, dispatch) = store(appFilter)
 
     Scaffold(
@@ -93,9 +89,9 @@ private fun AppInfo(
 
 @Binding
 fun appPickerStore(
+    appFilter: AppFilter,
     navigator: Navigator,
-    getInstalledApps: getInstalledApps,
-    appFilter: @Assisted AppFilter,
+    getInstalledApps: getInstalledApps
 ) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
     execute(
         block = { getInstalledApps() },

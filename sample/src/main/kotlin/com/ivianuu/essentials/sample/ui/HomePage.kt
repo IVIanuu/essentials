@@ -47,11 +47,11 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 
-@FunBinding
-@Composable
-fun HomePage(dependencies: HomePageDependencies) {
+typealias HomePage = @Composable () -> Unit
+
+@Binding
+fun HomePage(dependencies: HomePageDependencies): HomePage = {
     Scaffold(
         topBar = {
             TopAppBar(

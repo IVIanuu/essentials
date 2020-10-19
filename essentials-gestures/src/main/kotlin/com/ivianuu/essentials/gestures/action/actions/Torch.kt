@@ -25,25 +25,27 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.torch.toggle
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.map
 
 @ActionBinding
 fun torchAction(
     stringResource: stringResource,
-    torchIcon: torchIcon,
+    torchIcon: TorchIcon,
     torch: Torch,
 ): Action = Action(
     key = "torch",
     title = stringResource(R.string.es_action_torch),
-    icon = torchIcon(),
+    icon = torchIcon,
     execute = { torch.toggle() }
 )
 
-@FunBinding
+typealias TorchIcon = ActionIcon
+
+@Binding
 fun torchIcon(
     torch: Torch,
-): ActionIcon = torch.torchState
+): TorchIcon = torch.torchState
     .map {
         if (it) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off

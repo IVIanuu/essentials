@@ -41,17 +41,18 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
+typealias NavBarPage = @Composable () -> Unit
+
+@Binding
 fun NavBarPage(
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     navBarManager: NavBarManager,
     navigator: Navigator,
     secureSettingsPage: SecureSettingsPage,
-) {
+): NavBarPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
     ) {

@@ -27,16 +27,14 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore2
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
+typealias ActionPickerPage = @Composable (Boolean, Boolean) -> Unit
+
+@Binding
 fun ActionPickerPage(
-    store: rememberStore2<ActionPickerState, ActionPickerAction, Boolean, Boolean>,
-    showDefaultOption: @Assisted Boolean = true,
-    showNoneOption: @Assisted Boolean = true,
-) {
+    store: rememberStore2<ActionPickerState, ActionPickerAction, Boolean, Boolean>
+): ActionPickerPage = { showDefaultOption, showNoneOption ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {

@@ -25,12 +25,13 @@ import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
-fun RestartProcessPage(restartProcess: restartProcess) {
+typealias RestartProcessPage = @Composable () -> Unit
+
+@Binding
+fun RestartProcessPage(restartProcess: restartProcess): RestartProcessPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Restart process") }) }
     ) {

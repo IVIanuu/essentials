@@ -43,9 +43,7 @@ import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
 @PermissionRequestRouteFactoryBinding
@@ -57,12 +55,12 @@ class DefaultPermissionRequestRouteFactory(
         Route { defaultPermissionPage(request) }
 }
 
-@FunBinding
-@Composable
+typealias DefaultPermissionPage = @Composable (PermissionRequest) -> Unit
+
+@Binding
 fun DefaultPermissionPage(
     store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
-    request: @Assisted PermissionRequest,
-) {
+): DefaultPermissionPage = { request ->
     val (state, dispatch) = store(request)
 
     Scaffold(
@@ -110,7 +108,7 @@ fun defaultPermissionStore(
     navigator: Navigator,
     requestHandler: requestHandler,
     startUi: startUi,
-    request: @Assisted PermissionRequest,
+    request: PermissionRequest,
 ) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions

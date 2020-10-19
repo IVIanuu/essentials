@@ -41,16 +41,13 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 
-@FunBinding
-@Composable
+typealias ShortcutPickerPage = @Composable (String?) -> Unit
+@Binding
 fun ShortcutPickerPage(
     store: rememberStore<ShortcutPickerState, ShortcutPickerAction>,
-    title: @Assisted String? = null,
-) {
+): ShortcutPickerPage = { title ->
     val (state, dispatch) = store()
     Scaffold(
         topBar = {
@@ -94,13 +91,13 @@ private fun Shortcut(
 @Binding
 fun shortcutPickerStore(
     navigator: Navigator,
-    getShortcuts: getShortcuts,
+    getAllShortcuts: getAllShortcuts,
     extractShortcut: extractShortcut,
     startActivityForIntentResult: startActivityForIntentResult,
     showToastRes: showToastRes,
 ) = storeProvider<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
     execute(
-        block = { getShortcuts() },
+        block = { getAllShortcuts() },
         reducer = { copy(shortcuts = it) }
     )
 

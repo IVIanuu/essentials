@@ -38,11 +38,11 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 
-@FunBinding
-@Composable
-fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
+typealias CounterPage = @Composable () -> Unit
+
+@Binding
+fun CounterPage(store: rememberStore<CounterState, CounterAction>): CounterPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +52,10 @@ suspend fun Torch.toggle() {
     setTorchState(!torchState.value)
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Binding
+val TorchImpl.torch: Torch get() = this
+
+@Binding(ApplicationComponent::class)
 class TorchImpl(
     broadcasts: broadcasts,
     private val cameraManager: CameraManager,

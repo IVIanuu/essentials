@@ -2,18 +2,12 @@ package com.ivianuu.essentials.sample
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
 
 @UiDecoratorBinding
-@FunBinding
-@Composable
-fun UiLogger(
-    logger: Logger,
-    children: @Assisted @Composable () -> Unit
-) {
+fun UiLogger(logger: Logger): UiDecorator = { children ->
     onActive {
         logger.d("hello from ui")
         onDispose {

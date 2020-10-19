@@ -40,12 +40,13 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
+
+typealias TextInputPage = @Composable () -> Unit
 
 @OptIn(ExperimentalFoundationApi::class)
-@FunBinding
-@Composable
-fun TextInputPage() {
+@Binding
+fun TextInputPage(): TextInputPage = {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {

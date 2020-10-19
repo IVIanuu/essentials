@@ -47,20 +47,20 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.delay
 
+typealias ForegroundJobPage = @Composable () -> Unit
+
 @SuppressLint("NewApi")
-@FunBinding
-@Composable
+@Binding
 fun ForegroundJobPage(
     buildForegroundNotification: buildForegroundNotification,
     foregroundManager: ForegroundManager,
     notificationManager: NotificationManager,
     systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
-) {
+): ForegroundJobPage = {
     if (systemBuildInfo.sdk >= 26) {
         onActive {
             notificationManager.createNotificationChannel(
@@ -133,17 +133,16 @@ fun ForegroundJobPage(
     }
 }
 
-@FunBinding
+typealias buildForegroundNotification = (Int, Color) -> Notification
+
+@Binding
 internal fun buildForegroundNotification(
     applicationContext: ApplicationContext,
-    count: @Assisted Int,
-    color: @Assisted Color,
-): Notification = NotificationCompat.Builder(
-    applicationContext,
-    "foreground"
-)
-    .setSmallIcon(R.drawable.ic_home)
-    .setContentTitle("Foreground")
-    .setContentText("Current progress $count")
-    .setColor(color.toArgb())
-    .build()
+): buildForegroundNotification = { count, color ->
+    NotificationCompat.Builder(applicationContext, "foreground")
+        .setSmallIcon(R.drawable.ic_home)
+        .setContentTitle("Foreground")
+        .setContentText("Current progress $count")
+        .setColor(color.toArgb())
+        .build()
+}

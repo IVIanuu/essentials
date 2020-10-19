@@ -17,27 +17,31 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.withContext
 
-@FunBinding
-suspend fun getActions(
+typealias getAllActions = suspend () -> List<Action>
+@Binding
+fun getActions(
     actions: Set<Action>,
     defaultDispatcher: DefaultDispatcher,
-): List<Action> = withContext(defaultDispatcher) { actions.toList() }
+): getAllActions = {
+    withContext(defaultDispatcher) { actions.toList() }
+}
 
-@FunBinding
-suspend fun getAction(
+typealias getAction = suspend (String) -> Action
+@Binding
+fun getAction(
     actions: Set<Action>,
     actionFactories: () -> Set<ActionFactory>,
     defaultDispatcher: DefaultDispatcher,
-    key: @Assisted String,
-): Action = withContext(defaultDispatcher) {
-    actions
-        .firstOrNull { it.key == key }
-        ?: actionFactories()
-            .firstOrNull { it.handles(key) }
-            ?.createAction(key)
-        ?: error("Unsupported action key $key")
+): getAction = { key ->
+    withContext(defaultDispatcher) {
+        actions
+            .firstOrNull { it.key == key }
+            ?: actionFactories()
+                .firstOrNull { it.handles(key) }
+                ?.createAction(key)
+            ?: error("Unsupported action key $key")
+    }
 }

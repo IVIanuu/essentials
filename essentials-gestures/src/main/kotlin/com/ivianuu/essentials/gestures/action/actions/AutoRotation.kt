@@ -30,13 +30,12 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.map
 
 @ActionBinding
 fun autoRotationAction(
-    autoRotationIcon: autoRotationIcon,
+    autoRotationIcon: AutoRotationIcon,
     choosePermissions: choosePermissions,
     setting: AutoRotationSetting,
     stringResource: stringResource,
@@ -45,7 +44,7 @@ fun autoRotationAction(
     title = stringResource(R.string.es_action_auto_rotation),
     permissions = choosePermissions { listOf(writeSettings) },
     unlockScreen = true,
-    icon = autoRotationIcon(),
+    icon = autoRotationIcon,
     execute = { setting.updateData { if (it != 1) 1 else 0 } }
 )
 
@@ -53,8 +52,10 @@ fun autoRotationAction(
 fun autoRotationSetting(factory: SettingsDataStoreFactory): AutoRotationSetting = factory
     .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
 
-@FunBinding
-fun autoRotationIcon(setting: AutoRotationSetting): ActionIcon = setting.data
+typealias AutoRotationIcon = ActionIcon
+
+@Binding
+fun AutoRotationIcon(setting: AutoRotationSetting): AutoRotationIcon = setting.data
     .map { it == 1 }
     .map {
         if (it) R.drawable.es_ic_screen_rotation

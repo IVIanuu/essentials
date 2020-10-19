@@ -53,12 +53,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlin.time.milliseconds
 
-@FunBinding
-@Composable
-fun ScaffoldPage(navigator: Navigator) {
+typealias ScaffoldPage = @Composable () -> Unit
+
+@Binding
+fun ScaffoldPage(navigator: Navigator): ScaffoldPage = {
     val controls = remember { ScaffoldControls() }
 
     Scaffold(

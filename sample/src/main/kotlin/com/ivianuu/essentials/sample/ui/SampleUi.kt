@@ -24,22 +24,20 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.essentials.ui.core.AppUiBinding
+import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
 
 @GenerateMergeComponents
-@AppUiBinding
-@FunBinding
-@Composable
-fun invoke(
+@Binding
+fun SampleUi(
     homePage: HomePage,
     navigator: Navigator,
     twilightTheme: TwilightTheme,
-) {
+): AppUi = {
     twilightTheme(
         colors(),
         darkColors(),

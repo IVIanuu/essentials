@@ -19,8 +19,9 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.merge.BindingModule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +41,11 @@ interface NotificationStore {
     suspend fun dismissAllNotifications()
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Binding
+val NotificationStoreImpl.notificationStore: NotificationStore
+    get() = this
+
+@Binding(ApplicationComponent::class)
 class NotificationStoreImpl(
     private val defaultDispatcher: DefaultDispatcher,
 ) : NotificationStore {

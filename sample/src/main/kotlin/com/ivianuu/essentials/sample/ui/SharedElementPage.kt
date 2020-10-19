@@ -29,12 +29,12 @@ import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
-fun SharedElementPage(color: @Assisted Color) {
+typealias SharedElementPage = @Composable (Color) -> Unit
+
+@Binding
+fun SharedElementPage(): SharedElementPage = { color ->
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {

@@ -25,32 +25,33 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
-import com.ivianuu.essentials.recentapps.currentApp
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.first
 
 @ActionBinding
-fun killForegroundAction(
+fun killCurrentAction(
     choosePermissions: choosePermissions,
-    killApp: killApp,
+    killCurrentApp: killCurrentApp,
     stringResource: stringResource,
 ): Action = Action(
-    key = "kill_foreground_action",
-    title = stringResource(R.string.es_action_kill_foreground_app),
+    key = "kill_current_app_action",
+    title = stringResource(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
     permissions = choosePermissions { accessibility + root },
-    execute = { killApp() }
+    execute = { killCurrentApp() }
 )
 
-@FunBinding
-suspend fun killApp(
+typealias killCurrentApp = suspend () -> Unit
+@Binding
+fun killCurrentApp(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,
-    currentAppFlow: currentApp,
+    currentAppFlow: CurrentApp,
     getHomePackage: getHomePackage,
     runRootCommand: runRootCommand,
-) {
-    val currentApp = currentAppFlow().first()
+): killCurrentApp = {
+    val currentApp = currentAppFlow.first()
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&
         currentApp != buildInfo.packageName && // we have no suicidal intentions :D
@@ -60,15 +61,16 @@ suspend fun killApp(
     }
 }
 
-@FunBinding
+typealias getHomePackage = () -> String
+@Binding
 fun getHomePackage(
     packageManager: PackageManager,
-): String {
+): getHomePackage = {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }
 
-    return packageManager.resolveActivity(
+    packageManager.resolveActivity(
         intent,
         PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""

@@ -26,8 +26,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.flowOf
@@ -40,12 +39,13 @@ internal fun singleActionIcon(icon: VectorAsset) = singleActionIcon { Icon(icon)
 
 internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(id)) }
 
-@FunBinding
-suspend fun runRootCommand(
+typealias runRootCommand = suspend (String) -> Unit
+
+@Binding
+fun runRootCommand(
     runShellCommand: runShellCommand,
     showToastRes: showToastRes,
-    command: @Assisted String,
-) {
+): runRootCommand = { command ->
     try {
         runShellCommand(command)
     } catch (t: Throwable) {
@@ -54,12 +54,13 @@ suspend fun runRootCommand(
     }
 }
 
-@FunBinding
+typealias sendIntent = (Intent) -> Unit
+
+@Binding
 fun sendIntent(
     applicationContext: ApplicationContext,
     showToastRes: showToastRes,
-    intent: @Assisted Intent,
-) {
+): sendIntent = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
         PendingIntent.getActivity(

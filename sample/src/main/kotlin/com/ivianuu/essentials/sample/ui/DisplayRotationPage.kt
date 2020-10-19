@@ -29,11 +29,12 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.DisplayRotationFlow
 import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
-fun DisplayRotationPage(displayRotationFlow: DisplayRotationFlow) {
+typealias DisplayRotationPage = @Composable () -> Unit
+
+@Binding
+fun DisplayRotationPage(displayRotationFlow: DisplayRotationFlow): DisplayRotationPage = {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)

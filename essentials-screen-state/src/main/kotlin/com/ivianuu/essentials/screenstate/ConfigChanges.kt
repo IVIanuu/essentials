@@ -20,18 +20,19 @@ import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@FunBinding
+typealias ConfigChanges = Flow<Unit>
+@Binding
 fun configChanges(
     applicationContext: ApplicationContext,
     mainDispatcher: MainDispatcher,
-): Flow<Unit> = callbackFlow<Unit> {
+): ConfigChanges = callbackFlow<Unit> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
             offerSafe(Unit)

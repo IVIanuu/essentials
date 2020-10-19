@@ -29,18 +29,16 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-/**
- * Asks the user for the secure settings permission
- */
-@FunBinding
-@Composable
+internal typealias SecureSettingsPcInstructionsPage = @Composable () -> Unit
+
+@Binding
 fun SecureSettingsPcInstructionsPage(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,
     navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
-) {
+    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
+): SecureSettingsPcInstructionsPage = {
     popNavigatorOnceSecureSettingsGranted(false)
 
     Scaffold(

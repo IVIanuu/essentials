@@ -47,7 +47,7 @@ class BroadcastsTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val broadcasts = broadcasts(applicationContext, Dispatchers.Main, "action")
+        val broadcasts = broadcasts(applicationContext, Dispatchers.Main)("action")
         var eventCount = 0
         val collectorJob = launch { broadcasts.collect { eventCount++ } }
         receiver.onReceive(applicationContext, Intent("action"))

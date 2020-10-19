@@ -50,24 +50,24 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 
-@FunBinding
-@Composable
+typealias CheckableAppsPage = @Composable (
+    Set<String>,
+    (Set<String>) -> Unit,
+    AppFilter,
+    String
+) -> Unit
+
+@Binding
 fun CheckableAppsPage(
-    store: rememberStore<CheckableAppsState, CheckableAppsAction>,
-    checkedApps: @Assisted Set<String>,
-    onCheckedAppsChanged: @Assisted suspend (Set<String>) -> Unit,
-    appBarTitle: @Assisted String,
-    appFilter: @Assisted AppFilter,
-) {
+    store: rememberStore<CheckableAppsState, CheckableAppsAction>
+): CheckableAppsPage = { checkedApps, onCheckedAppsChanged, appFilter, appBarTitle ->
     val (state, dispatch) = store()
 
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
@@ -198,7 +198,7 @@ data class CheckableApp(
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
-    val onCheckedAppsChanged: (suspend (Set<String>) -> Unit)? = null,
+    val onCheckedAppsChanged: ((Set<String>) -> Unit)? = null,
     val appFilter: AppFilter = DefaultAppFilter,
 ) {
     val checkableApps = apps
@@ -216,7 +216,7 @@ data class CheckableAppsState(
 sealed class CheckableAppsAction {
     data class UpdateRefs(
         val checkedApps: Set<String>,
-        val onCheckedAppsChanged: suspend (Set<String>) -> Unit,
+        val onCheckedAppsChanged: (Set<String>) -> Unit,
         val appFilter: AppFilter
     ) : CheckableAppsAction()
 

@@ -42,15 +42,15 @@ import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.prefs.preferenceDependencies
 import com.ivianuu.essentials.ui.prefs.requiresValue
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
 
-@FunBinding
-@Composable
-fun PrefsPage(prefs: Prefs) {
+typealias PrefsPage = @Composable () -> Unit
+
+@Binding
+fun PrefsPage(prefs: Prefs): PrefsPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {

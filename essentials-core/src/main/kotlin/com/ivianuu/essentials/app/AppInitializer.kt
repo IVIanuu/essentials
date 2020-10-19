@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -26,22 +26,24 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ApplicationComponent::class)
 annotation class AppInitializerBinding {
     @Module
-    class ModuleImpl<T : () -> Unit> {
+    class ModuleImpl<T : AppInitializer> {
         @SetElements
         fun intoSet(instance: T): AppInitializers = setOf(instance)
     }
 }
 
-typealias AppInitializers = Set<() -> Unit>
+typealias AppInitializer = () -> Unit
+typealias AppInitializers = Set<AppInitializer>
 
 @SetElements
 fun defaultAppInitializers(): AppInitializers = emptySet()
 
-@FunBinding
+typealias runInitializers = () -> Unit
+@Binding
 fun runInitializers(
     appInitializers: AppInitializers,
     logger: Logger,
-) {
+): runInitializers = {
     logger.d("run initializers")
     appInitializers
         .forEach { it() }

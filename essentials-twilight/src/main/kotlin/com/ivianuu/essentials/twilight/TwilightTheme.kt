@@ -34,22 +34,14 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
+typealias TwilightTheme = @Composable (Colors, Colors, Colors, Typography, @Composable () -> Unit) -> Unit
+
+@Binding
 fun TwilightTheme(
-    twilightStateFlow: TwilightStateFlow,
-    lightColors: @Assisted Colors = lightColors(),
-    darkColors: @Assisted Colors = darkColors(),
-    blackColors: @Assisted Colors = darkColors.copy(
-        background = Color.Black,
-        surface = Color.Black
-    ),
-    typography: @Assisted Typography = Typography(),
-    content: @Assisted @Composable () -> Unit,
-) {
+    twilightStateFlow: TwilightStateFlow
+): TwilightTheme = { lightColors, darkColors, blackColors, typography, children ->
     val twilightState by twilightStateFlow.collectAsState()
     AnimatedBox(current = twilightState) { currentTwilightState ->
         fun colorsForTwilightState() = if (currentTwilightState.isDark) {
@@ -76,7 +68,7 @@ fun TwilightTheme(
         EsMaterialTheme(
             colors = currentColors,
             typography = typography,
-            content = content
+            content = children
         )
     }
 }

@@ -33,13 +33,12 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 
-@FunBinding
-@Composable
+typealias BackupAndRestorePage = @Composable () -> Unit
+@Binding
 fun BackupAndRestorePage(
     store: rememberStore<BackupAndRestoreState, BackupAndRestoreAction>,
-) {
+): BackupAndRestorePage = {
     val (_, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
@@ -61,7 +60,7 @@ fun BackupAndRestorePage(
 }
 
 @Binding
-fun backupAndRestorePage(
+fun backupAndRestoreStore(
     backupData: backupData,
     restoreData: restoreData,
     showToastRes: showToastRes,

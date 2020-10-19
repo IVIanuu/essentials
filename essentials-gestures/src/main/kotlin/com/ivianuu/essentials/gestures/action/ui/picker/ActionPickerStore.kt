@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
-import com.ivianuu.essentials.gestures.action.getActions
+import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemClicked
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
@@ -41,19 +41,18 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
 @Binding
 fun actionPickerStore(
     navigator: Navigator,
     getAction: getAction,
-    getActions: getActions,
+    getAllActions: getAllActions,
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
     stringResource: stringResource,
-    showDefaultOption: @Assisted Boolean,
-    showNoneOption: @Assisted Boolean,
+    showDefaultOption: Boolean,
+    showNoneOption: Boolean,
 ) = storeProvider<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {
@@ -82,7 +81,7 @@ fun actionPickerStore(
                                         navigator
                                     )
                                 }
-                            ) + (getActions().map { ActionItem(it) })
+                            ) + (getAllActions().map { ActionItem(it) })
                     )
                 .sortedBy { it.title }
 

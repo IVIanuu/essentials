@@ -20,15 +20,14 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.android.work.WorkerBinding
 import kotlinx.coroutines.delay
 
 @WorkerBinding
 class TestWorker(
     private val logger: Logger,
-    context: @Assisted Context,
-    workerParams: @Assisted WorkerParameters,
+    context: Context,
+    workerParams: WorkerParameters,
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {

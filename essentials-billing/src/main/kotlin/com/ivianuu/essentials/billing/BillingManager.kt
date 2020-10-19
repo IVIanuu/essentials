@@ -31,10 +31,11 @@ import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.util.AppForegroundState
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.appForegroundState
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -68,9 +69,13 @@ interface BillingManager {
     suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Binding
+val BillingManagerImpl.billingManager: BillingManager
+    get() = this
+
+@Binding(ApplicationComponent::class)
 class BillingManagerImpl(
-    private val appForegroundState: appForegroundState,
+    private val appForegroundState: AppForegroundState,
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
     private val defaultDispatcher: DefaultDispatcher,
     private val ioDispatcher: IODispatcher,
@@ -162,7 +167,7 @@ class BillingManagerImpl(
 
     override fun isPurchased(sku: Sku): Flow<Boolean> {
         return merge(
-            appForegroundState()
+            appForegroundState
                 .filter { it },
             refreshes
         )

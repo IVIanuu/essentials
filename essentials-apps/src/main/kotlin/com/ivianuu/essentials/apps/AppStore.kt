@@ -19,36 +19,40 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.withContext
 
-@FunBinding
-suspend fun getInstalledApps(
+typealias getInstalledApps = suspend () -> List<AppInfo>
+@Binding
+fun getInstalledApps(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-): List<AppInfo> = withContext(ioDispatcher) {
-    packageManager.getInstalledApplications(0)
-        .parallelMap {
-            AppInfo(
-                appName = it.loadLabel(packageManager).toString(),
-                packageName = it.packageName
-            )
-        }
-        .distinctBy { it.packageName }
-        .sortedBy { it.appName.toLowerCase() }
-        .toList()
+): getInstalledApps = {
+    withContext(ioDispatcher) {
+        packageManager.getInstalledApplications(0)
+            .parallelMap {
+                AppInfo(
+                    appName = it.loadLabel(packageManager).toString(),
+                    packageName = it.packageName
+                )
+            }
+            .distinctBy { it.packageName }
+            .sortedBy { it.appName.toLowerCase() }
+            .toList()
+    }
 }
 
-@FunBinding
-suspend fun getAppInfo(
+typealias getAppInfo = suspend (String) -> AppInfo
+@Binding
+fun getAppInfo(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-    packageName: @Assisted String,
-): AppInfo = withContext(ioDispatcher) {
-    AppInfo(
-        packageName,
-        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
-            .toString()
-    )
+): getAppInfo = { packageName ->
+    withContext(ioDispatcher) {
+        AppInfo(
+            packageName,
+            packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+                .toString()
+        )
+    }
 }

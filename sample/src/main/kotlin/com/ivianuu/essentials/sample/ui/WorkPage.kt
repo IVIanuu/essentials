@@ -24,11 +24,12 @@ import com.ivianuu.essentials.sample.work.scheduleTasks
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
-fun WorkPage(scheduleTasks: scheduleTasks) {
+typealias WorkPage = @Composable () -> Unit
+
+@Binding
+fun WorkPage(scheduleTasks: scheduleTasks): WorkPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Work") }) }
     ) {

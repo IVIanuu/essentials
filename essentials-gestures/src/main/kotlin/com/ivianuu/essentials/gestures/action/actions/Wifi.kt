@@ -25,7 +25,8 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
@@ -33,24 +34,27 @@ import kotlinx.coroutines.flow.onStart
 fun wifiAction(
     stringResource: stringResource,
     toggleWifi: toggleWifi,
-    wifiIcon: wifiIcon,
+    wifiIcon: WifiIcon,
 ): Action = Action(
     key = "wifi",
     title = stringResource(R.string.es_action_wifi),
-    icon = wifiIcon(),
+    icon = wifiIcon,
     execute = { toggleWifi() }
 )
 
-@FunBinding
-fun toggleWifi(wifiManager: WifiManager) {
+typealias toggleWifi = () -> Unit
+@Binding
+fun toggleWifi(wifiManager: WifiManager): toggleWifi = {
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
-@FunBinding
+typealias WifiIcon = ActionIcon
+
+@Binding
 fun wifiIcon(
     broadcasts: broadcasts,
     wifiManager: WifiManager,
-): ActionIcon = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
+): WifiIcon = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =
             it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)

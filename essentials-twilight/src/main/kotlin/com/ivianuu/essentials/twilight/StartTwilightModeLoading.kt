@@ -16,18 +16,18 @@
 
 package com.ivianuu.essentials.twilight
 
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AppInitializerBinding
-@FunBinding
 fun initializeTwilightStateFlow(
     globalScope: GlobalScope,
     twilightStateFlow: TwilightStateFlow,
-) {
+): AppInitializer = {
     globalScope.launch {
         twilightStateFlow.first()
     }

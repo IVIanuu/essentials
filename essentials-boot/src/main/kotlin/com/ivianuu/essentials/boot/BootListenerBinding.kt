@@ -24,13 +24,15 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ApplicationComponent::class)
 annotation class BootListenerBinding {
     @Module
-    class ModuleImpl<T : () -> Unit> {
+    class ModuleImpl<T : BootListener> {
         @SetElements
         operator fun invoke(instance: T): BootListeners = setOf(instance)
     }
 }
 
-typealias BootListeners = Set<() -> Unit>
+typealias BootListener = () -> Unit
+
+typealias BootListeners = Set<BootListener>
 
 @SetElements
 fun defaultBootListeners(): BootListeners = emptySet()

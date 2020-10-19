@@ -19,18 +19,17 @@ package com.ivianuu.essentials.util
 import android.widget.Toast
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.launch
 
-@FunBinding
+typealias showToast = (String) -> Unit
+@Binding
 fun showToast(
     applicationContext: ApplicationContext,
     globalScope: GlobalScope,
-    mainDispatcher: MainDispatcher,
-    message: @Assisted String,
-) {
+    mainDispatcher: MainDispatcher
+): showToast = { message ->
     globalScope.launch(mainDispatcher) {
         Toast.makeText(
             applicationContext,
@@ -40,11 +39,11 @@ fun showToast(
     }
 }
 
-@FunBinding
+typealias showToastRes = (Int) -> Unit
+@Binding
 fun showToastRes(
     showToast: showToast,
     stringResource: stringResource,
-    messageRes: @Assisted Int,
-) {
+): showToastRes = { messageRes ->
     showToast(stringResource(messageRes))
 }

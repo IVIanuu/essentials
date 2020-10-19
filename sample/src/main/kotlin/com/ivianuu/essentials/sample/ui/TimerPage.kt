@@ -25,13 +25,14 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-@FunBinding
-@Composable
-fun TimerPage() {
+typealias TimerPage = @Composable () -> Unit
+
+@Binding
+fun TimerPage(): TimerPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }
     ) {

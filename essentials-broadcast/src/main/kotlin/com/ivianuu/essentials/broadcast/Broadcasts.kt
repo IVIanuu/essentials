@@ -22,21 +22,20 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@FunBinding
+typealias broadcasts = (String) -> Flow<Intent>
+@Binding
 fun broadcasts(
     applicationContext: ApplicationContext,
-    mainDispatcher: MainDispatcher,
-    action: @Assisted String,
-): Flow<Intent> {
-    return callbackFlow<Intent> {
+    mainDispatcher: MainDispatcher
+): broadcasts = { action ->
+    callbackFlow<Intent> {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 offerSafe(intent)

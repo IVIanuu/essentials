@@ -37,34 +37,36 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.recentapps.currentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
+typealias AppTrackerPage = @Composable () -> Unit
+
+@Binding
 fun AppTrackerPage(
     createAppTrackerNotification: createAppTrackerNotification,
-    currentApp: currentApp,
+    currentApp: CurrentApp,
     foregroundManager: ForegroundManager,
     requestPermissions: requestPermissions,
     showToast: showToast,
-) {
+): AppTrackerPage = {
     var trackingEnabled by rememberState { false }
     onCommit(trackingEnabled) {
         val foregroundJob = if (!trackingEnabled) null else {
             val foregroundJob = foregroundManager.startJob(createAppTrackerNotification(null))
-            currentApp()
+            currentApp
                 .onEach {
                     showToast("App changed $it")
                     createAppTrackerNotification(it)
@@ -103,14 +105,16 @@ fun AppTrackerPage(
     }
 }
 
+typealias createAppTrackerNotification = (String?) -> Notification
+
 @SuppressLint("NewApi")
-@FunBinding
+@Binding
 fun createAppTrackerNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
-    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
-    currentApp: @Assisted String?,
-): Notification {
+    systemBuildInfo: SystemBuildInfo,
+    currentApp: String?,
+): createAppTrackerNotification = {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -121,7 +125,7 @@ fun createAppTrackerNotification(
         )
     }
 
-    return NotificationCompat.Builder(applicationContext, "app_tracker")
+    NotificationCompat.Builder(applicationContext, "app_tracker")
         .apply {
             setSmallIcon(R.mipmap.ic_launcher)
             setContentTitle("Current app: $currentApp")

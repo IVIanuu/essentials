@@ -28,18 +28,19 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
+typealias UnlockPage = @Composable () -> Unit
+
+@Binding
 fun UnlockPage(
     screenStateFlow: ScreenStateFlow,
     showToast: showToast,
     unlockScreen: unlockScreen,
-) {
+): UnlockPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {

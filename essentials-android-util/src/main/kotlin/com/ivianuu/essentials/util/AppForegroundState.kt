@@ -19,18 +19,19 @@ package com.ivianuu.essentials.util
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationLifecycleOwner
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@FunBinding
+typealias AppForegroundState = Flow<Boolean>
+@Binding
 fun appForegroundState(
     mainDispatcher: MainDispatcher,
     lifecycleOwner: ApplicationLifecycleOwner,
-): Flow<Boolean> = callbackFlow {
+): AppForegroundState = callbackFlow {
     var wasInForeground = false
     val observer = LifecycleEventObserver { source, _ ->
         val isInForeground = source.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)

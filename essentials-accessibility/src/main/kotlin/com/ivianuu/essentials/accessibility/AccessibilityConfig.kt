@@ -19,9 +19,7 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,13 +37,11 @@ internal typealias AccessibilityConfigs = MutableStateFlow<List<AccessibilityCon
 @Binding(ApplicationComponent::class)
 fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
 
-@FunBinding
-fun applyAccessibilityConfig(
-    configs: AccessibilityConfigs,
-    config: @Assisted AccessibilityConfig
-): DisposableHandle {
+typealias applyAccessibilityConfig = (AccessibilityConfig) -> DisposableHandle
+@Binding
+fun applyAccessibilityConfig(configs: AccessibilityConfigs): applyAccessibilityConfig = { config ->
     synchronized(configs) { configs.value += config }
-    return object : DisposableHandle {
+    object : DisposableHandle {
         override fun dispose() {
             synchronized(configs) { configs.value -= config }
         }
@@ -53,11 +49,10 @@ fun applyAccessibilityConfig(
 }
 
 @AccessibilityWorkerBinding
-@FunBinding
-suspend fun manageAccessibilityConfig(
+fun manageAccessibilityConfig(
     configs: AccessibilityConfigs,
     serviceHolder: MutableAccessibilityServiceHolder
-) {
+): AccessibilityWorker = {
     combine(serviceHolder, configs)
         .collect { (service, configs) ->
             service?.serviceInfo = service?.serviceInfo?.apply {

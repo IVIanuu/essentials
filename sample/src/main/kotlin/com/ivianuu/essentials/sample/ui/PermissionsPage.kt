@@ -43,12 +43,13 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
-fun PermissionsPage(requestPermissions: requestPermissions) {
+typealias PermissionsPage = @Composable () -> Unit
+
+@Binding
+fun PermissionsPage(requestPermissions: requestPermissions): PermissionsPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {

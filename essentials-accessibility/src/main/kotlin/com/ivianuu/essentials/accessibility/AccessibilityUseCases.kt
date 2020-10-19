@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-suspend fun performGlobalAction(
-    holder: MutableAccessibilityServiceHolder,
-    action: @Assisted Int
-): Boolean = holder.value?.performGlobalAction(action) ?: false
+typealias performGlobalAction = suspend (Int) -> Boolean
+@Binding
+fun performGlobalAction(
+    holder: MutableAccessibilityServiceHolder
+): performGlobalAction = { action ->
+    holder.value?.performGlobalAction(action) ?: false
+}

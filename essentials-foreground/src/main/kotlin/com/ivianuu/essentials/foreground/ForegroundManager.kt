@@ -21,7 +21,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,11 @@ interface ForegroundManager {
     fun startJob(notification: Notification): ForegroundJob
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Binding
+val ForegroundManagerImpl.foregroundManager: ForegroundManager
+    get() = this
+
+@Binding(ApplicationComponent::class)
 class ForegroundManagerImpl(
     private val applicationContext: ApplicationContext,
     private val defaultDispatcher: DefaultDispatcher,

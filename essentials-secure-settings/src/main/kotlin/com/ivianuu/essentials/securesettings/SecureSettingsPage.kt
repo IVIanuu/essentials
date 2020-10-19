@@ -26,20 +26,19 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 
-@FunBinding
-@Composable
+typealias SecureSettingsPage = @Composable (Boolean) -> Unit
+
+@Binding
 fun SecureSettingsPage(
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
+    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    showToastRes: showToastRes,
-    showHideNavBarHint: @Assisted Boolean = false,
-) {
+    showToastRes: showToastRes
+): SecureSettingsPage = { showHideNavBarHint ->
     popNavigatorOnceSecureSettingsGranted(true)
 
     Scaffold(

@@ -23,7 +23,6 @@ import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -83,8 +82,10 @@ fun recentApps(
         .shareIn(globalScope, SharingStarted.Eagerly, 1)
 }
 
-@FunBinding
-fun currentApp(recentApps: RecentApps): Flow<String?> =
+typealias CurrentApp = Flow<String?>
+
+@Binding
+fun currentApp(recentApps: RecentApps): CurrentApp =
     recentApps
         .map { it.firstOrNull() }
         .distinctUntilChanged()

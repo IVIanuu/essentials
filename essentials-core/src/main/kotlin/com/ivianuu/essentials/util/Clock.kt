@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-@FunBinding
-fun now(): Duration = System.currentTimeMillis().milliseconds
+typealias now = () -> Duration
+@Binding
+fun now(): now = { System.currentTimeMillis().milliseconds }

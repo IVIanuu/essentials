@@ -26,16 +26,16 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 
-@FunBinding
-@Composable
+typealias AboutPage = @Composable () -> Unit
+
+@Binding
 fun AboutPage(
     buildInfo: BuildInfo,
     privacyPolicyUrl: PrivacyPolicyUrl?,
     aboutSection: AboutSection,
-) {
+): AboutPage = {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
         InsettingScrollableColumn {
             aboutSection(
@@ -47,14 +47,9 @@ fun AboutPage(
     }
 }
 
-@FunBinding
-@Composable
-fun AboutSection(
-    navigator: Navigator,
-    packageName: @Assisted String,
-    showHeader: @Assisted Boolean = false,
-    privacyPolicyUrl: @Assisted String? = null,
-) {
+typealias AboutSection = @Composable (String, Boolean, String?) -> Unit
+@Binding
+fun AboutSection(navigator: Navigator): AboutSection = { packageName, showHeader, privacyPolicyUrl ->
     if (showHeader) {
         Subheader {
             Text(R.string.about_title)

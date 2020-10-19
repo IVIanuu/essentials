@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-/*
- * Copyend 2019 Manuel Wrage
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.ivianuu.essentials.ui.core
 
 import android.view.View
@@ -48,9 +32,8 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
 import kotlin.math.max
 
 @Composable
@@ -109,9 +92,7 @@ fun ProvideInsets(
 }
 
 @UiDecoratorBinding
-@FunBinding
-@Composable
-fun ProvideWindowInsets(children: @Assisted @Composable () -> Unit) {
+fun ProvideWindowInsets(): UiDecorator = { children ->
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
     var insets by rememberState { PaddingValues() }

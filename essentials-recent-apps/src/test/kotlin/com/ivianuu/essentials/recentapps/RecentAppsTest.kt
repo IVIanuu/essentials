@@ -19,7 +19,6 @@ package com.ivianuu.essentials.recentapps
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.accessibility.AccessibilityServices
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -48,22 +47,12 @@ class RecentAppsTest {
         val recentAppsScopeDispatcher = TestCoroutineDispatcher()
         val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
-        val services = object : AccessibilityServices {
-            override val events: Flow<AccessibilityEvent>
-                get() = accessibilityEvents
-            override val isConnected: Flow<Boolean>
-                get() = emptyFlow()
-
-            override fun applyConfig(config: AccessibilityConfig): DisposableHandle {
-                return object : DisposableHandle {
-                    override fun dispose() {
-                    }
+        val recentAppsFlow = recentApps(accessibilityEvents, {
+            object : DisposableHandle {
+                override fun dispose() {
                 }
             }
-
-            override suspend fun performGlobalAction(action: Int): Boolean = false
-        }
-        val recentAppsFlow = recentApps(recentAppsScope, NoopLogger, services)
+        }, recentAppsScope, NoopLogger)
         val recentApps = mutableListOf<List<String>>()
         val collectorJob = launch {
             recentAppsFlow.collect {

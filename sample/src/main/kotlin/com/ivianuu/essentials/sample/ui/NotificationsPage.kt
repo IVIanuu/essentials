@@ -74,14 +74,14 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@FunBinding
-@Composable
-fun NotificationsPage(store: rememberStore<NotificationsState, NotificationsAction>) {
+typealias NotificationsPage = @Composable () -> Unit
+
+@Binding
+fun NotificationsPage(store: rememberStore<NotificationsState, NotificationsAction>): NotificationsPage = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
     ) {
@@ -174,7 +174,7 @@ private fun NotificationPermissions(
 @Binding
 fun notificationStore(
     hasPermissions: hasPermissions,
-    notifications: notifications,
+    notifications: UiNotifications,
     notificationStore: NotificationStore,
     requestPermissions: requestPermissions,
 ) = storeProvider<NotificationsState, NotificationsAction>(NotificationsState()) {
@@ -185,7 +185,7 @@ fun notificationStore(
 
     combine(
         hasPermissions(listOf(permission)),
-        notifications().flowAsResource()
+        notifications.flowAsResource()
     ).setStateIn(this) { (hasPermissions: Boolean, notifications) ->
         copy(hasPermissions = hasPermissions, notifications = notifications)
     }
@@ -205,11 +205,13 @@ fun notificationStore(
     }
 }
 
-@FunBinding
+typealias UiNotifications = Flow<List<UiNotification>>
+
+@Binding
 fun notifications(
     applicationContext: ApplicationContext,
     notificationStore: NotificationStore,
-): Flow<List<UiNotification>> {
+): UiNotifications {
     return notificationStore.notifications
         .map { notifications ->
             notifications

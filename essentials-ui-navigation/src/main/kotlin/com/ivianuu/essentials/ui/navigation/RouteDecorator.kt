@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -24,12 +23,8 @@ typealias RouteDecorators = Set<RouteDecorator>
 @SetElements
 fun defaultRouteDecorators(): RouteDecorators = emptySet()
 
-@FunBinding
-@Composable
-fun DecorateRoute(
-    decorators: RouteDecorators,
-    route: @Assisted Route,
-    children: @Assisted @Composable () -> Unit
-) {
+typealias DecorateRoute = @Composable (Route, @Composable () -> Unit) -> Unit
+@Binding
+fun DecorateRoute(decorators: RouteDecorators): DecorateRoute = { route, children ->
     decorators.fold(children) { acc, decorator -> { decorator(route, acc) } }()
 }
