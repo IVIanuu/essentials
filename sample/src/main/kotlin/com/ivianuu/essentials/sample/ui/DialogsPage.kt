@@ -46,12 +46,13 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias DialogsPage = @Composable () -> Unit
 
-@Binding
-fun DialogsPage(): DialogsPage = {
+@FunBinding
+@Composable
+fun DialogsPage() {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {

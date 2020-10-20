@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,7 +28,10 @@ fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
     CoroutineScope(defaultDispatcher)
 
 typealias globalTask = suspend (suspend CoroutineScope.() -> Unit) -> Unit
-@Binding
-fun globalTask(globalScope: GlobalScope): globalTask = { block ->
+@FunBinding
+suspend fun globalTask(
+    globalScope: GlobalScope,
+    block: suspend CoroutineScope.() -> Unit
+) {
     globalScope.launch(block = block).join()
 }

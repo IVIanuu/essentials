@@ -26,6 +26,7 @@ import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.awaitClose
@@ -83,19 +84,17 @@ fun displayRotationFlow(
 }
 
 typealias getCurrentDisplayRotation = suspend () -> DisplayRotation
-@Binding
-fun getCurrentDisplayRotation(
+@FunBinding
+suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,
     windowManager: WindowManager,
-): getCurrentDisplayRotation = {
-    withContext(ioDispatcher) {
-        when (windowManager.defaultDisplay.rotation) {
-            Surface.ROTATION_0 -> DisplayRotation.PortraitUp
-            Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
-            Surface.ROTATION_180 -> DisplayRotation.PortraitDown
-            Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
-            else -> error("unexpected rotation")
-        }
+): DisplayRotation = withContext(ioDispatcher) {
+    when (windowManager.defaultDisplay.rotation) {
+        Surface.ROTATION_0 -> DisplayRotation.PortraitUp
+        Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
+        Surface.ROTATION_180 -> DisplayRotation.PortraitDown
+        Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
+        else -> error("unexpected rotation")
     }
 }
 

@@ -21,7 +21,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -29,61 +29,57 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-typealias hasPermissions = suspend (List<Permission>) -> Flow<Boolean>
-@Binding
+typealias hasPermissions = (List<Permission>) -> Flow<Boolean>
+@FunBinding
 fun hasPermissions(
     defaultDispatcher: DefaultDispatcher,
     stateProvider: stateProvider,
-): hasPermissions = { permissions ->
-    permissionChanges
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map {
-            withContext(defaultDispatcher) {
-                permissions.all { it.stateProvider().isGranted(it) }
-            }
-        }.distinctUntilChanged()
-}
+    permissions: List<Permission>
+): Flow<Boolean> = permissionChanges
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map {
+        withContext(defaultDispatcher) {
+            permissions.all { it.stateProvider().isGranted(it) }
+        }
+    }.distinctUntilChanged()
 
 typealias requestPermissions = suspend (List<Permission>) -> Boolean
-@Binding
-fun requestPermissions(
+@FunBinding
+suspend fun requestPermissions(
     defaultDispatcher: DefaultDispatcher,
     hasPermissions: hasPermissions,
     logger: Logger,
     navigator: Navigator,
     permissionRequestRouteFactory: PermissionRequestRouteFactory,
     startUi: startUi,
-): requestPermissions = { permissions ->
-    withContext(defaultDispatcher) {
-        logger.d("request permissions $permissions")
-        if (hasPermissions(permissions).first()) return@withContext true
+    permissions: List<Permission>
+): Boolean = withContext(defaultDispatcher) {
+    logger.d("request permissions $permissions")
+    if (hasPermissions(permissions).first()) return@withContext true
 
-        val request = PermissionRequest(permissions = permissions.toList())
-        startUi()
-        navigator.push<Any>(permissionRequestRouteFactory.createRoute(request))
+    val request = PermissionRequest(permissions = permissions.toList())
+    startUi()
+    navigator.push<Any>(permissionRequestRouteFactory.createRoute(request))
 
-        hasPermissions(permissions).first()
-    }
+    hasPermissions(permissions).first()
 }
 
 typealias stateProvider = Permission.() -> PermissionStateProvider
-@Binding
-fun stateProvider(
+@FunBinding
+fun Permission.stateProvider(
     stateProviders: Set<PermissionStateProvider>,
-): stateProvider = {
-    stateProviders.firstOrNull { it.handles(this) }
+): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
-}
 
 typealias requestHandler = Permission.() -> PermissionRequestHandler
-@Binding
-fun requestHandler(
+@FunBinding
+fun Permission.requestHandler(
     requestHandlers: Set<PermissionRequestHandler>,
-): requestHandler = {
+): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }
         ?: error("Couldn't find request handler for $this")
-    object : PermissionRequestHandler {
+    return object : PermissionRequestHandler {
         override fun handles(permission: Permission): Boolean = original.handles(permission)
         override suspend fun request(permission: Permission) {
             original.request(permission)

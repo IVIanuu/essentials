@@ -25,26 +25,27 @@ import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 typealias startActivityForIntentResult = suspend (Intent) -> ActivityResult
-@Binding
-fun startActivityForIntentResult(
-    startActivityForResult: startActivityForResult<Intent, ActivityResult>
-): startActivityForIntentResult = { intent ->
-    startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
-}
+@FunBinding
+suspend fun startActivityForIntentResult(
+    startActivityForResult: startActivityForResult<Intent, ActivityResult>,
+    intent: Intent
+) = startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
 typealias startActivityForResult<I, O> = suspend (ActivityResultContract<I, O>, I) -> O
-@Binding
-fun <I, O> startActivityForResult(
+@FunBinding
+suspend fun <I, O> startActivityForResult(
     startUi: startUi,
-    navigator: Navigator
-): startActivityForResult<I, O> = { contract, input ->
+    navigator: Navigator,
+    contract: ActivityResultContract<I, O>,
+    input: I
+): O {
     startUi()
-    suspendCancellableCoroutine { continuation ->
+    return suspendCancellableCoroutine { continuation ->
         var popped = false
         fun popIfNeeded() {
             if (!popped) {

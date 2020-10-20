@@ -28,18 +28,19 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
 typealias ActionsPage = @Composable () -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun ActionsPage(
     actionPickerPage: ActionPickerPage,
     executeAction: executeAction,
     navigator: Navigator,
     uiScope: UiScope,
-): ActionsPage = {
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }
     ) {

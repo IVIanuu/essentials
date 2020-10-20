@@ -37,13 +37,14 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias ChipsPage = @Composable () -> Unit
 
 @OptIn(ExperimentalLayout::class)
-@Binding
-fun ChipsPage(showToast: showToast): ChipsPage = {
+@FunBinding
+@Composable
+fun ChipsPage(showToast: showToast) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Chips") }) }
     ) {

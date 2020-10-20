@@ -24,16 +24,17 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.asState
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias CheckAppsPage = @Composable () -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun CheckAppsPage(
     checkableAppsPage: CheckableAppsPage,
     factory: DiskDataStoreFactory,
     launchableAppFilter: LaunchableAppFilter,
-): CheckAppsPage = {
+) {
     var checkedApps by remember {
         factory.create("checked_apps") { emptySet<String>() }
     }.asState()

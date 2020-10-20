@@ -19,40 +19,37 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
 typealias getInstalledApps = suspend () -> List<AppInfo>
-@Binding
-fun getInstalledApps(
+@FunBinding
+suspend fun getInstalledApps(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-): getInstalledApps = {
-    withContext(ioDispatcher) {
-        packageManager.getInstalledApplications(0)
-            .parallelMap {
-                AppInfo(
-                    appName = it.loadLabel(packageManager).toString(),
-                    packageName = it.packageName
-                )
-            }
-            .distinctBy { it.packageName }
-            .sortedBy { it.appName.toLowerCase() }
-            .toList()
-    }
+): List<AppInfo> = withContext(ioDispatcher) {
+    packageManager.getInstalledApplications(0)
+        .parallelMap {
+            AppInfo(
+                appName = it.loadLabel(packageManager).toString(),
+                packageName = it.packageName
+            )
+        }
+        .distinctBy { it.packageName }
+        .sortedBy { it.appName.toLowerCase() }
+        .toList()
 }
 
 typealias getAppInfo = suspend (String) -> AppInfo
-@Binding
-fun getAppInfo(
+@FunBinding
+suspend fun getAppInfo(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-): getAppInfo = { packageName ->
-    withContext(ioDispatcher) {
-        AppInfo(
-            packageName,
-            packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
-                .toString()
-        )
-    }
+    packageName: String
+): AppInfo = withContext(ioDispatcher) {
+    AppInfo(
+        packageName,
+        packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+            .toString()
+    )
 }

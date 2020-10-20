@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
+import com.ivianuu.injekt.FunBinding
 import kotlin.math.max
 
 @Composable
@@ -91,8 +92,12 @@ fun ProvideInsets(
     Providers(InsetsAmbient provides insets, children = children)
 }
 
+typealias ProvideWindowInsets = UiDecorator
+
 @UiDecoratorBinding
-fun ProvideWindowInsets(): UiDecorator = { children ->
+@FunBinding
+@Composable
+fun ProvideWindowInsets(children: @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
     var insets by rememberState { PaddingValues() }

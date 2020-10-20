@@ -18,7 +18,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -41,12 +41,12 @@ typealias AppWorkers = Set<AppWorker>
 fun defaultAppWorkers(): AppWorkers = emptySet()
 
 typealias runAppWorkers = () -> Unit
-@Binding
+@FunBinding
 fun runAppWorkers(
     appWorkers: AppWorkers,
     logger: Logger,
     globalScope: GlobalScope,
-): runAppWorkers = {
+) {
     logger.d("run workers")
     appWorkers
         .forEach { worker ->

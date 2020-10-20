@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -30,32 +30,31 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 typealias broadcasts = (String) -> Flow<Intent>
-@Binding
+@FunBinding
 fun broadcasts(
     applicationContext: ApplicationContext,
-    mainDispatcher: MainDispatcher
-): broadcasts = { action ->
-    callbackFlow<Intent> {
-        val broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                offerSafe(intent)
-            }
+    mainDispatcher: MainDispatcher,
+    action: String
+): Flow<Intent> = callbackFlow<Intent> {
+    val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            offerSafe(intent)
         }
+    }
+    try {
+        applicationContext.registerReceiver(
+            broadcastReceiver,
+            IntentFilter().apply {
+                addAction(action)
+            }
+        )
+    } catch (t: Throwable) {
+    }
+
+    awaitClose {
         try {
-            applicationContext.registerReceiver(
-                broadcastReceiver,
-                IntentFilter().apply {
-                    addAction(action)
-                }
-            )
+            applicationContext.unregisterReceiver(broadcastReceiver)
         } catch (t: Throwable) {
         }
-
-        awaitClose {
-            try {
-                applicationContext.unregisterReceiver(broadcastReceiver)
-            } catch (t: Throwable) {
-            }
-        }
-    }.flowOn(mainDispatcher)
-}
+    }
+}.flowOn(mainDispatcher)

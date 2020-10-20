@@ -44,6 +44,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
 @PermissionRequestRouteFactoryBinding
@@ -57,10 +58,12 @@ class DefaultPermissionRequestRouteFactory(
 
 typealias DefaultPermissionPage = @Composable (PermissionRequest) -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun DefaultPermissionPage(
     store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
-): DefaultPermissionPage = { request ->
+    request: PermissionRequest
+) {
     val (state, dispatch) = store(request)
 
     Scaffold(

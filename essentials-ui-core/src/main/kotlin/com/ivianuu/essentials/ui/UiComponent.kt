@@ -5,7 +5,7 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.common.compositionActivity
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeChildComponent
@@ -15,8 +15,12 @@ import com.ivianuu.injekt.merge.mergeComponent
 @MergeChildComponent
 interface UiComponent
 
+typealias ProvideUiComponent = UiDecorator
+
 @UiDecoratorBinding
-fun UiComponentUiDecorator(): UiDecorator = { children ->
+@FunBinding
+@Composable
+fun ProvideUiComponent(children: @Composable () -> Unit) {
     val activity = compositionActivity
     val uiComponent = remember {
         activity.activityComponent.mergeComponent<UiComponentFactoryOwner>()

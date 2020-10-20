@@ -32,12 +32,13 @@ import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias DynamicSystemBarsPage = @Composable () -> Unit
 
-@Binding
-fun DynamicSystemBarsPage(): DynamicSystemBarsPage = {
+@FunBinding
+@Composable
+fun DynamicSystemBarsPage() {
     Box {
         ScrollableColumn {
             val colors: List<Color> = rememberSavedInstanceState {

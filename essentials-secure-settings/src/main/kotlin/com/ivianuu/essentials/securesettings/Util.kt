@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 
 @Composable
@@ -39,12 +39,14 @@ internal fun SecureSettingsHeader(text: String) {
 }
 
 internal typealias PopNavigatorOnceSecureSettingsGranted = @Composable (Boolean) -> Unit
-@Binding
+@FunBinding
+@Composable
 fun PopNavigatorOnceSecureSettingsGranted(
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     showToastRes: showToastRes,
-    navigator: Navigator
-): PopNavigatorOnceSecureSettingsGranted = { toast ->
+    navigator: Navigator,
+    toast: Boolean
+) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
     LaunchedTask {

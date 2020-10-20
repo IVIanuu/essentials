@@ -24,81 +24,70 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.res.ResourcesCompat
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
 typealias bitmapResource = (Int) -> ImageAsset
-@Binding
-fun bitmapResource(applicationContext: ApplicationContext): bitmapResource = { id ->
+@FunBinding
+fun bitmapResource(applicationContext: ApplicationContext, id: Int): ImageAsset =
     applicationContext.getDrawable(id)!!.toImageAsset()
-}
 
 typealias booleanResource = (Int) -> Boolean
-@Binding
-fun booleanResource(applicationContext: ApplicationContext): booleanResource = { id ->
+@FunBinding
+fun booleanResource(applicationContext: ApplicationContext, id: Int): Boolean =
     applicationContext.resources.getBoolean(id)
-}
 
 typealias colorResource = (Int) -> Color
-@Binding
-fun colorResource(applicationContext: ApplicationContext): colorResource = { id ->
+@FunBinding
+fun colorResource(applicationContext: ApplicationContext, id: Int): Color =
     Color(applicationContext.getColor(id))
-}
 
 typealias dimensionResource = (Int) -> Dp
-@Binding
-fun dimensionResource(applicationContext: ApplicationContext): dimensionResource = { id ->
+@FunBinding
+fun dimensionResource(applicationContext: ApplicationContext, id: Int): Dp =
     with(Density(applicationContext)) {
         applicationContext.resources.getDimension(id).toInt().toDp()
     }
-}
 
 typealias drawableResource = (Int) -> ImageAsset
-@Binding
-fun drawableResource(bitmapResource: bitmapResource): drawableResource = { id ->
+@FunBinding
+fun drawableResource(bitmapResource: bitmapResource, id: Int): ImageAsset =
     bitmapResource(id)
-}
 
 typealias floatResource = (Int) -> Float
-@Binding
-fun floatResource(applicationContext: ApplicationContext): floatResource = { id ->
+@FunBinding
+fun floatResource(applicationContext: ApplicationContext, id: Int): Float =
     ResourcesCompat.getFloat(applicationContext.resources, id)
-}
 
 typealias fontResource = (Int) -> Font
-@Binding
-fun fontResource(applicationContext: ApplicationContext): fontResource = { id ->
+@FunBinding
+fun fontResource(applicationContext: ApplicationContext, id: Int): Font =
     font(id)
-}
 
 typealias intResource = (Int) -> Int
-@Binding
-fun intResource(applicationContext: ApplicationContext): intResource = { id ->
+@FunBinding
+fun intResource(applicationContext: ApplicationContext, id: Int): Int =
     applicationContext.resources.getInteger(id)
-}
 
 typealias intArrayResource = (Int) -> IntArray
-@Binding
-fun intArrayResource(applicationContext: ApplicationContext): intArrayResource = { id ->
+@FunBinding
+fun intArrayResource(applicationContext: ApplicationContext, id: Int): IntArray =
     applicationContext.resources.getIntArray(id)
-}
 
 typealias stringResource = (Int) -> String
-@Binding
-fun stringResource(applicationContext: ApplicationContext): stringResource = { id ->
+@FunBinding
+fun stringResource(applicationContext: ApplicationContext, id: Int): String =
     applicationContext.getString(id)
-}
 
 typealias stringResourceWithArguments = (Int, List<Any?>) -> String
-@Binding
+@FunBinding
 fun stringResourceWithArguments(
-    applicationContext: ApplicationContext
-): stringResourceWithArguments = { id, args ->
-    applicationContext.getString(id, *args.toTypedArray())
-}
+    applicationContext: ApplicationContext,
+    id: Int,
+    args: List<Any?>
+): String = applicationContext.getString(id, *args.toTypedArray())
 
 typealias stringArrayResource = (Int) -> Array<String>
-@Binding
-fun stringArrayResource(applicationContext: ApplicationContext): stringArrayResource = { id ->
+@FunBinding
+fun stringArrayResource(applicationContext: ApplicationContext, id: Int): Array<String> =
     applicationContext.resources.getStringArray(id)
-}

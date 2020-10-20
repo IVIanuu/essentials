@@ -33,12 +33,13 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias TabsPage = @Composable () -> Unit
 
-@Binding
-fun TabsPage(): TabsPage = {
+@FunBinding
+@Composable
+fun TabsPage() {
     var selectedIndex by savedInstanceState { 0 }
     Scaffold(
         topBar = {

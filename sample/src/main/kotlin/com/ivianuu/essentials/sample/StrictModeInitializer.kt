@@ -19,9 +19,13 @@ package com.ivianuu.essentials.sample
 import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
+import com.ivianuu.injekt.FunBinding
+
+typealias initializeStrictModule = AppInitializer
 
 @AppInitializerBinding
-fun initializeStrictModule(): AppInitializer = {
+@FunBinding
+fun initializeStrictModule() {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
             .detectAll()

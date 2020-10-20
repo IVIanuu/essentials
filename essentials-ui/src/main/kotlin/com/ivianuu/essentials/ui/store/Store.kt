@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -57,74 +57,85 @@ val <S> Store<S, *>.snapshotState: S
     get() = state.collectAsState().value
 
 typealias rememberStore<S, A> = @Composable () -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A> rememberStore(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    init: (CoroutineScope) -> Store<S, A>,
-): rememberStore<S, A> = rememberStoreViaFactory(init)
+    provider: () -> (CoroutineScope) -> Store<S, A>
+): Store<S, A> = rememberStoreViaFactory { provider()(it) }
 
 typealias rememberStore1<S, A, P1> = @Composable (P1) -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A, P1> rememberStore1(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1) -> (CoroutineScope) -> Store<S, A>
-): rememberStore1<S, A, P1> = { p1 ->
-    key(p1) {
-        rememberStoreViaFactory { provider(p1)(it) }()
-    }
+    provider: (P1) -> (CoroutineScope) -> Store<S, A>,
+    p1: P1
+): Store<S, A> = key(p1) {
+    rememberStoreViaFactory { provider(p1)(it) }
 }
 
 typealias rememberStore2<S, A, P1, P2> = @Composable (P1, P2) -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A, P1, P2> rememberStore2(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2) -> (CoroutineScope) -> Store<S, A>
-): rememberStore2<S, A, P1, P2> = { p1, p2 ->
-    key(p1, p2) {
-        rememberStoreViaFactory { provider(p1, p2)(it) }()
-    }
+    provider: (P1, P2) -> (CoroutineScope) -> Store<S, A>,
+    p1: P1,
+    p2: P2
+): Store<S, A> = key(p1, p2) {
+    rememberStoreViaFactory { provider(p1, p2)(it) }
 }
 
 typealias rememberStore3<S, A, P1, P2, P3> = @Composable (P1, P2, P3) -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A, P1, P2, P3> rememberStore3(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3) -> (CoroutineScope) -> Store<S, A>
-): rememberStore3<S, A, P1, P2, P3> = { p1, p2, p3 ->
-    key(p1, p2, p3) {
-        rememberStoreViaFactory { provider(p1, p2, p3)(it) }()
-    }
+    provider: (P1, P2, P3) -> (CoroutineScope) -> Store<S, A>,
+    p1: P1,
+    p2: P2,
+    p3: P3
+): Store<S, A> = key(p1, p2, p3) {
+    rememberStoreViaFactory { provider(p1, p2, p3)(it) }
 }
 
 typealias rememberStore4<S, A, P1, P2, P3, P4> = @Composable (P1, P2, P3, P4) -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A, P1, P2, P3, P4> rememberStore4(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3, P4) -> (CoroutineScope) -> Store<S, A>
-): rememberStore4<S, A, P1, P2, P3, P4> = { p1, p2, p3, p4 ->
-    key(p1, p2, p3, p4) {
-        rememberStoreViaFactory { provider(p1, p2, p3, p4)(it) }()
-    }
+    provider: (P1, P2, P3, P4) -> (CoroutineScope) -> Store<S, A>,
+    p1: P1,
+    p2: P2,
+    p3: P3,
+    p4: P4
+): Store<S, A> = key(p1, p2, p3, p4) {
+    rememberStoreViaFactory { provider(p1, p2, p3, p4)(it) }
 }
 
 typealias rememberStore5<S, A, P1, P2, P3, P4, P5> = @Composable (P1, P2, P3, P4, P5) -> Store<S, A>
-@Binding
+@FunBinding
+@Composable
 fun <S, A, P1, P2, P3, P4, P5> rememberStore5(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3, P4, P5) -> (CoroutineScope) -> Store<S, A>
-): rememberStore5<S, A, P1, P2, P3, P4, P5> = { p1, p2, p3, p4, p5 ->
-    key(p1, p2, p3, p4, p5) {
-        rememberStoreViaFactory { provider(p1, p2, p3, p4, p5)(it) }()
-    }
+    provider: (P1, P2, P3, P4, P5) -> (CoroutineScope) -> Store<S, A>,
+    p1: P1,
+    p2: P2,
+    p3: P3,
+    p4: P4,
+    p5: P5
+): Store<S, A> = key(p1, p2, p3, p4, p5) {
+    rememberStoreViaFactory { provider(p1, p2, p3, p4, p5)(it) }
 }
 
-typealias rememberStoreViaFactory<S, A> = ((CoroutineScope) -> Store<S, A>) -> @Composable () -> Store<S, A>
-@Binding
+typealias rememberStoreViaFactory<S, A> = @Composable ((CoroutineScope) -> Store<S, A>) -> Store<S, A>
+@FunBinding
+@Composable
 fun <S, A> rememberStoreViaFactory(
-    defaultDispatcher: DefaultDispatcher
-): rememberStoreViaFactory<S, A> = { init ->
-    {
-        val scope = rememberRetainedCoroutinesScope { defaultDispatcher }
-        rememberRetained { init(scope) }   
-    }
+    defaultDispatcher: DefaultDispatcher,
+    init: (CoroutineScope) -> Store<S, A>
+): Store<S, A> {
+    val scope = rememberRetainedCoroutinesScope { defaultDispatcher }
+    return rememberRetained { init(scope) }
 }

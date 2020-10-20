@@ -33,13 +33,14 @@ import com.ivianuu.essentials.torch.toggle
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
 typealias TorchPage = @Composable () -> Unit
 
-@Binding
-fun TorchPage(torch: Torch): TorchPage = {
+@FunBinding
+@Composable
+fun TorchPage(torch: Torch) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         val torchState = torch.torchState.collectAsState()
 

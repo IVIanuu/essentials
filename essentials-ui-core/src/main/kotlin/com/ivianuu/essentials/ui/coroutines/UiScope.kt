@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -35,8 +36,16 @@ typealias UiScope = CoroutineScope
 fun uiScope(mainDispatcher: MainDispatcher): UiScope =
     CoroutineScope(mainDispatcher)
 
+typealias CancelUiScope = UiDecorator
+
 @UiDecoratorBinding
-fun CancelUiScope(logger: Logger, uiScope: UiScope): UiDecorator = { children ->
+@FunBinding
+@Composable
+fun CancelUiScope(
+    logger: Logger,
+    uiScope: UiScope,
+    children: @Composable () -> Unit
+) {
     onActive {
         onDispose {
             logger.d("Cancelling ui scope")

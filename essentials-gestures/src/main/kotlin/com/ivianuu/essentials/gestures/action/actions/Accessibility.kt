@@ -21,23 +21,25 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias accessibilityAction = (String, Int, Int, ActionIcon) -> Action
 
-@Binding
+@FunBinding
 fun accessibilityAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,
-    stringResource: stringResource
-): accessibilityAction = { key, accessibilityAction, titleRes, icon ->
-    Action(
-        key = key,
-        title = stringResource(titleRes),
-        icon = icon,
-        permissions = choosePermissions { listOf(accessibility) },
-        execute = {
-            performGlobalAction(accessibilityAction)
-        }
-    )
-}
+    stringResource: stringResource,
+    key: String,
+    accessibilityAction: Int,
+    titleRes: Int,
+    icon: ActionIcon
+) = Action(
+    key = key,
+    title = stringResource(titleRes),
+    icon = icon,
+    permissions = choosePermissions { listOf(accessibility) },
+    execute = {
+        performGlobalAction(accessibilityAction)
+    }
+)

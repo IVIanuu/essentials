@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
@@ -51,12 +51,11 @@ fun homeAction(
 )
 
 typealias openHomeScreen = () -> Unit
-
-@Binding
+@FunBinding
 fun openHomeScreen(
     applicationContext: ApplicationContext,
     sendIntent: sendIntent,
-): openHomeScreen = {
+) {
     try {
         val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         applicationContext.sendBroadcast(intent)

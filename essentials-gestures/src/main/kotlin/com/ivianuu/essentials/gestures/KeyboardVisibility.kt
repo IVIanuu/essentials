@@ -23,6 +23,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -69,9 +70,9 @@ fun keyboardVisible(
 }
 
 typealias getKeyboardHeight = () -> Int?
-@Binding
-fun getKeyboardHeight(inputMethodManager: InputMethodManager): getKeyboardHeight = {
-    try {
+@FunBinding
+fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
+    return try {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
     } catch (t: Throwable) {

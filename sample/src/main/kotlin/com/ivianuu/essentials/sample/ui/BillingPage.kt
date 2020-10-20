@@ -35,13 +35,14 @@ import com.ivianuu.essentials.billing.BillingManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
 typealias BillingPage = @Composable () -> Unit
 
-@Binding
-fun BillingPage(billingManager: BillingManager): BillingPage = {
+@FunBinding
+@Composable
+fun BillingPage(billingManager: BillingManager) {
     val isPurchased = remember { billingManager.isPurchased(DummySku) }
         .collectAsState(false)
 

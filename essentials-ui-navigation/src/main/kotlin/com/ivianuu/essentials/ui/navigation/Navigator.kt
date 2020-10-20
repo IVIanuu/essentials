@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
@@ -234,8 +235,12 @@ class Navigator {
 val NavigatorAmbient =
     staticAmbientOf<Navigator>()
 
+typealias ClearBackStackWhenLeavingApp = UiDecorator
+
 @UiDecoratorBinding
-fun ClearNavigatorBackStackWhenLeavingApp(navigator: Navigator): UiDecorator = { children ->
+@FunBinding
+@Composable
+fun ClearBackStackWhenLeavingApp(navigator: Navigator, children: @Composable () -> Unit) {
     onActive {
         onDispose {
             navigator.setBackStack(emptyList())

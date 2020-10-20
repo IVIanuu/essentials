@@ -29,16 +29,18 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
-import com.ivianuu.injekt.Binding
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.FunBinding
 
 internal typealias SecureSettingsPcInstructionsPage = @Composable () -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun SecureSettingsPcInstructionsPage(
-    buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    buildInfo: BuildInfo,
     navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
-): SecureSettingsPcInstructionsPage = {
+    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted
+) {
     popNavigatorOnceSecureSettingsGranted(false)
 
     Scaffold(

@@ -38,7 +38,6 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.essentials.recentapps.currentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
@@ -47,6 +46,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -54,14 +54,15 @@ import kotlinx.coroutines.launch
 
 typealias AppTrackerPage = @Composable () -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun AppTrackerPage(
     createAppTrackerNotification: createAppTrackerNotification,
     currentApp: CurrentApp,
     foregroundManager: ForegroundManager,
     requestPermissions: requestPermissions,
     showToast: showToast,
-): AppTrackerPage = {
+) {
     var trackingEnabled by rememberState { false }
     onCommit(trackingEnabled) {
         val foregroundJob = if (!trackingEnabled) null else {

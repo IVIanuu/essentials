@@ -19,7 +19,7 @@ package com.ivianuu.essentials.unlock
 import android.app.KeyguardManager
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
@@ -27,29 +27,28 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 typealias unlockScreen = suspend () -> Boolean
-@Binding
-fun unlockScreen(
+@FunBinding
+suspend fun unlockScreen(
     applicationContext: ApplicationContext,
     defaultDispatcher: DefaultDispatcher,
     logger: Logger,
     keyguardManager: KeyguardManager,
-): unlockScreen = {
-    withContext(defaultDispatcher) {
-        if (!keyguardManager.isKeyguardLocked) return@withContext true
+) = withContext(defaultDispatcher) {
+    if (!keyguardManager.isKeyguardLocked) return@withContext true
 
-        val result = CompletableDeferred<Boolean>()
-        val requestId = UUID.randomUUID().toString()
-        requestsById[requestId] = result
+    val result = CompletableDeferred<Boolean>()
+    val requestId = UUID.randomUUID().toString()
+    requestsById[requestId] = result
 
-        logger.d("unlock screen $requestId")
+    logger.d("unlock screen $requestId")
 
-        UnlockScreenActivity.unlock(applicationContext, requestId)
+    UnlockScreenActivity.unlock(applicationContext, requestId)
 
-        return@withContext result.await().also {
-            logger.d("unlock result $requestId -> $it")
-        }
+    return@withContext result.await().also {
+        logger.d("unlock result $requestId -> $it")
     }
 }
+
 
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 

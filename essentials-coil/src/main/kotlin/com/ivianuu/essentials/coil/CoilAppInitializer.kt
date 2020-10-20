@@ -20,8 +20,11 @@ import coil.Coil
 import coil.ImageLoader
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
+import com.ivianuu.injekt.FunBinding
 
+typealias initializeCoil = AppInitializer
 @AppInitializerBinding
-fun initializeCoil(imageLoaderFactory: () -> ImageLoader): AppInitializer = {
+@FunBinding
+fun initializeCoil(imageLoaderFactory: () -> ImageLoader) {
     Coil.setImageLoader(imageLoaderFactory)
 }

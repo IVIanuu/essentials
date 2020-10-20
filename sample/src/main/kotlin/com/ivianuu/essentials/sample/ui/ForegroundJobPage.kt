@@ -48,19 +48,21 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.delay
 
 typealias ForegroundJobPage = @Composable () -> Unit
 
 @SuppressLint("NewApi")
-@Binding
+@FunBinding
+@Composable
 fun ForegroundJobPage(
     buildForegroundNotification: buildForegroundNotification,
     foregroundManager: ForegroundManager,
     notificationManager: NotificationManager,
     systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
-): ForegroundJobPage = {
+) {
     if (systemBuildInfo.sdk >= 26) {
         onActive {
             notificationManager.createNotificationChannel(

@@ -42,12 +42,15 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 
 typealias ShortcutPickerPage = @Composable (String?) -> Unit
-@Binding
+@FunBinding
+@Composable
 fun ShortcutPickerPage(
     store: rememberStore<ShortcutPickerState, ShortcutPickerAction>,
-): ShortcutPickerPage = { title ->
+    title: String?
+) {
     val (state, dispatch) = store()
     Scaffold(
         topBar = {

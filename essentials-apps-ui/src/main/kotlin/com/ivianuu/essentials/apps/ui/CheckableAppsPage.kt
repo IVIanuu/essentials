@@ -51,6 +51,7 @@ import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -64,10 +65,15 @@ typealias CheckableAppsPage = @Composable (
     String
 ) -> Unit
 
-@Binding
+@FunBinding
+@Composable
 fun CheckableAppsPage(
-    store: rememberStore<CheckableAppsState, CheckableAppsAction>
-): CheckableAppsPage = { checkedApps, onCheckedAppsChanged, appFilter, appBarTitle ->
+    store: rememberStore<CheckableAppsState, CheckableAppsAction>,
+    checkedApps: Set<String>,
+    onCheckedAppsChanged: (Set<String>) -> Unit,
+    appFilter: AppFilter,
+    appBarTitle: String
+) {
     val (state, dispatch) = store()
 
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {

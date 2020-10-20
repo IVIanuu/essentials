@@ -23,21 +23,21 @@ import androidx.compose.runtime.LaunchedTask
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 typealias startUi = suspend () -> Activity
-@Binding
-fun startUi(
+@FunBinding
+suspend fun startUi(
     applicationContext: ApplicationContext,
     buildInfo: BuildInfo,
     navigator: Navigator,
     packageManager: PackageManager,
-): startUi = {
+): Activity {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-    suspendCoroutine { continuation ->
+    return suspendCoroutine { continuation ->
         var completed = false
         navigator.push(
             Route(opaque = true) {

@@ -19,29 +19,25 @@ package com.ivianuu.essentials.securesettings
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.shell.runShellCommand
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
 typealias hasSecureSettingsPermission = suspend () -> Boolean
-@Binding
-fun hasSecureSettingsPermission(
+@FunBinding
+suspend fun hasSecureSettingsPermission(
     applicationContext: ApplicationContext,
-): hasSecureSettingsPermission = {
-    applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
-            PackageManager.PERMISSION_GRANTED
-}
+): Boolean = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+        PackageManager.PERMISSION_GRANTED
 
 typealias grantSecureSettingsPermissionViaRoot = suspend () -> Boolean
-@Binding
-fun grantSecureSettingsPermissionViaRoot(
+@FunBinding
+suspend fun grantSecureSettingsPermissionViaRoot(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     runShellCommand: runShellCommand,
-): grantSecureSettingsPermissionViaRoot = {
-    try {
-        runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-        hasSecureSettingsPermission()
-    } catch (t: Throwable) {
-        false
-    }
+): Boolean = try {
+    runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+    hasSecureSettingsPermission()
+} catch (t: Throwable) {
+    false
 }

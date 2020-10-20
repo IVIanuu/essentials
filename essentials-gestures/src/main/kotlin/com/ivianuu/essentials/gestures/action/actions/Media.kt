@@ -22,49 +22,52 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionMediaAppPref
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.first
 
 typealias mediaAction = (String, Int, Int, ActionIcon) -> Action
 
-@Binding
+@FunBinding
 fun mediaAction(
     doMediaAction: doMediaAction,
-    stringResource: stringResource
-): mediaAction = { key, keycode, titleRes, icon ->
-    Action(
-        key = key,
-        title = stringResource(titleRes),
-        icon = icon,
-        execute = { doMediaAction(keycode) }
-    )
-}
+    stringResource: stringResource,
+    key: String,
+    keycode: Int,
+    titleRes: Int,
+    icon: ActionIcon
+) = Action(
+    key = key,
+    title = stringResource(titleRes),
+    icon = icon,
+    execute = { doMediaAction(keycode) }
+)
 
 typealias doMediaAction = suspend (Int) -> Unit
-@Binding
-fun doMediaAction(
+@FunBinding
+suspend fun doMediaAction(
     applicationContext: ApplicationContext,
-    mediaIntent: mediaIntent
-): doMediaAction = { keycode ->
+    mediaIntent: mediaIntent,
+    keycode: Int
+) {
     applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
     applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
 }
 
 typealias mediaIntent = suspend (Int, Int) -> Intent
-@Binding
-fun mediaIntent(
-    mediaAppPref: ActionMediaAppPref
-): mediaIntent = { keyEvent, keycode ->
-    Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-        putExtra(
-            Intent.EXTRA_KEY_EVENT,
-            KeyEvent(keyEvent, keycode)
-        )
+@FunBinding
+suspend fun mediaIntent(
+    mediaAppPref: ActionMediaAppPref,
+    keyEvent: Int,
+    keycode: Int
+): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+    putExtra(
+        Intent.EXTRA_KEY_EVENT,
+        KeyEvent(keyEvent, keycode)
+    )
 
-        val mediaApp = mediaAppPref.data.first()
-        if (mediaApp != null) {
-            `package` = mediaApp
-        }
+    val mediaApp = mediaAppPref.data.first()
+    if (mediaApp != null) {
+        `package` = mediaApp
     }
 }

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
 @ActionBinding
@@ -44,13 +44,13 @@ fun killCurrentAction(
 )
 
 typealias killCurrentApp = suspend () -> Unit
-@Binding
-fun killCurrentApp(
+@FunBinding
+suspend fun killCurrentApp(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,
     currentAppFlow: CurrentApp,
     getHomePackage: getHomePackage,
     runRootCommand: runRootCommand,
-): killCurrentApp = {
+) {
     val currentApp = currentAppFlow.first()
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&
@@ -62,15 +62,14 @@ fun killCurrentApp(
 }
 
 typealias getHomePackage = () -> String
-@Binding
+@FunBinding
 fun getHomePackage(
     packageManager: PackageManager,
-): getHomePackage = {
+): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }
-
-    packageManager.resolveActivity(
+    return packageManager.resolveActivity(
         intent,
         PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""

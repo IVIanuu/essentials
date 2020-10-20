@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
@@ -43,8 +43,8 @@ fun wifiAction(
 )
 
 typealias toggleWifi = () -> Unit
-@Binding
-fun toggleWifi(wifiManager: WifiManager): toggleWifi = {
+@FunBinding
+fun toggleWifi(wifiManager: WifiManager) {
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 

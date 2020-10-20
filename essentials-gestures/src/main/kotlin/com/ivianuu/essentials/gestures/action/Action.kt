@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -51,10 +51,11 @@ annotation class ActionBinding {
 
 typealias choosePermissions = (ActionPermissions.() -> List<Permission>) -> List<Permission>
 
-@Binding
-fun choosePermissions(permissions: ActionPermissions): choosePermissions = { block ->
-    permissions.block()
-}
+@FunBinding
+fun choosePermissions(
+    permissions: ActionPermissions,
+    block: ActionPermissions.() -> List<Permission>
+): List<Permission> = permissions.block()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
