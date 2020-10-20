@@ -24,9 +24,9 @@ import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactor
 import com.ivianuu.essentials.datastore.android.settings.int
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 
-typealias disableNonSdkInterfaceDetection = suspend () -> Unit
 @FunBinding
 suspend fun disableNonSdkInterfaceDetection(
     logger: Logger,
@@ -57,9 +57,8 @@ suspend fun disableNonSdkInterfaceDetection(
     }
 }
 
-typealias setOverscan = (Rect) -> Unit
 @FunBinding
-fun setOverscan(logger: Logger, rect: Rect) {
+fun setOverscan(logger: Logger, rect: @Assisted Rect) {
     logger.d("set overscan $rect")
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")

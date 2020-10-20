@@ -16,14 +16,11 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.accessibility.AccessibilityWorker
 import com.ivianuu.essentials.accessibility.AccessibilityWorkerBinding
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.awaitCancellation
-
-typealias logAccessibility = AccessibilityWorker
 
 @AccessibilityWorkerBinding
 @FunBinding

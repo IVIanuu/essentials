@@ -28,27 +28,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
-import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.prefs.ClipboardListItem
-import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
-import com.ivianuu.essentials.ui.prefs.DurationSliderListItem
-import com.ivianuu.essentials.ui.prefs.IntSliderListItem
-import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
-import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
-import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
-import com.ivianuu.essentials.ui.prefs.SliderValueText
-import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
-import com.ivianuu.essentials.ui.prefs.preferenceDependencies
-import com.ivianuu.essentials.ui.prefs.requiresValue
+import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlin.time.hours
 import kotlin.time.milliseconds
 import kotlin.time.minutes
-
-typealias PrefsPage = @Composable () -> Unit
 
 @FunBinding
 @Composable

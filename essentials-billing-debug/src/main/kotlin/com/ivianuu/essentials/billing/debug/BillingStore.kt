@@ -16,17 +16,12 @@
 
 package com.ivianuu.essentials.billing.debug
 
-import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.InternalPurchasesResult
-import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchasesResult
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -51,10 +46,7 @@ interface BillingStore {
     suspend fun clearPurchases()
 }
 
-@Binding
-val BillingStoreImpl.billingStore: BillingStore get() = this
-
-@Binding(ApplicationComponent::class)
+@ImplBinding(ApplicationComponent::class)
 class BillingStoreImpl(
     private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,

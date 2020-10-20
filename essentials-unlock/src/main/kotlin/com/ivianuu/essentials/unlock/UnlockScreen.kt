@@ -23,10 +23,9 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-typealias unlockScreen = suspend () -> Boolean
 @FunBinding
 suspend fun unlockScreen(
     applicationContext: ApplicationContext,

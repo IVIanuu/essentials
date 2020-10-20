@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
@@ -29,12 +30,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-typealias broadcasts = (String) -> Flow<Intent>
 @FunBinding
 fun broadcasts(
     applicationContext: ApplicationContext,
     mainDispatcher: MainDispatcher,
-    action: String
+    action: @Assisted String
 ): Flow<Intent> = callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

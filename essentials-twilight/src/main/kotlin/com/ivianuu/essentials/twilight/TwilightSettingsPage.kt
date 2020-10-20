@@ -31,8 +31,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.FunBinding
 
-typealias TwilightSettingsPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun TwilightSettingsPage(

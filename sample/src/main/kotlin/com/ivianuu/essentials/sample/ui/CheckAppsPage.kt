@@ -26,8 +26,6 @@ import com.ivianuu.essentials.datastore.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.injekt.FunBinding
 
-typealias CheckAppsPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun CheckAppsPage(

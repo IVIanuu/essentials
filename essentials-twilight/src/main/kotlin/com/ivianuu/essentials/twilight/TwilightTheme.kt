@@ -20,30 +20,23 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.material.Colors
 import androidx.compose.material.Typography
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-
-typealias TwilightTheme = @Composable (Colors, Colors, Colors, Typography, @Composable () -> Unit) -> Unit
 
 @FunBinding
 @Composable
 fun TwilightTheme(
     twilightStateFlow: TwilightStateFlow,
-    lightColors: Colors,
-    darkColors: Colors,
-    blackColors: Colors,
-    typography: Typography,
-    children: @Composable () -> Unit
+    lightColors: @Assisted Colors,
+    darkColors: @Assisted Colors,
+    blackColors: @Assisted Colors,
+    typography: @Assisted Typography,
+    children: @Assisted @Composable () -> Unit
 ) {
     val twilightState by twilightStateFlow.collectAsState()
     AnimatedBox(current = twilightState) { currentTwilightState ->

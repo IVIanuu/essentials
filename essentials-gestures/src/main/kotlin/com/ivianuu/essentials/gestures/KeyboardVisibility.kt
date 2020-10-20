@@ -26,15 +26,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.flow.*
 
 typealias KeyboardVisible = Flow<Boolean>
 
@@ -69,7 +61,6 @@ fun keyboardVisible(
         .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
-typealias getKeyboardHeight = () -> Int?
 @FunBinding
 fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
     return try {

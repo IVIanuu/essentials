@@ -26,10 +26,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
-
-typealias SecureSettingsPage = @Composable (Boolean) -> Unit
 
 @FunBinding
 @Composable
@@ -39,7 +38,7 @@ fun SecureSettingsPage(
     popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
     showToastRes: showToastRes,
-    showHideNavBarHint: Boolean
+    showHideNavBarHint: @Assisted Boolean
 ) {
     popNavigatorOnceSecureSettingsGranted(true)
 

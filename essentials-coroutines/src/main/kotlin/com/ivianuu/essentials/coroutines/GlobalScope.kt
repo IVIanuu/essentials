@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -27,11 +28,10 @@ typealias GlobalScope = CoroutineScope
 fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
     CoroutineScope(defaultDispatcher)
 
-typealias globalTask = suspend (suspend CoroutineScope.() -> Unit) -> Unit
 @FunBinding
 suspend fun globalTask(
     globalScope: GlobalScope,
-    block: suspend CoroutineScope.() -> Unit
+    block: @Assisted suspend CoroutineScope.() -> Unit
 ) {
     globalScope.launch(block = block).join()
 }

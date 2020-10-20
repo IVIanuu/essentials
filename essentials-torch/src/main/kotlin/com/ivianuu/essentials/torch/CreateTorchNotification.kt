@@ -23,18 +23,18 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
-typealias createTorchNotification = () -> Notification
 @SuppressLint("NewApi")
 @FunBinding
 fun createTorchNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
     stringResource: stringResource,
-    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
+    systemBuildInfo: SystemBuildInfo,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(

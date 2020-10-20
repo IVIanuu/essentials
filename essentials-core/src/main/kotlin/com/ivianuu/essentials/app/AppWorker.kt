@@ -28,19 +28,17 @@ import kotlinx.coroutines.launch
 @BindingModule(ApplicationComponent::class)
 annotation class AppWorkerBinding {
     @Module
-    class ModuleImpl<T : AppWorker> {
+    class ModuleImpl<T : suspend () -> Unit> {
         @SetElements
         operator fun invoke(instance: T): AppWorkers = setOf(instance)
     }
 }
 
-typealias AppWorker = suspend () -> Unit
-typealias AppWorkers = Set<AppWorker>
+typealias AppWorkers = Set<suspend () -> Unit>
 
 @SetElements
 fun defaultAppWorkers(): AppWorkers = emptySet()
 
-typealias runAppWorkers = () -> Unit
 @FunBinding
 fun runAppWorkers(
     appWorkers: AppWorkers,

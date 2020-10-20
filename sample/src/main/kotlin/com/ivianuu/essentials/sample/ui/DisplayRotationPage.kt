@@ -31,8 +31,6 @@ import com.ivianuu.essentials.screenstate.DisplayRotationFlow
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.injekt.FunBinding
 
-typealias DisplayRotationPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun DisplayRotationPage(displayRotationFlow: DisplayRotationFlow) {

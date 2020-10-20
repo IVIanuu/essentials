@@ -17,25 +17,23 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-typealias runShellCommand = suspend (String) -> List<String>
 @FunBinding
 suspend fun runShellCommand(
     runShellCommands: runShellCommands,
-    command: String
+    command: @Assisted String
 ): List<String> = runShellCommands(listOf(command))
 
-typealias runShellCommands = suspend (List<String>) -> List<String>
 @FunBinding
 suspend fun runShellCommands(
     ioDispatcher: IODispatcher,
-    commands: List<String>
+    commands: @Assisted List<String>
 ): List<String> = withContext(ioDispatcher) { SU.run(commands) }
 
-typealias isShellAvailable = suspend () -> Boolean
 @FunBinding
 suspend fun isShellAvailable(ioDispatcher: IODispatcher): Boolean =
     withContext(ioDispatcher) { SU.available() }

@@ -20,15 +20,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
-import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.permission.requestHandler
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
@@ -43,6 +35,7 @@ import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
@@ -56,13 +49,11 @@ class DefaultPermissionRequestRouteFactory(
         Route { defaultPermissionPage(request) }
 }
 
-typealias DefaultPermissionPage = @Composable (PermissionRequest) -> Unit
-
 @FunBinding
 @Composable
 fun DefaultPermissionPage(
     store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
-    request: PermissionRequest
+    request: @Assisted PermissionRequest
 ) {
     val (state, dispatch) = store(request)
 
@@ -111,7 +102,7 @@ fun defaultPermissionStore(
     navigator: Navigator,
     requestHandler: requestHandler,
     startUi: startUi,
-    request: PermissionRequest,
+    request: @Assisted PermissionRequest,
 ) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions

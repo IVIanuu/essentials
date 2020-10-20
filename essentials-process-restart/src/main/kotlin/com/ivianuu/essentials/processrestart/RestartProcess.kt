@@ -23,7 +23,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
-typealias restartProcess = suspend () -> Unit
 @FunBinding
 suspend fun restartProcess(
     applicationContext: ApplicationContext,

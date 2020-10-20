@@ -17,11 +17,8 @@
 package com.ivianuu.essentials.sample
 
 import android.os.StrictMode
-import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.FunBinding
-
-typealias initializeStrictModule = AppInitializer
 
 @AppInitializerBinding
 @FunBinding

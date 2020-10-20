@@ -21,20 +21,16 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
-typealias hasPermissions = (List<Permission>) -> Flow<Boolean>
 @FunBinding
 fun hasPermissions(
     defaultDispatcher: DefaultDispatcher,
     stateProvider: stateProvider,
-    permissions: List<Permission>
+    permissions: @Assisted List<Permission>
 ): Flow<Boolean> = permissionChanges
     .map { Unit }
     .onStart { emit(Unit) }
@@ -44,7 +40,6 @@ fun hasPermissions(
         }
     }.distinctUntilChanged()
 
-typealias requestPermissions = suspend (List<Permission>) -> Boolean
 @FunBinding
 suspend fun requestPermissions(
     defaultDispatcher: DefaultDispatcher,
@@ -53,7 +48,7 @@ suspend fun requestPermissions(
     navigator: Navigator,
     permissionRequestRouteFactory: PermissionRequestRouteFactory,
     startUi: startUi,
-    permissions: List<Permission>
+    permissions: @Assisted List<Permission>
 ): Boolean = withContext(defaultDispatcher) {
     logger.d("request permissions $permissions")
     if (hasPermissions(permissions).first()) return@withContext true
@@ -65,16 +60,14 @@ suspend fun requestPermissions(
     hasPermissions(permissions).first()
 }
 
-typealias stateProvider = Permission.() -> PermissionStateProvider
 @FunBinding
-fun Permission.stateProvider(
+fun @Assisted Permission.stateProvider(
     stateProviders: Set<PermissionStateProvider>,
 ): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
 
-typealias requestHandler = Permission.() -> PermissionRequestHandler
 @FunBinding
-fun Permission.requestHandler(
+fun @Assisted Permission.requestHandler(
     requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }

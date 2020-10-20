@@ -39,8 +39,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 
-typealias ChipsPage = @Composable () -> Unit
-
 @OptIn(ExperimentalLayout::class)
 @FunBinding
 @Composable

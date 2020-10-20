@@ -32,8 +32,6 @@ import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding
 
-internal typealias SecureSettingsPcInstructionsPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsPage(

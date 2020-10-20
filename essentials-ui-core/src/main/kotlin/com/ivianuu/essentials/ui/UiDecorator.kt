@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
@@ -26,22 +27,18 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ActivityComponent::class)
 annotation class UiDecoratorBinding {
     @Module
-    class ModuleImpl<T : UiDecorator> {
+    class ModuleImpl<T : @Composable (@Composable () -> Unit) -> Unit> {
         @SetElements
-        operator fun <T : UiDecorator> invoke(instance: T): UiDecorators = setOf(instance)
+        operator fun <T : @Composable (@Composable () -> Unit) -> Unit> invoke(instance: T): UiDecorators = setOf(instance)
     }
 }
 
-typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
-
-typealias UiDecorators = Set<UiDecorator>
-
+typealias UiDecorators = Set<@Composable (@Composable () -> Unit) -> Unit>
 @SetElements
 fun defaultUiDecorators(): UiDecorators = emptySet()
 
-typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 @FunBinding
 @Composable
-fun DecorateUi(decorators: UiDecorators, children: @Composable () -> Unit) {
+fun DecorateUi(decorators: UiDecorators, children: @Assisted @Composable () -> Unit) {
     decorators.fold(children) { acc, decorator -> { decorator(acc) } }()
 }

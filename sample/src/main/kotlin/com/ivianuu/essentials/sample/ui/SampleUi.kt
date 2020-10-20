@@ -31,8 +31,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
 
-typealias SampleUi = @Composable () -> Unit
-
 @GenerateMergeComponents
 @AppUiBinding
 @FunBinding

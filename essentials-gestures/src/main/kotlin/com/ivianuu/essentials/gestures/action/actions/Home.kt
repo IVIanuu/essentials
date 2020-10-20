@@ -50,7 +50,6 @@ fun homeAction(
     }
 )
 
-typealias openHomeScreen = () -> Unit
 @FunBinding
 fun openHomeScreen(
     applicationContext: ApplicationContext,

@@ -31,8 +31,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-typealias ActionsPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun ActionsPage(

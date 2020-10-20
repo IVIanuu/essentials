@@ -40,8 +40,6 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
-typealias CounterPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun CounterPage(store: rememberStore<CounterState, CounterAction>) {

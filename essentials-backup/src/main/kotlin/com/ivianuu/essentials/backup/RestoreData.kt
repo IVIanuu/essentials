@@ -32,7 +32,6 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-typealias restoreData = suspend () -> Result<Unit, Throwable>
 @FunBinding
 suspend fun restoreData(
     applicationContext: ApplicationContext,

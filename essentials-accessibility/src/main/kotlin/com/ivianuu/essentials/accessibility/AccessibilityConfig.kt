@@ -19,6 +19,7 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -38,11 +39,10 @@ internal typealias AccessibilityConfigs = MutableStateFlow<List<AccessibilityCon
 @Binding(ApplicationComponent::class)
 fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
 
-typealias applyAccessibilityConfig = (AccessibilityConfig) -> DisposableHandle
 @FunBinding
 fun applyAccessibilityConfig(
     configs: AccessibilityConfigs,
-    config: AccessibilityConfig
+    config: @Assisted AccessibilityConfig
 ): DisposableHandle {
     synchronized(configs) { configs.value += config }
     return object : DisposableHandle {
@@ -52,7 +52,6 @@ fun applyAccessibilityConfig(
     }
 }
 
-typealias manageAccessibilityConfig = AccessibilityWorker
 @AccessibilityWorkerBinding
 @FunBinding
 suspend fun manageAccessibilityConfig(

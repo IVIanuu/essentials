@@ -49,8 +49,6 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
-typealias HomePage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun HomePage(dependencies: HomePageDependencies) {

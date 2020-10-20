@@ -20,20 +20,14 @@ import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.ambientOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.platform.ViewAmbient
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlin.math.max
 
@@ -92,12 +86,10 @@ fun ProvideInsets(
     Providers(InsetsAmbient provides insets, children = children)
 }
 
-typealias ProvideWindowInsets = UiDecorator
-
 @UiDecoratorBinding
 @FunBinding
 @Composable
-fun ProvideWindowInsets(children: @Composable () -> Unit) {
+fun ProvideWindowInsets(children: @Assisted @Composable () -> Unit) {
     val ownerView = ViewAmbient.current
     val density = DensityAmbient.current
     var insets by rememberState { PaddingValues() }

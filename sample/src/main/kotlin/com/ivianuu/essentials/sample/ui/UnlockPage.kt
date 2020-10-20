@@ -33,8 +33,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-typealias UnlockPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun UnlockPage(

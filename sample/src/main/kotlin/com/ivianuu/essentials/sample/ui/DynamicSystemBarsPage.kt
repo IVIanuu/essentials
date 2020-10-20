@@ -34,8 +34,6 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.FunBinding
 
-typealias DynamicSystemBarsPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun DynamicSystemBarsPage() {

@@ -26,19 +26,17 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ApplicationComponent::class)
 annotation class AppInitializerBinding {
     @Module
-    class ModuleImpl<T : AppInitializer> {
+    class ModuleImpl<T : () -> Unit> {
         @SetElements
         fun intoSet(instance: T): AppInitializers = setOf(instance)
     }
 }
 
-typealias AppInitializer = () -> Unit
-typealias AppInitializers = Set<AppInitializer>
+typealias AppInitializers = Set<() -> Unit>
 
 @SetElements
 fun defaultAppInitializers(): AppInitializers = emptySet()
 
-typealias runInitializers = () -> Unit
 @FunBinding
 fun runInitializers(
     appInitializers: AppInitializers,

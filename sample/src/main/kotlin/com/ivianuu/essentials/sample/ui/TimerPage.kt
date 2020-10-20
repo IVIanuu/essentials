@@ -29,8 +29,6 @@ import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-typealias TimerPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun TimerPage() {

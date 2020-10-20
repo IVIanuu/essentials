@@ -28,7 +28,6 @@ import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-typealias startUi = suspend () -> Activity
 @FunBinding
 suspend fun startUi(
     applicationContext: ApplicationContext,

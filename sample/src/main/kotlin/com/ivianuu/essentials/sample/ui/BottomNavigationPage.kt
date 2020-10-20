@@ -43,8 +43,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.FunBinding
 
-typealias BottomNavigationPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun BottomNavigationPage() {

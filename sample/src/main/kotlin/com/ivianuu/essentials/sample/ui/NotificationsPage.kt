@@ -22,14 +22,7 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.IconButton
@@ -44,16 +37,10 @@ import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
-import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
-import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
+import com.ivianuu.essentials.sample.ui.NotificationsAction.*
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
@@ -78,8 +65,6 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
-typealias NotificationsPage = @Composable () -> Unit
 
 @FunBinding
 @Composable

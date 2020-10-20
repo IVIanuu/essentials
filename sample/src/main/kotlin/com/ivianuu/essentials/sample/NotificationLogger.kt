@@ -17,13 +17,10 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.notificationlistener.NotificationWorker
 import com.ivianuu.essentials.notificationlistener.NotificationWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.awaitCancellation
-
-typealias logNotifications = NotificationWorker
 
 @NotificationWorkerBinding
 @FunBinding

@@ -19,9 +19,9 @@ package com.ivianuu.essentials.ui.coroutines
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
@@ -36,15 +36,13 @@ typealias UiScope = CoroutineScope
 fun uiScope(mainDispatcher: MainDispatcher): UiScope =
     CoroutineScope(mainDispatcher)
 
-typealias CancelUiScope = UiDecorator
-
 @UiDecoratorBinding
 @FunBinding
 @Composable
 fun CancelUiScope(
     logger: Logger,
     uiScope: UiScope,
-    children: @Composable () -> Unit
+    children: @Assisted @Composable () -> Unit
 ) {
     onActive {
         onDispose {

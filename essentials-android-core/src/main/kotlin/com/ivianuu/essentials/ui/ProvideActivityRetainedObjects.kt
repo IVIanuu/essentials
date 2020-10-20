@@ -8,14 +8,13 @@ import androidx.compose.ui.platform.ContextAmbient
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.currentOrNull
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-
-typealias ProvideActivityRetainedObjects = UiDecorator
 
 @UiDecoratorBinding
 @FunBinding
 @Composable
-fun ProvideActivityRetainedObjects(children: @Composable () -> Unit) {
+fun ProvideActivityRetainedObjects(children: @Assisted @Composable () -> Unit) {
     val activity = ContextAmbient.currentOrNull as? ComponentActivity
     if (activity != null) {
         val retainedObjects = remember { RetainedObjects() }

@@ -29,9 +29,7 @@ import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemClicked
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.*
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
@@ -41,6 +39,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
 @Binding
@@ -51,8 +50,8 @@ fun actionPickerStore(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
     stringResource: stringResource,
-    showDefaultOption: Boolean,
-    showNoneOption: Boolean,
+    showDefaultOption: @Assisted Boolean,
+    showNoneOption: @Assisted Boolean,
 ) = storeProvider<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {

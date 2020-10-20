@@ -26,9 +26,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-
-typealias AboutPage = @Composable () -> Unit
 
 @FunBinding
 @Composable
@@ -48,14 +47,13 @@ fun AboutPage(
     }
 }
 
-typealias AboutSection = @Composable (String, Boolean, String?) -> Unit
 @FunBinding
 @Composable
 fun AboutSection(
     navigator: Navigator,
-    packageName: String,
-    showHeader: Boolean,
-    privacyPolicyUrl: PrivacyPolicyUrl?
+    packageName: @Assisted String,
+    showHeader: @Assisted Boolean,
+    privacyPolicyUrl: @Assisted PrivacyPolicyUrl?
 ) {
     if (showHeader) {
         Subheader {

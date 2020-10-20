@@ -42,17 +42,17 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-typealias AppPickerPage = @Composable (AppFilter, String?) -> Unit
 @FunBinding
 @Composable
 fun AppPickerPage(
     store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>,
-    appFilter: AppFilter,
-    title: String?
+    appFilter: @Assisted AppFilter,
+    title: @Assisted String?
 ) {
     val (state, dispatch) = store(appFilter)
 
@@ -93,7 +93,7 @@ private fun AppInfo(
 
 @Binding
 fun appPickerStore(
-    appFilter: AppFilter,
+    appFilter: @Assisted AppFilter,
     navigator: Navigator,
     getInstalledApps: getInstalledApps
 ) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {

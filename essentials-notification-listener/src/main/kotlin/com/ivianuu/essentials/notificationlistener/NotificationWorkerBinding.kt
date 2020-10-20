@@ -24,15 +24,13 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ServiceComponent::class)
 annotation class NotificationWorkerBinding {
     @Module
-    class ModuleImpl<T : NotificationWorker> {
+    class ModuleImpl<T : suspend () -> Unit> {
         @SetElements
         operator fun invoke(instance: T): NotificationWorkers = setOf(instance)
     }
 }
 
-typealias NotificationWorker = suspend () -> Unit
-
-typealias NotificationWorkers = Set<NotificationWorker>
+typealias NotificationWorkers = Set<suspend () -> Unit>
 
 @SetElements
 fun defaultNotificationWorkers(): NotificationWorkers = emptySet()

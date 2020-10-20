@@ -19,10 +19,10 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
-typealias getInstalledApps = suspend () -> List<AppInfo>
 @FunBinding
 suspend fun getInstalledApps(
     ioDispatcher: IODispatcher,
@@ -40,12 +40,11 @@ suspend fun getInstalledApps(
         .toList()
 }
 
-typealias getAppInfo = suspend (String) -> AppInfo
 @FunBinding
 suspend fun getAppInfo(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-    packageName: String
+    packageName: @Assisted String
 ): AppInfo = withContext(ioDispatcher) {
     AppInfo(
         packageName,

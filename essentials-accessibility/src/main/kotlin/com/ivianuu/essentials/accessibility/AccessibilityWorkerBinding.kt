@@ -24,14 +24,12 @@ import com.ivianuu.injekt.merge.BindingModule
 @BindingModule(ServiceComponent::class)
 annotation class AccessibilityWorkerBinding {
     @Module
-    class ModuleImpl<T : AccessibilityWorker> {
+    class ModuleImpl<T : suspend () -> Unit> {
         @SetElements
         fun intoSet(instance: T): AccessibilityWorkers = setOf(instance)
     }
 }
 
-typealias AccessibilityWorker = suspend () -> Unit
-
-typealias AccessibilityWorkers = Set<AccessibilityWorker>
+typealias AccessibilityWorkers = Set<suspend () -> Unit>
 @SetElements
 fun defaultAccessibilityWorkers(): AccessibilityWorkers = emptySet()

@@ -26,8 +26,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.FunBinding
 
-typealias WorkPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun WorkPage(scheduleTasks: scheduleTasks) {

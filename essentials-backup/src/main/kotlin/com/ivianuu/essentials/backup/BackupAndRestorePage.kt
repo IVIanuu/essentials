@@ -35,7 +35,6 @@ import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
-typealias BackupAndRestorePage = @Composable () -> Unit
 @FunBinding
 @Composable
 fun BackupAndRestorePage(

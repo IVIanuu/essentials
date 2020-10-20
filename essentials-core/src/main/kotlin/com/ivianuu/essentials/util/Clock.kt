@@ -20,6 +20,5 @@ import com.ivianuu.injekt.FunBinding
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-typealias now = () -> Duration
 @FunBinding
 fun now(): Duration = System.currentTimeMillis().milliseconds

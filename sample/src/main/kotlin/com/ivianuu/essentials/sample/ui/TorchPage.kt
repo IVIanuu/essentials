@@ -36,8 +36,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-typealias TorchPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun TorchPage(torch: Torch) {

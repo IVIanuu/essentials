@@ -28,8 +28,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-typealias RestartProcessPage = @Composable () -> Unit
-
 @FunBinding
 @Composable
 fun RestartProcessPage(restartProcess: restartProcess) {

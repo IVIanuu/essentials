@@ -30,18 +30,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
 enum class DisplayRotation(val isPortrait: Boolean) {
@@ -83,7 +72,6 @@ fun displayRotationFlow(
         .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
-typealias getCurrentDisplayRotation = suspend () -> DisplayRotation
 @FunBinding
 suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,

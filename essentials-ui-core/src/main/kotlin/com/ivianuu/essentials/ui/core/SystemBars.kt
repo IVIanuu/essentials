@@ -20,16 +20,7 @@ import android.os.Build
 import android.view.View
 import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
@@ -43,10 +34,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.setFlag
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 
 @Composable
@@ -81,12 +72,10 @@ fun Modifier.systemBarStyle(
     onGloballyPositioned { globalBounds = it.globalBounds }
 }
 
-typealias ProvideSystemBarManager = UiDecorator
-
 @UiDecoratorBinding
 @FunBinding
 @Composable
-fun ProvideSystemBarManager(children: @Composable () -> Unit) {
+fun ProvideSystemBarManager(children: @Assisted @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(

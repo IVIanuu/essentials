@@ -22,21 +22,13 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
@@ -51,8 +43,6 @@ import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-
-typealias AppTrackerPage = @Composable () -> Unit
 
 @FunBinding
 @Composable

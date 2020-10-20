@@ -22,14 +22,12 @@ import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
-typealias hasSecureSettingsPermission = suspend () -> Boolean
 @FunBinding
 suspend fun hasSecureSettingsPermission(
     applicationContext: ApplicationContext,
 ): Boolean = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
         PackageManager.PERMISSION_GRANTED
 
-typealias grantSecureSettingsPermissionViaRoot = suspend () -> Boolean
 @FunBinding
 suspend fun grantSecureSettingsPermissionViaRoot(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,

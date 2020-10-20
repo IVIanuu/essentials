@@ -26,6 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
@@ -43,10 +44,9 @@ fun killCurrentAction(
     execute = { killCurrentApp() }
 )
 
-typealias killCurrentApp = suspend () -> Unit
 @FunBinding
 suspend fun killCurrentApp(
-    buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    buildInfo: BuildInfo,
     currentAppFlow: CurrentApp,
     getHomePackage: getHomePackage,
     runRootCommand: runRootCommand,
@@ -61,7 +61,6 @@ suspend fun killCurrentApp(
     }
 }
 
-typealias getHomePackage = () -> String
 @FunBinding
 fun getHomePackage(
     packageManager: PackageManager,

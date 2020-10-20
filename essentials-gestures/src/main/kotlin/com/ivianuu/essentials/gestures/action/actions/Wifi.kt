@@ -42,14 +42,12 @@ fun wifiAction(
     execute = { toggleWifi() }
 )
 
-typealias toggleWifi = () -> Unit
 @FunBinding
 fun toggleWifi(wifiManager: WifiManager) {
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
 typealias WifiIcon = ActionIcon
-
 @Binding
 fun wifiIcon(
     broadcasts: broadcasts,
