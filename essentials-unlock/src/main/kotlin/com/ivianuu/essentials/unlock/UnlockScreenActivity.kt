@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -135,5 +136,5 @@ interface UnlockScreenActivityComponent {
     val broadcasts: broadcasts
     val keyguardManager: KeyguardManager
     val logger: Logger
-    val systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo
+    val systemBuildInfo: SystemBuildInfo
 }
