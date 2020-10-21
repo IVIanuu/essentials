@@ -22,13 +22,21 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.foundation.Text
 import androidx.compose.material.Button
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.foreground.startForegroundJob
-import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.Desc
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
@@ -37,7 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
@@ -60,7 +68,7 @@ fun AppTrackerPage(
             currentApp
                 .onEach {
                     showToast("App changed $it")
-                    createAppTrackerNotification(it)
+                    foregroundJob.updateNotification(createAppTrackerNotification(it))
                 }
                 .launchIn(foregroundJob.scope)
             foregroundJob
@@ -96,16 +104,14 @@ fun AppTrackerPage(
     }
 }
 
-typealias createAppTrackerNotification = (String?) -> Notification
-
 @SuppressLint("NewApi")
-@Binding
+@FunBinding
 fun createAppTrackerNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
     systemBuildInfo: SystemBuildInfo,
-    currentApp: String?,
-): createAppTrackerNotification = {
+    currentApp: @Assisted String?,
+): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -116,7 +122,7 @@ fun createAppTrackerNotification(
         )
     }
 
-    NotificationCompat.Builder(applicationContext, "app_tracker")
+    return NotificationCompat.Builder(applicationContext, "app_tracker")
         .apply {
             setSmallIcon(R.mipmap.ic_launcher)
             setContentTitle("Current app: $currentApp")
