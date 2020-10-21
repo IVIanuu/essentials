@@ -17,36 +17,32 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
 
 @BindingModule(ApplicationComponent::class)
 annotation class PermissionStateProviderBinding {
-    @Module
-    class ModuleImpl<T : PermissionStateProvider> {
+    companion object {
         @SetElements
-        operator fun invoke(instance: T): Set<PermissionStateProvider> = setOf(instance)
+        operator fun <T : PermissionStateProvider> invoke(instance: T): Set<PermissionStateProvider> = setOf(instance)
     }
 }
 
 @BindingModule(ApplicationComponent::class)
 annotation class PermissionRequestHandlerBinding {
-    @Module
-    class ModuleImpl<T : PermissionRequestHandler> {
+    companion object {
         @SetElements
-        operator fun invoke(instance: T): Set<PermissionRequestHandler> =
+        operator fun <T : PermissionRequestHandler> invoke(instance: T): Set<PermissionRequestHandler> =
             setOf(instance)
     }
 }
 
 @BindingModule(ApplicationComponent::class)
 annotation class PermissionRequestRouteFactoryBinding {
-    @Module
-    class ModuleImpl<T : PermissionRequestRouteFactory> {
+    companion object {
         @Binding
-        val T.permissionRequestRouteFactory: PermissionRequestRouteFactory
+        val <T : PermissionRequestRouteFactory> T.permissionRequestRouteFactory: PermissionRequestRouteFactory
             get() = this
     }
 }

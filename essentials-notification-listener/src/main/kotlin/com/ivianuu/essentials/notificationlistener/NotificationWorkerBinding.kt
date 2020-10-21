@@ -16,17 +16,15 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.BindingModule
 
 @BindingModule(ServiceComponent::class)
 annotation class NotificationWorkerBinding {
-    @Module
-    class ModuleImpl<T : suspend () -> Unit> {
+    companion object {
         @SetElements
-        operator fun invoke(instance: T): NotificationWorkers = setOf(instance)
+        operator fun <T : suspend () -> Unit> invoke(instance: T): NotificationWorkers = setOf(instance)
     }
 }
 

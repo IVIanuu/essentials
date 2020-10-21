@@ -19,15 +19,13 @@ package com.ivianuu.essentials.ui
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.merge.BindingModule
 
 @BindingModule(ActivityComponent::class)
 annotation class UiDecoratorBinding {
-    @Module
-    class ModuleImpl<T : @Composable (@Composable () -> Unit) -> Unit> {
+    companion object {
         @SetElements
         operator fun <T : @Composable (@Composable () -> Unit) -> Unit> invoke(instance: T): UiDecorators = setOf(instance)
     }

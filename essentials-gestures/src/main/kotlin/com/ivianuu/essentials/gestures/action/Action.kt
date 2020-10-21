@@ -22,7 +22,6 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
@@ -43,10 +42,9 @@ typealias ActionIcon = Flow<@Composable () -> Unit>
 
 @BindingModule(ApplicationComponent::class)
 annotation class ActionBinding {
-    @Module
-    class ModuleImpl<T : Action> {
+    companion object {
         @SetElements
-        fun actionIntoSet(instance: T): Set<Action> = setOf(instance)
+        fun <T : Action> actionIntoSet(instance: T): Set<Action> = setOf(instance)
     }
 }
 
@@ -65,10 +63,9 @@ interface ActionFactory {
 
 @BindingModule(ApplicationComponent::class)
 annotation class ActionFactoryBinding {
-    @Module
-    class ModuleImpl<T : ActionFactory> {
+    companion object {
         @SetElements
-        fun actionFactoryIntoSet(instance: T): Set<ActionFactory> = setOf(instance)
+        fun <T : ActionFactory> actionFactoryIntoSet(instance: T): Set<ActionFactory> = setOf(instance)
     }
 }
 
@@ -80,9 +77,8 @@ interface ActionPickerDelegate {
 
 @BindingModule(ApplicationComponent::class)
 annotation class ActionPickerDelegateBinding {
-    @Module
-    class ModuleImpl<T : ActionPickerDelegate> {
+    companion object {
         @SetElements
-        fun actionPickerDelegate(instance: T): Set<ActionPickerDelegate> = setOf(instance)
+        fun <T : ActionPickerDelegate> actionPickerDelegate(instance: T): Set<ActionPickerDelegate> = setOf(instance)
     }
 }

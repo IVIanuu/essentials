@@ -16,17 +16,15 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
 
 @BindingModule(ApplicationComponent::class)
 annotation class BootListenerBinding {
-    @Module
-    class ModuleImpl<T : () -> Unit> {
+    companion object {
         @SetElements
-        operator fun invoke(instance: T): BootListeners = setOf(instance)
+        operator fun <T : () -> Unit> invoke(instance: T): BootListeners = setOf(instance)
     }
 }
 

@@ -48,11 +48,11 @@ fun diskDataStoreFactory(
     globalScope: GlobalScope,
     ioDispatcher: IODispatcher,
     prefsDir: () -> PrefsDir,
-    serializerFactory: MoshiSerializerFactory,
+    lazySerializerFactory: () -> MoshiSerializerFactory,
 ) = DiskDataStoreFactory(
     scope = globalScope + ioDispatcher,
     produceDataStoreDirectory = prefsDir,
-    serializerFactory = serializerFactory
+    lazySerializerFactory = lazySerializerFactory
 )
 
 @Binding(ApplicationComponent::class)

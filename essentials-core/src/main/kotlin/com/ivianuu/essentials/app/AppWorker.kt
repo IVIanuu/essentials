@@ -19,7 +19,6 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
@@ -27,10 +26,9 @@ import kotlinx.coroutines.launch
 
 @BindingModule(ApplicationComponent::class)
 annotation class AppWorkerBinding {
-    @Module
-    class ModuleImpl<T : suspend () -> Unit> {
+    companion object {
         @SetElements
-        operator fun invoke(instance: T): AppWorkers = setOf(instance)
+        operator fun <T : suspend () -> Unit> invoke(instance: T): AppWorkers = setOf(instance)
     }
 }
 
