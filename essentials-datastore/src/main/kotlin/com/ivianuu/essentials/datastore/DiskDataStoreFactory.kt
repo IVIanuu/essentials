@@ -21,11 +21,11 @@ import java.io.File
 
 class DiskDataStoreFactory(
     private val scope: CoroutineScope,
-    private val produceBoxDirectory: () -> File,
+    private val produceDataStoreDirectory: () -> File,
     @PublishedApi internal val serializerFactory: MoshiSerializerFactory,
 ) {
 
-    private val boxDirectory by lazy(produceBoxDirectory)
+    private val dataStoreDirectory by lazy(produceDataStoreDirectory)
 
     inline fun <reified T> create(
         name: String,
@@ -42,7 +42,7 @@ class DiskDataStoreFactory(
         produceDefaultData: () -> T
     ): DataStore<T> {
         return DiskDataStore(
-            produceFile = { File(boxDirectory, name) },
+            produceFile = { File(dataStoreDirectory, name) },
             produceSerializer = produceSerializer,
             produceDefaultData = produceDefaultData,
             scope = scope

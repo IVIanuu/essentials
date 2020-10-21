@@ -16,15 +16,17 @@
 
 package com.ivianuu.essentials.datastore
 
-import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.datastore.DiskDataStoreImpl.Message.InitializeIfNeeded
+import com.ivianuu.essentials.datastore.DiskDataStoreImpl.Message.UpdateData
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
@@ -53,40 +55,64 @@ internal class DiskDataStoreImpl<T>(
     produceFile: () -> File,
     produceSerializer: () -> Serializer<T>,
     produceDefaultData: () -> T,
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     private val corruptionHandler: CorruptionHandler
 ) : DataStore<T> {
-
-    private val changeNotifier = EventFlow<T>()
-    private var cachedData: Any? = this
-    private val cachedDataMutex = Mutex()
-    private val writeLock = WriteLock()
 
     private val file: File by lazy(produceFile)
     private val serializer: Serializer<T> by lazy(produceSerializer)
     override val defaultData: T by lazy(produceDefaultData)
 
+    private val _data = MutableSharedFlow<T>(replay = 1)
     override val data: Flow<T>
-        get() = changeNotifier
-            .onStart { emit(getData()) }
+        get() = _data
+            .onStart { actor.offer(InitializeIfNeeded()) }
             .distinctUntilChanged()
 
-    override suspend fun updateData(transform: suspend (t: T) -> T): T {
-        return withContext(scope.coroutineContext) {
-            val currentData = getData()
-            val newData = transform(currentData)
-            if (newData == currentData) return@withContext newData
-            writeData(newData)
-            newData
+    private val actor = scope.actor<Message<T>>(capacity = Channel.UNLIMITED) {
+        for (message in channel) {
+            when (message) {
+                is UpdateData -> {
+                    message.newData.completeWith(
+                        runCatching {
+                            val currentData = getAndInitializeDataOnce()
+                            val newData = message.transform(currentData)
+                            if (newData != currentData) {
+                                writeData(newData)
+                                _data.emit(newData)
+                            }
+                            newData
+                        }
+                    )
+                    Unit
+                }
+                is InitializeIfNeeded -> {
+                    if (_data.replayCache.isEmpty()) {
+                        _data.emit(getAndInitializeDataOnce())
+                    } else Unit
+                }
+            }.let {}
         }
     }
 
-    private suspend fun getData(): T = withContext(scope.coroutineContext) {
-        writeLock.awaitWrite()
-        val cached = cachedDataMutex.withLock { cachedData }
-        if (cached !== this@DiskDataStoreImpl) return@withContext cached as T
+    private sealed class Message<T> {
+        class UpdateData<T>(
+            val transform: suspend (T) -> T,
+            val newData: CompletableDeferred<T>
+        ) : Message<T>()
+        class InitializeIfNeeded<T> : Message<T>()
+    }
 
-        if (!file.exists()) return@withContext defaultData
+    override suspend fun updateData(transform: suspend (t: T) -> T): T {
+        val deferred = CompletableDeferred<T>()
+        actor.offer(UpdateData(transform, deferred))
+        return deferred.await()
+    }
+
+    private suspend fun getAndInitializeDataOnce(): T {
+        _data.replayCache.let { if (it.isNotEmpty()) return it.single() }
+
+        if (!file.exists()) return defaultData
 
         val serializedData = try {
             file.bufferedReader().use {
@@ -96,7 +122,7 @@ internal class DiskDataStoreImpl<T>(
             throw IOException("Couldn't read file at '$file'", t)
         }
 
-        val deserializedData = try {
+        return try {
             serializer.deserialize(serializedData)
         } catch (t: Throwable) {
             val newData = corruptionHandler.onCorruption(this@DiskDataStoreImpl, serializedData, t)
@@ -113,81 +139,42 @@ internal class DiskDataStoreImpl<T>(
             // If we reach this point, we've successfully replaced the data on disk with newData.
             newData
         }
-
-        cachedDataMutex.withLock { cachedData = deserializedData }
-
-        return@withContext deserializedData
     }
 
-    private suspend fun writeData(newData: T) = withContext(scope.coroutineContext) {
-        try {
-            writeLock.beginWrite()
+    private suspend fun writeData(newData: T) {
+        if (!file.exists()) {
+            file.parentFile?.mkdirs()
 
-            if (!file.exists()) {
-                file.parentFile?.mkdirs()
-
-                if (!file.createNewFile()) {
-                    throw IOException("Couldn't create '$file'")
-                }
+            if (!file.createNewFile()) {
+                throw IOException("Couldn't create '$file'")
             }
+        }
 
-            val serializedData = try {
-                serializer.serialize(newData)
-            } catch (t: Throwable) {
-                throw RuntimeException(
-                    "Couldn't serialize data '$newData' for file '$file'",
-                    t
-                )
-            }
-
-            val tmpFile = File.createTempFile(
-                "new", "tmp", file.parentFile
+        val serializedData = try {
+            serializer.serialize(newData)
+        } catch (t: Throwable) {
+            throw RuntimeException(
+                "Couldn't serialize data '$newData' for file '$file'",
+                t
             )
+        }
 
-            try {
-                tmpFile.bufferedWriter().use { it.write(serializedData) }
-                if (!tmpFile.renameTo(file)) {
-                    throw IOException("$tmpFile could not be renamed to $file")
-                }
-            } catch (e: IOException) {
-                if (tmpFile.exists()) {
-                    tmpFile.delete()
-                }
-                throw e
-            } finally {
+        val tmpFile = File.createTempFile(
+            "new", "tmp", file.parentFile
+        )
+
+        try {
+            tmpFile.bufferedWriter().use { it.write(serializedData) }
+            if (!tmpFile.renameTo(file)) {
+                throw IOException("$tmpFile could not be renamed to $file")
+            }
+        } catch (e: IOException) {
+            if (tmpFile.exists()) {
                 tmpFile.delete()
             }
-
-            cachedDataMutex.withLock { cachedData = newData }
-            changeNotifier.emit(newData)
+            throw e
         } finally {
-            writeLock.endWrite()
+            tmpFile.delete()
         }
-    }
-}
-
-private class WriteLock {
-
-    private var currentLock: CompletableDeferred<Unit>? = null
-    private val mutex = Mutex()
-
-    suspend fun awaitWrite() {
-        val lock = mutex.withLock { currentLock }
-        lock?.await()
-    }
-
-    suspend fun beginWrite() {
-        awaitWrite()
-        mutex.withLock { currentLock = CompletableDeferred() }
-    }
-
-    suspend fun endWrite() {
-        val lock = mutex.withLock {
-            val tmp = currentLock
-            currentLock = null
-            tmp
-        }
-
-        lock?.complete(Unit)
     }
 }

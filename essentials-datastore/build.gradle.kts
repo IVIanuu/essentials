@@ -28,4 +28,5 @@ dependencies {
     compile(Deps.Coroutines.core)
     compile(Deps.Moshi.moshi)
     compile(Deps.Kotlin.stdlib)
+    testCompile(project(":essentials-test"))
 }
