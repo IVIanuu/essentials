@@ -19,6 +19,7 @@ package com.ivianuu.essentials.apps.ui
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
 typealias AppFilter = (AppInfo) -> Boolean
@@ -46,7 +47,7 @@ class LaunchableAppFilter(
 
 @Binding
 class IntentAppFilter(
-    private val intent: Intent,
+    private val intent: @Assisted Intent,
     private val packageManager: PackageManager
 ) : AppFilter {
     private val apps by lazy {
