@@ -16,12 +16,16 @@
 
 package com.ivianuu.essentials.foreground
 
+import android.app.Notification
 import android.app.NotificationManager
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -37,6 +41,15 @@ class ForegroundService : EsService() {
         super.onCreate()
         component.logger.d("started foreground service")
         component.foregroundManager.jobs
+            .flatMapLatest { jobs ->
+                if (jobs.isNotEmpty()) {
+                    combine(jobs.map { it.notification }) { notifications ->
+                        jobs.zip(notifications)
+                    }
+                } else {
+                    flowOf(emptyList())
+                }
+            }
             .onEach { update(it) }
             .launchIn(scope)
     }
@@ -44,23 +57,26 @@ class ForegroundService : EsService() {
     override fun onDestroy() {
         super.onDestroy()
         component.logger.d("stopped foreground service")
+        update(emptyList())
     }
 
-    private fun update(newJobs: List<ForegroundJob>) {
-        component.logger.d("update jobs $newJobs")
+    private fun update(newJobs: List<Pair<ForegroundJob, Notification>>) {
+        component.logger.d("update jobs: $newJobs last: $lastJobs")
 
         lastJobs
-            .filter { it !in newJobs }
+            .filter { prevJob ->
+                newJobs.none { prevJob == it.first }
+            }
             .forEach { job -> component.notificationManager.cancel(job.id) }
 
-        lastJobs = newJobs
+        lastJobs = newJobs.map { it.first }
 
         if (newJobs.isNotEmpty()) {
-            newJobs.forEachIndexed { index, job ->
+            newJobs.forEachIndexed { index, (job, notification) ->
                 if (index == 0) {
-                    startForeground(job.id, job.notification)
+                    startForeground(job.id, notification)
                 } else {
-                    component.notificationManager.notify(job.id, job.notification)
+                    component.notificationManager.notify(job.id, notification)
                 }
             }
         } else {

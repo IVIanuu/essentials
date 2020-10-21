@@ -20,12 +20,13 @@ import android.app.Notification
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 
 interface ForegroundJob {
 
     val id: Int
     val isActive: Boolean
-    val notification: Notification
+    val notification: Flow<Notification>
 
     val scope: CoroutineScope
 

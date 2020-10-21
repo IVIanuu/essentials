@@ -43,16 +43,11 @@ class ForegroundManager(
     internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
 
     internal fun startJob(notification: Notification): ForegroundJob {
-        val job = ForegroundJobImpl(notification)
+        val job = ForegroundJobImpl(ids.incrementAndGet(), notification)
         _jobs.value += job
         logger.d("start job $job")
         startServiceIfNeeded()
-        dispatchUpdate()
         return job
-    }
-
-    private fun dispatchUpdate() {
-        _jobs.value = _jobs.value
     }
 
     private fun startServiceIfNeeded() {
@@ -66,19 +61,18 @@ class ForegroundManager(
     }
 
     private inner class ForegroundJobImpl(
-        override var notification: Notification
+        override val id: Int,
+        initialNotification: Notification
     ) : ForegroundJob {
 
+        override val notification = MutableStateFlow(initialNotification)
         override val scope = CoroutineScope(defaultDispatcher)
-
-        override val id: Int = ids.incrementAndGet()
 
         override val isActive: Boolean
             get() = this in _jobs.value
 
         override fun updateNotification(notification: Notification) {
-            this.notification = notification
-            dispatchUpdate()
+            this.notification.value = notification
         }
 
         override fun stop() {
@@ -86,7 +80,6 @@ class ForegroundManager(
             scope.cancel()
             _jobs.value -= this
             logger.d("stop job $this")
-            dispatchUpdate()
         }
 
         override fun equals(other: Any?): Boolean {
