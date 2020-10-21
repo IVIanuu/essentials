@@ -84,7 +84,7 @@ class ScreenStateTest {
             mockk {
                 every { isInteractive } returns false
             }
-        )()
+        )
         expectThat(screenState).isEqualTo(ScreenState.Off)
     }
 
@@ -98,7 +98,7 @@ class ScreenStateTest {
             mockk {
                 every { isInteractive } returns true
             }
-        )()
+        )
         expectThat(screenState).isEqualTo(ScreenState.Locked)
     }
 
@@ -112,7 +112,7 @@ class ScreenStateTest {
             mockk {
                 every { isInteractive } returns true
             }
-        )()
+        )
         expectThat(screenState).isEqualTo(ScreenState.Unlocked)
     }
 }

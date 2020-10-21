@@ -51,7 +51,7 @@ fun diskDataStoreFactory(
     serializerFactory: MoshiSerializerFactory,
 ) = DiskDataStoreFactory(
     scope = globalScope + ioDispatcher,
-    produceBoxDirectory = prefsDir,
+    produceDataStoreDirectory = prefsDir,
     serializerFactory = serializerFactory
 )
 
