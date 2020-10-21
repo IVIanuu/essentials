@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.onDispose
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
@@ -44,11 +44,9 @@ fun CancelUiScope(
     uiScope: UiScope,
     children: @Assisted @Composable () -> Unit
 ) {
-    onActive {
-        onDispose {
-            logger.d("Cancelling ui scope")
-            uiScope.cancel()
-        }
+    onDispose {
+        logger.d("Cancelling ui scope")
+        uiScope.cancel()
     }
     children()
 }

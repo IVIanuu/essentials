@@ -24,7 +24,6 @@ import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onActive
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
@@ -234,10 +233,8 @@ val NavigatorAmbient = staticAmbientOf<Navigator>()
 @FunBinding
 @Composable
 fun ClearBackStackWhenLeavingApp(navigator: Navigator, children: @Assisted @Composable () -> Unit) {
-    onActive {
-        onDispose {
-            navigator.setBackStack(emptyList())
-        }
+    onDispose {
+        navigator.setBackStack(emptyList())
     }
     children()
 }
