@@ -43,6 +43,7 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.*
 
 @Stable
+@Binding(ApplicationComponent::class)
 class Navigator {
 
     var handleBack by mutableStateOf(true)
@@ -221,10 +222,6 @@ class Navigator {
         }
     }
 
-    companion object {
-        @Binding(ApplicationComponent::class)
-        fun binding() = Navigator()
-    }
 }
 
 val NavigatorAmbient = staticAmbientOf<Navigator>()
