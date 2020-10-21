@@ -32,7 +32,6 @@ class ForegroundService : EsService() {
     }
 
     private var lastJobs = listOf<ForegroundJob>()
-    private var foregroundId: Int? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -54,12 +53,7 @@ class ForegroundService : EsService() {
 
         lastJobs
             .filter { it !in newJobs }
-            .forEach { job ->
-                component.notificationManager.cancel(job.id)
-                if (job.id == foregroundId) {
-                    foregroundId = null
-                }
-            }
+            .forEach { job -> component.notificationManager.cancel(job.id) }
 
         lastJobs = newJobs
 
@@ -80,7 +74,7 @@ class ForegroundService : EsService() {
 
 @MergeInto(ServiceComponent::class)
 interface ForegroundServiceComponent {
-    val foregroundManager: ForegroundManagerImpl
+    val foregroundManager: ForegroundManager
     val notificationManager: NotificationManager
     val logger: Logger
 }

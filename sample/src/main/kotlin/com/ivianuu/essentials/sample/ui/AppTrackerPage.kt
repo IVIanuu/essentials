@@ -26,7 +26,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForegroundJob
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
@@ -49,14 +49,14 @@ import kotlinx.coroutines.launch
 fun AppTrackerPage(
     createAppTrackerNotification: createAppTrackerNotification,
     currentApp: CurrentApp,
-    foregroundManager: ForegroundManager,
     requestPermissions: requestPermissions,
     showToast: showToast,
+    startForegroundJob: startForegroundJob
 ) {
     var trackingEnabled by rememberState { false }
     onCommit(trackingEnabled) {
         val foregroundJob = if (!trackingEnabled) null else {
-            val foregroundJob = foregroundManager.startJob(createAppTrackerNotification(null))
+            val foregroundJob = startForegroundJob(createAppTrackerNotification(null))
             currentApp
                 .onEach {
                     showToast("App changed $it")

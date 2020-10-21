@@ -32,11 +32,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundJob
-import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForegroundJob
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -47,9 +48,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun ForegroundJobPage(
     buildForegroundNotification: buildForegroundNotification,
-    foregroundManager: ForegroundManager,
     notificationManager: NotificationManager,
-    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
+    startForegroundJob: startForegroundJob,
+    systemBuildInfo: SystemBuildInfo,
 ) {
     if (systemBuildInfo.sdk >= 26) {
         onActive {
@@ -105,9 +106,7 @@ fun ForegroundJobPage(
                         foregroundJob?.stop()
                         null
                     } else {
-                        foregroundManager.startJob(
-                            buildForegroundNotification(count, primaryColor)
-                        )
+                        startForegroundJob(buildForegroundNotification(count, primaryColor))
                     }
                 }
             ) {

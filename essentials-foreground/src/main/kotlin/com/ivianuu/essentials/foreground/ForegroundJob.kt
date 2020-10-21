@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.Notification
+import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 
 interface ForegroundJob {
@@ -31,3 +33,9 @@ interface ForegroundJob {
 
     fun stop()
 }
+
+@FunBinding
+fun startForegroundJob(
+    foregroundManager: ForegroundManager,
+    notification: @Assisted Notification
+): ForegroundJob = foregroundManager.startJob(notification)

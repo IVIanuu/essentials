@@ -21,7 +21,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
@@ -30,21 +30,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 
-interface ForegroundManager {
-    fun startJob(notification: Notification): ForegroundJob
-}
-
-@ImplBinding(ApplicationComponent::class)
-class ForegroundManagerImpl(
+@Binding(ApplicationComponent::class)
+class ForegroundManager(
     private val applicationContext: ApplicationContext,
     private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,
-) : ForegroundManager {
+) {
+
+    private val ids = AtomicInteger(0)
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
     internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
 
-    override fun startJob(notification: Notification): ForegroundJob {
+    internal fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(notification)
         _jobs.value += job
         logger.d("start job $job")
@@ -114,5 +112,3 @@ class ForegroundManagerImpl(
         }
     }
 }
-
-private val ids = AtomicInteger(0)

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.foreground.ForegroundJob
-import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForegroundJob
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.ImplBinding
@@ -57,11 +57,11 @@ class TorchImpl(
     broadcasts: broadcasts,
     private val cameraManager: CameraManager,
     private val createTorchNotification: createTorchNotification,
-    private val foregroundManager: ForegroundManager,
     globalScope: GlobalScope,
     private val logger: Logger,
     private val mainDispatcher: MainDispatcher,
     private val showToastRes: showToastRes,
+    private val startForegroundJob: startForegroundJob
 ) : Torch {
 
     private val _torchState = MutableStateFlow(false)
@@ -73,7 +73,7 @@ class TorchImpl(
         for (enabled in this) {
             logger.d("update state $enabled")
             foregroundJob = if (enabled) {
-                foregroundManager.startJob(createTorchNotification())
+                startForegroundJob(createTorchNotification())
             } else {
                 // todo use foregroundJob?.stop() once compiler is fixed
                 if (foregroundJob != null) foregroundJob!!.stop()
