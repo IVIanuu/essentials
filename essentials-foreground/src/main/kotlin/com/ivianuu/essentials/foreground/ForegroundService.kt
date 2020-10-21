@@ -35,9 +35,7 @@ class ForegroundService : EsService() {
 
     override fun onCreate() {
         super.onCreate()
-
         component.logger.d("started foreground service")
-
         component.foregroundManager.jobs
             .onEach { update(it) }
             .launchIn(scope)
@@ -48,7 +46,7 @@ class ForegroundService : EsService() {
         component.logger.d("stopped foreground service")
     }
 
-    private fun update(newJobs: List<ForegroundJob>) = synchronized(this) {
+    private fun update(newJobs: List<ForegroundJob>) {
         component.logger.d("update jobs $newJobs")
 
         lastJobs
