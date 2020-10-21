@@ -50,7 +50,8 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
     }
 
     override fun onListenerDisconnected() {
-        _connectedScope!!.cancel()
+        _connectedScope?.cancel()
+        _connectedScope = null
         super.onListenerDisconnected()
     }
 

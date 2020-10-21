@@ -49,7 +49,8 @@ abstract class EsAccessibilityService : AccessibilityService() {
     }
 
     override fun onInterrupt() {
-        _connectedScope!!.cancel()
+        _connectedScope?.cancel()
+        _connectedScope = null
     }
 
     override fun onDestroy() {

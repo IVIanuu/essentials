@@ -39,21 +39,24 @@ abstract class EsTileService : TileService() {
 
     val scope by lazy { CoroutineScope(defaultDispatcher) }
 
-    lateinit var listeningCoroutineScope: CoroutineScope
-        private set
+    private var _listeningCoroutineScope: CoroutineScope? = null
+    val listeningCoroutineScope: CoroutineScope
+        get() = _listeningCoroutineScope ?: error("Not listening")
 
     override fun onStartListening() {
         super.onStartListening()
-        listeningCoroutineScope = CoroutineScope(defaultDispatcher)
+        _listeningCoroutineScope = CoroutineScope(defaultDispatcher)
     }
 
     override fun onStopListening() {
-        listeningCoroutineScope.cancel()
+        _listeningCoroutineScope?.cancel()
+        _listeningCoroutineScope = null
         super.onStopListening()
     }
 
     override fun onDestroy() {
-        listeningCoroutineScope.cancel()
+        _listeningCoroutineScope?.cancel()
+        _listeningCoroutineScope = null
         super.onDestroy()
     }
 }
