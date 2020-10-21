@@ -22,8 +22,11 @@ import java.io.File
 class DiskDataStoreFactory(
     private val scope: CoroutineScope,
     private val produceDataStoreDirectory: () -> File,
-    @PublishedApi internal val serializerFactory: MoshiSerializerFactory,
+    lazySerializerFactory: () -> MoshiSerializerFactory,
 ) {
+
+    @PublishedApi
+    internal val serializerFactory by lazy(lazySerializerFactory)
 
     private val dataStoreDirectory by lazy(produceDataStoreDirectory)
 
