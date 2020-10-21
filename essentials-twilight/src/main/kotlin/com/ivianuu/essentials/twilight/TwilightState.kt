@@ -22,7 +22,6 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChanges
-import com.ivianuu.essentials.screenstate.configChanges
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -37,6 +36,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
+
+data class TwilightState(
+    val isDark: Boolean,
+    val useBlack: Boolean
+)
 
 typealias TwilightStateFlow = StateFlow<TwilightState>
 
@@ -106,7 +110,3 @@ fun timeTwilightState(
         hour < 6 || hour >= 22
     }
 
-data class TwilightState(
-    val isDark: Boolean,
-    val useBlack: Boolean
-)
