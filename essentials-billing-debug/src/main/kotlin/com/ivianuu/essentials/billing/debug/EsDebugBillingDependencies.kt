@@ -21,17 +21,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
-private var debugBillingClient: DebugBillingClient? = null
-
-@Binding
-fun debugBillingClient(billingClient: BillingClient): DebugBillingClient {
-    return debugBillingClient!!
-}
-
 @Binding
 fun billingClient(
     debugBillingClientFactory: (PurchasesUpdatedListener) -> DebugBillingClient,
     listener: @Assisted PurchasesUpdatedListener
-): BillingClient =
-    debugBillingClientFactory(listener)
-        .also { debugBillingClient = it }
+): BillingClient = debugBillingClientFactory(listener)

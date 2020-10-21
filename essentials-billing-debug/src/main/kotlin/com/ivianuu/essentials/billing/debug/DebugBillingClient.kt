@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
@@ -36,7 +37,7 @@ import java.util.*
 @Binding
 class DebugBillingClient(
     private val billingStore: BillingStore,
-    private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    private val buildInfo: BuildInfo,
     private val defaultDispatcher: DefaultDispatcher,
     private val globalScope: GlobalScope,
     private val startUi: startUi,
