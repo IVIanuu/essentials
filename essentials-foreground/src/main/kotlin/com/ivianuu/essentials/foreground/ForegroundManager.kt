@@ -44,7 +44,7 @@ class ForegroundManager(
 
     internal fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(ids.incrementAndGet(), notification)
-        _jobs.value += job
+        synchronized(_jobs) { _jobs.value += job }
         logger.d("start job $job")
         startServiceIfNeeded()
         return job
