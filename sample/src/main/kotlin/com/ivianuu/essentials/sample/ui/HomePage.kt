@@ -45,6 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -63,7 +64,7 @@ fun HomePage(dependencies: HomePageDependencies) {
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {
+                            PopupMenu.Item(onSelected = {
                                 dependencies.showToast("Selected $title")
                             }) {
                                 Text(title)
@@ -201,7 +202,7 @@ private fun HomeItem(
             com.ivianuu.essentials.ui.popup.PopupMenuButton(
                 items = listOf(1, 2, 3)
                     .map { index ->
-                        com.ivianuu.essentials.ui.popup.PopupMenu.Item(onSelected = {}) {
+                        PopupMenu.Item(onSelected = {}) {
                             Text(index.toString())
                         }
                     }

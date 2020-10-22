@@ -22,7 +22,14 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.IconButton
@@ -34,13 +41,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
-import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsAction.*
+import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
+import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
+import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
@@ -59,7 +73,6 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -208,7 +221,7 @@ fun notifications(
                             ?.toString() ?: "",
                         text = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
                             ?.toString() ?: "",
-                        icon = runCatchingAndLog {
+                        icon = runCatching {
                             sbn.notification.smallIcon
                                 .loadDrawable(applicationContext)
                                 .toImageAsset();

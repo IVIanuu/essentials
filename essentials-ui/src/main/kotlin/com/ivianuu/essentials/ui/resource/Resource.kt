@@ -25,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
+import com.ivianuu.essentials.result.unwrap
 import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.util.unwrap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector

@@ -18,10 +18,10 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
-import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -39,7 +39,7 @@ suspend fun restoreData(
     prefsDir: PrefsDir,
     restartProcess: restartProcess,
     startActivityForIntentResult: startActivityForIntentResult,
-): Result<Unit, Throwable> = runCatchingAndLog {
+): Result<Unit, Throwable> = runCatching {
     withContext(ioDispatcher) {
         val uri = startActivityForIntentResult(
             Intent.createChooser(

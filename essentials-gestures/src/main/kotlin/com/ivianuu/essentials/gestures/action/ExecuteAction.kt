@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.unlock.unlockScreen
-import com.ivianuu.essentials.util.DefaultResult
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Assisted
@@ -37,7 +37,7 @@ suspend fun executeAction(
     unlockScreen: unlockScreen,
     showToast: showToast,
     key: @Assisted String
-): DefaultResult<Boolean> = withContext(defaultDispatcher) {
+): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
     runCatching {
         logger.d("execute $key")
         val action = getAction(key)

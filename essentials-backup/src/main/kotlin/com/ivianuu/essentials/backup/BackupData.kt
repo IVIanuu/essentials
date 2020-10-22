@@ -19,18 +19,18 @@ package com.ivianuu.essentials.backup
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.runCatchingAndLog
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -42,7 +42,7 @@ suspend fun backupData(
     buildInfo: BuildInfo,
     ioDispatcher: IODispatcher,
     navigator: Navigator,
-): Result<Unit, Throwable> = runCatchingAndLog {
+): Result<Unit, Throwable> = runCatching {
     withContext(ioDispatcher) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
         val backupFileName = "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
