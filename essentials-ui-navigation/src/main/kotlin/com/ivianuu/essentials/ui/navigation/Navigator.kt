@@ -133,18 +133,12 @@ class NavigatorImpl(
 val NavigatorAmbient = staticAmbientOf<Navigator>()
 
 @Composable
-fun Navigator.Content(
-    handleBack: Boolean = true,
-    popsLastRoute: Boolean = false
-) {
+fun Navigator.Content(handleBack: Boolean = true) {
     val currentBackStack by backStack.collectAsState()
-    val backPressEnabled = handleBack &&
-            currentBackStack.isNotEmpty() &&
-            (popsLastRoute || currentBackStack.size > 1)
+    val backPressEnabled = handleBack && currentBackStack.size > 1
     OnBackPressed(enabled = backPressEnabled) {
         popTop()
     }
-
     Providers(NavigatorAmbient provides this) {
         AnimatedStack(children = currentBackStack.map { it.stackChild })
     }
