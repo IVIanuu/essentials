@@ -25,7 +25,7 @@ import com.ivianuu.injekt.merge.BindingModule
 annotation class PermissionStateProviderBinding {
     companion object {
         @SetElements
-        operator fun <T : PermissionStateProvider> invoke(instance: T): Set<PermissionStateProvider> = setOf(instance)
+        fun <T : PermissionStateProvider> stateProviderIntoSet(instance: T): Set<PermissionStateProvider> = setOf(instance)
     }
 }
 
@@ -33,7 +33,7 @@ annotation class PermissionStateProviderBinding {
 annotation class PermissionRequestHandlerBinding {
     companion object {
         @SetElements
-        operator fun <T : PermissionRequestHandler> invoke(instance: T): Set<PermissionRequestHandler> =
+        fun <T : PermissionRequestHandler> requestHandlerIntoSet(instance: T): Set<PermissionRequestHandler> =
             setOf(instance)
     }
 }

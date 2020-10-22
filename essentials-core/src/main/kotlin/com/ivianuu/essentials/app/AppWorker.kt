@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 annotation class AppWorkerBinding {
     companion object {
         @SetElements
-        operator fun <T : suspend () -> Unit> invoke(instance: T): AppWorkers = setOf(instance)
+        fun <T : suspend () -> Unit> workerIntoSet(instance: T): AppWorkers = setOf(instance)
     }
 }
 

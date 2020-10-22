@@ -11,7 +11,7 @@ import com.ivianuu.injekt.merge.BindingModule
 annotation class RouteDecoratorBinding {
     companion object {
         @SetElements
-        operator fun <T : @Composable (Route, @Composable () -> Unit) -> Unit> invoke(instance: T): RouteDecorators = setOf(instance)
+        fun <T : @Composable (Route, @Composable () -> Unit) -> Unit> routeDecoratorIntoSet(instance: T): RouteDecorators = setOf(instance)
     }
 }
 

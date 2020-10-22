@@ -18,13 +18,23 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
+import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiComponentAmbient
+import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.common.RetainedObjects
+import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 
 @Immutable
 class Route(
@@ -34,25 +44,54 @@ class Route(
     private val content: @Composable () -> Unit
 ) {
 
+    internal val stackChild = AnimatedStackChild(
+        key = this,
+        opaque = opaque,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition
+    ) {
+        val compositionKey = currentComposer.currentCompoundKeyHash
+
+        val savedStateRegistry = remember {
+            UiSavedStateRegistry(
+                restoredValues = savedState.remove(compositionKey),
+                canBeSaved = { true }
+            )
+        }
+        Providers(
+            RouteAmbient provides this,
+            UiSavedStateRegistryAmbient provides savedStateRegistry,
+            RetainedObjectsAmbient provides retainedObjects
+        ) {
+            val uiComponent = UiComponentAmbient.current
+            remember(uiComponent) { uiComponent.mergeComponent<RouteComponent>() }
+                .decorateRoute(this, content)
+            onDispose {
+                savedState[compositionKey] = savedStateRegistry.performSave()
+            }
+        }
+    }
+
+    private val _result = CompletableDeferred<Any?>()
+    internal val result: Deferred<Any?> get() = _result
+
+    internal var resultToSend: Any? = null
+
+    private var savedState =
+        mutableMapOf<Any, Map<String, List<Any?>>>()
+
+    private val retainedObjects = RetainedObjects()
+
     constructor(
         transition: StackTransition? = null,
         opaque: Boolean = false,
         content: @Composable () -> Unit
     ) : this(transition, transition, opaque, content)
 
-    @Composable
-    operator fun invoke() {
-        val uiComponent = UiComponentAmbient.current
-        remember(uiComponent) { uiComponent.mergeComponent<RouteComponent>() }
-            .decorateRoute(this, content)
+    internal fun detach() {
+        _result.complete(resultToSend)
+        retainedObjects.dispose()
     }
-
-    fun copy(
-        enterTransition: StackTransition? = this.enterTransition,
-        exitTransition: StackTransition? = this.exitTransition,
-        opaque: Boolean = this.opaque,
-        content: @Composable () -> Unit = this.content
-    ): Route = Route(enterTransition, exitTransition, opaque, content)
 }
 
 val RouteAmbient = staticAmbientOf<Route>()

@@ -137,14 +137,9 @@ private val DefaultAppBarElevation = 4.dp
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     val navigator = NavigatorAmbient.currentOrNull
-    val canGoBack = remember {
-        (navigator?.backStack?.size ?: 0) > 1 ||
-                (navigator?.popsLastRoute ?: false && navigator?.backStack?.isNotEmpty() ?: false)
-    }
+    val canGoBack = remember(navigator?.backStack) { (navigator?.backStack?.size ?: 0) > 1 }
     return when {
-        canGoBack -> {
-            { BackButton() }
-        }
+        canGoBack -> { { BackButton() } }
         else -> null
     }
 }

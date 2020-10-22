@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransiti
 import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
+import com.ivianuu.essentials.ui.navigation.Content
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
@@ -49,10 +50,10 @@ fun SampleUi(
         Providers(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
         ) {
-            if (!navigator.hasRoot) {
+            if (navigator.backStack.isEmpty()) {
                 navigator.setRoot { homePage() }
             }
-            navigator.content()
+            navigator.Content()
         }
     }
 }

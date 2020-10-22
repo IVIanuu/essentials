@@ -24,7 +24,7 @@ import com.ivianuu.injekt.merge.BindingModule
 annotation class BootListenerBinding {
     companion object {
         @SetElements
-        operator fun <T : () -> Unit> invoke(instance: T): BootListeners = setOf(instance)
+        fun <T : () -> Unit> listenerIntoSet(instance: T): BootListeners = setOf(instance)
     }
 }
 

@@ -27,7 +27,7 @@ import com.ivianuu.injekt.merge.BindingModule
 annotation class UiDecoratorBinding {
     companion object {
         @SetElements
-        operator fun <T : @Composable (@Composable () -> Unit) -> Unit> invoke(instance: T): UiDecorators = setOf(instance)
+        fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecoratorIntoSet(instance: T): UiDecorators = setOf(instance)
     }
 }
 

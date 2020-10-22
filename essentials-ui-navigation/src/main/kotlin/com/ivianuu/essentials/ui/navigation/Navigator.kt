@@ -20,62 +20,51 @@ import android.os.Looper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
-import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.OnBackPressed
-import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+@Composable
+fun Navigator.Content(
+    handleBack: Boolean = true,
+    popsLastRoute: Boolean = false
+) {
+    val backStack = backStack
+    val backPressEnabled = handleBack &&
+            backStack.isNotEmpty() &&
+            (popsLastRoute || backStack.size > 1)
+    OnBackPressed(enabled = backPressEnabled) {
+        popTop()
+    }
+
+    Providers(NavigatorAmbient provides this) {
+        AnimatedStack(children = backStack.map { it.stackChild })
+    }
+}
 
 @Stable
 @Binding(ApplicationComponent::class)
 class Navigator {
 
-    var handleBack by mutableStateOf(true)
-    var popsLastRoute by mutableStateOf(false)
-
-    private val _backStack = mutableStateListOf<RouteState>()
-    val backStack: List<Route> get() = synchronized(this) { _backStack }.map { it.route }
-
-    val hasRoot: Boolean
-        get() = synchronized(this) { _backStack }.isNotEmpty()
-
-    @Composable
-    fun content() {
-        val backStack = synchronized(this) { _backStack }
-        val backPressEnabled = handleBack &&
-                backStack.isNotEmpty() &&
-                (popsLastRoute || backStack.size > 1)
-        OnBackPressed(enabled = backPressEnabled) {
-            if (backStack.none { it.stackChild.isAnimating }) popTop()
-        }
-
-        Providers(NavigatorAmbient provides this) {
-            AnimatedStack(children = backStack.map { it.stackChild })
-        }
-    }
+    private val _backStack = mutableStateListOf<Route>()
+    val backStack: List<Route> get() = synchronized(this) { _backStack }
 
     fun setRoot(content: @Composable () -> Unit) {
         setRoot(Route(content = content))
     }
 
     fun setRoot(route: Route) {
-        setBackStackInternal(listOf(RouteState(route)))
+        setBackStack(listOf(route))
     }
 
     fun push(content: @Composable () -> Unit) {
@@ -91,14 +80,15 @@ class Navigator {
         push<T>(Route(content = content))
 
     @JvmName("pushForResult")
-    suspend fun <T : Any> push(route: Route): T? = pushInternal(route).result.await() as? T
+    suspend fun <T : Any> push(route: Route): T? {
+        pushInternal(route)
+        return route.result.await() as? T
+    }
 
-    private fun pushInternal(route: Route): RouteState = synchronized(this) {
-        val routeState = RouteState(route)
+    private fun pushInternal(route: Route) = synchronized(this) {
         val newBackStack = _backStack.toMutableList()
-        newBackStack += routeState
-        setBackStackInternal(newBackStack)
-        routeState
+        newBackStack += route
+        setBackStack(newBackStack)
     }
 
     fun replace(content: @Composable () -> Unit) {
@@ -114,52 +104,41 @@ class Navigator {
         replace<T>(Route(content = content))
 
     @JvmName("replaceForResult")
-    suspend fun <T : Any> replace(route: Route): T? = replaceInternal(route).result.await() as? T
+    suspend fun <T : Any> replace(route: Route): T? {
+        replaceInternal(route)
+        return route.result.await() as? T
+    }
 
-    private fun replaceInternal(route: Route): RouteState = synchronized(this) {
-        val routeState = RouteState(route)
+    private fun replaceInternal(route: Route) = synchronized(this) {
         val newBackStack = _backStack.toMutableList()
             .also { it.removeAt(it.lastIndex) }
-        newBackStack += routeState
-        setBackStackInternal(newBackStack)
-        routeState
+        newBackStack += route
+        setBackStack(newBackStack)
     }
 
     fun popTop(result: Any? = null) = synchronized(this) {
-        popInternal(route = _backStack.last(), result = result)
+        pop(route = _backStack.last(), result = result)
     }
 
     fun popToRoot() = synchronized(this) {
         val newTopRoute = _backStack.first()
-        setBackStackInternal(listOf(newTopRoute))
+        setBackStack(listOf(newTopRoute))
     }
 
     fun popTo(route: Route) = synchronized(this) {
-        val index = _backStack.indexOfFirst { it.route == route }
+        val index = _backStack.indexOf(route)
         val newBackStack = _backStack.subList(0, index)
-        setBackStackInternal(newBackStack)
+        setBackStack(newBackStack)
     }
 
     fun pop(route: Route, result: Any? = null) = synchronized(this) {
-        popInternal(route = _backStack.first { it.route == route }, result = result)
-    }
-
-    private fun popInternal(route: RouteState, result: Any? = null) = synchronized(this) {
         route.resultToSend = result
         val newBackStack = _backStack.toMutableList()
         newBackStack -= route
-        setBackStackInternal(newBackStack)
+        setBackStack(newBackStack)
     }
 
     fun setBackStack(newBackStack: List<Route>) = synchronized(this) {
-        setBackStackInternal(
-            newBackStack.map { route ->
-                _backStack.firstOrNull { it.route == route } ?: RouteState(route)
-            }
-        )
-    }
-
-    private fun setBackStackInternal(newBackStack: List<RouteState>) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             GlobalScope.launch(Dispatchers.Main) { setBackStackImpl(newBackStack) }
         } else {
@@ -167,7 +146,7 @@ class Navigator {
         }
     }
 
-    private fun setBackStackImpl(newBackStack: List<RouteState>) {
+    private fun setBackStackImpl(newBackStack: List<Route>) {
         synchronized(this) {
             val oldBackStack = _backStack.toList()
             _backStack.clear()
@@ -177,51 +156,6 @@ class Navigator {
                 .forEach { it.detach() }
         }
     }
-
-    private class RouteState(val route: Route) {
-
-        val stackChild = AnimatedStackChild(
-            key = this,
-            opaque = route.opaque,
-            enterTransition = route.enterTransition,
-            exitTransition = route.exitTransition
-        ) {
-            val compositionKey = currentComposer.currentCompoundKeyHash
-
-            val savedStateRegistry = remember {
-                UiSavedStateRegistry(
-                    restoredValues = savedState.remove(compositionKey),
-                    canBeSaved = { true }
-                )
-            }
-            Providers(
-                RouteAmbient provides route,
-                UiSavedStateRegistryAmbient provides savedStateRegistry,
-                RetainedObjectsAmbient provides retainedObjects
-            ) {
-                route()
-                onDispose {
-                    savedState[compositionKey] = savedStateRegistry.performSave()
-                }
-            }
-        }
-
-        private val _result = CompletableDeferred<Any?>()
-        val result: Deferred<Any?> get() = _result
-
-        var resultToSend: Any? = null
-
-        private var savedState =
-            mutableMapOf<Any, Map<String, List<Any?>>>()
-
-        private val retainedObjects = RetainedObjects()
-
-        fun detach() {
-            _result.complete(resultToSend)
-            retainedObjects.dispose()
-        }
-    }
-
 }
 
 val NavigatorAmbient = staticAmbientOf<Navigator>()

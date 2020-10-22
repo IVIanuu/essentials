@@ -24,7 +24,7 @@ import com.ivianuu.injekt.merge.BindingModule
 annotation class NotificationWorkerBinding {
     companion object {
         @SetElements
-        operator fun <T : suspend () -> Unit> invoke(instance: T): NotificationWorkers = setOf(instance)
+        fun <T : suspend () -> Unit> workerIntoSet(instance: T): NotificationWorkers = setOf(instance)
     }
 }
 
