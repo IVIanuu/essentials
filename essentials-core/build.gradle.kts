@@ -40,7 +40,7 @@ dependencies {
 
     compile(Deps.kotlinFlowExtensions)
 
-    compile(Deps.kotlinResult)
+    compile(Deps.KotlinResult.core)
 
     testCompile(project(":essentials-test"))
 }
