@@ -21,14 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.staticAmbientOf
-import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.common.OnBackPressed
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -159,13 +155,3 @@ class Navigator {
 }
 
 val NavigatorAmbient = staticAmbientOf<Navigator>()
-
-@UiDecoratorBinding
-@FunBinding
-@Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, children: @Assisted @Composable () -> Unit) {
-    onDispose {
-        navigator.setBackStack(emptyList())
-    }
-    children()
-}
