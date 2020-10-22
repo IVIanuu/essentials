@@ -18,16 +18,28 @@ package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
-typealias TwilightModePref = DataStore<TwilightMode>
+@FunBinding
+suspend fun setTwilightMode(pref: TwilightModePref, value: @Assisted TwilightMode) {
+    pref.updateData { value }
+}
+
+@FunBinding
+suspend fun setUseBlackInDarkMode(pref: UseBlackInDarkModePref, value: @Assisted Boolean) {
+    pref.updateData { value }
+}
+
+internal typealias TwilightModePref = DataStore<TwilightMode>
 
 @Binding(ApplicationComponent::class)
 fun twilightModePref(factory: DiskDataStoreFactory): TwilightModePref =
     factory.create("twilight_mode") { TwilightMode.System }
 
-typealias UseBlackInDarkModePref = DataStore<Boolean>
+internal typealias UseBlackInDarkModePref = DataStore<Boolean>
 
 @Binding(ApplicationComponent::class)
 fun useBlackInDarkModePref(factory: DiskDataStoreFactory): UseBlackInDarkModePref =
