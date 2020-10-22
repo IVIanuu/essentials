@@ -74,8 +74,10 @@ class Route(
 
     private val _result = CompletableDeferred<Any?>()
     internal val result: Deferred<Any?> get() = _result
-
-    internal var resultToSend: Any? = null
+    private var resultToSend: Any? = null
+    fun setResult(result: Any?) {
+        resultToSend = result
+    }
 
     private var savedState =
         mutableMapOf<Any, Map<String, List<Any?>>>()

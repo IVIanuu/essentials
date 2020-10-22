@@ -64,6 +64,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
 
 fun ColorPickerRoute(
     initialColor: Color,

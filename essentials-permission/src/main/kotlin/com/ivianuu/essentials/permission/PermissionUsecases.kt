@@ -19,11 +19,16 @@ package com.ivianuu.essentials.permission
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 @FunBinding

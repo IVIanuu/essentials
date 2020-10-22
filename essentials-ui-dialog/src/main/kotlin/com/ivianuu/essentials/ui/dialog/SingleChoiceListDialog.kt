@@ -24,6 +24,7 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
 
 @Composable
 fun <T> SingleChoiceListDialog(

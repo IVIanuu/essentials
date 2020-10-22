@@ -28,6 +28,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,9 @@ import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 
 enum class TopAppBarStyle {
     Primary, Surface
@@ -137,7 +142,11 @@ private val DefaultAppBarElevation = 4.dp
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     val navigator = NavigatorAmbient.currentOrNull
-    val canGoBack = remember(navigator?.backStack) { (navigator?.backStack?.size ?: 0) > 1 }
+    val canGoBack by remember {
+        (navigator?.backStack ?: emptyFlow())
+            .take(1)
+            .map { it.size > 1 }
+    }.collectAsState(false)
     return when {
         canGoBack -> { { BackButton() } }
         else -> null

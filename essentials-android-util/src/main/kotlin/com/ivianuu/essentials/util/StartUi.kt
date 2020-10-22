@@ -23,6 +23,8 @@ import androidx.compose.runtime.LaunchedTask
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.coroutines.resume

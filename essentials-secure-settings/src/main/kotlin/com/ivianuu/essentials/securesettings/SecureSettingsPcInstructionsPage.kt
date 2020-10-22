@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding

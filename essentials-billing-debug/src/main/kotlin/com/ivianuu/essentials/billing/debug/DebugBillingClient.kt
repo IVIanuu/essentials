@@ -17,12 +17,35 @@
 package com.ivianuu.essentials.billing.debug
 
 import android.app.Activity
-import com.android.billingclient.api.*
-import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.*
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.InternalPurchasesResult
+import com.android.billingclient.api.PriceChangeConfirmationListener
+import com.android.billingclient.api.PriceChangeFlowParams
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.PurchaseHistoryResponseListener
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.RewardLoadParams
+import com.android.billingclient.api.RewardResponseListener
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.SkuDetailsResponseListener
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
+import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.BuildInfo
@@ -32,7 +55,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 
 @Binding
 class DebugBillingClient(

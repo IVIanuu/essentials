@@ -25,6 +25,8 @@ import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine

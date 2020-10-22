@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding

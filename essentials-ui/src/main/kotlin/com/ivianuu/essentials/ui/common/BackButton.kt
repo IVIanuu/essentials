@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
 
 @Composable
 fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {

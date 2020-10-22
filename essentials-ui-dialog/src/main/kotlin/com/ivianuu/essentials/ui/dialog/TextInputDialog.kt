@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
 
 fun TextInputRoute(
     initial: String = "",

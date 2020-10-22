@@ -31,6 +31,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.TextInputRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.essentials.util.stringResourceWithArguments
 

@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 
 @Composable
 fun DialogListItem(

@@ -29,11 +29,14 @@ import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemClicked
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.*
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute

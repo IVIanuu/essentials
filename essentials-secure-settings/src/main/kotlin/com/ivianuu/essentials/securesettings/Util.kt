@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedTask
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding

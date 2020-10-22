@@ -19,7 +19,11 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
@@ -31,11 +35,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

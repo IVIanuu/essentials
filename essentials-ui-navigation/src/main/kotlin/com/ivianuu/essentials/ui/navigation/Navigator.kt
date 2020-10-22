@@ -16,142 +16,136 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.os.Looper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticAmbientOf
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+interface Navigator {
+    val backStack: StateFlow<List<Route>>
+    fun setBackStack(transform: suspend (List<Route>) -> List<Route>)
+}
+
+fun Navigator.setRoot(content: @Composable () -> Unit) {
+    setRoot(Route(content = content))
+}
+
+fun Navigator.setRoot(route: Route) {
+    setBackStack { listOf(route) }
+}
+
+fun Navigator.push(content: @Composable () -> Unit) {
+    push(Route(content = content))
+}
+
+fun Navigator.push(route: Route) {
+    setBackStack { it + route }
+}
+
+@JvmName("pushForResult")
+suspend fun <T : Any> Navigator.push(content: @Composable () -> Unit): T? = push<T>(Route(content = content))
+
+@JvmName("pushForResult")
+suspend fun <T : Any> Navigator.push(route: Route): T? {
+    setBackStack { it + route }
+    return route.result.await() as? T
+}
+
+fun Navigator.replaceTop(content: @Composable () -> Unit) {
+    replaceTop(Route(content = content))
+}
+
+fun Navigator.replaceTop(route: Route) {
+    setBackStack { it.dropLast(1) + route }
+}
+
+fun Navigator.popTop(result: Any? = null) {
+    setBackStack {
+        val routeToPop = it.last()
+        routeToPop.setResult(result)
+        it - routeToPop
+    }
+}
+
+fun Navigator.popToRoot() {
+    setBackStack { listOf(it.first()) }
+}
+
+fun Navigator.popTo(route: Route) {
+    setBackStack {
+        val index = it.indexOf(route)
+        it.subList(0, index)
+    }
+}
+
+fun Navigator.pop(route: Route, result: Any? = null) {
+    setBackStack {
+        route.setResult(result)
+        it - route
+    }
+}
+
+@Stable
+class NavigatorImpl(
+    scope: CoroutineScope,
+    initialBackStack: List<Route>
+) : Navigator {
+
+    private val _backStack = MutableStateFlow(initialBackStack)
+    override val backStack: StateFlow<List<Route>> get() = _backStack
+
+    private val actor = scope.actor<suspend (List<Route>) -> List<Route>>(
+        capacity = Channel.UNLIMITED
+    ) {
+        for (transform in this) {
+            val oldBackStack = _backStack.value.toList()
+            val newBackStack = transform(oldBackStack)
+            _backStack.value = newBackStack
+            oldBackStack
+                .filterNot { it in newBackStack }
+                .forEach { it.detach() }
+        }
+    }
+
+    override fun setBackStack(transform: suspend (List<Route>) -> List<Route>) {
+        actor.offer(transform)
+    }
+
+    companion object {
+        @Binding(ApplicationComponent::class)
+        fun defaultNavigator(globalScope: GlobalScope): Navigator =
+            NavigatorImpl(globalScope, emptyList())
+    }
+}
+
+val NavigatorAmbient = staticAmbientOf<Navigator>()
 
 @Composable
 fun Navigator.Content(
     handleBack: Boolean = true,
     popsLastRoute: Boolean = false
 ) {
-    val backStack = backStack
+    val currentBackStack by backStack.collectAsState()
     val backPressEnabled = handleBack &&
-            backStack.isNotEmpty() &&
-            (popsLastRoute || backStack.size > 1)
+            currentBackStack.isNotEmpty() &&
+            (popsLastRoute || currentBackStack.size > 1)
     OnBackPressed(enabled = backPressEnabled) {
         popTop()
     }
 
     Providers(NavigatorAmbient provides this) {
-        AnimatedStack(children = backStack.map { it.stackChild })
+        AnimatedStack(children = currentBackStack.map { it.stackChild })
     }
 }
-
-@Stable
-@Binding(ApplicationComponent::class)
-class Navigator {
-
-    private val _backStack = mutableStateListOf<Route>()
-    val backStack: List<Route> get() = synchronized(this) { _backStack }
-
-    fun setRoot(content: @Composable () -> Unit) {
-        setRoot(Route(content = content))
-    }
-
-    fun setRoot(route: Route) {
-        setBackStack(listOf(route))
-    }
-
-    fun push(content: @Composable () -> Unit) {
-        push(Route(content = content))
-    }
-
-    fun push(route: Route) {
-        pushInternal(route)
-    }
-
-    @JvmName("pushForResult")
-    suspend fun <T : Any> push(content: @Composable () -> Unit): T? =
-        push<T>(Route(content = content))
-
-    @JvmName("pushForResult")
-    suspend fun <T : Any> push(route: Route): T? {
-        pushInternal(route)
-        return route.result.await() as? T
-    }
-
-    private fun pushInternal(route: Route) = synchronized(this) {
-        val newBackStack = _backStack.toMutableList()
-        newBackStack += route
-        setBackStack(newBackStack)
-    }
-
-    fun replace(content: @Composable () -> Unit) {
-        replace(Route(content = content))
-    }
-
-    fun replace(route: Route) {
-        replaceInternal(route)
-    }
-
-    @JvmName("replaceForResult")
-    suspend fun <T : Any> replace(content: @Composable () -> Unit): T? =
-        replace<T>(Route(content = content))
-
-    @JvmName("replaceForResult")
-    suspend fun <T : Any> replace(route: Route): T? {
-        replaceInternal(route)
-        return route.result.await() as? T
-    }
-
-    private fun replaceInternal(route: Route) = synchronized(this) {
-        val newBackStack = _backStack.toMutableList()
-            .also { it.removeAt(it.lastIndex) }
-        newBackStack += route
-        setBackStack(newBackStack)
-    }
-
-    fun popTop(result: Any? = null) = synchronized(this) {
-        pop(route = _backStack.last(), result = result)
-    }
-
-    fun popToRoot() = synchronized(this) {
-        val newTopRoute = _backStack.first()
-        setBackStack(listOf(newTopRoute))
-    }
-
-    fun popTo(route: Route) = synchronized(this) {
-        val index = _backStack.indexOf(route)
-        val newBackStack = _backStack.subList(0, index)
-        setBackStack(newBackStack)
-    }
-
-    fun pop(route: Route, result: Any? = null) = synchronized(this) {
-        route.resultToSend = result
-        val newBackStack = _backStack.toMutableList()
-        newBackStack -= route
-        setBackStack(newBackStack)
-    }
-
-    fun setBackStack(newBackStack: List<Route>) = synchronized(this) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            GlobalScope.launch(Dispatchers.Main) { setBackStackImpl(newBackStack) }
-        } else {
-            setBackStackImpl(newBackStack)
-        }
-    }
-
-    private fun setBackStackImpl(newBackStack: List<Route>) {
-        synchronized(this) {
-            val oldBackStack = _backStack.toList()
-            _backStack.clear()
-            _backStack += newBackStack
-            oldBackStack
-                .filterNot { it in newBackStack }
-                .forEach { it.detach() }
-        }
-    }
-}
-
-val NavigatorAmbient = staticAmbientOf<Navigator>()

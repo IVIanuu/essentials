@@ -36,6 +36,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.stringResource
 import java.io.ByteArrayOutputStream
