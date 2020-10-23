@@ -20,7 +20,6 @@ import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
@@ -52,9 +51,7 @@ fun SampleUi(
         Providers(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
         ) {
-            onCommit(true) {
-                navigator.setRootIfEmpty { homePage() }
-            }
+            navigator.setRootIfEmpty { homePage() }
             navigator.Content()
         }
     }
