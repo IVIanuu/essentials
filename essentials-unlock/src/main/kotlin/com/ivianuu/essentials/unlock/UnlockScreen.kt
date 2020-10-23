@@ -23,7 +23,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @FunBinding
@@ -47,7 +47,6 @@ suspend fun unlockScreen(
         logger.d("unlock result $requestId -> $it")
     }
 }
-
 
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
