@@ -38,6 +38,14 @@ interface Navigator {
     fun setBackStack(transform: suspend (List<Route>) -> List<Route>)
 }
 
+fun Navigator.setRootIfEmpty(content: @Composable () -> Unit) {
+    setRootIfEmpty(Route(content = content))
+}
+
+fun Navigator.setRootIfEmpty(route: Route) {
+    setBackStack { if (it.isEmpty()) listOf(route) else it }
+}
+
 fun Navigator.setRoot(content: @Composable () -> Unit) {
     setRoot(Route(content = content))
 }

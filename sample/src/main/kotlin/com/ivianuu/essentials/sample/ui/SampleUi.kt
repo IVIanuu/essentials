@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.Content
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.setRoot
+import com.ivianuu.essentials.ui.navigation.setRootIfEmpty
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.GenerateMergeComponents
 
@@ -53,7 +53,7 @@ fun SampleUi(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
         ) {
             onCommit(true) {
-                navigator.setRoot { homePage() }
+                navigator.setRootIfEmpty { homePage() }
             }
             navigator.Content()
         }
