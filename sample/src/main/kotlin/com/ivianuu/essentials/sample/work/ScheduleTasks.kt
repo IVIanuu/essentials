@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.sample.work
 
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.ivianuu.essentials.work.functional.OneTimeWorkRequestBuilder
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 fun scheduleTasks(workManager: WorkManager) {
-    workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
+    workManager.enqueue(OneTimeWorkRequestBuilder(TEST_WORKER_ID).build())
 }

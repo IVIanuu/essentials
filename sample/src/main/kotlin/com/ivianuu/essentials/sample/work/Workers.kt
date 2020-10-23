@@ -16,25 +16,18 @@
 
 package com.ivianuu.essentials.sample.work
 
-import android.content.Context
-import androidx.work.WorkerParameters
+import androidx.work.ListenableWorker
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.injekt.Assisted
-import com.ivianuu.injekt.android.work.WorkerBinding
+import com.ivianuu.essentials.work.functional.WorkerBinding
+import com.ivianuu.essentials.work.functional.worker
 import kotlinx.coroutines.delay
 
-@WorkerBinding
-class TestWorker(
-    private val logger: Logger,
-    context: @Assisted Context,
-    workerParams: @Assisted WorkerParameters,
-) : EsWorker(context, workerParams) {
+const val TEST_WORKER_ID = "test"
 
-    override suspend fun doWork(): Result {
-        logger.d("start work")
-        delay(5000)
-        logger.d("finish work")
-        return Result.success()
-    }
+@WorkerBinding
+fun TestWorker(logger: Logger) = worker(TEST_WORKER_ID) {
+    logger.d("start work")
+    delay(5000)
+    logger.d("finish work")
+    ListenableWorker.Result.success()
 }
