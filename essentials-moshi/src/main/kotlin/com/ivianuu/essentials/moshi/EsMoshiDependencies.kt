@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.BindingModule
@@ -25,10 +24,9 @@ import com.squareup.moshi.Moshi
 
 @BindingModule(ApplicationComponent::class)
 annotation class JsonAdapterBinding {
-    @Module
-    class ModuleImpl<T : Any> {
+    companion object {
         @SetElements
-        fun invoke(instance: T): JsonAdapters = setOf(instance)
+        fun <T : Any> invoke(instance: T): JsonAdapters = setOf(instance)
     }
 }
 
