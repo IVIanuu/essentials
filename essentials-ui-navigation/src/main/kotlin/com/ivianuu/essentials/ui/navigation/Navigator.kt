@@ -120,10 +120,12 @@ class NavigatorImpl(
         for (transform in this) {
             val oldBackStack = _backStack.value.toList()
             val newBackStack = transform(oldBackStack)
-            _backStack.value = newBackStack
-            oldBackStack
-                .filterNot { it in newBackStack }
-                .forEach { it.detach() }
+            if (oldBackStack != newBackStack) {
+                _backStack.value = newBackStack
+                oldBackStack
+                    .filterNot { it in newBackStack }
+                    .forEach { it.detach() }
+            }
         }
     }
 
@@ -143,6 +145,7 @@ val NavigatorAmbient = staticAmbientOf<Navigator>()
 @Composable
 fun Navigator.Content(handleBack: Boolean = true) {
     val currentBackStack by backStack.collectAsState()
+    println("backstack changed $currentBackStack")
     val backPressEnabled = handleBack && currentBackStack.size > 1
     OnBackPressed(enabled = backPressEnabled) {
         popTop()
