@@ -20,13 +20,20 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.material.Colors
 import androidx.compose.material.Typography
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 @FunBinding
 @Composable
@@ -38,33 +45,34 @@ fun TwilightTheme(
     typography: @Assisted Typography,
     children: @Assisted @Composable () -> Unit
 ) {
-    val twilightState by twilightStateFlow.collectAsState()
-    AnimatedBox(current = twilightState) { currentTwilightState ->
-        fun colorsForTwilightState() = if (currentTwilightState.isDark) {
-            if (currentTwilightState.useBlack) blackColors else darkColors
-        } else lightColors
-
-        var lastColors by rememberUntrackedState { colorsForTwilightState() }
-        val targetColors = colorsForTwilightState()
-
-        val animation = key(currentTwilightState) { animatedFloat(0f) }
-        onCommit(animation) {
-            animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
+    val targetColors by twilightStateFlow
+        .map {
+            if (it.isDark) {
+                if (it.useBlack) blackColors else darkColors
+            } else lightColors
         }
+        .distinctUntilChanged()
+        .collectAsState(lightColors)
 
-        val currentColors = remember(animation.value) {
-            lerp(
-                lastColors,
-                targetColors,
-                animation.value
-            )
-        }
-        lastColors = currentColors
+    var lastColors by rememberUntrackedState { targetColors }
 
-        EsMaterialTheme(
-            colors = currentColors,
-            typography = typography,
-            content = children
+    val animation = key(targetColors) { animatedFloat(0f) }
+    onCommit(animation) {
+        animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
+    }
+
+    val animatedColors = remember(animation.value) {
+        lerp(
+            lastColors,
+            targetColors,
+            animation.value
         )
     }
+    lastColors = animatedColors
+
+    EsMaterialTheme(
+        colors = animatedColors,
+        typography = typography,
+        content = children
+    )
 }
