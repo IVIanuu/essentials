@@ -20,9 +20,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.essentials.datastore.android.color
-import com.ivianuu.essentials.datastore.android.duration
+import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
@@ -32,45 +32,48 @@ import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlin.time.hours
-import kotlin.time.milliseconds
-import kotlin.time.minutes
+import com.squareup.moshi.JsonClass
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
+import com.ivianuu.essentials.ui.common.interactive
 
 @FunBinding
 @Composable
-fun PrefsPage(prefs: Prefs) {
+fun PrefsPage(prefsStore: PrefsStore) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
         InsettingScrollableColumn {
+            var prefs by prefsStore.asState()
             SwitchListItem(
-                dataStore = prefs.switch,
+                value = prefs.switch,
+                onValueChange = { prefs = prefs.copy(switch = it) },
                 title = { Text("Switch") }
             )
 
-            val dependenciesModifier = Modifier.preferenceDependencies(
-                prefs.switch requiresValue true
-            )
-
-            Subheader(modifier = dependenciesModifier) { Text("Category") }
+            Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
 
             CheckboxListItem(
-                dataStore = prefs.checkbox,
-                modifier = dependenciesModifier,
+                value = prefs.checkbox,
+                onValueChange = { prefs = prefs.copy(checkbox = it) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Checkbox") },
                 subtitle = { Text("This is a checkbox preference") }
             )
 
             RadioButtonListItem(
-                dataStore = prefs.radioButton,
-                modifier = dependenciesModifier,
+                value = prefs.radioButton,
+                onValueChange = { prefs = prefs.copy(radioButton = it) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Radio Button") },
                 subtitle = { Text("This is a radio button preference") }
             )
 
             IntSliderListItem(
-                dataStore = prefs.slider,
-                modifier = dependenciesModifier,
+                value = prefs.slider,
+                onValueChange = { prefs = prefs.copy(slider = it) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Slider") },
                 subtitle = { Text("This is a slider preference") },
                 stepPolicy = incrementingStepPolicy(5),
@@ -78,38 +81,31 @@ fun PrefsPage(prefs: Prefs) {
                 valueText = { SliderValueText(it) }
             )
 
-            DurationSliderListItem(
-                dataStore = prefs.durationSlider,
-                modifier = dependenciesModifier,
-                title = { Text("Slider duration") },
-                subtitle = { Text("This is a slider preference") },
-                stepPolicy = incrementingStepPolicy(1.minutes),
-                valueRange = 1.minutes..1.hours,
-                valueText = { SliderValueText(it) }
-            )
-
-            Subheader(modifier = dependenciesModifier) {
+            Subheader(modifier = Modifier.interactive(prefs.switch)) {
                 Text("Dialogs")
             }
 
             TextInputDialogListItem(
-                dataStore = prefs.textInput,
-                modifier = dependenciesModifier,
+                value = prefs.textInput,
+                onValueChange = { prefs = prefs.copy(textInput = it) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Text input") },
                 subtitle = { Text("This is a text input preference") },
                 allowEmpty = false
             )
 
             ColorDialogListItem(
-                dataStore = prefs.color,
-                modifier = dependenciesModifier,
+                value = Color(prefs.color),
+                onValueChange = { prefs = prefs.copy(color = it.toArgb()) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Color") },
                 subtitle = { Text("This is a color preference") }
             )
 
             MultiChoiceDialogListItem(
-                dataStore = prefs.multiChoice,
-                modifier = dependenciesModifier,
+                value = prefs.multiChoice,
+                onValueChange = { prefs = prefs.copy(multiChoice = it) },
+                modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Multi select list") },
                 subtitle = { Text("This is a multi select list preference") },
                 items = listOf(
@@ -120,8 +116,9 @@ fun PrefsPage(prefs: Prefs) {
             )
 
             SingleChoiceDialogListItem(
-                dataStore = prefs.singleChoice,
-                modifier = dependenciesModifier,
+                value = prefs.singleChoice,
+                modifier = Modifier.interactive(prefs.switch),
+                onValueChange = { prefs = prefs.copy(singleChoice = it) },
                 title = { Text("Single item list") },
                 subtitle = { Text("This is a single item list preference") },
                 items = listOf(
@@ -135,22 +132,25 @@ fun PrefsPage(prefs: Prefs) {
                 title = { Text("Clipboard") },
                 subtitle = { Text("This is a clipboard preference") },
                 clipboardText = { "cool clip" },
-                modifier = dependenciesModifier
+                modifier = Modifier.interactive(prefs.switch)
             )
         }
     }
 }
 
+@JsonClass(generateAdapter = true)
+data class Prefs(
+    val switch: Boolean = false,
+    val checkbox: Boolean = false,
+    val radioButton: Boolean = false,
+    val slider: Int = 50,
+    val textInput: String = "",
+    val color: Int = Color.Red.toArgb(),
+    val multiChoice: Set<String> = setOf("A", "B", "C"),
+    val singleChoice: String = "C"
+)
+
+typealias PrefsStore = DataStore<Prefs>
 @Binding(ApplicationComponent::class)
-class Prefs(factory: DiskDataStoreFactory) {
-    val switch = factory.create("switch") { false }
-    val checkbox = factory.create("checkbox") { false }
-    val radioButton = factory.create("radio_button") { false }
-    val slider = factory.create("slider") { 50 }
-    val durationSlider =
-        factory.duration("duration_slider") { 33.milliseconds }
-    val textInput = factory.create("text_input") { "" }
-    val color = factory.color("color") { Color.Red }
-    val multiChoice = factory.create("multi_choice") { setOf("A", "B", "C") }
-    val singleChoice = factory.create("single_choice") { "C" }
-}
+fun prefsStore(factory: DiskDataStoreFactory): PrefsStore =
+    factory.create("prefs") { Prefs() }

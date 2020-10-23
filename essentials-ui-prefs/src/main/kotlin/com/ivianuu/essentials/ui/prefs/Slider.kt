@@ -32,39 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import kotlin.time.Duration
-
-@Composable
-fun DoubleSliderListItem(
-    dataStore: DataStore<Double>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Double) -> Unit)? = null,
-    valueRange: ClosedRange<Double> = 0.0..1.0,
-    stepPolicy: StepPolicy<Double>,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    DoubleSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy,
-        valueText = valueText
-    )
-}
 
 @Composable
 fun DoubleSliderListItem(
@@ -93,31 +66,6 @@ fun DoubleSliderListItem(
             valueText = valueText
         )
     }
-}
-
-@Composable
-fun FloatSliderListItem(
-    dataStore: DataStore<Float>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Float) -> Unit)? = null,
-    valueRange: ClosedRange<Float> = 0f..1f,
-    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    FloatSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
 }
 
 @Composable
@@ -151,31 +99,6 @@ fun FloatSliderListItem(
 
 @Composable
 fun IntSliderListItem(
-    dataStore: DataStore<Int>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Int) -> Unit)? = null,
-    valueRange: IntRange = 0..100,
-    stepPolicy: StepPolicy<Int> = NoStepsStepPolicy,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    IntSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
-}
-
-@Composable
-fun IntSliderListItem(
     value: Int,
     onValueChange: (Int) -> Unit,
     title: @Composable (() -> Unit)? = null,
@@ -201,31 +124,6 @@ fun IntSliderListItem(
             stepPolicy = stepPolicy
         )
     }
-}
-
-@Composable
-fun LongSliderListItem(
-    dataStore: DataStore<Long>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Long) -> Unit)? = null,
-    valueRange: LongRange = 0L..100L,
-    stepPolicy: StepPolicy<Long> = NoStepsStepPolicy,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    LongSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
 }
 
 @Composable
@@ -259,31 +157,6 @@ fun LongSliderListItem(
 
 @Composable
 fun DpSliderListItem(
-    dataStore: DataStore<Dp>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Dp) -> Unit)? = null,
-    valueRange: ClosedRange<Dp> = 0.dp..1.dp,
-    stepPolicy: StepPolicy<Dp> = NoStepsStepPolicy,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    DpSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueText = valueText,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy
-    )
-}
-
-@Composable
-fun DpSliderListItem(
     value: Dp,
     onValueChange: (Dp) -> Unit,
     title: @Composable (() -> Unit)? = null,
@@ -309,31 +182,6 @@ fun DpSliderListItem(
             stepPolicy = stepPolicy
         )
     }
-}
-
-@Composable
-fun DurationSliderListItem(
-    dataStore: DataStore<Duration>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    valueText: @Composable ((Duration) -> Unit)? = null,
-    valueRange: ClosedRange<Duration>,
-    stepPolicy: StepPolicy<Duration> = NoStepsStepPolicy,
-    modifier: Modifier = Modifier,
-) {
-    var value by dataStore.asState()
-    DurationSliderListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        valueRange = valueRange,
-        stepPolicy = stepPolicy,
-        valueText = valueText
-    )
 }
 
 @Composable

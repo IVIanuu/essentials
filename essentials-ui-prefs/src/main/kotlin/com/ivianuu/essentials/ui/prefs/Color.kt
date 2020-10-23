@@ -21,42 +21,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-
-@Composable
-fun ColorDialogListItem(
-    dataStore: DataStore<Color>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    dialogTitle: @Composable (() -> Unit)? = title,
-    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
-    showAlphaSelector: Boolean = true,
-    allowCustomArgb: Boolean = true,
-    modifier: Modifier = Modifier
-) {
-    var value by dataStore.asState()
-    ColorDialogListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        dialogTitle = dialogTitle,
-        colorPalettes = colorPalettes,
-        showAlphaSelector = showAlphaSelector,
-        allowCustomArgb = allowCustomArgb
-    )
-}
 
 @Composable
 fun ColorDialogListItem(

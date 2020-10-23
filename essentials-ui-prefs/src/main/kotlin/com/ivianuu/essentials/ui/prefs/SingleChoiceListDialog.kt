@@ -20,38 +20,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-
-@Composable
-fun <T> SingleChoiceDialogListItem(
-    dataStore: DataStore<T>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    trailing: @Composable (() -> Unit)? = null,
-    dialogTitle: @Composable (() -> Unit)? = title,
-    items: List<SingleChoiceDialogListItem.Item<T>>,
-    modifier: Modifier = Modifier
-) {
-    var value by dataStore.asState()
-    SingleChoiceDialogListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        trailing = trailing,
-        dialogTitle = dialogTitle,
-        items = items
-    )
-}
 
 @Composable
 fun <T> SingleChoiceDialogListItem(

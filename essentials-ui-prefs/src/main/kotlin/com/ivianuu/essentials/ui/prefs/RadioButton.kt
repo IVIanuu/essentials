@@ -19,32 +19,9 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.asState
 import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.ListItem
-
-@Composable
-fun RadioButtonListItem(
-    dataStore: DataStore<Boolean>,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
-) {
-    var value by dataStore.asState()
-    RadioButtonListItem(
-        value = value,
-        onValueChange = { value = it },
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading
-    )
-}
 
 @Composable
 fun RadioButtonListItem(
