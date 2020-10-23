@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.StoreImpl.StoreMessage.DispatchAction
-import com.ivianuu.essentials.store.StoreImpl.StoreMessage.SetState
+import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.DispatchAction
+import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.SetState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -39,30 +39,12 @@ interface Store<S, A> {
 }
 
 interface StoreScope<S, A> : CoroutineScope {
-    val actions: Flow<A>
     val state: Flow<S>
-    suspend fun setState(block: suspend S.() -> S)
-}
-
-suspend inline fun <S, A> StoreScope<S, A>.onEachAction(crossinline block: suspend (A) -> Unit) {
-    actions.collect(block)
+    suspend fun setState(block: suspend S.() -> S): S
+    suspend fun onEachAction(block: suspend (A) -> Unit)
 }
 
 suspend inline fun <S, A> StoreScope<S, A>.currentState(): S = state.first()
-
-@BuilderInference
-fun <S, A> CoroutineScope.store(
-    initial: S,
-    block: suspend StoreScope<S, A>.() -> Unit,
-): Store<S, A> = StoreImpl(this, initial, block)
-
-@BuilderInference
-fun <S, A> storeProvider(
-    initial: S,
-    block: suspend StoreScope<S, A>.() -> Unit,
-): (CoroutineScope) -> Store<S, A> = {
-    it.store(initial, block)
-}
 
 inline fun <S, A, T> Flow<T>.setStateIn(
     scope: StoreScope<S, A>,
@@ -84,14 +66,39 @@ suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reduce: suspe
     }
 }
 
-internal class StoreImpl<S, A>(
-    private val scope: CoroutineScope,
+fun <S, A> storeProvider(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit,
+): (CoroutineScope) -> Store<S, A> = {
+    it.store(initial, block)
+}
+
+fun <S, A> CoroutineScope.store(
+    initial: S,
+    block: suspend StoreScope<S, A>.() -> Unit
+): Store<S, A> {
+    val state = MutableStateFlow(initial)
+    return storeFromSource(
+        state = state,
+        setState = { state.value = it },
+        block = block
+    )
+}
+
+fun <S, A> CoroutineScope.storeFromSource(
+    state: StateFlow<S>,
+    setState: suspend (S) -> Unit,
+    block: suspend StoreScope<S, A>.() -> Unit
+): Store<S, A> = StoreFromSourceImpl(this, state, setState, block)
+
+internal class StoreFromSourceImpl<S, A>(
+    scope: CoroutineScope,
+    override val state: StateFlow<S>,
+    private val setState: suspend (S) -> Unit,
+    block: suspend StoreScope<S, A>.() -> Unit
 ) : Store<S, A>, StoreScope<S, A>, CoroutineScope by scope {
 
-    override val state = MutableStateFlow(initial)
-    override val actions = EventFlow<A>()
+    private val actions = EventFlow<A>()
 
     private val actor = actor<StoreMessage<S, A>>(capacity = Channel.UNLIMITED) {
         for (msg in channel) {
@@ -100,8 +107,8 @@ internal class StoreImpl<S, A>(
                 is SetState -> {
                     val currentState = state.value
                     val newState = msg.block(currentState)
-                    state.value = newState
-                    msg.acknowledged.complete(Unit)
+                    if (currentState != newState) setState(newState)
+                    msg.acknowledged.complete(newState)
                 }
             }.let {}
         }
@@ -115,16 +122,20 @@ internal class StoreImpl<S, A>(
         actor.offer(DispatchAction(action))
     }
 
-    override suspend fun setState(block: suspend S.() -> S) {
-        val acknowledged = CompletableDeferred<Unit>()
+    override suspend fun setState(block: suspend S.() -> S): S {
+        val acknowledged = CompletableDeferred<S>()
         actor.offer(SetState(acknowledged, block))
-        acknowledged.await()
+        return acknowledged.await()
+    }
+
+    override suspend fun onEachAction(block: suspend (A) -> Unit) {
+        actions.collect(block)
     }
 
     sealed class StoreMessage<S, A> {
         data class DispatchAction<S, A>(val action: A) : StoreMessage<S, A>()
         data class SetState<S, A>(
-            val acknowledged: CompletableDeferred<Unit>,
+            val acknowledged: CompletableDeferred<S>,
             val block: suspend S.() -> S,
         ) : StoreMessage<S, A>()
     }

@@ -27,7 +27,6 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppPickerAction.AppClicked
-import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold

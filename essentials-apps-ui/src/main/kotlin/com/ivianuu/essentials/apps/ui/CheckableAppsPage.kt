@@ -27,9 +27,11 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.*
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.AppClicked
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.UpdateRefs
 import com.ivianuu.essentials.store.currentState
-import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -37,7 +39,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.ui.resource.Idle
+import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.invoke
+import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.executeIn

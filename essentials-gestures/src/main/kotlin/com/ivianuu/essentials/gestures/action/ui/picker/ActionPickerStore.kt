@@ -33,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionI
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop

@@ -55,7 +55,6 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
-import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.tuples.combine
