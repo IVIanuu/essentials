@@ -16,31 +16,35 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.DiskDataStoreFactory
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.dataStore
+import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
+import com.ivianuu.essentials.twilight.TwilightAction.UseBlackInDarkModeChange
+import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@FunBinding
-suspend fun setTwilightMode(pref: TwilightModePref, value: @Assisted TwilightMode) {
-    pref.updateData { value }
-}
+@JsonClass(generateAdapter = true)
+data class TwilightPrefs(
+    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.System,
+    @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false
+)
 
-@FunBinding
-suspend fun setUseBlackInDarkMode(pref: UseBlackInDarkModePref, value: @Assisted Boolean) {
-    pref.updateData { value }
-}
-
-internal typealias TwilightModePref = DataStore<TwilightMode>
-
+typealias TwilightPrefsStore = Store<TwilightPrefs, TwilightAction>
 @Binding(ApplicationComponent::class)
-fun twilightModePref(factory: DiskDataStoreFactory): TwilightModePref =
-    factory.create("twilight_mode") { TwilightMode.System }
+fun twilightPrefsStore(dataStore: dataStore<TwilightPrefs, TwilightAction>): TwilightPrefsStore =
+    dataStore("twilight_prefs", TwilightPrefs()) {
+        onEachAction { action ->
+            when (action) {
+                is ChangeTwilightMode -> setState { copy(twilightMode = action.newValue) }
+                is UseBlackInDarkModeChange -> setState { copy(useBlackInDarkMode = action.newValue) }
+            }.exhaustive
+        }
+    }
 
-internal typealias UseBlackInDarkModePref = DataStore<Boolean>
-
-@Binding(ApplicationComponent::class)
-fun useBlackInDarkModePref(factory: DiskDataStoreFactory): UseBlackInDarkModePref =
-    factory.create("use_black") { false }
+sealed class TwilightAction {
+    data class ChangeTwilightMode(val newValue: TwilightMode) : TwilightAction()
+    data class UseBlackInDarkModeChange(val newValue: Boolean) : TwilightAction()
+}

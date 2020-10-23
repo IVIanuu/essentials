@@ -28,7 +28,6 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -50,21 +49,17 @@ fun twilightState(
     batteryTwilightState: BatteryTwilightState,
     systemTwilightState: SystemTwilightState,
     timeTwilightState: TimeTwilightState,
-    twilightModePref: TwilightModePref,
-    useBlackInDarkModePref: UseBlackInDarkModePref,
+    twilightPrefsStore: TwilightPrefsStore
 ): TwilightStateFlow {
-    return twilightModePref.data
-        .flatMapLatest { mode ->
-            when (mode) {
+    return twilightPrefsStore.state
+        .flatMapLatest { (mode, useBlack) ->
+            (when (mode) {
                 TwilightMode.System -> systemTwilightState
                 TwilightMode.Light -> flowOf(false)
                 TwilightMode.Dark -> flowOf(true)
                 TwilightMode.Battery -> batteryTwilightState
                 TwilightMode.Time -> timeTwilightState
-            }
-        }
-        .combine(useBlackInDarkModePref.data) { isDark, useBlack ->
-            TwilightState(isDark, useBlack)
+            }).map { TwilightState(it, useBlack) }
         }
         .distinctUntilChanged()
         .stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
@@ -109,4 +104,3 @@ fun timeTwilightState(
         val hour = calendar[Calendar.HOUR_OF_DAY]
         hour < 6 || hour >= 22
     }
-

@@ -18,10 +18,9 @@ package com.ivianuu.essentials.twilight
 
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.datastore.android.asState
+import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
+import com.ivianuu.essentials.twilight.TwilightAction.UseBlackInDarkModeChange
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -29,31 +28,31 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun TwilightSettingsPage(
-    twilightModePref: TwilightModePref,
-    useBlackInDarkModePref: UseBlackInDarkModePref,
-) {
+fun TwilightSettingsPage(prefsStore: TwilightPrefsStore) {
+    val (state, dispatch) = prefsStore
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
         InsettingScrollableColumn {
-            var twilightMode by twilightModePref.asState()
             TwilightMode.values().toList().forEach { mode ->
                 TwilightModeItem(
                     mode = mode,
-                    isSelected = twilightMode == mode,
-                    onClick = { twilightMode = mode }
+                    isSelected = state.twilightMode == mode,
+                    onClick = { dispatch(ChangeTwilightMode(mode)) }
                 )
             }
 
             Subheader { Text(R.string.es_twilight_pref_category_more) }
 
             CheckboxListItem(
-                dataStore = useBlackInDarkModePref,
+                value = state.useBlackInDarkMode,
+                onValueChange = { dispatch(UseBlackInDarkModeChange(it)) },
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }
