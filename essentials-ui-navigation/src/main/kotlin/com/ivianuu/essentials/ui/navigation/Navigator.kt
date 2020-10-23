@@ -145,7 +145,6 @@ val NavigatorAmbient = staticAmbientOf<Navigator>()
 @Composable
 fun Navigator.Content(handleBack: Boolean = true) {
     val currentBackStack by backStack.collectAsState()
-    println("backstack changed $currentBackStack")
     val backPressEnabled = handleBack && currentBackStack.size > 1
     OnBackPressed(enabled = backPressEnabled) {
         popTop()
