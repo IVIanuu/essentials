@@ -28,6 +28,6 @@ abstract class FlowTileService<T> : StateTileService<T>() {
         super.onStartListening()
         state
             .onEach { setState(it) }
-            .launchIn(listeningCoroutineScope)
+            .launchIn(listeningScope)
     }
 }
