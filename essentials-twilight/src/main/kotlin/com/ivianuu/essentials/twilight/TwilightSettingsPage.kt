@@ -20,7 +20,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
-import com.ivianuu.essentials.twilight.TwilightAction.UseBlackInDarkModeChange
+import com.ivianuu.essentials.twilight.TwilightAction.ChangeUseBlackInDarkMode
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -52,7 +52,7 @@ fun TwilightSettingsPage(prefsStore: TwilightPrefsStore) {
 
             CheckboxListItem(
                 value = state.useBlackInDarkMode,
-                onValueChange = { dispatch(UseBlackInDarkModeChange(it)) },
+                onValueChange = { dispatch(ChangeUseBlackInDarkMode(it)) },
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.twilight
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.dataStore
 import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
-import com.ivianuu.essentials.twilight.TwilightAction.UseBlackInDarkModeChange
+import com.ivianuu.essentials.twilight.TwilightAction.ChangeUseBlackInDarkMode
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -39,12 +39,12 @@ fun twilightPrefsStore(dataStore: dataStore<TwilightPrefs, TwilightAction>): Twi
         onEachAction { action ->
             when (action) {
                 is ChangeTwilightMode -> setState { copy(twilightMode = action.newValue) }
-                is UseBlackInDarkModeChange -> setState { copy(useBlackInDarkMode = action.newValue) }
+                is ChangeUseBlackInDarkMode -> setState { copy(useBlackInDarkMode = action.newValue) }
             }.exhaustive
         }
     }
 
 sealed class TwilightAction {
     data class ChangeTwilightMode(val newValue: TwilightMode) : TwilightAction()
-    data class UseBlackInDarkModeChange(val newValue: Boolean) : TwilightAction()
+    data class ChangeUseBlackInDarkMode(val newValue: Boolean) : TwilightAction()
 }
