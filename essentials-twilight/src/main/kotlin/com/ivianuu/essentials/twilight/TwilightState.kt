@@ -51,7 +51,7 @@ fun twilightState(
     timeTwilightState: TimeTwilightState,
     twilightPrefsStore: TwilightPrefsStore
 ): TwilightStateFlow {
-    return twilightPrefsStore.state
+    return twilightPrefsStore.data
         .flatMapLatest { (mode, useBlack) ->
             (when (mode) {
                 TwilightMode.System -> systemTwilightState

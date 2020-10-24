@@ -19,8 +19,10 @@ package com.ivianuu.essentials.twilight
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
-import com.ivianuu.essentials.twilight.TwilightAction.ChangeUseBlackInDarkMode
+import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.twilight.TwilightPageAction.UpdateTwilightMode
+import com.ivianuu.essentials.twilight.TwilightPageAction.UpdateUseBlackInDarkMode
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -30,12 +32,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun TwilightSettingsPage(prefsStore: TwilightPrefsStore) {
-    val (state, dispatch) = prefsStore
+fun TwilightSettingsPage(store: rememberStore<TwilightPageState, TwilightPageAction>) {
+    val (state, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
@@ -43,20 +48,42 @@ fun TwilightSettingsPage(prefsStore: TwilightPrefsStore) {
             TwilightMode.values().toList().forEach { mode ->
                 TwilightModeItem(
                     mode = mode,
-                    isSelected = state.twilightMode == mode,
-                    onClick = { dispatch(ChangeTwilightMode(mode)) }
+                    isSelected = state.prefs.twilightMode == mode,
+                    onClick = { dispatch(UpdateTwilightMode(mode)) }
                 )
             }
 
             Subheader { Text(R.string.es_twilight_pref_category_more) }
 
             CheckboxListItem(
-                value = state.useBlackInDarkMode,
-                onValueChange = { dispatch(ChangeUseBlackInDarkMode(it)) },
+                value = state.prefs.useBlackInDarkMode,
+                onValueChange = { dispatch(UpdateUseBlackInDarkMode(it)) },
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }
     }
+}
+
+@Binding
+fun twilightPageStore(
+    twilightPrefs: twilightPrefs,
+    updateTwilightMode: updateTwilightMode,
+    updateUseBlackInDarkMode: updateUseBlackInDarkMode
+) = storeProvider<TwilightPageState, TwilightPageAction>(TwilightPageState()) {
+    twilightPrefs.setStateIn(this) { copy(prefs = it) }
+    onEachAction { action ->
+        when (action) {
+            is UpdateTwilightMode -> updateTwilightMode(action.mode)
+            is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.useBlackInDarkMode)
+        }.exhaustive
+    }
+}
+
+data class TwilightPageState(val prefs: TwilightPrefs = TwilightPrefs())
+
+sealed class TwilightPageAction {
+    data class UpdateTwilightMode(val mode: TwilightMode) : TwilightPageAction()
+    data class UpdateUseBlackInDarkMode(val useBlackInDarkMode: Boolean) : TwilightPageAction()
 }
 
 @Composable

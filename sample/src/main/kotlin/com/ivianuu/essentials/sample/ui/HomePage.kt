@@ -47,6 +47,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -59,7 +60,7 @@ fun HomePage(dependencies: HomePageDependencies) {
             TopAppBar(
                 title = { Text("Home") },
                 actions = {
-                    com.ivianuu.essentials.ui.popup.PopupMenuButton(
+                    PopupMenuButton(
                         items = listOf(
                             "Option 1",
                             "Option 2",
@@ -200,7 +201,7 @@ private fun HomeItem(
             }
         },
         trailing = {
-            com.ivianuu.essentials.ui.popup.PopupMenuButton(
+            PopupMenuButton(
                 items = listOf(1, 2, 3)
                     .map { index ->
                         PopupMenu.Item(onSelected = {}) {

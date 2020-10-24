@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.dataStore
-import com.ivianuu.essentials.twilight.TwilightAction.ChangeTwilightMode
-import com.ivianuu.essentials.twilight.TwilightAction.ChangeUseBlackInDarkMode
-import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.datastore.DataStore
+import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.flow.Flow
 
 @JsonClass(generateAdapter = true)
 data class TwilightPrefs(
@@ -32,19 +32,27 @@ data class TwilightPrefs(
     @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false
 )
 
-typealias TwilightPrefsStore = Store<TwilightPrefs, TwilightAction>
+internal typealias TwilightPrefsStore = DataStore<TwilightPrefs>
 @Binding(ApplicationComponent::class)
-fun twilightPrefsStore(dataStore: dataStore<TwilightPrefs, TwilightAction>): TwilightPrefsStore =
-    dataStore("twilight_prefs", TwilightPrefs()) {
-        onEachAction { action ->
-            when (action) {
-                is ChangeTwilightMode -> setState { copy(twilightMode = action.newValue) }
-                is ChangeUseBlackInDarkMode -> setState { copy(useBlackInDarkMode = action.newValue) }
-            }.exhaustive
-        }
-    }
+fun twilightPrefsStore(factory: DiskDataStoreFactory): TwilightPrefsStore =
+    factory.create("twilight_prefs") { TwilightPrefs() }
 
-sealed class TwilightAction {
-    data class ChangeTwilightMode(val newValue: TwilightMode) : TwilightAction()
-    data class ChangeUseBlackInDarkMode(val newValue: Boolean) : TwilightAction()
+typealias twilightPrefs = Flow<TwilightPrefs>
+@Binding
+fun twilightPrefs(store: TwilightPrefsStore): twilightPrefs = store.data
+
+@FunBinding
+suspend fun updateTwilightMode(
+    store: TwilightPrefsStore,
+    twilightMode: @Assisted TwilightMode
+) {
+    store.updateData { it.copy(twilightMode = twilightMode) }
+}
+
+@FunBinding
+suspend fun updateUseBlackInDarkMode(
+    store: TwilightPrefsStore,
+    useBlackInDarkMode: @Assisted Boolean
+) {
+    store.updateData { it.copy(useBlackInDarkMode = useBlackInDarkMode) }
 }
