@@ -36,7 +36,7 @@ class DiskDataStoreTest {
     private val factory = DiskDataStoreFactory(
         scope,
         { storeDir },
-        MoshiSerializerFactory(Moshi.Builder().build())
+        { MoshiSerializerFactory(Moshi.Builder().build()) }
     )
 
     private inline fun <reified T> createStore(name: String, noinline produceDefaultData: () -> T) =
