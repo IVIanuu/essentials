@@ -24,7 +24,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 @FunBinding
-suspend fun setActionMediaApp(
+suspend fun updateActionMediaApp(
     pref: ActionMediaAppPref,
     value: @Assisted String
 ) {
