@@ -114,26 +114,24 @@ internal class DiskDataStoreImpl<T>(
 
         if (!file.exists()) return defaultData
 
-        val serializedData = try {
-            file.bufferedReader().use {
-                it.readText()
-            }
-        } catch (t: Throwable) {
-            throw IOException("Couldn't read file at '$file'", t)
-        }
-
         return try {
+            val serializedData = try {
+                file.readText()
+            } catch (readException: Throwable) {
+                throw IOException("Couldn't read file at '$file'", readException)
+            }
+
             serializer.deserialize(serializedData)
-        } catch (t: Throwable) {
-            val newData = corruptionHandler.onCorruption(this@DiskDataStoreImpl, serializedData, t)
+        } catch (readException: Throwable) {
+            val newData = corruptionHandler.onCorruption(this@DiskDataStoreImpl, readException)
 
             try {
                 writeData(newData)
-            } catch (writeEx: IOException) {
+            } catch (t2: IOException) {
                 // If we fail to write the handled data, add the new exception as a suppressed
                 // exception.
-                t.addSuppressed(writeEx)
-                throw t
+                readException.addSuppressed(t2)
+                throw readException
             }
 
             // If we reach this point, we've successfully replaced the data on disk with newData.
@@ -153,10 +151,7 @@ internal class DiskDataStoreImpl<T>(
         val serializedData = try {
             serializer.serialize(newData)
         } catch (t: Throwable) {
-            throw RuntimeException(
-                "Couldn't serialize data '$newData' for file '$file'",
-                t
-            )
+            throw RuntimeException("Couldn't serialize data '$newData' for file '$file'", t)
         }
 
         val tmpFile = File.createTempFile(
@@ -164,9 +159,9 @@ internal class DiskDataStoreImpl<T>(
         )
 
         try {
-            tmpFile.bufferedWriter().use { it.write(serializedData) }
+            tmpFile.writeText(serializedData)
             if (!tmpFile.renameTo(file)) {
-                throw IOException("$tmpFile could not be renamed to $file")
+                throw IOException("$tmpFile couldn't be renamed to $file")
             }
         } catch (e: IOException) {
             if (tmpFile.exists()) {
