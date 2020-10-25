@@ -143,7 +143,7 @@ fun checkableAppsStore(
         .mapLatest { installedApps.await().filter(it) }
         .executeIn(this) { copy(apps = it) }
 
-    onEachAction { action ->
+    for (action in this) {
         suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
             val currentState = currentState()
             val newCheckedApps = currentState.checkableApps()!!

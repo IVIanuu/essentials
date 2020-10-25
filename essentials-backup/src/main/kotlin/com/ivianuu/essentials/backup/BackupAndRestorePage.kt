@@ -65,7 +65,7 @@ fun backupAndRestoreStore(
     restoreData: restoreData,
     showToastRes: showToastRes,
 ) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             BackupData -> {
                 backupData()

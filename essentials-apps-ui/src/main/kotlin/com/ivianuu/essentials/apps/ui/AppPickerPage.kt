@@ -102,9 +102,9 @@ fun appPickerStore(
         reducer = { copy(allApps = it) }
     )
 
-    onEachAction {
-        when (it) {
-            is PickApp -> navigator.popTop(result = it.app)
+    for (action in this) {
+        when (action) {
+            is PickApp -> navigator.popTop(result = action.app)
         }.exhaustive
     }
 }

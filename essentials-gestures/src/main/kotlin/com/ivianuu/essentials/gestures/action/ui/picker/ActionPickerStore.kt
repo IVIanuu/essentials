@@ -91,13 +91,13 @@ fun actionPickerStore(
         reducer = { copy(items = it) }
     )
 
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             is PickAction -> {
-                val result = action.item.getResult() ?: return@onEachAction
+                val result = action.item.getResult() ?: continue
                 if (result is ActionPickerResult.Action) {
                     val pickedAction = getAction(result.actionKey)
-                    if (!requestPermissions(pickedAction.permissions)) return@onEachAction
+                    if (!requestPermissions(pickedAction.permissions)) continue
                 }
 
                 navigator.popTop(result = result)

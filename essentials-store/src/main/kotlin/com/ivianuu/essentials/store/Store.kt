@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.DispatchAction
 import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.SetState
 import kotlinx.coroutines.CompletableDeferred
@@ -27,7 +26,6 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +39,12 @@ interface Store<S, A> {
 interface StoreScope<S, A> : CoroutineScope {
     val state: Flow<S>
     suspend fun setState(block: suspend S.() -> S): S
-    suspend fun onEachAction(block: suspend (A) -> Unit)
+    operator fun iterator(): StoreScopeIterator<S, A>
+}
+
+interface StoreScopeIterator<S, A> {
+    suspend operator fun hasNext(): Boolean
+    suspend operator fun next(): A
 }
 
 suspend inline fun <S, A> StoreScope<S, A>.currentState(): S = state.first()
@@ -56,6 +59,10 @@ inline fun <S, A, T> Flow<T>.setStateIn(
         }
     }
         .launchIn(scope)
+}
+
+suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
+    for (action in this) block(action)
 }
 
 suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reduce: suspend S.(A) -> S) {
@@ -98,12 +105,12 @@ internal class StoreFromSourceImpl<S, A>(
     block: suspend StoreScope<S, A>.() -> Unit
 ) : Store<S, A>, StoreScope<S, A>, CoroutineScope by scope {
 
-    private val actions = EventFlow<A>()
+    private val actions = Channel<A>(Channel.UNLIMITED)
 
     private val actor = actor<StoreMessage<S, A>>(capacity = Channel.UNLIMITED) {
         for (msg in channel) {
             when (msg) {
-                is DispatchAction -> actions.emit(msg.action)
+                is DispatchAction -> actions.offer(msg.action)
                 is SetState -> {
                     val currentState = state.value
                     val newState = msg.block(currentState)
@@ -128,8 +135,10 @@ internal class StoreFromSourceImpl<S, A>(
         return acknowledged.await()
     }
 
-    override suspend fun onEachAction(block: suspend (A) -> Unit) {
-        actions.collect(block)
+    override fun iterator(): StoreScopeIterator<S, A> = object : StoreScopeIterator<S, A> {
+        private val channelIterator = actions.iterator()
+        override suspend fun hasNext(): Boolean = channelIterator.hasNext()
+        override suspend fun next(): A = channelIterator.next()
     }
 
     sealed class StoreMessage<S, A> {

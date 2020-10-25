@@ -104,12 +104,12 @@ fun shortcutPickerStore(
         reducer = { copy(shortcuts = it) }
     )
 
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             is ShortcutPickerAction.PickShortcut -> {
                 try {
                     val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
-                        .data ?: return@onEachAction
+                        .data ?: continue
                     val shortcut = extractShortcut(shortcutRequestResult)
                     navigator.popTop(result = shortcut)
                 } catch (t: Throwable) {

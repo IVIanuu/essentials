@@ -189,7 +189,7 @@ fun notificationStore(
         copy(hasPermissions = hasPermissions, notifications = notifications)
     }
 
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             is RequestPermissions -> {
                 requestPermissions(listOf(permission))

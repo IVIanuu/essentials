@@ -127,7 +127,7 @@ fun defaultPermissionStore(
 
     updatePermissionsToProcessOrFinish()
 
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             is PermissionAction.RequestPermission -> {
                 action.permission.requestHandler().request(action.permission)

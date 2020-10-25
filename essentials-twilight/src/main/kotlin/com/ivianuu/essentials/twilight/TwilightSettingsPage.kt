@@ -71,7 +71,7 @@ fun twilightPageStore(
     updateUseBlackInDarkMode: updateUseBlackInDarkMode
 ) = storeProvider<TwilightPageState, TwilightPageAction>(TwilightPageState()) {
     twilightPrefs.setStateIn(this) { copy(prefs = it) }
-    onEachAction { action ->
+    for (action in this) {
         when (action) {
             is UpdateTwilightMode -> updateTwilightMode(action.mode)
             is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.useBlackInDarkMode)
