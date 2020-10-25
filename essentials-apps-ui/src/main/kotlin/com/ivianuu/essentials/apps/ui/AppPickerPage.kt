@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.AppPickerAction.AppClicked
+import com.ivianuu.essentials.apps.ui.AppPickerAction.PickApp
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -66,7 +66,7 @@ fun AppPickerPage(
         ResourceLazyColumnFor(state.filteredApps) { app ->
             key(app.packageName) {
                 AppInfo(
-                    onClick = { dispatch(AppClicked(app)) },
+                    onClick = { dispatch(PickApp(app)) },
                     app = app
                 )
             }
@@ -104,7 +104,7 @@ fun appPickerStore(
 
     onEachAction {
         when (it) {
-            is AppClicked -> navigator.popTop(result = it.app)
+            is PickApp -> navigator.popTop(result = it.app)
         }.exhaustive
     }
 }
@@ -118,5 +118,5 @@ data class AppPickerState(
 }
 
 sealed class AppPickerAction {
-    data class AppClicked(val app: AppInfo) : AppPickerAction()
+    data class PickApp(val app: AppInfo) : AppPickerAction()
 }

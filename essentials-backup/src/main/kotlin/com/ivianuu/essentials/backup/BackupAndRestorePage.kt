@@ -18,8 +18,8 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.runtime.Composable
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupClicked
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreClicked
+import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
+import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
@@ -47,13 +47,13 @@ fun BackupAndRestorePage(
             ListItem(
                 title = { Text(R.string.es_pref_backup) },
                 subtitle = { Text(R.string.es_pref_backup_summary) },
-                onClick = { dispatch(BackupClicked) }
+                onClick = { dispatch(BackupData) }
             )
 
             ListItem(
                 title = { Text(R.string.es_pref_restore) },
                 subtitle = { Text(R.string.es_pref_restore_summary) },
-                onClick = { dispatch(RestoreClicked) }
+                onClick = { dispatch(RestoreData) }
             )
         }
     }
@@ -67,14 +67,14 @@ fun backupAndRestoreStore(
 ) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
     onEachAction { action ->
         when (action) {
-            BackupClicked -> {
+            BackupData -> {
                 backupData()
                     .onFailure {
                         it.printStackTrace()
                         showToastRes(R.string.es_backup_error)
                     }
             }
-            RestoreClicked -> {
+            RestoreData -> {
                 restoreData()
                     .onFailure {
                         it.printStackTrace()
@@ -88,6 +88,6 @@ fun backupAndRestoreStore(
 object BackupAndRestoreState
 
 sealed class BackupAndRestoreAction {
-    object BackupClicked : BackupAndRestoreAction()
-    object RestoreClicked : BackupAndRestoreAction()
+    object BackupData : BackupAndRestoreAction()
+    object RestoreData : BackupAndRestoreAction()
 }

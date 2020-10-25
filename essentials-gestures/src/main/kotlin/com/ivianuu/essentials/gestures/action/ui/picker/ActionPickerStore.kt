@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.ItemClicked
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
@@ -93,7 +93,7 @@ fun actionPickerStore(
 
     onEachAction { action ->
         when (action) {
-            is ItemClicked -> {
+            is PickAction -> {
                 val result = action.item.getResult() ?: return@onEachAction
                 if (result is ActionPickerResult.Action) {
                     val pickedAction = getAction(result.actionKey)
@@ -169,5 +169,5 @@ sealed class ActionPickerItem {
 data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
 
 sealed class ActionPickerAction {
-    data class ItemClicked(val item: ActionPickerItem) : ActionPickerAction()
+    data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
 }

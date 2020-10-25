@@ -52,9 +52,9 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotificationClicked
-import com.ivianuu.essentials.sample.ui.NotificationsAction.NotificationClicked
-import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissionsClicked
+import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
+import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
+import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.tuples.combine
@@ -91,15 +91,15 @@ fun NotificationsPage(store: rememberStore<NotificationsState, NotificationsActi
                 NotificationsList(
                     notifications = state.notifications,
                     onNotificationClick = {
-                        dispatch(NotificationClicked(it))
+                        dispatch(OpenNotification(it))
                     },
                     onDismissNotificationClick = {
-                        dispatch(DismissNotificationClicked(it))
+                        dispatch(DismissNotification(it))
                     }
                 )
             } else {
                 NotificationPermissions {
-                    dispatch(RequestPermissionsClicked)
+                    dispatch(RequestPermissions)
                 }
             }
         }
@@ -191,13 +191,13 @@ fun notificationStore(
 
     onEachAction { action ->
         when (action) {
-            is RequestPermissionsClicked -> {
+            is RequestPermissions -> {
                 requestPermissions(listOf(permission))
             }
-            is NotificationClicked -> {
+            is OpenNotification -> {
                 notificationStore.openNotification(action.notification.sbn.notification)
             }
-            is DismissNotificationClicked -> {
+            is DismissNotification -> {
                 notificationStore.dismissNotification(action.notification.sbn.key)
             }
         }.exhaustive
@@ -252,9 +252,9 @@ data class NotificationsState(
 )
 
 sealed class NotificationsAction {
-    object RequestPermissionsClicked : NotificationsAction()
-    data class NotificationClicked(val notification: UiNotification) : NotificationsAction()
-    data class DismissNotificationClicked(val notification: UiNotification) : NotificationsAction()
+    object RequestPermissions : NotificationsAction()
+    data class OpenNotification(val notification: UiNotification) : NotificationsAction()
+    data class DismissNotification(val notification: UiNotification) : NotificationsAction()
 }
 
 data class UiNotification(

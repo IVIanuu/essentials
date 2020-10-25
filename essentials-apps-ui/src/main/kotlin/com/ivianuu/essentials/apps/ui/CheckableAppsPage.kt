@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.AppClicked
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAllClicked
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAllClicked
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAll
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAll
+import com.ivianuu.essentials.apps.ui.CheckableAppsAction.ToggleApp
 import com.ivianuu.essentials.apps.ui.CheckableAppsAction.UpdateRefs
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.storeProvider
@@ -82,14 +82,14 @@ fun CheckableAppsPage(
                         items = listOf(
                             PopupMenu.Item(
                                 onSelected = {
-                                    dispatch(SelectAllClicked)
+                                    dispatch(SelectAll)
                                 }
                             ) {
                                 Text(R.string.es_select_all)
                             },
                             PopupMenu.Item(
                                 onSelected = {
-                                    dispatch(DeselectAllClicked)
+                                    dispatch(DeselectAll)
                                 }
                             ) {
                                 Text(R.string.es_deselect_all)
@@ -103,7 +103,7 @@ fun CheckableAppsPage(
         ResourceLazyColumnFor(state.checkableApps) { app ->
             CheckableApp(
                 app = app,
-                onClick = { dispatch(AppClicked(app)) }
+                onClick = { dispatch(ToggleApp(app)) }
             )
         }
     }
@@ -164,7 +164,7 @@ fun checkableAppsStore(
                     )
                 }
             }
-            is AppClicked -> {
+            is ToggleApp -> {
                 pushNewCheckedApps {
                     if (!action.app.isChecked) {
                         it += action.app.info.packageName
@@ -173,14 +173,14 @@ fun checkableAppsStore(
                     }
                 }
             }
-            SelectAllClicked -> {
+            SelectAll -> {
                 currentState().apps()?.let { allApps ->
                     pushNewCheckedApps { newApps ->
                         newApps += allApps.map { it.packageName }
                     }
                 }
             }
-            DeselectAllClicked -> {
+            DeselectAll -> {
                 pushNewCheckedApps { it.clear() }
             }
         }.exhaustive
@@ -219,7 +219,7 @@ sealed class CheckableAppsAction {
         val appFilter: AppFilter
     ) : CheckableAppsAction()
 
-    data class AppClicked(val app: CheckableApp) : CheckableAppsAction()
-    object SelectAllClicked : CheckableAppsAction()
-    object DeselectAllClicked : CheckableAppsAction()
+    data class ToggleApp(val app: CheckableApp) : CheckableAppsAction()
+    object SelectAll : CheckableAppsAction()
+    object DeselectAll : CheckableAppsAction()
 }

@@ -66,7 +66,7 @@ fun ShortcutPickerPage(
         ResourceLazyColumnFor(state.shortcuts) { shortcut ->
             Shortcut(
                 info = shortcut,
-                onClick = { dispatch(ShortcutPickerAction.ShortcutClicked(shortcut)) }
+                onClick = { dispatch(ShortcutPickerAction.PickShortcut(shortcut)) }
             )
         }
     }
@@ -106,7 +106,7 @@ fun shortcutPickerStore(
 
     onEachAction { action ->
         when (action) {
-            is ShortcutPickerAction.ShortcutClicked -> {
+            is ShortcutPickerAction.PickShortcut -> {
                 try {
                     val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
                         .data ?: return@onEachAction
@@ -126,5 +126,5 @@ data class ShortcutPickerState(
 )
 
 sealed class ShortcutPickerAction {
-    data class ShortcutClicked(val shortcut: Shortcut) : ShortcutPickerAction()
+    data class PickShortcut(val shortcut: Shortcut) : ShortcutPickerAction()
 }

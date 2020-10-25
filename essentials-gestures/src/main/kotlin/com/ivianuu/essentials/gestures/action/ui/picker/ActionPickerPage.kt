@@ -44,7 +44,7 @@ fun ActionPickerPage(
         ResourceLazyColumnFor(state.items) { item ->
             ActionPickerItem(
                 item = item,
-                onClick = { dispatch(ActionPickerAction.ItemClicked(item)) }
+                onClick = { dispatch(ActionPickerAction.PickAction(item)) }
             )
         }
     }

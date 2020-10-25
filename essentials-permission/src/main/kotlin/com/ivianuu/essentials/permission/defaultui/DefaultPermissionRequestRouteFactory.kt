@@ -74,7 +74,7 @@ fun DefaultPermissionPage(
             state.permissionsToProcess.forEach { permission ->
                 Permission(
                     permission = permission,
-                    onClick = { dispatch(PermissionAction.PermissionClicked(permission)) }
+                    onClick = { dispatch(PermissionAction.RequestPermission(permission)) }
                 )
             }
         }
@@ -129,7 +129,7 @@ fun defaultPermissionStore(
 
     onEachAction { action ->
         when (action) {
-            is PermissionAction.PermissionClicked -> {
+            is PermissionAction.RequestPermission -> {
                 action.permission.requestHandler().request(action.permission)
                 startUi()
                 updatePermissionsToProcessOrFinish()
@@ -143,5 +143,5 @@ data class PermissionState(
 )
 
 sealed class PermissionAction {
-    data class PermissionClicked(val permission: Permission) : PermissionAction()
+    data class RequestPermission(val permission: Permission) : PermissionAction()
 }
