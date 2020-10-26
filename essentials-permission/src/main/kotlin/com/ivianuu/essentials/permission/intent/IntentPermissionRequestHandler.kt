@@ -23,12 +23,12 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.util.startActivityForIntentResult
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.job
 import kotlinx.coroutines.selects.select
 
 val Permission.Companion.Intent by lazy {
@@ -57,7 +57,7 @@ class IntentPermissionRequestHandler(
                 }
             }.onAwait {}
         }.also {
-            coroutineContext[Job]?.children?.toList()?.parallelForEach { it.cancelAndJoin() }
+            coroutineContext.job.children.toList().parallelForEach { it.cancelAndJoin() }
         }
     }
 }

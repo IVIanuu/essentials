@@ -77,7 +77,7 @@ object Deps {
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
-        private const val version = "1.4.0-M1"
+        private const val version = "1.4.0"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
