@@ -39,10 +39,10 @@ interface Store<S, A> {
 interface StoreScope<S, A> : CoroutineScope {
     val state: Flow<S>
     suspend fun setState(block: suspend S.() -> S): S
-    operator fun iterator(): StoreScopeIterator<S, A>
+    operator fun iterator(): StoreScopeActionIterator<S, A>
 }
 
-interface StoreScopeIterator<S, A> {
+interface StoreScopeActionIterator<S, A> {
     suspend operator fun hasNext(): Boolean
     suspend operator fun next(): A
 }
@@ -135,7 +135,7 @@ internal class StoreFromSourceImpl<S, A>(
         return acknowledged.await()
     }
 
-    override fun iterator(): StoreScopeIterator<S, A> = object : StoreScopeIterator<S, A> {
+    override fun iterator(): StoreScopeActionIterator<S, A> = object : StoreScopeActionIterator<S, A> {
         private val channelIterator = actions.iterator()
         override suspend fun hasNext(): Boolean = channelIterator.hasNext()
         override suspend fun next(): A = channelIterator.next()
