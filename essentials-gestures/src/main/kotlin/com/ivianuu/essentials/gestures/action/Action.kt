@@ -21,10 +21,9 @@ import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 import kotlinx.coroutines.flow.Flow
 
 @Immutable
@@ -40,7 +39,7 @@ data class Action(
 
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class ActionBinding {
     companion object {
         @SetElements
@@ -61,7 +60,7 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class ActionFactoryBinding {
     companion object {
         @SetElements
@@ -75,7 +74,7 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class ActionPickerDelegateBinding {
     companion object {
         @SetElements

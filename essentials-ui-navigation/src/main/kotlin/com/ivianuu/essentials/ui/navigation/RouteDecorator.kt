@@ -2,12 +2,11 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class RouteDecoratorBinding {
     companion object {
         @SetElements

@@ -18,12 +18,11 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ActivityComponent::class)
+@BindingAdapter
 annotation class UiDecoratorBinding {
     companion object {
         @SetElements

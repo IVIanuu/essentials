@@ -23,9 +23,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.MapEntries
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
@@ -41,7 +40,7 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class WorkerBinding {
     companion object {
         @MapEntries

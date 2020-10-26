@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.boot
 
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class BootListenerBinding {
     companion object {
         @SetElements

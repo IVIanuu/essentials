@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.accessibility
 
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ServiceComponent::class)
+@BindingAdapter
 annotation class AccessibilityWorkerBinding {
     companion object {
         @SetElements

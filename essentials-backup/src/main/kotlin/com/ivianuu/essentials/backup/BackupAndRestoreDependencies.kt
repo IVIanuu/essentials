@@ -19,12 +19,11 @@ package com.ivianuu.essentials.backup
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 import java.io.File
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class BackupFile {
     companion object {
         @SetElements

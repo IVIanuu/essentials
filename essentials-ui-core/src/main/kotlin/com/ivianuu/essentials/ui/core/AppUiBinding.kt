@@ -18,10 +18,9 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.merge.BindingModule
+import com.ivianuu.injekt.BindingAdapter
 
-@BindingModule(ActivityComponent::class)
+@BindingAdapter
 annotation class AppUiBinding {
     companion object {
         @Binding

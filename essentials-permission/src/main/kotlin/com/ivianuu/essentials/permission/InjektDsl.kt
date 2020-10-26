@@ -17,11 +17,10 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class PermissionStateProviderBinding {
     companion object {
         @SetElements
@@ -29,7 +28,7 @@ annotation class PermissionStateProviderBinding {
     }
 }
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class PermissionRequestHandlerBinding {
     companion object {
         @SetElements
@@ -38,7 +37,7 @@ annotation class PermissionRequestHandlerBinding {
     }
 }
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class PermissionRequestRouteFactoryBinding {
     companion object {
         @Binding

@@ -17,12 +17,11 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.BindingModule
 
-@BindingModule(ApplicationComponent::class)
+@BindingAdapter
 annotation class AppInitializerBinding {
     companion object {
         @SetElements
