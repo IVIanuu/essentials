@@ -28,7 +28,6 @@ class SettingsDataStoreFactory(
     private val mainDispatcher: MainDispatcher,
     private val scope: CoroutineScope,
 ) {
-
     fun <T> create(
         name: String,
         type: SettingDataStore.Type,
