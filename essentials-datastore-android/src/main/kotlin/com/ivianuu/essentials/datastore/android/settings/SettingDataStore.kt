@@ -25,7 +25,6 @@ import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -62,7 +61,7 @@ object SettingDataStore {
 
 private val MainHandler = Handler()
 
-class SettingDataStoreImpl<T>(
+internal class SettingDataStoreImpl<T>(
     private val type: SettingDataStore.Type,
     val name: String,
     override val defaultData: T,
@@ -81,7 +80,7 @@ class SettingDataStoreImpl<T>(
     }
 
     override val data: Flow<T> = callbackFlow<Unit> {
-        val observer = withContext(Dispatchers.Main) {
+        val observer = withContext(mainDispatcher) {
             object : ContentObserver(MainHandler) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
