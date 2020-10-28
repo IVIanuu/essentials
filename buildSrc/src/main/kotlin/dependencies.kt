@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev687"
+    const val version = "${Build.versionName}-dev688"
 }
 
 object Deps {
@@ -72,7 +72,7 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val coil = "io.coil-kt:coil:0.11.0"
+    const val coil = "io.coil-kt:coil:1.0.0"
 
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
