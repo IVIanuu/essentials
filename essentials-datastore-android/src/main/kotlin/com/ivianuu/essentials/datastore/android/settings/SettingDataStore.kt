@@ -42,7 +42,6 @@ object SettingDataStore {
     }
 
     interface Adapter<T> {
-
         fun get(
             name: String,
             defaultData: T,

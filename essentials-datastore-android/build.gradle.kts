@@ -31,5 +31,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(Deps.AndroidX.Compose.core)
     api(Deps.Coroutines.core)
+    kapt(Deps.Moshi.codegen)
     api(project(":essentials-datastore"))
+    testImplementation(project(":essentials-test"))
 }
