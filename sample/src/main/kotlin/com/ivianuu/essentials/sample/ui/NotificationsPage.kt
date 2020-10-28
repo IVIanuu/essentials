@@ -40,8 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationStore
@@ -51,6 +49,8 @@ import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.result.fold
+import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
@@ -76,6 +76,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 @FunBinding

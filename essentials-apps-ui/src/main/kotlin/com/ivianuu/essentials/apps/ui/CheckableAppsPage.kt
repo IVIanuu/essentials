@@ -42,7 +42,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.resource.invoke
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2

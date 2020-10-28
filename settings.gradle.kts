@@ -32,6 +32,7 @@ include(
     ":essentials-permission",
     ":essentials-process-restart",
     ":essentials-recent-apps",
+    ":essentials-result",
     ":essentials-screen-state",
     ":essentials-secure-settings",
     ":essentials-service",

@@ -18,9 +18,9 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.core.content.FileProvider
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -39,7 +39,7 @@ import java.util.zip.ZipOutputStream
 suspend fun backupData(
     applicationContext: ApplicationContext,
     backupDir: BackupDir,
-    backupFiles: () -> BackupFiles,
+    backupFiles: BackupFiles,
     buildInfo: BuildInfo,
     ioDispatcher: IODispatcher,
     navigator: Navigator,
@@ -57,7 +57,7 @@ suspend fun backupData(
         val dest = FileOutputStream(backupFile)
         val out = ZipOutputStream(BufferedOutputStream(dest))
 
-        backupFiles()
+        backupFiles
             .flatMap { it.walkTopDown() }
             .filterNot { it.isDirectory }
             .filterNot { it.absolutePath in BACKUP_BLACKLIST }

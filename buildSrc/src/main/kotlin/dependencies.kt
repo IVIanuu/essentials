@@ -110,14 +110,6 @@ object Deps {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
     }
 
-    const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
-
-    object KotlinResult {
-        private const val version = "1.1.9"
-        const val core = "com.michael-bull.kotlin-result:kotlin-result:$version"
-        const val coroutines = "com.michael-bull.kotlin-result:kotlin-result-coroutines:$version"
-    }
-
     const val mockk = "io.mockk:mockk:1.10.0"
 
     object Moshi {

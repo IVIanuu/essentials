@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToast

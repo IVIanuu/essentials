@@ -16,15 +16,6 @@
 
 package com.ivianuu.essentials.result
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.unwrap
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.transform
-
 inline fun <V> binding(@BuilderInference block: ResultBinding<V>.() -> V): Result<V, Throwable> {
     val receiver = ResultBindingImpl<V>()
     return try {
@@ -51,28 +42,6 @@ internal class ResultBindingImpl<V> : ResultBinding<V> {
                 this@ResultBindingImpl.error = this
                 throw BindException
             }
-        }
-    }
-}
-
-fun <V> Flow<V>.flowCatching(): Flow<Result<V, Throwable>> {
-    return map<V, Result<V, Throwable>> { Ok(it) }
-        .catch {
-            it.printStackTrace()
-            emit(Err(it))
-        }
-}
-
-fun <V, E> Flow<Result<V, E>>.unwrap(): Flow<V> {
-    return map { it.unwrap() }
-}
-
-@JvmName("unwrapThrowable")
-fun <V> Flow<Result<V, Throwable>>.unwrap(): Flow<V> {
-    return transform {
-        when (it) {
-            is Ok -> emit(it.value)
-            is Err -> throw it.error
         }
     }
 }

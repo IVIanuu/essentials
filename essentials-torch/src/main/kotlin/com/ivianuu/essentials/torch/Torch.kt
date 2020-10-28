@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher

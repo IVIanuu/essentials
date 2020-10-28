@@ -23,9 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.fold
-import com.ivianuu.essentials.result.unwrap
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +33,9 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
 @Immutable
-sealed class Resource<out T>
+sealed class Resource<out T> {
+    open operator fun invoke(): T? = null
+}
 
 @Immutable
 object Idle : Resource<Nothing>() {
@@ -48,6 +49,7 @@ object Loading : Resource<Nothing>() {
 
 @Immutable
 class Success<T>(val value: T) : Resource<T>() {
+    override fun invoke() = value
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -84,36 +86,22 @@ class Error(val error: Throwable) : Resource<Nothing>() {
     override fun toString(): String = "Err(value=$error)"
 }
 
-operator fun <T> Resource<T>.invoke(): T? = (this as? Success)?.value
-
-operator fun <T> Success<T>.invoke(): T = value
-
 val Resource<*>.shouldLoad: Boolean get() = this is Idle || this is Error
 
 val Resource<*>.isComplete: Boolean get() = this is Success || this is Error
 
-inline fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> {
-    return when (this) {
-        is Success -> Success(transform(value))
-        else -> this as Resource<R>
-    }
+inline fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> = when (this) {
+    is Success -> Success(transform(value))
+    else -> this as Resource<R>
 }
 
-inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R> {
-    return when (this) {
-        is Success -> transform(value)
-        else -> this as Resource<R>
-    }
+inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R> = when (this) {
+    is Success -> transform(value)
+    else -> this as Resource<R>
 }
 
-fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> {
-    return resourceFlow { emitAll(this@flowAsResource) }
-}
-
-@JvmName("flowAsyncFromResult")
-fun <V> Flow<Result<V, Throwable>>.flowAsResource(): Flow<Resource<V>> {
-    return unwrap()
-        .flowAsResource()
+fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
+    emitAll(this@flowAsResource)
 }
 
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
@@ -140,13 +128,8 @@ fun <T> Flow<T>.collectAsResource(): Resource<T> {
 
 // todo remove overload once compose is fixed
 @Composable
-fun <T> produceResource(
-    block: suspend CoroutineScope.() -> T
-): Resource<T> =
-    produceResource(
-        inputs = *emptyArray(),
-        block = block
-    )
+fun <T> produceResource(block: suspend CoroutineScope.() -> T): Resource<T> =
+    produceResource(inputs = *emptyArray(), block = block)
 
 @Composable
 fun <T> produceResource(

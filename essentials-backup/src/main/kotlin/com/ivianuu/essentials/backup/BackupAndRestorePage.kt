@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.backup
 
 import androidx.compose.runtime.Composable
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
