@@ -19,6 +19,7 @@ package com.ivianuu.essentials.screenstate
 import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.injekt.android.ApplicationContext
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +30,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -52,7 +51,7 @@ class ConfigChangesTest {
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
-        expectThat(eventCount).isEqualTo(3)
+        eventCount shouldBe 3
         collectorJob.cancelAndJoin()
     }
 }

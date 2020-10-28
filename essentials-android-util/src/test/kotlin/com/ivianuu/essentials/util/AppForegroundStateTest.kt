@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
@@ -28,8 +29,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.containsExactly
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -54,7 +53,7 @@ class AppForegroundStateTest {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
 
-        expectThat(events).containsExactly(
+        events.shouldContainExactly(
             false,
             true,
             false,

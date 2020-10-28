@@ -151,7 +151,7 @@ internal class DiskDataStoreImpl<T>(
         val serializedData = try {
             serializer.serialize(newData)
         } catch (e: Throwable) {
-            throw RuntimeException("Couldn't serialize data '$newData' for file '$file'", t)
+            throw RuntimeException("Couldn't serialize data '$newData' for file '$file'", e)
         }
 
         val tmpFile = File.createTempFile(

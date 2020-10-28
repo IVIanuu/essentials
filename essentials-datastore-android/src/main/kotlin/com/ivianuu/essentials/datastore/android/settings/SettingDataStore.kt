@@ -112,7 +112,7 @@ internal class SettingDataStoreImpl<T>(
                     newData
                 }
             } catch (e: Throwable) {
-                throw RuntimeException("Couldn't write data for name: $name", t)
+                throw RuntimeException("Couldn't write data for name: $name", e)
             }
         }
 
@@ -120,7 +120,7 @@ internal class SettingDataStoreImpl<T>(
         try {
             adapter.get(name, defaultData, contentResolver, type)
         } catch (e: Throwable) {
-            throw RuntimeException("Couldn't read data for name: $name", t)
+            throw RuntimeException("Couldn't read data for name: $name", e)
         }
     }
 }

@@ -143,7 +143,7 @@ fun <T> produceResource(
         state = try {
             Success(block())
         } catch (e: Throwable) {
-            Error(t)
+            Error(e)
         }
     }
 

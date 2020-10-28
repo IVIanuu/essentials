@@ -17,26 +17,22 @@
 package com.ivianuu.essentials.recentapps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.util.NoopLogger
+import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.containsExactly
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -106,13 +102,12 @@ class RecentAppsTest {
             )
         )
 
-        expectThat(recentApps)
-            .containsExactly(
-                listOf(),
-                listOf("a"),
-                listOf("b", "a"),
-                listOf("c", "b", "a")
-            )
+        recentApps.shouldContainExactly(
+            listOf(),
+            listOf("a"),
+            listOf("b", "a"),
+            listOf("c", "b", "a")
+        )
 
         collectorJob.cancelAndJoin()
         recentAppsScope.cancel()
@@ -133,13 +128,7 @@ class RecentAppsTest {
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("b", "c", "a"))
 
-        expectThat(currentApps)
-            .containsExactly(
-                "a",
-                "c",
-                "a",
-                "b"
-            )
+        currentApps.shouldContainExactly("a", "c", "a", "b")
 
         collectorJob.cancelAndJoin()
     }

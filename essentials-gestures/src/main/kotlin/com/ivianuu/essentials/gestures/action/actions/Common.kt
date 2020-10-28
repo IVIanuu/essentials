@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.shell.runShellCommand
+import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -47,7 +49,7 @@ suspend fun runRootCommand(
     try {
         runShellCommand(command)
     } catch (e: Throwable) {
-        t.printStackTrace()
+        e.printStackTrace()
         showToastRes(R.string.es_no_root)
     }
 }
@@ -64,7 +66,7 @@ fun sendIntent(
             applicationContext, 99, intent, 0, null
         ).send()
     } catch (e: Throwable) {
-        t.printStackTrace()
+        e.printStackTrace()
         showToastRes(R.string.es_activity_not_found)
     }
 }

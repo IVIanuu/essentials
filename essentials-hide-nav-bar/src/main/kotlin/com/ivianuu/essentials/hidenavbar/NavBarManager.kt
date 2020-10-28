@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -28,10 +29,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
@@ -87,7 +86,7 @@ class NavBarManager(
         }
 
         globalScope.launch {
-            buildList<Deferred<*>> {
+            coroutineScope {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
                         this += displayRotationFlow.drop(1)
@@ -99,12 +98,12 @@ class NavBarManager(
                 }
 
                 // apply config
-                this += async {
+                launch {
                     flows.merge()
                         .onStart { emit(Unit) }
                         .map {
                             !config.showWhileScreenOff ||
-                                screenStateFlow.first() == ScreenState.Unlocked
+                                    screenStateFlow.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             wasNavBarHiddenPref.updateData { navBarHidden }
@@ -112,8 +111,8 @@ class NavBarManager(
                         }
                         .collect()
                 }
-                this += async {
-                    // force show on shut downs
+                // force show on shut downs
+                launch {
                     broadcasts(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             mutex.withLock {
@@ -126,7 +125,7 @@ class NavBarManager(
                         }
                         .collect()
                 }
-            }.awaitAll()
+            }
         }.also { job ->
             mutex.withLock { this@NavBarManager.job = job }
         }
@@ -139,14 +138,14 @@ class NavBarManager(
                 // ensure that we can access non sdk interfaces
                 disableNonSdkInterfaceDetection()
             } catch (e: Throwable) {
-                t.printStackTrace()
+                e.printStackTrace()
             }
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             setOverscan(rect)
         } catch (e: Throwable) {
-            t.printStackTrace()
+            e.printStackTrace()
         }
     }
 

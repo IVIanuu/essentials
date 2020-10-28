@@ -31,7 +31,7 @@ dependencies {
     // compile(Deps.AndroidX.Ui.test)
     compile(Deps.Coroutines.test)
     compile(Deps.junit)
+    compile(Deps.kotestAssertions)
     compile(Deps.Kotlin.stdlib)
     compile(Deps.mockk)
-    compile(Deps.strikt)
 }

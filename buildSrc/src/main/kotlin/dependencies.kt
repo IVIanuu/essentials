@@ -101,6 +101,8 @@ object Deps {
 
     const val junit = "junit:junit:4.13"
 
+    const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
+
     object Kotlin {
         const val version = "1.4.255-SNAPSHOT"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
@@ -136,8 +138,6 @@ object Deps {
     const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
-
-    const val strikt = "io.strikt:strikt-core:0.26.1"
 
     const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }

@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.datastore
 
 import com.squareup.moshi.Moshi
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -24,9 +26,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.containsExactly
-import strikt.assertions.isEqualTo
 import java.nio.file.Files
 
 class DiskDataStoreTest {
@@ -46,11 +45,11 @@ class DiskDataStoreTest {
     fun testWrite() = scope.runBlockingTest {
         val (store, file) = createStore("test") { 0 }
         store.updateData { 1 }
-        expectThat(store.data.first()).isEqualTo(1)
-        expectThat(file.readText().toInt()).isEqualTo(1)
+        store.data.first() shouldBe 1
+        file.readText().toInt() shouldBe 1
         store.updateData { it + 1 }
-        expectThat(store.data.first()).isEqualTo(2)
-        expectThat(file.readText().toInt()).isEqualTo(2)
+        store.data.first() shouldBe 2
+        file.readText().toInt() shouldBe 2
     }
 
     @Test
@@ -63,13 +62,13 @@ class DiskDataStoreTest {
                 .collect { datas += it }
         }
 
-        expectThat(datas).containsExactly(0)
+        datas.shouldContainExactly(0)
         store.updateData { it + 1 }
-        expectThat(datas).containsExactly(0, 1)
+        datas.shouldContainExactly(0, 1)
         store.updateData { it + 1 }
         store.updateData { it + 1 }
         store.updateData { it }
-        expectThat(datas).containsExactly(0, 1, 2, 3)
+        datas.shouldContainExactly(0, 1, 2, 3)
 
         collectorJob.cancelAndJoin()
     }
@@ -89,16 +88,16 @@ class DiskDataStoreTest {
                 .collect { datas2 += it }
         }
 
-        expectThat(datas1).containsExactly(0)
-        expectThat(datas2).containsExactly(0)
+        datas1.shouldContainExactly(0)
+        datas2.shouldContainExactly(0)
         store.updateData { it + 1 }
-        expectThat(datas1).containsExactly(0, 1)
-        expectThat(datas2).containsExactly(0, 1)
+        datas1.shouldContainExactly(0, 1)
+        datas2.shouldContainExactly(0, 1)
         store.updateData { it + 1 }
         store.updateData { it + 1 }
         store.updateData { it }
-        expectThat(datas1).containsExactly(0, 1, 2, 3)
-        expectThat(datas2).containsExactly(0, 1, 2, 3)
+        datas1.shouldContainExactly(0, 1, 2, 3)
+        datas2.shouldContainExactly(0, 1, 2, 3)
 
         collectorJob1.cancelAndJoin()
         collectorJob2.cancelAndJoin()

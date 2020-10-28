@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.result
 
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class ResultBindingTest {
 
@@ -35,7 +34,7 @@ class ResultBindingTest {
             !doSomething()
         }
 
-        expectThat(invocations).isEqualTo(1)
+        invocations shouldBe 1
     }
 
 }

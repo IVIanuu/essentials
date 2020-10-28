@@ -21,6 +21,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.util.NoopLogger
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.cancel
@@ -32,9 +34,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.containsExactly
-import strikt.assertions.isEqualTo
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -65,12 +64,7 @@ class ScreenStateTest {
         currentScreenState = ScreenState.Unlocked
         broadcasts.emit(Intent())
 
-        expectThat(values)
-            .containsExactly(
-                ScreenState.Off,
-                ScreenState.Locked,
-                ScreenState.Unlocked
-            )
+        values.shouldContainExactly(ScreenState.Off, ScreenState.Locked, ScreenState.Unlocked)
 
         collectorJob.cancelAndJoin()
         globalScope.cancel()
@@ -85,7 +79,7 @@ class ScreenStateTest {
                 every { isInteractive } returns false
             }
         )
-        expectThat(screenState).isEqualTo(ScreenState.Off)
+        screenState shouldBe ScreenState.Off
     }
 
     @Test
@@ -99,7 +93,7 @@ class ScreenStateTest {
                 every { isInteractive } returns true
             }
         )
-        expectThat(screenState).isEqualTo(ScreenState.Locked)
+        screenState shouldBe ScreenState.Locked
     }
 
     @Test
@@ -113,6 +107,6 @@ class ScreenStateTest {
                 every { isInteractive } returns true
             }
         )
-        expectThat(screenState).isEqualTo(ScreenState.Unlocked)
+        screenState shouldBe ScreenState.Unlocked
     }
 }

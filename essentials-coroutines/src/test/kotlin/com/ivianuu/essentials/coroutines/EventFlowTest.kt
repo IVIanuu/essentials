@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.coroutines
 
+import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.containsExactly
 
 class EventFlowTest {
 
@@ -39,8 +38,7 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        expectThat(values)
-            .containsExactly(1, 2, 3)
+        values.shouldContainExactly(1, 2, 3)
 
         collectorJob.cancelAndJoin()
     }
@@ -62,10 +60,8 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        expectThat(values1)
-            .containsExactly(1, 2, 3)
-        expectThat(values2)
-            .containsExactly(1, 2, 3)
+        values1.shouldContainExactly(1, 2, 3)
+        values2.shouldContainExactly(1, 2, 3)
 
         collectorJob1.cancelAndJoin()
         collectorJob2.cancelAndJoin()
@@ -88,7 +84,7 @@ class EventFlowTest {
 
         advanceUntilIdle()
 
-        expectThat(values).containsExactly(1, 2, 3)
+        values.shouldContainExactly(1, 2, 3)
 
         collectorJob.cancelAndJoin()
     }
@@ -108,7 +104,7 @@ class EventFlowTest {
             }
         }
 
-        expectThat(values).containsExactly(1, 2, 3)
+        values.shouldContainExactly(1, 2, 3)
 
         collectorJob.cancelAndJoin()
     }
@@ -128,7 +124,7 @@ class EventFlowTest {
             }
         }
 
-        expectThat(values).containsExactly(2, 3)
+        values.shouldContainExactly(2, 3)
 
         collectorJob.cancelAndJoin()
     }

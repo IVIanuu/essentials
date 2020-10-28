@@ -19,9 +19,12 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
+import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
@@ -56,7 +59,7 @@ fun openHomeScreen(
         val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         applicationContext.sendBroadcast(intent)
     } catch (e: Throwable) {
-        t.printStackTrace()
+        e.printStackTrace()
     }
 
     sendIntent(

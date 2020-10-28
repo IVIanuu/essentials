@@ -18,6 +18,7 @@ package com.ivianuu.essentials.securesettings
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 

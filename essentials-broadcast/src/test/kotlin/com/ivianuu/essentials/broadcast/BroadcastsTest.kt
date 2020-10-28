@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.injekt.android.ApplicationContext
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -30,8 +31,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
@@ -52,7 +51,7 @@ class BroadcastsTest {
         val collectorJob = launch { broadcasts.collect { eventCount++ } }
         receiver.onReceive(applicationContext, Intent("action"))
         receiver.onReceive(applicationContext, Intent("action"))
-        expectThat(eventCount).isEqualTo(2)
+        eventCount shouldBe 2
         collectorJob.cancelAndJoin()
     }
 }
