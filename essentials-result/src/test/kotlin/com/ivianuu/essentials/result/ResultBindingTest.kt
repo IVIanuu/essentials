@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.result
 
-import com.github.michaelbull.result.Err
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
