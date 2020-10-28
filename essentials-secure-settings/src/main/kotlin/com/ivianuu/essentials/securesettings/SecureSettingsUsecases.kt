@@ -18,7 +18,6 @@ package com.ivianuu.essentials.securesettings
 
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
@@ -36,6 +35,6 @@ suspend fun grantSecureSettingsPermissionViaRoot(
 ): Boolean = try {
     runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
     hasSecureSettingsPermission()
-} catch (t: Throwable) {
+} catch (e: Throwable) {
     false
 }

@@ -33,7 +33,7 @@ suspend fun <T> retry(
     repeat(times - 1) {
         try {
             return block()
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
             if (!predicate(t)) throw RuntimeException(t)
         }
         delay(currentDelay.toLongMilliseconds()) // todo remove toLongMilliseconds()

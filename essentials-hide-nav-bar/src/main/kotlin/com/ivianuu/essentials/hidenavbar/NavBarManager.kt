@@ -18,7 +18,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -139,14 +138,14 @@ class NavBarManager(
             try {
                 // ensure that we can access non sdk interfaces
                 disableNonSdkInterfaceDetection()
-            } catch (t: Throwable) {
+            } catch (e: Throwable) {
                 t.printStackTrace()
             }
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             setOverscan(rect)
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
             t.printStackTrace()
         }
     }

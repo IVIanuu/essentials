@@ -24,7 +24,7 @@ class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
     override fun serialize(data: T): String {
         return try {
             adapter.toJson(data)
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
             throw SerializerException("Failed to serialize $data", t)
         }
     }
@@ -32,7 +32,7 @@ class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
     override fun deserialize(serializedData: String): T {
         return try {
             adapter.fromJson(serializedData)!!
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
             throw SerializerException("Failed to deserialize $serializedData", t)
         }
     }

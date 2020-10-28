@@ -48,13 +48,13 @@ fun broadcasts(
                 addAction(action)
             }
         )
-    } catch (t: Throwable) {
+    } catch (e: Throwable) {
     }
 
     awaitClose {
         try {
             applicationContext.unregisterReceiver(broadcastReceiver)
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
         }
     }
 }.flowOn(mainDispatcher)

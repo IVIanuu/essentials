@@ -21,7 +21,11 @@ import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 interface NotificationStore {
@@ -53,7 +57,7 @@ class NotificationStoreImpl(
             try {
                 notification.contentIntent.send()
                 true
-            } catch (t: Throwable) {
+            } catch (e: Throwable) {
                 false
             }
         }

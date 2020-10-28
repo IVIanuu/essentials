@@ -48,7 +48,7 @@ suspend fun getAllShortcuts(
                     name = resolveInfo.loadLabel(packageManager).toString(),
                     icon = resolveInfo.loadIcon(packageManager).toImageAsset()
                 )
-            } catch (t: Throwable) {
+            } catch (e: Throwable) {
                 null
             }
         }

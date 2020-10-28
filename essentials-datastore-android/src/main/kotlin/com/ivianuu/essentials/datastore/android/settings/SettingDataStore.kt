@@ -111,7 +111,7 @@ internal class SettingDataStoreImpl<T>(
                     adapter.set(name, newData, contentResolver, type)
                     newData
                 }
-            } catch (t: Throwable) {
+            } catch (e: Throwable) {
                 throw RuntimeException("Couldn't write data for name: $name", t)
             }
         }
@@ -119,7 +119,7 @@ internal class SettingDataStoreImpl<T>(
     private suspend fun get(): T = withContext(scope.coroutineContext) {
         try {
             adapter.get(name, defaultData, contentResolver, type)
-        } catch (t: Throwable) {
+        } catch (e: Throwable) {
             throw RuntimeException("Couldn't read data for name: $name", t)
         }
     }

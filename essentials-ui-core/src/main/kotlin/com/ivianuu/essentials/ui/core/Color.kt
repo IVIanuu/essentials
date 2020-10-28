@@ -71,7 +71,7 @@ fun Color.toHexString(includeAlpha: Boolean = true) = if (this.toArgb() == 0) {
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true) = try {
     toHexString(includeAlpha)
-} catch (t: Throwable) {
+} catch (e: Throwable) {
     null
 }
 
@@ -82,6 +82,6 @@ fun String.toColor(): Color {
 
 fun String.toColorOrNull(): Color? = try {
     toColor()
-} catch (t: Throwable) {
+} catch (e: Throwable) {
     null
 }

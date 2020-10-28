@@ -34,13 +34,8 @@ import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
-import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -112,7 +107,7 @@ fun shortcutPickerStore(
                         .data ?: continue
                     val shortcut = extractShortcut(shortcutRequestResult)
                     navigator.popTop(result = shortcut)
-                } catch (t: Throwable) {
+                } catch (e: Throwable) {
                     t.printStackTrace()
                     showToastRes(R.string.es_failed_to_pick_shortcut)
                 }
