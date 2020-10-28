@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonConstants
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.TextButton
@@ -116,7 +117,9 @@ fun ColorPickerDialog(
         positiveButton = {
             TextButton(
                 onClick = { onColorSelected(currentColor) },
-                contentColor = currentColor
+                colors = ButtonConstants.defaultTextButtonColors(
+                    contentColor = currentColor
+                )
             ) {
                 Text("OK")
             }
@@ -128,7 +131,9 @@ fun ColorPickerDialog(
             if (allowCustomArgb) {
                 TextButton(
                     onClick = { currentPage = otherPage },
-                    contentColor = currentColor
+                    colors = ButtonConstants.defaultTextButtonColors(
+                        contentColor = currentColor
+                    )
                 ) {
                     Text(otherPage.title)
                 }
