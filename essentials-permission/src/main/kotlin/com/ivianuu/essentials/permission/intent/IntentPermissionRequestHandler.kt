@@ -17,19 +17,13 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
-import com.ivianuu.essentials.coroutines.parallelForEach
+import com.ivianuu.essentials.coroutines.raceOf
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.util.startActivityForIntentResult
-import kotlinx.coroutines.async
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.job
-import kotlinx.coroutines.selects.select
 
 val Permission.Companion.Intent by lazy {
     Permission.Key<Intent>(
@@ -46,18 +40,16 @@ class IntentPermissionRequestHandler(
     override fun handles(permission: Permission): Boolean =
         Permission.Intent in permission
 
-    override suspend fun request(permission: Permission) = coroutineScope {
-        select<Unit> {
-            async {
-                startActivityForIntentResult(permission[Permission.Intent])
-            }.onAwait {}
-            async {
-                while (!hasPermissions(listOf(permission)).first()) {
-                    delay(100)
-                }
-            }.onAwait {}
-        }.also {
-            coroutineContext.job.children.toList().parallelForEach { it.cancelAndJoin() }
+    override suspend fun request(permission: Permission): Unit = raceOf(
+        {
+            // wait until user navigates back from the permission screen
+            startActivityForIntentResult(permission[Permission.Intent])
+        },
+        {
+            // wait until user granted permission
+            while (!hasPermissions(listOf(permission)).first()) {
+                delay(100)
+            }
         }
-    }
+    )
 }
