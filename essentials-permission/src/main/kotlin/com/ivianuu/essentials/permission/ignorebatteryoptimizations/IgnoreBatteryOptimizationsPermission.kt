@@ -22,20 +22,19 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 
 @SuppressLint("BatteryLife")
 fun IgnoreBatteryOptimizationsPermission(
     context: Context,
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ) = Permission(
-    Permission.IgnoreBatteryOptimizationsPermission withValue Unit,
-    Permission.Intent withValue Intent(
+    Permission.IgnoreBatteryOptimizationsPermission to Unit,
+    Permission.Intent to Intent(
         Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
         "package:${context.packageName}".toUri()
     ),

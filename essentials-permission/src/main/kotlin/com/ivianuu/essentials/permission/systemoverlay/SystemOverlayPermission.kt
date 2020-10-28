@@ -20,20 +20,19 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.injekt.android.ApplicationContext
 
 fun SystemOverlayPermission(
     context: Context,
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ) = Permission(
-    Permission.IsSystemOverlayPermission withValue Unit,
-    Permission.Intent withValue Intent(
+    Permission.IsSystemOverlayPermission to Unit,
+    Permission.Intent to Intent(
         Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
         "package:${context.packageName}".toUri()
     ),

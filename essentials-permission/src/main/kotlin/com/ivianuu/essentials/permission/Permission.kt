@@ -23,7 +23,7 @@ import kotlin.reflect.KProperty
 
 class Permission(private val metadata: Map<Key<*>, Any?>) {
 
-    constructor(vararg metadata: KeyWithValue<*>) : this(
+    constructor(vararg metadata: Permission.Pair<*>) : this(
         metadata.associate {
             it.key to it.value
         }
@@ -41,16 +41,12 @@ class Permission(private val metadata: Map<Key<*>, Any?>) {
         override fun toString() = name
     }
 
+    data class Pair<T>(val key: Key<T>, val value: T)
+
     companion object
 }
 
-data class KeyWithValue<T>(
-    val key: Permission.Key<T>,
-    val value: T
-)
-
-infix fun <T> Permission.Key<T>.withValue(value: T): KeyWithValue<T> =
-    KeyWithValue(this, value)
+infix fun <T> Permission.Key<T>.to(value: T) = Permission.Pair(this, value)
 
 val Permission.Companion.Title by lazy { Permission.Key<String>("Title") }
 val Permission.Companion.Desc by lazy { Permission.Key<String>("Desc") }

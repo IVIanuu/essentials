@@ -49,50 +49,50 @@ fun PermissionsPage(requestPermissions: requestPermissions) {
     ) {
         val camera = RuntimePermission(
             Manifest.permission.CAMERA,
-            Permission.Title withValue "Camera",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Camera",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val phone = RuntimePermission(
             Manifest.permission.CALL_PHONE,
-            Permission.Title withValue "Call phone",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Call phone",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val accessibility = AccessibilityServicePermission(
             DefaultAccessibilityService::class,
-            Permission.Title withValue "Accessibility",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Accessibility",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val notificationListener = NotificationListenerPermission(
             DefaultNotificationListenerService::class,
-            Permission.Title withValue "Notification listener",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Notification listener",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val systemOverlay = SystemOverlayPermission(
             ContextAmbient.current,
-            Permission.Title withValue "System overlay",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "System overlay",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val writeSecureSettings = WriteSecureSettingsPermission(
-            Permission.Title withValue "Write secure settings",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Write secure settings",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val writeSettings = WriteSettingsPermission(
             ContextAmbient.current,
-            Permission.Title withValue "Write settings",
-            Permission.Desc withValue "This is a desc",
-            Permission.Icon withValue { Icon(Icons.Default.Menu) }
+            Permission.Title to "Write settings",
+            Permission.Desc to "This is a desc",
+            Permission.Icon to { Icon(Icons.Default.Menu) }
         )
 
         val scope = rememberCoroutineScope()

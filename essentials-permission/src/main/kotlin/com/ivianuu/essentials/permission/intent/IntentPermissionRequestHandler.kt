@@ -24,6 +24,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.hasPermissions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.util.startActivityForIntentResult
 
 val Permission.Companion.Intent by lazy {
     Permission.Key<Intent>(

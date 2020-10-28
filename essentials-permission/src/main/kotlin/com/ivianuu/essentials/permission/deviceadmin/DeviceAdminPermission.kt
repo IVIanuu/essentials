@@ -20,24 +20,23 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
     context: Context,
     deviceAdminClass: KClass<*>,
     explanation: String,
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ): Permission {
     val component = ComponentName(context, deviceAdminClass.java)
     return Permission(
-        Permission.DeviceAdminComponent withValue component,
-        Permission.Intent withValue Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        Permission.DeviceAdminComponent to component,
+        Permission.Intent to Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
             putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
             putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, explanation)
         },

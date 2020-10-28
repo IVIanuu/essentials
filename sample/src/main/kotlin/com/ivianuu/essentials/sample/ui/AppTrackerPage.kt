@@ -36,7 +36,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
@@ -88,8 +88,8 @@ fun AppTrackerPage(
                             listOf(
                                 AccessibilityServicePermission(
                                     DefaultAccessibilityService::class,
-                                    Permission.Title withValue "Accessibility",
-                                    Permission.Desc withValue "App tracking requires the accessibility permission"
+                                    Permission.Title to "Accessibility",
+                                    Permission.Desc to "App tracking requires the accessibility permission"
                                 )
                             )
                         )

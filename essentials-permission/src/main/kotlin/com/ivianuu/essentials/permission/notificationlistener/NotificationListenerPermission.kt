@@ -20,22 +20,21 @@ import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import androidx.core.app.NotificationManagerCompat
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
     serviceClass: KClass<out NotificationListenerService>,
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ) = Permission(
-    Permission.NotificationListenerClass withValue serviceClass,
-    Permission.Intent withValue Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
+    Permission.NotificationListenerClass to serviceClass,
+    Permission.Intent to Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
     *metadata
 )
 

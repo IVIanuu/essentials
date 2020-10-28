@@ -26,7 +26,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Binding
@@ -37,23 +37,23 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 class ActionPermissions(applicationContext: ApplicationContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
-        Permission.Title withValue "Accessibility", // todo res
-        Permission.Desc withValue "Required to click buttons", // todo res
-        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_accessibility)) }
+        Permission.Title to "Accessibility", // todo res
+        Permission.Desc to "Required to click buttons", // todo res
+        Permission.Icon to { Icon(vectorResource(R.drawable.es_ic_accessibility)) }
     )
     val root = RootPermission(
-        Permission.Title withValue "Root", // todo res
-        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_adb)) }
+        Permission.Title to "Root", // todo res
+        Permission.Icon to { Icon(vectorResource(R.drawable.es_ic_adb)) }
     )
     val writeSecureSettings = WriteSecureSettingsPermission(
-        Permission.Title withValue "Write secure settings", // todo res
-        Permission.Desc withValue "Required to change the navigation bar visibility", // todo res
-        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) }
+        Permission.Title to "Write secure settings", // todo res
+        Permission.Desc to "Required to change the navigation bar visibility", // todo res
+        Permission.Icon to { Icon(vectorResource(R.drawable.es_ic_settings)) }
     )
     val writeSettings = WriteSettingsPermission(
         applicationContext,
-        Permission.Title withValue "Write Settings", // todo res
-        Permission.Desc withValue "Required to change settings", // todo res
-        Permission.Icon withValue { Icon(vectorResource(R.drawable.es_ic_settings)) } // todo change icon
+        Permission.Title to "Write Settings", // todo res
+        Permission.Desc to "Required to change settings", // todo res
+        Permission.Icon to { Icon(vectorResource(R.drawable.es_ic_settings)) } // todo change icon
     )
 }

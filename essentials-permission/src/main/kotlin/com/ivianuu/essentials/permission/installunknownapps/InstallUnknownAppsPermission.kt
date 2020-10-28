@@ -19,18 +19,17 @@ package com.ivianuu.essentials.permission.installunknownapps
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 
 fun InstallUnknownAppsPermission(
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ) = Permission(
-    Permission.IsUnknownAppsPermission withValue Unit,
-    Permission.Intent withValue Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
+    Permission.IsUnknownAppsPermission to Unit,
+    Permission.Intent to Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
     *metadata
 )
 

@@ -20,18 +20,17 @@ import android.app.AppOpsManager
 import android.content.Intent
 import android.os.Process
 import android.provider.Settings
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 
 fun PackageUsageStatsPermission(
-    vararg metadata: KeyWithValue<*>
+    vararg metadata: Permission.Pair<*>
 ) = Permission(
-    Permission.IsPackageUsageStatsPermission withValue Unit,
-    Permission.Intent withValue Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
+    Permission.IsPackageUsageStatsPermission to Unit,
+    Permission.Intent to Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
     *metadata
 )
 

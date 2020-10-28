@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.animatable.MetaProp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatable.animationOverlay
-import com.ivianuu.essentials.ui.animatable.withValue
+import com.ivianuu.essentials.ui.animatable.to
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
@@ -208,7 +208,7 @@ fun SharedElement(
 ) {
     Box(
         modifier = Modifier
-            .animatable(tag, SharedElementComposable withValue children).then(modifier)
+            .animatable(tag, SharedElementComposable to children).then(modifier)
     ) {
         children()
     }

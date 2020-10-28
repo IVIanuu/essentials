@@ -48,7 +48,7 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.sample.R
@@ -76,7 +76,6 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 @FunBinding
@@ -180,7 +179,7 @@ fun notificationStore(
 ) = storeProvider<NotificationsState, NotificationsAction>(NotificationsState()) {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
-        Permission.Title withValue "Notifications"
+        Permission.Title to "Notifications"
     )
 
     combine(

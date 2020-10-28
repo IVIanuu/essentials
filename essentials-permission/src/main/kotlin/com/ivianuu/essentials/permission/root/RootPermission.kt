@@ -16,19 +16,18 @@
 
 package com.ivianuu.essentials.permission.root
 
-import com.ivianuu.essentials.permission.KeyWithValue
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.withValue
+import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.shell.isShellAvailable
 import com.ivianuu.essentials.util.showToastRes
 
-fun RootPermission(vararg metadata: KeyWithValue<*>) = Permission(
-    Permission.IsRootPermission withValue Unit,
+fun RootPermission(vararg metadata: Permission.Pair<*>) = Permission(
+    Permission.IsRootPermission to Unit,
     *metadata
 )
 

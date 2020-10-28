@@ -96,7 +96,7 @@ fun Animatable.setFractionTranslationY(fraction: Float) =
 
 fun Modifier.animatable(
     tag: Any,
-    vararg props: PropWithValue<*>
+    vararg props: Prop.Pair<*>
 ): Modifier = composed {
     val animatable = animatableFor(tag)
     remember(*props) {
