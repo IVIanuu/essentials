@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.tile.functional
+package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.util.exhaustive

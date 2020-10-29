@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.work.functional
+package com.ivianuu.essentials.work
 
 import androidx.work.Data
 import androidx.work.ForegroundInfo

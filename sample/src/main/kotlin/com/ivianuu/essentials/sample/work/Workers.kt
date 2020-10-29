@@ -18,8 +18,8 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.ListenableWorker
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.work.functional.WorkerBinding
-import com.ivianuu.essentials.work.functional.worker
+import com.ivianuu.essentials.work.WorkerBinding
+import com.ivianuu.essentials.work.worker
 import kotlinx.coroutines.delay
 
 const val TEST_WORKER_ID = "test"

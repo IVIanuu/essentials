@@ -31,7 +31,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <service
-            android:name="com.ivianuu.essentials.tile.functional.TileStoreService1"
+            android:name="com.ivianuu.essentials.tile.TileStoreService1"
             android:icon="@drawable/ic_email"
             android:label="@string/about_title"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

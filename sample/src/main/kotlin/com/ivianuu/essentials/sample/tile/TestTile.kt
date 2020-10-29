@@ -18,12 +18,10 @@ package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.setStateIn
-import com.ivianuu.essentials.store.storeProvider
-import com.ivianuu.essentials.tile.functional.TileState
-import com.ivianuu.essentials.tile.functional.TileStore
-import com.ivianuu.essentials.tile.functional.TileStoreBinding
-import com.ivianuu.essentials.tile.functional.onEachTileClick
-import com.ivianuu.essentials.tile.functional.tileStore
+import com.ivianuu.essentials.tile.TileState
+import com.ivianuu.essentials.tile.TileStoreBinding
+import com.ivianuu.essentials.tile.onEachTileClick
+import com.ivianuu.essentials.tile.tileStore
 import com.ivianuu.essentials.twilight.TwilightMode
 import com.ivianuu.essentials.twilight.twilightPrefs
 import com.ivianuu.essentials.twilight.updateTwilightMode

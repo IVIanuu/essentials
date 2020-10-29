@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.work.functional
+package com.ivianuu.essentials.work
 
 import android.content.Context
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.android.work.WorkerBinding

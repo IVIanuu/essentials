@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.work
 
 import androidx.work.WorkManager
-import com.ivianuu.essentials.work.functional.OneTimeWorkRequestBuilder
+import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
