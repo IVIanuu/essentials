@@ -47,8 +47,8 @@ class RecentAppsTest {
                 }
             }
         }, recentAppsScope, NoopLogger)
-        val recentAppsCollector = TestCollector<List<String>>()
-        recentAppsFlow.collectIn(this, recentAppsCollector)
+        val collector = TestCollector<List<String>>()
+        recentAppsFlow.collectIn(this, collector)
 
         accessibilityEvents.emit(
             AccessibilityEvent(
@@ -95,7 +95,7 @@ class RecentAppsTest {
             )
         )
 
-        recentAppsCollector.values.shouldContainExactly(
+        collector.values.shouldContainExactly(
             listOf(),
             listOf("a"),
             listOf("b", "a"),
@@ -106,8 +106,8 @@ class RecentAppsTest {
     @Test
     fun testCurrentApp() = runCancellingBlockingTest {
         val recentApps = EventFlow<List<String>>()
-        val currentAppsCollector = TestCollector<String?>()
-        currentApp(recentApps).collectIn(this, currentAppsCollector)
+        val collector = TestCollector<String?>()
+        currentApp(recentApps).collectIn(this, collector)
 
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("a", "b", "c"))
@@ -115,6 +115,6 @@ class RecentAppsTest {
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("b", "c", "a"))
 
-        currentAppsCollector.values.shouldContainExactly("a", "c", "a", "b")
+        collector.values.shouldContainExactly("a", "c", "a", "b")
     }
 }

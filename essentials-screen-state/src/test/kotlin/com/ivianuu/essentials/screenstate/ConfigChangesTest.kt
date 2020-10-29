@@ -18,16 +18,15 @@ package com.ivianuu.essentials.screenstate
 
 import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.TestCollector
+import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.injekt.android.ApplicationContext
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -35,7 +34,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ConfigChangesTest {
-
     @Test
     fun testConfigChanges() = runCancellingBlockingTest {
         lateinit var callback: ComponentCallbacks
@@ -47,11 +45,13 @@ class ConfigChangesTest {
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
         val configChanges = configChanges(applicationContext, Dispatchers.Main)
-        var eventCount = 0
-        launch { configChanges.collect { eventCount++ } }
+        val collector = TestCollector<Unit>()
+        configChanges.collectIn(this, collector)
+
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
-        eventCount shouldBe 3
+
+        collector.values.shouldHaveSize(3)
     }
 }

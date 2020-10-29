@@ -19,16 +19,14 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.TestCollector
+import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.injekt.android.ApplicationContext
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -48,10 +46,12 @@ class BroadcastsTest {
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
         val broadcasts = broadcasts(applicationContext, Dispatchers.Main, "action")
-        var eventCount = 0
-        launch { broadcasts.collect { eventCount++ } }
+        val collector = TestCollector<Intent>()
+        broadcasts.collectIn(this, collector)
+
         receiver.onReceive(applicationContext, Intent("action"))
         receiver.onReceive(applicationContext, Intent("action"))
-        eventCount shouldBe 2
+
+        collector.values.shouldHaveSize(2)
     }
 }

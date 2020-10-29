@@ -20,6 +20,8 @@ import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.test.TestCollector
+import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
@@ -53,10 +55,8 @@ class ScreenStateTest {
             logger = NoopLogger
         )
 
-        val values = mutableListOf<ScreenState>()
-        launch {
-            screenStateFlow.collect { values += it }
-        }
+        val collector = TestCollector<ScreenState>()
+        screenStateFlow.collectIn(this, collector)
 
         globalScopeDispatcher.runCurrent()
 
@@ -65,7 +65,8 @@ class ScreenStateTest {
         currentScreenState = ScreenState.Unlocked
         broadcasts.emit(Intent())
 
-        values.shouldContainExactly(ScreenState.Off, ScreenState.Locked, ScreenState.Unlocked)
+        collector.values
+            .shouldContainExactly(ScreenState.Off, ScreenState.Locked, ScreenState.Unlocked)
     }
 
     @Test

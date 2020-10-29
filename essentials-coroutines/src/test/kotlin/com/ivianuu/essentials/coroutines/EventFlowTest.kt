@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.test.TestCollector
+import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import io.kotest.matchers.collections.shouldContainExactly
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class EventFlowTest {
@@ -30,47 +28,38 @@ class EventFlowTest {
     @Test
     fun testSingleCollector() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
-        val values = mutableListOf<Int>()
-        launch { eventFlow.collect { values += it } }
+        val eventCollector = TestCollector<Int>()
+        eventFlow.collectIn(this, eventCollector)
 
         eventFlow.emit(1)
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        values.shouldContainExactly(1, 2, 3)
+        eventCollector.values.shouldContainExactly(1, 2, 3)
     }
 
     @Test
     fun testMultipleCollectors() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
 
-        val values1 = mutableListOf<Int>()
-        launch {
-            eventFlow.collect { values1 += it }
-        }
-        val values2 = mutableListOf<Int>()
-        launch {
-            eventFlow.collect { values2 += it }
-        }
+        val collector1 = TestCollector<Int>()
+        eventFlow.collectIn(this, collector1)
+        val collector2 = TestCollector<Int>()
+        eventFlow.collectIn(this, collector2)
 
         eventFlow.emit(1)
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        values1.shouldContainExactly(1, 2, 3)
-        values2.shouldContainExactly(1, 2, 3)
+        collector1.values.shouldContainExactly(1, 2, 3)
+        collector2.values.shouldContainExactly(1, 2, 3)
     }
 
     @Test
     fun testDoesNotDropEvents() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
-        val values = mutableListOf<Int>()
-        launch {
-            eventFlow.collect {
-                values += it
-                delay(1000)
-            }
-        }
+        val collector = TestCollector<Int> { delay(1000) }
+        eventFlow.collectIn(this, collector)
 
         eventFlow.emit(1)
         eventFlow.emit(2)
@@ -78,7 +67,7 @@ class EventFlowTest {
 
         advanceUntilIdle()
 
-        values.shouldContainExactly(1, 2, 3)
+        collector.values.shouldContainExactly(1, 2, 3)
     }
 
     @Test
@@ -89,14 +78,10 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        val values = mutableListOf<Int>()
-        launch {
-            eventFlow.collect {
-                values += it
-            }
-        }
+        val collector = TestCollector<Int>()
+        eventFlow.collectIn(this, collector)
 
-        values.shouldContainExactly(1, 2, 3)
+        collector.values.shouldContainExactly(1, 2, 3)
     }
 
     @Test
@@ -107,13 +92,9 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        val values = mutableListOf<Int>()
-        launch {
-            eventFlow.collect {
-                values += it
-            }
-        }
+        val collector = TestCollector<Int>()
+        eventFlow.collectIn(this, collector)
 
-        values.shouldContainExactly(2, 3)
+        collector.values.shouldContainExactly(2, 3)
     }
 }

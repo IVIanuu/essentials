@@ -24,10 +24,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScope
 
-class TestCollector<T> : FlowCollector<T> {
+class TestCollector<T>(
+    private val onEach: suspend (T) -> Unit = {}
+) : FlowCollector<T> {
     val values = mutableListOf<T>()
     override suspend fun emit(value: T) {
         values += value
+        onEach(value)
     }
 }
 
