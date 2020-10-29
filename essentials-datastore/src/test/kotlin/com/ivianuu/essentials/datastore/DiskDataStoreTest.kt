@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.datastore
 
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.squareup.moshi.Moshi
 import io.kotest.matchers.collections.shouldContainExactly
@@ -25,7 +27,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import java.nio.file.Files
 

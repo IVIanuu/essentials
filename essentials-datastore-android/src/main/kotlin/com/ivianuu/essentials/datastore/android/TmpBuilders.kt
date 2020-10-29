@@ -19,7 +19,7 @@ package com.ivianuu.essentials.datastore.android
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map
 import kotlin.time.Duration
 

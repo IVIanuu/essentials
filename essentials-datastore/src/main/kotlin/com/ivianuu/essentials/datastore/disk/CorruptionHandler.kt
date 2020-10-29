@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.datastore.disk
+
+import com.ivianuu.essentials.datastore.DataStore
 
 interface CorruptionHandler {
     suspend fun <T> onCorruption(

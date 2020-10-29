@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.datastore.disk
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi

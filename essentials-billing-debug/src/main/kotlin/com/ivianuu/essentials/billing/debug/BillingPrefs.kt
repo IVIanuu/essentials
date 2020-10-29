@@ -19,7 +19,7 @@ package com.ivianuu.essentials.billing.debug
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.map
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent

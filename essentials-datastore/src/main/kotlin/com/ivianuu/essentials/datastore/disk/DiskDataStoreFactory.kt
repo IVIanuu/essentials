@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.datastore.disk
 
+import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 import java.io.File
 

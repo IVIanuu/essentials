@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding

@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -14,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.datastore.disk
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

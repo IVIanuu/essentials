@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.hidenavbar
+package com.ivianuu.essentials.datastore
 
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.flow.MutableStateFlow
 
-internal typealias WasNavBarHiddenPref = DataStore<Boolean>
+// todo move to essentials-datastore-test
+class TestDataStore<T>(override val defaultData: T) : DataStore<T> {
+    override val data = MutableStateFlow(defaultData)
 
-@Binding(ApplicationComponent::class)
-fun wasNavBarHiddenPref(factory: DiskDataStoreFactory): WasNavBarHiddenPref =
-    factory.create("was_nav_bar_hidden") { false }
+    var value by data::value
+
+    private val _values = mutableListOf(defaultData)
+    val values by this::_values
+
+    override suspend fun updateData(transform: suspend (T) -> T): T {
+        return transform(data.value)
+            .also {
+                data.value = it
+                values += it
+            }
+    }
+}

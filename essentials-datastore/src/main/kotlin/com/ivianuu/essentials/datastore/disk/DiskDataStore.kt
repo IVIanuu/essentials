@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.datastore.disk
 
-import com.ivianuu.essentials.datastore.DiskDataStoreImpl.Message.InitializeIfNeeded
-import com.ivianuu.essentials.datastore.DiskDataStoreImpl.Message.UpdateData
+import com.ivianuu.essentials.datastore.DataStore
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreImpl.Message.InitializeIfNeeded
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreImpl.Message.UpdateData
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
