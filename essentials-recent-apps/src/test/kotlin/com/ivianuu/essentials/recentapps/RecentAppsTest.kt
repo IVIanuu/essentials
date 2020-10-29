@@ -21,16 +21,13 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.test.TestCollector
+import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.DisposableHandle
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -50,13 +47,8 @@ class RecentAppsTest {
                 }
             }
         }, recentAppsScope, NoopLogger)
-        val recentApps = mutableListOf<List<String>>()
-        launch {
-            recentAppsFlow.collect {
-                recentApps += it
-            }
-        }
-        recentAppsScopeDispatcher.runCurrent()
+        val recentAppsCollector = TestCollector<List<String>>()
+        recentAppsFlow.collectIn(this, recentAppsCollector)
 
         accessibilityEvents.emit(
             AccessibilityEvent(
@@ -103,7 +95,7 @@ class RecentAppsTest {
             )
         )
 
-        recentApps.shouldContainExactly(
+        recentAppsCollector.values.shouldContainExactly(
             listOf(),
             listOf("a"),
             listOf("b", "a"),
@@ -114,11 +106,8 @@ class RecentAppsTest {
     @Test
     fun testCurrentApp() = runCancellingBlockingTest {
         val recentApps = EventFlow<List<String>>()
-        val currentApps = mutableListOf<String?>()
-        launch {
-            currentApp(recentApps)
-                .collect { currentApps += it }
-        }
+        val currentAppsCollector = TestCollector<String?>()
+        currentApp(recentApps).collectIn(this, currentAppsCollector)
 
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("a", "b", "c"))
@@ -126,6 +115,6 @@ class RecentAppsTest {
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("b", "c", "a"))
 
-        currentApps.shouldContainExactly("a", "c", "a", "b")
+        currentAppsCollector.values.shouldContainExactly("a", "c", "a", "b")
     }
 }

@@ -16,11 +16,21 @@
 
 package com.ivianuu.essentials.test
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestCoroutineScope
 
 class TestCollector<T> : FlowCollector<T> {
     val values = mutableListOf<T>()
     override suspend fun emit(value: T) {
         values += value
     }
+}
+
+fun <T> Flow<T>.collectIn(scope: CoroutineScope, collector: FlowCollector<T>) {
+    scope.launch { collect(collector) }
 }
