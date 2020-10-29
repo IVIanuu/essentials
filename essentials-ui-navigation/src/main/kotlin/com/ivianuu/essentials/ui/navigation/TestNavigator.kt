@@ -22,7 +22,14 @@ import kotlinx.coroutines.runBlocking
 // todo move to ui-navigation-test
 class TestNavigator(initial: List<Route>) : Navigator {
     override val backStack = MutableStateFlow(initial)
+
+    private val _backStacks = mutableListOf(initial)
+    val backStacks: List<List<Route>> by this::_backStacks
+
     override fun setBackStack(transform: suspend (List<Route>) -> List<Route>) {
-        runBlocking { backStack.value = transform(backStack.value) }
+        runBlocking {
+            backStack.value = transform(backStack.value)
+                .also { _backStacks += it }
+        }
     }
 }
