@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory

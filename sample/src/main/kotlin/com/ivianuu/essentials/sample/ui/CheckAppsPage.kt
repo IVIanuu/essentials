@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.apps.ui.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.asState

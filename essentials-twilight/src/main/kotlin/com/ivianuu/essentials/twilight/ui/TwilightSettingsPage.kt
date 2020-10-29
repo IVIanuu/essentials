@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.twilight.ui
 
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
-import com.ivianuu.essentials.twilight.TwilightSettingsAction.UpdateTwilightMode
-import com.ivianuu.essentials.twilight.TwilightSettingsAction.UpdateUseBlackInDarkMode
+import com.ivianuu.essentials.twilight.R
+import com.ivianuu.essentials.twilight.data.TwilightMode
+import com.ivianuu.essentials.twilight.data.twilightPrefs
+import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateTwilightMode
+import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateUseBlackInDarkMode
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -33,7 +36,6 @@ import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
@@ -83,32 +85,4 @@ private fun TwilightModeItem(
             onClick = onClick
         )
     }
-}
-
-@Binding
-fun twilightSettingsStore(
-    twilightPrefs: twilightPrefs,
-    updateTwilightMode: updateTwilightMode,
-    updateUseBlackInDarkMode: updateUseBlackInDarkMode
-) = storeProvider<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {
-    twilightPrefs.setStateIn(this) {
-        copy(twilightMode = it.twilightMode, useBlackInDarkMode = it.useBlackInDarkMode)
-    }
-
-    for (action in this) {
-        when (action) {
-            is UpdateTwilightMode -> updateTwilightMode(action.mode)
-            is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.useBlackInDarkMode)
-        }.exhaustive
-    }
-}
-
-data class TwilightSettingsState(
-    val twilightMode: TwilightMode = TwilightMode.System,
-    val useBlackInDarkMode: Boolean = false
-)
-
-sealed class TwilightSettingsAction {
-    data class UpdateTwilightMode(val mode: TwilightMode) : TwilightSettingsAction()
-    data class UpdateUseBlackInDarkMode(val useBlackInDarkMode: Boolean) : TwilightSettingsAction()
 }

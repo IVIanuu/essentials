@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.ui
+package com.ivianuu.essentials.apps.ui.apppicker
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.AppPickerAction.PickApp
+import com.ivianuu.essentials.apps.ui.AppFilter
+import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -89,34 +92,4 @@ private fun AppInfo(
         },
         onClick = onClick
     )
-}
-
-@Binding
-fun appPickerStore(
-    appFilter: @Assisted AppFilter,
-    navigator: Navigator,
-    getInstalledApps: getInstalledApps
-) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
-    execute(
-        block = { getInstalledApps() },
-        reducer = { copy(allApps = it) }
-    )
-
-    for (action in this) {
-        when (action) {
-            is PickApp -> navigator.popTop(result = action.app)
-        }.exhaustive
-    }
-}
-
-data class AppPickerState(
-    val allApps: Resource<List<AppInfo>> = Idle,
-    val appFilter: AppFilter = DefaultAppFilter,
-) {
-    val filteredApps = allApps
-        .map { it.filter(appFilter) }
-}
-
-sealed class AppPickerAction {
-    data class PickApp(val app: AppInfo) : AppPickerAction()
 }

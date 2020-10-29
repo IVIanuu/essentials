@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.twilight.ui
 
-import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.essentials.twilight.data.TwilightMode
 
-// it's enough to instantiate the TwilightStateFlow because it starts emitting eagerly
-@AppInitializerBinding
-@FunBinding
-fun initializeTwilightStateFlow(
-    twilightStateFlow: TwilightStateFlow,
-) {
+data class TwilightSettingsState(
+    val twilightMode: TwilightMode = TwilightMode.System,
+    val useBlackInDarkMode: Boolean = false
+)
+
+sealed class TwilightSettingsAction {
+    data class UpdateTwilightMode(val mode: TwilightMode) : TwilightSettingsAction()
+    data class UpdateUseBlackInDarkMode(val useBlackInDarkMode: Boolean) : TwilightSettingsAction()
 }

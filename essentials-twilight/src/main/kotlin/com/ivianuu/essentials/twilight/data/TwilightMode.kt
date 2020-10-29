@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.twilight.data
+
+import com.ivianuu.essentials.twilight.R
 
 enum class TwilightMode(
     val titleRes: Int,

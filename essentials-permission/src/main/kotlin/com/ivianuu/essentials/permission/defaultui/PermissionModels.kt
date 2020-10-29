@@ -16,16 +16,12 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
-import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.permission.Permission
 
-@PermissionRequestRouteFactoryBinding
-class DefaultPermissionRequestRouteFactory(
-    private val defaultPermissionPage: DefaultPermissionPage,
-) : PermissionRequestRouteFactory {
+data class PermissionState(
+    val permissionsToProcess: List<Permission> = emptyList()
+)
 
-    override fun createRoute(request: PermissionRequest): Route =
-        Route { defaultPermissionPage(request) }
+sealed class PermissionAction {
+    data class RequestPermission(val permission: Permission) : PermissionAction()
 }

@@ -58,36 +58,3 @@ fun BackupAndRestorePage(
         }
     }
 }
-
-@Binding
-fun backupAndRestoreStore(
-    backupData: backupData,
-    restoreData: restoreData,
-    showToastRes: showToastRes,
-) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
-    for (action in this) {
-        when (action) {
-            BackupData -> {
-                backupData()
-                    .onFailure {
-                        it.printStackTrace()
-                        showToastRes(R.string.es_backup_error)
-                    }
-            }
-            RestoreData -> {
-                restoreData()
-                    .onFailure {
-                        it.printStackTrace()
-                        showToastRes(R.string.es_restore_error)
-                    }
-            }
-        }.exhaustive
-    }
-}
-
-object BackupAndRestoreState
-
-sealed class BackupAndRestoreAction {
-    object BackupData : BackupAndRestoreAction()
-    object RestoreData : BackupAndRestoreAction()
-}

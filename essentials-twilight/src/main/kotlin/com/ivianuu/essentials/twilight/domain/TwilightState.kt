@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.twilight.domain
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -22,6 +22,8 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChanges
+import com.ivianuu.essentials.twilight.data.TwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefsStore
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent

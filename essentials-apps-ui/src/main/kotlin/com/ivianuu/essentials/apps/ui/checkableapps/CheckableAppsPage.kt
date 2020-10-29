@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.ui
+package com.ivianuu.essentials.apps.ui.checkableapps
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
@@ -27,10 +27,13 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.DeselectAll
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.SelectAll
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.ToggleApp
-import com.ivianuu.essentials.apps.ui.CheckableAppsAction.UpdateRefs
+import com.ivianuu.essentials.apps.ui.AppFilter
+import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateRefs
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.ui.core.Text
@@ -129,96 +132,4 @@ private fun CheckableApp(
         },
         onClick = onClick
     )
-}
-
-@Binding
-fun checkableAppsStore(
-    getInstalledApps: getInstalledApps,
-) = storeProvider<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
-    val installedApps = async { getInstalledApps() }
-    state
-        .map { it.appFilter }
-        .distinctUntilChanged()
-        .mapLatest { installedApps.await().filter(it) }
-        .executeIn(this) { copy(apps = it) }
-
-    for (action in this) {
-        suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-            val currentState = currentState()
-            val newCheckedApps = currentState.checkableApps()!!
-                .filter { it.isChecked }
-                .map { it.info.packageName }
-                .toMutableSet()
-                .apply(reducer)
-            currentState.onCheckedAppsChanged!!(newCheckedApps)
-        }
-
-        when (action) {
-            is UpdateRefs -> {
-                setState {
-                    copy(
-                        checkedApps = action.checkedApps,
-                        onCheckedAppsChanged = action.onCheckedAppsChanged,
-                        appFilter = action.appFilter
-                    )
-                }
-            }
-            is ToggleApp -> {
-                pushNewCheckedApps {
-                    if (!action.app.isChecked) {
-                        it += action.app.info.packageName
-                    } else {
-                        it -= action.app.info.packageName
-                    }
-                }
-            }
-            SelectAll -> {
-                currentState().apps()?.let { allApps ->
-                    pushNewCheckedApps { newApps ->
-                        newApps += allApps.map { it.packageName }
-                    }
-                }
-            }
-            DeselectAll -> {
-                pushNewCheckedApps { it.clear() }
-            }
-        }.exhaustive
-    }
-}
-
-@Immutable
-data class CheckableApp(
-    val info: AppInfo,
-    val isChecked: Boolean
-)
-
-@Immutable
-data class CheckableAppsState(
-    val apps: Resource<List<AppInfo>> = Idle,
-    val checkedApps: Set<String> = emptySet(),
-    val onCheckedAppsChanged: ((Set<String>) -> Unit)? = null,
-    val appFilter: AppFilter = DefaultAppFilter,
-) {
-    val checkableApps = apps
-        .map { it.filter(appFilter) }
-        .map { apps ->
-            apps.map { app ->
-                CheckableApp(
-                    info = app,
-                    isChecked = app.packageName in checkedApps
-                )
-            }
-        }
-}
-
-sealed class CheckableAppsAction {
-    data class UpdateRefs(
-        val checkedApps: Set<String>,
-        val onCheckedAppsChanged: (Set<String>) -> Unit,
-        val appFilter: AppFilter
-    ) : CheckableAppsAction()
-
-    data class ToggleApp(val app: CheckableApp) : CheckableAppsAction()
-    object SelectAll : CheckableAppsAction()
-    object DeselectAll : CheckableAppsAction()
 }

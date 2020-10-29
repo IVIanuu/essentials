@@ -21,7 +21,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.twilight.TwilightTheme
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.essentials.ui.core.AppUiBinding

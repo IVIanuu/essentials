@@ -23,7 +23,6 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo
-import com.ivianuu.essentials.apps.ui.AppPickerPage
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
