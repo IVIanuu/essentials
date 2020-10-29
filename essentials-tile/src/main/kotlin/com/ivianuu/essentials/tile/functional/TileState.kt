@@ -72,6 +72,6 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
 annotation class TileStoreBinding {
     companion object {
         @MapEntries
-        fun <T : TileStoreEntry> intoTileMap(instance: T): TileStores = mapOf(1 to instance)
+        fun <T : TileStoreEntry> intoTileMap(instance: T): TileStores = mapOf(instance.index to instance)
     }
 }
