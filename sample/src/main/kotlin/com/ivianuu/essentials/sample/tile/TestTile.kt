@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import android.content.Context
-import android.graphics.drawable.Icon
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
@@ -28,18 +26,16 @@ import com.ivianuu.essentials.tile.functional.onEachTileClick
 import com.ivianuu.essentials.twilight.TwilightMode
 import com.ivianuu.essentials.twilight.twilightPrefs
 import com.ivianuu.essentials.twilight.updateTwilightMode
-import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @TileStore1Binding
 fun testTileStore(
-    context: ApplicationContext,
     twilightPrefs: twilightPrefs,
     updateTwilightMode: updateTwilightMode
 ): TileStore = storeProvider(
     TileState(
-        icon = Icon.createWithResource(context, R.drawable.es_ic_accessibility),
+        iconRes = R.drawable.es_ic_accessibility,
         label = "Hello"
     )
 ) {

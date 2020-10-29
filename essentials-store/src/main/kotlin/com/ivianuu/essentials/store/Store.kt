@@ -65,14 +65,6 @@ suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
     for (action in this) block(action)
 }
 
-suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reduce: suspend S.(A) -> S) {
-    onEachAction { action ->
-        setState {
-            reduce(this, action)
-        }
-    }
-}
-
 fun <S, A> storeProvider(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit,

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.tile.functional
 
+import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.EsTileService
 import com.ivianuu.essentials.tile.functional.TileAction.*
@@ -67,7 +68,11 @@ abstract class AbstractTileStoreService(val index: Int) : EsTileService() {
             TileState.Status.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
             TileState.Status.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
         }
-        qsTile.icon = state.icon
+        qsTile.icon = when {
+            state.icon != null -> state.icon
+            state.iconRes != null -> Icon.createWithResource(this, state.iconRes)
+            else -> null
+        }
         qsTile.label = when {
             state.label != null -> state.label
             state.labelRes != null -> component.stringResource(state.labelRes)

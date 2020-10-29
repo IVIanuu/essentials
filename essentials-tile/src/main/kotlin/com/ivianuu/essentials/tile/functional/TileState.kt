@@ -32,6 +32,7 @@ typealias TileStores = Map<Int, () -> TileStore>
 
 data class TileState(
     val icon: Icon? = null,
+    val iconRes: Int? = null,
     val label: String? = null,
     val labelRes: Int? = null,
     val description: String? = null,
