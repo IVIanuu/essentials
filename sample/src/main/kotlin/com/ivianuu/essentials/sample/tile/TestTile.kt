@@ -21,20 +21,22 @@ import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.tile.functional.TileState
 import com.ivianuu.essentials.tile.functional.TileStore
-import com.ivianuu.essentials.tile.functional.TileStore1Binding
+import com.ivianuu.essentials.tile.functional.TileStoreBinding
 import com.ivianuu.essentials.tile.functional.onEachTileClick
+import com.ivianuu.essentials.tile.functional.tileStore
 import com.ivianuu.essentials.twilight.TwilightMode
 import com.ivianuu.essentials.twilight.twilightPrefs
 import com.ivianuu.essentials.twilight.updateTwilightMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-@TileStore1Binding
+@TileStoreBinding
 fun testTileStore(
     twilightPrefs: twilightPrefs,
     updateTwilightMode: updateTwilightMode
-): TileStore = storeProvider(
-    TileState(
+) = tileStore(
+    index = 0,
+    initial = TileState(
         iconRes = R.drawable.es_ic_accessibility,
         label = "Hello"
     )

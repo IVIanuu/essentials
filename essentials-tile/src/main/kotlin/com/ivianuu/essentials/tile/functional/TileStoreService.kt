@@ -18,6 +18,7 @@ package com.ivianuu.essentials.tile.functional
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tile.EsTileService
 import com.ivianuu.essentials.tile.functional.TileAction.*
 import com.ivianuu.essentials.util.stringResource
@@ -48,10 +49,11 @@ abstract class AbstractTileStoreService(val index: Int) : EsTileService() {
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
-            val tileStore = (component.tileStores[index]
-                ?: error("No tile found for $index"))()(this)
-            launch { clicks.collect { tileStore.dispatch(TileClicked) } }
-            launch { tileStore.state.collect { applyState(it) } }
+            val (_, initialState, block) = (component.tileStores[index]
+                ?: error("No tile found for $index"))
+            val store = store(initialState, block)
+            launch { clicks.collect { store.dispatch(TileClicked) } }
+            launch { store.state.collect { applyState(it) } }
         }
     }
 

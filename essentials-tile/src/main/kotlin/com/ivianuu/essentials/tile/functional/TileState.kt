@@ -17,18 +17,28 @@
 package com.ivianuu.essentials.tile.functional
 
 import android.graphics.drawable.Icon
-import android.service.quicksettings.Tile
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.MapEntries
-import kotlinx.coroutines.CoroutineScope
 
-typealias TileStore = (CoroutineScope) -> Store<TileState, TileAction>
+typealias TileStore = suspend StoreScope<TileState, TileAction>.() -> Unit
 
-typealias TileStores = Map<Int, () -> TileStore>
+fun tileStore(
+    index: Int,
+    initial: TileState,
+    block: suspend StoreScope<TileState, TileAction>.() -> Unit
+): TileStoreEntry = TileStoreEntry(index, initial, block)
+
+data class TileStoreEntry(
+    val index: Int,
+    val initialState: TileState,
+    val block: TileStore
+)
+
+typealias TileStores = Map<Int, TileStoreEntry>
 
 data class TileState(
     val icon: Icon? = null,
@@ -59,73 +69,9 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
 }
 
 @BindingAdapter
-annotation class TileStore1Binding {
+annotation class TileStoreBinding {
     companion object {
         @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(1 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore2Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(2 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore3Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(3 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore4Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(4 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore5Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(5 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore6Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(6 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore7Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(7 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore8Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(8 to instance)
-    }
-}
-
-@BindingAdapter
-annotation class TileStore9Binding {
-    companion object {
-        @MapEntries
-        fun <T : TileStore> intoTileMap(instance: () -> T): TileStores = mapOf(9 to instance)
+        fun <T : TileStoreEntry> intoTileMap(instance: T): TileStores = mapOf(1 to instance)
     }
 }
