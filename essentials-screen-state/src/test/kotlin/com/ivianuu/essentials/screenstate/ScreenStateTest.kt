@@ -20,6 +20,7 @@ import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -40,7 +41,7 @@ import org.robolectric.annotation.Config
 class ScreenStateTest {
 
     @Test
-    fun testScreenState() = runBlockingTest {
+    fun testScreenState() = runCancellingBlockingTest {
         val broadcasts = EventFlow<Intent>()
         var currentScreenState = ScreenState.Off
         val globalScopeDispatcher = TestCoroutineDispatcher()
@@ -53,7 +54,7 @@ class ScreenStateTest {
         )
 
         val values = mutableListOf<ScreenState>()
-        val collectorJob = launch {
+        launch {
             screenStateFlow.collect { values += it }
         }
 
@@ -65,13 +66,10 @@ class ScreenStateTest {
         broadcasts.emit(Intent())
 
         values.shouldContainExactly(ScreenState.Off, ScreenState.Locked, ScreenState.Unlocked)
-
-        collectorJob.cancelAndJoin()
-        globalScope.cancel()
     }
 
     @Test
-    fun testGetCurrentScreenStateWithScreenOff() = runBlockingTest {
+    fun testGetCurrentScreenStateWithScreenOff() = runCancellingBlockingTest {
         val screenState = getCurrentScreenState(
             TestCoroutineDispatcher(),
             mockk(),
@@ -83,7 +81,7 @@ class ScreenStateTest {
     }
 
     @Test
-    fun testGetCurrentScreenStateWithLockedScreen() = runBlockingTest {
+    fun testGetCurrentScreenStateWithLockedScreen() = runCancellingBlockingTest {
         val screenState = getCurrentScreenState(
             TestCoroutineDispatcher(),
             mockk {
@@ -97,7 +95,7 @@ class ScreenStateTest {
     }
 
     @Test
-    fun testGetCurrentScreenStateWithUnlockedScreen() = runBlockingTest {
+    fun testGetCurrentScreenStateWithUnlockedScreen() = runCancellingBlockingTest {
         val screenState = getCurrentScreenState(
             TestCoroutineDispatcher(),
             mockk {

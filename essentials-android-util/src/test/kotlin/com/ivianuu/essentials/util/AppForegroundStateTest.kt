@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
@@ -35,7 +36,7 @@ import org.robolectric.annotation.Config
 class AppForegroundStateTest {
 
     @Test
-    fun testAppForegroundState() = runBlockingTest {
+    fun testAppForegroundState() = runCancellingBlockingTest {
         val lifecycleOwner = object : LifecycleOwner {
             private val _lifecycle = LifecycleRegistry(this)
             override fun getLifecycle(): Lifecycle = _lifecycle
@@ -43,7 +44,7 @@ class AppForegroundStateTest {
         val lifecycleRegistry = lifecycleOwner.lifecycle as LifecycleRegistry
 
         val events = mutableListOf<Boolean>()
-        val collectorJob = launch {
+        launch {
             appForegroundState(Dispatchers.Main, lifecycleOwner)
                 .collect { events += it }
         }
@@ -60,7 +61,5 @@ class AppForegroundStateTest {
             true,
             false
         )
-
-        collectorJob.cancelAndJoin()
     }
 }

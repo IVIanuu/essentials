@@ -19,6 +19,7 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.injekt.android.ApplicationContext
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -37,7 +38,7 @@ import org.robolectric.annotation.Config
 class BroadcastsTest {
 
     @Test
-    fun testBroadcasts() = runBlockingTest {
+    fun testBroadcasts() = runCancellingBlockingTest {
         lateinit var receiver: BroadcastReceiver
         val applicationContext = mockk<ApplicationContext> {
             every { registerReceiver(any(), any()) } answers {
@@ -48,10 +49,9 @@ class BroadcastsTest {
         }
         val broadcasts = broadcasts(applicationContext, Dispatchers.Main, "action")
         var eventCount = 0
-        val collectorJob = launch { broadcasts.collect { eventCount++ } }
+        launch { broadcasts.collect { eventCount++ } }
         receiver.onReceive(applicationContext, Intent("action"))
         receiver.onReceive(applicationContext, Intent("action"))
         eventCount shouldBe 2
-        collectorJob.cancelAndJoin()
     }
 }

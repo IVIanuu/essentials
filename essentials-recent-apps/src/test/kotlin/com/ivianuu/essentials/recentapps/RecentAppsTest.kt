@@ -21,6 +21,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.DisposableHandle
@@ -39,7 +40,7 @@ import org.robolectric.annotation.Config
 class RecentAppsTest {
 
     @Test
-    fun testRecentApps() = runBlockingTest {
+    fun testRecentApps() = runCancellingBlockingTest {
         val recentAppsScopeDispatcher = TestCoroutineDispatcher()
         val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
@@ -50,7 +51,7 @@ class RecentAppsTest {
             }
         }, recentAppsScope, NoopLogger)
         val recentApps = mutableListOf<List<String>>()
-        val collectorJob = launch {
+        launch {
             recentAppsFlow.collect {
                 recentApps += it
             }
@@ -108,16 +109,13 @@ class RecentAppsTest {
             listOf("b", "a"),
             listOf("c", "b", "a")
         )
-
-        collectorJob.cancelAndJoin()
-        recentAppsScope.cancel()
     }
 
     @Test
-    fun testCurrentApp() = runBlockingTest {
+    fun testCurrentApp() = runCancellingBlockingTest {
         val recentApps = EventFlow<List<String>>()
         val currentApps = mutableListOf<String?>()
-        val collectorJob = launch {
+        launch {
             currentApp(recentApps)
                 .collect { currentApps += it }
         }
@@ -129,7 +127,5 @@ class RecentAppsTest {
         recentApps.emit(listOf("b", "c", "a"))
 
         currentApps.shouldContainExactly("a", "c", "a", "b")
-
-        collectorJob.cancelAndJoin()
     }
 }

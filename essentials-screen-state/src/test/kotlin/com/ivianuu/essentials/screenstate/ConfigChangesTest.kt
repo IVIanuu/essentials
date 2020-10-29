@@ -18,6 +18,7 @@ package com.ivianuu.essentials.screenstate
 
 import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.injekt.android.ApplicationContext
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -36,7 +37,7 @@ import org.robolectric.annotation.Config
 class ConfigChangesTest {
 
     @Test
-    fun testConfigChanges() = runBlockingTest {
+    fun testConfigChanges() = runCancellingBlockingTest {
         lateinit var callback: ComponentCallbacks
         val applicationContext = mockk<ApplicationContext> {
             every { registerComponentCallbacks(any()) } answers {
@@ -47,11 +48,10 @@ class ConfigChangesTest {
         }
         val configChanges = configChanges(applicationContext, Dispatchers.Main)
         var eventCount = 0
-        val collectorJob = launch { configChanges.collect { eventCount++ } }
+        launch { configChanges.collect { eventCount++ } }
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())
         eventCount shouldBe 3
-        collectorJob.cancelAndJoin()
     }
 }

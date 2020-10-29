@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -27,32 +28,28 @@ import org.junit.Test
 class EventFlowTest {
 
     @Test
-    fun testSingleCollector() = runBlockingTest {
+    fun testSingleCollector() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
         val values = mutableListOf<Int>()
-        val collectorJob = launch {
-            eventFlow.collect { values += it }
-        }
+        launch { eventFlow.collect { values += it } }
 
         eventFlow.emit(1)
         eventFlow.emit(2)
         eventFlow.emit(3)
 
         values.shouldContainExactly(1, 2, 3)
-
-        collectorJob.cancelAndJoin()
     }
 
     @Test
-    fun testMultipleCollectors() = runBlockingTest {
+    fun testMultipleCollectors() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
 
         val values1 = mutableListOf<Int>()
-        val collectorJob1 = launch {
+        launch {
             eventFlow.collect { values1 += it }
         }
         val values2 = mutableListOf<Int>()
-        val collectorJob2 = launch {
+        launch {
             eventFlow.collect { values2 += it }
         }
 
@@ -62,16 +59,13 @@ class EventFlowTest {
 
         values1.shouldContainExactly(1, 2, 3)
         values2.shouldContainExactly(1, 2, 3)
-
-        collectorJob1.cancelAndJoin()
-        collectorJob2.cancelAndJoin()
     }
 
     @Test
-    fun testDoesNotDropEvents() = runBlockingTest {
+    fun testDoesNotDropEvents() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
         val values = mutableListOf<Int>()
-        val collectorJob = launch {
+        launch {
             eventFlow.collect {
                 values += it
                 delay(1000)
@@ -85,12 +79,10 @@ class EventFlowTest {
         advanceUntilIdle()
 
         values.shouldContainExactly(1, 2, 3)
-
-        collectorJob.cancelAndJoin()
     }
 
     @Test
-    fun testBuffersWhileNoCollectors() = runBlockingTest {
+    fun testBuffersWhileNoCollectors() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>(Int.MAX_VALUE)
 
         eventFlow.emit(1)
@@ -98,19 +90,17 @@ class EventFlowTest {
         eventFlow.emit(3)
 
         val values = mutableListOf<Int>()
-        val collectorJob = launch {
+        launch {
             eventFlow.collect {
                 values += it
             }
         }
 
         values.shouldContainExactly(1, 2, 3)
-
-        collectorJob.cancelAndJoin()
     }
 
     @Test
-    fun testDropsBufferValuesIfExceedsMaxBufferSize() = runBlockingTest {
+    fun testDropsBufferValuesIfExceedsMaxBufferSize() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>(2)
 
         eventFlow.emit(1)
@@ -118,14 +108,12 @@ class EventFlowTest {
         eventFlow.emit(3)
 
         val values = mutableListOf<Int>()
-        val collectorJob = launch {
+        launch {
             eventFlow.collect {
                 values += it
             }
         }
 
         values.shouldContainExactly(2, 3)
-
-        collectorJob.cancelAndJoin()
     }
 }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample
+package com.ivianuu.essentials.ui.navigation
 
-import org.junit.Test
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 
-class SampleTest {
-
-    @Test
-    fun test() {
+// todo move to ui-navigation-test
+class TestNavigator(initial: List<Route>) : Navigator {
+    override val backStack = MutableStateFlow(initial)
+    override fun setBackStack(transform: suspend (List<Route>) -> List<Route>) {
+        runBlocking { backStack.value = transform(backStack.value) }
     }
-
 }

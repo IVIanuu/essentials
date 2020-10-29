@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.datastore
 
+import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.squareup.moshi.Moshi
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -42,7 +43,7 @@ class DiskDataStoreTest {
         factory.create(name, produceDefaultData) to storeDir.resolve(name)
 
     @Test
-    fun testWrite() = scope.runBlockingTest {
+    fun testWrite() = scope.runCancellingBlockingTest {
         val (store, file) = createStore("test") { 0 }
         store.updateData { 1 }
         store.data.first() shouldBe 1
@@ -53,7 +54,7 @@ class DiskDataStoreTest {
     }
 
     @Test
-    fun testSingleCollector() = scope.runBlockingTest {
+    fun testSingleCollector() = scope.runCancellingBlockingTest {
         val (store) = createStore("test") { 0 }
 
         val datas = mutableListOf<Int>()
@@ -74,16 +75,16 @@ class DiskDataStoreTest {
     }
 
     @Test
-    fun testMultipleCollector() = scope.runBlockingTest {
+    fun testMultipleCollector() = scope.runCancellingBlockingTest {
         val (store) = createStore("test") { 0 }
 
         val datas1 = mutableListOf<Int>()
-        val collectorJob1 = launch {
+        launch {
             store.data
                 .collect { datas1 += it }
         }
         val datas2 = mutableListOf<Int>()
-        val collectorJob2 = launch {
+        launch {
             store.data
                 .collect { datas2 += it }
         }
@@ -98,9 +99,6 @@ class DiskDataStoreTest {
         store.updateData { it }
         datas1.shouldContainExactly(0, 1, 2, 3)
         datas2.shouldContainExactly(0, 1, 2, 3)
-
-        collectorJob1.cancelAndJoin()
-        collectorJob2.cancelAndJoin()
     }
 
 }
