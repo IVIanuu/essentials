@@ -30,6 +30,8 @@ import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlin.coroutines.coroutineContext
 
 @Composable
 internal fun SecureSettingsHeader(text: String) {
@@ -41,8 +43,7 @@ internal fun SecureSettingsHeader(text: String) {
 }
 
 @FunBinding
-@Composable
-fun PopNavigatorOnceSecureSettingsGranted(
+suspend fun popNavigatorOnceSecureSettingsGranted(
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     showToastRes: showToastRes,
     navigator: Navigator,
@@ -50,14 +51,12 @@ fun PopNavigatorOnceSecureSettingsGranted(
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
-    LaunchedTask {
-        while (true) {
-            if (hasSecureSettingsPermission()) {
-                if (toast) showToastRes(R.string.es_secure_settings_permission_granted)
-                navigator.popTop(result = true)
-                break
-            }
-            delay(500)
+    while (coroutineContext.isActive) {
+        if (hasSecureSettingsPermission()) {
+            if (toast) showToastRes(R.string.es_secure_settings_permission_granted)
+            navigator.popTop(result = true)
+            break
         }
+        delay(100)
     }
 }

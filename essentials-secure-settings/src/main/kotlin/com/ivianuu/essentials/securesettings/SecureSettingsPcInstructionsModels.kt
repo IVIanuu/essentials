@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission.defaultui
+package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
-import com.ivianuu.essentials.ui.navigation.Route
+data class SecureSettingsPcInstructionsState(val packageName: String) {
+    val secureSettingsAdbCommand =
+        "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
+}
 
-@PermissionRequestRouteFactoryBinding
-class DefaultPermissionRequestRouteFactory(
-    private val permissionPage: PermissionPage,
-) : PermissionRequestRouteFactory {
-
-    override fun createRoute(request: PermissionRequest): Route =
-        Route { permissionPage(request) }
+sealed class SecureSettingsPcInstructionsAction {
+    object NavigateToGadgetHacksTutorial : SecureSettingsPcInstructionsAction()
+    object NavigateToLifeHackerTutorial : SecureSettingsPcInstructionsAction()
+    object NavigateToXdaTutorial : SecureSettingsPcInstructionsAction()
 }

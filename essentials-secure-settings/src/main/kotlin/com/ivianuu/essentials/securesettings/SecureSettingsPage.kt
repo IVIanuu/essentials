@@ -19,6 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.*
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -26,6 +27,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.FunBinding
@@ -34,15 +38,10 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun SecureSettingsPage(
-    grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
-    navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted,
-    secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    showToastRes: showToastRes,
+    store: rememberStore<SecureSettingsState, SecureSettingsAction>,
     showHideNavBarHint: @Assisted Boolean
 ) {
-    popNavigatorOnceSecureSettingsGranted(true)
-
+    val (_, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
     ) {
@@ -60,26 +59,13 @@ fun SecureSettingsPage(
             ListItem(
                 title = { Text(R.string.es_pref_use_pc) },
                 subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                onClick = {
-                    navigator.push {
-                        secureSettingsPcInstructionsPage()
-                    }
-                }
+                onClick = { dispatch(NavigateToPcInstructions) }
             )
 
-            val scope = rememberCoroutineScope()
             ListItem(
                 title = { Text(R.string.es_pref_use_root) },
                 subtitle = { Text(R.string.es_pref_use_root_summary) },
-                onClick = {
-                    scope.launch {
-                        if (grantSecureSettingsPermissionViaRoot()) {
-                            showToastRes(R.string.es_secure_settings_permission_granted)
-                        } else {
-                            showToastRes(R.string.es_secure_settings_no_root)
-                        }
-                    }
-                }
+                onClick = { dispatch(GrantPermissionsViaRoot) }
             )
         }
     }

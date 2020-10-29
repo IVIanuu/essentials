@@ -21,6 +21,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -30,18 +31,18 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsPage(
-    buildInfo: BuildInfo,
-    navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: PopNavigatorOnceSecureSettingsGranted
+    store: rememberStore<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>
 ) {
-    popNavigatorOnceSecureSettingsGranted(false)
-
+    val (state, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
     ) {
@@ -68,31 +69,19 @@ fun SecureSettingsPcInstructionsPage(
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                onClick = {
-                    navigator.push(
-                        UrlRoute("https://youtu.be/CDuxcrrWLnY")
-                    )
-                }
+                onClick = { dispatch(NavigateToGadgetHacksTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                onClick = {
-                    navigator.push(
-                        UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-                    )
-                }
+                onClick = { dispatch(NavigateToLifeHackerTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                onClick = {
-                    navigator.push(
-                        UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-                    )
-                }
+                onClick = { dispatch(NavigateToXdaTutorial) }
             )
 
             ClipboardListItem(
@@ -101,13 +90,11 @@ fun SecureSettingsPcInstructionsPage(
                     Text(
                         stringResource(
                             R.string.es_pref_secure_settings_step_4_summary,
-                            buildInfo.packageName
+                            state.packageName
                         )
                     )
                 },
-                clipboardText = {
-                    "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
-                }
+                clipboardText = { state.secureSettingsAdbCommand }
             )
         }
     }

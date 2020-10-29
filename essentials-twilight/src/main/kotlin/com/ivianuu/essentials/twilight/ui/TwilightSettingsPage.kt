@@ -23,7 +23,6 @@ import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.twilightPrefs
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateTwilightMode
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateUseBlackInDarkMode
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn

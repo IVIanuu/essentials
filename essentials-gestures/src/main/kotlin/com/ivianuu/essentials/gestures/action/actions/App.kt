@@ -24,6 +24,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory

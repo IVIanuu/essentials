@@ -37,22 +37,3 @@ internal typealias TwilightPrefsStore = DataStore<TwilightPrefs>
 fun twilightPrefsStore(factory: DiskDataStoreFactory): TwilightPrefsStore =
     factory.create("twilight_prefs") { TwilightPrefs() }
 
-typealias twilightPrefs = Flow<TwilightPrefs>
-@Binding
-fun twilightPrefs(store: TwilightPrefsStore): twilightPrefs = store.data
-
-@FunBinding
-suspend fun updateTwilightMode(
-    store: TwilightPrefsStore,
-    twilightMode: @Assisted TwilightMode
-) {
-    store.updateData { it.copy(twilightMode = twilightMode) }
-}
-
-@FunBinding
-suspend fun updateUseBlackInDarkMode(
-    store: TwilightPrefsStore,
-    useBlackInDarkMode: @Assisted Boolean
-) {
-    store.updateData { it.copy(useBlackInDarkMode = useBlackInDarkMode) }
-}

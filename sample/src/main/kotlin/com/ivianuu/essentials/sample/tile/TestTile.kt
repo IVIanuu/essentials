@@ -23,7 +23,8 @@ import com.ivianuu.essentials.tile.TileStoreBinding
 import com.ivianuu.essentials.tile.onEachTileClick
 import com.ivianuu.essentials.tile.tileStore
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.twilightPrefs
+import com.ivianuu.essentials.twilight.domain.twilightPrefs
+import com.ivianuu.essentials.twilight.domain.updateTwilightMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 

@@ -38,6 +38,8 @@ data class TileStoreEntry(
 )
 
 typealias TileStores = Map<Int, TileStoreEntry>
+@MapEntries
+fun defaultTileStores(): TileStores = emptyMap()
 
 data class TileState(
     val icon: Icon? = null,
