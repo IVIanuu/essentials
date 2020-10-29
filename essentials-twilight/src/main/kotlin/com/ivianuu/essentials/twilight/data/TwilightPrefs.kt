@@ -36,4 +36,3 @@ internal typealias TwilightPrefsStore = DataStore<TwilightPrefs>
 @Binding(ApplicationComponent::class)
 fun twilightPrefsStore(factory: DiskDataStoreFactory): TwilightPrefsStore =
     factory.create("twilight_prefs") { TwilightPrefs() }
-
