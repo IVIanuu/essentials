@@ -100,6 +100,7 @@ fun generateMemoFunctions(genDir: File) {
             appendLine("    }")
 
             appendLine("}")
+            appendLine()
         }
     }
     file.writeText(code)
