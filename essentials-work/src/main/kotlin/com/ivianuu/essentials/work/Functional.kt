@@ -44,7 +44,7 @@ interface WorkScope {
 annotation class WorkerBinding {
     companion object {
         @MapEntries
-        fun <T : WorkerWithId> intoWorkerMap(instance: T): Workers =
+        fun <T : WorkerPair> intoWorkerMap(instance: T): Workers =
             mapOf(instance.id to instance.block)
     }
 }
@@ -52,9 +52,9 @@ annotation class WorkerBinding {
 fun worker(
     id: String,
     block: Worker
-): WorkerWithId = WorkerWithId(id, block)
+): WorkerPair = WorkerPair(id, block)
 
-data class WorkerWithId(val id: String, val block: Worker)
+data class WorkerPair(val id: String, val block: Worker)
 
 fun OneTimeWorkRequestBuilder(id: String): OneTimeWorkRequest.Builder {
     return OneTimeWorkRequestBuilder<FunctionalWorker>()
