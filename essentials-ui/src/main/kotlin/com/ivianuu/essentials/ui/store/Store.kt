@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.store
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
@@ -28,11 +29,15 @@ import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.reflect.typeOf
 
 fun <S, V> StoreScope<S, *>.execute(
     block: suspend () -> V,
@@ -47,15 +52,46 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
+interface StoreState
+interface StoreAction
+
+typealias StorePair<S, A> = Pair<S, (A) -> Unit>
+
+@Composable
+val <S, A> Store<S, A>.storePair: StorePair<S, A>
+    get() = StorePair(snapshotState, remember(this) { { dispatch(it) } })
+
+@Binding
+@Composable
+inline fun <reified S, reified A> storeFromProvider(
+    defaultDispatcher: DefaultDispatcher,
+    noinline provider: (CoroutineScope) -> Store<S, A>
+): Store<S, A> {
+    return rememberRetained(key = typeOf<Store<S, A>>()) {
+        StoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
+    }.store
+}
+
+@PublishedApi
+internal class StoreRunner<S, A>(
+    private val coroutineScope: CoroutineScope,
+    storeProvider: (CoroutineScope) -> Store<S, A>
+) : DisposableHandle {
+    val store = storeProvider(coroutineScope)
+    override fun dispose() {
+        coroutineScope.cancel()
+    }
+}
+
+@Composable
+val <S> Store<S, *>.snapshotState: S
+    get() = state.collectAsState().value
+
 @Composable
 operator fun <S> Store<S, *>.component1() = snapshotState
 
 @Composable
 operator fun <A> Store<*, A>.component2(): (A) -> Unit = { dispatch(it) }
-
-@Composable
-val <S> Store<S, *>.snapshotState: S
-    get() = state.collectAsState().value
 
 @FunBinding
 @Composable

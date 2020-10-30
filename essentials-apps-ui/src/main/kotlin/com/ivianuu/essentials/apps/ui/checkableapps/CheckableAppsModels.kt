@@ -23,6 +23,8 @@ import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
 
 @Immutable
 data class CheckableApp(
@@ -36,7 +38,7 @@ data class CheckableAppsState(
     val checkedApps: Set<String> = emptySet(),
     val onCheckedAppsChanged: ((Set<String>) -> Unit)? = null,
     val appFilter: AppFilter = DefaultAppFilter,
-) {
+) : StoreState {
     val checkableApps = apps
         .map { it.filter(appFilter) }
         .map { apps ->
@@ -49,7 +51,7 @@ data class CheckableAppsState(
         }
 }
 
-sealed class CheckableAppsAction {
+sealed class CheckableAppsAction : StoreAction {
     data class UpdateRefs(
         val checkedApps: Set<String>,
         val onCheckedAppsChanged: (Set<String>) -> Unit,

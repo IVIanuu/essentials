@@ -19,6 +19,7 @@ package com.ivianuu.essentials.apps.ui
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.memo.memoize
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
@@ -26,38 +27,24 @@ typealias AppFilter = (AppInfo) -> Boolean
 
 val DefaultAppFilter: AppFilter = { true }
 
-@Binding
-class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
-    private val cachedResults = mutableMapOf<String, Boolean>()
-    override fun invoke(app: AppInfo): Boolean = cachedResults.getOrPut(app.packageName) {
-        appFilter(app)
-    }
-}
+typealias LaunchableAppFilter = AppFilter
 
 @Binding
-class LaunchableAppFilter(
-    private val packageManager: PackageManager,
-) : AppFilter {
-    private val wrapped = CachingAppFilter { app ->
-        packageManager.getLaunchIntentForPackage(app.packageName) != null
-    }
+fun LaunchableAppFilter(
+    packageManager: PackageManager
+): LaunchableAppFilter = { app: AppInfo ->
+    packageManager.getLaunchIntentForPackage(app.packageName) != null
+}.memoize()
 
-    override fun invoke(app: AppInfo) = wrapped(app)
-}
-
+typealias IntentAppFilter = AppFilter
 @Binding
-class IntentAppFilter(
-    private val intent: @Assisted Intent,
-    private val packageManager: PackageManager
-) : AppFilter {
-    private val apps by lazy {
+fun IntentAppFilter(
+    packageManager: PackageManager,
+    intent: Intent
+): IntentAppFilter {
+    val apps by lazy {
         packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo.packageName }
     }
-
-    private val wrapped = CachingAppFilter { app ->
-        app.packageName in apps
-    }
-
-    override fun invoke(app: AppInfo) = wrapped(app)
+    return { app -> app.packageName in apps }
 }

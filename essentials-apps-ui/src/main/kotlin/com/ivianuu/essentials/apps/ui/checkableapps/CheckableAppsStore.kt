@@ -50,6 +50,7 @@ fun checkableAppsStore(
             currentState.onCheckedAppsChanged!!(newCheckedApps)
         }
 
+        @Suppress("IMPLICIT_CAST_TO_ANY")
         when (action) {
             is UpdateRefs -> {
                 setState {

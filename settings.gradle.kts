@@ -27,6 +27,8 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hide-nav-bar",
     ":essentials-kotlin-compiler",
+    ":essentials-memo",
+    ":essentials-memo:generator",
     ":essentials-moshi",
     ":essentials-notification-listener",
     ":essentials-permission",

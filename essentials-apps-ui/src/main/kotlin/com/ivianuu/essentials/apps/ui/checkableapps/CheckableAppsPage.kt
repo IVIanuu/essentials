@@ -20,57 +20,39 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppFilter
-import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateRefs
-import com.ivianuu.essentials.store.currentState
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.resource.Idle
-import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.executeIn
-import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 
 @FunBinding
 @Composable
 fun CheckableAppsPage(
-    store: rememberStore<CheckableAppsState, CheckableAppsAction>,
+    state: CheckableAppsState,
+    dispatch: (CheckableAppsAction) -> Unit,
     checkedApps: @Assisted Set<String>,
     onCheckedAppsChanged: @Assisted (Set<String>) -> Unit,
     appFilter: @Assisted AppFilter,
     appBarTitle: @Assisted String
 ) {
-    val (state, dispatch) = store()
-
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
         dispatch(UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
     }
