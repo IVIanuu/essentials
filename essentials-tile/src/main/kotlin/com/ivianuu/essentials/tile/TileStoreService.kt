@@ -37,7 +37,7 @@ class TileStoreService7 : AbstractTileStoreService(7)
 class TileStoreService8 : AbstractTileStoreService(8)
 class TileStoreService9 : AbstractTileStoreService(9)
 
-abstract class AbstractTileStoreService(val index: Int) : EsTileService() {
+abstract class AbstractTileStoreService(private val index: Int) : EsTileService() {
 
     private val component by lazy {
         serviceComponent.mergeComponent<FunTileServiceComponent>()

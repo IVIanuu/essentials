@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 
 @Binding
-fun securesettingsPcInstructionsStore(
+fun secureSettingsPcInstructionsStore(
     buildInfo: BuildInfo,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
