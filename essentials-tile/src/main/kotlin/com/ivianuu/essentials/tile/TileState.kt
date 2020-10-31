@@ -73,8 +73,8 @@ annotation class TileStoreBinding(val index: Int) {
     companion object {
         @MapEntries
         fun <T : TileStorePair> intoTileMap(
-            @BindingAdapterArg("index") index: Int,
-            provider: () -> T
+            provider: () -> T,
+            @BindingAdapterArg("index") index: Int
         ): TileStores = mapOf(index to provider)
     }
 }

@@ -46,8 +46,8 @@ annotation class WorkerBinding(val id: String) {
     companion object {
         @MapEntries
         fun <T : Worker> intoWorkerMap(
-            @BindingAdapterArg("id") id: String,
-            workerProvider: () -> T
+            workerProvider: () -> T,
+            @BindingAdapterArg("id") id: String
         ): Workers = mapOf(id to workerProvider)
     }
 }
