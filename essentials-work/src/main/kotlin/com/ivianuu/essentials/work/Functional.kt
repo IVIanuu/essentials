@@ -24,6 +24,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.MapEntries
 import java.util.UUID
 import kotlin.time.Duration
@@ -41,20 +42,15 @@ interface WorkScope {
 }
 
 @BindingAdapter
-annotation class WorkerBinding {
+annotation class WorkerBinding(val id: String) {
     companion object {
         @MapEntries
-        fun <T : WorkerPair> intoWorkerMap(instance: T): Workers =
-            mapOf(instance.id to instance.block)
+        fun <T : Worker> intoWorkerMap(
+            @BindingAdapterArg("id") id: String,
+            workerProvider: () -> T
+        ): Workers = mapOf(id to workerProvider)
     }
 }
-
-fun worker(
-    id: String,
-    block: Worker
-): WorkerPair = WorkerPair(id, block)
-
-data class WorkerPair(val id: String, val block: Worker)
 
 fun OneTimeWorkRequestBuilder(id: String): OneTimeWorkRequest.Builder {
     return OneTimeWorkRequestBuilder<FunctionalWorker>()

@@ -21,23 +21,22 @@ import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.MapEntries
 
 typealias TileStore = suspend StoreScope<TileState, TileAction>.() -> Unit
 
 fun tileStore(
-    index: Int,
     initial: TileState,
     block: suspend StoreScope<TileState, TileAction>.() -> Unit
-): TileStoreEntry = TileStoreEntry(index, initial, block)
+): TileStorePair = TileStorePair(initial, block)
 
-data class TileStoreEntry(
-    val index: Int,
+data class TileStorePair(
     val initialState: TileState,
     val block: TileStore
 )
 
-typealias TileStores = Map<Int, TileStoreEntry>
+typealias TileStores = Map<Int, () -> TileStorePair>
 @MapEntries
 fun defaultTileStores(): TileStores = emptyMap()
 
@@ -70,9 +69,12 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
 }
 
 @BindingAdapter
-annotation class TileStoreBinding {
+annotation class TileStoreBinding(val index: Int) {
     companion object {
         @MapEntries
-        fun <T : TileStoreEntry> intoTileMap(instance: T): TileStores = mapOf(instance.index to instance)
+        fun <T : TileStorePair> intoTileMap(
+            @BindingAdapterArg("index") index: Int,
+            provider: () -> T
+        ): TileStores = mapOf(index to provider)
     }
 }

@@ -18,16 +18,19 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.ListenableWorker
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.work.WorkScope
 import com.ivianuu.essentials.work.WorkerBinding
-import com.ivianuu.essentials.work.worker
+import com.ivianuu.injekt.FunApi
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 
 const val TEST_WORKER_ID = "test"
 
-@WorkerBinding
-fun TestWorker(logger: Logger) = worker(TEST_WORKER_ID) {
+@WorkerBinding(TEST_WORKER_ID)
+@FunBinding
+suspend fun @receiver:FunApi WorkScope.TestWorker(logger: Logger): ListenableWorker.Result {
     logger.d("start work")
     delay(5000)
     logger.d("finish work")
-    ListenableWorker.Result.success()
+    return ListenableWorker.Result.success()
 }

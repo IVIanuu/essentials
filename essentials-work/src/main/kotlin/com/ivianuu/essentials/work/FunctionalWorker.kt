@@ -34,7 +34,7 @@ class FunctionalWorker(
     override suspend fun doWork(): Result {
         val id = tags.first { it.startsWith(WORKER_ID_TAG_PREFIX) }
             .removePrefix(WORKER_ID_TAG_PREFIX)
-        val worker = workers[id] ?: error("No worker found for $id")
+        val worker = workers[id]?.invoke() ?: error("No worker found for $id")
         val scope = object : WorkScope {
             override val id: UUID
                 get() = this@FunctionalWorker.id
@@ -58,7 +58,7 @@ class FunctionalWorker(
 
 internal const val WORKER_ID_TAG_PREFIX = "worker_id_"
 
-typealias Workers = Map<String, Worker>
+typealias Workers = Map<String, () -> Worker>
 
 @MapEntries
 fun defaultWorkers(): Workers = emptyMap()

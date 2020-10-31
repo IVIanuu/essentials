@@ -28,12 +28,11 @@ import com.ivianuu.essentials.twilight.domain.updateTwilightMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-@TileStoreBinding
+@TileStoreBinding(1)
 fun testTileStore(
     twilightPrefs: twilightPrefs,
     updateTwilightMode: updateTwilightMode
 ) = tileStore(
-    index = 0,
     initial = TileState(
         iconRes = R.drawable.es_ic_accessibility,
         label = "Hello"

@@ -48,7 +48,7 @@ abstract class AbstractTileStoreService(val index: Int) : EsTileService() {
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
-            val (_, initialState, block) = (component.tileStores[index]
+            val (initialState, block) = (component.tileStores[index]?.invoke()
                 ?: error("No tile found for $index"))
             val store = store(initialState, block)
             launch { clicks.collect { store.dispatch(TileClicked) } }
