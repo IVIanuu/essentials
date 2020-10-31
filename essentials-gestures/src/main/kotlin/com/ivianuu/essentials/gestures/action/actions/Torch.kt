@@ -28,7 +28,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.map
 
-@ActionBinding
+@ActionBinding("torch")
 fun torchAction(
     stringResource: stringResource,
     torchIcon: TorchIcon,

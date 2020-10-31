@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("split_screen")
 fun splitScreenAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "split_screen",
     AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN,

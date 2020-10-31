@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.util.stringResource
 
-@ActionBinding
+@ActionBinding("input_method")
 fun inputMethodAction(
     inputMethodManager: InputMethodManager,
     stringResource: stringResource,

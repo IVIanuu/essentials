@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("quick_settings")
 fun quickSettingsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "quick_settings",
     AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS,

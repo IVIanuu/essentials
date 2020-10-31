@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("notifications")
 fun notificationsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "notifications",
     AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,

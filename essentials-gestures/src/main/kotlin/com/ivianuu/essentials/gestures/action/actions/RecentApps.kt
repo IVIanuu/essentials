@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("recent_apps")
 fun recentAppsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "recent_apps",
     AccessibilityService.GLOBAL_ACTION_RECENTS,

@@ -30,7 +30,7 @@ import com.ivianuu.injekt.android.ApplicationContext
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
 
-@ActionBinding
+@ActionBinding("home")
 fun homeAction(
     choosePermissions: choosePermissions,
     openHomeScreen: openHomeScreen,

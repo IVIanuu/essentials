@@ -21,8 +21,10 @@ import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.flow.Flow
 
@@ -40,10 +42,13 @@ data class Action(
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
 @BindingAdapter
-annotation class ActionBinding {
+annotation class ActionBinding(val key: String) {
     companion object {
-        @SetElements
-        fun <T : Action> actionIntoSet(instance: T): Set<Action> = setOf(instance)
+        @MapEntries
+        fun <T : Action> actionIntoSet(
+            provider: () -> T,
+            @BindingAdapterArg("key") key: String
+        ): Map<String, () -> Action> = mapOf(key to provider)
     }
 }
 

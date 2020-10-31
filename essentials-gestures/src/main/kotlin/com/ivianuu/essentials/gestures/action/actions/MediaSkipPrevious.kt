@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("media_skip_previous")
 fun mediaSkipPreviousAction(mediaAction: mediaAction): Action = mediaAction(
     "media_skip_previous",
     KeyEvent.KEYCODE_MEDIA_PREVIOUS,

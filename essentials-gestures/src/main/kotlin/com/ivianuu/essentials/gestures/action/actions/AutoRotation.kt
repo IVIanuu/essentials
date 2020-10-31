@@ -33,7 +33,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.map
 
-@ActionBinding
+@ActionBinding("auto_rotation")
 fun autoRotationAction(
     autoRotationIcon: AutoRotationIcon,
     choosePermissions: choosePermissions,

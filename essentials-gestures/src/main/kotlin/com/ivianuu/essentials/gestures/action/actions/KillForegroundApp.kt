@@ -31,7 +31,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
-@ActionBinding
+@ActionBinding("kill_current_app_action")
 fun killCurrentAction(
     choosePermissions: choosePermissions,
     killCurrentApp: killCurrentApp,

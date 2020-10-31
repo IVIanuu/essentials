@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("media_play_pause")
 fun mediaPlayPauseAction(mediaAction: mediaAction): Action = mediaAction(
     "media_play_pause",
     KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,

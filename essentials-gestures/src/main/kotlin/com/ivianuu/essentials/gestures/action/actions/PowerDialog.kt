@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 
-@ActionBinding
+@ActionBinding("power_dialog")
 fun powerDialogAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "power_dialog",
     AccessibilityService.GLOBAL_ACTION_POWER_DIALOG,

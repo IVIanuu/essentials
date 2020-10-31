@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.util.stringResource
 
-@ActionBinding
+@ActionBinding("search")
 fun searchAction(
     sendIntent: sendIntent,
     stringResource: stringResource,

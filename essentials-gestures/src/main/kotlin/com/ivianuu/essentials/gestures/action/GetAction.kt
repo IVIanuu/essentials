@@ -23,19 +23,22 @@ import kotlinx.coroutines.withContext
 
 @FunBinding
 suspend fun getAllActions(
-    actions: Set<Action>,
+    actions: Map<String, () -> Action>,
     defaultDispatcher: DefaultDispatcher,
-): List<Action> = withContext(defaultDispatcher) { actions.toList() }
+): List<Action> = withContext(defaultDispatcher) {
+    actions.values
+        .map { it() }
+}
 
 @FunBinding
 suspend fun getAction(
-    actions: Set<Action>,
+    actions: Map<String, () -> Action>,
     actionFactories: () -> Set<ActionFactory>,
     defaultDispatcher: DefaultDispatcher,
     @FunApi key: String
 ): Action = withContext(defaultDispatcher) {
-    actions
-        .firstOrNull { it.key == key }
+    actions[key]
+        ?.invoke()
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
             ?.createAction(key)

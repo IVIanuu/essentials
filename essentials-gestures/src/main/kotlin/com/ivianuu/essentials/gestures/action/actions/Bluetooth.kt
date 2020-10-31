@@ -29,7 +29,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@ActionBinding
+@ActionBinding("bluetooth")
 fun bluetoothAction(
     bluetoothIcon: BluetoothIcon,
     stringResource: stringResource

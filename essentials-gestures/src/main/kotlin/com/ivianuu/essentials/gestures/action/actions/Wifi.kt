@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
@@ -30,7 +29,7 @@ import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@ActionBinding
+@ActionBinding("wifi")
 fun wifiAction(
     stringResource: stringResource,
     toggleWifi: toggleWifi,

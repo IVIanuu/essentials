@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
 import kotlinx.coroutines.delay
 
-@ActionBinding
+@ActionBinding("last_app")
 fun lastAppAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,

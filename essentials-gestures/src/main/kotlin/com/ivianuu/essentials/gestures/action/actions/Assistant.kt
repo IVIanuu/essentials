@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.util.stringResource
 
-@ActionBinding
+@ActionBinding("assistant")
 fun assistantAction(
     stringResource: stringResource,
     searchManager: SearchManager,
