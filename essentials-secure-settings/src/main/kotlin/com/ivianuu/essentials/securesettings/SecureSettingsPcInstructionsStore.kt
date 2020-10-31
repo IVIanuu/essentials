@@ -37,13 +37,13 @@ fun storeSettingsPcInstructionsStore(
     launch { popNavigatorOnceSecureSettingsGranted(false) }
     for (action in this) {
         when (action) {
-            NavigateToGadgetHacksTutorial -> navigator.push(
+            ShowGadgetHacksTutorial -> navigator.push(
                 UrlRoute("https://youtu.be/CDuxcrrWLnY")
             )
-            NavigateToLifeHackerTutorial -> navigator.push(
+            ShowLifeHackerTutorial -> navigator.push(
                 UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
             )
-            NavigateToXdaTutorial -> navigator.push(
+            ShowXdaTutorial -> navigator.push(
                 UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
             )
         }.exhaustive

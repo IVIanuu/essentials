@@ -27,14 +27,10 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
@@ -69,19 +65,19 @@ fun SecureSettingsPcInstructionsPage(
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                onClick = { dispatch(NavigateToGadgetHacksTutorial) }
+                onClick = { dispatch(ShowGadgetHacksTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                onClick = { dispatch(NavigateToLifeHackerTutorial) }
+                onClick = { dispatch(ShowLifeHackerTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                onClick = { dispatch(NavigateToXdaTutorial) }
+                onClick = { dispatch(ShowXdaTutorial) }
             )
 
             ClipboardListItem(

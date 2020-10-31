@@ -19,6 +19,6 @@ package com.ivianuu.essentials.securesettings
 object SecureSettingsState
 
 sealed class SecureSettingsAction {
-    object NavigateToPcInstructions : SecureSettingsAction()
     object GrantPermissionsViaRoot : SecureSettingsAction()
+    object ShowToPcInstructions : SecureSettingsAction()
 }

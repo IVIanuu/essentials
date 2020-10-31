@@ -22,7 +22,7 @@ data class SecureSettingsPcInstructionsState(val packageName: String) {
 }
 
 sealed class SecureSettingsPcInstructionsAction {
-    object NavigateToGadgetHacksTutorial : SecureSettingsPcInstructionsAction()
-    object NavigateToLifeHackerTutorial : SecureSettingsPcInstructionsAction()
-    object NavigateToXdaTutorial : SecureSettingsPcInstructionsAction()
+    object ShowGadgetHacksTutorial : SecureSettingsPcInstructionsAction()
+    object ShowLifeHackerTutorial : SecureSettingsPcInstructionsAction()
+    object ShowXdaTutorial : SecureSettingsPcInstructionsAction()
 }

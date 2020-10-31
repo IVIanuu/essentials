@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.*
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
@@ -25,15 +24,11 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.launch
 
 @FunBinding
 @Composable
@@ -59,7 +54,7 @@ fun SecureSettingsPage(
             ListItem(
                 title = { Text(R.string.es_pref_use_pc) },
                 subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                onClick = { dispatch(NavigateToPcInstructions) }
+                onClick = { dispatch(ShowToPcInstructions) }
             )
 
             ListItem(

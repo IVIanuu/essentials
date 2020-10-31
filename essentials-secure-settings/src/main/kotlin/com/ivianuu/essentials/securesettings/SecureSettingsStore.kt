@@ -39,7 +39,7 @@ fun secureSettingsStore(
 
     for (action in this) {
         when (action) {
-            NavigateToPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
+            ShowToPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
             GrantPermissionsViaRoot -> {
                 if (grantSecureSettingsPermissionViaRoot()) {
                     showToastRes(R.string.es_secure_settings_permission_granted)
