@@ -20,7 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.memo.memoize
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
 typealias AppFilter = (AppInfo) -> Boolean

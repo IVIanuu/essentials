@@ -18,15 +18,15 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 @FunBinding
 suspend fun updateActionMediaApp(
     pref: ActionMediaAppPref,
-    value: @Assisted String
+    @FunApi value: String
 ) {
     pref.updateData { value }
 }

@@ -43,8 +43,8 @@ import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.first
 
@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun PermissionPage(
     store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
-    request: @Assisted PermissionRequest
+    @FunApi request: PermissionRequest
 ) {
     val (state, dispatch) = store(request)
 

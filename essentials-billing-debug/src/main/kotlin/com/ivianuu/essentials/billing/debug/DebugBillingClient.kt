@@ -50,7 +50,6 @@ import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -65,7 +64,7 @@ class DebugBillingClient(
     private val globalScope: GlobalScope,
     private val startUi: startUi,
     private val navigator: Navigator,
-    private val purchasesUpdatedListener: @Assisted PurchasesUpdatedListener
+    private val purchasesUpdatedListener: PurchasesUpdatedListener
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null

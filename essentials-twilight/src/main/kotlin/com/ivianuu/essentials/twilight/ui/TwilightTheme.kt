@@ -31,7 +31,7 @@ import com.ivianuu.essentials.twilight.domain.TwilightStateFlow
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
 import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -40,11 +40,11 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun TwilightTheme(
     twilightStateFlow: TwilightStateFlow,
-    lightColors: @Assisted Colors,
-    darkColors: @Assisted Colors,
-    blackColors: @Assisted Colors,
-    typography: @Assisted Typography,
-    children: @Assisted @Composable () -> Unit
+    @FunApi lightColors: Colors,
+    @FunApi darkColors: Colors,
+    @FunApi blackColors: Colors,
+    @FunApi typography: Typography,
+    @FunApi children: @Composable () -> Unit
 ) {
     val targetColors by twilightStateFlow
         .map {

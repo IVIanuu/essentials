@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -44,7 +44,7 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(
 suspend fun runRootCommand(
     runShellCommand: runShellCommand,
     showToastRes: showToastRes,
-    command: @Assisted String
+    @FunApi command: String
 ) {
     try {
         runShellCommand(command)
@@ -58,7 +58,7 @@ suspend fun runRootCommand(
 fun sendIntent(
     applicationContext: ApplicationContext,
     showToastRes: showToastRes,
-    intent: @Assisted Intent
+    @FunApi intent: Intent
 ) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {

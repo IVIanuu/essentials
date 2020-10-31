@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.flow.Flow
@@ -50,7 +50,7 @@ annotation class ActionBinding {
 @FunBinding
 fun choosePermissions(
     permissions: ActionPermissions,
-    block: @Assisted ActionPermissions.() -> List<Permission>
+    @FunApi block: ActionPermissions.() -> List<Permission>
 ): List<Permission> = permissions.block()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)

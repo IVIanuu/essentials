@@ -21,7 +21,7 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.common.compositionActivity
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
@@ -35,7 +35,7 @@ interface UiComponent
 @UiDecoratorBinding
 @FunBinding
 @Composable
-fun ProvideUiComponent(children: @Assisted @Composable () -> Unit) {
+fun ProvideUiComponent(@FunApi children: @Composable () -> Unit) {
     val activity = compositionActivity
     val uiComponent = remember {
         activity.activityComponent.mergeComponent<UiComponentFactoryOwner>()

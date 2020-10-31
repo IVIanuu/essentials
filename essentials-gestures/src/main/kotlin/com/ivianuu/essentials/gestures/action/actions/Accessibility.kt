@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
@@ -29,10 +29,10 @@ fun accessibilityAction(
     choosePermissions: choosePermissions,
     performGlobalAction: performGlobalAction,
     stringResource: stringResource,
-    key: @Assisted String,
-    accessibilityAction: @Assisted Int,
-    titleRes: @Assisted Int,
-    icon: @Assisted ActionIcon
+    @FunApi key: String,
+    @FunApi accessibilityAction: Int,
+    @FunApi titleRes: Int,
+    @FunApi icon: ActionIcon
 ) = Action(
     key = key,
     title = stringResource(titleRes),

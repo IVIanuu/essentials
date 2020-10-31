@@ -28,8 +28,8 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
@@ -105,7 +105,7 @@ fun <S, A> rememberStore(
 fun <S, A, P1> rememberStore1(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
     provider: (P1) -> (CoroutineScope) -> Store<S, A>,
-    p1: @Assisted P1
+    @FunApi p1: P1
 ): Store<S, A> = key(p1) {
     rememberStoreViaFactory { provider(p1)(it) }
 }
@@ -115,8 +115,8 @@ fun <S, A, P1> rememberStore1(
 fun <S, A, P1, P2> rememberStore2(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
     provider: (P1, P2) -> (CoroutineScope) -> Store<S, A>,
-    p1: @Assisted P1,
-    p2: @Assisted P2
+    @FunApi p1: P1,
+    @FunApi p2: P2
 ): Store<S, A> = key(p1, p2) {
     rememberStoreViaFactory { provider(p1, p2)(it) }
 }
@@ -126,9 +126,9 @@ fun <S, A, P1, P2> rememberStore2(
 fun <S, A, P1, P2, P3> rememberStore3(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
     provider: (P1, P2, P3) -> (CoroutineScope) -> Store<S, A>,
-    p1: @Assisted P1,
-    p2: @Assisted P2,
-    p3: @Assisted P3
+    @FunApi p1: P1,
+    @FunApi p2: P2,
+    @FunApi p3: P3
 ): Store<S, A> = key(p1, p2, p3) {
     rememberStoreViaFactory { provider(p1, p2, p3)(it) }
 }
@@ -138,10 +138,10 @@ fun <S, A, P1, P2, P3> rememberStore3(
 fun <S, A, P1, P2, P3, P4> rememberStore4(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
     provider: (P1, P2, P3, P4) -> (CoroutineScope) -> Store<S, A>,
-    p1: @Assisted P1,
-    p2: @Assisted P2,
-    p3: @Assisted P3,
-    p4: @Assisted P4
+    @FunApi p1: P1,
+    @FunApi p2: P2,
+    @FunApi p3: P3,
+    @FunApi p4: P4
 ): Store<S, A> = key(p1, p2, p3, p4) {
     rememberStoreViaFactory { provider(p1, p2, p3, p4)(it) }
 }
@@ -151,11 +151,11 @@ fun <S, A, P1, P2, P3, P4> rememberStore4(
 fun <S, A, P1, P2, P3, P4, P5> rememberStore5(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
     provider: (P1, P2, P3, P4, P5) -> (CoroutineScope) -> Store<S, A>,
-    p1: @Assisted P1,
-    p2: @Assisted P2,
-    p3: @Assisted P3,
-    p4: @Assisted P4,
-    p5: @Assisted P5
+    @FunApi p1: P1,
+    @FunApi p2: P2,
+    @FunApi p3: P3,
+    @FunApi p4: P4,
+    @FunApi p5: P5
 ): Store<S, A> = key(p1, p2, p3, p4, p5) {
     rememberStoreViaFactory { provider(p1, p2, p3, p4, p5)(it) }
 }
@@ -164,7 +164,7 @@ fun <S, A, P1, P2, P3, P4, P5> rememberStore5(
 @Composable
 fun <S, A> rememberStoreViaFactory(
     defaultDispatcher: DefaultDispatcher,
-    init: @Assisted (CoroutineScope) -> Store<S, A>
+    @FunApi init: (CoroutineScope) -> Store<S, A>
 ): Store<S, A> {
     val scope = rememberRetainedCoroutinesScope { defaultDispatcher }
     return rememberRetained { init(scope) }

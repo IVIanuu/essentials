@@ -24,7 +24,7 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
@@ -60,7 +60,7 @@ suspend fun getAllShortcuts(
 suspend fun extractShortcut(
     defaultDispatcher: DefaultDispatcher,
     packageManager: PackageManager,
-    shortcutRequestResult: @Assisted Intent
+    @FunApi shortcutRequestResult: Intent
 ): Shortcut = withContext(defaultDispatcher) {
     val intent =
         shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!

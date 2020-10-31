@@ -24,7 +24,7 @@ import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
@@ -36,7 +36,7 @@ suspend fun executeAction(
     requestPermissions: requestPermissions,
     unlockScreen: unlockScreen,
     showToast: showToast,
-    key: @Assisted String
+    @FunApi key: String
 ): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
     runCatching {
         logger.d("execute $key")

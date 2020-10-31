@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerState
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
@@ -38,21 +40,24 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.essentials.ui.store.component1
+import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @FunBinding
 @Composable
 fun CheckableAppsPage(
-    state: CheckableAppsState,
-    dispatch: (CheckableAppsAction) -> Unit,
-    checkedApps: @Assisted Set<String>,
-    onCheckedAppsChanged: @Assisted (Set<String>) -> Unit,
-    appFilter: @Assisted AppFilter,
-    appBarTitle: @Assisted String
+    store: rememberStore<CheckableAppsState, CheckableAppsAction>,
+    @FunApi checkedApps: Set<String>,
+    @FunApi onCheckedAppsChanged: (Set<String>) -> Unit,
+    @FunApi appFilter: AppFilter,
+    @FunApi appBarTitle: String
 ) {
+    val (state, dispatch) = store()
     onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
         dispatch(UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
     }

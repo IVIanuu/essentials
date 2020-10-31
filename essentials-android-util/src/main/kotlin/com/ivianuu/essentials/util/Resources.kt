@@ -24,59 +24,59 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.res.ResourcesCompat
 import com.ivianuu.essentials.ui.image.toImageAsset
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
 @FunBinding
-fun bitmapResource(applicationContext: ApplicationContext, id: @Assisted Int): ImageAsset =
+fun bitmapResource(applicationContext: ApplicationContext, @FunApi id: Int): ImageAsset =
     applicationContext.getDrawable(id)!!.toImageAsset()
 
 @FunBinding
-fun booleanResource(applicationContext: ApplicationContext, id: @Assisted Int): Boolean =
+fun booleanResource(applicationContext: ApplicationContext, @FunApi id: Int): Boolean =
     applicationContext.resources.getBoolean(id)
 
 @FunBinding
-fun colorResource(applicationContext: ApplicationContext, id: @Assisted Int): Color =
+fun colorResource(applicationContext: ApplicationContext, @FunApi id: Int): Color =
     Color(applicationContext.getColor(id))
 
 @FunBinding
-fun dimensionResource(applicationContext: ApplicationContext, id: @Assisted Int): Dp =
+fun dimensionResource(applicationContext: ApplicationContext, @FunApi id: Int): Dp =
     with(Density(applicationContext)) {
         applicationContext.resources.getDimension(id).toInt().toDp()
     }
 
 @FunBinding
-fun drawableResource(bitmapResource: bitmapResource, id: @Assisted Int): ImageAsset =
+fun drawableResource(bitmapResource: bitmapResource, @FunApi id: Int): ImageAsset =
     bitmapResource(id)
 
 @FunBinding
-fun floatResource(applicationContext: ApplicationContext, id: @Assisted Int): Float =
+fun floatResource(applicationContext: ApplicationContext, @FunApi id: Int): Float =
     ResourcesCompat.getFloat(applicationContext.resources, id)
 
 @FunBinding
-fun fontResource(applicationContext: ApplicationContext, id: @Assisted Int): Font =
+fun fontResource(applicationContext: ApplicationContext, @FunApi id: Int): Font =
     font(id)
 
 @FunBinding
-fun intResource(applicationContext: ApplicationContext, id: @Assisted Int): Int =
+fun intResource(applicationContext: ApplicationContext, @FunApi id: Int): Int =
     applicationContext.resources.getInteger(id)
 
 @FunBinding
-fun intArrayResource(applicationContext: ApplicationContext, id: @Assisted Int): IntArray =
+fun intArrayResource(applicationContext: ApplicationContext, @FunApi id: Int): IntArray =
     applicationContext.resources.getIntArray(id)
 
 @FunBinding
-fun stringResource(applicationContext: ApplicationContext, id: @Assisted Int): String =
+fun stringResource(applicationContext: ApplicationContext, @FunApi id: Int): String =
     applicationContext.getString(id)
 
 @FunBinding
 fun stringResourceWithArguments(
     applicationContext: ApplicationContext,
-    id: @Assisted Int,
-    args: @Assisted List<Any?>
+    @FunApi id: Int,
+    @FunApi args: List<Any?>
 ): String = applicationContext.getString(id, *args.toTypedArray())
 
 @FunBinding
-fun stringArrayResource(applicationContext: ApplicationContext, id: @Assisted Int): Array<String> =
+fun stringArrayResource(applicationContext: ApplicationContext, @FunApi id: Int): Array<String> =
     applicationContext.resources.getStringArray(id)

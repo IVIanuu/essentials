@@ -21,8 +21,8 @@ import androidx.compose.runtime.onDispose
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ActivityComponent
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +42,7 @@ fun uiScope(mainDispatcher: MainDispatcher): UiScope =
 fun CancelUiScope(
     logger: Logger,
     uiScope: UiScope,
-    children: @Assisted @Composable () -> Unit
+    @FunApi children: @Composable () -> Unit
 ) {
     onDispose {
         logger.d("Cancelling ui scope")

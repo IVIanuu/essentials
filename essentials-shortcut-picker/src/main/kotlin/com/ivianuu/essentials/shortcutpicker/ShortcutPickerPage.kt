@@ -41,15 +41,15 @@ import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun ShortcutPickerPage(
     store: rememberStore<ShortcutPickerState, ShortcutPickerAction>,
-    title: @Assisted String?
+    @FunApi title: String?
 ) {
     val (state, dispatch) = store()
     Scaffold(

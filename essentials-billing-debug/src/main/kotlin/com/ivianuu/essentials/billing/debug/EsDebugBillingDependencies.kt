@@ -18,11 +18,10 @@ package com.ivianuu.essentials.billing.debug
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
 
 @Binding
 fun billingClient(
     debugBillingClientFactory: (PurchasesUpdatedListener) -> DebugBillingClient,
-    listener: @Assisted PurchasesUpdatedListener
+    listener: PurchasesUpdatedListener
 ): BillingClient = debugBillingClientFactory(listener)

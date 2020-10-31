@@ -41,8 +41,8 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 
 @Binding
 fun actionPickerStore(
@@ -52,8 +52,8 @@ fun actionPickerStore(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
     stringResource: stringResource,
-    showDefaultOption: @Assisted Boolean,
-    showNoneOption: @Assisted Boolean,
+    @FunApi showDefaultOption: Boolean,
+    @FunApi showNoneOption: Boolean,
 ) = storeProvider<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {

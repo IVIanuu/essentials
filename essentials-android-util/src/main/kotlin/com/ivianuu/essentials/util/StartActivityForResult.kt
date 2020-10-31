@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -35,15 +35,15 @@ import kotlin.coroutines.resume
 @FunBinding
 suspend fun startActivityForIntentResult(
     startActivityForResult: startActivityForResult<Intent, ActivityResult>,
-    intent: @Assisted Intent
+    @FunApi intent: Intent
 ): ActivityResult = startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
 @FunBinding
 suspend fun <I, O> startActivityForResult(
     startUi: startUi,
     navigator: Navigator,
-    contract: @Assisted ActivityResultContract<I, O>,
-    input: @Assisted I
+    @FunApi contract: ActivityResultContract<I, O>,
+    @FunApi input: I
 ): O {
     startUi()
     return suspendCancellableCoroutine { continuation ->

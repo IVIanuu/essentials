@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
@@ -32,7 +32,7 @@ suspend fun getAction(
     actions: Set<Action>,
     actionFactories: () -> Set<ActionFactory>,
     defaultDispatcher: DefaultDispatcher,
-    key: @Assisted String
+    @FunApi key: String
 ): Action = withContext(defaultDispatcher) {
     actions
         .firstOrNull { it.key == key }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
 
@@ -44,7 +44,7 @@ suspend fun getInstalledApps(
 suspend fun getAppInfo(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-    packageName: @Assisted String
+    @FunApi packageName: String
 ): AppInfo = withContext(ioDispatcher) {
     AppInfo(
         packageName,

@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 
@@ -36,6 +36,6 @@ fun defaultUiDecorators(): UiDecorators = emptySet()
 
 @FunBinding
 @Composable
-fun DecorateUi(decorators: UiDecorators, children: @Assisted @Composable () -> Unit) {
+fun DecorateUi(decorators: UiDecorators, @FunApi children: @Composable () -> Unit) {
     decorators.fold(children) { acc, decorator -> { decorator(acc) } }()
 }

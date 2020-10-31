@@ -19,8 +19,8 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
@@ -42,7 +42,7 @@ fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
 @FunBinding
 fun applyAccessibilityConfig(
     configs: AccessibilityConfigs,
-    config: @Assisted AccessibilityConfig
+    @FunApi config: AccessibilityConfig
 ): DisposableHandle {
     synchronized(configs) { configs.value += config }
     return object : DisposableHandle {

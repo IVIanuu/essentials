@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
@@ -110,7 +110,7 @@ fun createAppTrackerNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,
     systemBuildInfo: SystemBuildInfo,
-    currentApp: @Assisted String?,
+    @FunApi currentApp: String?,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(

@@ -24,14 +24,14 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 
 @Binding
 fun appPickerStore(
     navigator: Navigator,
     getInstalledApps: getInstalledApps,
-    appFilter: @Assisted AppFilter
+    @FunApi appFilter: AppFilter
 ) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
     execute(
         block = { getInstalledApps() },

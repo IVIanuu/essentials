@@ -19,8 +19,8 @@ package com.ivianuu.essentials.twilight.domain
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.essentials.twilight.data.TwilightPrefsStore
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 
@@ -31,7 +31,7 @@ fun twilightPrefs(store: TwilightPrefsStore): twilightPrefs = store.data
 @FunBinding
 suspend fun updateTwilightMode(
     store: TwilightPrefsStore,
-    twilightMode: @Assisted TwilightMode
+    @FunApi twilightMode: TwilightMode
 ) {
     store.updateData { it.copy(twilightMode = twilightMode) }
 }
@@ -39,7 +39,7 @@ suspend fun updateTwilightMode(
 @FunBinding
 suspend fun updateUseBlackInDarkMode(
     store: TwilightPrefsStore,
-    useBlackInDarkMode: @Assisted Boolean
+    @FunApi useBlackInDarkMode: Boolean
 ) {
     store.updateData { it.copy(useBlackInDarkMode = useBlackInDarkMode) }
 }

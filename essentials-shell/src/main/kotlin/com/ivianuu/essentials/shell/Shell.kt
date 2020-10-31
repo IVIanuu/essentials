@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
@@ -25,13 +25,13 @@ import kotlinx.coroutines.withContext
 @FunBinding
 suspend fun runShellCommand(
     runShellCommands: runShellCommands,
-    command: @Assisted String
+    @FunApi command: String
 ): List<String> = runShellCommands(listOf(command))
 
 @FunBinding
 suspend fun runShellCommands(
     ioDispatcher: IODispatcher,
-    commands: @Assisted List<String>
+    @FunApi commands: List<String>
 ): List<String> = withContext(ioDispatcher) { SU.run(commands) }
 
 @FunBinding

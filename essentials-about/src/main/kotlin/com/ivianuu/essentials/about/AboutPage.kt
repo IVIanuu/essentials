@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
@@ -52,9 +52,9 @@ fun AboutPage(
 @Composable
 fun AboutSection(
     navigator: Navigator,
-    packageName: @Assisted String,
-    showHeader: @Assisted Boolean,
-    privacyPolicyUrl: @Assisted PrivacyPolicyUrl?
+    @FunApi packageName: String,
+    @FunApi showHeader: Boolean,
+    @FunApi privacyPolicyUrl: PrivacyPolicyUrl?
 ) {
     if (showHeader) {
         Subheader {

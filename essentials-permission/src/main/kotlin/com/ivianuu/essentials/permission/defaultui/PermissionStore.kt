@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import kotlinx.coroutines.flow.first
 
 @Binding
@@ -37,7 +37,7 @@ fun permissionStore(
     navigator: Navigator,
     requestHandler: requestHandler,
     startUi: startUi,
-    request: @Assisted PermissionRequest,
+    @FunApi request: PermissionRequest,
 ) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions

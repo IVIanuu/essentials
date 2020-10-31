@@ -20,7 +20,7 @@ import android.content.Context
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.android.work.WorkerBinding
 import java.util.UUID
@@ -28,8 +28,8 @@ import java.util.UUID
 @WorkerBinding
 class FunctionalWorker(
     private val workers: Workers,
-    context: @Assisted Context,
-    workerParams: @Assisted WorkerParameters,
+    @FunApi context: Context,
+    @FunApi workerParams: WorkerParameters,
 ) : EsWorker(context, workerParams) {
     override suspend fun doWork(): Result {
         val id = tags.first { it.startsWith(WORKER_ID_TAG_PREFIX) }

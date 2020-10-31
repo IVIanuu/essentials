@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,7 +35,7 @@ import kotlinx.coroutines.withContext
 fun hasPermissions(
     defaultDispatcher: DefaultDispatcher,
     stateProvider: stateProvider,
-    permissions: @Assisted List<Permission>
+    @FunApi permissions: List<Permission>
 ): Flow<Boolean> = permissionChanges
     .map { Unit }
     .onStart { emit(Unit) }
@@ -53,7 +53,7 @@ suspend fun requestPermissions(
     navigator: Navigator,
     permissionRequestRouteFactory: PermissionRequestRouteFactory,
     startUi: startUi,
-    permissions: @Assisted List<Permission>
+    @FunApi permissions: List<Permission>
 ): Boolean = withContext(defaultDispatcher) {
     logger.d("request permissions $permissions")
     if (hasPermissions(permissions).first()) return@withContext true
@@ -66,13 +66,13 @@ suspend fun requestPermissions(
 }
 
 @FunBinding
-fun @Assisted Permission.stateProvider(
+fun @receiver:FunApi Permission.stateProvider(
     stateProviders: Set<PermissionStateProvider>,
 ): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
 
 @FunBinding
-fun @Assisted Permission.requestHandler(
+fun @receiver:FunApi Permission.requestHandler(
     requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }

@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onDispose
 import com.ivianuu.essentials.ui.UiDecoratorBinding
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @UiDecoratorBinding
 @FunBinding
 @Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, children: @Assisted @Composable () -> Unit) {
+fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi children: @Composable () -> Unit) {
     onDispose {
         navigator.setBackStack { emptyList() }
     }

@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SecureSettingsPage(
     store: rememberStore<SecureSettingsState, SecureSettingsAction>,
-    showHideNavBarHint: @Assisted Boolean
+    @FunApi showHideNavBarHint: Boolean
 ) {
     val (_, dispatch) = store()
     Scaffold(

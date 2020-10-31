@@ -45,8 +45,8 @@ import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Assisted
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -54,8 +54,8 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun AppPickerPage(
     store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>,
-    appFilter: @Assisted AppFilter,
-    title: @Assisted String?
+    @FunApi appFilter: AppFilter,
+    @FunApi title: String?
 ) {
     val (state, dispatch) = store(appFilter)
 

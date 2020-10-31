@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.Notification
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -38,5 +38,5 @@ interface ForegroundJob {
 @FunBinding
 fun startForegroundJob(
     foregroundManager: ForegroundManager,
-    notification: @Assisted Notification
+    @FunApi notification: Notification
 ): ForegroundJob = foregroundManager.startJob(notification)

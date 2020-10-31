@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionMediaAppPref
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Assisted
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.first
@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.first
 fun mediaAction(
     doMediaAction: doMediaAction,
     stringResource: stringResource,
-    key: @Assisted String,
-    keycode: @Assisted Int,
-    titleRes: @Assisted Int,
-    icon: @Assisted ActionIcon
+    @FunApi key: String,
+    @FunApi keycode: Int,
+    @FunApi titleRes: Int,
+    @FunApi icon: ActionIcon
 ) = Action(
     key = key,
     title = stringResource(titleRes),
@@ -46,7 +46,7 @@ fun mediaAction(
 suspend fun doMediaAction(
     applicationContext: ApplicationContext,
     mediaIntent: mediaIntent,
-    keycode: @Assisted Int
+    @FunApi keycode: Int
 ) {
     applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
     applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
@@ -55,8 +55,8 @@ suspend fun doMediaAction(
 @FunBinding
 suspend fun mediaIntent(
     mediaAppPref: ActionMediaAppPref,
-    keyEvent: @Assisted Int,
-    keycode: @Assisted Int
+    @FunApi keyEvent: Int,
+    @FunApi keycode: Int
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
         Intent.EXTRA_KEY_EVENT,
