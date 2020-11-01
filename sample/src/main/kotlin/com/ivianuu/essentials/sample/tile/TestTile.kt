@@ -28,7 +28,7 @@ import com.ivianuu.essentials.twilight.domain.updateTwilightMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-@TileStoreBinding(1)
+@TileStoreBinding("test_tile")
 fun testTileStore(
     twilightPrefs: twilightPrefs,
     updateTwilightMode: updateTwilightMode

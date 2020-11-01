@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.tile
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.store
@@ -27,17 +29,17 @@ import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TileStoreService1 : AbstractTileStoreService(1)
-class TileStoreService2 : AbstractTileStoreService(2)
-class TileStoreService3 : AbstractTileStoreService(3)
-class TileStoreService4 : AbstractTileStoreService(4)
-class TileStoreService5 : AbstractTileStoreService(5)
-class TileStoreService6 : AbstractTileStoreService(6)
-class TileStoreService7 : AbstractTileStoreService(7)
-class TileStoreService8 : AbstractTileStoreService(8)
-class TileStoreService9 : AbstractTileStoreService(9)
+class TileStoreService1 : AbstractTileStoreService()
+class TileStoreService2 : AbstractTileStoreService()
+class TileStoreService3 : AbstractTileStoreService()
+class TileStoreService4 : AbstractTileStoreService()
+class TileStoreService5 : AbstractTileStoreService()
+class TileStoreService6 : AbstractTileStoreService()
+class TileStoreService7 : AbstractTileStoreService()
+class TileStoreService8 : AbstractTileStoreService()
+class TileStoreService9 : AbstractTileStoreService()
 
-abstract class AbstractTileStoreService(private val index: Int) : EsTileService() {
+abstract class AbstractTileStoreService : EsTileService() {
 
     private val component by lazy {
         serviceComponent.mergeComponent<FunTileServiceComponent>()
@@ -48,8 +50,15 @@ abstract class AbstractTileStoreService(private val index: Int) : EsTileService(
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
-            val (initialState, block) = (component.tileStores[index]?.invoke()
-                ?: error("No tile found for $index"))
+            val tileId = packageManager.getServiceInfo(
+                ComponentName(
+                    this@AbstractTileStoreService,
+                    this@AbstractTileStoreService.javaClass
+                ),
+                PackageManager.GET_META_DATA
+            ).metaData?.getString(TILE_ID_KEY) ?: error("No id specified for $this")
+            val (initialState, block) = (component.tileStores[tileId]?.invoke()
+                ?: error("No tile found for $tileId"))
             val store = store(initialState, block)
             launch { clicks.collect { store.dispatch(TileClicked) } }
             launch { store.state.collect { applyState(it) } }
@@ -87,6 +96,8 @@ abstract class AbstractTileStoreService(private val index: Int) : EsTileService(
         qsTile.updateTile()
     }
 }
+
+const val TILE_ID_KEY = "com.ivianuu.essentials.tile.TILE_ID"
 
 @MergeInto(ServiceComponent::class)
 interface FunTileServiceComponent {

@@ -36,7 +36,6 @@ fun secureSettingsStore(
     SecureSettingsState
 ) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }
-
     for (action in this) {
         when (action) {
             ShowToPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
