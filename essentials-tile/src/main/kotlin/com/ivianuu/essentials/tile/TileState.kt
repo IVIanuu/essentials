@@ -36,7 +36,7 @@ data class TileStorePair(
     val block: TileStore
 )
 
-typealias TileStores = Map<String, () -> TileStorePair>
+typealias TileStores = Map<Int, () -> TileStorePair>
 @MapEntries
 fun defaultTileStores(): TileStores = emptyMap()
 
@@ -69,12 +69,12 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
 }
 
 @BindingAdapter
-annotation class TileStoreBinding(val id: String) {
+annotation class TileStoreBinding(val index: Int) {
     companion object {
         @MapEntries
         fun <T : TileStorePair> intoTileMap(
             provider: () -> T,
-            @BindingAdapterArg("id") id: String
-        ): TileStores = mapOf(id to provider)
+            @BindingAdapterArg("index") index: Int
+        ): TileStores = mapOf(index to provider)
     }
 }

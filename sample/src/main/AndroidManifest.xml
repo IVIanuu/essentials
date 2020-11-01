@@ -38,9 +38,6 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
-            <meta-data
-                android:name="com.ivianuu.essentials.tile.TILE_ID"
-                android:value="test_tile" />
         </service>
 
     </application>
