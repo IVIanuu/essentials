@@ -91,24 +91,25 @@ class TorchImpl(
         runCatching {
             withContext(mainDispatcher) {
                 suspendCancellableCoroutine<Boolean> { continuation ->
-                    cameraManager.registerTorchCallback(
-                        object : CameraManager.TorchCallback() {
-                            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                                cameraManager.unregisterTorchCallback(this)
-                                cameraManager.setTorchMode(cameraId, newState)
-                                stateActor.offerSafe(newState)
-                                continuation.resume(newState)
-                            }
+                    val callback = object : CameraManager.TorchCallback() {
+                        override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                            cameraManager.unregisterTorchCallback(this)
+                            cameraManager.setTorchMode(cameraId, newState)
+                            stateActor.offerSafe(newState)
+                            continuation.resume(newState)
+                        }
 
-                            override fun onTorchModeUnavailable(cameraId: String) {
-                                cameraManager.unregisterTorchCallback(this)
-                                showToastRes(R.string.es_failed_to_toggle_torch)
-                                stateActor.offerSafe(false)
-                                continuation.resume(false)
-                            }
-                        },
-                        null
-                    )
+                        override fun onTorchModeUnavailable(cameraId: String) {
+                            cameraManager.unregisterTorchCallback(this)
+                            showToastRes(R.string.es_failed_to_toggle_torch)
+                            stateActor.offerSafe(false)
+                            continuation.resume(false)
+                        }
+                    }
+                    cameraManager.registerTorchCallback(callback, null)
+                    continuation.invokeOnCancellation {
+                        cameraManager.unregisterTorchCallback(callback)
+                    }
                 }
             }
         }.onFailure {
