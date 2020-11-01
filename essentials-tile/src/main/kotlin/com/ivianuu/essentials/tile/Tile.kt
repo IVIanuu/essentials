@@ -17,26 +17,23 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.tile.TileAction.*
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.MapEntries
+import kotlinx.coroutines.CoroutineScope
 
-typealias TileStore = suspend StoreScope<TileState, TileAction>.() -> Unit
-
-fun tileStore(
+fun tile(
     initial: TileState,
     block: suspend StoreScope<TileState, TileAction>.() -> Unit
-): TileStorePair = TileStorePair(initial, block)
+) = storeProvider(initial, block)
 
-data class TileStorePair(
-    val initialState: TileState,
-    val block: TileStore
-)
-
-typealias TileStores = Map<Int, () -> TileStorePair>
+typealias TileStores = Map<Int, () -> (CoroutineScope) -> Store<TileState, TileAction>>
 @MapEntries
 fun defaultTileStores(): TileStores = emptyMap()
 
@@ -63,18 +60,18 @@ sealed class TileAction {
 suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () -> Unit) {
     onEachAction {
         when (it) {
-            TileAction.TileClicked -> block()
+            TileClicked -> block()
         }.exhaustive
     }
 }
 
 @BindingAdapter
-annotation class TileStoreBinding(val index: Int) {
+annotation class TileBinding(val slot: Int) {
     companion object {
         @MapEntries
-        fun <T : TileStorePair> intoTileMap(
+        fun <T : (CoroutineScope) -> Store<TileState, TileAction>> intoTileMap(
             provider: () -> T,
-            @BindingAdapterArg("index") index: Int
-        ): TileStores = mapOf(index to provider)
+            @BindingAdapterArg("slot") slot: Int
+        ): TileStores = mapOf(slot to provider)
     }
 }

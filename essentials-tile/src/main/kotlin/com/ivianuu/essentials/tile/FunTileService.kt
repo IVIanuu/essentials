@@ -27,17 +27,17 @@ import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TileStoreService1 : AbstractTileStoreService(1)
-class TileStoreService2 : AbstractTileStoreService(2)
-class TileStoreService3 : AbstractTileStoreService(3)
-class TileStoreService4 : AbstractTileStoreService(4)
-class TileStoreService5 : AbstractTileStoreService(5)
-class TileStoreService6 : AbstractTileStoreService(6)
-class TileStoreService7 : AbstractTileStoreService(7)
-class TileStoreService8 : AbstractTileStoreService(8)
-class TileStoreService9 : AbstractTileStoreService(9)
+class FunTileService1 : AbstractFunTileService(1)
+class FunTileService2 : AbstractFunTileService(2)
+class FunTileService3 : AbstractFunTileService(3)
+class FunTileService4 : AbstractFunTileService(4)
+class FunTileService5 : AbstractFunTileService(5)
+class FunTileService6 : AbstractFunTileService(6)
+class FunTileService7 : AbstractFunTileService(7)
+class FunTileService8 : AbstractFunTileService(8)
+class FunTileService9 : AbstractFunTileService(9)
 
-abstract class AbstractTileStoreService(private val index: Int) : EsTileService() {
+abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
 
     private val component by lazy {
         serviceComponent.mergeComponent<FunTileServiceComponent>()
@@ -48,9 +48,10 @@ abstract class AbstractTileStoreService(private val index: Int) : EsTileService(
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
-            val (initialState, block) = (component.tileStores[index]?.invoke()
-                ?: error("No tile found for $index"))
-            val store = store(initialState, block)
+            val store = (component.tileStores[slot]
+                ?.invoke()
+                ?.invoke(this)
+                ?: error("No tile found for $slot"))
             launch { clicks.collect { store.dispatch(TileClicked) } }
             launch { store.state.collect { applyState(it) } }
         }
