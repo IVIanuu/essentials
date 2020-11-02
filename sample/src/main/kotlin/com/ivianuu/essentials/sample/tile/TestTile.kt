@@ -23,23 +23,18 @@ import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.onEachTileClick
 import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.domain.twilightPrefs
-import com.ivianuu.essentials.twilight.domain.updateTwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightModePref
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @TileBinding(1)
-fun TestTile(
-    twilightPrefs: twilightPrefs,
-    updateTwilightMode: updateTwilightMode
-) = tile(
+fun TestTile(twilightModePref: TwilightModePref) = tile(
     initial = TileState(
         iconRes = R.drawable.es_ic_accessibility,
         label = "Hello"
     )
 ) {
-    twilightPrefs
-        .map { it.twilightMode }
+    twilightModePref.data
         .map {
             TileState(
                 label = it.name,
@@ -50,9 +45,9 @@ fun TestTile(
         .setStateIn(this) { it }
 
     onEachTileClick {
-        updateTwilightMode(
-            if (twilightPrefs.first().twilightMode == TwilightMode.Light) TwilightMode.Dark
+        twilightModePref.updateData {
+            if (it == TwilightMode.Light) TwilightMode.Dark
             else TwilightMode.Light
-        )
+        }
     }
 }

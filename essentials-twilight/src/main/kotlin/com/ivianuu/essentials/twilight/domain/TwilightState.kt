@@ -22,8 +22,10 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChanges
+import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsStore
+import com.ivianuu.essentials.twilight.data.TwilightModePref
+import com.ivianuu.essentials.twilight.data.UseBlackInDarkModePref
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -51,18 +53,21 @@ fun twilightState(
     batteryTwilightState: BatteryTwilightState,
     systemTwilightState: SystemTwilightState,
     timeTwilightState: TimeTwilightState,
-    twilightPrefsStore: TwilightPrefsStore
+    twilightModePref: TwilightModePref,
+    useBlackInDarkModePref: UseBlackInDarkModePref
 ): TwilightStateFlow {
-    return twilightPrefsStore.data
-        .flatMapLatest { (mode, useBlack) ->
-            (when (mode) {
-                TwilightMode.System -> systemTwilightState
-                TwilightMode.Light -> flowOf(false)
-                TwilightMode.Dark -> flowOf(true)
-                TwilightMode.Battery -> batteryTwilightState
-                TwilightMode.Time -> timeTwilightState
-            }).map { TwilightState(it, useBlack) }
-        }
+    return combine(
+        twilightModePref.data,
+        useBlackInDarkModePref.data
+    ).flatMapLatest { (mode, useBlack) ->
+        (when (mode) {
+            TwilightMode.System -> systemTwilightState
+            TwilightMode.Light -> flowOf(false)
+            TwilightMode.Dark -> flowOf(true)
+            TwilightMode.Battery -> batteryTwilightState
+            TwilightMode.Time -> timeTwilightState
+        }).map { TwilightState(it, useBlack) }
+    }
         .distinctUntilChanged()
         .stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
 }

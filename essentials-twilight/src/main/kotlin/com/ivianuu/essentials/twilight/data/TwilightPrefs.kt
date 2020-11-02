@@ -25,13 +25,13 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 
-@JsonClass(generateAdapter = true)
-data class TwilightPrefs(
-    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.System,
-    @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false
-)
 
-internal typealias TwilightPrefsStore = DataStore<TwilightPrefs>
+typealias TwilightModePref = DataStore<TwilightMode>
 @Binding(ApplicationComponent::class)
-fun twilightPrefsStore(factory: DiskDataStoreFactory): TwilightPrefsStore =
-    factory.create("twilight_prefs") { TwilightPrefs() }
+fun twilightModePref(factory: DiskDataStoreFactory): TwilightModePref =
+    factory.create("twilight_mode") { TwilightMode.System }
+
+typealias UseBlackInDarkModePref = DataStore<Boolean>
+@Binding(ApplicationComponent::class)
+fun useBlackInDarkModePref(factory: DiskDataStoreFactory): UseBlackInDarkModePref =
+    factory.create("use_black_in_dark_mode_pref") { false }

@@ -18,27 +18,23 @@ package com.ivianuu.essentials.twilight.ui
 
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.storeProvider
-import com.ivianuu.essentials.twilight.domain.twilightPrefs
-import com.ivianuu.essentials.twilight.domain.updateTwilightMode
-import com.ivianuu.essentials.twilight.domain.updateUseBlackInDarkMode
+import com.ivianuu.essentials.twilight.data.TwilightModePref
+import com.ivianuu.essentials.twilight.data.UseBlackInDarkModePref
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.*
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 
 @Binding
 fun twilightSettingsStore(
-    twilightPrefs: twilightPrefs,
-    updateTwilightMode: updateTwilightMode,
-    updateUseBlackInDarkMode: updateUseBlackInDarkMode
+    twilightModePref: TwilightModePref,
+    useBlackInDarkModePref: UseBlackInDarkModePref
 ) = storeProvider<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {
-    twilightPrefs.setStateIn(this) {
-        copy(twilightMode = it.twilightMode, useBlackInDarkMode = it.useBlackInDarkMode)
-    }
-
+    twilightModePref.data.setStateIn(this) { copy(twilightMode = it) }
+    useBlackInDarkModePref.data.setStateIn(this) { copy(useBlackInDarkMode = useBlackInDarkMode) }
     for (action in this) {
         when (action) {
-            is UpdateTwilightMode -> updateTwilightMode(action.value)
-            is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.value)
+            is UpdateTwilightMode -> twilightModePref.updateData { action.value }
+            is UpdateUseBlackInDarkMode -> useBlackInDarkModePref.updateData { action.value }
         }.exhaustive
     }
 }
