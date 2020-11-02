@@ -75,9 +75,9 @@ inline fun <reified S, reified A> storeFromProvider(
 @PublishedApi
 internal class StoreRunner<S, A>(
     private val coroutineScope: CoroutineScope,
-    storeProvider: (CoroutineScope) -> Store<S, A>
+    store: (CoroutineScope) -> Store<S, A>
 ) : DisposableHandle {
-    val store = storeProvider(coroutineScope)
+    val store = store(coroutineScope)
     override fun dispose() {
         coroutineScope.cancel()
     }
@@ -97,67 +97,67 @@ operator fun <A> Store<*, A>.component2(): (A) -> Unit = { dispatch(it) }
 @Composable
 fun <S, A> rememberStore(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: () -> (CoroutineScope) -> Store<S, A>
-): Store<S, A> = rememberStoreViaFactory { provider()(it) }
+    provider: (CoroutineScope) -> Store<S, A>
+): Store<S, A> = rememberStoreViaFactory { provider(it) }
 
 @FunBinding
 @Composable
 fun <S, A, P1> rememberStore1(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1) -> (CoroutineScope) -> Store<S, A>,
+    provider: (CoroutineScope, P1) -> Store<S, A>,
     @FunApi p1: P1
 ): Store<S, A> = key(p1) {
-    rememberStoreViaFactory { provider(p1)(it) }
+    rememberStoreViaFactory { provider(it, p1) }
 }
 
 @FunBinding
 @Composable
 fun <S, A, P1, P2> rememberStore2(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2) -> (CoroutineScope) -> Store<S, A>,
+    provider: (CoroutineScope, P1, P2) -> Store<S, A>,
     @FunApi p1: P1,
     @FunApi p2: P2
 ): Store<S, A> = key(p1, p2) {
-    rememberStoreViaFactory { provider(p1, p2)(it) }
+    rememberStoreViaFactory { provider(it, p1, p2) }
 }
 
 @FunBinding
 @Composable
 fun <S, A, P1, P2, P3> rememberStore3(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3) -> (CoroutineScope) -> Store<S, A>,
+    provider: (CoroutineScope, P1, P2, P3) -> Store<S, A>,
     @FunApi p1: P1,
     @FunApi p2: P2,
     @FunApi p3: P3
 ): Store<S, A> = key(p1, p2, p3) {
-    rememberStoreViaFactory { provider(p1, p2, p3)(it) }
+    rememberStoreViaFactory { provider(it, p1, p2, p3) }
 }
 
 @FunBinding
 @Composable
 fun <S, A, P1, P2, P3, P4> rememberStore4(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3, P4) -> (CoroutineScope) -> Store<S, A>,
+    provider: (CoroutineScope, P1, P2, P3, P4) -> Store<S, A>,
     @FunApi p1: P1,
     @FunApi p2: P2,
     @FunApi p3: P3,
     @FunApi p4: P4
 ): Store<S, A> = key(p1, p2, p3, p4) {
-    rememberStoreViaFactory { provider(p1, p2, p3, p4)(it) }
+    rememberStoreViaFactory { provider(it, p1, p2, p3, p4) }
 }
 
 @FunBinding
 @Composable
 fun <S, A, P1, P2, P3, P4, P5> rememberStore5(
     rememberStoreViaFactory: rememberStoreViaFactory<S, A>,
-    provider: (P1, P2, P3, P4, P5) -> (CoroutineScope) -> Store<S, A>,
+    provider: (CoroutineScope, P1, P2, P3, P4, P5) -> Store<S, A>,
     @FunApi p1: P1,
     @FunApi p2: P2,
     @FunApi p3: P3,
     @FunApi p4: P4,
     @FunApi p5: P5
 ): Store<S, A> = key(p1, p2, p3, p4, p5) {
-    rememberStoreViaFactory { provider(p1, p2, p3, p4, p5)(it) }
+    rememberStoreViaFactory { provider(it, p1, p2, p3, p4, p5) }
 }
 
 @FunBinding

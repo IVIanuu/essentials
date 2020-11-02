@@ -17,22 +17,23 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.*
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Binding
-fun secureSettingsStore(
+fun CoroutineScope.secureSettingsStore(
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
     showToastRes: showToastRes
-) = storeProvider<SecureSettingsState, SecureSettingsAction>(
+) = store<SecureSettingsState, SecureSettingsAction>(
     SecureSettingsState
 ) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }

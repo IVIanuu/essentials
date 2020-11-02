@@ -33,7 +33,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionI
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.resource.Idle
@@ -43,9 +43,10 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
+import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun actionPickerStore(
+fun CoroutineScope.actionPickerStore(
     navigator: Navigator,
     getAction: getAction,
     getAllActions: getAllActions,
@@ -54,7 +55,7 @@ fun actionPickerStore(
     stringResource: stringResource,
     @FunApi showDefaultOption: Boolean,
     @FunApi showNoneOption: Boolean,
-) = storeProvider<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
+) = store<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {
             val specialOptions = mutableListOf<SpecialOption>()

@@ -20,7 +20,7 @@ import android.graphics.drawable.Icon
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tile.TileAction.*
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.BindingAdapter
@@ -31,7 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 fun tile(
     initial: TileState,
     block: suspend StoreScope<TileState, TileAction>.() -> Unit
-) = storeProvider(initial, block)
+) = store(initial, block)
 
 typealias TileStores = Map<Int, () -> (CoroutineScope) -> Store<TileState, TileAction>>
 @MapEntries

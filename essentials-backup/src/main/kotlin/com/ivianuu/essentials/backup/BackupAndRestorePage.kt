@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

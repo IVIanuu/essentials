@@ -65,7 +65,7 @@ suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
     for (action in this) block(action)
 }
 
-fun <S, A> storeProvider(
+fun <S, A> store(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit,
 ): (CoroutineScope) -> Store<S, A> = {

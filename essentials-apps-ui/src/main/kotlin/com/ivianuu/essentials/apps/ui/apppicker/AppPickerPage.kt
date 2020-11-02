@@ -30,7 +30,7 @@ import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

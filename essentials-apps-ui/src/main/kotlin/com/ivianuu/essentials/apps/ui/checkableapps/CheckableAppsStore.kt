@@ -19,19 +19,20 @@ package com.ivianuu.essentials.apps.ui.checkableapps
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.*
 import com.ivianuu.essentials.store.currentState
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 
 @Binding
-fun checkableAppsStore(
+fun CoroutineScope.checkableAppsStore(
     getInstalledApps: getInstalledApps,
-) = storeProvider<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
+) = store<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
     val installedApps = async { getInstalledApps() }
     state
         .map { it.appFilter }

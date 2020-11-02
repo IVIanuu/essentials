@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -75,7 +75,7 @@ fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
 }
 
 @Binding
-fun counterStore() = storeProvider<CounterState, CounterAction>(CounterState(0)) {
+fun counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
     for (action in this) {
         setState {
             when (action) {

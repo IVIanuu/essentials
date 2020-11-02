@@ -17,21 +17,22 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Binding
-fun secureSettingsPcInstructionsStore(
+fun CoroutineScope.secureSettingsPcInstructionsStore(
     buildInfo: BuildInfo,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
-) = storeProvider<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>(
+) = store<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>(
     SecureSettingsPcInstructionsState(buildInfo.packageName)
 ) {
     launch { popNavigatorOnceSecureSettingsGranted(false) }

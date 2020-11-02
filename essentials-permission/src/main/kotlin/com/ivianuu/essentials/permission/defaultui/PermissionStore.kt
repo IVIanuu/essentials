@@ -20,7 +20,7 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.*
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.util.Logger
@@ -28,17 +28,18 @@ import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 
 @Binding
-fun permissionStore(
+fun CoroutineScope.permissionStore(
     hasPermissions: hasPermissions,
     logger: Logger,
     navigator: Navigator,
     requestHandler: requestHandler,
     startUi: startUi,
     @FunApi request: PermissionRequest,
-) = storeProvider<PermissionState, PermissionAction>(PermissionState()) {
+) = store<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions
             .filterNot { hasPermissions(listOf(it)).first() }

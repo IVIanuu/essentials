@@ -17,18 +17,20 @@
 package com.ivianuu.essentials.twilight.ui
 
 import com.ivianuu.essentials.store.setStateIn
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.twilight.data.TwilightModePref
 import com.ivianuu.essentials.twilight.data.UseBlackInDarkModePref
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.*
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun twilightSettingsStore(
+fun CoroutineScope.twilightSettingsStore(
     twilightModePref: TwilightModePref,
     useBlackInDarkModePref: UseBlackInDarkModePref
-) = storeProvider<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {
+) = store<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {
     twilightModePref.data.setStateIn(this) { copy(twilightMode = it) }
     useBlackInDarkModePref.data.setStateIn(this) { copy(useBlackInDarkMode = it) }
     for (action in this) {

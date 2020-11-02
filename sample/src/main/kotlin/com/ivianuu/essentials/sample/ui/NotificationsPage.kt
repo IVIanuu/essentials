@@ -56,7 +56,7 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
 import com.ivianuu.essentials.store.setStateIn
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -176,7 +176,7 @@ fun notificationStore(
     notifications: UiNotifications,
     notificationStore: NotificationStore,
     requestPermissions: requestPermissions,
-) = storeProvider<NotificationsState, NotificationsAction>(NotificationsState()) {
+) = store<NotificationsState, NotificationsAction>(NotificationsState()) {
     val permission = NotificationListenerPermission(
         DefaultNotificationListenerService::class,
         Permission.Title to "Notifications"

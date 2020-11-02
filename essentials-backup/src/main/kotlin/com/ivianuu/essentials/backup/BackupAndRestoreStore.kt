@@ -18,17 +18,18 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.*
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
+import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun backupAndRestoreStore(
+fun CoroutineScope.backupAndRestoreStore(
     backupData: backupData,
     restoreData: restoreData,
     showToastRes: showToastRes,
-) = storeProvider<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
+) = store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
     for (action in this) {
         when (action) {
             BackupData -> {

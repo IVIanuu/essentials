@@ -19,20 +19,21 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.*
-import com.ivianuu.essentials.store.storeProvider
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
+import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun appPickerStore(
+fun CoroutineScope.appPickerStore(
     navigator: Navigator,
     getInstalledApps: getInstalledApps,
     @FunApi appFilter: AppFilter
-) = storeProvider<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
+) = store<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
     execute(
         block = { getInstalledApps() },
         reducer = { copy(allApps = it) }
