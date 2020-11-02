@@ -24,7 +24,7 @@ import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
-@AppInitializerBinding
+@AppInitializerBinding("purchases")
 @FunBinding
 fun initializePurchases(
     billingStore: BillingStore,

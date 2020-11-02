@@ -20,7 +20,7 @@ import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.FunBinding
 
-@AppInitializerBinding
+@AppInitializerBinding("strict_mode")
 @FunBinding
 fun initializeStrictModule() {
     StrictMode.setThreadPolicy(

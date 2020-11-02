@@ -24,7 +24,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
-@AppInitializerBinding
+@AppInitializerBinding("workers")
 @FunBinding
 fun initializeWorkers(
     applicationContext: ApplicationContext,

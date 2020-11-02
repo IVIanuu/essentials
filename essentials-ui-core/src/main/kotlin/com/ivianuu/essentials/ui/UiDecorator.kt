@@ -63,6 +63,7 @@ fun defaultUiDecorators(): UiDecorators = emptySet()
 @Composable
 fun DecorateUi(
     decorators: UiDecorators,
+    logger: Logger,
     @FunApi children: @Composable () -> Unit
 ) {
     remember {
@@ -75,6 +76,7 @@ fun DecorateUi(
             .reversed()
             .fold(children) { acc, decorator ->
                 {
+                    logger.d("Decorate ui ${decorator.key}")
                     decorator.content(acc)
                 }
             }

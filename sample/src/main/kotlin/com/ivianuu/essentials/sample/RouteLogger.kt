@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-@RouteDecoratorBinding
+@RouteDecoratorBinding("logger")
 @FunBinding
 @Composable
 fun RouteLogger(logger: Logger, @FunApi route: Route, @FunApi children: @Composable () -> Unit) {

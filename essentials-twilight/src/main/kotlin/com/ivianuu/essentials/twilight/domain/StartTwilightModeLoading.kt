@@ -20,7 +20,7 @@ import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.FunBinding
 
 // it's enough to instantiate the TwilightStateFlow because it starts emitting eagerly
-@AppInitializerBinding
+@AppInitializerBinding("twilight")
 @FunBinding
 fun initializeTwilightStateFlow(
     twilightStateFlow: TwilightStateFlow,

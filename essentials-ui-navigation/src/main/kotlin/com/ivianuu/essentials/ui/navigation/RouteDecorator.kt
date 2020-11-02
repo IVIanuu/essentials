@@ -17,20 +17,44 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 
 @BindingAdapter
-annotation class RouteDecoratorBinding {
+annotation class RouteDecoratorBinding(
+    val key: String,
+    val dependencies: Array<String> = [],
+    val dependents: Array<String> = []
+) {
     companion object {
         @SetElements
-        fun <T : @Composable (Route, @Composable () -> Unit) -> Unit> routeDecoratorIntoSet(instance: T): RouteDecorators = setOf(instance)
+        fun <T : @Composable (Route, @Composable () -> Unit) -> Unit> routeDecoratorIntoSet(
+            @BindingAdapterArg("key") key: String,
+            @BindingAdapterArg("dependencies") dependencies: Array<String>?,
+            @BindingAdapterArg("dependents") dependents: Array<String>?,
+            content: T
+        ): RouteDecorators = setOf(RouteDecorator(
+            key = key,
+            dependencies = dependencies?.toSet() ?: emptySet(),
+            dependents = dependents?.toSet() ?: emptySet(),
+            content = content as @Composable (Route, @Composable () -> Unit) -> Unit
+        ))
     }
 }
 
-typealias RouteDecorators = Set<@Composable (Route, @Composable () -> Unit) -> Unit>
+data class RouteDecorator(
+    val key: String,
+    val dependencies: Set<String>,
+    val dependents: Set<String>,
+    val content: @Composable (Route, @Composable () -> Unit) -> Unit
+)
+
+typealias RouteDecorators = Set<RouteDecorator>
 
 @SetElements
 fun defaultRouteDecorators(): RouteDecorators = emptySet()
@@ -39,8 +63,21 @@ fun defaultRouteDecorators(): RouteDecorators = emptySet()
 @Composable
 fun DecorateRoute(
     decorators: RouteDecorators,
+    logger: Logger,
     @FunApi route: Route,
     @FunApi children: @Composable () -> Unit
 ) {
-    decorators.fold(children) { acc, decorator -> { decorator(route, acc) } }()
+    decorators
+        .sortedGraph(
+            key = { it.key },
+            dependencies = { it.dependencies },
+            dependents = { it.dependents }
+        )
+        .reversed()
+        .fold(children) { acc, decorator ->
+            {
+                logger.d("Decorate route $route ${decorator.key}")
+                decorator.content(route, acc)
+            }
+        }()
 }
