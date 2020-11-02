@@ -19,20 +19,9 @@ package com.ivianuu.essentials.gestures.action
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
-@FunBinding
-suspend fun updateActionMediaApp(
-    pref: ActionMediaAppPref,
-    @FunApi value: String
-) {
-    pref.updateData { value }
-}
-
-internal typealias ActionMediaAppPref = DataStore<String?>
-
+typealias ActionMediaAppPref = DataStore<String?>
 @Binding(ApplicationComponent::class)
 fun actionMediaAppPref(factory: DiskDataStoreFactory): ActionMediaAppPref =
-    factory.create<String?>("action_media_app") { null }
+    factory.create("action_media_app") { null }
