@@ -70,7 +70,7 @@ suspend fun <T : Any> Navigator.push(content: @Composable () -> Unit): T? = push
 @JvmName("pushForResult")
 suspend fun <T : Any> Navigator.push(route: Route): T? {
     setBackStack { it + route }
-    return route.result.await() as? T
+    return route.awaitResult()
 }
 
 fun Navigator.replaceTop(content: @Composable () -> Unit) {

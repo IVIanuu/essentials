@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 
 @Immutable
 class Route(
@@ -72,12 +71,13 @@ class Route(
         }
     }
 
-    private val _result = CompletableDeferred<Any?>()
-    internal val result: Deferred<Any?> get() = _result
+    private val result = CompletableDeferred<Any?>()
     private var resultToSend: Any? = null
     fun setResult(result: Any?) {
         resultToSend = result
     }
+
+    suspend fun <T : Any> awaitResult(): T? = result.await() as? T
 
     private var savedState =
         mutableMapOf<Any, Map<String, List<Any?>>>()
@@ -91,7 +91,7 @@ class Route(
     ) : this(transition, transition, opaque, content)
 
     internal fun detach() {
-        _result.complete(resultToSend)
+        result.complete(resultToSend)
         retainedObjects.dispose()
     }
 }
