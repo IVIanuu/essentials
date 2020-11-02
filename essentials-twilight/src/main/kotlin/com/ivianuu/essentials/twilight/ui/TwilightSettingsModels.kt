@@ -24,6 +24,6 @@ data class TwilightSettingsState(
 )
 
 sealed class TwilightSettingsAction {
-    data class UpdateTwilightMode(val mode: TwilightMode) : TwilightSettingsAction()
-    data class UpdateUseBlackInDarkMode(val useBlackInDarkMode: Boolean) : TwilightSettingsAction()
+    data class UpdateTwilightMode(val value: TwilightMode) : TwilightSettingsAction()
+    data class UpdateUseBlackInDarkMode(val value: Boolean) : TwilightSettingsAction()
 }

@@ -37,8 +37,8 @@ fun twilightSettingsStore(
 
     for (action in this) {
         when (action) {
-            is UpdateTwilightMode -> updateTwilightMode(action.mode)
-            is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.useBlackInDarkMode)
+            is UpdateTwilightMode -> updateTwilightMode(action.value)
+            is UpdateUseBlackInDarkMode -> updateUseBlackInDarkMode(action.value)
         }.exhaustive
     }
 }
