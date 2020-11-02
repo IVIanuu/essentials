@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.HomeRouteUiBinding
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.push
@@ -52,6 +53,7 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
+@HomeRouteUiBinding
 @FunBinding
 @Composable
 fun HomePage(dependencies: HomePageDependencies) {

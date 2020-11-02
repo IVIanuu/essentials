@@ -36,7 +36,7 @@ typealias UiScope = CoroutineScope
 fun uiScope(mainDispatcher: MainDispatcher): UiScope =
     CoroutineScope(mainDispatcher)
 
-@UiDecoratorBinding
+@UiDecoratorBinding("cancel_ui_scope")
 @FunBinding
 @Composable
 fun CancelUiScope(

@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
-import com.ivianuu.essentials.ui.UiDecoratorBinding
-import com.ivianuu.injekt.FunApi
+import com.ivianuu.essentials.ui.core.AppUiBinding
+import com.ivianuu.essentials.ui.navigation.Content
+import com.ivianuu.essentials.ui.navigation.HomeRoute
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.setRootIfEmpty
 import com.ivianuu.injekt.FunBinding
 
-@UiDecoratorBinding("clear_navigator_backstack")
+@AppUiBinding
 @FunBinding
 @Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi children: @Composable () -> Unit) {
-    onDispose {
-        navigator.setBackStack { emptyList() }
-    }
-    children()
+fun DefaultAppUi(
+    homeRoute: HomeRoute,
+    navigator: Navigator
+) {
+    navigator.setRootIfEmpty(homeRoute)
+    navigator.Content()
 }

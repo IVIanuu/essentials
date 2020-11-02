@@ -32,7 +32,7 @@ import com.ivianuu.injekt.merge.mergeComponent
 @MergeChildComponent
 interface UiComponent
 
-@UiDecoratorBinding
+@UiDecoratorBinding("ui_component")
 @FunBinding
 @Composable
 fun ProvideUiComponent(@FunApi children: @Composable () -> Unit) {

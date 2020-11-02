@@ -22,25 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.ui.TwilightTheme
+import com.ivianuu.essentials.ui.AppThemeBinding
+import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.colors
-import com.ivianuu.essentials.ui.navigation.Content
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.setRootIfEmpty
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.merge.GenerateMergeComponents
 
-@GenerateMergeComponents
-@AppUiBinding
+@AppThemeBinding
 @FunBinding
 @Composable
-fun SampleUi(
-    homePage: HomePage,
-    navigator: Navigator,
+fun SampleTheme(
     twilightTheme: TwilightTheme,
+    @FunApi children: @Composable () -> Unit
 ) {
     twilightTheme(
         colors(),
@@ -49,10 +45,8 @@ fun SampleUi(
         Typography()
     ) {
         Providers(
-            DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() }
-        ) {
-            navigator.setRootIfEmpty { homePage() }
-            navigator.Content()
-        }
+            DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() },
+            children = children
+        )
     }
 }

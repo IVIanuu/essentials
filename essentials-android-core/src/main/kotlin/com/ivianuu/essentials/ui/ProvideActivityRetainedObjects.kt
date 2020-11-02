@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-@UiDecoratorBinding
+@UiDecoratorBinding("activity_retained_objects")
 @FunBinding
 @Composable
 fun ProvideActivityRetainedObjects(@FunApi children: @Composable () -> Unit) {

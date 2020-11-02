@@ -86,7 +86,7 @@ fun ProvideInsets(
     Providers(InsetsAmbient provides insets, children = children)
 }
 
-@UiDecoratorBinding
+@UiDecoratorBinding("window_insets")
 @FunBinding
 @Composable
 fun ProvideWindowInsets(@FunApi children: @Composable () -> Unit) {

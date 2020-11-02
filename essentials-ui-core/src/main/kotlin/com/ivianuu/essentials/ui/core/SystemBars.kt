@@ -72,7 +72,7 @@ fun Modifier.systemBarStyle(
     onGloballyPositioned { globalBounds = it.globalBounds }
 }
 
-@UiDecoratorBinding
+@UiDecoratorBinding("system_bars")
 @FunBinding
 @Composable
 fun ProvideSystemBarManager(@FunApi children: @Composable () -> Unit) {

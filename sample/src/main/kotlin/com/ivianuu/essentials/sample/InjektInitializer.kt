@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.sample
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
-import com.ivianuu.essentials.ui.UiDecoratorBinding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.GenerateMergeComponents
 
-@UiDecoratorBinding("clear_navigator_backstack")
-@FunBinding
-@Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi children: @Composable () -> Unit) {
-    onDispose {
-        navigator.setBackStack { emptyList() }
-    }
-    children()
-}
+@GenerateMergeComponents
+object InjektInitializer

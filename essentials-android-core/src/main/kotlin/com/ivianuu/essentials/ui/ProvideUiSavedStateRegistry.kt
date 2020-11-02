@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-@UiDecoratorBinding
+@UiDecoratorBinding("saved_state_registry")
 @FunBinding
 @Composable
 fun ProvideUiSavedStateRegistry(@FunApi children: @Composable () -> Unit) {
