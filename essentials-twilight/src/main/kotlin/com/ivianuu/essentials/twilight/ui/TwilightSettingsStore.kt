@@ -30,7 +30,7 @@ fun twilightSettingsStore(
     useBlackInDarkModePref: UseBlackInDarkModePref
 ) = storeProvider<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {
     twilightModePref.data.setStateIn(this) { copy(twilightMode = it) }
-    useBlackInDarkModePref.data.setStateIn(this) { copy(useBlackInDarkMode = useBlackInDarkMode) }
+    useBlackInDarkModePref.data.setStateIn(this) { copy(useBlackInDarkMode = it) }
     for (action in this) {
         when (action) {
             is UpdateTwilightMode -> twilightModePref.updateData { action.value }
