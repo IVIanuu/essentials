@@ -89,7 +89,7 @@ fun DecorateUi(decorators: UiDecorators, @FunApi children: @Composable () -> Uni
 annotation class AppThemeBinding {
     companion object {
         // The theme typically uses EsMaterialTheme which itself uses the SystemBarManager
-        // So we safely declare the system bars as a dependency
+        // So we ensure that were running after system bars
         @UiDecoratorBinding("app_theme", ["system_bars"])
         fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecorator(
             instance: T
