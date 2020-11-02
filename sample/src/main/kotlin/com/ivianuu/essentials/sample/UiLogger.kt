@@ -23,7 +23,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-@UiDecoratorBinding("ui_logger")
+@UiDecoratorBinding("ui_logger", dependents = ["system_bars"])
 @FunBinding
 @Composable
 fun UiLogger(logger: Logger, @FunApi children: @Composable () -> Unit) {
