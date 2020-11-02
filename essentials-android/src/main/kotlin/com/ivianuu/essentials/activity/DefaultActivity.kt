@@ -25,7 +25,7 @@ import com.ivianuu.injekt.merge.mergeComponent
 
 class DefaultActivity : EsActivity() {
     @Composable
-    override fun content() {
+    override fun Content() {
         activityComponent.mergeComponent<DefaultActivityComponent>()
             .appUi()
     }

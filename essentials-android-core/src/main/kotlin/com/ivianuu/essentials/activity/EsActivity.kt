@@ -52,7 +52,7 @@ abstract class EsActivity : AppCompatActivity() {
 
         composition = container.setContent(Recomposer.current()) {
             activityComponent.mergeComponent<EsActivityComponent>().decorateUi {
-                content()
+                Content()
             }
         }
     }
@@ -63,7 +63,7 @@ abstract class EsActivity : AppCompatActivity() {
     }
 
     @Composable
-    protected abstract fun content()
+    protected abstract fun Content()
 }
 
 @MergeInto(ActivityComponent::class)

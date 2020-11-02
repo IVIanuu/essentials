@@ -57,31 +57,27 @@ fun defaultUiDecorators(): UiDecorators = emptySet()
 @Composable
 fun DecorateUi(decorators: UiDecorators, @FunApi children: @Composable () -> Unit) {
     remember {
-        var currentContent = children
-        val processedDecorators = mutableSetOf<UiDecorator>()
+        val sortedDecorators = mutableSetOf<UiDecorator>()
         var lastDecorators = emptySet<UiDecorator>()
         while (true) {
-            val unprocessedDecorators = decorators - processedDecorators
+            val unprocessedDecorators = decorators - sortedDecorators
             if (unprocessedDecorators.isEmpty()) break
             check(lastDecorators != unprocessedDecorators) {
                 "Corrupt UiDecoratorBinding setup $lastDecorators"
             }
             lastDecorators = unprocessedDecorators
-            unprocessedDecorators
+            sortedDecorators += unprocessedDecorators
                 .filter { decorator ->
                     decorator.dependencies.all { dependency ->
-                        processedDecorators.any {
+                        sortedDecorators.any {
                             it.key == dependency
                         }
                     }
                 }
-                .forEach { decorator ->
-                    val decoratorChildren = currentContent
-                    currentContent = { decorator.content(decoratorChildren) }
-                    processedDecorators += decorator
-                }
         }
-        currentContent
+        sortedDecorators.reversed().fold(children) { acc, decorator ->
+            { decorator.content(acc) }
+        }
     }()
 }
 

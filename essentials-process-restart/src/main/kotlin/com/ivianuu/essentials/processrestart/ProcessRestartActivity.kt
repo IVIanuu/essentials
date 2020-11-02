@@ -36,7 +36,7 @@ class ProcessRestartActivity : EsActivity() {
     }
 
     @Composable
-    override fun content() {
+    override fun Content() {
     }
 
     internal companion object {

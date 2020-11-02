@@ -107,7 +107,7 @@ class UnlockScreenActivity : EsActivity() {
     }
 
     @Composable
-    override fun content() {
+    override fun Content() {
     }
 
     override fun onDestroy() {
