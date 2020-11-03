@@ -28,6 +28,12 @@ import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.injekt.FunApi
+
+data class ActionPickerOptions(
+    val showDefaultOption: Boolean = false,
+    val showNoneOption: Boolean = false,
+)
 
 sealed class ActionPickerResult {
     data class Action(val actionKey: String) : ActionPickerResult()

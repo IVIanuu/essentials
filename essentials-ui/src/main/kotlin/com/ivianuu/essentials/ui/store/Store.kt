@@ -57,6 +57,7 @@ interface StoreAction
 
 typealias StorePair<S, A> = Pair<S, (A) -> Unit>
 
+@Binding
 @Composable
 val <S, A> Store<S, A>.storePair: StorePair<S, A>
     get() = StorePair(snapshotState, remember(this) { { dispatch(it) } })

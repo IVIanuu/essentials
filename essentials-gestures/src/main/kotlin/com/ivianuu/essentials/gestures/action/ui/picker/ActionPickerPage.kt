@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
+import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.essentials.ui.store.rememberStore2
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -33,14 +34,13 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun ActionPickerPage(
-    store: rememberStore2<ActionPickerState, ActionPickerAction, Boolean, Boolean>,
-    @FunApi showDefaultOption: Boolean,
-    @FunApi showNoneOption: Boolean
+    store: rememberStore1<ActionPickerState, ActionPickerAction, ActionPickerOptions>,
+    @FunApi options: ActionPickerOptions
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
     ) {
-        val (state, dispatch) = store(showDefaultOption, showNoneOption)
+        val (state, dispatch) = store(options)
         ResourceLazyColumnFor(state.items) { item ->
             ActionPickerItem(
                 item = item,

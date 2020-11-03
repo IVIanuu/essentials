@@ -53,21 +53,20 @@ fun CoroutineScope.actionPickerStore(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
     stringResource: stringResource,
-    @FunApi showDefaultOption: Boolean,
-    @FunApi showNoneOption: Boolean,
+    @FunApi options: ActionPickerOptions
 ) = store<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {
             val specialOptions = mutableListOf<SpecialOption>()
 
-            if (showDefaultOption) {
+            if (options.showDefaultOption) {
                 specialOptions += SpecialOption(
                     title = stringResource(R.string.es_default),
                     getResult = { ActionPickerResult.Default }
                 )
             }
 
-            if (showNoneOption) {
+            if (options.showNoneOption) {
                 specialOptions += SpecialOption(
                     title = stringResource(R.string.es_none),
                     getResult = { ActionPickerResult.None }
