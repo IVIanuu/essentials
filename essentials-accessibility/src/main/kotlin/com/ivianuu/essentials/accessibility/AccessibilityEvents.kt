@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.accessibility
 
+
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -27,5 +28,5 @@ fun mutableAccessibilityEvents(): MutableAccessibilityEvents = EventFlow()
 
 typealias AccessibilityEvents = Flow<AccessibilityEvent>
 @Binding
-val MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
+inline val MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
     get() = this

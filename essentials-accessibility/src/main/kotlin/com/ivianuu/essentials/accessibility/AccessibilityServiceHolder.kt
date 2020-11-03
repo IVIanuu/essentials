@@ -29,5 +29,5 @@ fun mutableAccessibilityServiceHolder(): MutableAccessibilityServiceHolder =
 
 typealias AccessibilityServiceHolder = StateFlow<AccessibilityService?>
 @Binding
-val MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
+inline val MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
         get() = this

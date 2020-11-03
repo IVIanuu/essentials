@@ -23,14 +23,14 @@ import kotlinx.coroutines.Dispatchers
 typealias DefaultDispatcher = CoroutineDispatcher
 
 @Binding
-fun defaultDispatcher(): DefaultDispatcher = Dispatchers.Default
+inline fun defaultDispatcher(): DefaultDispatcher = Dispatchers.Default
 
 typealias MainDispatcher = CoroutineDispatcher
 
 @Binding
-fun mainDispatcher(): MainDispatcher = Dispatchers.Main
+inline fun mainDispatcher(): MainDispatcher = Dispatchers.Main
 
 typealias IODispatcher = CoroutineDispatcher
 
 @Binding
-fun ioDispatcher(): IODispatcher = Dispatchers.IO
+inline fun ioDispatcher(): IODispatcher = Dispatchers.IO
