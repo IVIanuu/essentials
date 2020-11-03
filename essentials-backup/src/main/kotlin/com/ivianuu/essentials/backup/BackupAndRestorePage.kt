@@ -19,8 +19,6 @@ package com.ivianuu.essentials.backup
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -29,9 +27,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

@@ -18,25 +18,34 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.android.asState
+import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
-import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.prefs.ClipboardListItem
+import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
+import com.ivianuu.essentials.ui.prefs.IntSliderListItem
+import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
+import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.SliderValueText
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.JsonClass
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.ui.common.interactive
 
 @FunBinding
 @Composable

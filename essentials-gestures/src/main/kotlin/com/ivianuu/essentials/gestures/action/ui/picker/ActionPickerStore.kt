@@ -16,18 +16,10 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
 import com.ivianuu.essentials.gestures.action.getAllActions
-import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
@@ -36,8 +28,6 @@ import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.resource.Idle
-import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource

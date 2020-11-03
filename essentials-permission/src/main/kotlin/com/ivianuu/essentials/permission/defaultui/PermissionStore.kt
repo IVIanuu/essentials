@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.permission.defaultui
 
 import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.defaultui.PermissionAction.*
+import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.store.store

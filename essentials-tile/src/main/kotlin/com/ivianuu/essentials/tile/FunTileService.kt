@@ -18,8 +18,7 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.tile.TileAction.*
+import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto

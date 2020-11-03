@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.accessibility
 
-
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent

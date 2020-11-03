@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowXdaTutorial
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute

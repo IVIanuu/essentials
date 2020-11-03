@@ -21,7 +21,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowXdaTutorial
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

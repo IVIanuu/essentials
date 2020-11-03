@@ -27,7 +27,6 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore1
-import com.ivianuu.essentials.ui.store.rememberStore2
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 

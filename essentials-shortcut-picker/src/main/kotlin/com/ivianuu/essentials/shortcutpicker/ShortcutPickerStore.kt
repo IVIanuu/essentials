@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.*
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop

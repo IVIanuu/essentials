@@ -18,7 +18,8 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.ShowToPcInstructions
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem

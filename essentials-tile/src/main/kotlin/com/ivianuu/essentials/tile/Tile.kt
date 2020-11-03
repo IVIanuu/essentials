@@ -21,7 +21,7 @@ import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.tile.TileAction.*
+import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.BindingAdapterArg

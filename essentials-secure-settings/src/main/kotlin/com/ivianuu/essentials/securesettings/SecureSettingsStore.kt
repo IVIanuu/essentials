@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.ShowToPcInstructions
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push

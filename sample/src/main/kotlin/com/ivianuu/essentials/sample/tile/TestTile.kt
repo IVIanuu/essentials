@@ -18,13 +18,12 @@ package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.setStateIn
-import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.tile.TileBinding
+import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.tile.onEachTileClick
 import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightModePref
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @TileBinding(1)

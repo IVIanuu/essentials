@@ -19,8 +19,6 @@ package com.ivianuu.essentials.twilight.ui
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import com.ivianuu.essentials.store.setStateIn
-import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateTwilightMode
@@ -35,7 +33,6 @@ import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding

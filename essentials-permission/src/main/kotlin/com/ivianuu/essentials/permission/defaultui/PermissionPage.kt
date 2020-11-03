@@ -24,29 +24,16 @@ import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequest
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactory
-import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.permission.requestHandler
-import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
 import com.ivianuu.essentials.ui.store.rememberStore1
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.first
 
 @FunBinding
 @Composable

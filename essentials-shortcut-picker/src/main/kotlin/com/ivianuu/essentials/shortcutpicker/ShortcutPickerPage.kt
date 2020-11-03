@@ -25,24 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.*
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.resource.Idle
-import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.component1
 import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.essentials.util.startActivityForIntentResult
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 

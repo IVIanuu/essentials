@@ -55,26 +55,30 @@ fun <S, V> Flow<V>.executeIn(
 interface StoreState
 interface StoreAction
 
-typealias StorePair<S, A> = Pair<S, (A) -> Unit>
+@Binding
+@Composable
+val <S : StoreState> RetainedStore<S, *>._storeState: S get() = snapshotState
 
 @Binding
 @Composable
-val <S, A> Store<S, A>.storePair: StorePair<S, A>
-    get() = StorePair(snapshotState, remember(this) { { dispatch(it) } })
+val <A : StoreAction> RetainedStore<*, A>._storeDispatch: (A) -> Unit get() = remember(this) {
+    { dispatch(it) }
+}
 
+typealias RetainedStore<S, A> = Store<S, A>
 @Binding
 @Composable
-inline fun <reified S, reified A> storeFromProvider(
+inline fun <reified S, reified A> retainedStore(
     defaultDispatcher: DefaultDispatcher,
     noinline provider: (CoroutineScope) -> Store<S, A>
-): Store<S, A> {
+): RetainedStore<S, A> {
     return rememberRetained(key = typeOf<Store<S, A>>()) {
-        StoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
+        RetainedStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
     }.store
 }
 
 @PublishedApi
-internal class StoreRunner<S, A>(
+internal class RetainedStoreRunner<S, A>(
     private val coroutineScope: CoroutineScope,
     store: (CoroutineScope) -> Store<S, A>
 ) : DisposableHandle {

@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.apps.ui.checkableapps
 
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.*
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateRefs
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.executeIn
