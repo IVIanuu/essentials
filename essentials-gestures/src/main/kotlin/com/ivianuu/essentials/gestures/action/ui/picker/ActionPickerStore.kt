@@ -28,6 +28,7 @@ import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.stringResource
@@ -35,7 +36,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import kotlinx.coroutines.CoroutineScope
 
-@Binding
+@StoreBinding
 fun CoroutineScope.ActionPickerStore(
     navigator: Navigator,
     getAction: getAction,

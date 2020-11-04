@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.BindingAdapter
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
@@ -52,29 +53,32 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
-interface StoreState
-interface StoreAction
-
-@Binding
-@Composable
-val <S : StoreState> RetainedStore<S, *>._storeState: S get() = snapshotState
-
-@Binding
-@Composable
-val <A : StoreAction> RetainedStore<*, A>._storeDispatch: (A) -> Unit get() = remember(this) {
-    { dispatch(it) }
-}
-
 typealias RetainedStore<S, A> = Store<S, A>
-@Binding
-@Composable
-inline fun <reified S, reified A> retainedStore(
-    defaultDispatcher: DefaultDispatcher,
-    noinline provider: (CoroutineScope) -> Store<S, A>
-): RetainedStore<S, A> {
-    return rememberRetained(key = typeOf<Store<S, A>>()) {
-        RetainedStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
-    }.store
+
+@BindingAdapter
+annotation class StoreBinding {
+    companion object {
+        @Binding
+        @Composable
+        fun <T : Store<S, A>, S, A> RetainedStore<S, A>._storeState(): S = snapshotState
+
+        @Binding
+        @Composable
+        fun <T : Store<S, A>, S, A> RetainedStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
+            { dispatch(it) }
+        }
+
+        @Binding
+        @Composable
+        inline fun <reified T : Store<S, A>, reified S, reified A> retainedStore(
+            defaultDispatcher: DefaultDispatcher,
+            noinline provider: (CoroutineScope) -> T
+        ): RetainedStore<S, A> {
+            return rememberRetained(key = typeOf<Store<S, A>>()) {
+                RetainedStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
+            }.store
+        }
+    }
 }
 
 @PublishedApi

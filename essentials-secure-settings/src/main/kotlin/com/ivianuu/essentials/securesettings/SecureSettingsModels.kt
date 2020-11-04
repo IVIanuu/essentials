@@ -16,12 +16,9 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.ui.store.StoreAction
-import com.ivianuu.essentials.ui.store.StoreState
+object SecureSettingsState
 
-object SecureSettingsState : StoreState
-
-sealed class SecureSettingsAction : StoreAction {
+sealed class SecureSettingsAction {
     object GrantPermissionsViaRoot : SecureSettingsAction()
     object ShowToPcInstructions : SecureSettingsAction()
 }

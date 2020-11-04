@@ -20,6 +20,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
@@ -27,7 +28,7 @@ import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
-@Binding
+@StoreBinding
 fun CoroutineScope.ShortcutPickerStore(
     navigator: Navigator,
     getAllShortcuts: getAllShortcuts,

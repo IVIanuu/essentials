@@ -23,6 +23,7 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAp
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 
-@Binding
+@StoreBinding
 fun CoroutineScope.checkableAppsStore(
     getInstalledApps: getInstalledApps,
     params: CheckableAppsParams

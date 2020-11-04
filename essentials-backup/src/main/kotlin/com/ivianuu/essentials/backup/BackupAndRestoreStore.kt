@@ -20,12 +20,13 @@ import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
-@Binding
+@StoreBinding
 fun CoroutineScope.BackupAndRestoreStore(
     backupData: backupData,
     restoreData: restoreData,

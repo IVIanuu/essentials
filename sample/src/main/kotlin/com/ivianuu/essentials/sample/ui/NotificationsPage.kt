@@ -68,8 +68,7 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.StoreAction
-import com.ivianuu.essentials.ui.store.StoreState
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -171,7 +170,7 @@ private fun NotificationPermissions(
     }
 }
 
-@Binding
+@StoreBinding
 fun CoroutineScope.NotificationStore(
     hasPermissions: hasPermissions,
     notifications: UiNotifications,
@@ -247,9 +246,9 @@ fun notifications(
 data class NotificationsState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle
-) : StoreState
+)
 
-sealed class NotificationsAction : StoreAction {
+sealed class NotificationsAction {
     object RequestPermissions : NotificationsAction()
     data class OpenNotification(val notification: UiNotification) : NotificationsAction()
     data class DismissNotification(val notification: UiNotification) : NotificationsAction()

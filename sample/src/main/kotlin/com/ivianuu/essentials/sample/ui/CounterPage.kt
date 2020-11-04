@@ -34,8 +34,7 @@ import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.StoreAction
-import com.ivianuu.essentials.ui.store.StoreState
+import com.ivianuu.essentials.ui.store.StoreBinding
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.RetainedActivityComponent
@@ -77,7 +76,7 @@ fun CounterPage(
     }
 }
 
-@Binding
+@StoreBinding
 fun CoroutineScope.CounterStore() = store<CounterState, CounterAction>(
     CounterState(0)
 ) {
@@ -91,9 +90,9 @@ fun CoroutineScope.CounterStore() = store<CounterState, CounterAction>(
     }
 }
 
-data class CounterState(val count: Int) : StoreState
+data class CounterState(val count: Int)
 
-sealed class CounterAction : StoreAction {
+sealed class CounterAction {
     object Inc : CounterAction()
     object Dec : CounterAction()
 }

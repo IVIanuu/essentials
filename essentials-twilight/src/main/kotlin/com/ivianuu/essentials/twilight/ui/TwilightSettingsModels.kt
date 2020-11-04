@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.twilight.ui
 
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.ui.store.StoreAction
-import com.ivianuu.essentials.ui.store.StoreState
 
 data class TwilightSettingsState(
     val twilightMode: TwilightMode = TwilightMode.System,
     val useBlackInDarkMode: Boolean = false
-) : StoreState
+)
 
-sealed class TwilightSettingsAction : StoreAction {
+sealed class TwilightSettingsAction {
     data class UpdateTwilightMode(val value: TwilightMode) : TwilightSettingsAction()
     data class UpdateUseBlackInDarkMode(val value: Boolean) : TwilightSettingsAction()
 }
