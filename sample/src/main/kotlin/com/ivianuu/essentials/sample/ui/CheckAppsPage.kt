@@ -17,29 +17,36 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsPage
-import com.ivianuu.essentials.datastore.android.asState
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.launch
 
 @FunBinding
 @Composable
 fun CheckAppsPage(
-    checkableAppsPage: CheckableAppsPage,
+    checkableAppsPage: (CheckableAppsParams) -> CheckableAppsPage,
     factory: DiskDataStoreFactory,
     launchableAppFilter: LaunchableAppFilter,
 ) {
-    var checkedApps by remember {
-        factory.create("checked_apps") { emptySet<String>() }
-    }.asState()
-    checkableAppsPage(
-        checkedApps,
-        { newCheckedApps -> checkedApps = newCheckedApps },
-        launchableAppFilter,
-        "Send check apps"
-    )
+    val checkedAppsStore = remember { factory.create("checked_apps") { emptySet<String>() } }
+    val scope = rememberCoroutineScope()
+    remember {
+        checkableAppsPage(
+            CheckableAppsParams(
+                checkedAppsStore.data,
+                { checkedApps ->
+                    scope.launch {
+                        checkedAppsStore.updateData { checkedApps }
+                    }
+                },
+                launchableAppFilter,
+                "Send check apps"
+            )
+        )
+    }()
 }

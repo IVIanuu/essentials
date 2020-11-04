@@ -30,17 +30,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsPage(
-    store: rememberStore<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>
+    state: SecureSettingsPcInstructionsState,
+    dispatch: (SecureSettingsPcInstructionsAction) -> Unit
 ) {
-    val (state, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
     ) {

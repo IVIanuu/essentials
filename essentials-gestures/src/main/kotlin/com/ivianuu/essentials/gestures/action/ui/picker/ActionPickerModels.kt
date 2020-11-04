@@ -28,8 +28,10 @@ import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
 
-data class ActionPickerOptions(
+data class ActionPickerParams(
     val showDefaultOption: Boolean = false,
     val showNoneOption: Boolean = false,
 )
@@ -41,9 +43,9 @@ sealed class ActionPickerResult {
 }
 
 @Immutable
-data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
+data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle) : StoreState
 
-sealed class ActionPickerAction {
+sealed class ActionPickerAction : StoreAction {
     data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
 }
 

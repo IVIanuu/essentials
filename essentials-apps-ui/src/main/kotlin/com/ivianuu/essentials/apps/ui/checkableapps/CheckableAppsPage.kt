@@ -20,16 +20,13 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onCommit
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateRefs
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -37,31 +34,19 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
-import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @FunBinding
 @Composable
 fun CheckableAppsPage(
-    store: rememberStore<CheckableAppsState, CheckableAppsAction>,
-    @FunApi checkedApps: Set<String>,
-    @FunApi onCheckedAppsChanged: (Set<String>) -> Unit,
-    @FunApi appFilter: AppFilter,
-    @FunApi appBarTitle: String
+    state: CheckableAppsState,
+    dispatch: (CheckableAppsAction) -> Unit
 ) {
-    val (state, dispatch) = store()
-    onCommit(checkedApps, onCheckedAppsChanged, appFilter) {
-        dispatch(UpdateRefs(checkedApps, onCheckedAppsChanged, appFilter))
-    }
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(appBarTitle) },
+                title = { Text(state.appBarTitle) },
                 actions = {
                     PopupMenuButton(
                         items = listOf(
@@ -88,7 +73,7 @@ fun CheckableAppsPage(
         ResourceLazyColumnFor(state.checkableApps) { app ->
             CheckableApp(
                 app = app,
-                onClick = { dispatch(ToggleApp(app)) }
+                onClick = { dispatch(UpdateAppCheckState(app, !app.isChecked)) }
             )
         }
     }

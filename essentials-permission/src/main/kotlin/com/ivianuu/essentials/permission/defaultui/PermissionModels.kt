@@ -17,11 +17,13 @@
 package com.ivianuu.essentials.permission.defaultui
 
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
 
 data class PermissionState(
     val permissionsToProcess: List<Permission> = emptyList()
-)
+) : StoreState
 
-sealed class PermissionAction {
+sealed class PermissionAction : StoreAction {
     data class RequestPermission(val permission: Permission) : PermissionAction()
 }

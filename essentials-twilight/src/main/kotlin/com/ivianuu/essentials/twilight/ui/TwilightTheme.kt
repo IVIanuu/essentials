@@ -20,6 +20,8 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.material.Colors
 import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +32,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.twilight.domain.TwilightStateFlow
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
 import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -40,10 +43,10 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun TwilightTheme(
     twilightStateFlow: TwilightStateFlow,
-    @FunApi lightColors: Colors,
-    @FunApi darkColors: Colors,
-    @FunApi blackColors: Colors,
-    @FunApi typography: Typography,
+    @FunApi lightColors: Colors = lightColors(),
+    @FunApi darkColors: Colors = darkColors(),
+    @FunApi blackColors: Colors = blackColors(),
+    @FunApi typography: Typography = Typography(),
     @FunApi children: @Composable () -> Unit
 ) {
     val targetColors by twilightStateFlow

@@ -28,7 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Binding
-fun CoroutineScope.secureSettingsStore(
+fun CoroutineScope.SecureSettingsStore(
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,

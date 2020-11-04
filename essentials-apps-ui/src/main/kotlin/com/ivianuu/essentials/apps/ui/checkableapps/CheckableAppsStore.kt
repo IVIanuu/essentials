@@ -19,9 +19,9 @@ package com.ivianuu.essentials.apps.ui.checkableapps
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.ToggleApp
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateRefs
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.store.currentState
+import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.executeIn
 import com.ivianuu.essentials.util.exhaustive
@@ -35,12 +35,18 @@ import kotlinx.coroutines.flow.mapLatest
 @Binding
 fun CoroutineScope.checkableAppsStore(
     getInstalledApps: getInstalledApps,
-) = store<CheckableAppsState, CheckableAppsAction>(CheckableAppsState()) {
-    val installedApps = async { getInstalledApps() }
+    params: CheckableAppsParams
+) = store<CheckableAppsState, CheckableAppsAction>(
+    CheckableAppsState(
+        appFilter = params.appFilter,
+        appBarTitle = params.appBarTitle
+    )
+) {
+    params.checkedApps.setStateIn(this) { copy(checkedApps = it) }
     state
         .map { it.appFilter }
         .distinctUntilChanged()
-        .mapLatest { installedApps.await().filter(it) }
+        .mapLatest { getInstalledApps().filter(it) }
         .executeIn(this) { copy(apps = it) }
 
     for (action in this) {
@@ -51,21 +57,12 @@ fun CoroutineScope.checkableAppsStore(
                 .map { it.info.packageName }
                 .toMutableSet()
                 .apply(reducer)
-            currentState.onCheckedAppsChanged!!(newCheckedApps)
+            params.onCheckedAppsChanged(newCheckedApps)
         }
 
         @Suppress("IMPLICIT_CAST_TO_ANY")
         when (action) {
-            is UpdateRefs -> {
-                setState {
-                    copy(
-                        checkedApps = action.checkedApps,
-                        onCheckedAppsChanged = action.onCheckedAppsChanged,
-                        appFilter = action.appFilter
-                    )
-                }
-            }
-            is ToggleApp -> {
+            is UpdateAppCheckState -> {
                 pushNewCheckedApps {
                     if (!action.app.isChecked) {
                         it += action.app.info.packageName

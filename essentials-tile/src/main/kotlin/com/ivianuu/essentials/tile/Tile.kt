@@ -28,12 +28,12 @@ import com.ivianuu.injekt.BindingAdapterArg
 import com.ivianuu.injekt.MapEntries
 import kotlinx.coroutines.CoroutineScope
 
-fun tile(
+fun CoroutineScope.tile(
     initial: TileState,
     block: suspend StoreScope<TileState, TileAction>.() -> Unit
 ) = store(initial, block)
 
-typealias TileStores = Map<Int, () -> (CoroutineScope) -> Store<TileState, TileAction>>
+typealias TileStores = Map<Int, (CoroutineScope) -> Store<TileState, TileAction>>
 @MapEntries
 fun defaultTileStores(): TileStores = emptyMap()
 
@@ -69,8 +69,8 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
 annotation class TileBinding(val slot: Int) {
     companion object {
         @MapEntries
-        fun <T : (CoroutineScope) -> Store<TileState, TileAction>> intoTileMap(
-            provider: () -> T,
+        fun <T : Store<TileState, TileAction>> intoTileMap(
+            provider: (CoroutineScope) -> T,
             @BindingAdapterArg("slot") slot: Int
         ): TileStores = mapOf(slot to provider)
     }

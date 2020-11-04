@@ -48,7 +48,6 @@ abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
         super.onStartListening()
         listeningScope.launch {
             val store = (component.tileStores[slot]
-                ?.invoke()
                 ?.invoke(this)
                 ?: error("No tile found for $slot"))
             launch { clicks.collect { store.dispatch(TileClicked) } }

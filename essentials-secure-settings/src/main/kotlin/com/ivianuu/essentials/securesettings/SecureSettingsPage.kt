@@ -25,19 +25,15 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPage(
-    store: rememberStore<SecureSettingsState, SecureSettingsAction>,
-    @FunApi showHideNavBarHint: Boolean
+    dispatch: (SecureSettingsAction) -> Unit,
+    @FunApi showHideNavBarHint: Boolean = false
 ) {
-    val (_, dispatch) = store()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
     ) {

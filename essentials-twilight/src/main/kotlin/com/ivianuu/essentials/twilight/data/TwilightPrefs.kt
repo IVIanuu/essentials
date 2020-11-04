@@ -21,7 +21,6 @@ import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
-
 typealias TwilightModePref = DataStore<TwilightMode>
 @Binding(ApplicationComponent::class)
 fun twilightModePref(factory: DiskDataStoreFactory): TwilightModePref =

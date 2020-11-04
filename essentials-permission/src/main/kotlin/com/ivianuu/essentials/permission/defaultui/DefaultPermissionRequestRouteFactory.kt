@@ -23,9 +23,9 @@ import com.ivianuu.essentials.ui.navigation.Route
 
 @PermissionRequestRouteFactoryBinding
 class DefaultPermissionRequestRouteFactory(
-    private val permissionPage: PermissionPage,
+    private val permissionPage: (PermissionRequest) -> PermissionPage,
 ) : PermissionRequestRouteFactory {
 
     override fun createRoute(request: PermissionRequest): Route =
-        Route { permissionPage(request) }
+        Route { permissionPage(request)() }
 }

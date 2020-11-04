@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.securesettings
 
-data class SecureSettingsPcInstructionsState(val packageName: String) {
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
+
+data class SecureSettingsPcInstructionsState(val packageName: String) : StoreState {
     val secureSettingsAdbCommand =
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
 }
 
-sealed class SecureSettingsPcInstructionsAction {
+sealed class SecureSettingsPcInstructionsAction : StoreAction {
     object ShowGadgetHacksTutorial : SecureSettingsPcInstructionsAction()
     object ShowLifeHackerTutorial : SecureSettingsPcInstructionsAction()
     object ShowXdaTutorial : SecureSettingsPcInstructionsAction()

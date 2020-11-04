@@ -18,7 +18,7 @@ package com.ivianuu.essentials.apps.ui.apppicker
 
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.AppFilter
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.*
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
@@ -29,18 +29,25 @@ import com.ivianuu.injekt.FunApi
 import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun CoroutineScope.appPickerStore(
+fun CoroutineScope.AppPickerStore(
     navigator: Navigator,
     getInstalledApps: getInstalledApps,
-    @FunApi appFilter: AppFilter
-) = store<AppPickerState, AppPickerAction>(AppPickerState(appFilter = appFilter)) {
+    params: AppPickerParams
+) = store<AppPickerState, AppPickerAction>(
+    AppPickerState(
+        appFilter = params.appFilter,
+        title = params.title
+    )
+) {
     execute(
         block = { getInstalledApps() },
         reducer = { copy(allApps = it) }
     )
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     for (action in this) {
         when (action) {
+            is FilterApps -> setState { copy(appFilter = action.appFilter) }
             is PickApp -> navigator.popTop(result = action.app)
         }.exhaustive
     }

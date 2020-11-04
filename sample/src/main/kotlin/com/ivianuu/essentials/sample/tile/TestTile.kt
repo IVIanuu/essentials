@@ -24,10 +24,11 @@ import com.ivianuu.essentials.tile.onEachTileClick
 import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightModePref
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 
 @TileBinding(1)
-fun TestTile(twilightModePref: TwilightModePref) = tile(
+fun CoroutineScope.TestTile(twilightModePref: TwilightModePref) = tile(
     initial = TileState(
         iconRes = R.drawable.es_ic_accessibility,
         label = "Hello"

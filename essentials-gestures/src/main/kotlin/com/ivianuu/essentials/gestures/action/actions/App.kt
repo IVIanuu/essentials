@@ -25,6 +25,7 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory
@@ -64,7 +65,7 @@ class AppActionFactory(
 
 @ActionPickerDelegateBinding
 class AppActionPickerDelegate(
-    private val appPickerPage: AppPickerPage,
+    private val appPickerPage: (AppPickerParams) -> AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
     private val navigator: Navigator,
     private val stringResource: stringResource,
@@ -76,7 +77,7 @@ class AppActionPickerDelegate(
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {
-            appPickerPage(launchableAppFilter, null)
+            appPickerPage(AppPickerParams(launchableAppFilter))()
         } ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }

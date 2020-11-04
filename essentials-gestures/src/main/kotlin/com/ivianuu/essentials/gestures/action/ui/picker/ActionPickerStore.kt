@@ -36,27 +36,27 @@ import com.ivianuu.injekt.FunApi
 import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun CoroutineScope.actionPickerStore(
+fun CoroutineScope.ActionPickerStore(
     navigator: Navigator,
     getAction: getAction,
     getAllActions: getAllActions,
     actionPickerDelegates: Set<ActionPickerDelegate>,
     requestPermissions: requestPermissions,
     stringResource: stringResource,
-    @FunApi options: ActionPickerOptions
+    params: ActionPickerParams
 ) = store<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
     execute(
         block = {
             val specialOptions = mutableListOf<SpecialOption>()
 
-            if (options.showDefaultOption) {
+            if (params.showDefaultOption) {
                 specialOptions += SpecialOption(
                     title = stringResource(R.string.es_default),
                     getResult = { ActionPickerResult.Default }
                 )
             }
 
-            if (options.showNoneOption) {
+            if (params.showNoneOption) {
                 specialOptions += SpecialOption(
                     title = stringResource(R.string.es_none),
                     getResult = { ActionPickerResult.None }

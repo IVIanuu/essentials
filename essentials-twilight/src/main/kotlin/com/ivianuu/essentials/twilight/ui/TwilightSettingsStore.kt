@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun CoroutineScope.twilightSettingsStore(
+fun CoroutineScope.TwilightSettingsStore(
     twilightModePref: TwilightModePref,
     useBlackInDarkModePref: UseBlackInDarkModePref
 ) = store<TwilightSettingsState, TwilightSettingsAction>(TwilightSettingsState()) {

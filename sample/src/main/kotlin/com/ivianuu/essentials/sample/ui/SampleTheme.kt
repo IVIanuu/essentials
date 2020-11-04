@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.ui.TwilightTheme
+import com.ivianuu.essentials.twilight.ui.invokeTwilightTheme
 import com.ivianuu.essentials.ui.AppThemeBinding
 import com.ivianuu.essentials.ui.animatedstack.DefaultStackTransitionAmbient
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.essentials.ui.material.blackColors
-import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
@@ -37,12 +34,7 @@ fun SampleTheme(
     twilightTheme: TwilightTheme,
     @FunApi children: @Composable () -> Unit
 ) {
-    twilightTheme(
-        colors(),
-        darkColors(),
-        blackColors(),
-        Typography()
-    ) {
+    twilightTheme.invokeTwilightTheme {
         Providers(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() },
             children = children

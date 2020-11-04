@@ -21,8 +21,8 @@ import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerOptions
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerPage
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerParams
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun ActionsPage(
-    actionPickerPage: ActionPickerPage,
+    actionPickerPage: (ActionPickerParams) -> ActionPickerPage,
     executeAction: executeAction,
     navigator: Navigator,
     uiScope: UiScope,
@@ -49,7 +49,7 @@ fun ActionsPage(
             onClick = {
                 uiScope.launch {
                     val action = navigator.push<ActionPickerResult> {
-                        actionPickerPage(ActionPickerOptions())
+                        actionPickerPage(ActionPickerParams())()
                     }
                         ?.let { it as? ActionPickerResult.Action }
                         ?.actionKey ?: return@launch

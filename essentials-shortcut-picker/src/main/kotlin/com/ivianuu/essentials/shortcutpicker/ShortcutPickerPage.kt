@@ -30,19 +30,16 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun ShortcutPickerPage(
-    store: rememberStore<ShortcutPickerState, ShortcutPickerAction>,
-    @FunApi title: String?
+    state: ShortcutPickerState,
+    dispatch: (ShortcutPickerAction) -> Unit,
+    @FunApi title: String? = null
 ) {
-    val (state, dispatch) = store()
     Scaffold(
         topBar = {
             TopAppBar(

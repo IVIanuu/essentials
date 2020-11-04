@@ -29,20 +29,15 @@ import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun PermissionPage(
-    store: rememberStore1<PermissionState, PermissionAction, PermissionRequest>,
-    @FunApi request: PermissionRequest
+    state: PermissionState,
+    dispatch: (PermissionAction) -> Unit
 ) {
-    val (state, dispatch) = store(request)
-
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res

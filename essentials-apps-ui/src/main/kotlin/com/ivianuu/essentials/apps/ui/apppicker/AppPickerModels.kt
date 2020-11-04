@@ -22,15 +22,24 @@ import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
+
+data class AppPickerParams(
+    val appFilter: AppFilter = DefaultAppFilter,
+    val title: String? = null
+)
 
 data class AppPickerState(
     val allApps: Resource<List<AppInfo>> = Idle,
     val appFilter: AppFilter = DefaultAppFilter,
-) {
+    val title: String? = null
+) : StoreState {
     val filteredApps = allApps
         .map { it.filter(appFilter) }
 }
 
-sealed class AppPickerAction {
+sealed class AppPickerAction : StoreAction {
+    data class FilterApps(val appFilter: AppFilter) : AppPickerAction()
     data class PickApp(val app: AppInfo) : AppPickerAction()
 }

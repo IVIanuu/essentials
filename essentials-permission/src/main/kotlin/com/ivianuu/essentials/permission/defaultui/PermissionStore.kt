@@ -32,13 +32,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 
 @Binding
-fun CoroutineScope.permissionStore(
+fun CoroutineScope.PermissionStore(
     hasPermissions: hasPermissions,
     logger: Logger,
     navigator: Navigator,
     requestHandler: requestHandler,
     startUi: startUi,
-    @FunApi request: PermissionRequest,
+    request: PermissionRequest,
 ) = store<PermissionState, PermissionAction>(PermissionState()) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions

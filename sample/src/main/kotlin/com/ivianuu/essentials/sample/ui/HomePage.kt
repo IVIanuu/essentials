@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
 import com.ivianuu.essentials.backup.BackupAndRestorePage
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsPage
@@ -100,8 +101,7 @@ fun HomePage(dependencies: HomePageDependencies) {
                         HomeItem.About -> Route { dependencies.aboutPage() }
                         HomeItem.Actions -> Route { dependencies.actionsPage() }
                         HomeItem.AppPicker -> Route {
-                            dependencies.appPickerPage(DefaultAppFilter,
-                                null)
+                            dependencies.appPickerPage(AppPickerParams())()
                         }
                         HomeItem.AppTracker -> Route { dependencies.appTrackerPage() }
                         HomeItem.BackupRestore -> Route { dependencies.backupAndRestorePage() }
@@ -153,7 +153,7 @@ fun HomePage(dependencies: HomePageDependencies) {
 class HomePageDependencies(
     val aboutPage: AboutPage,
     val actionsPage: ActionsPage,
-    val appPickerPage: AppPickerPage,
+    val appPickerPage: (AppPickerParams) -> AppPickerPage,
     val appTrackerPage: AppTrackerPage,
     val backupAndRestorePage: BackupAndRestorePage,
     val billingPage: BillingPage,
@@ -191,6 +191,7 @@ private fun HomeItem(
     onClick: () -> Unit,
     item: HomeItem,
 ) {
+    println()
     ListItem(
         title = { Text(item.title) },
         leading = {

@@ -16,9 +16,12 @@
 
 package com.ivianuu.essentials.backup
 
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
+
 object BackupAndRestoreState
 
-sealed class BackupAndRestoreAction {
+sealed class BackupAndRestoreAction : StoreAction {
     object BackupData : BackupAndRestoreAction()
     object RestoreData : BackupAndRestoreAction()
 }

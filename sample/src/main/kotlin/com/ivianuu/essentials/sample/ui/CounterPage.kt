@@ -29,19 +29,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
+import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.android.RetainedActivityComponent
+import kotlinx.coroutines.CoroutineScope
 
 @FunBinding
 @Composable
-fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
+fun CounterPage(
+    state: CounterState,
+    dispatch: (CounterAction) -> Unit
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -50,8 +55,6 @@ fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val (state, dispatch) = store()
-
             Text(
                 text = "Count: ${state.count}",
                 style = MaterialTheme.typography.h3
@@ -75,7 +78,9 @@ fun CounterPage(store: rememberStore<CounterState, CounterAction>) {
 }
 
 @Binding
-fun counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
+fun CoroutineScope.CounterStore() = store<CounterState, CounterAction>(
+    CounterState(0)
+) {
     for (action in this) {
         setState {
             when (action) {
@@ -86,5 +91,9 @@ fun counterStore() = store<CounterState, CounterAction>(CounterState(0)) {
     }
 }
 
-data class CounterState(val count: Int)
-enum class CounterAction { Inc, Dec }
+data class CounterState(val count: Int) : StoreState
+
+sealed class CounterAction : StoreAction {
+    object Inc : CounterAction()
+    object Dec : CounterAction()
+}

@@ -46,7 +46,7 @@ suspend fun popNavigatorOnceSecureSettingsGranted(
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     showToastRes: showToastRes,
     navigator: Navigator,
-    @FunApi toast: Boolean
+    @FunApi toast: Boolean = true
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission

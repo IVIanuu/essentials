@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun CoroutineScope.backupAndRestoreStore(
+fun CoroutineScope.BackupAndRestoreStore(
     backupData: backupData,
     restoreData: restoreData,
     showToastRes: showToastRes,

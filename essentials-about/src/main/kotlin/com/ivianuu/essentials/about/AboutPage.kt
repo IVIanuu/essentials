@@ -51,10 +51,11 @@ fun AboutPage(
 @FunBinding
 @Composable
 fun AboutSection(
+    buildInfo: BuildInfo,
     navigator: Navigator,
     @FunApi packageName: String,
-    @FunApi showHeader: Boolean,
-    @FunApi privacyPolicyUrl: PrivacyPolicyUrl?
+    @FunApi showHeader: Boolean = false,
+    @FunApi privacyPolicyUrl: PrivacyPolicyUrl? = null
 ) {
     if (showHeader) {
         Subheader {

@@ -30,15 +30,14 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun TwilightSettingsPage(store: rememberStore<TwilightSettingsState, TwilightSettingsAction>) {
-    val (state, dispatch) = store()
+fun TwilightSettingsPage(
+    state: TwilightSettingsState,
+    dispatch: (TwilightSettingsAction) -> Unit
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {

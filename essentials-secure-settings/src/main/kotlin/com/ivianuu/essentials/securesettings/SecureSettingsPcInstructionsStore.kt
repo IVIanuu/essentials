@@ -30,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Binding
-fun CoroutineScope.secureSettingsPcInstructionsStore(
+fun CoroutineScope.SecureSettingsPcInstructionsStore(
     buildInfo: BuildInfo,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted

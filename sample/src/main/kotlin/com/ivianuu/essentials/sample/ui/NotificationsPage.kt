@@ -68,24 +68,25 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore
+import com.ivianuu.essentials.ui.store.StoreAction
+import com.ivianuu.essentials.ui.store.StoreState
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @FunBinding
 @Composable
-fun NotificationsPage(store: rememberStore<NotificationsState, NotificationsAction>) {
+fun NotificationsPage(
+    state: NotificationsState,
+    dispatch: (NotificationsAction) -> Unit
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
     ) {
-        val (state, dispatch) = store()
-
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
@@ -171,7 +172,7 @@ private fun NotificationPermissions(
 }
 
 @Binding
-fun notificationStore(
+fun CoroutineScope.NotificationStore(
     hasPermissions: hasPermissions,
     notifications: UiNotifications,
     notificationStore: NotificationStore,
@@ -189,17 +190,14 @@ fun notificationStore(
         copy(hasPermissions = hasPermissions, notifications = notifications)
     }
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     for (action in this) {
         when (action) {
-            is RequestPermissions -> {
-                requestPermissions(listOf(permission))
-            }
-            is OpenNotification -> {
-                notificationStore.openNotification(action.notification.sbn.notification)
-            }
-            is DismissNotification -> {
-                notificationStore.dismissNotification(action.notification.sbn.key)
-            }
+            is RequestPermissions -> requestPermissions(listOf(permission))
+            is OpenNotification -> notificationStore
+                .openNotification(action.notification.sbn.notification)
+            is DismissNotification -> notificationStore
+                .dismissNotification(action.notification.sbn.key)
         }.exhaustive
     }
 }
@@ -249,9 +247,9 @@ fun notifications(
 data class NotificationsState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle
-)
+) : StoreState
 
-sealed class NotificationsAction {
+sealed class NotificationsAction : StoreAction {
     object RequestPermissions : NotificationsAction()
     data class OpenNotification(val notification: UiNotification) : NotificationsAction()
     data class DismissNotification(val notification: UiNotification) : NotificationsAction()

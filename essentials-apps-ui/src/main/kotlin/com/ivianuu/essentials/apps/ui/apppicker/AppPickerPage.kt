@@ -32,9 +32,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.component1
-import com.ivianuu.essentials.ui.store.component2
-import com.ivianuu.essentials.ui.store.rememberStore1
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -42,16 +39,13 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @FunBinding
 @Composable
 fun AppPickerPage(
-    store: rememberStore1<AppPickerState, AppPickerAction, AppFilter>,
-    @FunApi appFilter: AppFilter,
-    @FunApi title: String?
+    state: AppPickerState,
+    dispatch: (AppPickerAction) -> Unit
 ) {
-    val (state, dispatch) = store(appFilter)
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title ?: stringResource(R.string.es_title_app_picker)) }
+                title = { Text(state.title ?: stringResource(R.string.es_title_app_picker)) }
             )
         }
     ) {

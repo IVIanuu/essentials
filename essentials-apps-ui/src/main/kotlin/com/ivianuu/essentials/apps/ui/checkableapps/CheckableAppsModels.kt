@@ -25,6 +25,14 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.store.StoreAction
 import com.ivianuu.essentials.ui.store.StoreState
+import kotlinx.coroutines.flow.Flow
+
+data class CheckableAppsParams(
+    val checkedApps: Flow<Set<String>>,
+    val onCheckedAppsChanged: (Set<String>) -> Unit,
+    val appFilter: AppFilter,
+    val appBarTitle: String
+)
 
 @Immutable
 data class CheckableApp(
@@ -36,8 +44,8 @@ data class CheckableApp(
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
-    val onCheckedAppsChanged: ((Set<String>) -> Unit)? = null,
     val appFilter: AppFilter = DefaultAppFilter,
+    val appBarTitle: String
 ) : StoreState {
     val checkableApps = apps
         .map { it.filter(appFilter) }
@@ -52,13 +60,7 @@ data class CheckableAppsState(
 }
 
 sealed class CheckableAppsAction : StoreAction {
-    data class UpdateRefs(
-        val checkedApps: Set<String>,
-        val onCheckedAppsChanged: (Set<String>) -> Unit,
-        val appFilter: AppFilter
-    ) : CheckableAppsAction()
-
-    data class ToggleApp(val app: CheckableApp) : CheckableAppsAction()
     object SelectAll : CheckableAppsAction()
     object DeselectAll : CheckableAppsAction()
+    data class UpdateAppCheckState(val app: CheckableApp, val value: Boolean) : CheckableAppsAction()
 }

@@ -28,7 +28,7 @@ import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
 @Binding
-fun CoroutineScope.shortcutPickerStore(
+fun CoroutineScope.ShortcutPickerStore(
     navigator: Navigator,
     getAllShortcuts: getAllShortcuts,
     extractShortcut: extractShortcut,
