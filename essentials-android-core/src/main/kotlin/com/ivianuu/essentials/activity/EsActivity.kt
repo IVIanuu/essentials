@@ -21,13 +21,17 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiComponentAmbient
+import com.ivianuu.essentials.ui.UiComponentFactoryOwner
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -51,8 +55,14 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeViewModelStoreOwner.set(container, this)
 
         composition = container.setContent(Recomposer.current()) {
-            activityComponent.mergeComponent<EsActivityComponent>().decorateUi {
-                Content()
+            val uiComponent = remember {
+                activityComponent.mergeComponent<UiComponentFactoryOwner>()
+                    .uiComponentFactory()
+            }
+            Providers(UiComponentAmbient provides uiComponent) {
+                uiComponent.mergeComponent<EsActivityComponent>().decorateUi {
+                    Content()
+                }
             }
         }
     }
@@ -66,7 +76,7 @@ abstract class EsActivity : AppCompatActivity() {
     protected abstract fun Content()
 }
 
-@MergeInto(ActivityComponent::class)
+@MergeInto(UiComponent::class)
 interface EsActivityComponent {
     val decorateUi: DecorateUi
 }
