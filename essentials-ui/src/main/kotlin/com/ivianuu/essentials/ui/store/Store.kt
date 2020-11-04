@@ -18,20 +18,16 @@ package com.ivianuu.essentials.ui.store
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.ui.common.rememberRetained
-import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
@@ -53,18 +49,18 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
-typealias RetainedStore<S, A> = Store<S, A>
+typealias RememberedStore<S, A> = Store<S, A>
 
 @BindingAdapter
 annotation class StoreBinding {
     companion object {
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> RetainedStore<S, A>._storeState(): S = snapshotState
+        fun <T : Store<S, A>, S, A> RememberedStore<S, A>._storeState(): S = snapshotState
 
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> RetainedStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
+        fun <T : Store<S, A>, S, A> RememberedStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
             { dispatch(it) }
         }
 
@@ -73,7 +69,7 @@ annotation class StoreBinding {
         inline fun <reified T : Store<S, A>, reified S, reified A> retainedStore(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> T
-        ): RetainedStore<S, A> {
+        ): RememberedStore<S, A> {
             return rememberRetained(key = typeOf<Store<S, A>>()) {
                 RetainedStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store
