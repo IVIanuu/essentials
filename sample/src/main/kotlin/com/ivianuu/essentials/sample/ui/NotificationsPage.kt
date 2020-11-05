@@ -45,9 +45,7 @@ import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerSe
 import com.ivianuu.essentials.notificationlistener.NotificationStore
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runCatching
@@ -56,7 +54,6 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
 import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -69,7 +66,7 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.StoreBinding
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -171,7 +168,7 @@ private fun NotificationPermissions(
     }
 }
 
-@StoreBinding
+@UiStoreBinding
 fun CoroutineScope.NotificationStore(
     hasPermissions: hasPermissions,
     notifications: UiNotifications,

@@ -29,16 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.StoreBinding
-import com.ivianuu.injekt.Binding
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.RetainedActivityComponent
 import kotlinx.coroutines.CoroutineScope
 
 @FunBinding
@@ -77,7 +74,7 @@ fun CounterPage(
     }
 }
 
-@StoreBinding
+@UiStoreBinding
 fun CoroutineScope.CounterStore() = store<CounterState, CounterAction>(
     CounterState(0)
 ) {

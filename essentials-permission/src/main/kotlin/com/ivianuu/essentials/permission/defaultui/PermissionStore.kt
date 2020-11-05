@@ -18,22 +18,17 @@ package com.ivianuu.essentials.permission.defaultui
 
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
-import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.store.StoreBinding
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 
-@StoreBinding
+@UiStoreBinding
 fun CoroutineScope.PermissionStore(
     hasPermissions: hasPermissions,
     logger: Logger,

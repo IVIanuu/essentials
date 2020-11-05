@@ -23,12 +23,11 @@ import com.ivianuu.essentials.twilight.data.TwilightModePref
 import com.ivianuu.essentials.twilight.data.UseBlackInDarkModePref
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateTwilightMode
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateUseBlackInDarkMode
-import com.ivianuu.essentials.ui.store.StoreBinding
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 
-@StoreBinding
+@UiStoreBinding
 fun CoroutineScope.TwilightSettingsStore(
     twilightModePref: TwilightModePref,
     useBlackInDarkModePref: UseBlackInDarkModePref

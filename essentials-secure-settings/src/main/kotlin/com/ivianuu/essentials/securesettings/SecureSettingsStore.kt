@@ -22,14 +22,12 @@ import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.store.StoreBinding
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.exhaustive
-import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@StoreBinding
+@UiStoreBinding
 fun CoroutineScope.SecureSettingsStore(
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,

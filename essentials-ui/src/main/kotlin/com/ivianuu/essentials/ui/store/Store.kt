@@ -49,36 +49,36 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
-typealias RememberedStore<S, A> = Store<S, A>
+typealias UiStore<S, A> = Store<S, A>
 
 @BindingAdapter
-annotation class StoreBinding {
+annotation class UiStoreBinding {
     companion object {
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> RememberedStore<S, A>._storeState(): S = snapshotState
+        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeState(): S = snapshotState
 
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> RememberedStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
+        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
             { dispatch(it) }
         }
 
         @Binding
         @Composable
-        inline fun <reified T : Store<S, A>, reified S, reified A> retainedStore(
+        inline fun <reified T : Store<S, A>, reified S, reified A> uiStore(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> T
-        ): RememberedStore<S, A> {
+        ): UiStore<S, A> {
             return rememberRetained(key = typeOf<Store<S, A>>()) {
-                RetainedStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
+                UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store
         }
     }
 }
 
 @PublishedApi
-internal class RetainedStoreRunner<S, A>(
+internal class UiStoreRunner<S, A>(
     private val coroutineScope: CoroutineScope,
     store: (CoroutineScope) -> Store<S, A>
 ) : DisposableHandle {
@@ -91,4 +91,3 @@ internal class RetainedStoreRunner<S, A>(
 @Composable
 val <S> Store<S, *>.snapshotState: S
     get() = state.collectAsState().value
-
