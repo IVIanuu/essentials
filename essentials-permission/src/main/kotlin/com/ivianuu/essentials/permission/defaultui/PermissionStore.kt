@@ -20,6 +20,7 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
+import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop

@@ -21,6 +21,7 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.Deselect
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.store.currentState
+import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.StoreBinding

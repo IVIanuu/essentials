@@ -55,6 +55,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
+import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tuples.combine
