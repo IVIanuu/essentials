@@ -68,13 +68,14 @@ inline fun <S, A, T> Flow<T>.setStateIn(
         scope.setState {
             reducer(it)
         }
-    }
-        .launchIn(scope)
+    }.launchIn(scope)
 }
 
 suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
     for (action in this) block(action)
 }
+
+suspend inline fun <S, A> StoreScope<S, A>.awaitAction(): A = iterator().next()
 
 fun <S, A> CoroutineScope.store(
     initial: S,
