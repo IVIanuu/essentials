@@ -24,11 +24,12 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun BackupAndRestorePage(dispatch: (BackupAndRestoreAction) -> Unit) {
+fun BackupAndRestorePage(dispatch: @Dispatch (BackupAndRestoreAction) -> Unit) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {

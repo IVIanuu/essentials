@@ -29,14 +29,16 @@ import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun PermissionPage(
-    state: PermissionState,
-    dispatch: (PermissionAction) -> Unit
+    state: @State PermissionState,
+    dispatch: @Dispatch (PermissionAction) -> Unit
 ) {
     Scaffold(
         topBar = {

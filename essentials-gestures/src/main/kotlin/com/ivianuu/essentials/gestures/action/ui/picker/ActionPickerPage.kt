@@ -24,14 +24,16 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun ActionPickerPage(
-    state: ActionPickerState,
-    dispatch: (ActionPickerAction) -> Unit,
+    state: @State ActionPickerState,
+    dispatch: @Dispatch (ActionPickerAction) -> Unit,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }

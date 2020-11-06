@@ -51,25 +51,15 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
-typealias UiStore<S, A> = Store<S, A>
-
 @BindingAdapter
 annotation class UiStoreBinding {
     companion object {
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeState(): S = component1()
-
-        @Binding
-        @Composable
-        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeDispatch(): (A) -> Unit = component2()
-
-        @Binding
-        @Composable
         inline fun <reified T : Store<S, A>, reified S, reified A> uiStore(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> T
-        ): UiStore<S, A> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
+        ): Store<S, A> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
 
         @PublishedApi
         @Composable
@@ -77,7 +67,7 @@ annotation class UiStoreBinding {
             defaultDispatcher: DefaultDispatcher,
             type: KType,
             provider: (CoroutineScope) -> Store<S, A>
-        ): UiStore<S, A> {
+        ): Store<S, A> {
             return rememberRetained(key = type) {
                 UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store

@@ -25,13 +25,14 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPage(
-    dispatch: (SecureSettingsAction) -> Unit,
+    dispatch: @Dispatch (SecureSettingsAction) -> Unit,
     @FunApi showHideNavBarHint: Boolean = false
 ) {
     Scaffold(

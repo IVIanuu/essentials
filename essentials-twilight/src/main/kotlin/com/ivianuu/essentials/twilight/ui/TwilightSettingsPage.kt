@@ -30,13 +30,15 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun TwilightSettingsPage(
-    state: TwilightSettingsState,
-    dispatch: (TwilightSettingsAction) -> Unit
+    state: @State TwilightSettingsState,
+    dispatch: @Dispatch (TwilightSettingsAction) -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }

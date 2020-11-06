@@ -69,6 +69,8 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
@@ -81,8 +83,8 @@ import kotlinx.coroutines.flow.map
 @FunBinding
 @Composable
 fun NotificationsPage(
-    state: NotificationsState,
-    dispatch: (NotificationsAction) -> Unit
+    state: @State NotificationsState,
+    dispatch: @Dispatch (NotificationsAction) -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
