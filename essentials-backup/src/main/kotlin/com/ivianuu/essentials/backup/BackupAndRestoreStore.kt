@@ -18,9 +18,12 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 
 @UiStoreBinding

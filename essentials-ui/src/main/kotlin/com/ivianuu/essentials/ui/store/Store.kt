@@ -56,7 +56,7 @@ annotation class UiStoreBinding {
     companion object {
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeState(): S = snapshotState
+        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeState(): S = component1()
 
         @Binding
         @Composable
@@ -89,5 +89,9 @@ internal class UiStoreRunner<S, A>(
 }
 
 @Composable
-val <S> Store<S, *>.snapshotState: S
-    get() = state.collectAsState().value
+operator fun <S> Store<S, *>.component1(): S = state.collectAsState().value
+
+@Composable
+operator fun <A> Store<*, A>.component2(): (A) -> Unit = {
+    dispatch(it)
+}

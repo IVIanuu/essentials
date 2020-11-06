@@ -18,10 +18,13 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.getAction
+import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -29,6 +32,7 @@ import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.exhaustive
+import com.ivianuu.essentials.util.stringResource
 import kotlinx.coroutines.CoroutineScope
 
 @UiStoreBinding

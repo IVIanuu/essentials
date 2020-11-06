@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
+import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.*
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
