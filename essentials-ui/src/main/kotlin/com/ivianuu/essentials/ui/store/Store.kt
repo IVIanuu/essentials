@@ -72,6 +72,7 @@ annotation class UiStoreBinding {
         ): UiStore<S, A> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
 
         @PublishedApi
+        @Composable
         internal fun <S, A> uiStoreImpl(
             defaultDispatcher: DefaultDispatcher,
             type: KType,
