@@ -28,12 +28,14 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 fun <S, V> StoreScope<S, *>.execute(
@@ -60,17 +62,22 @@ annotation class UiStoreBinding {
 
         @Binding
         @Composable
-        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeDispatch(): (A) -> Unit = remember(this) {
-            { dispatch(it) }
-        }
+        fun <T : Store<S, A>, S, A> UiStore<S, A>._storeDispatch(): (A) -> Unit = component2()
 
         @Binding
         @Composable
         inline fun <reified T : Store<S, A>, reified S, reified A> uiStore(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> T
+        ): UiStore<S, A> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
+
+        @PublishedApi
+        internal fun <S, A> uiStoreImpl(
+            defaultDispatcher: DefaultDispatcher,
+            type: KType,
+            provider: (CoroutineScope) -> Store<S, A>
         ): UiStore<S, A> {
-            return rememberRetained(key = typeOf<Store<S, A>>()) {
+            return rememberRetained(key = type) {
                 UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store
         }
@@ -88,10 +95,20 @@ internal class UiStoreRunner<S, A>(
     }
 }
 
-@Composable
-operator fun <S> Store<S, *>.component1(): S = state.collectAsState().value
+@Qualifier
+@Target(AnnotationTarget.TYPE)
+annotation class State
 
 @Composable
-operator fun <A> Store<*, A>.component2(): (A) -> Unit = {
-    dispatch(it)
+@Binding
+operator fun <S> Store<S, *>.component1(): @State S = state.collectAsState().value
+
+@Qualifier
+@Target(AnnotationTarget.TYPE)
+annotation class Dispatch
+
+@Composable
+@Binding
+operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = remember(this) {
+    { dispatch(it) }
 }
