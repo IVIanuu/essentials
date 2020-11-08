@@ -90,16 +90,16 @@ internal class UiStoreRunner<S, A>(
 @Target(AnnotationTarget.TYPE)
 annotation class State
 
-@Composable
 @Binding
+@Composable
 operator fun <S> Store<S, *>.component1(): @State S = state.collectAsState().value
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 annotation class Dispatch
 
-@Composable
 @Binding
+@Composable
 operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = remember(this) {
     { dispatch(it) }
 }
