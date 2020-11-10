@@ -22,7 +22,6 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 
@@ -48,6 +47,6 @@ fun CoroutineScope.BackupAndRestoreStore(
                         showToastRes(R.string.es_restore_error)
                     }
             }
-        }.exhaustive
+        }
     }
 }

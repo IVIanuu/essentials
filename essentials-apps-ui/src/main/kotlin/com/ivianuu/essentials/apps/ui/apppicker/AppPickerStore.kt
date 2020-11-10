@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.ui.store.execute
-import com.ivianuu.essentials.util.exhaustive
 import kotlinx.coroutines.CoroutineScope
 
 @UiStoreBinding
@@ -48,6 +47,6 @@ fun CoroutineScope.AppPickerStore(
         when (action) {
             is FilterApps -> setState { copy(appFilter = action.appFilter) }
             is PickApp -> navigator.popTop(result = action.app)
-        }.exhaustive
+        }
     }
 }

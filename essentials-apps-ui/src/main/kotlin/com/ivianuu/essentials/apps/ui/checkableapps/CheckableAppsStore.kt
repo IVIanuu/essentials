@@ -26,7 +26,6 @@ import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.ui.store.executeIn
-import com.ivianuu.essentials.util.exhaustive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -81,6 +80,6 @@ fun CoroutineScope.checkableAppsStore(
             DeselectAll -> {
                 pushNewCheckedApps { it.clear() }
             }
-        }.exhaustive
+        }
     }
 }

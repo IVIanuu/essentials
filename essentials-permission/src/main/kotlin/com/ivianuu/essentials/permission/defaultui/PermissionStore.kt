@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.startUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -62,6 +61,6 @@ fun CoroutineScope.PermissionStore(
                 startUi()
                 updatePermissionsToProcessOrFinish()
             }
-        }.exhaustive
+        }
     }
 }

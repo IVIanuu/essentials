@@ -72,7 +72,6 @@ import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -200,7 +199,7 @@ fun CoroutineScope.NotificationStore(
                 .openNotification(action.notification.sbn.notification)
             is DismissNotification -> notificationStore
                 .dismissNotification(action.notification.sbn.key)
-        }.exhaustive
+        }
     }
 }
 

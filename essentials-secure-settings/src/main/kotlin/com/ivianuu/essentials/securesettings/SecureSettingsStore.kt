@@ -23,7 +23,6 @@ import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.util.exhaustive
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,6 +49,6 @@ fun CoroutineScope.SecureSettingsStore(
                     showToastRes(R.string.es_secure_settings_no_root)
                 }
             }
-        }.exhaustive
+        }
     }
 }

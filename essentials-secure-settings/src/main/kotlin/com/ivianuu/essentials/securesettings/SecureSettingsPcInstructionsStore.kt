@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.exhaustive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -50,6 +49,6 @@ fun CoroutineScope.SecureSettingsPcInstructionsStore(
             ShowXdaTutorial -> navigator.push(
                 UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
             )
-        }.exhaustive
+        }
     }
 }

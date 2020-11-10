@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev704"
+    const val version = "${Build.versionName}-dev705"
 }
 
 object Deps {
@@ -86,7 +86,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev703"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev705"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 

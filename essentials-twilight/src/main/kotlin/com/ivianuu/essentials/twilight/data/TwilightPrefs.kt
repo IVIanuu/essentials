@@ -16,10 +16,38 @@
 
 package com.ivianuu.essentials.twilight.data
 
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
+import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
+
+data class TwilightPrefsState(
+    val twilightMode: TwilightMode = TwilightMode.System,
+    val useBlackInDarkMode: Boolean = false
+)
+
+sealed class TwilightPrefsAction {
+    data class UpdateTwilightMode(val value: TwilightMode) : TwilightPrefsAction()
+    data class UpdateUseBlackInDarkMode(val value: Boolean) : TwilightPrefsAction()
+}
+
+@Binding
+fun TwilightPrefsStore(
+    scope: GlobalScope
+) = scope.store<TwilightPrefsState, TwilightPrefsAction>(
+    TwilightPrefsState()
+) {
+    for (action in this) {
+        when (action) {
+            is UpdateTwilightMode -> setState { copy(twilightMode = action.value) }
+            is UpdateUseBlackInDarkMode -> setState { copy(useBlackInDarkMode = action.value) }
+        }
+    }
+}
 
 typealias TwilightModePref = DataStore<TwilightMode>
 @Binding(ApplicationComponent::class)
