@@ -19,6 +19,8 @@ package com.ivianuu.essentials.datastore.disk
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import java.lang.reflect.Type
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
     override fun serialize(data: T): String {
@@ -39,9 +41,6 @@ class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
 }
 
 class MoshiSerializerFactory(private val moshi: Moshi) {
-
-    inline fun <reified T> create(): MoshiSerializer<T> =
-        create(javaTypeOf<T>())
-
-    fun <T> create(type: Type): MoshiSerializer<T> = MoshiSerializer(moshi.adapter(type))
+    inline fun <reified T> create(): MoshiSerializer<T> = create(typeOf<T>())
+    fun <T> create(type: KType): MoshiSerializer<T> = MoshiSerializer(moshi.adapter(type.asJavaType()))
 }

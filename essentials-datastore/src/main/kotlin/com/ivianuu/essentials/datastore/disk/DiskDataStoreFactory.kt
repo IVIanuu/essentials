@@ -19,6 +19,8 @@ package com.ivianuu.essentials.datastore.disk
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 import java.io.File
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 class DiskDataStoreFactory(
     private val scope: CoroutineScope,
@@ -36,7 +38,17 @@ class DiskDataStoreFactory(
         noinline produceDefaultData: () -> T
     ): DataStore<T> = create(
         name = name,
-        produceSerializer = { serializerFactory.create() },
+        type = typeOf<T>(),
+        produceDefaultData = produceDefaultData
+    )
+
+    fun <T> create(
+        name: String,
+        type: KType,
+        produceDefaultData: () -> T
+    ): DataStore<T> = create(
+        name = name,
+        produceSerializer = { serializerFactory.create(type) },
         produceDefaultData = produceDefaultData
     )
 
