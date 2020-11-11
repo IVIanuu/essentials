@@ -31,6 +31,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-android-core"))
+    api(project(":essentials-android-data"))
     api(project(":essentials-broadcast"))
     api(project(":essentials-screen-state"))
     kapt(project(":essentials-compiler"))

@@ -21,8 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateTwilightMode
-import com.ivianuu.essentials.twilight.ui.TwilightSettingsAction.UpdateUseBlackInDarkMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
+import com.ivianuu.essentials.twilight.data.TwilightPrefsState
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -37,8 +38,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TwilightSettingsPage(
-    state: @State TwilightSettingsState,
-    dispatch: @Dispatch (TwilightSettingsAction) -> Unit
+    state: @State TwilightPrefsState,
+    dispatch: @Dispatch (TwilightPrefsAction) -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }

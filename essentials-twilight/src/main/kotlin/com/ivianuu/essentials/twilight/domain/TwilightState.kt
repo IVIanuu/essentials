@@ -22,10 +22,9 @@ import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChanges
-import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightModePref
-import com.ivianuu.essentials.twilight.data.UseBlackInDarkModePref
+import com.ivianuu.essentials.twilight.data.TwilightPrefsState
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -53,13 +52,9 @@ fun twilightState(
     batteryTwilightState: BatteryTwilightState,
     systemTwilightState: SystemTwilightState,
     timeTwilightState: TimeTwilightState,
-    twilightModePref: TwilightModePref,
-    useBlackInDarkModePref: UseBlackInDarkModePref
+    twilightPrefsState: @State Flow<TwilightPrefsState>
 ): TwilightStateFlow {
-    return combine(
-        twilightModePref.data,
-        useBlackInDarkModePref.data
-    ).flatMapLatest { (mode, useBlack) ->
+    return twilightPrefsState.flatMapLatest { (mode, useBlack) ->
         (when (mode) {
             TwilightMode.System -> systemTwilightState
             TwilightMode.Light -> flowOf(false)

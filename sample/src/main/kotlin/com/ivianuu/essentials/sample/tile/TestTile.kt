@@ -16,38 +16,38 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.tile.onEachTileClick
 import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightModePref
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
+import com.ivianuu.essentials.twilight.data.TwilightPrefsState
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.StateFlow
 
 @TileBinding(1)
-fun CoroutineScope.TestTile(twilightModePref: TwilightModePref) = tile(
-    initial = TileState(
-        iconRes = R.drawable.es_ic_accessibility,
-        label = "Hello"
-    )
-) {
-    twilightModePref.data
-        .map {
-            TileState(
-                label = it.name,
-                status = if (it == TwilightMode.Light) TileState.Status.Active
-                else TileState.Status.Inactive
-            )
-        }
-        .setStateIn(this) { it }
-
+fun CoroutineScope.TestTile(
+    twilightPrefsState: @State StateFlow<TwilightPrefsState>,
+    dispatch: @Dispatch (TwilightPrefsAction) -> Unit
+) = tile(twilightPrefsState.value.toTileState()) {
+    twilightPrefsState.setStateIn(this) { it.toTileState() }
     onEachTileClick {
-        twilightModePref.updateData {
-            if (it == TwilightMode.Light) TwilightMode.Dark
-            else TwilightMode.Light
-        }
+        dispatch(
+            UpdateTwilightMode(
+                if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark
+                else TwilightMode.Light
+            )
+        )
     }
 }
+
+private fun TwilightPrefsState.toTileState() = TileState(
+    label = twilightMode.name,
+    status = if (twilightMode == TwilightMode.Light) TileState.Status.Active
+    else TileState.Status.Inactive
+)
