@@ -19,7 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.ShowToPcInstructions
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -52,7 +52,7 @@ fun SecureSettingsPage(
             ListItem(
                 title = { Text(R.string.es_pref_use_pc) },
                 subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                onClick = { dispatch(ShowToPcInstructions) }
+                onClick = { dispatch(OpenPcInstructions) }
             )
 
             ListItem(

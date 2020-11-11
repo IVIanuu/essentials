@@ -21,9 +21,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowXdaTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -66,19 +66,19 @@ fun SecureSettingsPcInstructionsPage(
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-                onClick = { dispatch(ShowGadgetHacksTutorial) }
+                onClick = { dispatch(OpenGadgetHacksTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-                onClick = { dispatch(ShowLifeHackerTutorial) }
+                onClick = { dispatch(OpenLifeHackerTutorial) }
             )
 
             ListItem(
                 leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
                 title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-                onClick = { dispatch(ShowXdaTutorial) }
+                onClick = { dispatch(OpenXdaTutorial) }
             )
 
             ClipboardListItem(

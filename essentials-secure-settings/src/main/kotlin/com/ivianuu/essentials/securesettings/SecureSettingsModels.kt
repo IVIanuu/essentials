@@ -20,5 +20,5 @@ object SecureSettingsState
 
 sealed class SecureSettingsAction {
     object GrantPermissionsViaRoot : SecureSettingsAction()
-    object ShowToPcInstructions : SecureSettingsAction()
+    object OpenPcInstructions : SecureSettingsAction()
 }

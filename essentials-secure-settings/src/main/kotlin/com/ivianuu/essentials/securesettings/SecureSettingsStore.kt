@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.ShowToPcInstructions
+import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -41,7 +41,7 @@ fun CoroutineScope.SecureSettingsStore(
 
     for (action in this) {
         when (action) {
-            ShowToPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
+            OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
             GrantPermissionsViaRoot -> {
                 if (grantSecureSettingsPermissionViaRoot()) {
                     showToastRes(R.string.es_secure_settings_permission_granted)

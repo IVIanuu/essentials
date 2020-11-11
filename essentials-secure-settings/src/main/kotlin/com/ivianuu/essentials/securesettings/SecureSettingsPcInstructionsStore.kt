@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.ShowXdaTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -40,13 +40,13 @@ fun CoroutineScope.SecureSettingsPcInstructionsStore(
     launch { popNavigatorOnceSecureSettingsGranted(false) }
     for (action in this) {
         when (action) {
-            ShowGadgetHacksTutorial -> navigator.push(
+            OpenGadgetHacksTutorial -> navigator.push(
                 UrlRoute("https://youtu.be/CDuxcrrWLnY")
             )
-            ShowLifeHackerTutorial -> navigator.push(
+            OpenLifeHackerTutorial -> navigator.push(
                 UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
             )
-            ShowXdaTutorial -> navigator.push(
+            OpenXdaTutorial -> navigator.push(
                 UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
             )
         }
