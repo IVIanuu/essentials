@@ -77,6 +77,14 @@ suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
 
 suspend inline fun <S, A> StoreScope<S, A>.awaitAction(): A = iterator().next()
 
+suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reducer: S.(A) -> S) {
+    onEachAction {
+        setState {
+            reducer(it)
+        }
+    }
+}
+
 fun <S, A> CoroutineScope.store(
     initial: S,
     block: suspend StoreScope<S, A>.() -> Unit

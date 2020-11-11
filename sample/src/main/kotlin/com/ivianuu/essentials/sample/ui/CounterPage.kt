@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.reduceState
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -80,12 +81,10 @@ fun CounterPage(
 fun CoroutineScope.CounterStore() = store<CounterState, CounterAction>(
     CounterState(0)
 ) {
-    for (action in this) {
-        setState {
-            when (action) {
-                Inc -> copy(count = count + 1)
-                Dec -> copy(count = count - 1)
-            }
+    reduceState { action ->
+        when (action) {
+            Inc -> copy(count = count + 1)
+            Dec -> copy(count = count - 1)
         }
     }
 }
