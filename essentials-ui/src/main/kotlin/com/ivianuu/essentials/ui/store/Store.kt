@@ -34,6 +34,7 @@ import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
@@ -95,7 +96,12 @@ annotation class State
 operator fun <S> Store<S, *>.component1(): @State S = state.collectAsState().value
 
 @Binding
-fun <S> Store<S, *>.state(): @State Flow<S> = state
+inline val <S> @State StateFlow<S>.flow: @State Flow<S>
+    get() = this
+
+@Binding
+inline val <S> Store<S, *>.stateFlow: @State StateFlow<S>
+    get() = state
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
