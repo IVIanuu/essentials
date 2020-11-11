@@ -94,12 +94,12 @@ annotation class State
 @Composable
 operator fun <S> Store<S, *>.component1(): @State S = state.collectAsState().value
 
+@Binding
+fun <S> Store<S, *>.state(): @State Flow<S> = state
+
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 annotation class Dispatch
 
 @Binding
-@Composable
-operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = remember(this) {
-    { dispatch(it) }
-}
+operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = { dispatch(it) }
