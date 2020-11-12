@@ -34,4 +34,5 @@ dependencies {
     api(Deps.AndroidX.Compose.material)
     api(Deps.Injekt.android)
     api(project(":essentials-core"))
+    implementation(Deps.kotlinxImmutable)
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -38,7 +39,7 @@ internal fun singleActionIcon(icon: @Composable () -> Unit): ActionIcon = flowOf
 
 internal fun singleActionIcon(icon: VectorAsset) = singleActionIcon { Icon(icon) }
 
-internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(vectorResource(id)) }
+internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
 
 @FunBinding
 suspend fun runRootCommand(

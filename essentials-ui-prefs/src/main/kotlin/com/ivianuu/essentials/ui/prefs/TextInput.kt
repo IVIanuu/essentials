@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.prefs
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,7 @@ fun TextInputDialogListItem(
     trailing: @Composable (() -> Unit)? = null,
     dialogTitle: @Composable (() -> Unit)? = title,
     dialogLabel: @Composable (() -> Unit)? = null,
-    dialogKeyboardType: KeyboardType = KeyboardType.Text,
+    dialogKeyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     allowEmpty: Boolean = true,
     modifier: Modifier = Modifier
 ) {
@@ -54,7 +55,7 @@ fun TextInputDialogListItem(
                 onValueChange = { currentValue = it },
                 title = dialogTitle,
                 label = dialogLabel,
-                keyboardType = dialogKeyboardType,
+                keyboardOptions = dialogKeyboardOptions,
                 positiveButton = {
                     TextButton(
                         enabled = allowEmpty || currentValue.isNotEmpty(),

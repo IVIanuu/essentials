@@ -28,6 +28,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -61,6 +62,6 @@ fun AutoRotationIcon(setting: AutoRotationSetting): AutoRotationIcon = setting.d
         if (it) R.drawable.es_ic_screen_rotation
         else R.drawable.es_ic_screen_lock_rotation
     }
-    .map { { Icon(vectorResource(it)) } }
+    .map { { Icon(it) } }
 
 typealias AutoRotationSetting = DataStore<Int>

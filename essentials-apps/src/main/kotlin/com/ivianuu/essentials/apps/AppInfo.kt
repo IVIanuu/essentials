@@ -21,5 +21,4 @@ import androidx.compose.runtime.Immutable
 /**
  * Simple application info
  */
-@Immutable
 data class AppInfo(val packageName: String, val appName: String)

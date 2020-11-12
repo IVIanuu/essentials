@@ -32,13 +32,11 @@ data class CheckableAppsParams(
     val appBarTitle: String
 )
 
-@Immutable
 data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )
 
-@Immutable
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),

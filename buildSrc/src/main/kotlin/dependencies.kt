@@ -32,7 +32,7 @@ object Publishing {
 }
 
 object Deps {
-    const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
+    const val accompanistCoil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
 
     object AndroidX {
@@ -40,7 +40,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-alpha06"
+            const val version = "1.0.0-alpha07"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
@@ -111,6 +111,8 @@ object Deps {
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
     }
+
+    const val kotlinxImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
 
     const val mockk = "io.mockk:mockk:1.10.0"
 

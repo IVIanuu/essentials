@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -33,7 +34,7 @@ import com.ivianuu.essentials.ui.navigation.popTop
 fun TextInputRoute(
     initial: String = "",
     label: @Composable () -> Unit,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions,
     title: @Composable (() -> Unit)? = null,
     allowEmpty: Boolean = true
 ) = DialogRoute {
@@ -45,7 +46,7 @@ fun TextInputRoute(
         value = currentValue,
         onValueChange = { currentValue = it },
         label = label,
-        keyboardType = keyboardType,
+        keyboardOptions = keyboardOptions,
         title = title,
         positiveButton = {
             TextButton(
@@ -66,7 +67,7 @@ fun TextInputDialog(
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
@@ -85,7 +86,7 @@ fun TextInputDialog(
                 TextField(
                     value = value,
                     onValueChange = onValueChange,
-                    keyboardType = keyboardType,
+                    keyboardOptions = keyboardOptions,
                     textStyle = MaterialTheme.typography.subtitle1,
                     label = label ?: {}
                 )

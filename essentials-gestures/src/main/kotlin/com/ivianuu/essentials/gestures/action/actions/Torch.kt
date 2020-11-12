@@ -25,6 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.torch.TorchState
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
@@ -56,6 +57,6 @@ fun torchIcon(torchState: @State Flow<TorchState>): TorchIcon = torchState
     }
     .map {
         {
-            Icon(vectorResource(it))
+            Icon(it)
         }
     }

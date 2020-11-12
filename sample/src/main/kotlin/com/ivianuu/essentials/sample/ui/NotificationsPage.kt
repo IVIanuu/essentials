@@ -60,6 +60,7 @@ import com.ivianuu.essentials.store.setStateIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
@@ -144,7 +145,7 @@ private fun NotificationsList(
                 trailing = if (notification.isClearable) {
                     {
                         IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                            Icon(vectorResource(R.drawable.es_ic_clear))
+                            Icon(R.drawable.es_ic_clear)
                         }
                     }
                 } else null
@@ -235,7 +236,7 @@ fun notifications(
                                 }
                             },
                             failure = {
-                                { Icon(vectorResource(R.drawable.es_ic_error)) }
+                                { Icon(R.drawable.es_ic_error) }
                             }
                         ),
                         color = Color(sbn.notification.color),

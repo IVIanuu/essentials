@@ -33,6 +33,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageAsset
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -74,7 +75,7 @@ class ShortcutActionPickerDelegate(
     override val title: String
         get() = stringResource(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
-        Icon(vectorResource(R.drawable.es_ic_content_cut))
+        Icon(R.drawable.es_ic_content_cut)
     }
 
     override suspend fun getResult(): ActionPickerResult? {

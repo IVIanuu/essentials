@@ -60,7 +60,6 @@ fun <T> SingleChoiceDialogListItem(
 }
 
 object SingleChoiceDialogListItem {
-    @Immutable
     data class Item<T>(
         val title: String,
         val value: T

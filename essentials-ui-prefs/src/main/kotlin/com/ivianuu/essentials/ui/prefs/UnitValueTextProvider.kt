@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Percentage
 import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Px
 import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Seconds
 
-@Immutable
 class UnitValueTextProvider(
     private val context: Context,
     private val unit: Unit

@@ -20,7 +20,6 @@ import android.content.Intent
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.ImageAsset
 
-@Immutable
 data class Shortcut(
     val intent: Intent,
     val name: String,

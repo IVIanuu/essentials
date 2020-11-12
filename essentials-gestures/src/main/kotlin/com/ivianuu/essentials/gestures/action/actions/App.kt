@@ -33,6 +33,7 @@ import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.stringResource
@@ -73,7 +74,7 @@ class AppActionPickerDelegate(
     override val title: String
         get() = stringResource(R.string.es_action_app)
     override val icon: @Composable () -> Unit
-        get() = { Icon(vectorResource(R.drawable.es_ic_apps)) }
+        get() = { Icon(R.drawable.es_ic_apps) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.push<AppInfo> {

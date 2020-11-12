@@ -35,7 +35,6 @@ import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CompletableDeferred
 
-@Immutable
 class Route(
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,

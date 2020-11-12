@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.popTop
 
 object PopupMenu {
-    @Immutable
     data class Item(
         val onSelected: () -> Unit,
         val content: @Composable () -> Unit

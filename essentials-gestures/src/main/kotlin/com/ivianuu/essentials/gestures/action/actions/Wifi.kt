@@ -23,6 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
@@ -64,6 +65,6 @@ fun wifiIcon(
     }
     .map {
         {
-            Icon(vectorResource(it))
+            Icon(it)
         }
     }

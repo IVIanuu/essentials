@@ -32,22 +32,18 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-@Immutable
 sealed class Resource<out T> {
     open operator fun invoke(): T? = null
 }
 
-@Immutable
 object Idle : Resource<Nothing>() {
     override fun toString(): String = "Idle"
 }
 
-@Immutable
 object Loading : Resource<Nothing>() {
     override fun toString(): String = "Loading"
 }
 
-@Immutable
 class Success<T>(val value: T) : Resource<T>() {
     override fun invoke() = value
 
@@ -67,7 +63,6 @@ class Success<T>(val value: T) : Resource<T>() {
     override fun toString(): String = "Ok(value=$value)"
 }
 
-@Immutable
 class Error(val error: Throwable) : Resource<Nothing>() {
 
     override fun equals(other: Any?): Boolean {

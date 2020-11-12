@@ -25,6 +25,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -65,19 +66,19 @@ fun SecureSettingsPcInstructionsPage(
             )
 
             ListItem(
-                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
+                leading = { Icon(R.drawable.es_ic_link) },
                 title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
                 onClick = { dispatch(OpenGadgetHacksTutorial) }
             )
 
             ListItem(
-                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
+                leading = { Icon(R.drawable.es_ic_link) },
                 title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
                 onClick = { dispatch(OpenLifeHackerTutorial) }
             )
 
             ListItem(
-                leading = { Icon(vectorResource(R.drawable.es_ic_link)) },
+                leading = { Icon(R.drawable.es_ic_link) },
                 title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
                 onClick = { dispatch(OpenXdaTutorial) }
             )

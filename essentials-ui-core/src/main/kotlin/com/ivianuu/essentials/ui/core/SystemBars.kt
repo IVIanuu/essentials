@@ -36,7 +36,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.globalBounds
-import androidx.compose.ui.onGloballyPositioned
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Dp
@@ -95,7 +95,6 @@ fun ProvideSystemBarManager(@FunApi children: @Composable () -> Unit) {
 
 private val SystemBarManagerAmbient = staticAmbientOf<SystemBarManager>()
 
-@Immutable
 data class SystemBarStyle(
     val barColor: Color,
     val lightIcons: Boolean,

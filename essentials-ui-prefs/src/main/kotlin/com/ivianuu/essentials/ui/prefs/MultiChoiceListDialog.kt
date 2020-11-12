@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.foundation.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -77,7 +76,6 @@ fun <T> MultiChoiceDialogListItem(
 }
 
 object MultiChoiceDialogListItem {
-    @Immutable
     data class Item<T>(
         val title: String,
         val value: T

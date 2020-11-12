@@ -28,7 +28,6 @@ import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.flow.Flow
 
-@Immutable
 data class Action(
     val key: String,
     val title: String,

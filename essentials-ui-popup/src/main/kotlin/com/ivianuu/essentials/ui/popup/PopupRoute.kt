@@ -21,10 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.gesture.tapGestureFilter
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.ConfigurationAmbient
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable

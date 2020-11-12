@@ -35,6 +35,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
@@ -69,7 +70,7 @@ fun BottomNavigationPage() {
                             BottomNavigationItem(
                                 selected = item == selectedItem,
                                 onClick = { selectedItem = item },
-                                icon = { Icon(vectorResource(item.icon)) },
+                                icon = { Icon(item.icon) },
                                 label = { Text(item.title) }
                             )
                         }

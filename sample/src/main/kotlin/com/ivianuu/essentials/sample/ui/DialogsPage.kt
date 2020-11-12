@@ -24,17 +24,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.getValue
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.state
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -211,25 +213,24 @@ fun DialogsPage() {
                 }
 
                 val singleChoiceItems = listOf(1, 2, 3, 4, 5)
-                val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = state { 1 }
+                var selectedSingleChoiceItem by rememberState { 1 }
                 DialogLauncherButton(
                     text = "Single choice list"
                 ) {
-                    val (tmpSelectedItem, setTmpSelectedItem) = state { selectedSingleChoiceItem }
+                    var tmpSelectedItem by rememberState { selectedSingleChoiceItem }
 
                     SingleChoiceListDialog(
                         title = { Text("Single choice") },
                         items = singleChoiceItems,
                         selectedItem = tmpSelectedItem,
-                        onSelect = setTmpSelectedItem,
+                        onSelect = { tmpSelectedItem = it },
                         dismissOnSelection = false,
                         item = { Text("Item: $it") },
                         positiveButton = {
                             DialogCloseButton(
                                 text = "OK",
-                                onClick = {
-                                    setSelectedSingleChoiceItem(tmpSelectedItem)
-                                })
+                                onClick = { selectedSingleChoiceItem = tmpSelectedItem }
+                            )
                         },
                         negativeButton = {
                             DialogCloseButton(text = "Cancel")
@@ -238,24 +239,22 @@ fun DialogsPage() {
                 }
 
                 val multiChoiceItems = listOf("A", "B", "C")
-                val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = state { multiChoiceItems }
+                var selectedMultiChoiceItems by rememberState { multiChoiceItems }
                 DialogLauncherButton(
                     text = "Multi choice list"
                 ) {
-                    val (tmpSelectedItems, setTmpSelectedItems) = state { selectedMultiChoiceItems }
+                    var tmpSelectedItems by rememberState { selectedMultiChoiceItems }
 
                     MultiChoiceListDialog(
                         title = { Text("Multi choice") },
                         items = multiChoiceItems,
                         selectedItems = tmpSelectedItems,
-                        onSelectionsChanged = setTmpSelectedItems,
+                        onSelectionsChanged = { tmpSelectedItems = it },
                         item = { Text(it) },
                         positiveButton = {
                             DialogCloseButton(
                                 text = "OK",
-                                onClick = {
-                                    setSelectedMultiChoiceItems(tmpSelectedItems)
-                                }
+                                onClick = { selectedMultiChoiceItems = tmpSelectedItems }
                             )
                         },
                         negativeButton = {
@@ -265,7 +264,7 @@ fun DialogsPage() {
                 }
 
                 val primaryColor = MaterialTheme.colors.primary
-                val (currentColor, setCurrentColor) = state { primaryColor }
+                var currentColor by rememberState { primaryColor }
                 DialogLauncherButton(text = "Color Picker") { dismiss ->
                     ColorPickerDialog(
                         title = { Text("Color Picker") },
@@ -273,26 +272,24 @@ fun DialogsPage() {
                         initialColor = currentColor,
                         onCancel = dismiss,
                         onColorSelected = {
-                            setCurrentColor(it)
+                            currentColor = it
                             dismiss()
                         }
                     )
                 }
 
-                val (textInputValue, setTextInputValue) = state { "" }
+                var textInputValue by rememberState { "" }
                 DialogLauncherButton(text = "Text input") {
-                    val (tmpTextInputValue, setTmpTextInputValue) = state { textInputValue }
+                    var tmpTextInputValue by rememberState { textInputValue }
                     TextInputDialog(
                         value = tmpTextInputValue,
-                        onValueChange = setTmpTextInputValue,
+                        onValueChange = { tmpTextInputValue = it },
                         title = { Text("Text input") },
                         label = { Text("Hint..") },
                         positiveButton = {
                             DialogCloseButton(
                                 text = "OK",
-                                onClick = {
-                                    setTextInputValue(tmpTextInputValue)
-                                },
+                                onClick = { textInputValue = tmpTextInputValue },
                                 enabled = tmpTextInputValue.isNotEmpty()
                             )
                         },

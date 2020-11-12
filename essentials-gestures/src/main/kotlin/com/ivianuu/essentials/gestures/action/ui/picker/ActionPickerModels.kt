@@ -40,16 +40,13 @@ sealed class ActionPickerResult {
     object None : ActionPickerResult()
 }
 
-@Immutable
 data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
 
 sealed class ActionPickerAction {
     data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
 }
 
-@Immutable
 sealed class ActionPickerItem {
-    @Immutable
     data class ActionItem(val action: Action) : ActionPickerItem() {
         override val title: String
             get() = action.title
@@ -78,7 +75,6 @@ sealed class ActionPickerItem {
         override suspend fun getResult() = delegate.getResult()
     }
 
-    @Immutable
     data class SpecialOption(
         override val title: String,
         val getResult: () -> ActionPickerResult?

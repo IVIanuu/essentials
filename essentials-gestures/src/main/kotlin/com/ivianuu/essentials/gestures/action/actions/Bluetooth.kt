@@ -24,6 +24,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.map
@@ -64,5 +65,5 @@ fun bluetoothIcon(broadcasts: broadcasts): BluetoothIcon {
             if (it) R.drawable.es_ic_bluetooth
             else R.drawable.es_ic_bluetooth_disabled
         }
-        .map { { Icon(vectorResource(it)) } }
+        .map { { Icon(it) } }
 }
