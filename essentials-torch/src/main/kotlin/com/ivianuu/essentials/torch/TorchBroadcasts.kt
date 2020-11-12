@@ -17,25 +17,24 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.app.AppWorkerBinding
+import com.ivianuu.essentials.tuples.combine
+import com.ivianuu.essentials.ui.store.State
+import kotlinx.coroutines.flow.Flow
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.ui.store.Dispatch
-import com.ivianuu.essentials.ui.store.State
-import com.ivianuu.essentials.ui.store.StateEffect
-import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 
-@StateEffect
+@AppWorkerBinding
 @FunBinding
 suspend fun TorchBroadcastReceiver(
     broadcasts: broadcasts,
     dispatch: @Dispatch (TorchAction) -> Unit,
-    @FunApi state: TorchState,
+    state: @State Flow<TorchState>,
 ) {
-    broadcasts(ACTION_TOGGLE_TORCH).collect {
-        dispatch(UpdateTorchEnabled(!state.torchEnabled))
+    combine(broadcasts(ACTION_TOGGLE_TORCH), state).collect { (_, currentState) ->
+        dispatch(UpdateTorchEnabled(!currentState.torchEnabled))
     }
 }
 
