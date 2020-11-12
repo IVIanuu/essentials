@@ -14,31 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.moshi
+package com.ivianuu.essentials.torch
 
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
-import com.squareup.moshi.Moshi
 
-@Effect
-annotation class JsonAdapterBinding {
-    companion object {
-        @SetElements
-        fun <T : Any> invoke(instance: T): JsonAdapters = setOf(instance)
+@Binding(ApplicationComponent::class)
+fun TorchStore(
+    scope: GlobalScope
+) = scope.store<TorchState, TorchAction>(TorchState()) {
+    for (action in this) {
+        when (action) {
+            is UpdateTorchEnabled -> setState { copy(torchEnabled = action.value) }
+        }
     }
 }
 
-typealias JsonAdapters = Set<Any>
-
-@Binding(ApplicationComponent::class)
-fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
-    .apply {
-        jsonAdapters
-            .forEach { adapter -> add(adapter) }
-    }
-    .build()
-
-@SetElements
-fun defaultAdapters(): JsonAdapters = emptySet()
+data class TorchState(val torchEnabled: Boolean = false)
+sealed class TorchAction {
+    data class UpdateTorchEnabled(val value: Boolean) : TorchAction()
+}

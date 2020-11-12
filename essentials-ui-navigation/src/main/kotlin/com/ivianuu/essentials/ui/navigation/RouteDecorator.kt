@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.BindingAdapterArg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 
-@BindingAdapter
+@Effect
 annotation class RouteDecoratorBinding(
     val key: String,
     val dependencies: Array<String> = [],
@@ -34,9 +34,9 @@ annotation class RouteDecoratorBinding(
     companion object {
         @SetElements
         fun <T : @Composable (Route, @Composable () -> Unit) -> Unit> routeDecoratorIntoSet(
-            @BindingAdapterArg("key") key: String,
-            @BindingAdapterArg("dependencies") dependencies: Array<String>?,
-            @BindingAdapterArg("dependents") dependents: Array<String>?,
+            @Arg("key") key: String,
+            @Arg("dependencies") dependencies: Array<String>?,
+            @Arg("dependents") dependents: Array<String>?,
             content: T
         ): RouteDecorators = setOf(RouteDecorator(
             key = key,

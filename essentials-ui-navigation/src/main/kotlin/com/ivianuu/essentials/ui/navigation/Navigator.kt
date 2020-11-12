@@ -26,7 +26,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -144,7 +144,7 @@ class NavigatorImpl(
 
 typealias HomeRoute = Route
 
-@BindingAdapter
+@Effect
 annotation class HomeRouteUiBinding {
     companion object {
         @Binding

@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 @FunBinding
 @Composable
 fun CounterPage(
-    state: @State CounterState,
+    state: @UiState CounterState,
     dispatch: @Dispatch (CounterAction) -> Unit
 ) {
     Scaffold(

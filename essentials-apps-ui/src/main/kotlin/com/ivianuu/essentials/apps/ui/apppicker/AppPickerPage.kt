@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -41,7 +42,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @FunBinding
 @Composable
 fun AppPickerPage(
-    state: @State AppPickerState,
+    state: @UiState AppPickerState,
     dispatch: @Dispatch (AppPickerAction) -> Unit
 ) {
     Scaffold(

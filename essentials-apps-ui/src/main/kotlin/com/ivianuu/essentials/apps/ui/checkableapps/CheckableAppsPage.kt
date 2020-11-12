@@ -36,13 +36,14 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @FunBinding
 @Composable
 fun CheckableAppsPage(
-    state: @State CheckableAppsState,
+    state: @UiState CheckableAppsState,
     dispatch: @Dispatch (CheckableAppsAction) -> Unit
 ) {
     Scaffold(

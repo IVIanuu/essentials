@@ -23,10 +23,34 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.ivianuu.essentials.app.AppWorkerBinding
+import com.ivianuu.essentials.foreground.ForegroundJob
+import com.ivianuu.essentials.foreground.startForegroundJob
+import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.StateEffect
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+
+@StateEffect
+fun updateTorchForegroundState(
+    createTorchNotification: createTorchNotification,
+    startForegroundJob: startForegroundJob
+): suspend (TorchState) -> Unit {
+    var foregroundJob: ForegroundJob? = null
+    return { torchState ->
+        foregroundJob = if (torchState.torchEnabled) {
+            startForegroundJob(createTorchNotification())
+        } else {
+            // todo use foregroundJob?.stop() once compiler is fixed
+            if (foregroundJob != null) foregroundJob!!.stop()
+            null
+        }
+    }
+}
 
 @SuppressLint("NewApi")
 @FunBinding
@@ -56,7 +80,7 @@ fun createTorchNotification(
                 PendingIntent.getBroadcast(
                     applicationContext,
                     1,
-                    Intent(Torch.ACTION_TOGGLE_TORCH),
+                    Intent(ACTION_TOGGLE_TORCH),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )

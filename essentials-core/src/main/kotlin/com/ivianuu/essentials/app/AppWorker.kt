@@ -18,12 +18,12 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.launch
 
-@BindingAdapter
+@Effect
 annotation class AppWorkerBinding {
     companion object {
         @SetElements

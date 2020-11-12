@@ -23,41 +23,38 @@ import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.torch.Torch
-import com.ivianuu.essentials.torch.toggle
+import com.ivianuu.essentials.torch.TorchAction
+import com.ivianuu.essentials.torch.TorchAction.*
+import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.launch
 
 @FunBinding
 @Composable
-fun TorchPage(torch: Torch) {
+fun TorchPage(
+    state: @UiState TorchState,
+    dispatch: @Dispatch (TorchAction) -> Unit
+) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
-        val torchState = torch.torchState.collectAsState()
-
         Column(
             modifier = Modifier.center(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Torch is ${if (torchState.value) "enabled" else "disabled"}",
+                "Torch is ${if (state.torchEnabled) "enabled" else "disabled"}",
                 style = MaterialTheme.typography.h4
             )
             Spacer(Modifier.preferredHeight(8.dp))
-            val scope = rememberCoroutineScope()
             Button(
-                onClick = {
-                    scope.launch {
-                        torch.toggle()
-                    }
-                }
+                onClick = { dispatch(UpdateTorchEnabled(!state.torchEnabled)) }
             ) {
                 Text("Toggle torch")
             }

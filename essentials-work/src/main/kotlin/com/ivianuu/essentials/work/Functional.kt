@@ -23,8 +23,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.BindingAdapterArg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.MapEntries
 import java.util.UUID
 import kotlin.time.Duration
@@ -41,13 +41,13 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-@BindingAdapter
+@Effect
 annotation class WorkerBinding(val id: String) {
     companion object {
         @MapEntries
         fun <T : Worker> intoWorkerMap(
             workerProvider: () -> T,
-            @BindingAdapterArg("id") id: String
+            @Arg("id") id: String
         ): Workers = mapOf(id to workerProvider)
     }
 }

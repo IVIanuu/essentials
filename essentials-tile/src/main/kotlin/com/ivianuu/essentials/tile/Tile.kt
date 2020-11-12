@@ -22,8 +22,8 @@ import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.onEachAction
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tile.TileAction.TileClicked
-import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.BindingAdapterArg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.MapEntries
 import kotlinx.coroutines.CoroutineScope
 
@@ -64,13 +64,13 @@ suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () 
     }
 }
 
-@BindingAdapter
+@Effect
 annotation class TileBinding(val slot: Int) {
     companion object {
         @MapEntries
         fun <T : Store<TileState, TileAction>> intoTileMap(
             provider: (CoroutineScope) -> T,
-            @BindingAdapterArg("slot") slot: Int
+            @Arg("slot") slot: Int
         ): TileStores = mapOf(slot to provider)
     }
 }

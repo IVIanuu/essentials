@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.SetElements
 
-@BindingAdapter
+@Effect
 annotation class AccessibilityWorkerBinding {
     companion object {
         @SetElements

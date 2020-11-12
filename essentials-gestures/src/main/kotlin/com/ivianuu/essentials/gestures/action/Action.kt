@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.BindingAdapterArg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.MapEntries
@@ -41,13 +41,13 @@ data class Action(
 
 typealias ActionIcon = Flow<@Composable () -> Unit>
 
-@BindingAdapter
+@Effect
 annotation class ActionBinding(val key: String) {
     companion object {
         @MapEntries
         fun <T : Action> actionIntoSet(
             provider: () -> T,
-            @BindingAdapterArg("key") key: String
+            @Arg("key") key: String
         ): Map<String, () -> Action> = mapOf(key to provider)
     }
 }
@@ -65,7 +65,7 @@ interface ActionFactory {
     suspend fun createAction(key: String): Action
 }
 
-@BindingAdapter
+@Effect
 annotation class ActionFactoryBinding {
     companion object {
         @SetElements
@@ -79,7 +79,7 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@BindingAdapter
+@Effect
 annotation class ActionPickerDelegateBinding {
     companion object {
         @SetElements

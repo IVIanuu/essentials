@@ -20,13 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.BindingAdapter
-import com.ivianuu.injekt.BindingAdapterArg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 
-@BindingAdapter
+@Effect
 annotation class UiDecoratorBinding(
     val key: String,
     val dependencies: Array<String> = [],
@@ -35,9 +35,9 @@ annotation class UiDecoratorBinding(
     companion object {
         @SetElements
         fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecoratorIntoSet(
-            @BindingAdapterArg("key") key: String,
-            @BindingAdapterArg("dependencies") dependencies: Array<String>?,
-            @BindingAdapterArg("dependents") dependents: Array<String>?,
+            @Arg("key") key: String,
+            @Arg("dependencies") dependencies: Array<String>?,
+            @Arg("dependents") dependents: Array<String>?,
             content: T
         ): UiDecorators = setOf(UiDecorator(
             key = key,
@@ -83,7 +83,7 @@ fun DecorateUi(
     }()
 }
 
-@BindingAdapter
+@Effect
 annotation class AppThemeBinding {
     companion object {
         // The theme typically uses EsMaterialTheme which itself uses the SystemBarManager

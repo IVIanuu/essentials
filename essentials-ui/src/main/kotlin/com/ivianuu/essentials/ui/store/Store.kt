@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setStateIn
@@ -27,15 +28,20 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.BindingAdapter
+import com.ivianuu.injekt.Decorator
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
@@ -52,7 +58,7 @@ fun <S, V> Flow<V>.executeIn(
     reducer: suspend S.(Resource<V>) -> S,
 ): Job = flowAsResource().setStateIn(scope, reducer)
 
-@BindingAdapter
+@Effect
 annotation class UiStoreBinding {
     companion object {
         @Binding
@@ -91,9 +97,13 @@ internal class UiStoreRunner<S, A>(
 @Target(AnnotationTarget.TYPE)
 annotation class State
 
+@Qualifier
+@Target(AnnotationTarget.TYPE)
+annotation class UiState
+
 @Binding
 @Composable
-operator fun <S> Store<S, *>.component1(): @State S = state.collectAsState().value
+operator fun <S> Store<S, *>.component1(): @UiState S = state.collectAsState().value
 
 @Binding
 inline val <S> @State StateFlow<S>.flow: @State Flow<S>
@@ -109,3 +119,86 @@ annotation class Dispatch
 
 @Binding
 operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = { dispatch(it) }
+
+@Effect
+annotation class StateEffect {
+    companion object {
+        @SetElements
+        fun <T : suspend (S) -> Unit, S> intoSet(instance: T): Set<StateEffectBlock<S>> =
+            setOf(instance)
+    }
+}
+
+typealias StateEffectBlock<S> = suspend (S) -> Unit
+
+@Decorator
+fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorDefault(
+    scope: () -> GlobalScope,
+    stateEffects: Set<StateEffectBlock<S>>?,
+    factory: () -> T
+): () -> T {
+    return if (stateEffects == null) factory
+    else ({
+        val instance = factory()
+        scope().launch {
+            instance.state.collectLatest { state ->
+                coroutineScope {
+                    stateEffects.forEach { effect ->
+                        launch {
+                            effect(state)
+                        }
+                    }
+                }
+            }
+        }
+        instance
+    })
+}
+
+@Decorator
+fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorComposable(
+    scope: () -> GlobalScope,
+    stateEffects: Set<StateEffectBlock<S>>?,
+    factory: @Composable () -> T
+): @Composable () -> T {
+    return if (stateEffects == null) factory
+    else ({
+        val instance = factory()
+        scope().launch {
+            instance.state.collectLatest { state ->
+                coroutineScope {
+                    stateEffects.forEach { effect ->
+                        launch {
+                            effect(state)
+                        }
+                    }
+                }
+            }
+        }
+        instance
+    })
+}
+
+@Decorator
+fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorSuspend(
+    scope: () -> GlobalScope,
+    stateEffects: Set<StateEffectBlock<S>>?,
+    factory: suspend () -> T
+): suspend () -> T {
+    return if (stateEffects == null) factory
+    else ({
+        val instance = factory()
+        scope().launch {
+            instance.state.collectLatest { state ->
+                coroutineScope {
+                    stateEffects.forEach { effect ->
+                        launch {
+                            effect(state)
+                        }
+                    }
+                }
+            }
+        }
+        instance
+    })
+}

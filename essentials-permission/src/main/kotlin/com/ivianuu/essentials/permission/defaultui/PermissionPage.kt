@@ -31,13 +31,14 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun PermissionPage(
-    state: @State PermissionState,
+    state: @UiState PermissionState,
     dispatch: @Dispatch (PermissionAction) -> Unit
 ) {
     Scaffold(

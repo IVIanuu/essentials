@@ -32,12 +32,13 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsPage(
-    state: @State SecureSettingsPcInstructionsState,
+    state: @UiState SecureSettingsPcInstructionsState,
     dispatch: @Dispatch (SecureSettingsPcInstructionsAction) -> Unit
 ) {
     Scaffold(
