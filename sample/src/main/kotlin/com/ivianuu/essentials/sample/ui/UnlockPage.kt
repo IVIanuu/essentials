@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.Text
 import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier

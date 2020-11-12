@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.core
 
 import android.os.Build
 import android.view.View
-import androidx.compose.foundation.AmbientContentColor
+import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable

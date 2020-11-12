@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource

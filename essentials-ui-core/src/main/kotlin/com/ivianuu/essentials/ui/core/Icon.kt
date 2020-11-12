@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.Icon
+import androidx.compose.material.AmbientContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

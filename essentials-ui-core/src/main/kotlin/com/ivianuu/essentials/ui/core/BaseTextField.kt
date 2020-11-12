@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.foundation.AmbientContentColor
-import androidx.compose.foundation.AmbientTextStyle
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.AmbientTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

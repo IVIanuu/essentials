@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
-import androidx.compose.foundation.Text
 import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc

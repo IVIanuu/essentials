@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.AmbientContentColor
-import androidx.compose.foundation.ProvideTextStyle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -42,7 +42,7 @@ fun Subheader(
         alignment = Alignment.CenterStart
     ) {
         Providers(AmbientContentColor provides MaterialTheme.colors.secondary) {
-            ProvideTextStyle(value = MaterialTheme.typography.body2, children = text)
+            ProvideTextStyle(MaterialTheme.typography.body2, text)
         }
     }
 }

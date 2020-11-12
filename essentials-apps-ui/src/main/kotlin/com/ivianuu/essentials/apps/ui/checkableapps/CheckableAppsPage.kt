@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp

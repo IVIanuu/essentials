@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier

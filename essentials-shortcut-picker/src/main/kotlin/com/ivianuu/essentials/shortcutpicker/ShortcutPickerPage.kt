@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.shortcutpicker
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
@@ -46,11 +46,7 @@ fun ShortcutPickerPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        title ?: stringResource(R.string.es_title_shortcut_picker)
-                    )
-                }
+                title = { Text(title ?: stringResource(R.string.es_title_shortcut_picker)) }
             )
         }
     ) {

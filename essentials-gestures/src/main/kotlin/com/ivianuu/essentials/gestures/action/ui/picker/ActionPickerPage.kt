@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import androidx.compose.foundation.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.ui.core.Text

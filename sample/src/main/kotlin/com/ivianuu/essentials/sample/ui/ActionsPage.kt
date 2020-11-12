@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.Text
 import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
