@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.memo.memoize
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
 import com.ivianuu.essentials.store.setStateIn
@@ -137,22 +138,27 @@ fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorDefault(
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: () -> T
 ): () -> T {
-    return if (stateEffects == null) factory
-    else ({
-        val instance = factory()
-        scope().launch {
-            instance.state.collectLatest { state ->
-                coroutineScope {
-                    stateEffects.forEach { effect ->
-                        launch {
-                            effect(state)
+    return if (stateEffects == null || stateEffects.isEmpty()) factory
+    else {
+        var state: Pair<Store<S, A>, Job>? = null
+        {
+            val instance = factory()
+            if (state == null || state!!.first != instance) {
+                state = instance to scope().launch {
+                    instance.state.collectLatest { state ->
+                        coroutineScope {
+                            stateEffects.forEach { effect ->
+                                launch {
+                                    effect(state)
+                                }
+                            }
                         }
                     }
                 }
             }
+            instance
         }
-        instance
-    })
+    }
 }
 
 @Decorator
@@ -161,22 +167,27 @@ fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorComposable(
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: @Composable () -> T
 ): @Composable () -> T {
-    return if (stateEffects == null) factory
-    else ({
-        val instance = factory()
-        scope().launch {
-            instance.state.collectLatest { state ->
-                coroutineScope {
-                    stateEffects.forEach { effect ->
-                        launch {
-                            effect(state)
+    return if (stateEffects == null || stateEffects.isEmpty()) factory
+    else {
+        var state: Pair<Store<S, A>, Job>? = null
+        {
+            val instance = factory()
+            if (state == null || state!!.first != instance) {
+                state = instance to scope().launch {
+                    instance.state.collectLatest { state ->
+                        coroutineScope {
+                            stateEffects.forEach { effect ->
+                                launch {
+                                    effect(state)
+                                }
+                            }
                         }
                     }
                 }
             }
+            instance
         }
-        instance
-    })
+    }
 }
 
 @Decorator
@@ -185,20 +196,25 @@ fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorSuspend(
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: suspend () -> T
 ): suspend () -> T {
-    return if (stateEffects == null) factory
-    else ({
-        val instance = factory()
-        scope().launch {
-            instance.state.collectLatest { state ->
-                coroutineScope {
-                    stateEffects.forEach { effect ->
-                        launch {
-                            effect(state)
+    return if (stateEffects == null || stateEffects.isEmpty()) factory
+    else {
+        var state: Pair<Store<S, A>, Job>? = null
+        {
+            val instance = factory()
+            if (state == null || state!!.first != instance) {
+                state = instance to scope().launch {
+                    instance.state.collectLatest { state ->
+                        coroutineScope {
+                            stateEffects.forEach { effect ->
+                                launch {
+                                    effect(state)
+                                }
+                            }
                         }
                     }
                 }
             }
+            instance
         }
-        instance
-    })
+    }
 }
