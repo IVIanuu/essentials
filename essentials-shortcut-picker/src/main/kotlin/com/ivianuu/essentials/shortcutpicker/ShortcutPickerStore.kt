@@ -35,10 +35,7 @@ fun CoroutineScope.ShortcutPickerStore(
     startActivityForIntentResult: startActivityForIntentResult,
     showToastRes: showToastRes,
 ) = store<ShortcutPickerState, ShortcutPickerAction>(ShortcutPickerState()) {
-    execute(
-        block = { getAllShortcuts() },
-        reducer = { copy(shortcuts = it) }
-    )
+    execute(block = { getAllShortcuts() }) { copy(shortcuts = it) }
 
     for (action in this) {
         when (action) {

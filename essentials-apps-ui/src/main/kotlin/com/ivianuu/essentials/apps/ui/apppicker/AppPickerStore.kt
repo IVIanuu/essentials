@@ -37,10 +37,7 @@ fun CoroutineScope.AppPickerStore(
         title = params.title
     )
 ) {
-    execute(
-        block = { getInstalledApps() },
-        reducer = { copy(allApps = it) }
-    )
+    execute(block = { getInstalledApps() }) { copy(allApps = it) }
 
     @Suppress("IMPLICIT_CAST_TO_ANY")
     for (action in this) {

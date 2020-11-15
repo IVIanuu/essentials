@@ -76,9 +76,10 @@ fun CoroutineScope.ActionPickerStore(
                 .sortedBy { it.title }
 
             return@execute specialOptions + actionsAndDelegates
-        },
-        reducer = { copy(items = it) }
-    )
+        }
+    ) {
+        copy(items = it)
+    }
 
     for (action in this) {
         when (action) {
