@@ -189,7 +189,7 @@ fun CoroutineScope.NotificationStore(
     combine(
         hasPermissions(listOf(permission)),
         notifications.flowAsResource()
-    ).setStateIn(this) { (hasPermissions: Boolean, notifications) ->
+    ).setStateIn(this) { (hasPermissions, notifications) ->
         copy(hasPermissions = hasPermissions, notifications = notifications)
     }
 
