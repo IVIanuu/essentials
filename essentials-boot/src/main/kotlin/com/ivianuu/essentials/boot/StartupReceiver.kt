@@ -25,7 +25,6 @@ import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 
 class StartupReceiver : EsBroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
