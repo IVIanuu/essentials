@@ -22,6 +22,7 @@ import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
@@ -30,13 +31,12 @@ import kotlinx.coroutines.launch
 @UiStoreBinding
 fun CoroutineScope.SecureSettingsStore(
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
+    initial: @Initial SecureSettingsState = SecureSettingsState,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
     showToastRes: showToastRes
-) = store<SecureSettingsState, SecureSettingsAction>(
-    SecureSettingsState
-) {
+) = store<SecureSettingsState, SecureSettingsAction>(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }
 
     for (action in this) {

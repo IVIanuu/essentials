@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
+import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.Flow
 
 data class CheckableAppsParams(
@@ -32,10 +33,12 @@ data class CheckableAppsParams(
     val appBarTitle: String
 )
 
-data class CheckableApp(
-    val info: AppInfo,
-    val isChecked: Boolean
-)
+internal typealias CheckedAppsSource = Flow<Set<String>>
+@Binding
+fun checkedAppsSource(params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
+internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
+@Binding
+fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged = params.onCheckedAppsChanged
 
 data class CheckableAppsState(
     val apps: Resource<List<AppInfo>> = Idle,
@@ -53,7 +56,19 @@ data class CheckableAppsState(
                 )
             }
         }
+    companion object {
+        @Binding
+        fun initial(params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
+            appFilter = params.appFilter,
+            appBarTitle = params.appBarTitle
+        )
+    }
 }
+
+data class CheckableApp(
+    val info: AppInfo,
+    val isChecked: Boolean
+)
 
 sealed class CheckableAppsAction {
     object SelectAll : CheckableAppsAction()

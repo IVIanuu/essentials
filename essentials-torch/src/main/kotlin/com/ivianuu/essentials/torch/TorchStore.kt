@@ -20,13 +20,15 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.torch.TorchAction.*
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 @Binding(ApplicationComponent::class)
 fun TorchStore(
-    scope: GlobalScope
-) = scope.store<TorchState, TorchAction>(TorchState()) {
+    scope: GlobalScope,
+    initial: @Initial TorchState = TorchState()
+) = scope.store<TorchState, TorchAction>(initial) {
     for (action in this) {
         when (action) {
             is UpdateTorchEnabled -> setState { copy(torchEnabled = action.value) }

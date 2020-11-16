@@ -22,21 +22,17 @@ import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.ui.store.execute
 import kotlinx.coroutines.CoroutineScope
 
 @UiStoreBinding
 fun CoroutineScope.AppPickerStore(
-    navigator: Navigator,
     getInstalledApps: getInstalledApps,
-    params: AppPickerParams
-) = store<AppPickerState, AppPickerAction>(
-    AppPickerState(
-        appFilter = params.appFilter,
-        title = params.title
-    )
-) {
+    initial: @Initial AppPickerState,
+    navigator: Navigator
+) = store<AppPickerState, AppPickerAction>(initial) {
     execute(block = { getInstalledApps() }) { copy(allApps = it) }
 
     @Suppress("IMPLICIT_CAST_TO_ANY")

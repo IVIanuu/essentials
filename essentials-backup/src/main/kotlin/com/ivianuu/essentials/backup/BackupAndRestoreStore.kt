@@ -21,6 +21,7 @@ import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
@@ -28,9 +29,10 @@ import kotlinx.coroutines.CoroutineScope
 @UiStoreBinding
 fun CoroutineScope.BackupAndRestoreStore(
     backupData: backupData,
+    initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
     restoreData: restoreData,
-    showToastRes: showToastRes,
-) = store<BackupAndRestoreState, BackupAndRestoreAction>(BackupAndRestoreState) {
+    showToastRes: showToastRes
+) = store<BackupAndRestoreState, BackupAndRestoreAction>(initial) {
     for (action in this) {
         when (action) {
             BackupData -> {

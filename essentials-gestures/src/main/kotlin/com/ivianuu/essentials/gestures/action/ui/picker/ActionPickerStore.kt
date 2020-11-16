@@ -29,57 +29,23 @@ import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.ui.store.execute
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 
 @UiStoreBinding
 fun CoroutineScope.ActionPickerStore(
-    navigator: Navigator,
+    getActionPickerItems: getActionPickerItems,
     getAction: getAction,
-    getAllActions: getAllActions,
-    actionPickerDelegates: Set<ActionPickerDelegate>,
-    requestPermissions: requestPermissions,
-    stringResource: stringResource,
-    params: ActionPickerParams
-) = store<ActionPickerState, ActionPickerAction>(ActionPickerState()) {
-    execute(
-        block = {
-            val specialOptions = mutableListOf<SpecialOption>()
-
-            if (params.showDefaultOption) {
-                specialOptions += SpecialOption(
-                    title = stringResource(R.string.es_default),
-                    getResult = { ActionPickerResult.Default }
-                )
-            }
-
-            if (params.showNoneOption) {
-                specialOptions += SpecialOption(
-                    title = stringResource(R.string.es_none),
-                    getResult = { ActionPickerResult.None }
-                )
-            }
-
-            val actionsAndDelegates = (
-                    (
-                            actionPickerDelegates
-                                .map {
-                                    PickerDelegate(
-                                        it,
-                                        navigator
-                                    )
-                                }
-                            ) + (getAllActions().map { ActionItem(it) })
-                    )
-                .sortedBy { it.title }
-
-            return@execute specialOptions + actionsAndDelegates
-        }
-    ) {
-        copy(items = it)
-    }
+    initial: @Initial ActionPickerState = ActionPickerState(),
+    navigator: Navigator,
+    requestPermissions: requestPermissions
+) = store<ActionPickerState, ActionPickerAction>(initial) {
+    execute(block = { getActionPickerItems() }) { copy(items = it) }
 
     for (action in this) {
         when (action) {
@@ -94,4 +60,44 @@ fun CoroutineScope.ActionPickerStore(
             }
         }
     }
+}
+
+@FunBinding
+suspend fun getActionPickerItems(
+    actionPickerDelegates: Set<ActionPickerDelegate>,
+    getAllActions: getAllActions,
+    navigator: Navigator,
+    params: ActionPickerParams,
+    stringResource: stringResource
+) = buildList<ActionPickerItem> {
+    val specialOptions = mutableListOf<SpecialOption>()
+
+    if (params.showDefaultOption) {
+        specialOptions += SpecialOption(
+            title = stringResource(R.string.es_default),
+            getResult = { ActionPickerResult.Default }
+        )
+    }
+
+    if (params.showNoneOption) {
+        specialOptions += SpecialOption(
+            title = stringResource(R.string.es_none),
+            getResult = { ActionPickerResult.None }
+        )
+    }
+
+    val actionsAndDelegates = (
+            (
+                    actionPickerDelegates
+                        .map {
+                            PickerDelegate(
+                                it,
+                                navigator
+                            )
+                        }
+                    ) + (getAllActions().map { ActionItem(it) })
+            )
+        .sortedBy { it.title }
+
+    return specialOptions + actionsAndDelegates
 }
