@@ -18,16 +18,16 @@ package com.ivianuu.essentials.ui.store
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.memo.memoize
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.reduce
+import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.flowAsResource
+import com.ivianuu.essentials.ui.resource.resource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
@@ -45,19 +45,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
-
-fun <S, V> StoreScope<S, *>.execute(
-    block: suspend () -> V,
-    reducer: suspend S.(Resource<V>) -> S
-): Job {
-    return flow { emit(block()) }
-        .executeIn(this, reducer)
-}
-
-fun <S, V> Flow<V>.executeIn(
-    scope: StoreScope<S, *>,
-    reducer: suspend S.(Resource<V>) -> S,
-): Job = flowAsResource().setStateIn(scope, reducer)
 
 @Effect
 annotation class UiStoreBinding {
@@ -93,6 +80,16 @@ internal class UiStoreRunner<S, A>(
         coroutineScope.cancel()
     }
 }
+
+inline fun <S, A, T> StoreScope<S, A>.reduceResource(
+    noinline block: suspend () -> T,
+    crossinline reducer: S.(Resource<T>) -> S,
+): Job = resource { block() }.reduceIn(this, reducer)
+
+inline fun <S, V> Flow<V>.reduceResourceIn(
+    scope: StoreScope<S, *>,
+    crossinline reducer: S.(Resource<V>) -> S,
+): Job = flowAsResource().reduceIn(scope, reducer)
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)

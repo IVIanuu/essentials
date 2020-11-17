@@ -21,6 +21,7 @@ import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermi
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
 import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.reduce
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
@@ -28,20 +29,23 @@ import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @UiStoreBinding
-fun CoroutineScope.PermissionStore(
+fun PermissionStore(
     hasPermissions: hasPermissions,
     initial: @Initial PermissionState = PermissionState(),
     logger: Logger,
     navigator: Navigator,
-    requestHandler: requestHandler,
-    startUi: startUi,
     request: PermissionRequest,
-) = store<PermissionState, PermissionAction>(initial) {
+    requestHandler: requestHandler,
+    scope: CoroutineScope,
+    startUi: startUi
+) = scope.store<PermissionState, PermissionAction>(initial) {
     suspend fun updatePermissionsToProcessOrFinish() {
         val permissionsToProcess = request.permissions
             .filterNot { hasPermissions(listOf(it)).first() }
@@ -51,7 +55,7 @@ fun CoroutineScope.PermissionStore(
         if (permissionsToProcess.isEmpty()) {
             navigator.popTop()
         } else {
-            setState { copy(permissionsToProcess = permissionsToProcess) }
+            reduce { copy(permissionsToProcess = permissionsToProcess) }
         }
     }
 

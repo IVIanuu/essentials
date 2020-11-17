@@ -20,7 +20,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.store.store
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -54,10 +54,10 @@ internal fun <S, A> persistedStoreImpl(
 ): Store<S, A> {
     val dataStore = diskDataStoreFactory.create(name, type) { initial }
     return globalScope.store(initial) {
-        dataStore.data.setStateIn(this) { it }
+        dataStore.data.reduceIn(this) { it }
         val wrappedScope = object : StoreScope<S, A> by this {
-            override suspend fun setState(block: suspend S.() -> S): S =
-                dataStore.updateData(block)
+            override suspend fun reduce(block: S.() -> S): S =
+                dataStore.updateData { block(it) }
         }
         block(wrappedScope)
     }

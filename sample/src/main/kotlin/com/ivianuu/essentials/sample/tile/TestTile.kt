@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.tile.onEachTileClick
+import com.ivianuu.essentials.tile.forEachTileClick
 import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
@@ -35,8 +35,8 @@ fun CoroutineScope.TestTile(
     twilightPrefsState: @State StateFlow<TwilightPrefsState>,
     dispatch: @Dispatch (TwilightPrefsAction) -> Unit
 ) = tile(twilightPrefsState.value.toTileState()) {
-    twilightPrefsState.setStateIn(this) { it.toTileState() }
-    onEachTileClick {
+    twilightPrefsState.reduceIn(this) { it.toTileState() }
+    forEachTileClick {
         dispatch(
             UpdateTwilightMode(
                 if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark

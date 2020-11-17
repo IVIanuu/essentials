@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.DispatchAction
-import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.SetState
+import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.Dispatch
+import com.ivianuu.essentials.store.StoreFromSourceImpl.StoreMessage.Reduce
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -27,10 +27,8 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
 
@@ -42,7 +40,7 @@ interface Store<S, A> {
 interface StoreScope<S, A> : CoroutineScope {
     val actions: Flow<A>
     val state: Flow<S>
-    suspend fun setState(block: suspend S.() -> S): S
+    suspend fun reduce(block: S.() -> S): S
 }
 
 operator fun <S, A> StoreScope<S, A>.iterator(): StoreScopeActionIterator<S, A> {
@@ -60,29 +58,46 @@ interface StoreScopeActionIterator<S, A> {
 
 suspend inline fun <S, A> StoreScope<S, A>.currentState(): S = state.first()
 
-inline fun <S, A, T> Flow<T>.setStateIn(
+suspend inline fun <S, A, T> Flow<T>.reduce(
     scope: StoreScope<S, A>,
-    crossinline reducer: suspend S.(T) -> S,
-): Job {
-    return onEach {
-        scope.setState {
-            reducer(it)
-        }
-    }.launchIn(scope)
+    crossinline reducer: S.(T) -> S,
+) {
+    collect { value ->
+        scope.reduce { reducer(value) }
+    }
 }
 
-suspend inline fun <S, A> StoreScope<S, A>.onEachAction(block: (A) -> Unit) {
-    for (action in this) block(action)
+inline fun <S, A, T> Flow<T>.reduceIn(
+    scope: StoreScope<S, A>,
+    crossinline reducer: S.(T) -> S,
+): Job = scope.launch { reduce(scope, reducer) }
+
+suspend inline fun <S, A> StoreScope<S, A>.forEachAction(action: (A) -> Unit) {
+    for (item in this) action(item)
 }
 
 suspend inline fun <S, A> StoreScope<S, A>.awaitAction(): A = iterator().next()
 
-suspend inline fun <S, A> StoreScope<S, A>.reduceState(crossinline reducer: suspend S.(A) -> S) {
-    onEachAction {
-        setState {
+suspend inline fun <S, A> StoreScope<S, A>.reduceEachAction(crossinline reducer: S.(A) -> S) {
+    forEachAction {
+        reduce {
             reducer(it)
         }
     }
+}
+
+fun <S, A> CoroutineScope.reducerStore(
+    initial: S,
+    reducer: S.(A) -> S
+): Store<S, A> = store(initial) {
+    reduceEachAction { reducer(it) }
+}
+
+fun <S, A> CoroutineScope.simpleStore(
+    initial: S,
+    action: suspend StoreScope<S, A>.(A) -> Unit
+): Store<S, A> = store(initial) {
+    forEachAction { action(it) }
 }
 
 fun <S, A> CoroutineScope.store(
@@ -113,13 +128,14 @@ internal class StoreFromSourceImpl<S, A>(
     override val actions = EventFlow<A>()
 
     private val actor = actor<StoreMessage<S, A>>(capacity = Channel.UNLIMITED) {
+        launch { block() }
         for (msg in channel) {
             @Suppress("IMPLICIT_CAST_TO_ANY")
             when (msg) {
-                is DispatchAction -> actions.emit(msg.action)
-                is SetState -> {
+                is Dispatch -> actions.emit(msg.action)
+                is Reduce -> {
                     val currentState = state.value
-                    val newState = msg.block(currentState)
+                    val newState = msg.reducer(currentState)
                     if (currentState != newState) setState(newState)
                     msg.acknowledged.complete(newState)
                 }
@@ -127,25 +143,21 @@ internal class StoreFromSourceImpl<S, A>(
         }
     }
 
-    init {
-        launch { block() }
-    }
-
     override fun dispatch(action: A) {
-        actor.offer(DispatchAction(action))
+        actor.offer(Dispatch(action))
     }
 
-    override suspend fun setState(block: suspend S.() -> S): S {
+    override suspend fun reduce(block: S.() -> S): S {
         val acknowledged = CompletableDeferred<S>()
-        actor.offer(SetState(acknowledged, block))
+        actor.offer(Reduce(acknowledged, block))
         return acknowledged.await()
     }
 
     sealed class StoreMessage<S, A> {
-        data class DispatchAction<S, A>(val action: A) : StoreMessage<S, A>()
-        data class SetState<S, A>(
+        data class Dispatch<S, A>(val action: A) : StoreMessage<S, A>()
+        data class Reduce<S, A>(
             val acknowledged: CompletableDeferred<S>,
-            val block: suspend S.() -> S,
+            val reducer: S.() -> S,
         ) : StoreMessage<S, A>()
     }
 }

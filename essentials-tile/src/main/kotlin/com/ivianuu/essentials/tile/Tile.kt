@@ -19,7 +19,7 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.onEachAction
+import com.ivianuu.essentials.store.forEachAction
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.injekt.Effect
@@ -56,10 +56,10 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-suspend fun StoreScope<TileState, TileAction>.onEachTileClick(block: suspend () -> Unit) {
-    onEachAction {
-        when (it) {
-            TileClicked -> block()
+suspend fun StoreScope<TileState, TileAction>.forEachTileClick(action: suspend () -> Unit) {
+    forEachAction { item ->
+        when (item) {
+            TileClicked -> action()
         }
     }
 }

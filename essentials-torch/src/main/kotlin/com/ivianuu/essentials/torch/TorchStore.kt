@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.reduce
+import com.ivianuu.essentials.store.reducerStore
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.ui.store.Initial
@@ -28,11 +29,9 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 fun TorchStore(
     scope: GlobalScope,
     initial: @Initial TorchState = TorchState()
-) = scope.store<TorchState, TorchAction>(initial) {
-    for (action in this) {
-        when (action) {
-            is UpdateTorchEnabled -> setState { copy(torchEnabled = action.value) }
-        }
+) = scope.reducerStore<TorchState, TorchAction>(initial) { action ->
+    when (action) {
+        is UpdateTorchEnabled -> copy(torchEnabled = action.value)
     }
 }
 

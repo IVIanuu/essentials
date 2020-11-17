@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -99,6 +98,10 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
     emitAll(this@flowAsResource)
 }
 
+inline fun <T> resource(crossinline block: suspend () -> T): Flow<Resource<T>> {
+    return resourceFlow { emit(block()) }
+}
+
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {
         emit(Loading)
@@ -123,20 +126,20 @@ fun <T> Flow<T>.collectAsResource(): Resource<T> {
 
 // todo remove overload once compose is fixed
 @Composable
-fun <T> produceResource(block: suspend CoroutineScope.() -> T): Resource<T> =
-    produceResource(inputs = *emptyArray(), block = block)
+fun <T> produceResource(producer: suspend CoroutineScope.() -> T): Resource<T> =
+    produceResource(inputs = *emptyArray(), producer = producer)
 
 @Composable
 fun <T> produceResource(
     vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> T
+    producer: suspend CoroutineScope.() -> T
 ): Resource<T> {
     var state by rememberState<Resource<T>>(*inputs) { Idle }
 
     LaunchedTask(*inputs) {
         state = Loading
         state = try {
-            Success(block())
+            Success(producer())
         } catch (e: Throwable) {
             Error(e)
         }

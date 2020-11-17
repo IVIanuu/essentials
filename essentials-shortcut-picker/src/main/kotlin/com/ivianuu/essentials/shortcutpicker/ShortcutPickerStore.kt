@@ -21,9 +21,10 @@ import com.ivianuu.essentials.store.iterator
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.resource.resource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.ui.store.execute
+import com.ivianuu.essentials.ui.store.reduceResource
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.CoroutineScope
@@ -37,8 +38,7 @@ fun CoroutineScope.ShortcutPickerStore(
     startActivityForIntentResult: startActivityForIntentResult,
     showToastRes: showToastRes,
 ) = store<ShortcutPickerState, ShortcutPickerAction>(initial) {
-    execute(block = { getAllShortcuts() }) { copy(shortcuts = it) }
-
+    reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
     for (action in this) {
         when (action) {
             is PickShortcut -> {

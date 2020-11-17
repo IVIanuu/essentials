@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.apps
 
-import androidx.compose.runtime.Immutable
-
 /**
  * Simple application info
  */

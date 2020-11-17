@@ -27,14 +27,14 @@ private val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
 
 suspend fun <A, B> Collection<A>.parallelMap(
     concurrency: Int = defaultConcurrency,
-    block: suspend (A) -> B
+    transform: suspend (A) -> B
 ): List<B> = supervisorScope {
     val semaphore = Semaphore(concurrency)
     map { item ->
         async {
             semaphore.acquire()
             try {
-                block(item)
+                transform(item)
             } finally {
                 semaphore.release()
             }
@@ -44,7 +44,7 @@ suspend fun <A, B> Collection<A>.parallelMap(
 
 suspend fun <A> Collection<A>.parallelForEach(
     concurrency: Int = defaultConcurrency,
-    block: suspend (A) -> Unit
+    action: suspend (A) -> Unit
 ) {
-    parallelMap(concurrency) { block(it) }
+    parallelMap(concurrency) { action(it) }
 }

@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.util.BuildInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -35,9 +34,7 @@ fun CoroutineScope.SecureSettingsPcInstructionsStore(
     initial: @Initial SecureSettingsPcInstructionsState,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
-) = store<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>(
-    initial
-) {
+) = store<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(false) }
     for (action in this) {
         when (action) {

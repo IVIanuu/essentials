@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
@@ -56,9 +54,10 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
 import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.reduce
+import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.tuples.combine
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -72,7 +71,6 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.Binding
@@ -80,6 +78,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 @FunBinding
@@ -181,21 +180,11 @@ fun CoroutineScope.NotificationStore(
     hasPermissions: hasPermissions,
     notifications: UiNotifications,
     notificationStore: NotificationStore,
+    permission: NotificationsPermission,
     requestPermissions: requestPermissions
 ) = store<NotificationsState, NotificationsAction>(initial) {
-    val permission = NotificationListenerPermission(
-        DefaultNotificationListenerService::class,
-        Permission.Title to "Notifications"
-    )
-
-    combine(
-        hasPermissions(listOf(permission)),
-        notifications.flowAsResource()
-    ).setStateIn(this) { (hasPermissions, notifications) ->
-        copy(hasPermissions = hasPermissions, notifications = notifications)
-    }
-
-    @Suppress("IMPLICIT_CAST_TO_ANY")
+    hasPermissions(listOf(permission)).reduceIn(this) { copy(hasPermissions = it) }
+    notifications.flowAsResource().reduceIn(this) { copy(notifications = it) }
     for (action in this) {
         when (action) {
             is RequestPermissions -> requestPermissions(listOf(permission))
@@ -206,6 +195,13 @@ fun CoroutineScope.NotificationStore(
         }
     }
 }
+
+typealias NotificationsPermission = Permission
+@Binding
+fun NotificationsPermission(): NotificationsPermission = NotificationListenerPermission(
+    DefaultNotificationListenerService::class,
+    Permission.Title to "Notifications"
+)
 
 typealias UiNotifications = Flow<List<UiNotification>>
 

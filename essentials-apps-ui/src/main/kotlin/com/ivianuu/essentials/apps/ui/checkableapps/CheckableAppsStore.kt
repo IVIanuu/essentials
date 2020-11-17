@@ -22,15 +22,14 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAl
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.setStateIn
+import com.ivianuu.essentials.store.reduce
+import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.ui.resource.resource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.ui.store.executeIn
+import com.ivianuu.essentials.ui.store.reduceResource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 
 @UiStoreBinding
 fun CoroutineScope.CheckableAppsStore(
@@ -39,39 +38,30 @@ fun CoroutineScope.CheckableAppsStore(
     getInstalledApps: getInstalledApps,
     initial: @Initial CheckableAppsState
 ) = store<CheckableAppsState, CheckableAppsAction>(initial) {
-    checkedAppsSource.setStateIn(this) { copy(checkedApps = it) }
-    state
-        .map { it.appFilter }
-        .distinctUntilChanged()
-        .mapLatest { getInstalledApps().filter(it) }
-        .executeIn(this) { copy(apps = it) }
+    checkedAppsSource.reduceIn(this) { copy(checkedApps = it) }
+    reduceResource({ getInstalledApps() }) { copy(allApps = it) }
 
-    suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        val currentState = currentState()
-        val newCheckedApps = currentState.checkableApps()!!
+    suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
+        val newCheckedApps = currentState().checkableApps()!!
             .filter { it.isChecked }
-            .map { it.info.packageName }
-            .toMutableSet()
-            .apply(reducer)
+            .mapTo(mutableSetOf()) { it.info.packageName }
+            .reducer(currentState())
         onCheckedAppsChanged(newCheckedApps)
     }
 
     for (action in this) {
-        @Suppress("IMPLICIT_CAST_TO_ANY")
         when (action) {
             is UpdateAppCheckState -> pushNewCheckedApps {
                 if (!action.app.isChecked) {
-                    it += action.app.info.packageName
+                    this + action.app.info.packageName
                 } else {
-                    it -= action.app.info.packageName
+                    this - action.app.info.packageName
                 }
             }
-            SelectAll -> currentState().apps()?.let { allApps ->
-                pushNewCheckedApps { newApps ->
-                    newApps += allApps.map { it.packageName }
-                }
+            SelectAll -> pushNewCheckedApps { currentState ->
+                currentState.allApps()!!.mapTo(mutableSetOf()) { it.packageName }
             }
-            DeselectAll -> pushNewCheckedApps { it.clear() }
+            DeselectAll -> pushNewCheckedApps { emptySet() }
         }
     }
 }

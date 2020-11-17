@@ -41,12 +41,12 @@ internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
 fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged = params.onCheckedAppsChanged
 
 data class CheckableAppsState(
-    val apps: Resource<List<AppInfo>> = Idle,
+    val allApps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
     val appFilter: AppFilter = DefaultAppFilter,
     val appBarTitle: String
 ) {
-    val checkableApps = apps
+    val checkableApps = allApps
         .map { it.filter(appFilter) }
         .map { apps ->
             apps.map { app ->

@@ -29,20 +29,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.reduceState
+import com.ivianuu.essentials.store.reduceEachAction
+import com.ivianuu.essentials.store.reducerStore
 import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 @FunBinding
 @Composable
@@ -83,12 +82,10 @@ fun CounterPage(
 @UiStoreBinding
 fun CoroutineScope.CounterStore(
     initial: @Initial CounterState = CounterState()
-) = store<CounterState, CounterAction>(initial) {
-    reduceState { action ->
-        when (action) {
-            Inc -> copy(count = count + 1)
-            Dec -> copy(count = count - 1)
-        }
+) = reducerStore<CounterState, CounterAction>(initial) { action ->
+    when (action) {
+        Inc -> copy(count = count + 1)
+        Dec -> copy(count = count - 1)
     }
 }
 

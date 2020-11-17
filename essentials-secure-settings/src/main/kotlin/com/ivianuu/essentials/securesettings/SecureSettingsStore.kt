@@ -38,16 +38,13 @@ fun CoroutineScope.SecureSettingsStore(
     showToastRes: showToastRes
 ) = store<SecureSettingsState, SecureSettingsAction>(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }
-
     for (action in this) {
         when (action) {
             OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
-            GrantPermissionsViaRoot -> {
-                if (grantSecureSettingsPermissionViaRoot()) {
-                    showToastRes(R.string.es_secure_settings_permission_granted)
-                } else {
-                    showToastRes(R.string.es_secure_settings_no_root)
-                }
+            GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
+                showToastRes(R.string.es_secure_settings_permission_granted)
+            } else {
+                showToastRes(R.string.es_secure_settings_no_root)
             }
         }
     }
