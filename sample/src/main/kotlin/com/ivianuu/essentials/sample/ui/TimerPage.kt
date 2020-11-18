@@ -19,38 +19,47 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.data.store.invokePersistedState
+import com.ivianuu.essentials.data.store.persistedState
+import com.ivianuu.essentials.store.reduce
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.FunBinding
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
+import kotlin.coroutines.coroutineContext
 
 @FunBinding
 @Composable
-fun TimerPage() {
+fun TimerPage(state: @UiState TimerState) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }
     ) {
-        val value = remember { timerFlow() }
-            .collectAsState(0).value
-
         Text(
-            text = "Value: $value",
+            text = "Value: ${state.value}",
             style = MaterialTheme.typography.h1,
             modifier = Modifier.center()
         )
     }
 }
 
-fun timerFlow() = flow {
-    var i = 0
-    while (true) {
-        ++i
-        emit(i)
-        delay(1000)
+@JsonClass(generateAdapter = true)
+data class TimerState(@Json(name = "value") val value: Int = 0)
+
+@UiStoreBinding
+fun TimerStore(
+    persistedState: persistedState<TimerState>
+) = persistedState.invokePersistedState("timer", TimerState()) {
+    reducerFlow {
+        while (coroutineContext.isActive) {
+            reduce { copy(value = value + 1) }
+            delay(1000)
+        }
     }
 }

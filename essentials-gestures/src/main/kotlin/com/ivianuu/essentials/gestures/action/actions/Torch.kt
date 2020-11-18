@@ -22,30 +22,31 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @ActionBinding("torch")
 fun torchAction(
     stringResource: stringResource,
     torchIcon: TorchIcon,
-    torchState: @State StateFlow<TorchState>,
-    dispatchTorchAction: @Dispatch (TorchAction) -> Unit
+    torchState: @State Flow<TorchState>,
+    dispatchTorchAction: DispatchAction<TorchAction>
 ): Action = Action(
     key = "torch",
     title = stringResource(R.string.es_action_torch),
     icon = torchIcon,
-    execute = { dispatchTorchAction(UpdateTorchEnabled(!torchState.value.torchEnabled)) }
+    execute = { dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled)) }
 )
 
 typealias TorchIcon = ActionIcon

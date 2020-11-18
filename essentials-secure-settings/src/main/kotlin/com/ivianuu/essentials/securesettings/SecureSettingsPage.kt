@@ -20,19 +20,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun SecureSettingsPage(
-    dispatch: @Dispatch (SecureSettingsAction) -> Unit,
+    dispatch: DispatchAction<SecureSettingsAction>,
+    state: @UiState SecureSettingsState,
     @FunApi showHideNavBarHint: Boolean = false
 ) {
     Scaffold(

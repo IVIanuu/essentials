@@ -19,17 +19,21 @@ package com.ivianuu.essentials.backup
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.Dispatch
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
-fun BackupAndRestorePage(dispatch: @Dispatch (BackupAndRestoreAction) -> Unit) {
+fun BackupAndRestorePage(
+    dispatch: DispatchAction<BackupAndRestoreAction>,
+    state: @UiState BackupAndRestoreState
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {

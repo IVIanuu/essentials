@@ -27,6 +27,7 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -34,7 +35,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
@@ -43,8 +43,8 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @FunBinding
 @Composable
 fun CheckableAppsPage(
-    state: @UiState CheckableAppsState,
-    dispatch: @Dispatch (CheckableAppsAction) -> Unit
+    dispatch: DispatchAction<CheckableAppsAction>,
+    state: @UiState CheckableAppsState
 ) {
     Scaffold(
         topBar = {

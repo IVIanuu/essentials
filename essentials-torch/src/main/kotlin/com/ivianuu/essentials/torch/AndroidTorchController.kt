@@ -19,8 +19,8 @@ package com.ivianuu.essentials.torch
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction.*
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.StateEffect
 import com.ivianuu.essentials.util.Logger
@@ -39,7 +39,7 @@ suspend fun updateAndroidTorchState(
     cameraManager: CameraManager,
     mainDispatcher: MainDispatcher,
     showToastRes: showToastRes,
-    dispatchTorchAction: @Dispatch (TorchAction) -> Unit,
+    dispatchTorchAction: DispatchAction<TorchAction>,
     @FunApi torchState: TorchState
 ) {
     runCatching {

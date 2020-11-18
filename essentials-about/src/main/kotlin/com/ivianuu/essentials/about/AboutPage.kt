@@ -51,7 +51,6 @@ fun AboutPage(
 @FunBinding
 @Composable
 fun AboutSection(
-    buildInfo: BuildInfo,
     navigator: Navigator,
     @FunApi packageName: String,
     @FunApi showHeader: Boolean = false,

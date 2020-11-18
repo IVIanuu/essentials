@@ -20,36 +20,34 @@ import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
-import com.ivianuu.essentials.store.currentState
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.reduceIn
-import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.ui.resource.resource
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.ui.store.reduceResource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 
 @UiStoreBinding
-fun CoroutineScope.CheckableAppsStore(
+fun CheckableAppsStore(
+    scope: CoroutineScope,
+    initial: @Initial CheckableAppsState,
+    actions: Actions<CheckableAppsAction>,
     checkedAppsSource: CheckedAppsSource,
-    onCheckedAppsChanged: OnCheckedAppsChanged,
     getInstalledApps: getInstalledApps,
-    initial: @Initial CheckableAppsState
-) = store<CheckableAppsState, CheckableAppsAction>(initial) {
-    checkedAppsSource.reduceIn(this) { copy(checkedApps = it) }
+    onCheckedAppsChanged: OnCheckedAppsChanged
+) = scope.state(initial) {
+    checkedAppsSource.reduce { copy(checkedApps = it) }
     reduceResource({ getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
-        val newCheckedApps = currentState().checkableApps()!!
+        val newCheckedApps = state.first().checkableApps()!!
             .filter { it.isChecked }
             .mapTo(mutableSetOf()) { it.info.packageName }
-            .reducer(currentState())
+            .reducer(state.first())
         onCheckedAppsChanged(newCheckedApps)
     }
-
-    for (action in this) {
+    actions.effect { action ->
         when (action) {
             is UpdateAppCheckState -> pushNewCheckedApps {
                 if (!action.app.isChecked) {

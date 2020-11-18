@@ -25,40 +25,40 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionI
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.resource.resource
+import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.ui.store.reduceResource
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterIsInstance
 
 @UiStoreBinding
-fun CoroutineScope.ActionPickerStore(
+fun ActionPickerStore(
+    scope: CoroutineScope,
+    initial: @Initial ActionPickerState = ActionPickerState(),
+    actions: Actions<ActionPickerAction>,
     getActionPickerItems: getActionPickerItems,
     getAction: getAction,
-    initial: @Initial ActionPickerState = ActionPickerState(),
     navigator: Navigator,
     requestPermissions: requestPermissions
-) = store<ActionPickerState, ActionPickerAction>(initial) {
+) = scope.state(initial) {
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
-    for (action in this) {
-        when (action) {
-            is PickAction -> {
-                val result = action.item.getResult() ?: continue
-                if (result is ActionPickerResult.Action) {
-                    val pickedAction = getAction(result.actionKey)
-                    if (!requestPermissions(pickedAction.permissions)) continue
-                }
-
-                navigator.popTop(result = result)
+    actions
+        .filterIsInstance<PickAction>()
+        .effect { action ->
+            val result = action.item.getResult() ?: return@effect
+            if (result is ActionPickerResult.Action) {
+                val pickedAction = getAction(result.actionKey)
+                if (!requestPermissions(pickedAction.permissions)) return@effect
             }
+
+            navigator.popTop(result = result)
         }
-    }
 }
 
 @FunBinding

@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.fold
+import com.ivianuu.essentials.store.StateScope
 import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -100,6 +101,13 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
 
 inline fun <T> resource(crossinline block: suspend () -> T): Flow<Resource<T>> {
     return resourceFlow { emit(block()) }
+}
+
+inline fun <S, T> StateScope<S>.reduceResource(
+    crossinline block: suspend () -> T,
+    noinline reducer: S.(Resource<T>) -> S
+) {
+    resource(block).reduce(reducer)
 }
 
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {

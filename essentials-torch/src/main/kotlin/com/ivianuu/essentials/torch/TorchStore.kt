@@ -17,22 +17,24 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.reducerStore
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 
 @Binding(ApplicationComponent::class)
 fun TorchStore(
     scope: GlobalScope,
-    initial: @Initial TorchState = TorchState()
-) = scope.reducerStore<TorchState, TorchAction>(initial) { action ->
-    when (action) {
-        is UpdateTorchEnabled -> copy(torchEnabled = action.value)
-    }
+    initial: @Initial TorchState = TorchState(),
+    actions: Actions<TorchAction>
+    ): StateFlow<TorchState> = scope.state(initial) {
+    actions
+        .filterIsInstance<UpdateTorchEnabled>()
+        .reduce { copy(torchEnabled = it.value) }
 }
 
 data class TorchState(val torchEnabled: Boolean = false)

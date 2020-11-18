@@ -26,13 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.*
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
@@ -40,8 +40,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TorchPage(
-    state: @UiState TorchState,
-    dispatch: @Dispatch (TorchAction) -> Unit
+    dispatch: DispatchAction<TorchAction>,
+    state: @UiState TorchState
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(

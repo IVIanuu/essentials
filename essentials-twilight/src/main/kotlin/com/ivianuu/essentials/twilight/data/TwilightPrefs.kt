@@ -16,10 +16,9 @@
 
 package com.ivianuu.essentials.twilight.data
 
-import com.ivianuu.essentials.data.store.invokePersistedStore
-import com.ivianuu.essentials.data.store.persistedStore
-import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.reduceEachAction
+import com.ivianuu.essentials.data.store.invokePersistedState
+import com.ivianuu.essentials.data.store.persistedState
+import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -39,9 +38,10 @@ sealed class TwilightPrefsAction {
 
 @Binding(ApplicationComponent::class)
 fun TwilightPrefsStore(
-    persistedStore: persistedStore<TwilightPrefsState, TwilightPrefsAction>
-) = persistedStore.invokePersistedStore("twilight_prefs", TwilightPrefsState()) {
-    reduceEachAction { action ->
+    actions: Actions<TwilightPrefsAction>,
+    persistedStore: persistedState<TwilightPrefsState>
+) = persistedStore.invokePersistedState("twilight_prefs", TwilightPrefsState()) {
+    actions.reduce { action ->
         when (action) {
             is UpdateTwilightMode -> copy(twilightMode = action.value)
             is UpdateUseBlackInDarkMode -> copy(useBlackInDarkMode = action.value)

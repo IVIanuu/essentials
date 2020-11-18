@@ -17,41 +17,41 @@
 package com.ivianuu.essentials.shortcutpicker
 
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.resource.resource
+import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.ui.store.reduceResource
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterIsInstance
 
 @UiStoreBinding
-fun CoroutineScope.ShortcutPickerStore(
+fun ShortcutPickerStore(
+    scope: CoroutineScope,
+    initial: @Initial ShortcutPickerState = ShortcutPickerState(),
+    actions: Actions<ShortcutPickerAction>,
     extractShortcut: extractShortcut,
     getAllShortcuts: getAllShortcuts,
-    initial: @Initial ShortcutPickerState = ShortcutPickerState(),
     navigator: Navigator,
     startActivityForIntentResult: startActivityForIntentResult,
     showToastRes: showToastRes,
-) = store<ShortcutPickerState, ShortcutPickerAction>(initial) {
+) = scope.state(initial) {
     reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
-    for (action in this) {
-        when (action) {
-            is PickShortcut -> {
-                try {
-                    val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
-                        .data ?: continue
-                    val shortcut = extractShortcut(shortcutRequestResult)
-                    navigator.popTop(result = shortcut)
-                } catch (e: Throwable) {
-                    e.printStackTrace()
-                    showToastRes(R.string.es_failed_to_pick_shortcut)
-                }
+    actions
+        .filterIsInstance<PickShortcut>()
+        .effect { action ->
+            try {
+                val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
+                    .data ?: return@effect
+                val shortcut = extractShortcut(shortcutRequestResult)
+                navigator.popTop(result = shortcut)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                showToastRes(R.string.es_failed_to_pick_shortcut)
             }
         }
-    }
 }

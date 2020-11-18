@@ -19,36 +19,39 @@ package com.ivianuu.essentials.backup
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterIsInstance
 
 @UiStoreBinding
-fun CoroutineScope.BackupAndRestoreStore(
-    backupData: backupData,
+fun BackupAndRestoreStore(
+    scope: CoroutineScope,
     initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
+    actions: Actions<BackupAndRestoreAction>,
+    backupData: backupData,
     restoreData: restoreData,
     showToastRes: showToastRes
-) = store<BackupAndRestoreState, BackupAndRestoreAction>(initial) {
-    for (action in this) {
-        when (action) {
-            BackupData -> {
-                backupData()
-                    .onFailure {
-                        it.printStackTrace()
-                        showToastRes(R.string.es_backup_error)
-                    }
-            }
-            RestoreData -> {
-                restoreData()
-                    .onFailure {
-                        it.printStackTrace()
-                        showToastRes(R.string.es_restore_error)
-                    }
-            }
+) = scope.state(initial) {
+    actions
+        .filterIsInstance<BackupData>()
+        .effect {
+            backupData()
+                .onFailure {
+                    it.printStackTrace()
+                    showToastRes(R.string.es_backup_error)
+                }
         }
-    }
+    actions
+        .filterIsInstance<RestoreData>()
+        .effect {
+            restoreData()
+                .onFailure {
+                    it.printStackTrace()
+                    showToastRes(R.string.es_restore_error)
+                }
+        }
 }

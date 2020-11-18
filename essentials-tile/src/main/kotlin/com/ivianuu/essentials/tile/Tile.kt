@@ -17,22 +17,14 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.forEachAction
-import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.tile.TileAction.TileClicked
+import com.ivianuu.essentials.store.Actions
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.MapEntries
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 
-fun CoroutineScope.tile(
-    initial: TileState,
-    block: suspend StoreScope<TileState, TileAction>.() -> Unit
-) = store(initial, block)
-
-typealias TileStores = Map<Int, (CoroutineScope) -> Store<TileState, TileAction>>
+typealias TileStores = Map<Int, (CoroutineScope, Actions<TileAction>) -> StateFlow<TileState>>
 @MapEntries
 fun defaultTileStores(): TileStores = emptyMap()
 
@@ -56,20 +48,12 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-suspend fun StoreScope<TileState, TileAction>.forEachTileClick(action: suspend () -> Unit) {
-    forEachAction { item ->
-        when (item) {
-            TileClicked -> action()
-        }
-    }
-}
-
 @Effect
 annotation class TileBinding(val slot: Int) {
     companion object {
         @MapEntries
-        fun <T : Store<TileState, TileAction>> intoTileMap(
-            provider: (CoroutineScope) -> T,
+        fun <T : StateFlow<TileState>> intoTileMap(
+            provider: (CoroutineScope, Actions<TileAction>) -> T,
             @Arg("slot") slot: Int
         ): TileStores = mapOf(slot to provider)
     }

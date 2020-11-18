@@ -20,14 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.reduceIn
 import com.ivianuu.essentials.ui.common.rememberRetained
-import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.resource.resource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
@@ -41,7 +34,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
@@ -51,18 +43,18 @@ annotation class UiStoreBinding {
     companion object {
         @Binding
         @Composable
-        inline fun <reified T : Store<S, A>, reified S, reified A> uiStore(
+        inline fun <reified T : StateFlow<S>, reified S> uiStore(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> T
-        ): Store<S, A> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
+        ): StateFlow<S> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
 
         @PublishedApi
         @Composable
-        internal fun <S, A> uiStoreImpl(
+        internal fun <S> uiStoreImpl(
             defaultDispatcher: DefaultDispatcher,
             type: KType,
-            provider: (CoroutineScope) -> Store<S, A>
-        ): Store<S, A> {
+            provider: (CoroutineScope) -> StateFlow<S>
+        ): StateFlow<S> {
             return rememberRetained(key = type) {
                 UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store
@@ -71,25 +63,15 @@ annotation class UiStoreBinding {
 }
 
 @PublishedApi
-internal class UiStoreRunner<S, A>(
+internal class UiStoreRunner<S>(
     private val coroutineScope: CoroutineScope,
-    store: (CoroutineScope) -> Store<S, A>
+    store: (CoroutineScope) -> StateFlow<S>
 ) : DisposableHandle {
     val store = store(coroutineScope)
     override fun dispose() {
         coroutineScope.cancel()
     }
 }
-
-inline fun <S, A, T> StoreScope<S, A>.reduceResource(
-    noinline block: suspend () -> T,
-    crossinline reducer: S.(Resource<T>) -> S,
-): Job = resource { block() }.reduceIn(this, reducer)
-
-inline fun <S, V> Flow<V>.reduceResourceIn(
-    scope: StoreScope<S, *>,
-    crossinline reducer: S.(Resource<V>) -> S,
-): Job = flowAsResource().reduceIn(scope, reducer)
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
@@ -99,28 +81,16 @@ annotation class Initial
 @Target(AnnotationTarget.TYPE)
 annotation class State
 
+@Binding
+inline val <S> StateFlow<S>.flow: @State Flow<S>
+    get() = this
+
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 annotation class UiState
-
 @Binding
 @Composable
-operator fun <S> Store<S, *>.component1(): @UiState S = state.collectAsState().value
-
-@Binding
-inline val <S> @State StateFlow<S>.flow: @State Flow<S>
-    get() = this
-
-@Binding
-inline val <S> Store<S, *>.stateFlow: @State StateFlow<S>
-    get() = state
-
-@Qualifier
-@Target(AnnotationTarget.TYPE)
-annotation class Dispatch
-
-@Binding
-operator fun <A> Store<*, A>.component2(): @Dispatch (A) -> Unit = { dispatch(it) }
+fun <S> StateFlow<S>.latest(): @UiState S = collectAsState().value
 
 @Effect
 annotation class StateEffect {
@@ -134,19 +104,19 @@ annotation class StateEffect {
 typealias StateEffectBlock<S> = suspend (S) -> Unit
 
 @Decorator
-fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorDefault(
+fun <T : StateFlow<S>, S> stateEffectStoreDecoratorDefault(
     scope: () -> GlobalScope,
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: () -> T
 ): () -> T {
     return if (stateEffects == null || stateEffects.isEmpty()) factory
     else {
-        var state: Pair<Store<S, A>, Job>? = null
+        var state: Pair<StateFlow<S>, Job>? = null
         {
             val instance = factory()
             if (state == null || state!!.first != instance) {
                 state = instance to scope().launch {
-                    instance.state.collectLatest { state ->
+                    instance.collectLatest { state ->
                         coroutineScope {
                             stateEffects.forEach { effect ->
                                 launch {
@@ -163,19 +133,19 @@ fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorDefault(
 }
 
 @Decorator
-fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorComposable(
+fun <T : StateFlow<S>, S> stateEffectStoreDecoratorComposable(
     scope: () -> GlobalScope,
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: @Composable () -> T
 ): @Composable () -> T {
     return if (stateEffects == null || stateEffects.isEmpty()) factory
     else {
-        var state: Pair<Store<S, A>, Job>? = null
+        var state: Pair<StateFlow<S>, Job>? = null
         {
             val instance = factory()
             if (state == null || state!!.first != instance) {
                 state = instance to scope().launch {
-                    instance.state.collectLatest { state ->
+                    instance.collectLatest { state ->
                         coroutineScope {
                             stateEffects.forEach { effect ->
                                 launch {
@@ -192,19 +162,19 @@ fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorComposable(
 }
 
 @Decorator
-fun <T : Store<S, A>, S, A> stateEffectStoreDecoratorSuspend(
+fun <T : StateFlow<S>, S> stateEffectStoreDecoratorSuspend(
     scope: () -> GlobalScope,
     stateEffects: Set<StateEffectBlock<S>>?,
     factory: suspend () -> T
 ): suspend () -> T {
     return if (stateEffects == null || stateEffects.isEmpty()) factory
     else {
-        var state: Pair<Store<S, A>, Job>? = null
+        var state: Pair<StateFlow<S>, Job>? = null
         {
             val instance = factory()
             if (state == null || state!!.first != instance) {
                 state = instance to scope().launch {
-                    instance.state.collectLatest { state ->
+                    instance.collectLatest { state ->
                         coroutineScope {
                             stateEffects.forEach { effect ->
                                 launch {

@@ -20,54 +20,51 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestHandler
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.startUi
-import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.take
 
 @UiStoreBinding
 fun PermissionStore(
-    hasPermissions: hasPermissions,
+    scope: CoroutineScope,
     initial: @Initial PermissionState = PermissionState(),
-    logger: Logger,
+    actions: Actions<PermissionAction>,
+    hasPermissions: hasPermissions,
     navigator: Navigator,
     request: PermissionRequest,
     requestHandler: requestHandler,
-    scope: CoroutineScope,
     startUi: startUi
-) = scope.store<PermissionState, PermissionAction>(initial) {
-    suspend fun updatePermissionsToProcessOrFinish() {
-        val permissionsToProcess = request.permissions
+) = scope.state(initial) {
+    state
+        .filter {
+            request.permissions
+                .all { hasPermissions(listOf(it)).first() }
+        }
+        .take(1)
+        .effect { navigator.popTop() }
+
+    suspend fun updatePermissions() {
+        val permissions = request.permissions
             .filterNot { hasPermissions(listOf(it)).first() }
-
-        logger.d("update permissions to process or finish not granted $permissionsToProcess")
-
-        if (permissionsToProcess.isEmpty()) {
-            navigator.popTop()
-        } else {
-            reduce { copy(permissionsToProcess = permissionsToProcess) }
-        }
+        reduce { copy(permissions = permissions) }
     }
 
-    launch { updatePermissionsToProcessOrFinish() }
+    effect { updatePermissions() }
 
-    for (action in this) {
-        when (action) {
-            is RequestPermission -> {
-                action.permission.requestHandler().request(action.permission)
-                startUi()
-                updatePermissionsToProcessOrFinish()
-            }
+    actions
+        .filterIsInstance<RequestPermission>()
+        .effect { action ->
+            action.permission.requestHandler().request(action.permission)
+            startUi()
+            updatePermissions()
         }
-    }
 }

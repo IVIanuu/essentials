@@ -18,9 +18,7 @@ package com.ivianuu.essentials.permission.defaultui
 
 import com.ivianuu.essentials.permission.Permission
 
-data class PermissionState(
-    val permissionsToProcess: List<Permission> = emptyList()
-)
+data class PermissionState(val permissions: List<Permission> = emptyList())
 
 sealed class PermissionAction {
     data class RequestPermission(val permission: Permission) : PermissionAction()

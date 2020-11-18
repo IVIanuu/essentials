@@ -35,13 +35,15 @@ import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
-@StateEffect
-fun updateTorchForegroundState(
+@AppWorkerBinding
+@FunBinding
+suspend fun updateTorchForegroundState(
     createTorchNotification: createTorchNotification,
-    startForegroundJob: startForegroundJob
-): suspend (TorchState) -> Unit {
+    startForegroundJob: startForegroundJob,
+    torchState: @State Flow<TorchState>
+) {
     var foregroundJob: ForegroundJob? = null
-    return { torchState ->
+    torchState.collect { torchState ->
         foregroundJob = if (torchState.torchEnabled) {
             startForegroundJob(createTorchNotification())
         } else {

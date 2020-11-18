@@ -18,23 +18,24 @@ package com.ivianuu.essentials.data.store
 
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.StoreScope
-import com.ivianuu.essentials.store.reduceIn
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.StateScope
+import com.ivianuu.essentials.store.state
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
+annotation class PersistedState
+
 @FunBinding
-inline fun <reified S, reified A> persistedStore(
+inline fun <reified S> persistedState(
     diskDataStoreFactory: DiskDataStoreFactory,
     globalScope: GlobalScope,
     @FunApi name: String,
     @FunApi initial: S,
-    @FunApi noinline block: suspend StoreScope<S, A>.() -> Unit
-): Store<S, A> = persistedStoreImpl(
+    @FunApi noinline block: StateScope<S>.() -> Unit
+): StateFlow<S> = persistedStateImpl(
     diskDataStoreFactory,
     globalScope,
     name,
@@ -44,21 +45,20 @@ inline fun <reified S, reified A> persistedStore(
 )
 
 @PublishedApi
-internal fun <S, A> persistedStoreImpl(
+internal fun <S> persistedStateImpl(
     diskDataStoreFactory: DiskDataStoreFactory,
     globalScope: GlobalScope,
     name: String,
     initial: S,
     type: KType,
-    block: suspend StoreScope<S, A>.() -> Unit
-): Store<S, A> {
+    block: StateScope<S>.() -> Unit
+): StateFlow<S> {
     val dataStore = diskDataStoreFactory.create(name, type) { initial }
-    return globalScope.store(initial) {
-        dataStore.data.reduceIn(this) { it }
-        val wrappedScope = object : StoreScope<S, A> by this {
-            override suspend fun reduce(block: S.() -> S): S =
-                dataStore.updateData { block(it) }
-        }
-        block(wrappedScope)
-    }
+    return globalScope.state(
+        dataStore.data,
+        initial,
+        { newState -> dataStore.updateData { newState } },
+        dataStore.data,
+        block
+    )
 }

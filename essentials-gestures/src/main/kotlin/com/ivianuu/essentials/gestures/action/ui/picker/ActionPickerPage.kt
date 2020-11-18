@@ -19,12 +19,12 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
@@ -33,8 +33,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun ActionPickerPage(
-    state: @UiState ActionPickerState,
-    dispatch: @Dispatch (ActionPickerAction) -> Unit,
+    dispatch: DispatchAction<ActionPickerAction>,
+    state: @UiState ActionPickerState
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }

@@ -24,6 +24,7 @@ import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.Text
@@ -31,7 +32,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.ClipboardListItem
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
@@ -39,8 +39,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsPage(
-    state: @UiState SecureSettingsPcInstructionsState,
-    dispatch: @Dispatch (SecureSettingsPcInstructionsAction) -> Unit
+    dispatch: DispatchAction<SecureSettingsPcInstructionsAction>,
+    state: @UiState SecureSettingsPcInstructionsState
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }

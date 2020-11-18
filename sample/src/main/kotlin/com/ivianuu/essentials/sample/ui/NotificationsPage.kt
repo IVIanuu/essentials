@@ -53,11 +53,10 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
-import com.ivianuu.essentials.store.iterator
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.reduce
-import com.ivianuu.essentials.store.reduceIn
-import com.ivianuu.essentials.store.store
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toImageAsset
@@ -69,7 +68,6 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
@@ -84,8 +82,8 @@ import kotlinx.coroutines.flow.map
 @FunBinding
 @Composable
 fun NotificationsPage(
-    state: @UiState NotificationsState,
-    dispatch: @Dispatch (NotificationsAction) -> Unit
+    dispatch: DispatchAction<NotificationsAction>,
+    state: @UiState NotificationsState
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
@@ -175,17 +173,19 @@ private fun NotificationPermissions(
 }
 
 @UiStoreBinding
-fun CoroutineScope.NotificationStore(
+fun NotificationStore(
+    scope: CoroutineScope,
     initial: @Initial NotificationsState = NotificationsState(),
+    actions: Actions<NotificationsAction>,
     hasPermissions: hasPermissions,
     notifications: UiNotifications,
     notificationStore: NotificationStore,
     permission: NotificationsPermission,
     requestPermissions: requestPermissions
-) = store<NotificationsState, NotificationsAction>(initial) {
-    hasPermissions(listOf(permission)).reduceIn(this) { copy(hasPermissions = it) }
-    notifications.flowAsResource().reduceIn(this) { copy(notifications = it) }
-    for (action in this) {
+) = scope.state(initial) {
+    hasPermissions(listOf(permission)).reduce { copy(hasPermissions = it) }
+    notifications.flowAsResource().reduce { copy(notifications = it) }
+    actions.effect { action ->
         when (action) {
             is RequestPermissions -> requestPermissions(listOf(permission))
             is OpenNotification -> notificationStore

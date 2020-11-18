@@ -25,25 +25,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @FunBinding
 @Composable
 fun AppPickerPage(
-    state: @UiState AppPickerState,
-    dispatch: @Dispatch (AppPickerAction) -> Unit
+    dispatch: DispatchAction<AppPickerAction>,
+    state: @UiState AppPickerState
 ) {
     Scaffold(
         topBar = {

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.android.ServiceComponent
@@ -42,22 +43,21 @@ abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
         serviceComponent.mergeComponent<FunTileServiceComponent>()
     }
 
-    private val clicks = EventFlow<Unit>()
+    private val tileActions = EventFlow<TileAction>()
 
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
             val store = (component.tileStores[slot]
-                ?.invoke(this)
+                ?.invoke(this, tileActions)
                 ?: error("No tile found for $slot"))
-            launch { clicks.collect { store.dispatch(TileClicked) } }
-            launch { store.state.collect { applyState(it) } }
+            store.collect { applyState(it) }
         }
     }
 
     override fun onClick() {
         super.onClick()
-        clicks.emit(Unit)
+        tileActions.emit(TileClicked)
     }
 
     private fun applyState(state: TileState) {

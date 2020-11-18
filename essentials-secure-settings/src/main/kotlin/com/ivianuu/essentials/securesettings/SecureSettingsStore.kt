@@ -18,34 +18,36 @@ package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @UiStoreBinding
-fun CoroutineScope.SecureSettingsStore(
-    grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
+fun SecureSettingsStore(
+    scope: CoroutineScope,
     initial: @Initial SecureSettingsState = SecureSettingsState,
+    actions: Actions<SecureSettingsAction>,
+    grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
     showToastRes: showToastRes
-) = store<SecureSettingsState, SecureSettingsAction>(initial) {
-    launch { popNavigatorOnceSecureSettingsGranted(true) }
-    for (action in this) {
-        when (action) {
-            OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
-            GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
-                showToastRes(R.string.es_secure_settings_permission_granted)
-            } else {
-                showToastRes(R.string.es_secure_settings_no_root)
+) = scope.state(initial) {
+    effect { popNavigatorOnceSecureSettingsGranted(true) }
+    actions
+        .effect { action ->
+            when (action) {
+                OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
+                GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
+                    showToastRes(R.string.es_secure_settings_permission_granted)
+                } else {
+                    showToastRes(R.string.es_secure_settings_no_root)
+                }
             }
         }
-    }
 }

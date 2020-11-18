@@ -26,11 +26,11 @@ import androidx.compose.ui.graphics.painter.ImagePainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
@@ -39,8 +39,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun ShortcutPickerPage(
+    dispatch: DispatchAction<ShortcutPickerAction>,
     state: @UiState ShortcutPickerState,
-    dispatch: @Dispatch (ShortcutPickerAction) -> Unit,
     @FunApi title: String? = null
 ) {
     Scaffold(

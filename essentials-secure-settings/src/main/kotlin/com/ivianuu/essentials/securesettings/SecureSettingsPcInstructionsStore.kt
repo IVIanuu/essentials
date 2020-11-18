@@ -19,24 +19,25 @@ package com.ivianuu.essentials.securesettings
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
-import com.ivianuu.essentials.store.iterator
-import com.ivianuu.essentials.store.store
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @UiStoreBinding
-fun CoroutineScope.SecureSettingsPcInstructionsStore(
+fun SecureSettingsPcInstructionsStore(
+    scope: CoroutineScope,
     initial: @Initial SecureSettingsPcInstructionsState,
+    actions: Actions<SecureSettingsPcInstructionsAction>,
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
-) = store<SecureSettingsPcInstructionsState, SecureSettingsPcInstructionsAction>(initial) {
-    launch { popNavigatorOnceSecureSettingsGranted(false) }
-    for (action in this) {
+) = scope.state(initial) {
+    effect { popNavigatorOnceSecureSettingsGranted(false) }
+    actions.effect { action ->
         when (action) {
             OpenGadgetHacksTutorial -> navigator.push(
                 UrlRoute("https://youtu.be/CDuxcrrWLnY")

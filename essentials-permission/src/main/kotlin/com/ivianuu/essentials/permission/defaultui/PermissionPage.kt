@@ -23,23 +23,21 @@ import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.defaultui.PermissionAction.*
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.Dispatch
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
 @FunBinding
 @Composable
 fun PermissionPage(
-    state: @UiState PermissionState,
-    dispatch: @Dispatch (PermissionAction) -> Unit
+    dispatch: DispatchAction<PermissionAction>,
+    state: @UiState PermissionState
 ) {
     Scaffold(
         topBar = {
@@ -47,10 +45,10 @@ fun PermissionPage(
         }
     ) {
         InsettingScrollableColumn {
-            state.permissionsToProcess.forEach { permission ->
+            state.permissions.forEach { permission ->
                 Permission(
                     permission = permission,
-                    onClick = { dispatch(PermissionAction.RequestPermission(permission)) }
+                    onClick = { dispatch(RequestPermission(permission)) }
                 )
             }
         }

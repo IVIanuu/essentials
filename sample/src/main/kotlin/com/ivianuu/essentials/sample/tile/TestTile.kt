@@ -16,27 +16,30 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.store.reduceIn
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.tile.forEachTileClick
-import com.ivianuu.essentials.tile.tile
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
-import com.ivianuu.essentials.ui.store.Dispatch
 import com.ivianuu.essentials.ui.store.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 
 @TileBinding(1)
-fun CoroutineScope.TestTile(
-    twilightPrefsState: @State StateFlow<TwilightPrefsState>,
-    dispatch: @Dispatch (TwilightPrefsAction) -> Unit
-) = tile(twilightPrefsState.value.toTileState()) {
-    twilightPrefsState.reduceIn(this) { it.toTileState() }
-    forEachTileClick {
+fun TestTile(
+    scope: CoroutineScope,
+    actions: Actions<TileAction>,
+    dispatch: DispatchAction<TwilightPrefsAction>,
+    twilightPrefsState: StateFlow<TwilightPrefsState>
+) = scope.state(twilightPrefsState.value.toTileState()) {
+    twilightPrefsState.reduce { it.toTileState() }
+    actions.filterIsInstance<TileAction>().effect {
         dispatch(
             UpdateTwilightMode(
                 if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark
