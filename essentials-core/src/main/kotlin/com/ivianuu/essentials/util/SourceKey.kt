@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.ivianuu.essentials.util
 
 fun _sourceKey(): Any = error("Intrinsic")

@@ -23,7 +23,6 @@ import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 
-
 @Effect
 annotation class AppInitializerBinding(
     val key: String,
