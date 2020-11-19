@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Effect
 annotation class NotificationWorkerBinding {
@@ -31,3 +34,12 @@ typealias NotificationWorkers = Set<suspend () -> Unit>
 
 @SetElements
 fun defaultNotificationWorkers(): NotificationWorkers = emptySet()
+
+@FunBinding
+suspend fun runNotificationWorkers(notificationWorkers: NotificationWorkers) {
+    coroutineScope {
+        notificationWorkers.forEach { worker ->
+            launch { worker() }
+        }
+    }
+}

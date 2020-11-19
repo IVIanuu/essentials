@@ -18,68 +18,66 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.notificationlistener.NotificationsAction.*
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.state
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 
-interface NotificationStore {
-    val isConnected: Flow<Boolean>
+data class NotificationsState(
+    val isConnected: Boolean = false,
+    val notifications: List<StatusBarNotification> = emptyList()
+)
 
-    val notifications: StateFlow<List<StatusBarNotification>>
-
-    suspend fun openNotification(notification: Notification): Boolean
-
-    suspend fun dismissNotification(key: String)
-
-    suspend fun dismissAllNotifications()
+sealed class NotificationsAction {
+    data class OpenNotification(val notification: Notification) : NotificationsAction()
+    data class DismissNotification(val key: String) : NotificationsAction()
+    object DismissAllNotifications : NotificationsAction()
 }
 
-@ImplBinding(ApplicationComponent::class)
-class NotificationStoreImpl(
-    private val defaultDispatcher: DefaultDispatcher,
-) : NotificationStore {
+@Binding(ApplicationComponent::class)
+fun NotificationsStore(
+    actions: Actions<NotificationsAction>,
+    serviceRef: NotificationServiceRef,
+    scope: GlobalScope
+) = scope.state(NotificationsState()) {
+    serviceRef
+        .reduce { copy(isConnected = it != null) }
 
-    private val service = MutableStateFlow<DefaultNotificationListenerService?>(null)
-    override val isConnected: Flow<Boolean> get() = service.map { it != null }
+    serviceRef
+        .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+        .reduce { copy(notifications = it) }
 
-    private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
-    override val notifications: StateFlow<List<StatusBarNotification>> get() = _notifications
-
-    override suspend fun openNotification(notification: Notification): Boolean {
-        return withContext(defaultDispatcher) {
-            service.first { it != null }
+    actions
+        .filterIsInstance<OpenNotification>()
+        .effect { action ->
             try {
-                notification.contentIntent.send()
-                true
+                action.notification.contentIntent.send()
             } catch (e: Throwable) {
-                false
             }
         }
-    }
 
-    override suspend fun dismissNotification(key: String): Unit = withContext(defaultDispatcher) {
-        service.first { it != null }!!.cancelNotification(key)
-    }
+    serviceRef
+        .filterNotNull()
+        .flatMapLatest { service ->
+            actions
+                .filterIsInstance<DismissNotification>()
+                .map { it.key to service }
+        }
+        .effect { (key, service) -> service.cancelNotification(key) }
 
-    override suspend fun dismissAllNotifications(): Unit = withContext(defaultDispatcher) {
-        service.first { it != null }!!.cancelAllNotifications()
-    }
-
-    internal fun onServiceConnected(service: DefaultNotificationListenerService) {
-        this.service.value = service
-    }
-
-    internal fun onNotificationsChanged(notifications: List<StatusBarNotification>) {
-        _notifications.value = notifications
-    }
-
-    internal fun onServiceDisconnected() {
-        this.service.value = null
-    }
+    serviceRef
+        .filterNotNull()
+        .flatMapLatest { service ->
+            actions
+                .filterIsInstance<DismissAllNotifications>()
+                .map { service }
+        }
+        .effect { it.cancelAllNotifications() }
 }

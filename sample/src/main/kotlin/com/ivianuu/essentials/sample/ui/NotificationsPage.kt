@@ -40,7 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.NotificationStore
+import com.ivianuu.essentials.notificationlistener.NotificationsAction
+import com.ivianuu.essentials.notificationlistener.NotificationsState
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.hasPermissions
@@ -50,9 +51,9 @@ import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsAction.DismissNotification
-import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
-import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
+import com.ivianuu.essentials.sample.ui.NotificationsPageAction.DismissNotification
+import com.ivianuu.essentials.sample.ui.NotificationsPageAction.OpenNotification
+import com.ivianuu.essentials.sample.ui.NotificationsPageAction.RequestPermissions
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.state
@@ -68,6 +69,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.injekt.Binding
@@ -80,16 +82,16 @@ import kotlinx.coroutines.flow.map
 @FunBinding
 @Composable
 fun NotificationsPage(
-    dispatch: DispatchAction<NotificationsAction>,
-    state: @UiState NotificationsState
+    dispatch: DispatchAction<NotificationsPageAction>,
+    pageState: @UiState NotificationsPageState
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
     ) {
-        AnimatedBox(state.hasPermissions) { hasPermission ->
+        AnimatedBox(pageState.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
-                    notifications = state.notifications,
+                    notifications = pageState.notifications,
                     onNotificationClick = {
                         dispatch(OpenNotification(it))
                     },
@@ -173,11 +175,11 @@ private fun NotificationPermissions(
 @UiStoreBinding
 fun NotificationStore(
     scope: CoroutineScope,
-    initial: @Initial NotificationsState = NotificationsState(),
-    actions: Actions<NotificationsAction>,
+    initial: @Initial NotificationsPageState = NotificationsPageState(),
+    actions: Actions<NotificationsPageAction>,
+    dispatchServiceAction: DispatchAction<NotificationsAction>,
     hasPermissions: hasPermissions,
     notifications: UiNotifications,
-    notificationStore: NotificationStore,
     permission: NotificationsPermission,
     requestPermissions: requestPermissions
 ) = scope.state(initial) {
@@ -186,10 +188,12 @@ fun NotificationStore(
     actions.effect { action ->
         when (action) {
             is RequestPermissions -> requestPermissions(listOf(permission))
-            is OpenNotification -> notificationStore
-                .openNotification(action.notification.sbn.notification)
-            is DismissNotification -> notificationStore
-                .dismissNotification(action.notification.sbn.key)
+            is OpenNotification -> dispatchServiceAction(
+                NotificationsAction.OpenNotification(action.notification.sbn.notification)
+            )
+            is DismissNotification -> dispatchServiceAction(
+                NotificationsAction.DismissNotification(action.notification.sbn.key)
+            )
         }
     }
 }
@@ -206,52 +210,51 @@ typealias UiNotifications = Flow<List<UiNotification>>
 @Binding
 fun notifications(
     applicationContext: ApplicationContext,
-    notificationStore: NotificationStore,
-): UiNotifications {
-    return notificationStore.notifications
-        .map { notifications ->
-            notifications
-                .parallelMap { sbn ->
-                    UiNotification(
-                        title = sbn.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
-                            ?.toString() ?: "",
-                        text = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
-                            ?.toString() ?: "",
-                        icon = runCatching {
-                            sbn.notification.smallIcon
-                                .loadDrawable(applicationContext)
-                                .toImageAsset();
+    serviceState: @State Flow<NotificationsState>,
+): UiNotifications = serviceState
+    .map { it.notifications }
+    .map { notifications ->
+        notifications
+            .parallelMap { it.toUiNotification(applicationContext) }
+    }
 
-                        }.fold(
-                            success = { asset ->
-                                {
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        asset = asset
-                                    )
-                                }
-                            },
-                            failure = {
-                                { Icon(R.drawable.es_ic_error) }
-                            }
-                        ),
-                        color = Color(sbn.notification.color),
-                        isClearable = sbn.isClearable,
-                        sbn = sbn
-                    )
-                }
+private fun StatusBarNotification.toUiNotification(applicationContext: ApplicationContext) = UiNotification(
+    title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+        ?.toString() ?: "",
+    text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+        ?.toString() ?: "",
+    icon = runCatching {
+        notification.smallIcon
+            .loadDrawable(applicationContext)
+            .toImageAsset();
+
+    }.fold(
+        success = { asset ->
+            {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    asset = asset
+                )
+            }
+        },
+        failure = {
+            { Icon(R.drawable.es_ic_error) }
         }
-}
+    ),
+    color = Color(notification.color),
+    isClearable = isClearable,
+    sbn = this
+)
 
-data class NotificationsState(
+data class NotificationsPageState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle
 )
 
-sealed class NotificationsAction {
-    object RequestPermissions : NotificationsAction()
-    data class OpenNotification(val notification: UiNotification) : NotificationsAction()
-    data class DismissNotification(val notification: UiNotification) : NotificationsAction()
+sealed class NotificationsPageAction {
+    object RequestPermissions : NotificationsPageAction()
+    data class OpenNotification(val notification: UiNotification) : NotificationsPageAction()
+    data class DismissNotification(val notification: UiNotification) : NotificationsPageAction()
 }
 
 data class UiNotification(

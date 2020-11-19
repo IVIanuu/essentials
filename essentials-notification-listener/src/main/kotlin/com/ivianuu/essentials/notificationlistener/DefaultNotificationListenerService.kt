@@ -18,12 +18,19 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class DefaultNotificationListenerService : EsNotificationListenerService() {
+
+    private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
+    val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
     private val component by lazy {
         serviceComponent.mergeComponent<DefaultNotificationListenerServiceComponent>()
@@ -32,19 +39,15 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         component.logger.d("listener connected")
-        component.notificationStore.onServiceConnected(this)
-        component.notificationWorkers.forEach { worker ->
-            connectedScope.launch {
-                scope.launch { worker() }
-            }
-        }
+        component.notificationServiceRef.value = this
+        connectedScope.launch { component.runNotificationWorkers() }
         notifyUpdate()
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
         component.logger.d("listener disconnected")
-        component.notificationStore.onServiceDisconnected()
+        component.notificationServiceRef.value = null
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
@@ -66,13 +69,17 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     }
 
     private fun notifyUpdate() {
-        component.notificationStore.onNotificationsChanged(activeNotifications.toList())
+        _notifications.value = activeNotifications.toList()
     }
 }
 
 @MergeInto(ServiceComponent::class)
 interface DefaultNotificationListenerServiceComponent {
+    val notificationServiceRef: NotificationServiceRef
     val logger: Logger
-    val notificationStore: NotificationStoreImpl
-    val notificationWorkers: NotificationWorkers
+    val runNotificationWorkers: runNotificationWorkers
 }
+
+internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>
+@Binding(ApplicationComponent::class)
+fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)
