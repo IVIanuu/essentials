@@ -40,17 +40,23 @@ suspend fun updateAndroidTorchState(
     runCatching {
         withContext(mainDispatcher) {
             suspendCancellableCoroutine<Unit> { continuation ->
+                var resumed = false
+                fun resumeIfNeeded() {
+                    if (resumed) return
+                    resumed = true
+                    continuation.resume(Unit)
+                }
                 val callback = object : CameraManager.TorchCallback() {
                     override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                         cameraManager.unregisterTorchCallback(this)
                         cameraManager.setTorchMode(cameraId, torchState.torchEnabled)
-                        continuation.resume(Unit)
+                        resumeIfNeeded()
                     }
 
                     override fun onTorchModeUnavailable(cameraId: String) {
                         cameraManager.unregisterTorchCallback(this)
                         showToastRes(R.string.es_failed_to_toggle_torch)
-                        continuation.resume(Unit)
+                        resumeIfNeeded()
                     }
                 }
                 cameraManager.registerTorchCallback(callback, null)

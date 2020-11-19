@@ -120,6 +120,7 @@ fun <S> CoroutineScope.state(
     val stateScope = StateScopeImpl(state)
         .apply(block)
 
+    // collect reducers
     launch {
         stateScope.reducers.merge().collect { reducer ->
             val currentState = getState()
@@ -128,6 +129,7 @@ fun <S> CoroutineScope.state(
         }
     }
 
+    // launch effects
     stateScope.effects.forEach { effect ->
         launch {
             effect()
