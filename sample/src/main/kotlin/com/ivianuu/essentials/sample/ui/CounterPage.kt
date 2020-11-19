@@ -31,6 +31,7 @@ import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -38,6 +39,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
@@ -84,15 +86,20 @@ fun CounterPage(
 fun CounterStore(
     scope: CoroutineScope,
     initial: @Initial CounterState = CounterState(),
-    actions: Actions<CounterAction>
+    actions: Actions<CounterAction>,
+    showToast: showToast
 ) = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
         .reduce { copy(count = count + 1) }
     actions
         .filterIsInstance<Dec>()
-        .filter { state.first().count > 0 }
+        .filter { currentState().count > 0 }
         .reduce { copy(count = count - 1) }
+    actions
+        .filterIsInstance<Dec>()
+        .filter { currentState().count <= 0 }
+        .effect { showToast("Value cannot be less than 0!") }
 }
 
 data class CounterState(val count: Int = 0)

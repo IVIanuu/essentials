@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -51,6 +52,10 @@ interface StateScope<S> {
         collect(action)
     }
 
+    fun <T> Flow<T>.effectLatest(action: suspend (T) -> Unit) = this@StateScope.effect {
+        collectLatest(action)
+    }
+
     fun reduce(reducer: Reducer<S>)
 
     fun <T> Flow<T>.mapReduce(reducer: S.(T) -> S): Flow<Reducer<S>> =
@@ -58,7 +63,6 @@ interface StateScope<S> {
 
     fun Flow<Reducer<S>>.catchReduce(reducer: S.(Throwable) -> S): Flow<Reducer<S>> =
         catch { t -> emit { reducer(t) } }
-
 
     fun <T> Flow<T>.reduceCatching(
         success: S.(T) -> S,

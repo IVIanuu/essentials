@@ -21,6 +21,7 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.Deselect
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
@@ -41,10 +42,10 @@ fun CheckableAppsStore(
     reduceResource({ getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
-        val newCheckedApps = state.first().checkableApps()!!
+        val newCheckedApps = currentState().checkableApps()!!
             .filter { it.isChecked }
             .mapTo(mutableSetOf()) { it.info.packageName }
-            .reducer(state.first())
+            .reducer(currentState())
         onCheckedAppsChanged(newCheckedApps)
     }
     actions.effect { action ->
