@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.prefs
 
 import android.content.Context
-import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Dp
 import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Millis
 import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Percentage

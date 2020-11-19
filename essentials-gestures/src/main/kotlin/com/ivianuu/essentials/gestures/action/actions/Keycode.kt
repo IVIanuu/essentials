@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action

@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
-import androidx.compose.foundation.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.datastore.disk
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import java.lang.reflect.Type
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 

@@ -27,7 +27,6 @@ import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.startForegroundJob
 import com.ivianuu.essentials.ui.store.State
-import com.ivianuu.essentials.ui.store.StateEffect
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding

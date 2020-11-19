@@ -19,7 +19,6 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.android.ApplicationContext

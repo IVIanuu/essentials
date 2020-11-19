@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.foundation.Icon
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.Desc

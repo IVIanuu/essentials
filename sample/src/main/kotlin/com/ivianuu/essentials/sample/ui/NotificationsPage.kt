@@ -55,7 +55,6 @@ import com.ivianuu.essentials.sample.ui.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsAction.RequestPermissions
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.store.reduce
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.Icon
@@ -76,7 +75,6 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 @FunBinding

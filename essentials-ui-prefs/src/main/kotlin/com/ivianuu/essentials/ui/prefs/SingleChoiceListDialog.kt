@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog

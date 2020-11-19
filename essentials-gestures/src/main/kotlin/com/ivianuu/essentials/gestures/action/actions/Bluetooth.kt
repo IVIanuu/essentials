@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
-import androidx.compose.foundation.Icon
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action

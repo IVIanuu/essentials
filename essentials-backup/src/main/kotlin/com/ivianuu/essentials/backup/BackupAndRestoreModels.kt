@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.backup
 
-import com.ivianuu.injekt.Binding
-
 object BackupAndRestoreState
 
 sealed class BackupAndRestoreAction {

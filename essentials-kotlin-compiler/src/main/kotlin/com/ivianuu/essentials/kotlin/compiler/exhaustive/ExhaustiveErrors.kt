@@ -18,7 +18,6 @@ package com.ivianuu.essentials.kotlin.compiler.exhaustive
 
 import org.jetbrains.kotlin.cfg.WhenMissingCase
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.diagnostics.Severity

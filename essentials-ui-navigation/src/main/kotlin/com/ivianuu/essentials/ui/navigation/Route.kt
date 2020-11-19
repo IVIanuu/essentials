@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.onDispose

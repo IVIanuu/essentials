@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.compose.foundation.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.VectorAsset
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand

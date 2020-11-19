@@ -19,7 +19,7 @@ package com.ivianuu.essentials.torch
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.torch.TorchAction.*
+import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent

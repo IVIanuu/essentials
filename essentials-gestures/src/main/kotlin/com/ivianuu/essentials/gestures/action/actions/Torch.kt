@@ -16,23 +16,19 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.foundation.Icon
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction
-import com.ivianuu.essentials.torch.TorchAction.*
+import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.store.State
-import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 

@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.apps.ui.apppicker
 
 import com.ivianuu.essentials.apps.getInstalledApps
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.*
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.resource.resource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import kotlinx.coroutines.CoroutineScope

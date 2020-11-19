@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Arg
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements

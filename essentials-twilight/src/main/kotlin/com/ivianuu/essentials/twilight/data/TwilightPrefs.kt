@@ -19,7 +19,8 @@ package com.ivianuu.essentials.twilight.data
 import com.ivianuu.essentials.data.store.invokePersistedState
 import com.ivianuu.essentials.data.store.persistedState
 import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateTwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateUseBlackInDarkMode
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.Json

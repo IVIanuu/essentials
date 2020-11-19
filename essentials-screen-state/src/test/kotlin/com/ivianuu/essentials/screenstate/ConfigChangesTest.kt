@@ -18,7 +18,6 @@ package com.ivianuu.essentials.screenstate
 
 import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.android.ApplicationContext

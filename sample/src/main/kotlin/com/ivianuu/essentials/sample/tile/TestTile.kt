@@ -24,9 +24,8 @@ import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateTwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
-import com.ivianuu.essentials.ui.store.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance

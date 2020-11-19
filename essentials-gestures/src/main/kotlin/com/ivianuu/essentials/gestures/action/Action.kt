@@ -19,8 +19,8 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.Arg
+import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.MapEntries

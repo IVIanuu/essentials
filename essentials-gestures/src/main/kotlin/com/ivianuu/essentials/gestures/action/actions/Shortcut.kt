@@ -23,7 +23,6 @@ import android.util.Base64
 import androidx.compose.foundation.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.ImagePainter
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionFactory

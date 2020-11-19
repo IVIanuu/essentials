@@ -23,7 +23,8 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.*
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateTwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateUseBlackInDarkMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
@@ -32,7 +33,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 

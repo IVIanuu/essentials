@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
-import androidx.compose.foundation.Icon
-import androidx.compose.ui.res.vectorResource
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory

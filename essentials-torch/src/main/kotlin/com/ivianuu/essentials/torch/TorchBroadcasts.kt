@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.app.AppWorkerBinding
-import com.ivianuu.essentials.tuples.combine
-import com.ivianuu.essentials.ui.store.State
-import kotlinx.coroutines.flow.Flow
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.torch.TorchAction.*
+import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
+import com.ivianuu.essentials.tuples.combine
+import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @AppWorkerBinding

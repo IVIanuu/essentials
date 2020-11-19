@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.about.AboutPage
-import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
 import com.ivianuu.essentials.backup.BackupAndRestorePage
