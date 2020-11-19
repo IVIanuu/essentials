@@ -41,7 +41,9 @@ import com.ivianuu.essentials.ui.animatable.animationOverlay
 import com.ivianuu.essentials.ui.animatable.to
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.setValue
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.milliseconds
@@ -79,8 +81,8 @@ fun SharedElementStackTransition(
     }
 
     if (bounds.all { it.first != null && it.second != null } || forceRun) {
-        var otherComplete by rememberUntrackedState { false }
-        var sharedElementComplete by rememberUntrackedState { false }
+        var otherComplete by rememberRef { false }
+        var sharedElementComplete by rememberRef { false }
 
         fun completeIfPossible() {
             if (otherComplete && (sharedElementComplete || forceRun)) {

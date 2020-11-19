@@ -35,7 +35,9 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.push
 
@@ -68,7 +70,7 @@ fun Modifier.popupClickable(
 ) = composed {
     val navigator = NavigatorAmbient.current
 
-    var coordinates by rememberUntrackedState<LayoutCoordinates?> { null }
+    var coordinates by rememberRef<LayoutCoordinates?> { null }
 
     onGloballyPositioned { coordinates = it }
         .clickable(indication = indicationFactory()) {

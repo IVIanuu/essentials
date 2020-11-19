@@ -29,7 +29,9 @@ import androidx.compose.ui.platform.ConfigurationAmbient
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.popTop
@@ -51,7 +53,7 @@ fun PopupRoute(
         navigator.popTop()
     }
 
-    var dismissed by rememberUntrackedState { false }
+    var dismissed by rememberRef { false }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {

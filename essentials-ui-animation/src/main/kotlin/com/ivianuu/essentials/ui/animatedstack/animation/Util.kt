@@ -22,11 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatable.bounds
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.setValue
 
 @Composable
 fun Animatable.rememberFirstNonNullBounds(): Rect? {
-    var capturedBoundsState by rememberUntrackedState<Rect?> { null }
+    var capturedBoundsState by rememberRef<Rect?> { null }
     if (capturedBoundsState == null && bounds != null) {
         capturedBoundsState = bounds
     }

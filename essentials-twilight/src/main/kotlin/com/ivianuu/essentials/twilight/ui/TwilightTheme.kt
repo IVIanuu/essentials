@@ -31,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.twilight.domain.TwilightStateFlow
 import com.ivianuu.essentials.ui.common.EsMaterialTheme
-import com.ivianuu.essentials.ui.common.rememberUntrackedState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.injekt.FunApi
@@ -58,7 +60,7 @@ fun TwilightTheme(
         .distinctUntilChanged()
         .collectAsState(lightColors)
 
-    var lastColors by rememberUntrackedState { targetColors }
+    var lastColors by rememberRef { targetColors }
 
     val animation = key(targetColors) { animatedFloat(0f) }
     onCommit(animation) {

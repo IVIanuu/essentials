@@ -19,33 +19,53 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SnapshotMutationPolicy
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.structuralEqualityPolicy
+import kotlin.reflect.KProperty
 
 @Composable
-inline fun <T> rememberUntrackedState(
+inline fun <T> rememberRef(
     policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
     crossinline init: () -> T,
-): MutableState<T> = remember { untrackedStateOf(init(), policy) }
+): Ref<T> = remember { refOf(init(), policy) }
 
 @Composable
-inline fun <T> rememberUntrackedState(
+inline fun <T> rememberRef(
     vararg inputs: Any?,
     policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
     crossinline init: () -> T,
-): MutableState<T> = remember(*inputs) {
-    untrackedStateOf(init(), policy)
+): Ref<T> = remember(*inputs) {
+    refOf(init(), policy)
 }
 
-fun <T> untrackedStateOf(
+fun <T> refOf(
     value: T,
     policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy()
-): MutableState<T> = UntrackedState(value, policy)
+): Ref<T> = RefImpl(value, policy)
 
-private class UntrackedState<T>(
+interface Ref<T> {
+    var value: T
+    operator fun component1(): T
+    operator fun component2(): (T) -> Unit
+}
+
+fun <T> Ref<T>.component1(): T = value
+fun <T> Ref<T>.component2(): (T) -> Unit = { value = it }
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <T> Ref<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <T> Ref<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
+    this.value = value
+}
+
+private class RefImpl<T>(
     value: T,
     val policy: SnapshotMutationPolicy<T>
-) : MutableState<T> {
+) : Ref<T> {
     override var value: T = value
         get() = synchronized(this) { field }
         set(value) {
