@@ -75,6 +75,22 @@ interface StateScope<S> {
 
 suspend inline fun <S> FlowCollector<Reducer<S>>.reduce(noinline reducer: S.() -> S) = emit(reducer)
 
+fun <T, S> Flow<T>.state(
+    scope: CoroutineScope,
+    initial: S,
+    started: SharingStarted = SharingStarted.Lazily,
+    reducer: S.(T) -> S
+) = map<T, Reducer<S>> { value -> { reducer(value) } }
+    .state(scope, initial, started)
+
+fun <S> Flow<Reducer<S>>.state(
+    scope: CoroutineScope,
+    initial: S,
+    started: SharingStarted = SharingStarted.Lazily
+): StateFlow<S> = scope.state(initial, started) {
+    this@state.reduce()
+}
+
 fun <S> CoroutineScope.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily,
