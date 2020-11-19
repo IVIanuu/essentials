@@ -90,7 +90,7 @@ inline val <S> StateFlow<S>.flow: @State Flow<S>
 annotation class UiState
 @Binding
 @Composable
-fun <S> StateFlow<S>.latest(): @UiState S = collectAsState().value
+inline val <S> StateFlow<S>.latest: @UiState S = collectAsState().value
 
 @Effect
 annotation class StateEffect {
