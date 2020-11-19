@@ -91,11 +91,11 @@ fun CounterStore(
 ) = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
-        .reduce { copy(count = count + 1) }
+        .reduce { copy(count = count.inc()) }
     actions
         .filterIsInstance<Dec>()
         .filter { currentState().count > 0 }
-        .reduce { copy(count = count - 1) }
+        .reduce { copy(count = count.dec()) }
     actions
         .filterIsInstance<Dec>()
         .filter { currentState().count <= 0 }
