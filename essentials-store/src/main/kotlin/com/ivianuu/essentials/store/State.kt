@@ -103,16 +103,15 @@ fun <S> CoroutineScope.state(
     start: Flow<*> = flowOf(Unit),
     block: StateScope<S>.() -> Unit
 ): StateFlow<S> {
-    val stateScope = StateScopeImpl(state)
-        .apply(block)
-
-    val reducers = stateScope.reducers.merge()
-    val effects = stateScope.effects
-
     launch {
         start
             .take(1)
             .first()
+        val stateScope = StateScopeImpl(state)
+            .apply(block)
+
+        val reducers = stateScope.reducers.merge()
+        val effects = stateScope.effects
         launch {
             reducers.collect { reducer ->
                 val currentState = state.value
