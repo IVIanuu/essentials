@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.delay
 import org.junit.Test
@@ -28,8 +28,7 @@ class EventFlowTest {
     @Test
     fun testSingleCollector() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
-        val eventCollector = TestCollector<Int>()
-        eventFlow.collectIn(this, eventCollector)
+        val eventCollector = eventFlow.testCollect(this)
 
         eventFlow.emit(1)
         eventFlow.emit(2)
@@ -42,10 +41,8 @@ class EventFlowTest {
     fun testMultipleCollectors() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
 
-        val collector1 = TestCollector<Int>()
-        eventFlow.collectIn(this, collector1)
-        val collector2 = TestCollector<Int>()
-        eventFlow.collectIn(this, collector2)
+        val collector1 = eventFlow.testCollect(this)
+        val collector2 = eventFlow.testCollect(this)
 
         eventFlow.emit(1)
         eventFlow.emit(2)
@@ -58,8 +55,7 @@ class EventFlowTest {
     @Test
     fun testDoesNotDropEvents() = runCancellingBlockingTest {
         val eventFlow = EventFlow<Int>()
-        val collector = TestCollector<Int> { delay(1000) }
-        eventFlow.collectIn(this, collector)
+        val collector = eventFlow.testCollect(this) { delay(1000) }
 
         eventFlow.emit(1)
         eventFlow.emit(2)
@@ -78,8 +74,7 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        val collector = TestCollector<Int>()
-        eventFlow.collectIn(this, collector)
+        val collector = eventFlow.testCollect(this)
 
         collector.values.shouldContainExactly(1, 2, 3)
     }
@@ -92,8 +87,7 @@ class EventFlowTest {
         eventFlow.emit(2)
         eventFlow.emit(3)
 
-        val collector = TestCollector<Int>()
-        eventFlow.collectIn(this, collector)
+        val collector = eventFlow.testCollect(this)
 
         collector.values.shouldContainExactly(2, 3)
     }

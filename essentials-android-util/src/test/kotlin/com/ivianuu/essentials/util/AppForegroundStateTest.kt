@@ -21,8 +21,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.Dispatchers
 import org.junit.Test
@@ -40,9 +40,8 @@ class AppForegroundStateTest {
             override fun getLifecycle(): Lifecycle = _lifecycle
         }
         val lifecycleRegistry = lifecycleOwner.lifecycle as LifecycleRegistry
-        val collector = TestCollector<Boolean>()
-        appForegroundState(Dispatchers.Main, lifecycleOwner)
-            .collectIn(this, collector)
+        val collector = appForegroundState(Dispatchers.Main, lifecycleOwner)
+            .testCollect(this)
 
         lifecycleRegistry.currentState = Lifecycle.State.RESUMED
         lifecycleRegistry.currentState = Lifecycle.State.CREATED

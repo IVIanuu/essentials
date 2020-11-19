@@ -22,8 +22,8 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.DisposableHandle
@@ -41,14 +41,13 @@ class RecentAppsTest {
         val recentAppsScopeDispatcher = TestCoroutineDispatcher()
         val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
-        val recentAppsFlow = recentApps(accessibilityEvents, {
+        val collector = recentApps(accessibilityEvents, {
             object : DisposableHandle {
                 override fun dispose() {
                 }
             }
         }, recentAppsScope, NoopLogger)
-        val collector = TestCollector<List<String>>()
-        recentAppsFlow.collectIn(this, collector)
+            .testCollect(this)
 
         accessibilityEvents.emit(
             AccessibilityEvent(
@@ -106,8 +105,7 @@ class RecentAppsTest {
     @Test
     fun testCurrentApp() = runCancellingBlockingTest {
         val recentApps = EventFlow<List<String>>()
-        val collector = TestCollector<String?>()
-        currentApp(recentApps).collectIn(this, collector)
+        val collector = currentApp(recentApps).testCollect(this)
 
         recentApps.emit(listOf("a", "b", "c"))
         recentApps.emit(listOf("a", "b", "c"))

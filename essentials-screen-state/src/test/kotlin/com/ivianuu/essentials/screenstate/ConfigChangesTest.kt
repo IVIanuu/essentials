@@ -19,8 +19,8 @@ package com.ivianuu.essentials.screenstate
 import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.android.ApplicationContext
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
@@ -43,9 +43,8 @@ class ConfigChangesTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val configChanges = configChanges(applicationContext, Dispatchers.Main)
-        val collector = TestCollector<Unit>()
-        configChanges.collectIn(this, collector)
+        val collector = configChanges(applicationContext, Dispatchers.Main)
+            .testCollect(this)
 
         callback.onConfigurationChanged(mockk())
         callback.onConfigurationChanged(mockk())

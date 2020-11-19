@@ -31,6 +31,9 @@ class TestCollector<T>(
     }
 }
 
-fun <T> Flow<T>.collectIn(scope: CoroutineScope, collector: FlowCollector<T>) {
-    scope.launch { collect(collector) }
-}
+fun <T> Flow<T>.testCollect(scope: CoroutineScope, onEach: suspend (T) -> Unit = {}) =
+    TestCollector(onEach).also { collector ->
+        scope.launch {
+            collect(collector)
+        }
+    }

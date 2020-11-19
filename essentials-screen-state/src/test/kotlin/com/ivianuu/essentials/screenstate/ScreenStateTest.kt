@@ -21,8 +21,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -43,15 +43,13 @@ class ScreenStateTest {
         var currentScreenState = ScreenState.Off
         val globalScopeDispatcher = TestCoroutineDispatcher()
         val globalScope = childCoroutineScope(globalScopeDispatcher)
-        val screenStateFlow = screenStateFlow(
+
+        val collector = screenStateFlow(
             broadcasts = { broadcasts },
             getCurrentScreenState = { currentScreenState },
             globalScope = globalScope,
             logger = NoopLogger
-        )
-
-        val collector = TestCollector<ScreenState>()
-        screenStateFlow.collectIn(this, collector)
+        ).testCollect(this)
 
         globalScopeDispatcher.runCurrent()
 

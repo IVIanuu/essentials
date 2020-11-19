@@ -22,8 +22,8 @@ import com.ivianuu.essentials.sample.ui.CounterAction.*
 import com.ivianuu.essentials.sample.ui.CounterState
 import com.ivianuu.essentials.sample.ui.CounterStore
 import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.Test
 
@@ -36,12 +36,12 @@ class SampleTest {
     @Test
     fun testCounter() = runCancellingBlockingTest {
         val actions = EventFlow<CounterAction>()
-        val collector = TestCollector<CounterState>()
-        CounterStore(scope = this, actions = actions)
-            .collectIn(this, collector)
+        val collector = CounterStore(scope = this, actions = actions)
+            .testCollect(this)
 
         actions.emit(Inc)
         actions.emit(Dec)
+
         collector.values.shouldContainExactly(
             CounterState(0),
             CounterState(1),
