@@ -34,4 +34,5 @@ dependencies {
     compile(Deps.kotestAssertions)
     compile(Deps.Kotlin.stdlib)
     compile(Deps.mockk)
+    compile(Deps.turbine)
 }

@@ -141,5 +141,7 @@ object Deps {
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
 
+    const val turbine = "app.cash.turbine:turbine:0.2.1"
+
     const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }
