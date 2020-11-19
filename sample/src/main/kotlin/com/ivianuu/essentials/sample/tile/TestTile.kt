@@ -39,14 +39,16 @@ fun TestTile(
     twilightPrefsState: StateFlow<TwilightPrefsState>
 ) = scope.state(twilightPrefsState.value.toTileState()) {
     twilightPrefsState.reduce { it.toTileState() }
-    actions.filterIsInstance<TileAction>().effect {
-        dispatch(
-            UpdateTwilightMode(
-                if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark
-                else TwilightMode.Light
+    actions
+        .filterIsInstance<TileAction>()
+        .effect {
+            dispatch(
+                UpdateTwilightMode(
+                    if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark
+                    else TwilightMode.Light
+                )
             )
-        )
-    }
+        }
 }
 
 private fun TwilightPrefsState.toTileState() = TileState(

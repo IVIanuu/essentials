@@ -31,7 +31,7 @@ fun TorchStore(
     scope: GlobalScope,
     initial: @Initial TorchState = TorchState(),
     actions: Actions<TorchAction>
-    ): StateFlow<TorchState> = scope.state(initial) {
+): StateFlow<TorchState> = scope.state(initial) {
     actions
         .filterIsInstance<UpdateTorchEnabled>()
         .reduce { copy(torchEnabled = it.value) }

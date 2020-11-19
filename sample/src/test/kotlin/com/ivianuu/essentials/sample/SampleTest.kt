@@ -24,9 +24,7 @@ import com.ivianuu.essentials.sample.ui.CounterStore
 import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.collectIn
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.util.appForegroundState
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.Test
 
 class SampleTest {
@@ -42,11 +40,13 @@ class SampleTest {
         CounterStore(scope = this, actions = actions)
             .collectIn(this, collector)
 
-        collector.values.last() shouldBe CounterState(0)
         actions.emit(Inc)
-        collector.values.last() shouldBe CounterState(1)
         actions.emit(Dec)
-        collector.values.last() shouldBe CounterState(0)
+        collector.values.shouldContainExactly(
+            CounterState(0),
+            CounterState(1),
+            CounterState(0)
+        )
     }
 
 }
