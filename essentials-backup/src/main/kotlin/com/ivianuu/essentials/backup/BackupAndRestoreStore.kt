@@ -18,6 +18,7 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -38,7 +39,7 @@ fun BackupAndRestoreStore(
 ) = scope.state(initial) {
     actions
         .filterIsInstance<BackupData>()
-        .effect {
+        .collectIn(this) {
             backupData()
                 .onFailure {
                     it.printStackTrace()
@@ -47,7 +48,7 @@ fun BackupAndRestoreStore(
         }
     actions
         .filterIsInstance<RestoreData>()
-        .effect {
+        .collectIn(this) {
             restoreData()
                 .onFailure {
                     it.printStackTrace()

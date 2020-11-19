@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.securesettings
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.Actions
@@ -26,6 +27,7 @@ import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @UiStoreBinding
 fun SecureSettingsStore(
@@ -38,9 +40,9 @@ fun SecureSettingsStore(
     secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
     showToastRes: showToastRes
 ) = scope.state(initial) {
-    effect { popNavigatorOnceSecureSettingsGranted(true) }
+    launch { popNavigatorOnceSecureSettingsGranted(true) }
     actions
-        .effect { action ->
+        .collectIn(this) { action ->
             when (action) {
                 OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
                 GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {

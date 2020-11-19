@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.permission.hasPermissions
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 
 @UiStoreBinding
 fun PermissionStore(
@@ -50,7 +52,7 @@ fun PermissionStore(
                 .all { hasPermissions(listOf(it)).first() }
         }
         .take(1)
-        .effect { navigator.popTop() }
+        .collectIn(this) { navigator.popTop() }
 
     suspend fun updatePermissions() {
         val permissions = request.permissions
@@ -58,11 +60,11 @@ fun PermissionStore(
         reduce { copy(permissions = permissions) }
     }
 
-    effect { updatePermissions() }
+    launch { updatePermissions() }
 
     actions
         .filterIsInstance<RequestPermission>()
-        .effect { action ->
+        .collectIn(this) { action ->
             action.permission.requestHandler().request(action.permission)
             startUi()
             updatePermissions()

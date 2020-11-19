@@ -18,6 +18,7 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import android.app.NotificationManager
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ServiceComponent
@@ -50,8 +51,7 @@ class ForegroundService : EsService() {
                     flowOf(emptyList())
                 }
             }
-            .onEach { update(it) }
-            .launchIn(scope)
+            .collectIn(scope) { update(it) }
     }
 
     override fun onDestroy() {

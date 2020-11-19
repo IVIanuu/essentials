@@ -20,6 +20,7 @@ import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
@@ -48,7 +49,7 @@ fun CheckableAppsStore(
             .reducer(currentState())
         onCheckedAppsChanged(newCheckedApps)
     }
-    actions.effect { action ->
+    actions.collectIn(this) { action ->
         when (action) {
             is UpdateAppCheckState -> pushNewCheckedApps {
                 if (!action.app.isChecked) {

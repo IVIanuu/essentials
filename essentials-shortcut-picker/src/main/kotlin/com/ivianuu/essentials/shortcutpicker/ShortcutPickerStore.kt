@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -43,10 +44,10 @@ fun ShortcutPickerStore(
     reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
     actions
         .filterIsInstance<PickShortcut>()
-        .effect { action ->
+        .collectIn(this) { action ->
             try {
                 val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
-                    .data ?: return@effect
+                    .data ?: return@collectIn
                 val shortcut = extractShortcut(shortcutRequestResult)
                 navigator.popTop(result = shortcut)
             } catch (e: Throwable) {

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.securesettings
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
@@ -27,6 +28,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStoreBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @UiStoreBinding
 fun SecureSettingsPcInstructionsStore(
@@ -36,8 +38,8 @@ fun SecureSettingsPcInstructionsStore(
     navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
 ) = scope.state(initial) {
-    effect { popNavigatorOnceSecureSettingsGranted(false) }
-    actions.effect { action ->
+    launch { popNavigatorOnceSecureSettingsGranted(false) }
+    actions.collectIn(this) { action ->
         when (action) {
             OpenGadgetHacksTutorial -> navigator.push(
                 UrlRoute("https://youtu.be/CDuxcrrWLnY")

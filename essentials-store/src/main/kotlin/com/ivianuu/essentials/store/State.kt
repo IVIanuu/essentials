@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.store
 
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.Channel
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
 
-    fun reduce(reducer: Reducer<S>)
+    suspend fun reduce(reducer: Reducer<S>): S
 
     fun Flow<Reducer<S>>.reduce() {
         launch {
@@ -141,18 +142,26 @@ private class StateScopeImpl<S>(
     private val setState: suspend (S) -> Unit
 ) : StateScope<S>, CoroutineScope by scope {
 
-    private val actor = actor<Reducer<S>>(
+    private val actor = actor<Reduce>(
         start = CoroutineStart.LAZY,
         capacity = Channel.UNLIMITED
     ) {
-        for (reducer in this) {
+        for (reduce in this) {
             val currentState = getState()
-            val newState = reducer(currentState)
+            val newState = reduce.reducer(currentState)
             if (currentState != newState) setState(newState)
+            reduce.acknowledged.complete(newState)
         }
     }
 
-    override fun reduce(reducer: Reducer<S>) {
-        actor.offer(reducer)
+    override suspend fun reduce(reducer: Reducer<S>): S {
+        val acknowledged = CompletableDeferred<S>()
+        actor.offer(Reduce(reducer, acknowledged))
+        return acknowledged.await()
     }
+
+    private inner class Reduce(
+        val reducer: Reducer<S>,
+        val acknowledged: CompletableDeferred<S>
+    )
 }

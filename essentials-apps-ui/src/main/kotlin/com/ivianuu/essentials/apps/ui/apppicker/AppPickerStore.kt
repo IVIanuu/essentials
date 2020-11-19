@@ -19,6 +19,7 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -43,5 +44,5 @@ fun AppPickerStore(
         .reduce { copy(appFilter = it.appFilter) }
     actions
         .filterIsInstance<PickApp>()
-        .effect { navigator.popTop(result = it.app) }
+        .collectIn(this) { navigator.popTop(result = it.app) }
 }

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.*
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -56,7 +57,7 @@ fun NotificationsStore(
 
     actions
         .filterIsInstance<OpenNotification>()
-        .effect { action ->
+        .collectIn(this) { action ->
             try {
                 action.notification.contentIntent.send()
             } catch (e: Throwable) {
@@ -70,7 +71,7 @@ fun NotificationsStore(
                 .filterIsInstance<DismissNotification>()
                 .map { it.key to service }
         }
-        .effect { (key, service) -> service.cancelNotification(key) }
+        .collectIn(this) { (key, service) -> service.cancelNotification(key) }
 
     serviceRef
         .filterNotNull()
@@ -79,5 +80,5 @@ fun NotificationsStore(
                 .filterIsInstance<DismissAllNotifications>()
                 .map { service }
         }
-        .effect { it.cancelAllNotifications() }
+        .collectIn(this) { it.cancelAllNotifications() }
 }
