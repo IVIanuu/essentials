@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
@@ -185,7 +186,7 @@ fun NotificationStore(
 ) = scope.state(initial) {
     hasPermissions(listOf(permission)).reduce { copy(hasPermissions = it) }
     notifications.flowAsResource().reduce { copy(notifications = it) }
-    actions.effect { action ->
+    actions.collectIn(this) { action ->
         when (action) {
             is RequestPermissions -> requestPermissions(listOf(permission))
             is OpenNotification -> dispatchServiceAction(

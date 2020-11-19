@@ -33,6 +33,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 
 @FunBinding
@@ -56,7 +57,7 @@ data class TimerState(@Json(name = "value") val value: Int = 0)
 fun TimerStore(
     persistedState: persistedState<TimerState>
 ) = persistedState.invokePersistedState("timer", TimerState()) {
-    reducerFlow {
+    launch {
         while (coroutineContext.isActive) {
             reduce { copy(value = value + 1) }
             delay(1000)

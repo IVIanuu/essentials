@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.foreground.startForegroundJob
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Permission
@@ -66,11 +67,10 @@ fun AppTrackerPage(
         val foregroundJob = if (!trackingEnabled) null else {
             val foregroundJob = startForegroundJob(createAppTrackerNotification(null))
             currentApp
-                .onEach {
+                .collectIn(foregroundJob.scope) {
                     showToast("App changed $it")
                     foregroundJob.updateNotification(createAppTrackerNotification(it))
                 }
-                .launchIn(foregroundJob.scope)
             foregroundJob
         }
         onDispose { foregroundJob?.stop() }

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.tile
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.state
@@ -40,7 +41,7 @@ fun TestTile(
     twilightPrefsState.reduce { it.toTileState() }
     actions
         .filterIsInstance<TileAction>()
-        .effect {
+        .collectIn(this) {
             dispatch(
                 UpdateTwilightMode(
                     if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark

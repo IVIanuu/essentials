@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.Actions
@@ -99,7 +100,7 @@ fun CounterStore(
     actions
         .filterIsInstance<Dec>()
         .filter { currentState().count <= 0 }
-        .effect { showToast("Value cannot be less than 0!") }
+        .collectIn(this) { showToast("Value cannot be less than 0!") }
 }
 
 data class CounterState(val count: Int = 0)
