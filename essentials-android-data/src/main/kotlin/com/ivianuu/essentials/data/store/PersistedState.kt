@@ -26,8 +26,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-annotation class PersistedState
-
 @FunBinding
 inline fun <reified S> persistedState(
     diskDataStoreFactory: DiskDataStoreFactory,
