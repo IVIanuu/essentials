@@ -32,10 +32,6 @@ import org.junit.Test
 class SampleTest {
 
     @Test
-    fun test() {
-    }
-
-    @Test
     fun testCounter() = runCancellingBlockingTest {
         val actions = EventFlow<CounterAction>()
         val collector = CounterStore(scope = this, actions = actions, showToast = {})

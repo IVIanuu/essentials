@@ -22,7 +22,11 @@ import com.ivianuu.essentials.store.StateScope
 import com.ivianuu.essentials.store.state
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingCommand
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
@@ -53,10 +57,13 @@ internal fun <S> persistedStateImpl(
 ): StateFlow<S> {
     val dataStore = diskDataStoreFactory.create(name, type) { initial }
     return globalScope.state(
-        dataStore.data,
         initial,
-        { newState -> dataStore.updateData { newState } },
         dataStore.data,
+        { newState -> dataStore.updateData { newState } },
+        object : SharingStarted {
+            override fun command(subscriptionCount: StateFlow<Int>): Flow<SharingCommand> =
+                dataStore.data.map { SharingCommand.START }
+        },
         block
     )
 }

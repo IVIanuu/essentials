@@ -18,14 +18,17 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -36,7 +39,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 interface StateScope<S> {
-    val state: StateFlow<S>
+    val state: Flow<S>
 
     fun Flow<Reducer<S>>.reduce()
 
@@ -74,62 +77,72 @@ suspend inline fun <S> FlowCollector<Reducer<S>>.reduce(noinline reducer: S.() -
 
 fun <S> CoroutineScope.state(
     initial: S,
-    start: Flow<*> = flowOf(Unit),
+    started: SharingStarted = SharingStarted.Lazily,
     block: StateScope<S>.() -> Unit
-): StateFlow<S> = state(MutableStateFlow(initial), start, block)
+): StateFlow<S> = state(MutableStateFlow(initial), started, block)
+
+fun <S> CoroutineScope.state(
+    initial: S,
+    state: Flow<S>,
+    setState: suspend (S) -> Unit,
+    started: SharingStarted = SharingStarted.Lazily,
+    block: StateScope<S>.() -> Unit
+): StateFlow<S> {
+    val _state = state.stateIn(this, started, initial)
+    return state(
+        _state,
+        { _state.value },
+        setState,
+        started,
+        block
+    )
+}
 
 fun <S> CoroutineScope.state(
     state: MutableStateFlow<S>,
-    start: Flow<*> = flowOf(Unit),
-    block: StateScope<S>.() -> Unit
-): StateFlow<S> = state(state, { state.value = it }, start, block)
-
-fun <S> CoroutineScope.state(
-    state: Flow<S>,
-    initial: S,
-    setState: suspend (S) -> Unit,
-    start: Flow<*> = flowOf(Unit),
+    started: SharingStarted = SharingStarted.Lazily,
     block: StateScope<S>.() -> Unit
 ): StateFlow<S> = state(
-    state.stateIn(this, SharingStarted.Eagerly, initial),
-    setState,
-    start,
+    state,
+    { state.value },
+    { state.value = it },
+    started,
     block
 )
 
 fun <S> CoroutineScope.state(
-    state: StateFlow<S>,
+    state: Flow<S>,
+    getState: () -> S,
     setState: suspend (S) -> Unit,
-    start: Flow<*> = flowOf(Unit),
+    started: SharingStarted = SharingStarted.Lazily,
     block: StateScope<S>.() -> Unit
-): StateFlow<S> {
-    launch {
-        start
-            .take(1)
-            .first()
-        val stateScope = StateScopeImpl(state)
-            .apply(block)
+): StateFlow<S> = channelFlow {
+    val stateScope = StateScopeImpl(state)
+        .apply(block)
 
-        val reducers = stateScope.reducers.merge()
-        val effects = stateScope.effects
-        launch {
-            reducers.collect { reducer ->
-                val currentState = state.value
-                val newState = reducer(currentState)
-                if (currentState != newState) setState(newState)
-            }
-        }
-        effects.forEach { effect ->
-            launch {
-                effect()
-            }
+    launch {
+        stateScope.reducers.merge().collect { reducer ->
+            val currentState = getState()
+            val newState = reducer(currentState)
+            if (currentState != newState) setState(newState)
         }
     }
 
-    return state
-}
+    stateScope.effects.forEach { effect ->
+        launch {
+            effect()
+        }
+    }
 
-private class StateScopeImpl<S>(override val state: StateFlow<S>) : StateScope<S> {
+    // emit source
+    launch {
+        state.collect {
+            send(it)
+        }
+    }
+}.stateIn(this, started, getState())
+
+private class StateScopeImpl<S>(override val state: Flow<S>) : StateScope<S> {
     private val reduces = EventFlow<Reducer<S>>()
     val reducers = mutableListOf<Flow<Reducer<S>>>(reduces)
     val effects = mutableListOf<suspend () -> Unit>()
