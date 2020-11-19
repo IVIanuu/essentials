@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.EventFlow
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -27,51 +29,40 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-interface StateScope<S> {
+interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
-
-    fun Flow<Reducer<S>>.reduce()
-
-    fun <T> Flow<T>.reduce(reducer: S.(T) -> S) =
-        mapReduce(reducer).reduce()
-
-    fun reducerFlow(block: suspend FlowCollector<Reducer<S>>.() -> Unit) =
-        flow(block).reduce()
-
-    fun effect(block: suspend () -> Unit)
-
-    fun <T> Flow<T>.effect(action: suspend (T) -> Unit) = this@StateScope.effect {
-        collect(action)
-    }
-
-    fun <T> Flow<T>.effectLatest(action: suspend (T) -> Unit) = this@StateScope.effect {
-        collectLatest(action)
-    }
 
     fun reduce(reducer: Reducer<S>)
 
-    fun <T> Flow<T>.mapReduce(reducer: S.(T) -> S): Flow<Reducer<S>> =
-        map { value -> { reducer(value) } }
+    fun Flow<Reducer<S>>.reduce() {
+        launch {
+            collect {
+                reduce(it)
+            }
+        }
+    }
 
-    fun Flow<Reducer<S>>.catchReduce(reducer: S.(Throwable) -> S): Flow<Reducer<S>> =
-        catch { t -> emit { reducer(t) } }
+    fun <T> Flow<T>.reduce(reducer: S.(T) -> S) =
+        map<T, Reducer<S>> { value -> { reducer(value) } }
+            .reduce()
 
     fun <T> Flow<T>.reduceCatching(
         success: S.(T) -> S,
         error: S.(Throwable) -> S
-    ) = mapReduce(success).catchReduce(error).reduce()
+    ) = map<T, Reducer<S>> { value ->
+        { success(value) }
+    }.catch { t -> reduce { error(t) } }
+        .reduce()
 }
+
+suspend inline fun <S> StateScope<S>.currentState(): S = state.first()
+
+typealias Reducer<S> = S.() -> S
 
 suspend inline fun <S> FlowCollector<Reducer<S>>.reduce(noinline reducer: S.() -> S) = emit(reducer)
 
@@ -133,50 +124,35 @@ fun <S> CoroutineScope.state(
     started: SharingStarted = SharingStarted.Lazily,
     block: StateScope<S>.() -> Unit
 ): StateFlow<S> = channelFlow {
-    val stateScope = StateScopeImpl(state)
-        .apply(block)
+    coroutineScope {
+        launch {
+            state.collect { newState ->
+                send(newState)
+            }
+        }
+        StateScopeImpl(this, state, getState, setState).block()
+    }
+}.stateIn(this, started, getState())
 
-    // collect reducers
-    launch {
-        stateScope.reducers.merge().collect { reducer ->
+private class StateScopeImpl<S>(
+    scope: CoroutineScope,
+    override val state: Flow<S>,
+    private val getState: () -> S,
+    private val setState: suspend (S) -> Unit
+) : StateScope<S>, CoroutineScope by scope {
+
+    private val actor = actor<Reducer<S>>(
+        start = CoroutineStart.LAZY,
+        capacity = Channel.UNLIMITED
+    ) {
+        for (reducer in this) {
             val currentState = getState()
             val newState = reducer(currentState)
             if (currentState != newState) setState(newState)
         }
     }
 
-    // launch effects
-    stateScope.effects.forEach { effect ->
-        launch {
-            effect()
-        }
-    }
-
-    // emit source
-    launch {
-        state.collect {
-            send(it)
-        }
-    }
-}.stateIn(this, started, getState())
-
-private class StateScopeImpl<S>(override val state: Flow<S>) : StateScope<S> {
-    private val reduces = EventFlow<Reducer<S>>()
-    val reducers = mutableListOf<Flow<Reducer<S>>>(reduces)
-    val effects = mutableListOf<suspend () -> Unit>()
-    override fun Flow<Reducer<S>>.reduce() {
-        reducers += this
-    }
-
-    override fun effect(block: suspend () -> Unit) {
-        effects += block
-    }
-
     override fun reduce(reducer: Reducer<S>) {
-        reduces.emit(reducer)
+        actor.offer(reducer)
     }
 }
-
-suspend inline fun <S> StateScope<S>.currentState(): S = state.first()
-
-typealias Reducer<S> = S.() -> S
