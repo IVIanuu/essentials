@@ -33,7 +33,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 class Animatable(val tag: Any) {
 
     private val _props = mutableStateMapOf<Prop<*>, Any?>()
-    val props: Map<Prop<*>, Any?> get() = _props
+    val props: Map<Prop<*>, Any?> by this::_props
 
     private val modifiersByProps = mutableMapOf<Prop<*>, Modifier>()
 

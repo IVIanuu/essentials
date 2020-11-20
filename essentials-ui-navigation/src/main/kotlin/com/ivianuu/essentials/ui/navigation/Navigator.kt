@@ -113,7 +113,7 @@ class NavigatorImpl(
 ) : Navigator {
 
     private val _backStack = MutableStateFlow(initialBackStack)
-    override val backStack: StateFlow<List<Route>> get() = _backStack
+    override val backStack: StateFlow<List<Route>> by this::_backStack
 
     private val actor = scope.actor<suspend (List<Route>) -> List<Route>>(
         capacity = Channel.UNLIMITED

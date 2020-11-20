@@ -40,7 +40,7 @@ class ForegroundManager(
     private val ids = AtomicInteger(0)
 
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
-    internal val jobs: StateFlow<List<ForegroundJob>> get() = _jobs
+    internal val jobs: StateFlow<List<ForegroundJob>> by this::_jobs
 
     internal fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(ids.incrementAndGet(), notification)
