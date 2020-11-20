@@ -38,9 +38,9 @@ import kotlinx.coroutines.launch
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
 
-    suspend fun reduce(reducer: Reducer<S>): S
+    suspend fun reduce(reducer: S.() -> S): S
 
-    fun Flow<Reducer<S>>.reduce() {
+    fun Flow<S.() -> S>.reduce() {
         launch {
             collect {
                 reduce(it)
@@ -49,13 +49,13 @@ interface StateScope<S> : CoroutineScope {
     }
 
     fun <T> Flow<T>.reduce(reducer: S.(T) -> S) =
-        map<T, Reducer<S>> { value -> { reducer(value) } }
+        map<T, S.() -> S> { value -> { reducer(value) } }
             .reduce()
 
     fun <T> Flow<T>.reduceCatching(
         success: S.(T) -> S,
         error: S.(Throwable) -> S
-    ) = map<T, Reducer<S>> { value ->
+    ) = map<T, S.() -> S> { value ->
         { success(value) }
     }.catch { t -> reduce { error(t) } }
         .reduce()
@@ -63,19 +63,17 @@ interface StateScope<S> : CoroutineScope {
 
 suspend inline fun <S> StateScope<S>.currentState(): S = state.first()
 
-typealias Reducer<S> = S.() -> S
-
-suspend inline fun <S> FlowCollector<Reducer<S>>.reduce(noinline reducer: S.() -> S) = emit(reducer)
+suspend inline fun <S> FlowCollector<S.() -> S>.reduce(noinline reducer: S.() -> S) = emit(reducer)
 
 fun <T, S> Flow<T>.state(
     scope: CoroutineScope,
     initial: S,
     started: SharingStarted = SharingStarted.Lazily,
     reducer: S.(T) -> S
-) = map<T, Reducer<S>> { value -> { reducer(value) } }
+) = map<T, S.() -> S> { value -> { reducer(value) } }
     .state(scope, initial, started)
 
-fun <S> Flow<Reducer<S>>.state(
+fun <S> Flow<S.() -> S>.state(
     scope: CoroutineScope,
     initial: S,
     started: SharingStarted = SharingStarted.Lazily
@@ -154,14 +152,14 @@ private class StateScopeImpl<S>(
         }
     }
 
-    override suspend fun reduce(reducer: Reducer<S>): S {
+    override suspend fun reduce(reducer: S.() -> S): S {
         val acknowledged = CompletableDeferred<S>()
         actor.offer(Reduce(reducer, acknowledged))
         return acknowledged.await()
     }
 
     private inner class Reduce(
-        val reducer: Reducer<S>,
+        val reducer: S.() -> S,
         val acknowledged: CompletableDeferred<S>
     )
 }
