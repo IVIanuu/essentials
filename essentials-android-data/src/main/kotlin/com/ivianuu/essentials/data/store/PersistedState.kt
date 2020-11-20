@@ -36,7 +36,7 @@ inline fun <reified S> persistedState(
     globalScope: GlobalScope,
     @FunApi name: String,
     @FunApi initial: S,
-    @FunApi noinline block: StateScope<S>.() -> Unit
+    @FunApi noinline block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> = persistedStateImpl(
     diskDataStoreFactory,
     globalScope,
@@ -53,7 +53,7 @@ internal fun <S> persistedStateImpl(
     name: String,
     initial: S,
     type: KType,
-    block: StateScope<S>.() -> Unit
+    block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
     val dataStore = diskDataStoreFactory.create(name, type) { initial }
     return globalScope.state(

@@ -86,7 +86,7 @@ fun <S> Flow<Reducer<S>>.state(
 fun <S> CoroutineScope.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily,
-    block: StateScope<S>.() -> Unit
+    block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> = state(MutableStateFlow(initial), started, block)
 
 fun <S> CoroutineScope.state(
@@ -94,7 +94,7 @@ fun <S> CoroutineScope.state(
     state: Flow<S>,
     setState: suspend (S) -> Unit,
     started: SharingStarted = SharingStarted.Lazily,
-    block: StateScope<S>.() -> Unit
+    block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
     val _state = state.stateIn(this, started, initial)
     return state(
@@ -109,7 +109,7 @@ fun <S> CoroutineScope.state(
 fun <S> CoroutineScope.state(
     state: MutableStateFlow<S>,
     started: SharingStarted = SharingStarted.Lazily,
-    block: StateScope<S>.() -> Unit
+    block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> = state(
     state,
     { state.value },
@@ -123,7 +123,7 @@ fun <S> CoroutineScope.state(
     getState: () -> S,
     setState: suspend (S) -> Unit,
     started: SharingStarted = SharingStarted.Lazily,
-    block: StateScope<S>.() -> Unit
+    block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> = channelFlow {
     coroutineScope {
         launch {

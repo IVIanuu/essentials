@@ -57,10 +57,8 @@ data class TimerState(@Json(name = "value") val value: Int = 0)
 fun TimerStore(
     persistedState: persistedState<TimerState>
 ) = persistedState.invokePersistedState("timer", TimerState()) {
-    launch {
-        while (coroutineContext.isActive) {
-            reduce { copy(value = value + 1) }
-            delay(1000)
-        }
+    while (coroutineContext.isActive) {
+        reduce { copy(value = value + 1) }
+        delay(1000)
     }
 }
