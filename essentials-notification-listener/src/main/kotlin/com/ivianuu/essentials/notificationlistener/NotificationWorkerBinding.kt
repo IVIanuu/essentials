@@ -36,9 +36,9 @@ typealias NotificationWorkers = Set<suspend () -> Unit>
 fun defaultNotificationWorkers(): NotificationWorkers = emptySet()
 
 @FunBinding
-suspend fun runNotificationWorkers(notificationWorkers: NotificationWorkers) {
+suspend fun runNotificationWorkers(workers: NotificationWorkers) {
     coroutineScope {
-        notificationWorkers.forEach { worker ->
+        workers.forEach { worker ->
             launch { worker() }
         }
     }

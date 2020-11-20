@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Effect
 annotation class AccessibilityWorkerBinding {
@@ -30,3 +33,12 @@ annotation class AccessibilityWorkerBinding {
 typealias AccessibilityWorkers = Set<suspend () -> Unit>
 @SetElements
 fun defaultAccessibilityWorkers(): AccessibilityWorkers = emptySet()
+
+@FunBinding
+suspend fun runAccessibilityWorkers(workers: AccessibilityWorkers) {
+    coroutineScope {
+        workers.forEach { worker ->
+            launch { worker() }
+        }
+    }
+}

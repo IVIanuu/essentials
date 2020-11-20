@@ -38,12 +38,12 @@ fun defaultAppWorkers(): AppWorkers = emptySet()
 
 @FunBinding
 fun runAppWorkers(
-    appWorkers: AppWorkers,
     logger: Logger,
     globalScope: GlobalScope,
+    workers: AppWorkers
 ) {
     logger.d("run workers")
-    appWorkers
+    workers
         .forEach { worker ->
             globalScope.launch {
                 worker()

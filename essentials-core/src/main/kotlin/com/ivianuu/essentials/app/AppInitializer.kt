@@ -59,10 +59,10 @@ fun defaultAppInitializers(): AppInitializers = emptySet()
 
 @FunBinding
 fun runInitializers(
-    appInitializers: AppInitializers,
+    initializers: AppInitializers,
     logger: Logger,
 ) {
-    appInitializers
+    initializers
         .sortedGraph(
             key = { it.key },
             dependencies = { it.dependencies },

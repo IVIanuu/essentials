@@ -35,10 +35,8 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
         component.logger.d("connected")
         component.serviceHolder.value = this
-        component.accessibilityWorkers.forEach { worker ->
-            connectedScope.launch {
-                scope.launch { worker() }
-            }
+        connectedScope.launch {
+            component.runAccessibilityWorkers()
         }
     }
 
@@ -65,7 +63,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 @MergeInto(ServiceComponent::class)
 interface DefaultAccessibilityServiceComponent {
     val accessibilityEvents: MutableAccessibilityEvents
-    val accessibilityWorkers: AccessibilityWorkers
     val logger: Logger
+    val runAccessibilityWorkers: runAccessibilityWorkers
     val serviceHolder: MutableAccessibilityServiceHolder
 }
