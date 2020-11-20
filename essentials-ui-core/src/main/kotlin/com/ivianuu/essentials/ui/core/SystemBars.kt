@@ -101,7 +101,6 @@ data class SystemBarStyle(
     val elevation: Dp,
 )
 
-@Stable
 private class SystemBarManager {
 
     val styles = mutableStateListOf<SystemBarStyle>()

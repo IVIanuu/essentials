@@ -22,7 +22,6 @@ import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticAmbientOf
 import kotlinx.coroutines.DisposableHandle
 
-@Stable
 class RetainedObjects {
     private val backing = mutableMapOf<Any, Any?>()
 

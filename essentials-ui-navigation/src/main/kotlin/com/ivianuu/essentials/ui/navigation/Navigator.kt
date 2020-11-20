@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -107,10 +108,10 @@ fun Navigator.pop(route: Route, result: Any? = null) {
     }
 }
 
-@Stable
+@ImplBinding(ApplicationComponent::class)
 class NavigatorImpl(
-    scope: CoroutineScope,
-    initialBackStack: List<Route>
+    scope: GlobalScope,
+    initialBackStack: List<Route> = emptyList()
 ) : Navigator {
 
     private val _backStack = MutableStateFlow(initialBackStack)
@@ -133,13 +134,6 @@ class NavigatorImpl(
 
     override fun setBackStack(transform: suspend (List<Route>) -> List<Route>) {
         actor.offer(transform)
-    }
-
-    companion object {
-        @Binding(ApplicationComponent::class)
-        fun defaultNavigator(
-            globalScope: GlobalScope
-        ): Navigator = NavigatorImpl(globalScope, emptyList())
     }
 }
 
