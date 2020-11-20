@@ -24,12 +24,12 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@UiStoreBinding
+@UiStateBinding
 fun SecureSettingsStore(
     scope: CoroutineScope,
     initial: @Initial SecureSettingsState = SecureSettingsState,

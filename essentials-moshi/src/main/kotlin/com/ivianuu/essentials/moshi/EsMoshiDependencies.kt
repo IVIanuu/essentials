@@ -18,6 +18,7 @@ package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.Moshi
@@ -26,7 +27,7 @@ import com.squareup.moshi.Moshi
 annotation class JsonAdapterBinding {
     companion object {
         @SetElements
-        fun <T : Any> invoke(instance: T): JsonAdapters = setOf(instance)
+        fun <T : Any> invoke(instance: @ForEffect T): JsonAdapters = setOf(instance)
     }
 }
 

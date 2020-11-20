@@ -24,8 +24,10 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
@@ -39,18 +41,35 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 @Effect
-annotation class UiStoreBinding {
+annotation class GlobalStateBinding {
+    companion object {
+        @Binding(ApplicationComponent::class)
+        fun <T : StateFlow<S>, S> globalStore(
+            scope: GlobalScope,
+            provider: (CoroutineScope) -> @ForEffect T,
+        ): StateFlow<S> = provider(scope)
+
+        @StateBinding
+        inline fun <T : StateFlow<S>, S> StateFlow<S>.globalStateBindings(): StateFlow<S> = this
+    }
+}
+
+@Effect
+annotation class UiStateBinding {
     companion object {
         @Binding
         @Composable
-        inline fun <reified T : StateFlow<S>, reified S> uiStore(
+        inline fun <reified T : StateFlow<S>, reified S> uiState(
             defaultDispatcher: DefaultDispatcher,
-            noinline provider: (CoroutineScope) -> T
-        ): StateFlow<S> = uiStoreImpl(defaultDispatcher, typeOf<T>(), provider)
+            noinline provider: (CoroutineScope) -> @ForEffect T
+        ): StateFlow<S> = uiStateImpl(defaultDispatcher, typeOf<T>(), provider)
+
+        @StateBinding
+        inline fun <T : StateFlow<S>, S> StateFlow<S>.uiStateBindings(): StateFlow<S> = this
 
         @PublishedApi
         @Composable
-        internal fun <S> uiStoreImpl(
+        internal fun <S> uiStateImpl(
             defaultDispatcher: DefaultDispatcher,
             type: KType,
             provider: (CoroutineScope) -> StateFlow<S>
@@ -59,6 +78,20 @@ annotation class UiStoreBinding {
                 UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
             }.store
         }
+    }
+}
+
+@Effect
+annotation class StateBinding {
+    companion object {
+        @Binding
+        inline val <T : StateFlow<S>, S> @ForEffect T.flow: @State Flow<S>
+            get() = this
+
+        @Binding
+        @Composable
+        inline val <T : StateFlow<S>, S> @ForEffect T.latest: @UiState S
+            get() = collectAsState().value
     }
 }
 
@@ -81,23 +114,15 @@ annotation class Initial
 @Target(AnnotationTarget.TYPE)
 annotation class State
 
-@Binding
-inline val <S> StateFlow<S>.flow: @State Flow<S>
-    get() = this
-
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 annotation class UiState
-@Binding
-@Composable
-inline val <S> StateFlow<S>.latest: @UiState S
-    get() = collectAsState().value
 
 @Effect
 annotation class StateEffect {
     companion object {
         @SetElements
-        fun <T : suspend (S) -> Unit, S> intoSet(instance: T): Set<StateEffectBlock<S>> =
+        fun <T : suspend (S) -> Unit, S> intoSet(instance: @ForEffect T): Set<StateEffectBlock<S>> =
             setOf(instance)
     }
 }

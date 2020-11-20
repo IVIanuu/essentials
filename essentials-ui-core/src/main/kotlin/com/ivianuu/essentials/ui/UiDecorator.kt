@@ -22,6 +22,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
@@ -38,7 +39,7 @@ annotation class UiDecoratorBinding(
             @Arg("key") key: String,
             @Arg("dependencies") dependencies: Array<String>?,
             @Arg("dependents") dependents: Array<String>?,
-            content: T
+            content: @ForEffect T
         ): UiDecorators = setOf(UiDecorator(
             key = key,
             dependencies = dependencies?.toSet() ?: emptySet(),
@@ -90,7 +91,7 @@ annotation class AppThemeBinding {
         // So we ensure that were running after the system bars decorator
         @UiDecoratorBinding("app_theme", dependencies = ["system_bars"])
         fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecorator(
-            instance: T
-        ) = instance
+            instance: @ForEffect T
+        ): T = instance
     }
 }

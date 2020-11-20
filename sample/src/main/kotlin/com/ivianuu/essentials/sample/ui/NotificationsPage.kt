@@ -72,7 +72,7 @@ import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -173,7 +173,7 @@ private fun NotificationPermissions(
     }
 }
 
-@UiStoreBinding
+@UiStateBinding
 fun NotificationStore(
     scope: CoroutineScope,
     initial: @Initial NotificationsPageState = NotificationsPageState(),

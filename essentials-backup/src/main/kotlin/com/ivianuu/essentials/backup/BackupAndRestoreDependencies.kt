@@ -20,6 +20,7 @@ import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.SetElements
 import java.io.File
 
@@ -27,7 +28,7 @@ import java.io.File
 annotation class BackupFile {
     companion object {
         @SetElements
-        fun <T : File> intoSet(instance: T): BackupFiles = setOf(instance)
+        fun <T : File> intoSet(instance: @ForEffect T): BackupFiles = setOf(instance)
     }
 }
 

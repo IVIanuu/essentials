@@ -19,6 +19,7 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 annotation class AppWorkerBinding {
     companion object {
         @SetElements
-        fun <T : suspend () -> Unit> workerIntoSet(instance: T): AppWorkers = setOf(instance)
+        fun <T : suspend () -> Unit> workerIntoSet(instance: @ForEffect T): AppWorkers = setOf(instance)
     }
 }
 

@@ -18,13 +18,14 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.SetElements
 
 @Effect
 annotation class PermissionStateProviderBinding {
     companion object {
         @SetElements
-        fun <T : PermissionStateProvider> stateProviderIntoSet(instance: T): Set<PermissionStateProvider> = setOf(instance)
+        fun <T : PermissionStateProvider> stateProviderIntoSet(instance: @ForEffect T): Set<PermissionStateProvider> = setOf(instance)
     }
 }
 
@@ -32,7 +33,7 @@ annotation class PermissionStateProviderBinding {
 annotation class PermissionRequestHandlerBinding {
     companion object {
         @SetElements
-        fun <T : PermissionRequestHandler> requestHandlerIntoSet(instance: T): Set<PermissionRequestHandler> =
+        fun <T : PermissionRequestHandler> requestHandlerIntoSet(instance: @ForEffect T): Set<PermissionRequestHandler> =
             setOf(instance)
     }
 }
@@ -41,7 +42,7 @@ annotation class PermissionRequestHandlerBinding {
 annotation class PermissionRequestRouteFactoryBinding {
     companion object {
         @Binding
-        inline val <T : PermissionRequestRouteFactory> T.permissionRequestRouteFactory: PermissionRequestRouteFactory
+        inline val <T : PermissionRequestRouteFactory> @ForEffect T.permissionRequestRouteFactory: PermissionRequestRouteFactory
             get() = this
     }
 }

@@ -26,7 +26,7 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.startUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-@UiStoreBinding
+@UiStateBinding
 fun PermissionStore(
     scope: CoroutineScope,
     initial: @Initial PermissionState = PermissionState(),

@@ -19,12 +19,9 @@ package com.ivianuu.essentials.twilight.ui
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateTwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateUseBlackInDarkMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
@@ -39,7 +36,7 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TwilightSettingsPage(
-    dispatch: DispatchAction<TwilightPrefsAction>,
+    update: updatePref<TwilightPrefsState>,
     state: @UiState TwilightPrefsState
 ) {
     Scaffold(
@@ -50,7 +47,7 @@ fun TwilightSettingsPage(
                 TwilightModeItem(
                     mode = mode,
                     isSelected = state.twilightMode == mode,
-                    onClick = { dispatch(UpdateTwilightMode(mode)) }
+                    onClick = { update { copy(twilightMode = mode) } }
                 )
             }
 
@@ -58,7 +55,7 @@ fun TwilightSettingsPage(
 
             CheckboxListItem(
                 value = state.useBlackInDarkMode,
-                onValueChange = { dispatch(UpdateUseBlackInDarkMode(it)) },
+                onValueChange = { update { copy(useBlackInDarkMode = it) } },
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }

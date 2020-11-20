@@ -32,4 +32,5 @@ dependencies {
     api(Deps.AndroidX.Compose.core)
     api(Deps.Coroutines.core)
     api(project(":essentials-datastore"))
+    api(project(":essentials-ui"))
 }

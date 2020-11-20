@@ -21,6 +21,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.MapEntries
@@ -44,8 +45,8 @@ annotation class ActionBinding(val key: String) {
     companion object {
         @MapEntries
         fun <T : Action> actionIntoSet(
-            provider: () -> T,
-            @Arg("key") key: String
+            @Arg("key") key: String,
+            provider: () -> @ForEffect T
         ): Map<String, () -> Action> = mapOf(key to provider)
     }
 }
@@ -67,7 +68,7 @@ interface ActionFactory {
 annotation class ActionFactoryBinding {
     companion object {
         @SetElements
-        fun <T : ActionFactory> actionFactoryIntoSet(instance: T): Set<ActionFactory> = setOf(instance)
+        fun <T : ActionFactory> actionFactoryIntoSet(instance: @ForEffect T): Set<ActionFactory> = setOf(instance)
     }
 }
 
@@ -81,6 +82,6 @@ interface ActionPickerDelegate {
 annotation class ActionPickerDelegateBinding {
     companion object {
         @SetElements
-        fun <T : ActionPickerDelegate> actionPickerDelegate(instance: T): Set<ActionPickerDelegate> = setOf(instance)
+        fun <T : ActionPickerDelegate> actionPickerDelegate(instance: @ForEffect T): Set<ActionPickerDelegate> = setOf(instance)
     }
 }

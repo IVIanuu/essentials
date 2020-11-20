@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -148,7 +149,7 @@ typealias HomeRoute = Route
 annotation class HomeRouteUiBinding {
     companion object {
         @Binding
-        fun <T : @Composable () -> Unit> homeRoute(instance: T): HomeRoute = Route(
+        fun <T : @Composable () -> Unit> homeRoute(instance: @ForEffect T): HomeRoute = Route(
             content = instance as @Composable () -> Unit
         )
     }

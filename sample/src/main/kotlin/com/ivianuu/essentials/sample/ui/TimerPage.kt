@@ -22,19 +22,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.data.store.invokePersistedState
 import com.ivianuu.essentials.data.store.persistedState
-import com.ivianuu.essentials.store.reduce
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.FunBinding
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @FunBinding
 @Composable
@@ -53,7 +50,7 @@ fun TimerPage(state: @UiState TimerState) {
 @JsonClass(generateAdapter = true)
 data class TimerState(@Json(name = "value") val value: Int = 0)
 
-@UiStoreBinding
+@UiStateBinding
 fun TimerStore(
     persistedState: persistedState<TimerState>
 ) = persistedState.invokePersistedState("timer", TimerState()) {

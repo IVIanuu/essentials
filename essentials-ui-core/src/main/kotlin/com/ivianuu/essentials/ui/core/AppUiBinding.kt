@@ -19,12 +19,13 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.runtime.Composable
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 
 @Effect
 annotation class AppUiBinding {
     companion object {
         @Binding
-        fun <T : @Composable () -> Unit> appUi(instance: T): AppUi =
+        fun <T : @Composable () -> Unit> appUi(instance: @ForEffect T): AppUi =
             instance as @Composable () -> Unit
     }
 }

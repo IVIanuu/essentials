@@ -25,6 +25,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.MapEntries
 import java.util.UUID
 import kotlin.time.Duration
@@ -46,8 +47,8 @@ annotation class WorkerBinding(val id: String) {
     companion object {
         @MapEntries
         fun <T : Worker> intoWorkerMap(
-            workerProvider: () -> T,
-            @Arg("id") id: String
+            @Arg("id") id: String,
+            workerProvider: () -> @ForEffect T
         ): Workers = mapOf(id to workerProvider)
     }
 }

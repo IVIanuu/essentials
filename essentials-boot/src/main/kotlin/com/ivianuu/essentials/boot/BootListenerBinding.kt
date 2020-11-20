@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.SetElements
 
 @Effect
 annotation class BootListenerBinding {
     companion object {
         @SetElements
-        fun <T : () -> Unit> listenerIntoSet(instance: T): BootListeners = setOf(instance)
+        fun <T : () -> Unit> listenerIntoSet(instance: @ForEffect T): BootListeners = setOf(instance)
     }
 }
 

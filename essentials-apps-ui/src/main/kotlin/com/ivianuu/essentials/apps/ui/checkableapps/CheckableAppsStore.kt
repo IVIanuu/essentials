@@ -26,11 +26,10 @@ import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 
-@UiStoreBinding
+@UiStateBinding
 fun CheckableAppsStore(
     scope: CoroutineScope,
     initial: @Initial CheckableAppsState,

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.*
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.store.GlobalStateBinding
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.filterIsInstance
@@ -42,7 +43,7 @@ sealed class NotificationsAction {
     object DismissAllNotifications : NotificationsAction()
 }
 
-@Binding(ApplicationComponent::class)
+@GlobalStateBinding
 fun NotificationsStore(
     actions: Actions<NotificationsAction>,
     serviceRef: NotificationServiceRef,

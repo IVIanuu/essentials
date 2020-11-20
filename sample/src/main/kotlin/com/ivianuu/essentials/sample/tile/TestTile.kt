@@ -17,37 +17,39 @@
 package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.coroutines.collectIn
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction
-import com.ivianuu.essentials.twilight.data.TwilightPrefsAction.UpdateTwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
+import com.ivianuu.essentials.ui.store.State
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 @TileBinding(1)
 fun TestTile(
     scope: CoroutineScope,
     actions: Actions<TileAction>,
-    dispatch: DispatchAction<TwilightPrefsAction>,
-    twilightPrefsState: StateFlow<TwilightPrefsState>
-) = scope.state(twilightPrefsState.value.toTileState()) {
+    update: updatePref<TwilightPrefsState>,
+    twilightPrefsState: @State Flow<TwilightPrefsState>
+) = scope.state(TwilightPrefsState().toTileState()) {
     twilightPrefsState.reduce { it.toTileState() }
     actions
         .filterIsInstance<TileAction>()
-        .collectIn(this) {
-            dispatch(
-                UpdateTwilightMode(
-                    if (twilightPrefsState.value.twilightMode == TwilightMode.Light) TwilightMode.Dark
-                    else TwilightMode.Light
-                )
-            )
+        .map {
+            if (twilightPrefsState.first().twilightMode == TwilightMode.Light) TwilightMode.Dark
+            else TwilightMode.Light
+        }
+        .collectIn(this) { twilightMode ->
+            update {
+                copy(twilightMode = twilightMode)
+            }
         }
 }
 

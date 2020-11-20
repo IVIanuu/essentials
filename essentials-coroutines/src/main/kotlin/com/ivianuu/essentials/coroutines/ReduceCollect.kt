@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight.data
+package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.datastore.android.PrefBinding
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-@PrefBinding("twilight_prefs")
-@JsonClass(generateAdapter = true)
-data class TwilightPrefsState(
-    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.System,
-    @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false
-)
+suspend fun <T, S> Flow<T>.reduceCollect(
+    initial: S,
+    reducer: S.(T) -> S
+) {
+    var state = initial
+    collect { state = state.reducer(it) }
+}
+
+suspend fun <T, S> Flow<T>.reduceCollectIn(
+    scope: CoroutineScope,
+    initial: S,
+    reducer: S.(T) -> S
+) = scope.launch {
+    reduceCollect(initial, reducer)
+}

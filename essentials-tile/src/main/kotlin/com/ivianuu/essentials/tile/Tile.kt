@@ -20,6 +20,7 @@ import android.graphics.drawable.Icon
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.MapEntries
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -53,8 +54,8 @@ annotation class TileBinding(val slot: Int) {
     companion object {
         @MapEntries
         fun <T : StateFlow<TileState>> intoTileMap(
-            provider: (CoroutineScope, Actions<TileAction>) -> T,
-            @Arg("slot") slot: Int
+            @Arg("slot") slot: Int,
+            provider: (CoroutineScope, Actions<TileAction>) -> @ForEffect T
         ): TileStores = mapOf(slot to provider)
     }
 }

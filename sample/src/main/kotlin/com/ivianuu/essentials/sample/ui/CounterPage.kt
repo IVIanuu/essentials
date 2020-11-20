@@ -39,13 +39,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 
 @FunBinding
 @Composable
@@ -83,7 +82,7 @@ fun CounterPage(
     }
 }
 
-@UiStoreBinding
+@UiStateBinding
 fun CounterStore(
     scope: CoroutineScope,
     initial: @Initial CounterState = CounterState(),

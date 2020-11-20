@@ -21,6 +21,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
@@ -37,7 +38,7 @@ annotation class RouteDecoratorBinding(
             @Arg("key") key: String,
             @Arg("dependencies") dependencies: Array<String>?,
             @Arg("dependents") dependents: Array<String>?,
-            content: T
+            content: @ForEffect T
         ): RouteDecorators = setOf(RouteDecorator(
             key = key,
             dependencies = dependencies?.toSet() ?: emptySet(),

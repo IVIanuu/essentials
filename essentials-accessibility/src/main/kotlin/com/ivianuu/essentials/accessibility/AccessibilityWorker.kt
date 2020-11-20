@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.coroutineScope
@@ -26,7 +27,9 @@ import kotlinx.coroutines.launch
 annotation class AccessibilityWorkerBinding {
     companion object {
         @SetElements
-        fun <T : suspend () -> Unit> intoSet(instance: T): AccessibilityWorkers = setOf(instance)
+        fun <T : suspend () -> Unit> intoSet(
+            instance: @ForEffect T
+        ): AccessibilityWorkers = setOf(instance)
     }
 }
 

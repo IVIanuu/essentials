@@ -23,12 +23,12 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.UiStoreBinding
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
 
-@UiStoreBinding
+@UiStateBinding
 fun BackupAndRestoreStore(
     scope: CoroutineScope,
     initial: @Initial BackupAndRestoreState = BackupAndRestoreState,

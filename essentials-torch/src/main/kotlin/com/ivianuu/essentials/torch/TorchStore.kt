@@ -20,15 +20,17 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
+import com.ivianuu.essentials.ui.store.GlobalStateBinding
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
-@Binding(ApplicationComponent::class)
+@GlobalStateBinding
 fun TorchStore(
-    scope: GlobalScope,
+    scope: CoroutineScope,
     initial: @Initial TorchState = TorchState(),
     actions: Actions<TorchAction>
 ): StateFlow<TorchState> = actions
