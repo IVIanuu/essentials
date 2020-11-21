@@ -26,7 +26,6 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.foreground.ForegroundJob
 import com.ivianuu.essentials.foreground.startForegroundJob
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
@@ -39,11 +38,11 @@ import kotlinx.coroutines.flow.collect
 suspend fun updateTorchForegroundState(
     createTorchNotification: createTorchNotification,
     startForegroundJob: startForegroundJob,
-    torchState: @State Flow<TorchState>
+    state: Flow<TorchState>
 ) {
     var foregroundJob: ForegroundJob? = null
-    torchState.collect { torchState ->
-        foregroundJob = if (torchState.torchEnabled) {
+    state.collect { currentState ->
+        foregroundJob = if (currentState.torchEnabled) {
             startForegroundJob(createTorchNotification())
         } else {
             // todo use foregroundJob?.stop() once compiler is fixed

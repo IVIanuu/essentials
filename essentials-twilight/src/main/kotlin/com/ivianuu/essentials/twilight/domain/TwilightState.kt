@@ -24,7 +24,6 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -52,7 +51,7 @@ fun twilightState(
     batteryTwilightState: BatteryTwilightState,
     systemTwilightState: SystemTwilightState,
     timeTwilightState: TimeTwilightState,
-    twilightPrefsState: @State Flow<TwilightPrefsState>
+    twilightPrefsState: Flow<TwilightPrefsState>
 ): TwilightStateFlow {
     return twilightPrefsState.flatMapLatest { (mode, useBlack) ->
         (when (mode) {

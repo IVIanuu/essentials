@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 
@@ -89,17 +90,13 @@ fun CounterStore(
     actions: Actions<CounterAction>,
     showToast: showToast
 ) = scope.state(initial) {
-    actions
-        .filterIsInstance<Inc>()
-        .reduce { copy(count = count.inc()) }
-    actions
-        .filterIsInstance<Dec>()
-        .filter { currentState().count > 0 }
-        .reduce { copy(count = count.dec()) }
-    actions
-        .filterIsInstance<Dec>()
-        .filter { currentState().count <= 0 }
-        .collectIn(this) { showToast("Value cannot be less than 0!") }
+    actions.collectIn(this) { action ->
+        when (action) {
+            Inc -> reduce { copy(count = count.inc()) }
+            Dec -> if (currentState().count > 0) reduce { copy(count = count.dec()) }
+            else showToast("Value cannot be less than 0!")
+        }
+    }
 }
 
 data class CounterState(val count: Int = 0)

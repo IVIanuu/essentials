@@ -70,7 +70,6 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Binding
@@ -211,7 +210,7 @@ typealias UiNotifications = Flow<List<UiNotification>>
 @Binding
 fun notifications(
     applicationContext: ApplicationContext,
-    serviceState: @State Flow<NotificationsState>,
+    serviceState: Flow<NotificationsState>,
 ): UiNotifications = serviceState
     .map { it.notifications }
     .map { notifications ->

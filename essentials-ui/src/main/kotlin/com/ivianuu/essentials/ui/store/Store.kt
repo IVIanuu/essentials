@@ -85,7 +85,7 @@ annotation class UiStateBinding {
 annotation class StateBinding {
     companion object {
         @Binding
-        inline val <T : StateFlow<S>, S> @ForEffect T.flow: @State Flow<S>
+        inline val <T : StateFlow<S>, S> @ForEffect T.flow: Flow<S>
             get() = this
 
         @Binding
@@ -112,106 +112,4 @@ annotation class Initial
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
-annotation class State
-
-@Qualifier
-@Target(AnnotationTarget.TYPE)
 annotation class UiState
-
-@Effect
-annotation class StateEffect {
-    companion object {
-        @SetElements
-        fun <T : suspend (S) -> Unit, S> intoSet(instance: @ForEffect T): Set<StateEffectBlock<S>> =
-            setOf(instance)
-    }
-}
-
-typealias StateEffectBlock<S> = suspend (S) -> Unit
-
-@Decorator
-fun <T : StateFlow<S>, S> stateEffectStoreDecoratorDefault(
-    scope: () -> GlobalScope,
-    stateEffects: Set<StateEffectBlock<S>>?,
-    factory: () -> T
-): () -> T {
-    return if (stateEffects == null || stateEffects.isEmpty()) factory
-    else {
-        var state: Pair<StateFlow<S>, Job>? = null
-        {
-            val instance = factory()
-            if (state == null || state!!.first != instance) {
-                state = instance to scope().launch {
-                    instance.collectLatest { state ->
-                        coroutineScope {
-                            stateEffects.forEach { effect ->
-                                launch {
-                                    effect(state)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            instance
-        }
-    }
-}
-
-@Decorator
-fun <T : StateFlow<S>, S> stateEffectStoreDecoratorComposable(
-    scope: () -> GlobalScope,
-    stateEffects: Set<StateEffectBlock<S>>?,
-    factory: @Composable () -> T
-): @Composable () -> T {
-    return if (stateEffects == null || stateEffects.isEmpty()) factory
-    else {
-        var state: Pair<StateFlow<S>, Job>? = null
-        {
-            val instance = factory()
-            if (state == null || state!!.first != instance) {
-                state = instance to scope().launch {
-                    instance.collectLatest { state ->
-                        coroutineScope {
-                            stateEffects.forEach { effect ->
-                                launch {
-                                    effect(state)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            instance
-        }
-    }
-}
-
-@Decorator
-fun <T : StateFlow<S>, S> stateEffectStoreDecoratorSuspend(
-    scope: () -> GlobalScope,
-    stateEffects: Set<StateEffectBlock<S>>?,
-    factory: suspend () -> T
-): suspend () -> T {
-    return if (stateEffects == null || stateEffects.isEmpty()) factory
-    else {
-        var state: Pair<StateFlow<S>, Job>? = null
-        {
-            val instance = factory()
-            if (state == null || state!!.first != instance) {
-                state = instance to scope().launch {
-                    instance.collectLatest { state ->
-                        coroutineScope {
-                            stateEffects.forEach { effect ->
-                                launch {
-                                    effect(state)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            instance
-        }
-    }
-}

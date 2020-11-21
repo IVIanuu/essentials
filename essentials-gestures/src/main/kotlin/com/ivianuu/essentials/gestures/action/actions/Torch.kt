@@ -25,7 +25,6 @@ import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.store.State
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +35,7 @@ import kotlinx.coroutines.flow.map
 fun torchAction(
     stringResource: stringResource,
     torchIcon: TorchIcon,
-    torchState: @State Flow<TorchState>,
+    torchState: Flow<TorchState>,
     dispatchTorchAction: DispatchAction<TorchAction>
 ): Action = Action(
     key = "torch",
@@ -45,9 +44,9 @@ fun torchAction(
     execute = { dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled)) }
 )
 
-typealias TorchIcon = ActionIcon
+private typealias TorchIcon = ActionIcon
 @Binding
-fun torchIcon(torchState: @State Flow<TorchState>): TorchIcon = torchState
+fun torchIcon(torchState: Flow<TorchState>): TorchIcon = torchState
     .map {
         if (it.torchEnabled) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off

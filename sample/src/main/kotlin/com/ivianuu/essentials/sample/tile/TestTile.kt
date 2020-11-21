@@ -25,7 +25,6 @@ import com.ivianuu.essentials.tile.TileBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
-import com.ivianuu.essentials.ui.store.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -37,7 +36,7 @@ fun TestTile(
     scope: CoroutineScope,
     actions: Actions<TileAction>,
     update: updatePref<TwilightPrefsState>,
-    twilightPrefsState: @State Flow<TwilightPrefsState>
+    twilightPrefsState: Flow<TwilightPrefsState>
 ) = scope.state(TwilightPrefsState().toTileState()) {
     twilightPrefsState.reduce { it.toTileState() }
     actions
