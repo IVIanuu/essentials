@@ -27,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.collectIn
+import com.ivianuu.essentials.coroutines.launchOnEach
+import com.ivianuu.essentials.coroutines.launchOnEachLatest
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.Actions
@@ -43,6 +45,10 @@ import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 
 @FunBinding
 @Composable
@@ -87,13 +93,15 @@ fun CounterStore(
     actions: Actions<CounterAction>,
     showToast: showToast
 ) = scope.state(initial) {
-    actions.collectIn(this) { action ->
-        when (action) {
-            Inc -> reduce { copy(count = count.inc()) }
-            Dec -> if (currentState().count > 0) reduce { copy(count = count.dec()) }
-            else showToast("Value cannot be less than 0!")
+    actions
+        .onEach { action ->
+            when (action) {
+                Inc -> reduce { copy(count = count.inc()) }
+                Dec -> if (currentState().count > 0) reduce { copy(count = count.dec()) }
+                else showToast("Value cannot be less than 0!")
+            }
         }
-    }
+        .launchIn(this)
 }
 
 data class CounterState(val count: Int = 0)

@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
@@ -77,7 +76,9 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 @FunBinding
 @Composable
@@ -185,17 +186,19 @@ fun NotificationStore(
 ) = scope.state(initial) {
     hasPermissions(listOf(permission)).reduce { copy(hasPermissions = it) }
     notifications.flowAsResource().reduce { copy(notifications = it) }
-    actions.collectIn(this) { action ->
-        when (action) {
-            is RequestPermissions -> requestPermissions(listOf(permission))
-            is OpenNotification -> dispatchServiceAction(
-                NotificationsAction.OpenNotification(action.notification.sbn.notification)
-            )
-            is DismissNotification -> dispatchServiceAction(
-                NotificationsAction.DismissNotification(action.notification.sbn.key)
-            )
+    actions
+        .onEach { action ->
+            when (action) {
+                is RequestPermissions -> requestPermissions(listOf(permission))
+                is OpenNotification -> dispatchServiceAction(
+                    NotificationsAction.OpenNotification(action.notification.sbn.notification)
+                )
+                is DismissNotification -> dispatchServiceAction(
+                    NotificationsAction.DismissNotification(action.notification.sbn.key)
+                )
+            }
         }
-    }
+        .launchIn(this)
 }
 
 typealias NotificationsPermission = Permission

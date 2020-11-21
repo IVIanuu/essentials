@@ -18,7 +18,6 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import android.app.NotificationManager
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ServiceComponent
@@ -27,6 +26,8 @@ import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ForegroundService : EsService() {
 
@@ -49,7 +50,8 @@ class ForegroundService : EsService() {
                     flowOf(emptyList())
                 }
             }
-            .collectIn(scope) { update(it) }
+            .onEach { update(it) }
+            .launchIn(scope)
     }
 
     override fun onDestroy() {

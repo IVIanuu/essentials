@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
@@ -37,6 +36,8 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
 fun ActionPickerStore(
@@ -51,15 +52,16 @@ fun ActionPickerStore(
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
     actions
         .filterIsInstance<PickAction>()
-        .collectIn(this) { action ->
-            val result = action.item.getResult() ?: return@collectIn
+        .onEach { action ->
+            val result = action.item.getResult() ?: return@onEach
             if (result is ActionPickerResult.Action) {
                 val pickedAction = getAction(result.actionKey)
-                if (!requestPermissions(pickedAction.permissions)) return@collectIn
+                if (!requestPermissions(pickedAction.permissions)) return@onEach
             }
 
             navigator.popTop(result = result)
         }
+        .launchIn(this)
 }
 
 @FunBinding

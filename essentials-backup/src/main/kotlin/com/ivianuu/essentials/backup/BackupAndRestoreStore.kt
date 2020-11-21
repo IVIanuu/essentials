@@ -18,7 +18,6 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -27,6 +26,8 @@ import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
 fun BackupAndRestoreStore(
@@ -39,20 +40,22 @@ fun BackupAndRestoreStore(
 ) = scope.state(initial) {
     actions
         .filterIsInstance<BackupData>()
-        .collectIn(this) {
+        .onEach {
             backupData()
                 .onFailure {
                     it.printStackTrace()
                     showToastRes(R.string.es_backup_error)
                 }
         }
+        .launchIn(this)
     actions
         .filterIsInstance<RestoreData>()
-        .collectIn(this) {
+        .onEach {
             restoreData()
                 .onFailure {
                     it.printStackTrace()
                     showToastRes(R.string.es_restore_error)
                 }
         }
+        .launchIn(this)
 }

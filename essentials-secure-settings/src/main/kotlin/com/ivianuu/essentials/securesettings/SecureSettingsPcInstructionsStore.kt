@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
 import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
@@ -28,6 +27,8 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @UiStateBinding
@@ -39,17 +40,19 @@ fun SecureSettingsPcInstructionsStore(
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
 ) = scope.state(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(false) }
-    actions.collectIn(this) { action ->
-        when (action) {
-            OpenGadgetHacksTutorial -> navigator.push(
-                UrlRoute("https://youtu.be/CDuxcrrWLnY")
-            )
-            OpenLifeHackerTutorial -> navigator.push(
-                UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-            )
-            OpenXdaTutorial -> navigator.push(
-                UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-            )
+    actions
+        .onEach { action ->
+            when (action) {
+                OpenGadgetHacksTutorial -> navigator.push(
+                    UrlRoute("https://youtu.be/CDuxcrrWLnY")
+                )
+                OpenLifeHackerTutorial -> navigator.push(
+                    UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+                )
+                OpenXdaTutorial -> navigator.push(
+                    UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+                )
+            }
         }
-    }
+        .launchIn(this)
 }

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -29,6 +28,8 @@ import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
 fun ShortcutPickerStore(
@@ -44,10 +45,10 @@ fun ShortcutPickerStore(
     reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
     actions
         .filterIsInstance<PickShortcut>()
-        .collectIn(this) { action ->
+        .onEach { action ->
             try {
                 val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
-                    .data ?: return@collectIn
+                    .data ?: return@onEach
                 val shortcut = extractShortcut(shortcutRequestResult)
                 navigator.popTop(result = shortcut)
             } catch (e: Throwable) {
@@ -55,4 +56,5 @@ fun ShortcutPickerStore(
                 showToastRes(R.string.es_failed_to_pick_shortcut)
             }
         }
+        .launchIn(this)
 }

@@ -26,14 +26,15 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.broadcast.broadcasts
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 
 /**
@@ -98,9 +99,10 @@ class UnlockScreenActivity : EsActivity() {
                 component.broadcasts(Intent.ACTION_USER_PRESENT)
             )
                 .take(1)
-                .collectIn(lifecycleScope) {
+                .onEach {
                     finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
                 }
+                .launchIn(lifecycleScope)
         }
     }
 

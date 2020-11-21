@@ -19,7 +19,6 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
@@ -30,7 +29,9 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 data class NotificationsState(
     val isConnected: Boolean = false,
@@ -58,12 +59,13 @@ fun NotificationsStore(
 
     actions
         .filterIsInstance<OpenNotification>()
-        .collectIn(this) { action ->
+        .onEach { action ->
             try {
                 action.notification.contentIntent.send()
             } catch (e: Throwable) {
             }
         }
+        .launchIn(this)
 
     serviceRef
         .filterNotNull()
@@ -72,7 +74,8 @@ fun NotificationsStore(
                 .filterIsInstance<DismissNotification>()
                 .map { it.key to service }
         }
-        .collectIn(this) { (key, service) -> service.cancelNotification(key) }
+        .onEach { (key, service) -> service.cancelNotification(key) }
+        .launchIn(this)
 
     serviceRef
         .filterNotNull()
@@ -81,5 +84,6 @@ fun NotificationsStore(
                 .filterIsInstance<DismissAllNotifications>()
                 .map { service }
         }
-        .collectIn(this) { it.cancelAllNotifications() }
+        .onEach { it.cancelAllNotifications() }
+        .launchIn(this)
 }

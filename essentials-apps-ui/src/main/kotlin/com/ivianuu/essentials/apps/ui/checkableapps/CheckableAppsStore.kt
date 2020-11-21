@@ -20,7 +20,6 @@ import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
@@ -28,6 +27,8 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
 fun CheckableAppsStore(
@@ -48,19 +49,22 @@ fun CheckableAppsStore(
             .reducer(currentState())
         onCheckedAppsChanged(newCheckedApps)
     }
-    actions.collectIn(this) { action ->
-        when (action) {
-            is UpdateAppCheckState -> pushNewCheckedApps {
-                if (!action.app.isChecked) {
-                    this + action.app.info.packageName
-                } else {
-                    this - action.app.info.packageName
+
+    actions
+        .onEach { action ->
+            when (action) {
+                is UpdateAppCheckState -> pushNewCheckedApps {
+                    if (!action.app.isChecked) {
+                        this + action.app.info.packageName
+                    } else {
+                        this - action.app.info.packageName
+                    }
                 }
+                SelectAll -> pushNewCheckedApps { currentState ->
+                    currentState.allApps()!!.mapTo(mutableSetOf()) { it.packageName }
+                }
+                DeselectAll -> pushNewCheckedApps { emptySet() }
             }
-            SelectAll -> pushNewCheckedApps { currentState ->
-                currentState.allApps()!!.mapTo(mutableSetOf()) { it.packageName }
-            }
-            DeselectAll -> pushNewCheckedApps { emptySet() }
         }
-    }
+        .launchIn(this)
 }

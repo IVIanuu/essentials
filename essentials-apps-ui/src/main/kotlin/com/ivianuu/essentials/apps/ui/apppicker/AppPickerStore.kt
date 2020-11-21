@@ -19,7 +19,6 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -29,6 +28,8 @@ import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
 fun AppPickerStore(
@@ -44,5 +45,6 @@ fun AppPickerStore(
         .reduce { copy(appFilter = it.appFilter) }
     actions
         .filterIsInstance<PickApp>()
-        .collectIn(this) { navigator.popTop(result = it.app) }
+        .onEach { navigator.popTop(result = it.app) }
+        .launchIn(this)
 }
