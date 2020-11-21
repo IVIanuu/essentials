@@ -19,6 +19,7 @@ package com.ivianuu.essentials.coroutines
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import org.junit.Test
 
@@ -26,15 +27,17 @@ class RaceTest {
 
     @Test
     fun testRace() = runCancellingBlockingTest {
+        var blockCancelled = false
         var aFinished = false
         var aCancelled = false
         var bFinished = false
         var bCancelled = false
-        race<Unit> {
+        val result = race {
             launchRacer {
                 try {
                     delay(1)
                     aFinished = true
+                    "a"
                 } catch (e: CancellationException) {
                     aCancelled = true
                     throw e
@@ -43,13 +46,22 @@ class RaceTest {
             launchRacer {
                 try {
                     bFinished = true
+                    "b"
                 } catch (e: CancellationException) {
                     bCancelled = true
                     throw e
                 }
             }
+
+            try {
+                awaitCancellation()
+            } catch (e: CancellationException) {
+                blockCancelled = true
+            }
         }
 
+        result shouldBe "b"
+        blockCancelled shouldBe true
         aFinished shouldBe false
         aCancelled shouldBe true
         bFinished shouldBe true
