@@ -59,6 +59,22 @@ class RaceTest {
     }
 
     @Test
+    fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
+        var thrown = false
+        try {
+            race<String> {
+                launchRacer {
+                    throw RuntimeException()
+                }
+            }
+        } catch (e: Throwable) {
+            thrown = true
+        }
+
+        thrown shouldBe true
+    }
+
+    @Test
     fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
         var blockCancelled = false
         race {
