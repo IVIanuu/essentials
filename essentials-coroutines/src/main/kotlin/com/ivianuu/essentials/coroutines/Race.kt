@@ -21,15 +21,23 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 
-suspend fun <T> raceOf(vararg racers: suspend CoroutineScope.() -> T): T {
+suspend fun <T> raceOf(vararg racers: suspend () -> T): T {
     require(racers.isNotEmpty()) { "A race needs racers." }
     return race {
         racers.forEach {
             launchRacer(it)
         }
+    }
+}
+
+suspend fun <T> Iterable<suspend () -> T>.race(): T = race {
+    forEach {
+        launchRacer(it)
     }
 }
 
@@ -39,11 +47,11 @@ suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit)
         val scopeBlockJob = childJob()
         val racingScope = object : RacingScope<T>, CoroutineScope by this@coroutineScope {
             var finished = false
-            override fun launchRacer(block: suspend CoroutineScope.() -> T) {
+            override fun launchRacer(block: suspend () -> T) {
                 if (finished) return
                 synchronized(this@coroutineScope) {
                     if (finished) return
-                    async(block = block).also { racers += it }
+                    async { block() }.also { racers += it }
                 }.onAwait { result ->
                     result.also {
                         synchronized(this@coroutineScope) {
@@ -64,5 +72,5 @@ suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit)
 }
 
 interface RacingScope<in T> : CoroutineScope {
-    fun launchRacer(block: suspend CoroutineScope.() -> T)
+    fun launchRacer(block: suspend () -> T)
 }
