@@ -26,33 +26,45 @@ import org.junit.Test
 class RaceTest {
 
     @Test
-    fun testRace() = runCancellingBlockingTest {
-        var blockCancelled = false
-        var aFinished = false
-        var aCancelled = false
-        var bFinished = false
-        var bCancelled = false
+    fun testFirstOneWins() = runCancellingBlockingTest {
         val result = race {
             launchRacer {
-                try {
-                    delay(1)
-                    aFinished = true
-                    "a"
-                } catch (e: CancellationException) {
-                    aCancelled = true
-                    throw e
-                }
+                delay(1)
+                "a"
+            }
+            launchRacer { "b" }
+        }
+        result shouldBe "b"
+    }
+
+    @Test
+    fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
+        var bCancelled = false
+        race {
+            launchRacer {
+                delay(1)
+                "a"
             }
             launchRacer {
                 try {
-                    bFinished = true
-                    "b"
+                    awaitCancellation()
                 } catch (e: CancellationException) {
                     bCancelled = true
                     throw e
                 }
             }
+        }
 
+        bCancelled shouldBe true
+    }
+
+    @Test
+    fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
+        var blockCancelled = false
+        race {
+            launchRacer {
+                delay(1)
+            }
             try {
                 awaitCancellation()
             } catch (e: CancellationException) {
@@ -60,12 +72,7 @@ class RaceTest {
             }
         }
 
-        result shouldBe "b"
         blockCancelled shouldBe true
-        aFinished shouldBe false
-        aCancelled shouldBe true
-        bFinished shouldBe true
-        bCancelled shouldBe false
     }
 
 }
