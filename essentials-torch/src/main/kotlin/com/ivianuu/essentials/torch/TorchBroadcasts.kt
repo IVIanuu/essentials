@@ -24,6 +24,7 @@ import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @AppWorkerBinding
 @FunBinding
@@ -32,9 +33,11 @@ suspend fun TorchBroadcastReceiver(
     dispatch: DispatchAction<TorchAction>,
     state: Flow<TorchState>,
 ) {
-    combine(broadcasts(ACTION_TOGGLE_TORCH), state).collect { (_, currentState) ->
-        dispatch(UpdateTorchEnabled(!currentState.torchEnabled))
-    }
+    combine(broadcasts(ACTION_TOGGLE_TORCH), state)
+        .onEach { (_, currentState) ->
+            dispatch(UpdateTorchEnabled(!currentState.torchEnabled))
+        }
+        .collect()
 }
 
 const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
