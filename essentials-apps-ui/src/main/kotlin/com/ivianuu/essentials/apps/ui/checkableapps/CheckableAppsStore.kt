@@ -39,7 +39,9 @@ fun CheckableAppsStore(
     getInstalledApps: getInstalledApps,
     onCheckedAppsChanged: OnCheckedAppsChanged
 ) = scope.state(initial) {
-    checkedAppsSource.reduce { copy(checkedApps = it) }
+    checkedAppsSource
+        .reduce { copy(checkedApps = it) }
+        .launchIn(this)
     reduceResource({ getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
@@ -25,14 +26,14 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-fun <T> Flow<T>.launchOnStart(block: suspend () -> Unit) = flow {
+fun <T> Flow<T>.launchOnStart(block: suspend CoroutineScope.() -> Unit) = flow {
     coroutineScope {
-        launch { block() }
+        launch(block = block)
         emitAll(this@launchOnStart)
     }
 }
 
-fun <T> Flow<T>.launchOnEach(block: suspend (T) -> Unit) = flow {
+fun <T> Flow<T>.launchOnEach(block: suspend CoroutineScope.(T) -> Unit) = flow {
     coroutineScope {
         this@launchOnEach.collect { value ->
             emit(value)
@@ -41,7 +42,7 @@ fun <T> Flow<T>.launchOnEach(block: suspend (T) -> Unit) = flow {
     }
 }
 
-fun <T> Flow<T>.launchOnEachLatest(block: suspend (T) -> Unit) = flow {
+fun <T> Flow<T>.launchOnEachLatest(block: suspend CoroutineScope.(T) -> Unit) = flow {
     coroutineScope {
         var lastJob: Job? = null
         this@launchOnEachLatest.collect { value ->

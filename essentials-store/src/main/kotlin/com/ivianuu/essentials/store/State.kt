@@ -31,7 +31,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -40,25 +42,12 @@ interface StateScope<S> : CoroutineScope {
 
     suspend fun reduce(reducer: S.() -> S): S
 
-    fun Flow<S.() -> S>.reduce() {
-        launch {
-            collect {
-                reduce(it)
-            }
+    fun Flow<S.() -> S>.reduce(): Flow<S.() -> S> = onEach { reduce(it) }
+
+    fun <T> Flow<T>.reduce(reducer: S.(T) -> S): Flow<T> =
+        onEach { value ->
+            reduce { reducer(value) }
         }
-    }
-
-    fun <T> Flow<T>.reduce(reducer: S.(T) -> S) =
-        map<T, S.() -> S> { value -> { reducer(value) } }
-            .reduce()
-
-    fun <T> Flow<T>.reduceCatching(
-        success: S.(T) -> S,
-        error: S.(Throwable) -> S
-    ) = map<T, S.() -> S> { value ->
-        { success(value) }
-    }.catch { t -> reduce { error(t) } }
-        .reduce()
 }
 
 suspend inline fun <S> StateScope<S>.currentState(): S = state.first()
@@ -78,7 +67,7 @@ fun <S> Flow<S.() -> S>.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily
 ): StateFlow<S> = scope.state(initial, started) {
-    this@state.reduce()
+    this@state.reduce().collect()
 }
 
 fun <S> CoroutineScope.state(

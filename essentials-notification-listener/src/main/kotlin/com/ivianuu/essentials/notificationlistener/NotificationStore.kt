@@ -52,10 +52,12 @@ fun NotificationsStore(
 ) = scope.state(NotificationsState()) {
     serviceRef
         .reduce { copy(isConnected = it != null) }
+        .launchIn(this)
 
     serviceRef
         .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
         .reduce { copy(notifications = it) }
+        .launchIn(this)
 
     actions
         .filterIsInstance<OpenNotification>()

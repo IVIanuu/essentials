@@ -39,7 +39,9 @@ fun TestTile(
     update: updatePref<TwilightPrefsState>,
     twilightPrefsState: Flow<TwilightPrefsState>
 ) = scope.state(TwilightPrefsState().toTileState()) {
-    twilightPrefsState.reduce { it.toTileState() }
+    twilightPrefsState
+        .reduce { it.toTileState() }
+        .launchIn(this)
     actions
         .filterIsInstance<TileAction>()
         .map {

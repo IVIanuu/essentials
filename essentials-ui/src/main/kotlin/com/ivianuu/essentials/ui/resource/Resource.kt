@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
 
 sealed class Resource<out T> {
     open operator fun invoke(): T? = null
@@ -107,7 +108,7 @@ inline fun <S, T> StateScope<S>.reduceResource(
     crossinline block: suspend () -> T,
     noinline reducer: S.(Resource<T>) -> S
 ) {
-    resource(block).reduce(reducer)
+    resource(block).reduce(reducer).launchIn(this)
 }
 
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {

@@ -43,6 +43,7 @@ fun AppPickerStore(
     actions
         .filterIsInstance<FilterApps>()
         .reduce { copy(appFilter = it.appFilter) }
+        .launchIn(this)
     actions
         .filterIsInstance<PickApp>()
         .onEach { navigator.popTop(result = it.app) }

@@ -184,8 +184,12 @@ fun NotificationStore(
     permission: NotificationsPermission,
     requestPermissions: requestPermissions
 ) = scope.state(initial) {
-    hasPermissions(listOf(permission)).reduce { copy(hasPermissions = it) }
-    notifications.flowAsResource().reduce { copy(notifications = it) }
+    hasPermissions(listOf(permission))
+        .reduce { copy(hasPermissions = it) }
+        .launchIn(this)
+    notifications.flowAsResource()
+        .reduce { copy(notifications = it) }
+        .launchIn(this)
     actions
         .onEach { action ->
             when (action) {
