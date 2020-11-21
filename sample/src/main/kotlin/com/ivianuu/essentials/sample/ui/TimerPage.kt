@@ -22,14 +22,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.data.store.invokePersistedState
 import com.ivianuu.essentials.data.store.persistedState
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.FunBinding
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -47,15 +50,15 @@ fun TimerPage(state: @UiState TimerState) {
     }
 }
 
-@JsonClass(generateAdapter = true)
-data class TimerState(@Json(name = "value") val value: Int = 0)
+data class TimerState(val value: Int = 0)
 
 @UiStateBinding
 fun TimerStore(
-    persistedState: persistedState<TimerState>
-) = persistedState.invokePersistedState("timer", TimerState()) {
+    scope: CoroutineScope,
+    initial: @Initial TimerState = TimerState()
+) = scope.state(initial) {
     while (coroutineContext.isActive) {
-        reduce { copy(value = value + 1) }
+        reduce { copy(value = value.inc()) }
         delay(1000)
     }
 }
