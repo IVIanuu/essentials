@@ -28,20 +28,16 @@ fun <T> Flow<T>.onCancel(
     action: suspend FlowCollector<T>.() -> Unit
 ) = object : Flow<T> {
     override suspend fun collect(collector: FlowCollector<T>) {
-        var fromCollector = false
         try {
             this@onCancel.collect { value ->
                 try {
                     collector.emit(value)
                 } catch (e: CancellationException) {
-                    fromCollector = true
+                    throw CollectorCancellationException(e)
                 }
             }
-            collector.emitAll(this@onCancel)
         } catch (e: CancellationException) {
-            if (fromCollector) {
-                throw e
-            } else {
+            if (e !is CollectorCancellationException) {
                 withContext(NonCancellable) {
                     action(collector)
                 }
@@ -49,3 +45,7 @@ fun <T> Flow<T>.onCancel(
         }
     }
 }
+
+private class CollectorCancellationException(
+    override val cause: CancellationException
+) : CancellationException()
