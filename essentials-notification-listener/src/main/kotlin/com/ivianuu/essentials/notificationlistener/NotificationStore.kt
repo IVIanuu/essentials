@@ -20,12 +20,12 @@ import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.collectIn
-import com.ivianuu.essentials.notificationlistener.NotificationsAction.*
+import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
+import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
+import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.GlobalStateBinding
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest

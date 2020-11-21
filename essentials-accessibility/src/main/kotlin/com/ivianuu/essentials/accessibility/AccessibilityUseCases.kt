@@ -22,5 +22,5 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 suspend fun performGlobalAction(
     holder: MutableAccessibilityServiceHolder,
-     @FunApi action: Int
+    @FunApi action: Int
 ): Boolean = holder.value?.performGlobalAction(action) ?: false

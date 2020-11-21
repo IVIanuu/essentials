@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticAmbientOf
 import kotlinx.coroutines.DisposableHandle

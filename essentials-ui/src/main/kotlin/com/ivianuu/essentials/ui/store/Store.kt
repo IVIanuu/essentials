@@ -22,21 +22,16 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 

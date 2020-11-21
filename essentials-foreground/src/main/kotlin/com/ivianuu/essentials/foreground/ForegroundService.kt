@@ -27,8 +27,6 @@ import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class ForegroundService : EsService() {
 

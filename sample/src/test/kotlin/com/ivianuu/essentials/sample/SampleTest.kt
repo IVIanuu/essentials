@@ -24,7 +24,6 @@ import com.ivianuu.essentials.sample.ui.CounterState
 import com.ivianuu.essentials.sample.ui.CounterStore
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import org.junit.Test

@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatable.bounds
