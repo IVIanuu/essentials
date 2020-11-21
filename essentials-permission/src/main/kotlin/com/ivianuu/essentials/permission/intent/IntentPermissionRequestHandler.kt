@@ -48,9 +48,7 @@ class IntentPermissionRequestHandler(
         },
         {
             // wait until user granted permission
-            while (!hasPermissions(listOf(permission)).first()) {
-                delay(100)
-            }
+            hasPermissions(listOf(permission)).first { it }
         }
     )
 }
