@@ -19,7 +19,6 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -34,43 +33,36 @@ suspend fun <T> raceOf(vararg racers: suspend CoroutineScope.() -> T): T {
     }
 }
 
-interface RacingScope<in T> : CoroutineScope {
-    fun launchRacer(block: suspend CoroutineScope.() -> T)
-}
-
-suspend fun <T> race(
-    @BuilderInference
-    block: suspend RacingScope<T>.() -> Unit
-): T = coroutineScope {
+suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit): T = coroutineScope {
     val racers = mutableListOf<Deferred<T>>()
-    select<T> {
-        val job = Job(parent = coroutineContext[Job])
+    select {
+        val scopeBlockJob = childJob()
         val racingScope = object : RacingScope<T>, CoroutineScope by this@coroutineScope {
-            var raceWon = false
+            var finished = false
             override fun launchRacer(block: suspend CoroutineScope.() -> T) {
-                if (raceWon) return // A racer already completed.
-                async(block = block).also { racerAsync ->
-                    racers += racerAsync
-                    if (raceWon) { // A racer just completed on another thread, cancel.
-                        racerAsync.cancel()
+                if (finished) return
+                synchronized(this@coroutineScope) {
+                    if (finished) return
+                    async(block = block).also { racers += it }
+                }.onAwait { result ->
+                    result.also {
+                        synchronized(this@coroutineScope) {
+                            if (!finished) {
+                                finished = true
+                                scopeBlockJob.cancel()
+                                racers.forEach { it.cancel() }
+                            }
+                        }
                     }
-                }.onAwait { resultOfWinner: T ->
-                    raceWon = true
-                    job.cancel()
-                    var i = 0
-                    // Since launchRacerInternal might be called on multiple threads concurrently,
-                    //  we don't use a forEach loop, but a while loop that is additions tolerant.
-                    while (i <= racers.lastIndex) {
-                        val deferred = racers[i]
-                        deferred.cancel()
-                        i++
-                    }
-                    return@onAwait resultOfWinner
                 }
             }
         }
-        launch(job, start = CoroutineStart.UNDISPATCHED) {
+        launch(context = scopeBlockJob, start = CoroutineStart.UNDISPATCHED) {
             racingScope.block()
         }
     }
+}
+
+interface RacingScope<in T> : CoroutineScope {
+    fun launchRacer(block: suspend CoroutineScope.() -> T)
 }
