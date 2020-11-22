@@ -100,6 +100,7 @@ fun <T> InsettingLazyColumnFor(
     items: List<T>,
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val insets = InsetsAmbient.current
@@ -113,6 +114,7 @@ fun <T> InsettingLazyColumnFor(
                 }
             },
             modifier = modifier,
+            horizontalAlignment = horizontalAlignment,
             state = state
         ) { item ->
             when (item) {
@@ -133,6 +135,7 @@ fun <T> InsettingLazyRowFor(
     items: List<T>,
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
     val insets = InsetsAmbient.current
@@ -146,7 +149,8 @@ fun <T> InsettingLazyRowFor(
                 }
             },
             modifier = modifier,
-            state = state
+            state = state,
+            verticalAlignment = verticalAlignment
         ) { item ->
             when (item) {
                 LeadingInsetsItem -> {
