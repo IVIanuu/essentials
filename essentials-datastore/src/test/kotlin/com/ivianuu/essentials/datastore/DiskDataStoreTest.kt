@@ -19,6 +19,7 @@ package com.ivianuu.essentials.datastore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import com.squareup.moshi.Moshi
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -58,48 +59,34 @@ class DiskDataStoreTest {
     fun testSingleCollector() = scope.runCancellingBlockingTest {
         val (store) = createStore("test") { 0 }
 
-        val datas = mutableListOf<Int>()
-        val collectorJob = launch {
-            store.data
-                .collect { datas += it }
-        }
+        val collector = store.data.testCollect(this)
 
-        datas.shouldContainExactly(0)
+        collector.values.shouldContainExactly(0)
         store.updateData { it + 1 }
-        datas.shouldContainExactly(0, 1)
+        collector.values.shouldContainExactly(0, 1)
         store.updateData { it + 1 }
         store.updateData { it + 1 }
         store.updateData { it }
-        datas.shouldContainExactly(0, 1, 2, 3)
-
-        collectorJob.cancelAndJoin()
+        collector.values.shouldContainExactly(0, 1, 2, 3)
     }
 
     @Test
     fun testMultipleCollector() = scope.runCancellingBlockingTest {
         val (store) = createStore("test") { 0 }
 
-        val datas1 = mutableListOf<Int>()
-        launch {
-            store.data
-                .collect { datas1 += it }
-        }
-        val datas2 = mutableListOf<Int>()
-        launch {
-            store.data
-                .collect { datas2 += it }
-        }
+        val collector1 = store.data.testCollect(this)
+        val collector2 = store.data.testCollect(this)
 
-        datas1.shouldContainExactly(0)
-        datas2.shouldContainExactly(0)
+        collector1.values.shouldContainExactly(0)
+        collector2.values.shouldContainExactly(0)
         store.updateData { it + 1 }
-        datas1.shouldContainExactly(0, 1)
-        datas2.shouldContainExactly(0, 1)
+        collector1.values.shouldContainExactly(0, 1)
+        collector2.values.shouldContainExactly(0, 1)
         store.updateData { it + 1 }
         store.updateData { it + 1 }
         store.updateData { it }
-        datas1.shouldContainExactly(0, 1, 2, 3)
-        datas2.shouldContainExactly(0, 1, 2, 3)
+        collector1.values.shouldContainExactly(0, 1, 2, 3)
+        collector2.values.shouldContainExactly(0, 1, 2, 3)
     }
 
 }
