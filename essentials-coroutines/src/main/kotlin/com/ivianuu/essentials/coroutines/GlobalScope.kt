@@ -20,18 +20,12 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.launch
 
 typealias GlobalScope = CoroutineScope
 @Binding(ApplicationComponent::class)
 fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
     CoroutineScope(defaultDispatcher)
-
-@FunBinding
-suspend fun globalTask(
-    globalScope: GlobalScope,
-    @FunApi block: suspend CoroutineScope.() -> Unit
-) {
-    globalScope.launch(block = block).join()
-}
