@@ -26,6 +26,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -38,22 +39,26 @@ annotation class PrefBinding(val name: String) {
         @Binding(ApplicationComponent::class)
         inline fun <reified T : Any> pref(
             @Arg("name") name: String,
-            crossinline initial: () -> @Initial T,
+            crossinline initial: () -> @InitialOrFallback T,
             factory: DiskDataStoreFactory
         ): DataStore<T> = factory.create(name) { initial() }
 
-        @Binding
-        inline fun <reified T : Any> initial(): @Initial T = T::class.java.newInstance()
-
         @StateBinding
         @Binding(ApplicationComponent::class)
-        inline fun <T : Any> stateFlow(
+        fun <T : Any> stateFlow(
             scope: GlobalScope,
             dataStore: DataStore<T>,
-            initial: @Initial T
+            initial: @InitialOrFallback T
         ) = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
     }
 }
+
+@Qualifier
+@Target(AnnotationTarget.TYPE)
+internal annotation class InitialOrFallback
+@Binding
+inline fun <reified T : Any> initialOrFallback(initial: @Initial T?): @InitialOrFallback T =
+    initial ?: T::class.java.newInstance()
 
 @FunBinding
 fun <T> updatePref(
