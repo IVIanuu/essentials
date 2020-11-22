@@ -27,6 +27,7 @@ import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.store.StateScope
 import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
@@ -104,11 +105,13 @@ inline fun <T> resource(crossinline block: suspend () -> T): Flow<Resource<T>> {
     return resourceFlow { emit(block()) }
 }
 
-inline fun <S, T> StateScope<S>.reduceResource(
-    crossinline block: suspend () -> T,
-    noinline reducer: S.(Resource<T>) -> S
-) {
-    resource(block).reduce(reducer).launchIn(this)
+fun <S, T> StateScope<S>.reduceResource(
+    block: suspend () -> T,
+    reducer: S.(Resource<T>) -> S
+): Job {
+    return resource(block)
+        .reduce(reducer)
+        .launchIn(this)
 }
 
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {

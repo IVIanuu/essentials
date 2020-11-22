@@ -42,11 +42,12 @@ interface StateScope<S> : CoroutineScope {
 
     suspend fun reduce(reducer: S.() -> S): S
 
-    fun Flow<S.() -> S>.reduce(): Flow<S.() -> S> = onEach { reduce(it) }
+    fun Flow<S.() -> S>.reduce(): Flow<S.() -> S> =
+        onEach { this@StateScope.reduce(it) }
 
     fun <T> Flow<T>.reduce(reducer: S.(T) -> S): Flow<T> =
         onEach { value ->
-            reduce { reducer(value) }
+            this@StateScope.reduce { reducer(value) }
         }
 }
 
