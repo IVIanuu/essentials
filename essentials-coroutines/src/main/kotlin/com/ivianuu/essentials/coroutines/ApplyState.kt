@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 
-fun <T> Flow<T>.collectIn(scope: CoroutineScope, action: suspend (T) -> Unit): Job =
-    scope.launch { collect(action) }
+fun <T, S> Flow<T>.applyState(initial: S, reducer: suspend S.(T) -> S): Flow<T> {
+    var state = initial
+    return onEach { state = state.reducer(it) }
+}
