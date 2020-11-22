@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons

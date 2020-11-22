@@ -24,9 +24,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.AmbientEmphasisLevels
-import androidx.compose.material.ProvideEmphasis
+import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.material.ContentAlpha
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -47,7 +48,7 @@ fun SimpleDialogListItem(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProvideEmphasis(emphasis = AmbientEmphasisLevels.current.high) {
+            Providers(AmbientContentAlpha provides ContentAlpha.high) {
                 if (leading != null) {
                     leading()
                     Spacer(Modifier.width(24.dp))

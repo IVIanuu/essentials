@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.material.Icon
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.ButtonConstants
 import androidx.compose.material.MaterialTheme
@@ -56,7 +57,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.BaseTextField
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.core.toColorOrNull
 import com.ivianuu.essentials.ui.core.toHexString
@@ -341,18 +341,18 @@ private fun ColorEditorHeader(
                     color.toHexString(includeAlpha = showAlphaSelector)
                 }
                 Text("#")
-                BaseTextField(
+                BasicTextField(
                     value = hexInput,
                     onValueChange = { newValue ->
                         if ((showAlphaSelector && newValue.length > 8) ||
                             (!showAlphaSelector && newValue.length > 6)
-                        ) return@BaseTextField
+                        ) return@BasicTextField
 
                         hexInput = newValue
 
                         if ((showAlphaSelector && newValue.length < 8) ||
                             (!showAlphaSelector && newValue.length < 6)
-                        ) return@BaseTextField
+                        ) return@BasicTextField
 
                         val newColor = newValue.toColorOrNull()
 

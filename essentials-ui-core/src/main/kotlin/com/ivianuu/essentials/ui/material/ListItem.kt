@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,12 +27,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.preferredHeightIn
+import androidx.compose.material.AmbientContentAlpha
 import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideEmphasis
 import androidx.compose.material.ripple.AmbientRippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -90,9 +92,9 @@ fun ListItem(
                             ),
                         alignment = Alignment.Center
                     ) {
-                        ProvideEmphasis(
-                            emphasis = AmbientEmphasisLevels.current.high,
-                            content = leading
+                        Providers(
+                            AmbientContentAlpha provides ContentAlpha.high,
+                            children = leading
                         )
                     }
                 }
@@ -115,17 +117,17 @@ fun ListItem(
                 ) {
                     if (title != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-                            ProvideEmphasis(
-                                emphasis = AmbientEmphasisLevels.current.high,
-                                content = title
+                            Providers(
+                                AmbientContentAlpha provides ContentAlpha.high,
+                                children = title
                             )
                         }
                     }
                     if (subtitle != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.body2) {
-                            ProvideEmphasis(
-                                emphasis = AmbientEmphasisLevels.current.medium,
-                                content = subtitle
+                            Providers(
+                                AmbientContentAlpha provides ContentAlpha.medium,
+                                children = subtitle
                             )
                         }
                     }
@@ -147,9 +149,9 @@ fun ListItem(
                         ),
                         alignment = Alignment.Center
                     ) {
-                        ProvideEmphasis(
-                            emphasis = AmbientEmphasisLevels.current.high,
-                            content = trailing
+                        Providers(
+                            AmbientContentAlpha provides ContentAlpha.high,
+                            children = trailing
                         )
                     }
                 }

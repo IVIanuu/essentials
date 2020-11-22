@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.PendingIntent
 import android.content.Intent
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.VectorAsset
 import com.ivianuu.essentials.gestures.R

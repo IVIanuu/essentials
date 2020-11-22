@@ -24,6 +24,7 @@ import com.ivianuu.injekt.ForEffect
 @Effect
 annotation class AppUiBinding {
     companion object {
+        @Suppress("USELESS_CAST")
         @Binding
         fun <T : @Composable () -> Unit> appUi(instance: @ForEffect T): AppUi =
             instance as @Composable () -> Unit

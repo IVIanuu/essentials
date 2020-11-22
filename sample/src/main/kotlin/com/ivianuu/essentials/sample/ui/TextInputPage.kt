@@ -16,17 +16,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.BaseTextField
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -75,7 +76,7 @@ fun TextInputPage() {
                                         .align(Alignment.CenterStart)
                                 )
                             }
-                            BaseTextField(
+                            BasicTextField(
                                 value = state.inputValue,
                                 onValueChange = { state.inputValue = it },
                                 textStyle = MaterialTheme.typography.subtitle1,
@@ -84,7 +85,7 @@ fun TextInputPage() {
                             )
                         }
 
-                        // todo onActive { focusRequester.requestFocus() }
+                        onActive { focusRequester.requestFocus() }
                     } else {
                         Text("Text input")
                     }

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

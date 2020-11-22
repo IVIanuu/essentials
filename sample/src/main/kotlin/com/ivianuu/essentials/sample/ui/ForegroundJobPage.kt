@@ -29,6 +29,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onActive
@@ -88,7 +89,7 @@ fun ForegroundJobPage(
                 )
             }
 
-            LaunchedTask(currentJob) {
+            LaunchedEffect(currentJob) {
                 while (true) {
                     delay(1000)
                     count++

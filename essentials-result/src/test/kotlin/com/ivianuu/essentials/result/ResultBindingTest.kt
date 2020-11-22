@@ -24,9 +24,9 @@ class ResultBindingTest {
     @Test
     fun testErrorBinding() {
         var invocations = 0
-        val doSomething = {
+        val doSomething: () -> Result<Unit, Throwable> = {
             invocations++
-            Err(Throwable()) as Result<Unit, Throwable>
+            Err(Throwable())
         }
 
         binding {

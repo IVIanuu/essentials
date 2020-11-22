@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack

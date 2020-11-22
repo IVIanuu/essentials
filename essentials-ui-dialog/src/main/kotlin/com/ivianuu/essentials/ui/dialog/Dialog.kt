@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.ProvideTextStyle
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,10 +26,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.AmbientContentAlpha
 import androidx.compose.material.AmbientEmphasisLevels
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideEmphasis
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
@@ -93,9 +95,9 @@ private fun DialogBody(
             val styledTitle: @Composable (() -> Unit)? = title?.let {
                 {
                     ProvideTextStyle(MaterialTheme.typography.h6) {
-                        ProvideEmphasis(
-                            emphasis = AmbientEmphasisLevels.current.high,
-                            content = title
+                        Providers(
+                            AmbientContentAlpha provides ContentAlpha.high,
+                            children = title
                         )
                     }
                 }
@@ -103,9 +105,9 @@ private fun DialogBody(
 
             val styledIcon: @Composable (() -> Unit)? = icon?.let {
                 {
-                    ProvideEmphasis(
-                        emphasis = AmbientEmphasisLevels.current.high,
-                        content = icon
+                    Providers(
+                        AmbientContentAlpha provides ContentAlpha.high,
+                        children = icon
                     )
                 }
             }
@@ -129,9 +131,9 @@ private fun DialogBody(
     val finalContent: @Composable (() -> Unit)? = if (content != null) {
         {
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
-                ProvideEmphasis(
-                    emphasis = AmbientEmphasisLevels.current.medium,
-                    content = content
+                Providers(
+                    AmbientContentAlpha provides ContentAlpha.medium,
+                    children = content
                 )
             }
         }

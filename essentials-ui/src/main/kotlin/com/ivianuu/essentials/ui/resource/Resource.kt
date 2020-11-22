@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedTask
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProduceStateScope
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.store.StateScope
-import com.ivianuu.essentials.ui.core.rememberState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -136,29 +136,23 @@ fun <T> Flow<T>.collectAsResource(): Resource<T> {
         .value
 }
 
-// todo remove overload once compose is fixed
 @Composable
-fun <T> produceResource(producer: suspend CoroutineScope.() -> T): Resource<T> =
-    produceResource(inputs = *emptyArray(), producer = producer)
+fun <T> produceResource(
+    producer: suspend CoroutineScope.() -> T
+): Resource<T> = produceResource<T>(subjects = *emptyArray(), producer = producer)
 
 @Composable
 fun <T> produceResource(
-    vararg inputs: Any?,
+    vararg subjects: Any?,
     producer: suspend CoroutineScope.() -> T
-): Resource<T> {
-    var state by rememberState<Resource<T>>(*inputs) { Idle }
-
-    LaunchedTask(*inputs) {
-        state = Loading
-        state = try {
-            Success(producer())
-        } catch (e: Throwable) {
-            Error(e)
-        }
+): Resource<T> = produceState<Resource<T>>(Idle, *subjects) {
+    value = Loading
+    value = try {
+        Success(producer())
+    } catch (e: Throwable) {
+        Error(e)
     }
-
-    return state
-}
+}.value
 
 fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
     success = { Success(it) },
