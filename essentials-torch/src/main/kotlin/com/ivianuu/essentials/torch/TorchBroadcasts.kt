@@ -28,12 +28,8 @@ import kotlinx.coroutines.flow.onEach
 
 @AppWorkerBinding
 @FunBinding
-suspend fun TorchBroadcastReceiver(
-    broadcasts: broadcasts,
-    dispatch: DispatchAction<TorchAction>,
-    state: Flow<TorchState>,
-) {
-    combine(broadcasts(ACTION_DISABLE_TORCH), state)
+suspend fun handleTorchBroadcasts(broadcasts: broadcasts, dispatch: DispatchAction<TorchAction>) {
+    broadcasts(ACTION_DISABLE_TORCH)
         .onEach { dispatch(UpdateTorchEnabled(false)) }
         .collect()
 }
