@@ -29,6 +29,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -49,7 +50,7 @@ annotation class PrefBinding(val name: String) {
             scope: GlobalScope,
             dataStore: DataStore<T>,
             initial: @InitialOrFallback T
-        ) = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
+        ): StateFlow<T> = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
     }
 }
 
