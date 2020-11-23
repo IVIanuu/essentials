@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,16 +48,18 @@ fun DynamicSystemBarsPage() {
             }
 
             colors.forEach { color ->
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .height(300.dp)
-                        .background(color)
-                        .layoutId(color)
-                        .systemBarStyle(
-                            bgColor = Color.Black.copy(alpha = 0.2f),
-                            lightIcons = color.isLight
-                        )
-                )
+                key(color) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .background(color)
+                            .systemBarStyle(
+                                bgColor = Color.Black.copy(alpha = 0.2f),
+                                lightIcons = color.isLight
+                            )
+                    )
+                }
             }
         }
 
