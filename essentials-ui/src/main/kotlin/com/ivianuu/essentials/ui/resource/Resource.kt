@@ -114,6 +114,10 @@ fun <S, T> StateScope<S>.reduceResource(
         .launchIn(this)
 }
 
+fun <T, S> Flow<T>.reduceResource(scope: StateScope<S>, reducer: S.(Resource<T>) -> S) = with(scope) {
+    flowAsResource().reduce { reducer(it) }
+}
+
 fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {
         emit(Loading)
