@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.activity.EsActivity
@@ -40,7 +41,7 @@ import kotlinx.coroutines.flow.take
 /**
  * Requests a screen unlock
  */
-class UnlockScreenActivity : EsActivity() {
+class UnlockScreenActivity : AppCompatActivity() {
 
     private var hasResult = false
     private var valid = true
@@ -104,10 +105,6 @@ class UnlockScreenActivity : EsActivity() {
                 }
                 .launchIn(lifecycleScope)
         }
-    }
-
-    @Composable
-    override fun Content() {
     }
 
     override fun onDestroy() {

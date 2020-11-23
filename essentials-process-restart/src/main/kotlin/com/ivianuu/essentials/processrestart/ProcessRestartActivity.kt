@@ -19,10 +19,11 @@ package com.ivianuu.essentials.processrestart
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.activity.EsActivity
 
-class ProcessRestartActivity : EsActivity() {
+class ProcessRestartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +34,6 @@ class ProcessRestartActivity : EsActivity() {
 
         finish()
         Runtime.getRuntime().exit(0)
-    }
-
-    @Composable
-    override fun Content() {
     }
 
     internal companion object {
