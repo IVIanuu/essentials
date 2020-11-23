@@ -36,15 +36,13 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-typealias ScreenStateFlow = Flow<ScreenState>
-
 @Binding(ApplicationComponent::class)
-fun screenStateFlow(
+fun screenState(
     broadcasts: broadcasts,
     getCurrentScreenState: getCurrentScreenState,
     globalScope: GlobalScope,
     logger: Logger,
-): ScreenStateFlow {
+): Flow<ScreenState> {
     return merge(
         broadcasts(Intent.ACTION_SCREEN_OFF),
         broadcasts(Intent.ACTION_SCREEN_ON),

@@ -22,9 +22,7 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.essentials.screenstate.DisplayRotationFlow
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.screenstate.ScreenStateFlow
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -53,10 +51,10 @@ class NavBarManager(
     private val broadcasts: broadcasts,
     private val defaultDispatcher: DefaultDispatcher,
     private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
-    private val displayRotationFlow: DisplayRotationFlow,
+    private val displayRotation: Flow<DisplayRotation>,
     private val globalScope: GlobalScope,
     private val logger: Logger,
-    private val screenStateFlow: ScreenStateFlow,
+    private val screenState: Flow<ScreenState>,
     private val setOverscan: setOverscan,
     private val wasNavBarHiddenPref: WasNavBarHiddenPref,
 ) {
@@ -89,11 +87,11 @@ class NavBarManager(
             coroutineScope {
                 val flows = buildList<Flow<*>> {
                     if (config.rotationMode != NavBarRotationMode.Nougat) {
-                        this += displayRotationFlow.drop(1)
+                        this += displayRotation.drop(1)
                     }
 
                     if (config.showWhileScreenOff) {
-                        this += screenStateFlow.drop(1)
+                        this += screenState.drop(1)
                     }
                 }
 
@@ -103,7 +101,7 @@ class NavBarManager(
                         .onStart { emit(Unit) }
                         .map {
                             !config.showWhileScreenOff ||
-                                    screenStateFlow.first() == ScreenState.Unlocked
+                                    screenState.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
                             wasNavBarHiddenPref.updateData { navBarHidden }
@@ -151,7 +149,7 @@ class NavBarManager(
 
     private suspend fun getNavigationBarHeight(): Int {
         val name =
-            if (displayRotationFlow.first().isPortrait) "navigation_bar_height"
+            if (displayRotation.first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
         val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
         return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
@@ -161,7 +159,7 @@ class NavBarManager(
         navBarHeight: Int,
         config: NavBarConfig,
     ): Rect {
-        val currentRotation = displayRotationFlow.first()
+        val currentRotation = displayRotation.first()
         return when (config.rotationMode) {
             NavBarRotationMode.Marshmallow -> {
                 when (currentRotation) {

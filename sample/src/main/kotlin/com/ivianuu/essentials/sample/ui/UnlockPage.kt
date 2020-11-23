@@ -22,13 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.screenstate.ScreenStateFlow
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun UnlockPage(
-    screenStateFlow: ScreenStateFlow,
+    screenState: Flow<ScreenState>,
     showToast: showToast,
     unlockScreen: unlockScreen,
 ) {
@@ -49,11 +49,7 @@ fun UnlockPage(
             onClick = {
                 scope.launch {
                     showToast("Turn the screen off and on")
-
-                    screenStateFlow
-                        .filter { it == ScreenState.Locked }
-                        .first()
-
+                    screenState.first { it == ScreenState.Locked }
                     val unlocked = unlockScreen()
                     showToast("Screen unlocked $unlocked")
                 }

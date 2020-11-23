@@ -55,18 +55,16 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     LandscapeRight(false)
 }
 
-typealias DisplayRotationFlow = Flow<DisplayRotation>
-
 @Binding(ApplicationComponent::class)
-fun displayRotationFlow(
+fun displayRotation(
     configChanges: ConfigChanges,
     getCurrentDisplayRotation: getCurrentDisplayRotation,
     globalScope: GlobalScope,
     logger: Logger,
     rotationChanges: RotationChanges,
-    screenStateFlow: ScreenStateFlow,
-): DisplayRotationFlow {
-    return screenStateFlow
+    screenState: Flow<ScreenState>,
+): Flow<DisplayRotation> {
+    return screenState
         .flatMapLatest { currentScreenState ->
             if (currentScreenState.isOn) {
                 merge(rotationChanges, configChanges)

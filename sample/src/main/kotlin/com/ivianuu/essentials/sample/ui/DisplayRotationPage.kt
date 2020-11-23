@@ -23,26 +23,26 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.essentials.screenstate.DisplayRotationFlow
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.getValue
 
 @FunBinding
 @Composable
-fun DisplayRotationPage(displayRotationFlow: DisplayRotationFlow) {
+fun DisplayRotationPage(rotation: Flow<DisplayRotation>) {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)
             .systemBarStyle(MaterialTheme.colors.primary),
         alignment = Alignment.Center
     ) {
-        val displayRotation by displayRotationFlow.collectAsState(null)
+        val currentRotation by rotation.collectAsState(null)
         Text(
-            text = when (displayRotation) {
+            text = when (currentRotation) {
                 DisplayRotation.PortraitUp -> "Portrait up"
                 DisplayRotation.LandscapeLeft -> "Landscape left"
                 DisplayRotation.PortraitDown -> "Portrait down"

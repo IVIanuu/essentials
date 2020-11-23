@@ -43,7 +43,7 @@ class ScreenStateTest {
         val globalScopeDispatcher = TestCoroutineDispatcher()
         val globalScope = childCoroutineScope(globalScopeDispatcher)
 
-        val collector = screenStateFlow(
+        val collector = screenState(
             broadcasts = { broadcasts },
             getCurrentScreenState = { currentScreenState },
             globalScope = globalScope,
