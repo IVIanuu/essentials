@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.Icon
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,13 +32,13 @@ import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.ButtonConstants
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -54,6 +53,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.OffsetMap
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -64,6 +67,7 @@ import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.Slider
+import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.popTop
 
@@ -327,41 +331,51 @@ private fun ColorEditorHeader(
     color: Color,
     showAlphaSelector: Boolean,
     onColorChanged: (Color) -> Unit
-) {
-    ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-        Surface(color = color) {
-            Row(
-                modifier = Modifier.height(72.dp)
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                var hexInput by rememberState(color) {
-                    color.toHexString(includeAlpha = showAlphaSelector)
-                }
-                Text("#")
-                BasicTextField(
-                    value = hexInput,
-                    onValueChange = { newValue ->
-                        if ((showAlphaSelector && newValue.length > 8) ||
-                            (!showAlphaSelector && newValue.length > 6)
-                        ) return@BasicTextField
+) = key(color) {
+    var hexInput by rememberState { color.toHexString(includeAlpha = showAlphaSelector) }
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .padding(8.dp),
+        visualTransformation = object : VisualTransformation {
+            override fun filter(text: AnnotatedString): TransformedText {
+                return TransformedText(
+                    AnnotatedString("#") + text,
+                    object : OffsetMap {
+                        override fun originalToTransformed(offset: Int): Int {
+                            return offset + 1
+                        }
 
-                        hexInput = newValue
-
-                        if ((showAlphaSelector && newValue.length < 8) ||
-                            (!showAlphaSelector && newValue.length < 6)
-                        ) return@BasicTextField
-
-                        val newColor = newValue.toColorOrNull()
-
-                        if (newColor != null) onColorChanged(newColor)
+                        override fun transformedToOriginal(offset: Int): Int {
+                            return offset - 1
+                        }
                     }
                 )
             }
+        },
+        backgroundColor = color,
+        activeColor = guessingContentColorFor(color),
+        inactiveColor = guessingContentColorFor(color),
+        textStyle =  MaterialTheme.typography.subtitle1
+            .copy(color = guessingContentColorFor(color)),
+        value = hexInput,
+        onValueChange = { newValue ->
+            if ((showAlphaSelector && newValue.length > 8) ||
+                (!showAlphaSelector && newValue.length > 6)
+            ) return@TextField
+
+            hexInput = newValue
+
+            if ((showAlphaSelector && newValue.length < 8) ||
+                (!showAlphaSelector && newValue.length < 6)
+            ) return@TextField
+
+            val newColor = newValue.toColorOrNull()
+
+            if (newColor != null) onColorChanged(newColor)
         }
-    }
+    )
 }
 
 @Composable
