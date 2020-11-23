@@ -233,7 +233,7 @@ private fun StatusBarNotification.toUiNotification(applicationContext: Applicati
     icon = runCatching {
         notification.smallIcon
             .loadDrawable(applicationContext)
-            .toImageAsset();
+            .toImageAsset()
 
     }.fold(
         success = { asset ->
