@@ -19,19 +19,24 @@ package com.ivianuu.essentials.coil
 import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
+import coil.fetch.Fetcher
 import coil.intercept.Interceptor
+import coil.map.Mapper
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlin.reflect.KClass
 
 @Binding(ApplicationComponent::class)
 fun imageLoader(
     applicationContext: ApplicationContext,
-    decoders: Set<Decoder>,
-    fetchers: Set<FetcherBinding<*>>,
-    interceptors: Set<Interceptor>,
-    mappers: Set<MapperBinding<*>>,
+    decoders: Decoders,
+    fetchers: Fetchers,
+    interceptors: Interceptors,
+    mappers: Mappers,
 ): ImageLoader {
     return ImageLoader.Builder(applicationContext)
         .componentRegistry {
@@ -49,14 +54,66 @@ fun imageLoader(
         .build()
 }
 
-@SetElements
-fun defaultDecoders(): Set<Decoder> = emptySet()
+@Effect
+annotation class DecoderBinding {
+    companion object {
+        @SetElements
+        fun <T : Decoder> intoSet(instance: @ForEffect T): Decoders = setOf(instance)
+    }
+}
+
+typealias Decoders = Set<Decoder>
 
 @SetElements
-fun defaultFetchers(): Set<FetcherBinding<*>> = emptySet()
+fun defaultDecoders(): Decoders = emptySet()
+
+@Effect
+annotation class FetcherBinding {
+    companion object {
+        @SetElements
+        inline fun <reified F : Fetcher<T>, reified T : Any> intoSet(instance: @ForEffect F): Fetchers =
+            setOf(FetcherPair(instance, T::class))
+    }
+}
+
+data class FetcherPair<T : Any>(
+    val fetcher: Fetcher<T>,
+    val type: KClass<T>
+)
+
+typealias Fetchers = Set<FetcherPair<*>>
 
 @SetElements
-fun defaultInterceptors(): Set<Interceptor> = emptySet()
+fun defaultFetchers(): Fetchers = emptySet()
+
+@Effect
+annotation class InterceptorBinding {
+    companion object {
+        @SetElements
+        fun <T : Interceptor> intoSet(instance: @ForEffect T): Interceptors = setOf(instance)
+    }
+}
+
+typealias Interceptors = Set<Interceptor>
 
 @SetElements
-fun defaultMappers(): Set<MapperBinding<*>> = emptySet()
+fun defaultInterceptors(): Interceptors = emptySet()
+
+@Effect
+annotation class MapperBinding {
+    companion object {
+        @SetElements
+        inline fun <reified M : Mapper<T, V>, reified T : Any, reified V : Any> intoSet(instance: @ForEffect M): Mappers =
+            setOf(MapperPair(instance, T::class))
+    }
+}
+
+typealias Mappers = Set<MapperPair<*>>
+
+@SetElements
+fun defaultMappers(): Mappers = emptySet()
+
+data class MapperPair<T : Any>(
+    val mapper: Mapper<T, *>,
+    val type: KClass<T>
+)
