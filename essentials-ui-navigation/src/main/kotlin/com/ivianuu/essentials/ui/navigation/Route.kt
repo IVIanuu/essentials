@@ -64,10 +64,8 @@ class Route(
             remember(uiComponent) { uiComponent.mergeComponent<RouteComponent>() }
                 .decorateRoute(this, content)
             DisposableEffect(true) {
-                println("${this@Route} active")
                 isComposing = true
                 onDispose {
-                    println("$this dispose")
                     isComposing = false
                     savedState[compositionKey] = savedStateRegistry.performSave()
                     finalizeIfNeeded()
@@ -101,7 +99,6 @@ class Route(
 
     internal fun detach() {
         isDetached = true
-        println("$this detach")
         finalizeIfNeeded()
     }
 
@@ -109,7 +106,6 @@ class Route(
         if (isFinalized) return
         if (isComposing || !isDetached) return
         isFinalized = true
-        println("$this finalize")
         result.complete(resultToSend)
         retainedObjects.dispose()
     }
