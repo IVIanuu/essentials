@@ -17,27 +17,27 @@
 package com.ivianuu.essentials.apps.coil
 
 import android.content.pm.PackageManager
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import coil.bitmap.BitmapPool
 import coil.decode.DataSource
 import coil.decode.Options
 import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
+import coil.size.OriginalSize
+import coil.size.PixelSize
 import coil.size.Size
 import com.ivianuu.essentials.coil.FetcherBinding
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.SetElements
-import kotlinx.coroutines.withContext
+import com.ivianuu.injekt.android.ApplicationResources
 
 data class AppIcon(val packageName: String)
 
-@Binding
+@FetcherBinding
 class AppIconFetcher(
-    private val ioDispatcher: IODispatcher,
     private val packageManager: PackageManager,
+    private val resources: ApplicationResources
 ) : Fetcher<AppIcon> {
-
     override fun key(data: AppIcon): String? = data.packageName
 
     override suspend fun fetch(
@@ -45,15 +45,13 @@ class AppIconFetcher(
         data: AppIcon,
         size: Size,
         options: Options,
-    ): FetchResult = withContext(ioDispatcher) {
-        val drawable = packageManager.getApplicationIcon(data.packageName)
-        return@withContext DrawableResult(drawable, false, DataSource.DISK)
-    }
-
-    companion object {
-        @SetElements
-        fun appIconFetcherIntoMap(appIconFetcher: AppIconFetcher): Set<FetcherBinding<*>> = setOf(
-            FetcherBinding(appIconFetcher, AppIcon::class)
-        )
+    ): FetchResult {
+        val rawDrawable = packageManager.getApplicationIcon(data.packageName)
+        val finalDrawable = when (size) {
+            OriginalSize -> rawDrawable
+            is PixelSize -> rawDrawable.toBitmap(width = size.width, height = size.height)
+                .toDrawable(resources)
+        }
+        return DrawableResult(finalDrawable, false, DataSource.DISK)
     }
 }
