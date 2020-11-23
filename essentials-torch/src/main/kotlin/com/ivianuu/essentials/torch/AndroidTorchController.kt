@@ -25,9 +25,9 @@ import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @AppWorkerBinding
 @FunBinding
@@ -41,7 +41,7 @@ suspend fun updateAndroidTorchState(
     state.collect { currentState ->
         runCatching {
             withContext(mainDispatcher) {
-                suspendCancellableCoroutine<Unit> { continuation ->
+                suspendCoroutine<Unit> { continuation ->
                     var resumed = false
                     fun resumeIfNeeded() {
                         if (resumed) return
@@ -62,9 +62,6 @@ suspend fun updateAndroidTorchState(
                         }
                     }
                     cameraManager.registerTorchCallback(callback, null)
-                    continuation.invokeOnCancellation {
-                        cameraManager.unregisterTorchCallback(callback)
-                    }
                 }
             }
         }.onFailure {
