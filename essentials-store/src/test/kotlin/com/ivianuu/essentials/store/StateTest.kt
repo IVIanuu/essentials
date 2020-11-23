@@ -17,10 +17,17 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.childJob
+import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Test
 
 class StateTest {
@@ -61,4 +68,23 @@ class StateTest {
             .shouldContainExactly(0, 1, 0)
     }
 
+    @Test
+    fun testCancelsStateScope() = runCancellingBlockingTest {
+        val actions = EventFlow<Unit>()
+        val collector = TestCollector<Unit>()
+        val stateScope = TestCoroutineScope(childJob())
+        stateScope.state(0, SharingStarted.Eagerly) {
+            actions
+                .onEach { collector.emit(it) }
+                .launchIn(this)
+        }
+        stateScope.runCurrent()
+
+        actions.emit(Unit)
+        actions.emit(Unit)
+        stateScope.cancel()
+        actions.emit(Unit)
+
+        collector.values.size shouldBe 2
+    }
 }
