@@ -53,7 +53,7 @@ fun TimerPage(state: @UiState TimerState) {
 data class TimerState(val value: Int = 0)
 
 @UiStateBinding
-fun TimerStore(
+fun timerState(
     scope: CoroutineScope,
     initial: @Initial TimerState = TimerState()
 ) = scope.state(initial) {

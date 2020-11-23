@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
-fun CheckableAppsStore(
+fun checkableAppsState(
     scope: CoroutineScope,
     initial: @Initial CheckableAppsState,
     actions: Actions<CheckableAppsAction>,

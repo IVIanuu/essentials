@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
 @GlobalStateBinding
-fun TorchStore(
+fun torchState(
     scope: CoroutineScope,
     initial: @Initial TorchState = TorchState(),
     actions: Actions<TorchAction>

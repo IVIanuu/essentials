@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
-fun ActionPickerStore(
+fun actionPickerState(
     scope: CoroutineScope,
     initial: @Initial ActionPickerState = ActionPickerState(),
     actions: Actions<ActionPickerAction>,

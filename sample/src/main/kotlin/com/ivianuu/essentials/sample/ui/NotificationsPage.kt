@@ -174,7 +174,7 @@ private fun NotificationPermissions(
 }
 
 @UiStateBinding
-fun NotificationStore(
+fun notificationState(
     scope: CoroutineScope,
     initial: @Initial NotificationsPageState = NotificationsPageState(),
     actions: Actions<NotificationsPageAction>,

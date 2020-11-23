@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
-fun BackupAndRestoreStore(
+fun backupAndRestoreState(
     scope: CoroutineScope,
     initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
     actions: Actions<BackupAndRestoreAction>,

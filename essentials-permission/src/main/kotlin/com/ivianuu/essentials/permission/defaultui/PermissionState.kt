@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @UiStateBinding
-fun PermissionStore(
+fun permissionState(
     scope: CoroutineScope,
     initial: @Initial PermissionState = PermissionState(),
     actions: Actions<PermissionAction>,

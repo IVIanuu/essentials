@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
-fun AppPickerStore(
+fun appPickerState(
     scope: CoroutineScope,
     initial: @Initial AppPickerState,
     actions: Actions<AppPickerAction>,

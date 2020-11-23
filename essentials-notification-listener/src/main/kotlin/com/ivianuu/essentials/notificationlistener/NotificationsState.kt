@@ -45,7 +45,7 @@ sealed class NotificationsAction {
 }
 
 @GlobalStateBinding
-fun NotificationsStore(
+fun notificationState(
     actions: Actions<NotificationsAction>,
     serviceRef: NotificationServiceRef,
     scope: GlobalScope

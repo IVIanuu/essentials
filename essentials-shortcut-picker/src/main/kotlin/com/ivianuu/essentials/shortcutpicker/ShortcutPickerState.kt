@@ -14,43 +14,46 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.shortcutpicker
 
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.essentials.util.startActivityForIntentResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @UiStateBinding
-fun SecureSettingsStore(
+fun shortcutPickerState(
     scope: CoroutineScope,
-    initial: @Initial SecureSettingsState = SecureSettingsState,
-    actions: Actions<SecureSettingsAction>,
-    grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
+    initial: @Initial ShortcutPickerState = ShortcutPickerState(),
+    actions: Actions<ShortcutPickerAction>,
+    extractShortcut: extractShortcut,
+    getAllShortcuts: getAllShortcuts,
     navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
-    secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    showToastRes: showToastRes
+    startActivityForIntentResult: startActivityForIntentResult,
+    showToastRes: showToastRes,
 ) = scope.state(initial) {
-    launch { popNavigatorOnceSecureSettingsGranted(true) }
+    reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
     actions
+        .filterIsInstance<PickShortcut>()
         .onEach { action ->
-            when (action) {
-                OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
-                GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
-                    showToastRes(R.string.es_secure_settings_permission_granted)
-                } else {
-                    showToastRes(R.string.es_secure_settings_no_root)
-                }
+            try {
+                val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
+                    .data ?: return@onEach
+                val shortcut = extractShortcut(shortcutRequestResult)
+                navigator.popTop(result = shortcut)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                showToastRes(R.string.es_failed_to_pick_shortcut)
             }
         }
         .launchIn(this)

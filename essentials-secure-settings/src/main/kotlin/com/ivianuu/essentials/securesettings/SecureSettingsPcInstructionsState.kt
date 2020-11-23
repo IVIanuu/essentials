@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @UiStateBinding
-fun SecureSettingsPcInstructionsStore(
+fun secureSettingsPcInstructionsState(
     scope: CoroutineScope,
     initial: @Initial SecureSettingsPcInstructionsState,
     actions: Actions<SecureSettingsPcInstructionsAction>,

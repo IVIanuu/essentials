@@ -87,7 +87,7 @@ fun CounterPage(
 }
 
 @UiStateBinding
-fun CounterStore(
+fun counterState(
     scope: CoroutineScope,
     initial: @Initial CounterState = CounterState(),
     actions: Actions<CounterAction>,
