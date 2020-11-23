@@ -19,10 +19,13 @@ package com.ivianuu.essentials.util
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.LaunchedTask
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.RouteAmbient
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.FunBinding
@@ -42,11 +45,14 @@ suspend fun startUi(
         var completed = false
         navigator.push(
             Route(opaque = true) {
-                if (!completed) {
-                    completed = true
-                    navigator.popTop()
-                    val activity = compositionActivity
-                    LaunchedTask { continuation.resume(activity) }
+                val route = RouteAmbient.current
+                val activity = compositionActivity
+                LaunchedEffect(true) {
+                    if (!completed) {
+                        completed = true
+                        navigator.pop(route)
+                        continuation.resume(activity)
+                    }
                 }
             }
         )
