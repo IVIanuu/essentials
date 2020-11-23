@@ -20,6 +20,7 @@ import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -28,12 +29,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.milliseconds
 
 @Binding(ApplicationComponent::class)
 class ForegroundManager(
     private val applicationContext: ApplicationContext,
     private val defaultDispatcher: DefaultDispatcher,
+    globalScope: GlobalScope,
     private val logger: Logger,
 ) {
 
@@ -42,22 +49,25 @@ class ForegroundManager(
     private val _jobs = MutableStateFlow(emptyList<ForegroundJob>())
     internal val jobs: StateFlow<List<ForegroundJob>> by this::_jobs
 
+    init {
+        _jobs
+            .debounce(300.milliseconds)
+            .filter { it.isNotEmpty() }
+            .onEach {
+                logger.d("start service $it")
+                ContextCompat.startForegroundService(
+                    applicationContext,
+                    Intent(applicationContext, ForegroundService::class.java)
+                )
+            }
+            .launchIn(globalScope)
+    }
+
     internal fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(ids.incrementAndGet(), notification)
         synchronized(_jobs) { _jobs.value += job }
         logger.d("start job $job")
-        startServiceIfNeeded()
         return job
-    }
-
-    private fun startServiceIfNeeded() {
-        if (_jobs.value.isNotEmpty()) {
-            logger.d("start service ${_jobs.value}")
-            ContextCompat.startForegroundService(
-                applicationContext,
-                Intent(applicationContext, ForegroundService::class.java)
-            )
-        }
     }
 
     private inner class ForegroundJobImpl(
