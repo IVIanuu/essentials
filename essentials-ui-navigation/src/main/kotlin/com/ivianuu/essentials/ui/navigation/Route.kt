@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
 import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
@@ -63,8 +63,15 @@ class Route(
             val uiComponent = UiComponentAmbient.current
             remember(uiComponent) { uiComponent.mergeComponent<RouteComponent>() }
                 .decorateRoute(this, content)
-            onDispose {
-                savedState[compositionKey] = savedStateRegistry.performSave()
+            DisposableEffect(true) {
+                println("${this@Route} active")
+                isComposing = true
+                onDispose {
+                    println("$this dispose")
+                    isComposing = false
+                    savedState[compositionKey] = savedStateRegistry.performSave()
+                    finalizeIfNeeded()
+                }
             }
         }
     }
@@ -82,6 +89,10 @@ class Route(
 
     private val retainedObjects = RetainedObjects()
 
+    private var isComposing = false
+    private var isDetached = false
+    private var isFinalized = false
+
     constructor(
         transition: StackTransition? = null,
         opaque: Boolean = false,
@@ -89,9 +100,20 @@ class Route(
     ) : this(transition, transition, opaque, content)
 
     internal fun detach() {
+        isDetached = true
+        println("$this detach")
+        finalizeIfNeeded()
+    }
+
+    private fun finalizeIfNeeded() {
+        if (isFinalized) return
+        if (isComposing || !isDetached) return
+        isFinalized = true
+        println("$this finalize")
         result.complete(resultToSend)
         retainedObjects.dispose()
     }
+
 }
 
 val RouteAmbient = staticAmbientOf<Route>()
