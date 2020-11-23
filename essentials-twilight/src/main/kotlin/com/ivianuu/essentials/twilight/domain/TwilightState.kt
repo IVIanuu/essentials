@@ -43,8 +43,6 @@ data class TwilightState(
     val useBlack: Boolean
 )
 
-typealias TwilightStateFlow = StateFlow<TwilightState>
-
 @Binding(ApplicationComponent::class)
 fun twilightState(
     globalScope: GlobalScope,
@@ -52,7 +50,7 @@ fun twilightState(
     systemTwilightState: SystemTwilightState,
     timeTwilightState: TimeTwilightState,
     twilightPrefsState: Flow<TwilightPrefsState>
-): TwilightStateFlow {
+): StateFlow<TwilightState> {
     return twilightPrefsState.flatMapLatest { (mode, useBlack) ->
         (when (mode) {
             TwilightMode.System -> systemTwilightState

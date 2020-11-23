@@ -18,11 +18,10 @@ package com.ivianuu.essentials.twilight.domain
 
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.StateFlow
 
 // it's enough to instantiate the TwilightStateFlow because it starts emitting eagerly
 @AppInitializerBinding("twilight")
 @FunBinding
-fun initializeTwilightStateFlow(
-    twilightStateFlow: TwilightStateFlow,
-) {
+fun initializeTwilightStateFlow(twilightState: StateFlow<TwilightState>, ) {
 }

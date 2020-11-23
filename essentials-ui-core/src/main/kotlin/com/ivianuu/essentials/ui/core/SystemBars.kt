@@ -18,8 +18,11 @@ package com.ivianuu.essentials.ui.core
 
 import android.os.Build
 import android.view.View
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.AmbientContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.getValue
@@ -91,9 +94,26 @@ fun ProvideSystemBarManager(@FunApi children: @Composable () -> Unit) {
     )
 }
 
+@UiDecoratorBinding(
+    "root_system_bars_style",
+    dependencies = ["app_theme", "system_bars"]
+)
+@FunBinding
+@Composable
+fun RootSystemBarsStyle(@FunApi children: @Composable () -> Unit) {
+    Surface {
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .systemBarStyle()
+        ) {
+            children()
+        }
+    }
+}
+
 private val SystemBarManagerAmbient = staticAmbientOf<SystemBarManager>()
 
-data class SystemBarStyle(
+private data class SystemBarStyle(
     val barColor: Color,
     val lightIcons: Boolean,
     val bounds: Bounds,
@@ -212,7 +232,7 @@ private class SystemBarManager {
         } else {
             onCommit(activity) {
                 activity.window.navigationBarColor = Color.Black
-                    .copy(alpha = 0.2f)
+                    .copy(alpha = 0.4f)
                     .toArgb()
             }
         }
