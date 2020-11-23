@@ -87,7 +87,7 @@ fun createTorchNotification(
                 PendingIntent.getBroadcast(
                     applicationContext,
                     1,
-                    Intent(ACTION_TOGGLE_TORCH),
+                    Intent(ACTION_DISABLE_TORCH),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )

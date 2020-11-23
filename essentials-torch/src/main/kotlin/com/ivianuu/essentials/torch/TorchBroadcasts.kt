@@ -33,11 +33,9 @@ suspend fun TorchBroadcastReceiver(
     dispatch: DispatchAction<TorchAction>,
     state: Flow<TorchState>,
 ) {
-    combine(broadcasts(ACTION_TOGGLE_TORCH), state)
-        .onEach { (_, currentState) ->
-            dispatch(UpdateTorchEnabled(!currentState.torchEnabled))
-        }
+    combine(broadcasts(ACTION_DISABLE_TORCH), state)
+        .onEach { dispatch(UpdateTorchEnabled(false)) }
         .collect()
 }
 
-const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.torch.TOGGLE_TORCH"
+const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
