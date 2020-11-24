@@ -44,7 +44,7 @@ fun autoRotationAction(
     permissions = choosePermissions { listOf(writeSettings) },
     unlockScreen = true,
     icon = autoRotationIcon,
-    execute = { setting.updateData { if (it != 1) 1 else 0 } }
+    execute = { setting.updateData { if (this != 1) 1 else 0 } }
 )
 
 @Binding(ApplicationComponent::class)

@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 fun <T, S> DataStore<T>.select(
-    select: (T) -> S,
-    reduce: (T, S) -> T
+    select: T.() -> S,
+    reduce: T.(S) -> T
 ): DataStore<S> {
     val original = this
     return object : DataStore<S> {
@@ -31,14 +31,14 @@ fun <T, S> DataStore<T>.select(
             get() = original.data
                 .map { select(it) }
 
-        override suspend fun updateData(transform: suspend (S) -> S): S =
-            select(original.updateData { reduce(it, transform(select(it))) })
+        override suspend fun updateData(transform: suspend S.() -> S): S =
+            select(original.updateData { reduce(transform(select())) })
     }
 }
 
 fun <T, S> DataStore<T>.map(
-    fromRaw: (T) -> S,
-    toRaw: (S) -> T
+    fromRaw: T.() -> S,
+    toRaw: S.() -> T
 ): DataStore<S> {
     val original = this
     return object : DataStore<S> {
@@ -48,7 +48,7 @@ fun <T, S> DataStore<T>.map(
             get() = original.data
                 .map { fromRaw(it) }
 
-        override suspend fun updateData(transform: suspend (S) -> S): S =
-            fromRaw(original.updateData { toRaw(transform(fromRaw(it))) })
+        override suspend fun updateData(transform: suspend S.() -> S): S =
+            fromRaw(original.updateData { toRaw(transform(fromRaw())) })
     }
 }

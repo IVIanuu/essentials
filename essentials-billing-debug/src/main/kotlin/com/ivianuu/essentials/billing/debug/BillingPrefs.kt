@@ -30,10 +30,10 @@ internal typealias DebugProductsPref = DataStore<List<SkuDetails>>
 fun debugProductsPref(factory: DiskDataStoreFactory): DebugProductsPref =
     factory.create("billing_products") { emptySet<String>() }
         .map(
-            fromRaw = { productsJson ->
-                productsJson.map { SkuDetails(it) }
+            fromRaw = {
+                map { SkuDetails(it) }
             },
-            toRaw = { products -> products.map { it.originalJson }.toSet() }
+            toRaw = { map { it.originalJson }.toSet() }
         )
 
 internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
@@ -42,14 +42,14 @@ internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
 fun debugPurchasesPref(factory: DiskDataStoreFactory): DebugPurchasesPref =
     factory.create("billing_purchases") { emptySet<String>() }
         .map(
-            fromRaw = { purchasesJson ->
-                purchasesJson.map { purchase ->
+            fromRaw = {
+                map { purchase ->
                     val params = purchase.split("=:=")
-                    com.android.billingclient.api.Purchase(params[0], params[1])
+                    Purchase(params[0], params[1])
                 }
             },
-            toRaw = { purchases ->
-                purchases.map { purchase ->
+            toRaw = {
+                map { purchase ->
                     purchase.originalJson + "=:=" + purchase.signature
                 }.toSet()
             }

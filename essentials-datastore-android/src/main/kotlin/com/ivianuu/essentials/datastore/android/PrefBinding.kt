@@ -80,6 +80,6 @@ fun <T> updatePref(
     @FunApi reducer: suspend T.() -> T
 ) {
     scope.launch {
-        pref.updateData { reducer(it) }
+        pref.updateData { reducer() }
     }
 }

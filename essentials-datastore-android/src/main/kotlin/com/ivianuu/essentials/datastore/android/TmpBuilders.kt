@@ -31,8 +31,8 @@ fun DiskDataStoreFactory.color(
 ): DataStore<Color> {
     return create(name = name, produceDefaultData = { produceDefaultData().toArgb() })
         .map(
-            fromRaw = { Color(it) },
-            toRaw = { it.toArgb() }
+            fromRaw = { Color(this) },
+            toRaw = { toArgb() }
         )
 }
 
@@ -42,8 +42,8 @@ fun DiskDataStoreFactory.duration(
 ): DataStore<Duration> {
     return create(name = name, produceDefaultData = { produceDefaultData().toDouble() })
         .map(
-            fromRaw = { it.toDuration() },
-            toRaw = { it.toDouble() }
+            fromRaw = { toDuration() },
+            toRaw = { toDouble() }
         )
 }
 

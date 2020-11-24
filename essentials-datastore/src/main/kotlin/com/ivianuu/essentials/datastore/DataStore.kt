@@ -36,5 +36,5 @@ interface DataStore<T> {
      * Updates the data with the result of the [transform] block
      * And returns the result of [transform]
      */
-    suspend fun updateData(transform: suspend (T) -> T): T
+    suspend fun updateData(transform: suspend T.() -> T): T
 }

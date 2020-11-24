@@ -67,12 +67,12 @@ class BillingStoreImpl(
 
     override suspend fun addProduct(skuDetails: SkuDetails): Unit =
         withContext(defaultDispatcher) {
-            productsPref.updateData { it + skuDetails }
+            productsPref.updateData { this + skuDetails }
         }
 
     override suspend fun removeProduct(sku: String): Unit = withContext(defaultDispatcher) {
-        productsPref.updateData { products ->
-            products.filter { it.sku != sku }
+        productsPref.updateData {
+            filter { it.sku != sku }
         }
     }
 
@@ -98,13 +98,13 @@ class BillingStoreImpl(
         }
 
     override suspend fun addPurchase(purchase: Purchase): Unit = withContext(defaultDispatcher) {
-        purchasesPref.updateData { it + purchase }
+        purchasesPref.updateData { this + purchase }
     }
 
     override suspend fun removePurchase(purchaseToken: String): Unit =
         withContext(defaultDispatcher) {
-            purchasesPref.updateData { purchases ->
-                purchases.filter { it.purchaseToken != purchaseToken }
+            purchasesPref.updateData {
+                filter { it.purchaseToken != purchaseToken }
             }
             purchasesPref.data.first()
                 .filter { it.purchaseToken != purchaseToken }
