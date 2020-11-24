@@ -80,7 +80,7 @@ fun NavBarPage(
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                alignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = if (hasPermission) {

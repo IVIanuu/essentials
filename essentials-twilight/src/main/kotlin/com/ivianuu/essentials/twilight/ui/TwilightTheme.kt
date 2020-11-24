@@ -49,7 +49,7 @@ fun TwilightTheme(
     @FunApi darkColors: Colors = darkColors(),
     @FunApi blackColors: Colors = blackColors(),
     @FunApi typography: Typography = Typography(),
-    @FunApi children: @Composable () -> Unit
+    @FunApi content: @Composable () -> Unit
 ) {
     val targetColors by twilightState
         .map {
@@ -79,6 +79,6 @@ fun TwilightTheme(
     MaterialTheme(
         colors = animatedColors,
         typography = typography,
-        content = children
+        content = content
     )
 }

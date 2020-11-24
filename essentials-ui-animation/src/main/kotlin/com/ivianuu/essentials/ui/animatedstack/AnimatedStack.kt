@@ -66,18 +66,18 @@ fun <T> AnimatedStack(
                 }
             }
     }
-    AnimatedStack(modifier = modifier, children = children)
+    AnimatedStack(modifier = modifier, content = children)
 }
 
 @Composable
 fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
-    children: List<AnimatedStackChild<T>>
+    content: List<AnimatedStackChild<T>>
 ) {
     ProvideAnimatableRoot {
-        val state = remember { AnimatedStackState(children) }
+        val state = remember { AnimatedStackState(content) }
         state.defaultTransition = DefaultStackTransitionAmbient.current
-        state.setChildren(children)
+        state.setChildren(content)
         state.runningTransactions.values.toList().forEach {
             key(it) {
                 it.run()

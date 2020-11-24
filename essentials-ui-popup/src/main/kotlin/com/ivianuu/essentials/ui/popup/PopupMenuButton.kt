@@ -54,7 +54,7 @@ fun PopupMenuButton(
                 indicationFactory = { RippleIndication(bounded = false) }
             )
             .then(modifier),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         Icon(Icons.Default.MoreVert)
     }

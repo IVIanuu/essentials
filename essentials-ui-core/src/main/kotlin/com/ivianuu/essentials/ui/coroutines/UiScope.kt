@@ -42,11 +42,11 @@ fun uiScope(mainDispatcher: MainDispatcher): UiScope =
 fun CancelUiScope(
     logger: Logger,
     uiScope: UiScope,
-    @FunApi children: @Composable () -> Unit
+    @FunApi content: @Composable () -> Unit
 ) {
     onDispose {
         logger.d("Cancelling ui scope")
         uiScope.cancel()
     }
-    children()
+    content()
 }

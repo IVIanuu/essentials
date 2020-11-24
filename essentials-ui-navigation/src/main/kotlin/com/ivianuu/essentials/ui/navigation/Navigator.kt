@@ -158,6 +158,6 @@ fun Navigator.Content(handleBack: Boolean = true) {
         }
     }
     Providers(NavigatorAmbient provides this) {
-        AnimatedStack(children = currentBackStack.map { it.stackChild })
+        AnimatedStack(content = currentBackStack.map { it.stackChild })
     }
 }

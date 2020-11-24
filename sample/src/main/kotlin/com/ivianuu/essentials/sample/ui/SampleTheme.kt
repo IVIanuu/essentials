@@ -32,12 +32,12 @@ import com.ivianuu.injekt.FunBinding
 @Composable
 fun SampleTheme(
     twilightTheme: TwilightTheme,
-    @FunApi children: @Composable () -> Unit
+    @FunApi content: @Composable () -> Unit
 ) {
     twilightTheme.invokeTwilightTheme {
         Providers(
             DefaultStackTransitionAmbient provides remember { HorizontalStackTransition() },
-            children = children
+            content = content
         )
     }
 }

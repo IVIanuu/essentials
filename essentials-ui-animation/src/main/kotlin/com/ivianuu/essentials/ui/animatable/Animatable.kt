@@ -24,6 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.globalBounds
@@ -37,11 +39,11 @@ class Animatable(val tag: Any) {
 
     private val modifiersByProps = mutableMapOf<Prop<*>, Modifier>()
 
-    private val onGloballyPositioned = Modifier.onGloballyPositioned {
+    private val onGloballyPositioned = Modifier
+        .onGloballyPositioned {
         layoutCoordinates = it
     }
-    private val drawLayerModifier = MutableDrawLayerModifier()
-    private val baseModifier = onGloballyPositioned.then(drawLayerModifier)
+    private val baseModifier = onGloballyPositioned
 
     internal var modifier by mutableStateOf(baseModifier)
 
@@ -49,9 +51,6 @@ class Animatable(val tag: Any) {
 
     operator fun <T> set(prop: Prop<T>, value: T): Animatable {
         _props[prop] = value
-        if (prop is DrawLayerProp) {
-            prop.apply(drawLayerModifier, value)
-        }
         if (prop is ModifierProp) {
             modifiersByProps[prop] = prop.asModifier(value)
             modifier = baseModifier.then(

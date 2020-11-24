@@ -59,7 +59,7 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -233,14 +233,14 @@ private fun StatusBarNotification.toUiNotification(applicationContext: Applicati
     icon = runCatching {
         notification.smallIcon
             .loadDrawable(applicationContext)
-            .toImageAsset()
+            .toImageBitmap()
 
     }.fold(
-        success = { asset ->
+        success = { bitmap ->
             {
                 Image(
                     modifier = Modifier.size(24.dp),
-                    asset = asset
+                    bitmap = bitmap
                 )
             }
         },

@@ -17,20 +17,20 @@
 package com.ivianuu.essentials.util
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.font
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.res.ResourcesCompat
-import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
 @FunBinding
-fun bitmapResource(applicationContext: ApplicationContext, @FunApi id: Int): ImageAsset =
-    applicationContext.getDrawable(id)!!.toImageAsset()
+fun bitmapResource(applicationContext: ApplicationContext, @FunApi id: Int): ImageBitmap =
+    applicationContext.getDrawable(id)!!.toImageBitmap()
 
 @FunBinding
 fun booleanResource(applicationContext: ApplicationContext, @FunApi id: Int): Boolean =
@@ -47,7 +47,7 @@ fun dimensionResource(applicationContext: ApplicationContext, @FunApi id: Int): 
     }
 
 @FunBinding
-fun drawableResource(bitmapResource: bitmapResource, @FunApi id: Int): ImageAsset =
+fun drawableResource(bitmapResource: bitmapResource, @FunApi id: Int): ImageBitmap =
     bitmapResource(id)
 
 @FunBinding

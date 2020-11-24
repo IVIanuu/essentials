@@ -85,12 +85,12 @@ fun Modifier.systemBarStyle(
 @UiDecoratorBinding("system_bars")
 @FunBinding
 @Composable
-fun ProvideSystemBarManager(@FunApi children: @Composable () -> Unit) {
+fun ProvideSystemBarManager(@FunApi content: @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
         SystemBarManagerAmbient provides systemBarManager,
-        children = children
+        content = content
     )
 }
 
@@ -100,13 +100,13 @@ fun ProvideSystemBarManager(@FunApi children: @Composable () -> Unit) {
 )
 @FunBinding
 @Composable
-fun RootSystemBarsStyle(@FunApi children: @Composable () -> Unit) {
+fun RootSystemBarsStyle(@FunApi content: @Composable () -> Unit) {
     Surface {
         Box(
             modifier = Modifier.fillMaxSize()
                 .systemBarStyle()
         ) {
-            children()
+            content()
         }
     }
 }

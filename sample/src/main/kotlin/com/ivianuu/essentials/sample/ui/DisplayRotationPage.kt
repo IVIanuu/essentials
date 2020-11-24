@@ -38,7 +38,7 @@ fun DisplayRotationPage(rotation: Flow<DisplayRotation>) {
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)
             .systemBarStyle(MaterialTheme.colors.primary),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         val currentRotation by rotation.collectAsState(null)
         Text(

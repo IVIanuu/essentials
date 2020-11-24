@@ -20,18 +20,18 @@ import android.graphics.Bitmap;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class AndroidImageAssetAccessor {
+public final class AndroidImageBitmapAccessor {
 
     @NotNull
-    public static ImageAsset createAndroidImage(Bitmap bitmap) {
+    public static ImageBitmap createAndroidImageBitmap(Bitmap bitmap) {
         //noinspection KotlinInternalInJava
-        return new AndroidImageAsset(bitmap);
+        return new AndroidImageBitmap(bitmap);
     }
 
     @NotNull
-    public static Bitmap getBitmap(ImageAsset imageAsset) {
+    public static Bitmap getBitmap(ImageBitmap imageBitmap) {
         //noinspection KotlinInternalInJava
-        return ((AndroidImageAsset) imageAsset).getBitmap$ui_graphics_release();
+        return ((AndroidImageBitmap) imageBitmap).getBitmap$ui_graphics_release();
     }
 
 }

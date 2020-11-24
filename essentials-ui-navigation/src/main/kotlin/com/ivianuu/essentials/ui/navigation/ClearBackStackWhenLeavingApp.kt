@@ -25,9 +25,9 @@ import com.ivianuu.injekt.FunBinding
 @UiDecoratorBinding("clear_navigator_backstack")
 @FunBinding
 @Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi children: @Composable () -> Unit) {
+fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi content: @Composable () -> Unit) {
     onDispose {
         navigator.setBackStack { emptyList() }
     }
-    children()
+    content()
 }

@@ -31,7 +31,6 @@ import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.platform.DensityAmbient
-import androidx.compose.ui.util.lerp
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.MetaProp
 import com.ivianuu.essentials.ui.animatable.animatable
@@ -43,6 +42,7 @@ import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.util.lerp
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.milliseconds
@@ -205,12 +205,12 @@ data class SharedElementProps(
 fun SharedElement(
     tag: Any,
     modifier: Modifier = Modifier,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .animatable(tag, SharedElementComposable to children).then(modifier)
+            .animatable(tag, SharedElementComposable to content).then(modifier)
     ) {
-        children()
+        content()
     }
 }

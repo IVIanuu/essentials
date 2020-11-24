@@ -48,7 +48,7 @@ fun ChipsPage(showToast: showToast) {
     ) {
         Box(
             modifier = Modifier.padding(all = 8.dp),
-            alignment = Alignment.TopStart
+            contentAlignment = Alignment.TopStart
         ) {
             FlowRow(
                 mainAxisSpacing = 8.dp,
@@ -85,7 +85,7 @@ private fun Chip(
                         onClick = onClick,
                         indication = RippleIndication(bounded = false)
                     ),
-                alignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = name,

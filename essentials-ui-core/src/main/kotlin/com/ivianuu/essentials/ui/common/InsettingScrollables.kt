@@ -48,7 +48,7 @@ fun InsettingScrollableColumn(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     reverseScrollDirection: Boolean = false,
     isScrollEnabled: Boolean = true,
-    children: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     ScrollableColumn(
         modifier = modifier,
@@ -61,7 +61,7 @@ fun InsettingScrollableColumn(
         val insets = InsetsAmbient.current
         Spacer(Modifier.height(insets.top))
         ConsumeInsets(start = false, end = false) {
-            children()
+            content()
         }
         Spacer(Modifier.height(insets.bottom))
     }
@@ -76,7 +76,7 @@ fun InsettingScrollableRow(
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     reverseScrollDirection: Boolean = false,
     isScrollEnabled: Boolean = true,
-    children: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit
 ) {
     ScrollableRow(
         modifier = modifier,
@@ -89,7 +89,7 @@ fun InsettingScrollableRow(
         val insets = InsetsAmbient.current
         Spacer(Modifier.width(insets.start))
         ConsumeInsets(top = false, bottom = false) {
-            children()
+            content()
         }
         Spacer(Modifier.width(insets.end))
     }

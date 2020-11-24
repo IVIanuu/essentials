@@ -27,12 +27,12 @@ import com.ivianuu.injekt.FunBinding
 @RouteDecoratorBinding("logger")
 @FunBinding
 @Composable
-fun RouteLogger(logger: Logger, @FunApi route: Route, @FunApi children: @Composable () -> Unit) {
+fun RouteLogger(logger: Logger, @FunApi route: Route, @FunApi content: @Composable () -> Unit) {
     onActive {
         logger.d("hello from route $route")
         onDispose {
             logger.d("bye from route $route")
         }
     }
-    children()
+    content()
 }

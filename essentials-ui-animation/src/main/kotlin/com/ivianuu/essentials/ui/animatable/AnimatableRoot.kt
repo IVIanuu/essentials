@@ -33,12 +33,12 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ProvideAnimatableRoot(
     modifier: Modifier = Modifier,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     val state = remember { AnimatableRoot() }
     Providers(AnimatableRootAmbient provides state) {
         Box(modifier = modifier.then(Modifier.animatable(Root))) {
-            children()
+            content()
             state.animationOverlayEntries.forEach { overlay ->
                 key(overlay) {
                     overlay.content()

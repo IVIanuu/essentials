@@ -21,7 +21,7 @@ import com.ivianuu.essentials.sample.ui.CounterAction
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.sample.ui.CounterState
-import com.ivianuu.essentials.sample.ui.CounterStore
+import com.ivianuu.essentials.sample.ui.counterState
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
@@ -33,7 +33,7 @@ class SampleTest {
     @Test
     fun testCounter() = runCancellingBlockingTest {
         val actions = EventFlow<CounterAction>()
-        val collector = CounterStore(scope = this, actions = actions, showToast = {})
+        val collector = counterState(scope = this, actions = actions, showToast = {})
             .testCollect(this)
 
         actions.emit(Inc)
@@ -51,7 +51,7 @@ class SampleTest {
         val actions = EventFlow<CounterAction>()
         var toastCalled = false
 
-        CounterStore(scope = this, actions = actions, showToast = {
+        counterState(scope = this, actions = actions, showToast = {
             toastCalled = true
         }).testCollect(this)
 

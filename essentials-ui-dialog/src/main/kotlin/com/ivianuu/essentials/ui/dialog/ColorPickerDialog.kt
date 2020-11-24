@@ -192,48 +192,47 @@ private fun ColorGrid(
 
         WithConstraints(modifier = modifier) {
             ScrollableColumn(
-                modifier = Modifier.padding(all = 4.dp),
-                children = {
-                    items.chunked(4).forEach { rowItems ->
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            rowItems.forEach { item ->
-                                key(item) {
-                                    Box(
-                                        modifier = Modifier.size(maxWidth / 4),
-                                        alignment = Alignment.Center
-                                    ) {
-                                        when (item) {
-                                            is ColorGridItem.Back -> ColorGridBackButton(
-                                                onClick = { currentPalette = null }
-                                            )
-                                            is ColorGridItem.Color -> ColorGridItem(
-                                                color = item.color,
-                                                isSelected = item.color == currentColor,
-                                                onClick = {
-                                                    if (palette == null) {
-                                                        val paletteForItem =
-                                                            colors.first { it.front == item.color }
-                                                        if (paletteForItem.colors.size > 1) {
-                                                            currentPalette = paletteForItem
-                                                        } else {
-                                                            onColorSelected(item.color)
-                                                        }
+                modifier = Modifier.padding(all = 4.dp)
+            ) {
+                items.chunked(4).forEach { rowItems ->
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        rowItems.forEach { item ->
+                            key(item) {
+                                Box(
+                                    modifier = Modifier.size(maxWidth / 4),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    when (item) {
+                                        is ColorGridItem.Back -> ColorGridBackButton(
+                                            onClick = { currentPalette = null }
+                                        )
+                                        is ColorGridItem.Color -> ColorGridItem(
+                                            color = item.color,
+                                            isSelected = item.color == currentColor,
+                                            onClick = {
+                                                if (palette == null) {
+                                                    val paletteForItem =
+                                                        colors.first { it.front == item.color }
+                                                    if (paletteForItem.colors.size > 1) {
+                                                        currentPalette = paletteForItem
                                                     } else {
                                                         onColorSelected(item.color)
                                                     }
+                                                } else {
+                                                    onColorSelected(item.color)
                                                 }
-                                            )
-                                        }
+                                            }
+                                        )
                                     }
                                 }
                             }
                         }
                     }
                 }
-            )
+            }
         }
     }
 }
@@ -262,7 +261,7 @@ private fun ColorGridItem(
         ) {
             if (isSelected) {
                 Icon(
-                    asset = Icons.Default.Check,
+                    imageVector = Icons.Default.Check,
                     modifier = Modifier
                         .center()
                         .size(size = 36.dp)
@@ -276,7 +275,7 @@ private fun ColorGridItem(
 private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
-            asset = Icons.Default.ArrowBack,
+            imageVector = Icons.Default.ArrowBack,
             modifier = Modifier.size(size = 36.dp)
         )
     }
@@ -285,16 +284,16 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
 @Composable
 private fun BaseColorGridItem(
     onClick: () -> Unit,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier.squared(SquareFit.MatchWidth)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
             .clickable(onClick = onClick, indication = RippleIndication(bounded = false)),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
-        children()
+        content()
     }
 }
 

@@ -20,7 +20,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.runShellCommand
@@ -36,7 +36,7 @@ internal fun coilActionIcon(data: Any): ActionIcon = flowOf { CoilImage(data = d
 
 internal fun singleActionIcon(icon: @Composable () -> Unit): ActionIcon = flowOf(icon)
 
-internal fun singleActionIcon(icon: VectorAsset) = singleActionIcon { Icon(icon) }
+internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon) }
 
 internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
 

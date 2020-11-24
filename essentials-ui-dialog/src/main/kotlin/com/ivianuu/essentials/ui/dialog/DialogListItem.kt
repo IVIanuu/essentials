@@ -42,7 +42,7 @@ fun SimpleDialogListItem(
         modifier = Modifier.fillMaxWidth()
             .heightIn(min = 48.dp)
             .clickable(onClick = onClick),
-        alignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart
     ) {
         Row(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),

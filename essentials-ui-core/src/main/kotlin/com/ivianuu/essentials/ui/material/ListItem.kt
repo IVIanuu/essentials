@@ -73,7 +73,7 @@ fun ListItem(
                     )
                 else Modifier
             ),
-        alignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // leading
@@ -81,7 +81,7 @@ fun ListItem(
                 Box(
                     modifier = Modifier
                         .preferredHeight(minHeight),
-                    alignment = Alignment.CenterStart
+                    contentAlignment = Alignment.CenterStart
                 ) {
                     Box(
                         modifier = Modifier
@@ -90,11 +90,11 @@ fun ListItem(
                                 top = 8.dp,
                                 bottom = 8.dp
                             ),
-                        alignment = Alignment.Center
+                        contentAlignment = Alignment.Center
                     ) {
                         Providers(
                             AmbientContentAlpha provides ContentAlpha.high,
-                            children = leading
+                            content = leading
                         )
                     }
                 }
@@ -105,7 +105,7 @@ fun ListItem(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = HorizontalTextPadding),
-                alignment = Alignment.CenterStart
+                contentAlignment = Alignment.CenterStart
             ) {
                 Column(
                     modifier = Modifier
@@ -119,7 +119,7 @@ fun ListItem(
                         ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
                             Providers(
                                 AmbientContentAlpha provides ContentAlpha.high,
-                                children = title
+                                content = title
                             )
                         }
                     }
@@ -127,7 +127,7 @@ fun ListItem(
                         ProvideTextStyle(value = MaterialTheme.typography.body2) {
                             Providers(
                                 AmbientContentAlpha provides ContentAlpha.medium,
-                                children = subtitle
+                                content = subtitle
                             )
                         }
                     }
@@ -139,7 +139,7 @@ fun ListItem(
                 Box(
                     modifier = Modifier
                         .preferredHeight(minHeight),
-                    alignment = Alignment.CenterEnd
+                    contentAlignment = Alignment.CenterEnd
                 ) {
                     Box(
                         modifier = Modifier.padding(
@@ -147,11 +147,11 @@ fun ListItem(
                             end = 16.dp,
                             bottom = 8.dp
                         ),
-                        alignment = Alignment.Center
+                        contentAlignment = Alignment.Center
                     ) {
                         Providers(
                             AmbientContentAlpha provides ContentAlpha.high,
-                            children = trailing
+                            content = trailing
                         )
                     }
                 }

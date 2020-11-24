@@ -39,7 +39,7 @@ fun Subheader(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
             .then(modifier),
-        alignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart
     ) {
         Providers(AmbientContentColor provides MaterialTheme.colors.secondary) {
             ProvideTextStyle(MaterialTheme.typography.body2, text)

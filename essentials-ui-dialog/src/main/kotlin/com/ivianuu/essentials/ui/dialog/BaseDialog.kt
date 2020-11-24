@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BaseDialog(
     modifier: Modifier = Modifier,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -37,6 +37,6 @@ fun BaseDialog(
         color = MaterialTheme.colors.surface,
         elevation = 24.dp,
         shape = MaterialTheme.shapes.medium,
-        content = children
+        content = content
     )
 }

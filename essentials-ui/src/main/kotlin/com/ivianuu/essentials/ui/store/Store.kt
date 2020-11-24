@@ -53,11 +53,18 @@ annotation class GlobalStateBinding {
 annotation class UiStateBinding {
     companion object {
         @Binding
-        @Composable
-        inline fun <reified T : StateFlow<S>, reified S> uiState(
+        inline fun <reified T : StateFlow<S>, reified S> uiStateProducer(
             defaultDispatcher: DefaultDispatcher,
             noinline provider: (CoroutineScope) -> @ForEffect T
-        ): StateFlow<S> = uiStateImpl(defaultDispatcher, typeOf<T>(), provider)
+        ): UiStateProducer<S> = {
+            uiStateImpl(defaultDispatcher, typeOf<T>(), provider)
+        }
+
+        @Binding
+        @Composable
+        fun <T : StateFlow<S>, S> uiStateProducer(
+            producer: UiStateProducer<S>
+        ): StateFlow<S> = producer()
 
         @StateBinding
         inline fun <T : StateFlow<S>, S> StateFlow<S>.uiStateBindings(): StateFlow<S> = this
@@ -75,6 +82,9 @@ annotation class UiStateBinding {
         }
     }
 }
+
+// todo tmp workaround
+typealias UiStateProducer<S> = @Composable () -> StateFlow<S>
 
 @Effect
 annotation class StateBinding {

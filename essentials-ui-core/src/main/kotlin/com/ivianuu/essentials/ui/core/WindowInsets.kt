@@ -28,8 +28,8 @@ import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.DensityAmbient
-import androidx.compose.ui.platform.ViewAmbient
+import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.AmbientView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecoratorBinding
@@ -44,7 +44,7 @@ fun InsetsPadding(
     top: Boolean = true,
     end: Boolean = true,
     bottom: Boolean = true,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     val padding = InsetsAmbient.current
     Box(
@@ -55,7 +55,7 @@ fun InsetsPadding(
             if (bottom) padding.bottom else 0.dp
         ).then(modifier)
     ) {
-        ConsumeInsets(start, top, end, bottom, children)
+        ConsumeInsets(start, top, end, bottom, content)
     }
 }
 
@@ -70,7 +70,7 @@ fun ConsumeInsets(
     top: Boolean = true,
     end: Boolean = true,
     bottom: Boolean = true,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     val currentInsets = InsetsAmbient.current
     ProvideInsets(
@@ -80,24 +80,24 @@ fun ConsumeInsets(
             if (end) 0.dp else currentInsets.end,
             if (bottom) 0.dp else currentInsets.bottom
         ),
-        children = children
+        content = content
     )
 }
 
 @Composable
 fun ProvideInsets(
     insets: PaddingValues,
-    children: @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
-    Providers(InsetsAmbient provides insets, children = children)
+    Providers(InsetsAmbient provides insets, content = content)
 }
 
 @UiDecoratorBinding("window_insets")
 @FunBinding
 @Composable
-fun ProvideWindowInsets(@FunApi children: @Composable () -> Unit) {
-    val ownerView = ViewAmbient.current
-    val density = DensityAmbient.current
+fun ProvideWindowInsets(@FunApi content: @Composable () -> Unit) {
+    val ownerView = AmbientView.current
+    val density = AmbientDensity.current
     var insets by rememberState { PaddingValues() }
 
     val insetsListener = remember {
@@ -146,5 +146,5 @@ fun ProvideWindowInsets(@FunApi children: @Composable () -> Unit) {
         }
     }
 
-    ProvideInsets(insets, children)
+    ProvideInsets(insets, content)
 }

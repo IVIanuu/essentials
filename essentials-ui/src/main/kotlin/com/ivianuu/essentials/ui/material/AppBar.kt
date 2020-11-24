@@ -84,7 +84,7 @@ fun TopAppBar(
             ) {
                 ProvideTextStyle(
                     MaterialTheme.typography.h6,
-                    children = title
+                    content = title
                 )
             }
         }
@@ -130,7 +130,7 @@ fun TopAppBar(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                children = content
+                content = content
             )
         }
     }

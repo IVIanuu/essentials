@@ -34,7 +34,7 @@ import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
@@ -53,7 +53,7 @@ class ShortcutActionFactory(
         val label = tmp[1]
         val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)
-        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageAsset()
+        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
         return Action(
             key = key,
             title = label,

@@ -23,7 +23,7 @@ import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parallelMap
-import com.ivianuu.essentials.ui.image.toImageAsset
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
@@ -46,7 +46,7 @@ suspend fun getAllShortcuts(
                         )
                     },
                     name = resolveInfo.loadLabel(packageManager).toString(),
-                    icon = resolveInfo.loadIcon(packageManager).toImageAsset()
+                    icon = resolveInfo.loadIcon(packageManager).toImageBitmap()
                 )
             } catch (e: Throwable) {
                 null
@@ -71,13 +71,13 @@ suspend fun extractShortcut(
         shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
     val icon = when {
-        bitmapIcon != null -> bitmapIcon.toImageAsset()
+        bitmapIcon != null -> bitmapIcon.toImageBitmap()
         iconResource != null -> {
             val resources =
                 packageManager.getResourcesForApplication(iconResource.packageName)
             val id =
                 resources.getIdentifier(iconResource.resourceName, null, null)
-            resources.getDrawable(id).toImageAsset()
+            resources.getDrawable(id).toImageBitmap()
         }
         else -> error("no icon provided $shortcutRequestResult")
     }

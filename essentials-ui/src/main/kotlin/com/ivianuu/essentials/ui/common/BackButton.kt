@@ -25,10 +25,10 @@ import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.navigation.popTop
 
 @Composable
-fun BackButton(icon: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
+fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
     val navigator = NavigatorAmbient.current
     IconButton(
         onClick = { navigator.popTop() },
-        icon = icon
+        content = content
     )
 }

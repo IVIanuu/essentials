@@ -66,7 +66,7 @@ fun DecorateRoute(
     decorators: RouteDecorators,
     logger: Logger,
     @FunApi route: Route,
-    @FunApi children: @Composable () -> Unit
+    @FunApi content: @Composable () -> Unit
 ) {
     decorators
         .sortedGraph(
@@ -75,7 +75,7 @@ fun DecorateRoute(
             dependents = { it.dependents }
         )
         .reversed()
-        .fold(children) { acc, decorator ->
+        .fold(content) { acc, decorator ->
             {
                 logger.d("Decorate route $route ${decorator.key}")
                 decorator.content(route, acc)

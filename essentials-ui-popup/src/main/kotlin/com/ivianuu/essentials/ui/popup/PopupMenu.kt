@@ -49,7 +49,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
                             navigator.popTop()
                             item.onSelected()
                         },
-                        children = item.content
+                        content = item.content
                     )
                 }
             }
@@ -60,19 +60,19 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
 @Composable
 private fun PopupMenuItem(
     onSelected: () -> Unit,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier.preferredWidthIn(min = 200.dp)
             .height(48.dp)
             .clickable(onClick = onSelected),
-        alignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart
     ) {
         Box(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-            alignment = Alignment.CenterStart
+            contentAlignment = Alignment.CenterStart
         ) {
-            children()
+            content()
         }
     }
 }

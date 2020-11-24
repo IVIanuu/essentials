@@ -82,9 +82,9 @@ private val PopupTag = Any()
 private fun PopupLayout(
     position: Rect,
     modifier: Modifier,
-    children: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
-    Layout(children = children, modifier = modifier) { measureables, constraints ->
+    Layout(content = content, modifier = modifier) { measureables, constraints ->
         val childConstraints = constraints.copy(
             minWidth = 0,
             minHeight = 0

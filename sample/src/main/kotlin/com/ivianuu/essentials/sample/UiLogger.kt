@@ -26,12 +26,12 @@ import com.ivianuu.injekt.FunBinding
 @UiDecoratorBinding("ui_logger", dependents = ["system_bars"])
 @FunBinding
 @Composable
-fun UiLogger(logger: Logger, @FunApi children: @Composable () -> Unit) {
+fun UiLogger(logger: Logger, @FunApi content: @Composable () -> Unit) {
     onActive {
         logger.d("hello from ui")
         onDispose {
             logger.d("bye from ui")
         }
     }
-    children()
+    content()
 }

@@ -88,7 +88,7 @@ fun ScaffoldPage(navigator: Navigator) {
                         modifier = Modifier.height(56.dp)
                             .fillMaxWidth()
                             .padding(start = 16.dp, end = 16.dp),
-                        alignment = Alignment.CenterStart
+                        contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
                             text = "Bottom bar",

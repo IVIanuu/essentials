@@ -20,7 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.core.currentOrNull
@@ -30,12 +30,13 @@ import com.ivianuu.injekt.FunBinding
 @UiDecoratorBinding("activity_retained_objects")
 @FunBinding
 @Composable
-fun ProvideActivityRetainedObjects(@FunApi children: @Composable () -> Unit) {
-    val activity = ContextAmbient.currentOrNull as? ComponentActivity
+fun ProvideActivityRetainedObjects(@FunApi content: @Composable () -> Unit) {
+    val activity = AmbientContext.currentOrNull as? ComponentActivity
     if (activity != null) {
         val retainedObjects = remember { RetainedObjects() }
-        Providers(RetainedObjectsAmbient provides retainedObjects,
-            children = children
+        Providers(
+            RetainedObjectsAmbient provides retainedObjects,
+            content = content
         )
     }
 }

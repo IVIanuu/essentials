@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -97,7 +96,7 @@ private fun DialogBody(
                     ProvideTextStyle(MaterialTheme.typography.h6) {
                         Providers(
                             AmbientContentAlpha provides ContentAlpha.high,
-                            children = title
+                            content = title
                         )
                     }
                 }
@@ -107,7 +106,7 @@ private fun DialogBody(
                 {
                     Providers(
                         AmbientContentAlpha provides ContentAlpha.high,
-                        children = icon
+                        content = icon
                     )
                 }
             }
@@ -133,7 +132,7 @@ private fun DialogBody(
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
                 Providers(
                     AmbientContentAlpha provides ContentAlpha.medium,
-                    children = content
+                    content = content
                 )
             }
         }
@@ -173,7 +172,7 @@ private fun DialogContentLayout(
     content: @Composable (() -> Unit)?,
     buttons: @Composable (() -> Unit)?
 ) {
-    val children: @Composable () -> Unit = {
+    val content: @Composable () -> Unit = {
         if (header != null) {
             Box(
                 modifier = Modifier.padding(
@@ -217,22 +216,22 @@ private fun DialogContentLayout(
         }
     }
 
-    Layout(children = children) { measurables, constraints ->
+    Layout(content = content) { measurables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = 0
         )
 
         val headerMeasureable =
-            measurables.firstOrNull { it.id == DialogContentSlot.Header }
+            measurables.firstOrNull { it.layoutId == DialogContentSlot.Header }
         val topDividerMeasureable =
-            measurables.firstOrNull { it.id == DialogContentSlot.TopDivider }
+            measurables.firstOrNull { it.layoutId == DialogContentSlot.TopDivider }
         val contentMeasureable =
-            measurables.firstOrNull { it.id == DialogContentSlot.Content }
+            measurables.firstOrNull { it.layoutId == DialogContentSlot.Content }
         val bottomDividerMeasureable =
-            measurables.firstOrNull { it.id == DialogContentSlot.BottomDivider }
+            measurables.firstOrNull { it.layoutId == DialogContentSlot.BottomDivider }
         val buttonsMeasureable =
-            measurables.firstOrNull { it.id == DialogContentSlot.Buttons }
+            measurables.firstOrNull { it.layoutId == DialogContentSlot.Buttons }
 
         fun measureFixed(measureable: Measurable?): Placeable? {
             return if (measureable != null) {

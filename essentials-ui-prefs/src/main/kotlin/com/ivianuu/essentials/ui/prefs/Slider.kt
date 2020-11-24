@@ -286,7 +286,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
             if (valueText != null) {
                 Box(
                     modifier = Modifier.widthIn(min = 72.dp),
-                    alignment = Alignment.CenterEnd
+                    contentAlignment = Alignment.CenterEnd
                 ) {
                     valueText(fromFloat(sliderState))
                 }

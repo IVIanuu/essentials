@@ -65,7 +65,7 @@ fun defaultUiDecorators(): UiDecorators = emptySet()
 fun DecorateUi(
     decorators: UiDecorators,
     logger: Logger,
-    @FunApi children: @Composable () -> Unit
+    @FunApi content: @Composable () -> Unit
 ) {
     remember {
         decorators
@@ -75,7 +75,7 @@ fun DecorateUi(
                 dependents = { it.dependents }
             )
             .reversed()
-            .fold(children) { acc, decorator ->
+            .fold(content) { acc, decorator ->
                 {
                     logger.d("Decorate ui ${decorator.key}")
                     decorator.content(acc)

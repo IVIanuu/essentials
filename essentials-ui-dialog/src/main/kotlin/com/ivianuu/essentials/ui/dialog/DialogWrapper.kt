@@ -60,13 +60,13 @@ fun DialogWrapper(
         )
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.6f)),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         InsetsPadding {
             Box(
                 modifier = Modifier.tapGestureFilter(onTap = {})
                     .wrapContentSize(align = Alignment.Center),
-                alignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 dialog()
             }
