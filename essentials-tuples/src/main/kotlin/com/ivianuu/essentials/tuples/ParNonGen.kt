@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.coroutines
+package com.ivianuu.essentials.tuples
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 
-private val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
-    Runtime.getRuntime().availableProcessors().coerceAtLeast(3)
-}
+suspend fun <T> par(
+    vararg blocks: suspend () -> T,
+    concurrency: Int = defaultConcurrency
+): List<T> =
+    blocks.asIterable().parMap { it() }
 
-suspend fun <A, B> Collection<A>.parallelMap(
+suspend fun <T, R> Iterable<T>.parMap(
     concurrency: Int = defaultConcurrency,
-    transform: suspend (A) -> B
-): List<B> = supervisorScope {
+    transform: suspend (T) -> R
+): List<R> = supervisorScope {
     val semaphore = Semaphore(concurrency)
     map { item ->
         async {
@@ -42,9 +44,18 @@ suspend fun <A, B> Collection<A>.parallelMap(
     }.awaitAll()
 }
 
-suspend fun <A> Collection<A>.parallelForEach(
+suspend fun <T> Iterable<T>.parFilter(
     concurrency: Int = defaultConcurrency,
-    action: suspend (A) -> Unit
+    predicate: suspend (T) -> Boolean
+): List<T> = parMap(concurrency) { if (predicate(it)) it else null }.filterNotNull()
+
+suspend fun <T> Iterable<T>.parForEach(
+    concurrency: Int = defaultConcurrency,
+    action: suspend (T) -> Unit
 ) {
-    parallelMap(concurrency) { action(it) }
+    parMap(concurrency) { action(it); it }
+}
+
+internal val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
+    Runtime.getRuntime().availableProcessors().coerceAtLeast(3)
 }

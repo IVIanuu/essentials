@@ -23,4 +23,5 @@ fun main() {
     genDir.mkdirs()
     generateTuples(genDir)
     generateFlowCombine(genDir)
+    generatePar(genDir)
 }
