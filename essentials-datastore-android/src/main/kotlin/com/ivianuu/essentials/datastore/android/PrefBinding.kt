@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.datastore.android
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.ui.store.Initial
-import com.ivianuu.essentials.ui.store.StateBinding
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
@@ -28,6 +30,7 @@ import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -44,13 +47,22 @@ annotation class PrefBinding(val name: String) {
             factory: DiskDataStoreFactory
         ): DataStore<T> = factory.create(name) { initial() }
 
-        @StateBinding
+        @Suppress("NOTHING_TO_INLINE")
+        @Binding
+        inline fun <T : Any> flow(dataStore: DataStore<T>): Flow<T> = dataStore.data
+
         @Binding(ApplicationComponent::class)
         fun <T : Any> stateFlow(
             scope: GlobalScope,
-            dataStore: DataStore<T>,
+            flow: Flow<T>,
             initial: @InitialOrFallback T
-        ): StateFlow<T> = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
+        ): StateFlow<T> = flow.stateIn(scope, SharingStarted.Eagerly, initial)
+
+        // todo inline once compose/kotlin is fixed
+        @Binding
+        @Composable
+        fun <T : Any> StateFlow<T>.latest(initial: @InitialOrFallback T): @UiState T =
+            collectAsState(initial).value
     }
 }
 
