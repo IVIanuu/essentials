@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.shortcutpicker
 
 import android.content.Intent
-import androidx.compose.ui.graphics.ImageAsset
 import androidx.compose.ui.graphics.ImageBitmap
 
 data class Shortcut(

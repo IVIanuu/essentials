@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.ConfigurationAmbient
+import androidx.compose.ui.platform.AmbientConfiguration
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -45,7 +45,7 @@ fun PopupRoute(
 ) {
     val navigator = NavigatorAmbient.current
 
-    val configuration = ConfigurationAmbient.current
+    val configuration = AmbientConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
         navigator.popTop()

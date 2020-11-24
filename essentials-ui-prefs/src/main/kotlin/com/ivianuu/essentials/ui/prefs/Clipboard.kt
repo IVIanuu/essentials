@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.prefs
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipboardManagerAmbient
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientClipboardManager
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.text.AnnotatedString
 import com.ivianuu.essentials.ui.material.ListItem
 
@@ -33,8 +33,8 @@ fun ClipboardListItem(
     trailing: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val context = ContextAmbient.current
-    val clipboardManager = ClipboardManagerAmbient.current
+    val context = AmbientContext.current
+    val clipboardManager = AmbientClipboardManager.current
     ListItem(
         modifier = modifier,
         title = title,

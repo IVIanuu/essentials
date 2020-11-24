@@ -21,8 +21,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.savedinstancestate.AmbientUiSavedStateRegistry
 import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistryAmbient
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiComponentAmbient
@@ -57,7 +57,7 @@ class Route(
         }
         Providers(
             RouteAmbient provides this,
-            UiSavedStateRegistryAmbient provides savedStateRegistry,
+            AmbientUiSavedStateRegistry provides savedStateRegistry,
             RetainedObjectsAmbient provides retainedObjects
         ) {
             val uiComponent = UiComponentAmbient.current

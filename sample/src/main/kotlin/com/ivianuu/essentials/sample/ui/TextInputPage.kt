@@ -32,7 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawOpacity
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
@@ -72,7 +72,7 @@ fun TextInputPage() {
                                 Text(
                                     text = "Search..",
                                     style = MaterialTheme.typography.subtitle1,
-                                    modifier = Modifier.drawOpacity(0.5f)
+                                    modifier = Modifier.alpha(0.5f)
                                         .align(Alignment.CenterStart)
                                 )
                             }

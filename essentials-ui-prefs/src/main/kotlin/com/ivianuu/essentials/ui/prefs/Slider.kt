@@ -29,7 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.core.rememberState
@@ -313,6 +313,6 @@ fun <T> UnitValueTextProvider(
     unit: UnitValueTextProvider.Unit,
     toString: (T) -> String = { it.toString() }
 ): @Composable (T) -> Unit {
-    val textProvider = UnitValueTextProvider(ContextAmbient.current, unit)
+    val textProvider = UnitValueTextProvider(AmbientContext.current, unit)
     return { SliderValueText(textProvider(toString(it))) }
 }

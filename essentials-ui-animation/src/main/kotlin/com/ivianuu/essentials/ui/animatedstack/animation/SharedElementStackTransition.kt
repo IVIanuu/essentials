@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.MetaProp
 import com.ivianuu.essentials.ui.animatable.animatable
@@ -174,7 +174,7 @@ fun SharedElementStackTransition(
                 val currentProps = animatedProps[index]
                 val sharedElementComposable =
                     endAnimatable.getOrElse(SharedElementComposable) { {} }
-                with(DensityAmbient.current) {
+                with(AmbientDensity.current) {
                     Box(
                         modifier = Modifier
                             .preferredSize(

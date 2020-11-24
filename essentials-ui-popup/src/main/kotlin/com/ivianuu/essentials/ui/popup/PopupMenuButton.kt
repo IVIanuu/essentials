@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.material.ripple.rememberRippleIndication
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +52,7 @@ fun PopupMenuButton(
             .popupClickable(
                 items = items,
                 onCancel = onCancel,
-                indicationFactory = { RippleIndication(bounded = false) }
+                indicationFactory = { rememberRippleIndication(bounded = false) }
             )
             .then(modifier),
         contentAlignment = Alignment.Center

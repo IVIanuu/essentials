@@ -27,6 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.RippleIndication
+import androidx.compose.material.ripple.rememberRippleIndication
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -83,7 +84,7 @@ private fun Chip(
                     .preferredHeight(32.dp)
                     .clickable(
                         onClick = onClick,
-                        indication = RippleIndication(bounded = false)
+                        indication = rememberRippleIndication(bounded = false)
                     ),
                 contentAlignment = Alignment.Center
             ) {

@@ -25,7 +25,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
@@ -81,7 +81,7 @@ fun PermissionsPage(requestPermissions: requestPermissions) {
         )
 
         val systemOverlay = SystemOverlayPermission(
-            ContextAmbient.current,
+            AmbientContext.current,
             Permission.Title to "System overlay",
             Permission.Desc to "This is a desc",
             Permission.Icon to { Icon(Icons.Default.Menu) }
@@ -94,7 +94,7 @@ fun PermissionsPage(requestPermissions: requestPermissions) {
         )
 
         val writeSettings = WriteSettingsPermission(
-            ContextAmbient.current,
+            AmbientContext.current,
             Permission.Title to "Write settings",
             Permission.Desc to "This is a desc",
             Permission.Icon to { Icon(Icons.Default.Menu) }

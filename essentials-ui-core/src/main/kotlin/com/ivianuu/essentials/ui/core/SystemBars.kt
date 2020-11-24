@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.globalBounds
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.unit.Bounds
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
@@ -62,7 +62,7 @@ fun Modifier.systemBarStyle(
 ): Modifier = composed {
     val systemBarManager = SystemBarManagerAmbient.current
     var globalBounds by rememberState<Rect?> { null }
-    val density = DensityAmbient.current
+    val density = AmbientDensity.current
 
     onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
         val dpBounds = with(density) {
@@ -136,7 +136,7 @@ private class SystemBarManager {
         }
 
         val windowInsets = InsetsAmbient.current
-        val density = DensityAmbient.current
+        val density = AmbientDensity.current
         val screenHeight = with(density) {
             activity.window.decorView.height.toDp()
         }
