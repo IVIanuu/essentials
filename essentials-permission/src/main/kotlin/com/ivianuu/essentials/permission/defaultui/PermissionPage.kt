@@ -39,12 +39,11 @@ fun PermissionPage(
     dispatch: DispatchAction<PermissionAction>,
     state: @UiState PermissionState
 ) {
-    // todo tmp commented out Scaffold as a workaround for a crash caused by compose
-    /*Scaffold(
+    Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
         }
-    ) {*/
+    ) {
         InsettingScrollableColumn {
             state.permissions.forEach { permission ->
                 Permission(
@@ -53,7 +52,7 @@ fun PermissionPage(
                 )
             }
         }
-    //}
+    }
 }
 
 @Composable
