@@ -18,7 +18,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.parallelMap
+import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
@@ -29,7 +29,7 @@ suspend fun getInstalledApps(
     packageManager: PackageManager,
 ): List<AppInfo> = withContext(ioDispatcher) {
     packageManager.getInstalledApplications(0)
-        .parallelMap {
+        .parMap {
             AppInfo(
                 appName = it.loadLabel(packageManager).toString(),
                 packageName = it.packageName

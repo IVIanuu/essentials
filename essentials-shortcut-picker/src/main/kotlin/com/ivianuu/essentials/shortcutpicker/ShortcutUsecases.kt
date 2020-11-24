@@ -22,7 +22,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.parallelMap
+import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -35,7 +35,7 @@ suspend fun getAllShortcuts(
 ): List<Shortcut> = withContext(ioDispatcher) {
     val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
     packageManager.queryIntentActivities(shortcutsIntent, 0)
-        .parallelMap { resolveInfo ->
+        .parMap { resolveInfo ->
             try {
                 Shortcut(
                     intent = Intent().apply {

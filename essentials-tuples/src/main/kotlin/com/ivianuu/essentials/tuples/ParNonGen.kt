@@ -25,7 +25,7 @@ suspend fun <T> par(
     vararg blocks: suspend () -> T,
     concurrency: Int = defaultConcurrency
 ): List<T> =
-    blocks.asIterable().parMap { it() }
+    blocks.asIterable().parMap(concurrency) { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
     concurrency: Int = defaultConcurrency,

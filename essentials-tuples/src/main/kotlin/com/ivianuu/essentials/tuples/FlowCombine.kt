@@ -31,7 +31,7 @@ fun <A, B, C, D> combine(
     flowA: Flow<A>,
     flowB: Flow<B>,
     flowC: Flow<C>,
-    flowD: Flow<D>,
+    flowD: Flow<D>
 ): Flow<Tuple4<A, B, C, D>> {
     return combine(flowA, flowB, flowC, flowD) { a, b, c, d -> tupleOf(a, b, c, d) }
 }
@@ -41,7 +41,7 @@ fun <A, B, C, D, E> combine(
     flowB: Flow<B>,
     flowC: Flow<C>,
     flowD: Flow<D>,
-    flowE: Flow<E>,
+    flowE: Flow<E>
 ): Flow<Tuple5<A, B, C, D, E>> {
     return combine(flowA, flowB, flowC, flowD, flowE) { a, b, c, d, e -> tupleOf(a, b, c, d, e) }
 }
@@ -52,7 +52,7 @@ fun <A, B, C, D, E, F> combine(
     flowC: Flow<C>,
     flowD: Flow<D>,
     flowE: Flow<E>,
-    flowF: Flow<F>,
+    flowF: Flow<F>
 ): Flow<Tuple6<A, B, C, D, E, F>> {
     return combine(flowA, flowB, flowC, flowD, flowE, flowF) { values ->
         tupleOf(
@@ -73,7 +73,7 @@ fun <A, B, C, D, E, F, G> combine(
     flowD: Flow<D>,
     flowE: Flow<E>,
     flowF: Flow<F>,
-    flowG: Flow<G>,
+    flowG: Flow<G>
 ): Flow<Tuple7<A, B, C, D, E, F, G>> {
     return combine(
         flowA,
@@ -104,7 +104,7 @@ fun <A, B, C, D, E, F, G, H> combine(
     flowE: Flow<E>,
     flowF: Flow<F>,
     flowG: Flow<G>,
-    flowH: Flow<H>,
+    flowH: Flow<H>
 ): Flow<Tuple8<A, B, C, D, E, F, G, H>> {
     return combine(flowA, flowB, flowC, flowD, flowE, flowF, flowG, flowH) { values ->
         tupleOf(
@@ -129,7 +129,7 @@ fun <A, B, C, D, E, F, G, H, I> combine(
     flowF: Flow<F>,
     flowG: Flow<G>,
     flowH: Flow<H>,
-    flowI: Flow<I>,
+    flowI: Flow<I>
 ): Flow<Tuple9<A, B, C, D, E, F, G, H, I>> {
     return combine(
         flowA,
@@ -166,7 +166,7 @@ fun <A, B, C, D, E, F, G, H, I, J> combine(
     flowG: Flow<G>,
     flowH: Flow<H>,
     flowI: Flow<I>,
-    flowJ: Flow<J>,
+    flowJ: Flow<J>
 ): Flow<Tuple10<A, B, C, D, E, F, G, H, I, J>> {
     return combine(
         flowA,
@@ -206,7 +206,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K> combine(
     flowH: Flow<H>,
     flowI: Flow<I>,
     flowJ: Flow<J>,
-    flowK: Flow<K>,
+    flowK: Flow<K>
 ): Flow<Tuple11<A, B, C, D, E, F, G, H, I, J, K>> {
     return combine(
         flowA,
@@ -249,7 +249,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L> combine(
     flowI: Flow<I>,
     flowJ: Flow<J>,
     flowK: Flow<K>,
-    flowL: Flow<L>,
+    flowL: Flow<L>
 ): Flow<Tuple12<A, B, C, D, E, F, G, H, I, J, K, L>> {
     return combine(
         flowA,
@@ -295,7 +295,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M> combine(
     flowJ: Flow<J>,
     flowK: Flow<K>,
     flowL: Flow<L>,
-    flowM: Flow<M>,
+    flowM: Flow<M>
 ): Flow<Tuple13<A, B, C, D, E, F, G, H, I, J, K, L, M>> {
     return combine(
         flowA,
@@ -344,7 +344,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N> combine(
     flowK: Flow<K>,
     flowL: Flow<L>,
     flowM: Flow<M>,
-    flowN: Flow<N>,
+    flowN: Flow<N>
 ): Flow<Tuple14<A, B, C, D, E, F, G, H, I, J, K, L, M, N>> {
     return combine(
         flowA,
@@ -396,7 +396,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O> combine(
     flowL: Flow<L>,
     flowM: Flow<M>,
     flowN: Flow<N>,
-    flowO: Flow<O>,
+    flowO: Flow<O>
 ): Flow<Tuple15<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>> {
     return combine(
         flowA,
@@ -451,7 +451,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P> combine(
     flowM: Flow<M>,
     flowN: Flow<N>,
     flowO: Flow<O>,
-    flowP: Flow<P>,
+    flowP: Flow<P>
 ): Flow<Tuple16<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>> {
     return combine(
         flowA,
@@ -509,7 +509,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q> combine(
     flowN: Flow<N>,
     flowO: Flow<O>,
     flowP: Flow<P>,
-    flowQ: Flow<Q>,
+    flowQ: Flow<Q>
 ): Flow<Tuple17<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>> {
     return combine(
         flowA,
@@ -570,7 +570,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R> combine(
     flowO: Flow<O>,
     flowP: Flow<P>,
     flowQ: Flow<Q>,
-    flowR: Flow<R>,
+    flowR: Flow<R>
 ): Flow<Tuple18<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>> {
     return combine(
         flowA,
@@ -634,7 +634,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S> combine(
     flowP: Flow<P>,
     flowQ: Flow<Q>,
     flowR: Flow<R>,
-    flowS: Flow<S>,
+    flowS: Flow<S>
 ): Flow<Tuple19<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>> {
     return combine(
         flowA,
@@ -701,7 +701,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T> combine(
     flowQ: Flow<Q>,
     flowR: Flow<R>,
     flowS: Flow<S>,
-    flowT: Flow<T>,
+    flowT: Flow<T>
 ): Flow<Tuple20<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>> {
     return combine(
         flowA,
@@ -771,7 +771,7 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U> combine(
     flowR: Flow<R>,
     flowS: Flow<S>,
     flowT: Flow<T>,
-    flowU: Flow<U>,
+    flowU: Flow<U>
 ): Flow<Tuple21<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U>> {
     return combine(
         flowA,
@@ -821,3 +821,4 @@ fun <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U> combine(
         )
     }
 }
+
