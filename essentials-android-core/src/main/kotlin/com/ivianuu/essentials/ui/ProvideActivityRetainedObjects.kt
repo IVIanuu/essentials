@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
+import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
 import com.ivianuu.essentials.ui.common.RetainedObjects
@@ -38,5 +39,6 @@ fun ProvideActivityRetainedObjects(@FunApi content: @Composable () -> Unit) {
             RetainedObjectsAmbient provides retainedObjects,
             content = content
         )
+        onDispose { retainedObjects.dispose() }
     }
 }
