@@ -19,7 +19,7 @@ package com.ivianuu.essentials.tuples.generator
 import java.io.File
 
 fun generatePar(genDir: File) {
-    val file = genDir.resolve("Par.kt")
+    val file = genDir.resolve("ParTupled.kt")
     file.createNewFile()
     val code = buildString {
         appendLine("package com.ivianuu.essentials.tuples")
@@ -31,7 +31,7 @@ fun generatePar(genDir: File) {
                 append("${ALPHABET[index]}")
                 if (index != tuple - 1) append(", ")
             }
-            append("> par(")
+            append("> parTupled(")
             (1..tuple).forEachIndexed { index, arg ->
                 val char = ALPHABET[index]
                 append("block$char: suspend () -> $char")
