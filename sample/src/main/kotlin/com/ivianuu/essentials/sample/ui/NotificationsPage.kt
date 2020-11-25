@@ -43,7 +43,9 @@ import com.ivianuu.essentials.notificationlistener.NotificationsAction
 import com.ivianuu.essentials.notificationlistener.NotificationsState
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runCatching
