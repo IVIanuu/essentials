@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.isActive
+import kotlin.coroutines.coroutineContext
 
 typealias KeyboardVisible = Flow<Boolean>
 
@@ -58,7 +60,7 @@ fun keyboardVisible(
         .map { Unit }
         .onStart { emit(Unit) }
         .transformLatest {
-            while (true) {
+            while (coroutineContext.isActive) {
                 emit(Unit)
                 delay(100)
             }
