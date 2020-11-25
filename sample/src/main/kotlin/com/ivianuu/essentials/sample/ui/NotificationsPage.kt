@@ -38,15 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.parallelMap
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
 import com.ivianuu.essentials.notificationlistener.NotificationsState
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runCatching
@@ -57,6 +54,7 @@ import com.ivianuu.essentials.sample.ui.NotificationsPageAction.RequestPermissio
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toImageBitmap
@@ -222,7 +220,7 @@ fun notifications(
     .map { it.notifications }
     .map { notifications ->
         notifications
-            .parallelMap { it.toUiNotification(applicationContext) }
+            .parMap { it.toUiNotification(applicationContext) }
     }
 
 private fun StatusBarNotification.toUiNotification(applicationContext: ApplicationContext) = UiNotification(
