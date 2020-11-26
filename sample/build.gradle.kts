@@ -66,6 +66,8 @@ dependencies {
     implementation(project(":essentials-work"))
     kapt(project(":essentials-compiler"))
 
+    debugImplementation(Deps.leakCanary)
+
     testImplementation(project(":essentials-android-test"))
     testImplementation(project(":essentials-test"))
 }

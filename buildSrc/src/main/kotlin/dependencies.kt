@@ -115,6 +115,8 @@ object Deps {
 
     const val kotlinxImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
 
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
+
     const val mockk = "io.mockk:mockk:1.10.0"
 
     object Moshi {
