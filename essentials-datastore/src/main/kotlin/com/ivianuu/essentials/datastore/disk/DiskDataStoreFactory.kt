@@ -38,17 +38,18 @@ class DiskDataStoreFactory(
         noinline produceDefaultData: () -> T
     ): DataStore<T> = create(
         name = name,
-        type = typeOf<T>(),
+        produceType = { typeOf<T>() },
         produceDefaultData = produceDefaultData
     )
 
+    @JvmName("createWithType")
     fun <T> create(
         name: String,
-        type: KType,
-        produceDefaultData: () -> T
+        produceType: () -> KType,
+        produceDefaultData: () -> T,
     ): DataStore<T> = create(
         name = name,
-        produceSerializer = { serializerFactory.create(type) },
+        produceSerializer = { serializerFactory.create(produceType()) },
         produceDefaultData = produceDefaultData
     )
 
