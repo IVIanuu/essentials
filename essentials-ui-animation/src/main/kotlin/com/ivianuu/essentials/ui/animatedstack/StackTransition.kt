@@ -34,15 +34,17 @@ abstract class StackTransitionContext(
 
 typealias StackTransition = @Composable (StackTransitionContext) -> Unit
 
-val NoOpStackTransition: StackTransition = { context ->
-    remember {
-        if (context.toAnimatable != null) context.addTo()
-        if (context.fromAnimatable != null) context.removeFrom()
+// todo make this a single instance once compose is fixed
+val NoOpStackTransition: StackTransition
+    get() = { context ->
+        remember {
+            if (context.toAnimatable != null) context.addTo()
+            if (context.fromAnimatable != null) context.removeFrom()
+        }
+        onActive {
+            context.onComplete()
+        }
     }
-    onActive {
-        context.onComplete()
-    }
-}
 
 val DefaultStackTransitionAmbient =
     staticAmbientOf { NoOpStackTransition }
