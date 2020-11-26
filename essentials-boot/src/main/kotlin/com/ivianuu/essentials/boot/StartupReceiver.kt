@@ -19,18 +19,23 @@ package com.ivianuu.essentials.boot
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ReceiverComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class StartupReceiver : EsBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        with(receiverComponent.mergeComponent<StartupReceiverComponent>()) {
-            logger.d("on system boot")
-            bootListeners.forEach { it() }
+        val component = receiverComponent.mergeComponent<StartupReceiverComponent>()
+        component.logger.d("on system boot")
+        val scope = CoroutineScope(component.defaultDispatcher)
+        component.bootListeners.forEach {
+            scope.launch { it() }
         }
     }
 }
@@ -38,5 +43,6 @@ class StartupReceiver : EsBroadcastReceiver() {
 @MergeInto(ReceiverComponent::class)
 interface StartupReceiverComponent {
     val bootListeners: BootListeners
+    val defaultDispatcher: DefaultDispatcher
     val logger: Logger
 }

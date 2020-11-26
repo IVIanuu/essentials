@@ -24,11 +24,12 @@ import com.ivianuu.injekt.SetElements
 annotation class BootListenerBinding {
     companion object {
         @SetElements
-        fun <T : () -> Unit> listenerIntoSet(instance: @ForEffect T): BootListeners = setOf(instance)
+        fun <T : suspend () -> Unit> listenerIntoSet(instance: @ForEffect T): BootListeners =
+            setOf(instance)
     }
 }
 
-typealias BootListeners = Set<() -> Unit>
+typealias BootListeners = Set<suspend () -> Unit>
 
 @SetElements
 fun defaultBootListeners(): BootListeners = emptySet()
