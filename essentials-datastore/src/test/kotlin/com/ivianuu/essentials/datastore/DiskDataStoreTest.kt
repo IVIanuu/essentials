@@ -23,10 +23,7 @@ import com.ivianuu.essentials.test.testCollect
 import com.squareup.moshi.Moshi
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Test
 import java.nio.file.Files
@@ -50,7 +47,7 @@ class DiskDataStoreTest {
         store.updateData { 1 }
         store.data.first() shouldBe 1
         file.readText().toInt() shouldBe 1
-        store.updateData { it + 1 }
+        store.updateData { this + 1 }
         store.data.first() shouldBe 2
         file.readText().toInt() shouldBe 2
     }
@@ -62,11 +59,11 @@ class DiskDataStoreTest {
         val collector = store.data.testCollect(this)
 
         collector.values.shouldContainExactly(0)
-        store.updateData { it + 1 }
+        store.updateData { this + 1 }
         collector.values.shouldContainExactly(0, 1)
-        store.updateData { it + 1 }
-        store.updateData { it + 1 }
-        store.updateData { it }
+        store.updateData { this + 1 }
+        store.updateData { this + 1 }
+        store.updateData { this }
         collector.values.shouldContainExactly(0, 1, 2, 3)
     }
 
@@ -79,12 +76,12 @@ class DiskDataStoreTest {
 
         collector1.values.shouldContainExactly(0)
         collector2.values.shouldContainExactly(0)
-        store.updateData { it + 1 }
+        store.updateData { this + 1 }
         collector1.values.shouldContainExactly(0, 1)
         collector2.values.shouldContainExactly(0, 1)
-        store.updateData { it + 1 }
-        store.updateData { it + 1 }
-        store.updateData { it }
+        store.updateData { this + 1 }
+        store.updateData { this + 1 }
+        store.updateData { this }
         collector1.values.shouldContainExactly(0, 1, 2, 3)
         collector2.values.shouldContainExactly(0, 1, 2, 3)
     }
