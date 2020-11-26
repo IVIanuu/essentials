@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.ImmediateMainDispatcher
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.common.OnBackPressed
 import com.ivianuu.injekt.Binding
@@ -109,13 +110,15 @@ fun Navigator.pop(route: Route, result: Any? = null) {
 @ImplBinding(ApplicationComponent::class)
 class NavigatorImpl(
     scope: GlobalScope,
-    initialBackStack: List<Route> = emptyList()
+    dispatcher: ImmediateMainDispatcher,
+    initialBackStack: List<Route> = emptyList(),
 ) : Navigator {
 
     private val _backStack = MutableStateFlow(initialBackStack)
     override val backStack: StateFlow<List<Route>> by this::_backStack
 
     private val actor = scope.actor<suspend (List<Route>) -> List<Route>>(
+        context = dispatcher,
         capacity = Channel.UNLIMITED
     ) {
         for (transform in this) {
