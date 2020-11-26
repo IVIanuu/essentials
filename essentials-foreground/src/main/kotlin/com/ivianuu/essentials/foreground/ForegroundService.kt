@@ -18,16 +18,19 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import android.app.NotificationManager
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class ForegroundService : EsService() {
 
@@ -52,12 +55,13 @@ class ForegroundService : EsService() {
             }
             .onEach { update(it) }
             .launchIn(scope)
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        component.logger.d("stopped foreground service")
-        update(emptyList())
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            runOnCancellation {
+                component.logger.d("stopped foreground service")
+                update(emptyList())
+            }
+        }
     }
 
     private fun update(newJobs: List<Pair<ForegroundJob, Notification>>) {
