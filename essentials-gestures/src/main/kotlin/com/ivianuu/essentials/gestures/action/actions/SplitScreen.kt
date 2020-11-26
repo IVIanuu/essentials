@@ -31,7 +31,7 @@ fun splitScreenAction(accessibilityAction: accessibilityAction): Action = access
     singleActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-@ActionExecutorBinding("back")
+@ActionExecutorBinding("split_screen")
 @FunBinding
 suspend fun toggleSplitScreen(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)

@@ -30,7 +30,7 @@ fun mediaSkipPreviousAction(mediaAction: mediaAction): Action = mediaAction(
     singleActionIcon(R.drawable.es_ic_skip_previous)
 )
 
-@ActionExecutorBinding("media_play_pause")
+@ActionExecutorBinding("media_skip_previous")
 @FunBinding
 suspend fun sendSkipPreviousCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)

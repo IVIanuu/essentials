@@ -30,7 +30,7 @@ fun mediaSkipNextAction(mediaAction: mediaAction): Action = mediaAction(
     singleActionIcon(R.drawable.es_ic_skip_next)
 )
 
-@ActionExecutorBinding("media_play_pause")
+@ActionExecutorBinding("media_skip_next")
 @FunBinding
 suspend fun sendSkipNextCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_NEXT)
