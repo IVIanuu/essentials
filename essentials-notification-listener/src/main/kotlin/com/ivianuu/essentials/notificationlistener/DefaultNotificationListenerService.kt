@@ -17,12 +17,14 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.StatusBarNotification
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -38,16 +40,18 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        component.logger.d("listener connected")
-        component.notificationServiceRef.value = this
-        connectedScope.launch { component.runNotificationWorkers() }
-        notifyUpdate()
-    }
-
-    override fun onListenerDisconnected() {
-        super.onListenerDisconnected()
-        component.logger.d("listener disconnected")
-        component.notificationServiceRef.value = null
+        connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            runOnCancellation {
+                component.logger.d("listener disconnected")
+                component.notificationServiceRef.value = null
+            }
+        }
+        connectedScope.launch {
+            component.logger.d("listener connected")
+            component.notificationServiceRef.value = this@DefaultNotificationListenerService
+            notifyUpdate()
+            component.runNotificationWorkers()
+        }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
