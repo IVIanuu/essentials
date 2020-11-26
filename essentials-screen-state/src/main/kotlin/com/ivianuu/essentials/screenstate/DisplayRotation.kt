@@ -23,6 +23,7 @@ import android.view.WindowManager
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Binding
@@ -57,28 +58,29 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Binding(ApplicationComponent::class)
 fun displayRotation(
-    configChanges: ConfigChanges,
+    configChanges: () -> ConfigChanges,
     getCurrentDisplayRotation: getCurrentDisplayRotation,
     globalScope: GlobalScope,
     logger: Logger,
-    rotationChanges: RotationChanges,
-    screenState: Flow<ScreenState>,
+    rotationChanges: () -> RotationChanges,
+    screenState: () -> Flow<ScreenState>,
 ): Flow<DisplayRotation> {
-    return screenState
-        .flatMapLatest { currentScreenState ->
-            if (currentScreenState.isOn) {
-                merge(rotationChanges, configChanges)
-                    .onStart { logger.d("sub for rotation") }
-                    .onCompletion { logger.d("dispose rotation") }
-            } else {
-                logger.d("do not observe rotation while screen is off")
-                emptyFlow()
+    return deferredFlow {
+        screenState()
+            .flatMapLatest { currentScreenState ->
+                if (currentScreenState.isOn) {
+                    merge(rotationChanges(), configChanges())
+                        .onStart { logger.d("sub for rotation") }
+                        .onCompletion { logger.d("dispose rotation") }
+                } else {
+                    logger.d("do not observe rotation while screen is off")
+                    emptyFlow()
+                }
             }
-        }
-        .onStart { emit(Unit) }
-        .map { getCurrentDisplayRotation() }
-        .distinctUntilChanged()
-        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
+            .onStart { emit(Unit) }
+            .map { getCurrentDisplayRotation() }
+            .distinctUntilChanged()
+    }.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
 @FunBinding
