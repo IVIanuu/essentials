@@ -33,19 +33,18 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val defaultDispatcher: DefaultDispatcher by lazy {
+    private val component by lazy {
         serviceComponent.mergeComponent<EsAccessibilityServiceComponent>()
-            .defaultDispatcher
     }
 
-    val scope by lazy { CoroutineScope(defaultDispatcher) }
+    val scope by lazy { CoroutineScope(component.defaultDispatcher) }
 
     private var _connectedScope: CoroutineScope? = null
     val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        _connectedScope = CoroutineScope(defaultDispatcher)
+        _connectedScope = CoroutineScope(component.defaultDispatcher)
     }
 
     override fun onInterrupt() {

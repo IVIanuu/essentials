@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class DefaultAccessibilityService : EsAccessibilityService() {
@@ -32,9 +33,14 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-
         component.logger.d("connected")
         component.serviceHolder.value = this
+        connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            runOnCancellation {
+                component.logger.d("on unbind")
+                component.serviceHolder.value = null
+            }
+        }
         connectedScope.launch {
             component.runAccessibilityWorkers()
         }
@@ -50,12 +56,6 @@ class DefaultAccessibilityService : EsAccessibilityService() {
                 isFullScreen = event.isFullScreen
             )
         )
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        component.logger.d("on unbind")
-        component.serviceHolder.value = null
-        return super.onUnbind(intent)
     }
 
 }

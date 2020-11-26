@@ -34,12 +34,12 @@ abstract class EsService : Service() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val defaultDispatcher: DefaultDispatcher by lazy {
-        serviceComponent.mergeComponent<EsServiceComponent>()
-            .defaultDispatcher
+    val scope by lazy {
+        CoroutineScope(
+            serviceComponent.mergeComponent<EsServiceComponent>()
+                .defaultDispatcher
+        )
     }
-
-    val scope by lazy { CoroutineScope(defaultDispatcher) }
 
     override fun onDestroy() {
         scope.cancel()
