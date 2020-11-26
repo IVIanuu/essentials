@@ -67,6 +67,15 @@ abstract class EsActivity : AppCompatActivity() {
         }
     }
 
+    // todo tmp fix for https://issuetracker.google.com/issues/139738913
+    override fun onBackPressed() {
+        if (onBackPressedDispatcher.hasEnabledCallbacks()) {
+            super.onBackPressed()
+        } else {
+            finishAfterTransition()
+        }
+    }
+
     override fun onDestroy() {
         composition.dispose()
         super.onDestroy()
