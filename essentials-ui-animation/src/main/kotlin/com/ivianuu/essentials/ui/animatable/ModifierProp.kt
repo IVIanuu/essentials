@@ -21,9 +21,9 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.TransformOrigin
 import androidx.compose.ui.composed
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 
 @Stable
 interface ModifierProp<T> : Prop<T> {
@@ -40,7 +40,7 @@ inline fun <T> composedModifierProp(crossinline apply: @Composable (T) -> Modifi
 
 
 inline fun <T> drawLayerProp(crossinline apply: GraphicsLayerScope.(T) -> Unit): ModifierProp<T> =
-    modifierProp { Modifier.drawLayer { apply(it) } }
+    modifierProp { Modifier.graphicsLayer { apply(it) } }
 
 val ScaleX = drawLayerProp<Float> { scaleX = it }
 val ScaleY = drawLayerProp<Float> { scaleY = it }

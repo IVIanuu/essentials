@@ -36,9 +36,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.TransformOrigin
 import androidx.compose.ui.composed
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.absorbPointer
@@ -172,7 +172,7 @@ fun Modifier.fabAnimation(visible: Boolean): Modifier = composed {
             easing = FastOutSlowInEasing
         )
     )
-    drawLayer(
+    graphicsLayer(
         scaleX = fraction,
         scaleY = fraction,
         transformOrigin = TransformOrigin(0.5f, 0.5f)
