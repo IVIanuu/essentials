@@ -30,6 +30,11 @@ typealias MainDispatcher = CoroutineDispatcher
 @Binding
 inline fun mainDispatcher(): MainDispatcher = Dispatchers.Main
 
+typealias ImmediateMainDispatcher = CoroutineDispatcher
+
+@Binding
+inline fun immediateMainDispatcher(): ImmediateMainDispatcher = Dispatchers.Main.immediate
+
 typealias IODispatcher = CoroutineDispatcher
 
 @Binding
