@@ -18,52 +18,27 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.app.AppWorkerBinding
-import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @AppWorkerBinding
 @FunBinding
 suspend fun updateAndroidTorchState(
     cameraManager: CameraManager,
-    mainDispatcher: MainDispatcher,
     showToastRes: showToastRes,
     dispatch: DispatchAction<TorchAction>,
     state: Flow<TorchState>
 ) {
     state.collect { currentState ->
+        val cameraId = cameraManager.cameraIdList[0]
         runCatching {
-            withContext(mainDispatcher) {
-                suspendCoroutine<Unit> { continuation ->
-                    var resumed = false
-                    fun resumeIfNeeded() {
-                        if (resumed) return
-                        resumed = true
-                        continuation.resume(Unit)
-                    }
-                    val callback = object : CameraManager.TorchCallback() {
-                        override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                            cameraManager.unregisterTorchCallback(this)
-                            cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
-                            resumeIfNeeded()
-                        }
-
-                        override fun onTorchModeUnavailable(cameraId: String) {
-                            cameraManager.unregisterTorchCallback(this)
-                            showToastRes(R.string.es_failed_to_toggle_torch)
-                            resumeIfNeeded()
-                        }
-                    }
-                    cameraManager.registerTorchCallback(callback, null)
-                }
-            }
+            cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
         }.onFailure {
             it.printStackTrace()
             showToastRes(R.string.es_failed_to_toggle_torch)
