@@ -33,10 +33,11 @@ suspend fun executeAction(
     defaultDispatcher: DefaultDispatcher,
     logger: Logger,
     getAction: getAction,
+    getActionExecutor: getActionExecutor,
     requestPermissions: requestPermissions,
     unlockScreen: unlockScreen,
     showToast: showToast,
-    @FunApi key: String
+    @FunApi key: String,
 ): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
     runCatching {
         logger.d("execute $key")
@@ -57,7 +58,7 @@ suspend fun executeAction(
         logger.d("fire $key")
 
         // fire
-        action.execute()
+        getActionExecutor(key)()
         return@runCatching true
     }.onFailure {
         it.printStackTrace()

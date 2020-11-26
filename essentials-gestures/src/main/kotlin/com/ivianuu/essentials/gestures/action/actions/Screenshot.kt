@@ -17,21 +17,23 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
 import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.delay
 
 @ActionBinding("screenshot")
 fun screenshotAction(
     choosePermissions: choosePermissions,
-    performGlobalAction: performGlobalAction,
-    runRootCommand: runRootCommand,
-    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
     stringResource: stringResource,
+    systemBuildInfo: SystemBuildInfo,
 ): Action = Action(
     key = "screenshot",
     title = stringResource(R.string.es_action_screenshot),
@@ -41,13 +43,21 @@ fun screenshotAction(
             if (systemBuildInfo.sdk >= 28) accessibility
             else root
         )
-    },
-    execute = {
-        delay(500)
-        if (systemBuildInfo.sdk >= 28) {
-            performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-        } else {
-            runRootCommand("input keyevent 26")
-        }
     }
 )
+
+@SuppressLint("InlinedApi")
+@ActionExecutorBinding("screenshot")
+@FunBinding
+suspend fun takeScreenshot(
+    performGlobalAction: performGlobalAction,
+    runRootCommand: runRootCommand,
+    systemBuildInfo: SystemBuildInfo,
+) {
+    delay(500)
+    if (systemBuildInfo.sdk >= 28) {
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+    } else {
+        runRootCommand("input keyevent 26")
+    }
+}

@@ -20,11 +20,18 @@ import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_skip_previous")
 fun mediaSkipPreviousAction(mediaAction: mediaAction): Action = mediaAction(
     "media_skip_previous",
-    KeyEvent.KEYCODE_MEDIA_PREVIOUS,
     R.string.es_action_media_skip_previous,
     singleActionIcon(R.drawable.es_ic_skip_previous)
 )
+
+@ActionExecutorBinding("media_play_pause")
+@FunBinding
+suspend fun sendSkipPreviousCommand(doMediaAction: doMediaAction) {
+    doMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+}

@@ -23,25 +23,27 @@ import androidx.compose.material.icons.filled.Search
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("search")
-fun searchAction(
-    sendIntent: sendIntent,
-    stringResource: stringResource,
-): Action = Action(
+fun searchAction(stringResource: stringResource): Action = Action(
     key = "search",
     title = stringResource(R.string.es_action_search),
-    icon = singleActionIcon(Icons.Default.Search),
-    execute = {
-        sendIntent(
-            Intent(Intent.ACTION_MAIN).apply {
-                component = ComponentName(
-                    "com.google.android.googlequicksearchbox",
-                    "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
-                )
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        )
-    }
+    icon = singleActionIcon(Icons.Default.Search)
 )
+
+@ActionExecutorBinding("search")
+@FunBinding
+suspend fun showSearch(sendIntent: sendIntent) {
+    sendIntent(
+        Intent(Intent.ACTION_MAIN).apply {
+            component = ComponentName(
+                "com.google.android.googlequicksearchbox",
+                "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
+            )
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    )
+}

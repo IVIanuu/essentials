@@ -35,12 +35,26 @@ suspend fun getAction(
     actions: Map<String, () -> Action>,
     actionFactories: () -> Set<ActionFactory>,
     defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String
+    @FunApi key: String,
 ): Action = withContext(defaultDispatcher) {
     actions[key]
         ?.invoke()
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
             ?.createAction(key)
+        ?: error("Unsupported action key $key")
+}
+
+@FunBinding
+suspend fun getActionExecutor(
+    actionsExecutors: Map<String, ActionExecutor>,
+    actionFactories: () -> Set<ActionFactory>,
+    defaultDispatcher: DefaultDispatcher,
+    @FunApi key: String,
+): ActionExecutor = withContext(defaultDispatcher) {
+    actionsExecutors[key]
+        ?: actionFactories()
+            .firstOrNull { it.handles(key) }
+            ?.createExecutor(key)
         ?: error("Unsupported action key $key")
 }

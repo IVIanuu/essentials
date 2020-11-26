@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPermissions
@@ -50,9 +51,13 @@ class KeycodeActionFactory(
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
             permissions = listOf(permissions.root),
             unlockScreen = false,
-            enabled = true,
-            execute = { runRootCommand("input keyevent $keycode") }
+            enabled = true
         )
+    }
+
+    override suspend fun createExecutor(key: String): ActionExecutor {
+        val keycode = key.removePrefix(ACTION_KEY_PREFIX)
+        return { runRootCommand("input keyevent $keycode") }
     }
 }
 

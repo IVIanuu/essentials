@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.ImagePainter
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -43,7 +44,8 @@ import java.io.ByteArrayOutputStream
 
 @ActionFactoryBinding
 class ShortcutActionFactory(
-    private val logger: Logger,
+    private val
+    logger: Logger,
     private val sendIntent: sendIntent,
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
@@ -59,9 +61,14 @@ class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             enabled = true,
-            icon = singleActionIcon { Icon(ImagePainter(icon)) },
-            execute = { sendIntent(intent) }
+            icon = singleActionIcon { Icon(ImagePainter(icon)) }
         )
+    }
+
+    override suspend fun createExecutor(key: String): ActionExecutor {
+        val tmp = key.split(DELIMITER)
+        val intent = Intent.getIntent(tmp[2])
+        return { sendIntent(intent) }
     }
 }
 

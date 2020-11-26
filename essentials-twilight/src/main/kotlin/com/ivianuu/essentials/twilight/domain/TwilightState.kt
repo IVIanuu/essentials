@@ -21,6 +21,7 @@ import android.content.res.Configuration
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
@@ -46,22 +47,23 @@ data class TwilightState(
 @Binding(ApplicationComponent::class)
 fun twilightState(
     globalScope: GlobalScope,
-    batteryTwilightState: BatteryTwilightState,
-    systemTwilightState: SystemTwilightState,
-    timeTwilightState: TimeTwilightState,
-    twilightPrefsState: Flow<TwilightPrefsState>
+    batteryTwilightState: () -> BatteryTwilightState,
+    systemTwilightState: () -> SystemTwilightState,
+    timeTwilightState: () -> TimeTwilightState,
+    twilightPrefsState: () -> Flow<TwilightPrefsState>,
 ): StateFlow<TwilightState> {
-    return twilightPrefsState.flatMapLatest { (mode, useBlack) ->
-        (when (mode) {
-            TwilightMode.System -> systemTwilightState
-            TwilightMode.Light -> flowOf(false)
-            TwilightMode.Dark -> flowOf(true)
-            TwilightMode.Battery -> batteryTwilightState
-            TwilightMode.Time -> timeTwilightState
-        }).map { TwilightState(it, useBlack) }
-    }
-        .distinctUntilChanged()
-        .stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
+    return deferredFlow {
+        twilightPrefsState().flatMapLatest { (mode, useBlack) ->
+            (when (mode) {
+                TwilightMode.System -> systemTwilightState()
+                TwilightMode.Light -> flowOf(false)
+                TwilightMode.Dark -> flowOf(true)
+                TwilightMode.Battery -> batteryTwilightState()
+                TwilightMode.Time -> timeTwilightState()
+            }).map { TwilightState(it, useBlack) }
+        }
+            .distinctUntilChanged()
+    }.stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
 }
 
 internal typealias BatteryTwilightState = Flow<Boolean>

@@ -19,14 +19,22 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("notifications")
 fun notificationsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "notifications",
-    AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS,
     R.string.es_action_notifications,
     singleActionIcon(Icons.Default.Notifications)
 )
+
+@ActionExecutorBinding("notifications")
+@FunBinding
+suspend fun showNotificationsShade(performGlobalAction: performGlobalAction) {
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+}

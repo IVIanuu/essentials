@@ -20,21 +20,23 @@ import android.media.AudioManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("volume")
-fun volumeAction(
-    audioManager: AudioManager,
-    stringResource: stringResource,
-): Action = Action(
+fun volumeAction(stringResource: stringResource): Action = Action(
     key = "volume",
     title = stringResource(R.string.es_action_volume),
-    icon = singleActionIcon(R.drawable.es_ic_volume_up),
-    execute = {
-        audioManager.adjustStreamVolume(
-            AudioManager.STREAM_MUSIC,
-            AudioManager.ADJUST_SAME,
-            AudioManager.FLAG_SHOW_UI
-        )
-    }
+    icon = singleActionIcon(R.drawable.es_ic_volume_up)
 )
+
+@ActionExecutorBinding("volume")
+@FunBinding
+suspend fun showVolume(audioManager: AudioManager) {
+    audioManager.adjustStreamVolume(
+        AudioManager.STREAM_MUSIC,
+        AudioManager.ADJUST_SAME,
+        AudioManager.FLAG_SHOW_UI
+    )
+}

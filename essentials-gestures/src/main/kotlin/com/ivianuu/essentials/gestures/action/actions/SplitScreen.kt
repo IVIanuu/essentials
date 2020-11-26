@@ -17,14 +17,22 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("split_screen")
 fun splitScreenAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "split_screen",
-    AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN,
     R.string.es_action_split_screen,
     singleActionIcon(R.drawable.es_ic_view_agenda)
 )
+
+@ActionExecutorBinding("back")
+@FunBinding
+suspend fun toggleSplitScreen(performGlobalAction: performGlobalAction) {
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+}

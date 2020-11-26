@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
@@ -27,18 +26,13 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 fun accessibilityAction(
     choosePermissions: choosePermissions,
-    performGlobalAction: performGlobalAction,
     stringResource: stringResource,
     @FunApi key: String,
-    @FunApi accessibilityAction: Int,
     @FunApi titleRes: Int,
     @FunApi icon: ActionIcon
 ) = Action(
     key = key,
     title = stringResource(titleRes),
     icon = icon,
-    permissions = choosePermissions { listOf(accessibility) },
-    execute = {
-        performGlobalAction(accessibilityAction)
-    }
+    permissions = choosePermissions { listOf(accessibility) }
 )

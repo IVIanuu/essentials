@@ -32,14 +32,12 @@ fun mediaAction(
     doMediaAction: doMediaAction,
     stringResource: stringResource,
     @FunApi key: String,
-    @FunApi keycode: Int,
     @FunApi titleRes: Int,
     @FunApi icon: ActionIcon
 ) = Action(
     key = key,
     title = stringResource(titleRes),
-    icon = icon,
-    execute = { doMediaAction(keycode) }
+    icon = icon
 )
 
 @FunBinding

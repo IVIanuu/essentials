@@ -26,6 +26,7 @@ import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -50,15 +51,19 @@ class AppActionFactory(
             title = getAppInfo(packageName).packageName,
             unlockScreen = true,
             enabled = true,
-            icon = coilActionIcon(AppIcon(packageName)),
-            execute = {
-                sendIntent(
-                    packageManager.getLaunchIntentForPackage(
-                        packageName
-                    )!!
-                )
-            }
+            icon = coilActionIcon(AppIcon(packageName))
         )
+    }
+
+    override suspend fun createExecutor(key: String): ActionExecutor {
+        val packageName = key.removePrefix(ACTION_KEY_PREFIX)
+        return {
+            sendIntent(
+                packageManager.getLaunchIntentForPackage(
+                    packageName
+                )!!
+            )
+        }
     }
 }
 

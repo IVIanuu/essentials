@@ -23,6 +23,7 @@ import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
@@ -33,8 +34,6 @@ private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build
 @ActionBinding("home")
 fun homeAction(
     choosePermissions: choosePermissions,
-    openHomeScreen: openHomeScreen,
-    performGlobalAction: performGlobalAction,
     stringResource: stringResource,
 ): Action = Action(
     key = "home",
@@ -43,30 +42,32 @@ fun homeAction(
         if (needsHomeIntentWorkaround) emptyList()
         else listOf(accessibility)
     },
-    icon = singleActionIcon(R.drawable.es_ic_action_home),
-    execute = {
-        if (needsHomeIntentWorkaround) openHomeScreen()
-        else performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
-    }
+    icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
+@ActionExecutorBinding("home")
 @FunBinding
-fun openHomeScreen(
+suspend fun openHomeScreen(
     applicationContext: ApplicationContext,
+    performGlobalAction: performGlobalAction,
     sendIntent: sendIntent,
 ) {
-    try {
-        val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-        applicationContext.sendBroadcast(intent)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-    }
-
-    sendIntent(
-        Intent(Intent.ACTION_MAIN).apply {
-            addCategory(
-                Intent.CATEGORY_HOME
-            )
+    if (!needsHomeIntentWorkaround) {
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
+    } else {
+        try {
+            val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+            applicationContext.sendBroadcast(intent)
+        } catch (e: Throwable) {
+            e.printStackTrace()
         }
-    )
+
+        sendIntent(
+            Intent(Intent.ACTION_MAIN).apply {
+                addCategory(
+                    Intent.CATEGORY_HOME
+                )
+            }
+        )
+    }
 }

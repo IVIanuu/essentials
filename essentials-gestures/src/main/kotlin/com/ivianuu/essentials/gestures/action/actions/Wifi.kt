@@ -20,6 +20,7 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
@@ -31,17 +32,16 @@ import kotlinx.coroutines.flow.onStart
 @ActionBinding("wifi")
 fun wifiAction(
     stringResource: stringResource,
-    toggleWifi: toggleWifi,
     wifiIcon: WifiIcon,
 ): Action = Action(
     key = "wifi",
     title = stringResource(R.string.es_action_wifi),
-    icon = wifiIcon,
-    execute = { toggleWifi() }
+    icon = wifiIcon
 )
 
+@ActionExecutorBinding("wifi")
 @FunBinding
-fun toggleWifi(wifiManager: WifiManager) {
+suspend fun toggleWifi(wifiManager: WifiManager) {
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 

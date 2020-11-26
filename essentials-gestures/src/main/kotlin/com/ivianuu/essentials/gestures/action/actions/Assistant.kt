@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("assistant")
 fun assistantAction(
@@ -31,10 +34,14 @@ fun assistantAction(
     key = "assistant",
     title = stringResource(R.string.es_action_assistant),
     unlockScreen = true,
-    icon = singleActionIcon(R.drawable.es_ic_google),
-    execute = {
-        val launchAssist = searchManager.javaClass
-            .getDeclaredMethod("launchAssist", Bundle::class.java)
-        launchAssist.invoke(searchManager, Bundle())
-    }
+    icon = singleActionIcon(R.drawable.es_ic_google)
 )
+
+@SuppressLint("DiscouragedPrivateApi")
+@ActionExecutorBinding("assistant")
+@FunBinding
+suspend fun launchAssistant(searchManager: SearchManager) {
+    val launchAssist = searchManager.javaClass
+        .getDeclaredMethod("launchAssist", Bundle::class.java)
+    launchAssist.invoke(searchManager, Bundle())
+}

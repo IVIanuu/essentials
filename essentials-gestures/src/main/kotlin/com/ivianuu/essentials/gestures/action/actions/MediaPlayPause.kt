@@ -22,11 +22,18 @@ import androidx.compose.material.icons.filled.PlayArrow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_play_pause")
 fun mediaPlayPauseAction(mediaAction: mediaAction): Action = mediaAction(
     "media_play_pause",
-    KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
     R.string.es_action_media_play_pause,
     singleActionIcon(Icons.Default.PlayArrow)
 )
+
+@ActionExecutorBinding("media_play_pause")
+@FunBinding
+suspend fun sendPlayPauseCommand(doMediaAction: doMediaAction) {
+    doMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+}

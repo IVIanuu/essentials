@@ -35,7 +35,6 @@ data class Action(
     val unlockScreen: Boolean = false,
     val enabled: Boolean = true,
     val icon: ActionIcon,
-    val execute: suspend () -> Unit
 )
 
 typealias ActionIcon = Flow<@Composable () -> Unit>
@@ -46,15 +45,28 @@ annotation class ActionBinding(val key: String) {
         @MapEntries
         fun <T : Action> actionIntoSet(
             @Arg("key") key: String,
-            provider: () -> @ForEffect T
+            provider: () -> @ForEffect T,
         ): Map<String, () -> Action> = mapOf(key to provider)
+    }
+}
+
+typealias ActionExecutor = suspend () -> Unit
+
+@Effect
+annotation class ActionExecutorBinding(val key: String) {
+    companion object {
+        @MapEntries
+        fun <T : ActionExecutor> actionExecutorIntoMap(
+            @Arg("key") key: String,
+            instance: @ForEffect T,
+        ): Map<String, ActionExecutor> = mapOf(key to instance)
     }
 }
 
 @FunBinding
 fun choosePermissions(
     permissions: ActionPermissions,
-    @FunApi chooser: ActionPermissions.() -> List<Permission>
+    @FunApi chooser: ActionPermissions.() -> List<Permission>,
 ): List<Permission> = permissions.chooser()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
@@ -62,6 +74,7 @@ internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 interface ActionFactory {
     fun handles(key: String): Boolean
     suspend fun createAction(key: String): Action
+    suspend fun createExecutor(key: String): ActionExecutor
 }
 
 @Effect

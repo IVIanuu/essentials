@@ -17,20 +17,22 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
 import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("lock_screen")
 fun lockScreenAction(
     choosePermissions: choosePermissions,
-    performGlobalAction: performGlobalAction,
-    runRootCommand: runRootCommand,
     stringResource: stringResource,
-    systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
+    systemBuildInfo: SystemBuildInfo,
 ): Action = Action(
     key = "lock_screen",
     title = stringResource(R.string.es_action_lock_screen),
@@ -40,12 +42,20 @@ fun lockScreenAction(
             if (systemBuildInfo.sdk >= 28) accessibility
             else root
         )
-    },
-    execute = {
-        if (systemBuildInfo.sdk >= 28) {
-            performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
-        } else {
-            runRootCommand("input keyevent 26")
-        }
     }
 )
+
+@SuppressLint("InlinedApi")
+@ActionExecutorBinding("lock_screen")
+@FunBinding
+suspend fun doLockScreen(
+    performGlobalAction: performGlobalAction,
+    runRootCommand: runRootCommand,
+    systemBuildInfo: SystemBuildInfo,
+) {
+    if (systemBuildInfo.sdk >= 28) {
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+    } else {
+        runRootCommand("input keyevent 26")
+    }
+}

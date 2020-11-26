@@ -20,15 +20,19 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("input_method")
-fun inputMethodAction(
-    inputMethodManager: InputMethodManager,
-    stringResource: stringResource,
-): Action = Action(
+fun inputMethodAction(stringResource: stringResource): Action = Action(
     key = "input_method",
     title = stringResource(R.string.es_action_input_method),
-    icon = singleActionIcon(R.drawable.es_ic_keyboard_hide),
-    execute = { inputMethodManager.showInputMethodPicker() }
+    icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
 )
+
+@ActionExecutorBinding("input_method")
+@FunBinding
+suspend fun showInputMethodPicker(inputMethodManager: InputMethodManager) {
+    inputMethodManager.showInputMethodPicker()
+}

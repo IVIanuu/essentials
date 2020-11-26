@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
@@ -34,16 +35,15 @@ import kotlinx.coroutines.flow.first
 @ActionBinding("kill_current_app_action")
 fun killCurrentAction(
     choosePermissions: choosePermissions,
-    killCurrentApp: killCurrentApp,
     stringResource: stringResource,
 ): Action = Action(
     key = "kill_current_app_action",
     title = stringResource(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
-    permissions = choosePermissions { accessibility + root },
-    execute = { killCurrentApp() }
+    permissions = choosePermissions { accessibility + root }
 )
 
+@ActionExecutorBinding("kill_current_app_action")
 @FunBinding
 suspend fun killCurrentApp(
     buildInfo: BuildInfo,
@@ -62,9 +62,7 @@ suspend fun killCurrentApp(
 }
 
 @FunBinding
-fun getHomePackage(
-    packageManager: PackageManager,
-): String {
+fun getHomePackage(packageManager: PackageManager): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }

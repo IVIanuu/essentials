@@ -21,34 +21,40 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @ActionBinding("bluetooth")
 fun bluetoothAction(
     bluetoothIcon: BluetoothIcon,
-    stringResource: stringResource
+    stringResource: stringResource,
 ): Action = Action(
     key = "bluetooth",
     title = stringResource(R.string.es_action_bluetooth),
     icon = bluetoothIcon,
-    enabled = BluetoothAdapter.getDefaultAdapter() != null,
-    execute = {
-        BluetoothAdapter.getDefaultAdapter()?.let {
-            if (it.isEnabled) {
-                it.disable()
-            } else {
-                it.enable()
-            }
-        }
-    }
+    enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
+@ActionExecutorBinding("bluetooth")
+@FunBinding
+suspend fun toggleBluetooth() {
+    BluetoothAdapter.getDefaultAdapter()?.let {
+        if (it.isEnabled) {
+            it.disable()
+        } else {
+            it.enable()
+        }
+    }
+}
+
 internal typealias BluetoothIcon = ActionIcon
+
 @Binding
 fun bluetoothIcon(broadcasts: broadcasts): BluetoothIcon {
     return broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)

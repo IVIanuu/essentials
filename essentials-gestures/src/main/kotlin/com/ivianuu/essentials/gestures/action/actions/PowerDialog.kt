@@ -17,14 +17,22 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("power_dialog")
 fun powerDialogAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
     "power_dialog",
-    AccessibilityService.GLOBAL_ACTION_POWER_DIALOG,
     R.string.es_action_power_dialog,
     singleActionIcon(R.drawable.es_ic_power_settings_new)
 )
+
+@ActionExecutorBinding("power_dialog")
+@FunBinding
+suspend fun showPowerDialog(performGlobalAction: performGlobalAction) {
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+}
