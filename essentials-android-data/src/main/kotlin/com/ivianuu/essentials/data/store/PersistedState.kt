@@ -42,7 +42,7 @@ inline fun <reified S> persistedState(
     globalScope,
     name,
     initial,
-    typeOf<S>(),
+    { typeOf<S>() },
     block
 )
 
@@ -52,10 +52,10 @@ internal fun <S> persistedStateImpl(
     globalScope: GlobalScope,
     name: String,
     initial: S,
-    type: KType,
-    block: suspend StateScope<S>.() -> Unit
+    produceType: () -> KType,
+    block: suspend StateScope<S>.() -> Unit,
 ): StateFlow<S> {
-    val dataStore = diskDataStoreFactory.create(name, type) { initial }
+    val dataStore = diskDataStoreFactory.create(name, produceType) { initial }
     return globalScope.state(
         initial,
         dataStore.data,

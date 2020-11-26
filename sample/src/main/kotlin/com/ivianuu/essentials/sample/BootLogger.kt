@@ -22,6 +22,6 @@ import com.ivianuu.injekt.FunBinding
 
 @BootListenerBinding
 @FunBinding
-fun logBoot(logger: Logger) {
+suspend fun logBoot(logger: Logger) {
     logger.d("booted!")
 }
