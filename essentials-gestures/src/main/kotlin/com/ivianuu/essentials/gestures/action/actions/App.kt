@@ -48,7 +48,7 @@ class AppActionFactory(
         val packageName = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             key = key,
-            title = getAppInfo(packageName).packageName,
+            title = getAppInfo(packageName).appName,
             unlockScreen = true,
             enabled = true,
             icon = coilActionIcon(AppIcon(packageName))
