@@ -49,7 +49,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
         connectedScope.launch {
             component.logger.d("listener connected")
             component.notificationServiceRef.value = this@DefaultNotificationListenerService
-            notifyUpdate()
+            updateNotifications()
             component.runNotificationWorkers()
         }
     }
@@ -57,22 +57,22 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         component.logger.d("notification posted $sbn")
-        notifyUpdate()
+        updateNotifications()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
         component.logger.d("notification removed $sbn")
-        notifyUpdate()
+        updateNotifications()
     }
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
         component.logger.d("ranking update $rankingMap")
-        notifyUpdate()
+        updateNotifications()
     }
 
-    private fun notifyUpdate() {
+    private fun updateNotifications() {
         _notifications.value = activeNotifications.toList()
     }
 }
