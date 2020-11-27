@@ -20,19 +20,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 fun <T, S> DataStore<T>.lens(
-    lensGet: (T) -> S,
-    lensSet: (T, S) -> T,
+    get: (T) -> S,
+    set: (T, S) -> T,
 ): DataStore<S> {
     val original = this
     return object : DataStore<S> {
         override val defaultData: S
-            get() = lensGet(original.defaultData)
+            get() = get(original.defaultData)
 
         override val data: Flow<S>
             get() = original.data
-                .map { lensGet(it) }
+                .map { get(it) }
 
         override suspend fun updateData(transform: suspend S.() -> S): S =
-            lensGet(original.updateData { lensSet(this, transform(lensGet(this))) })
+            get(original.updateData { set(this, transform(get(this))) })
     }
 }

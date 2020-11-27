@@ -31,8 +31,8 @@ fun DiskDataStoreFactory.color(
 ): DataStore<Color> {
     return create(name = name, produceDefaultData = { produceDefaultData().toArgb() })
         .lens(
-            lensGet = { argb -> Color(argb) },
-            lensSet = { _, color -> color.toArgb() }
+            get = { argb -> Color(argb) },
+            set = { _, color -> color.toArgb() }
         )
 }
 
@@ -42,8 +42,8 @@ fun DiskDataStoreFactory.duration(
 ): DataStore<Duration> {
     return create(name = name, produceDefaultData = { produceDefaultData().toDouble() })
         .lens(
-            lensGet = { raw -> raw.toDuration() },
-            lensSet = { _, duration -> duration.toDouble() }
+            get = { raw -> raw.toDuration() },
+            set = { _, duration -> duration.toDouble() }
         )
 }
 

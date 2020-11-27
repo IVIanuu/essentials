@@ -30,8 +30,8 @@ internal typealias DebugProductsPref = DataStore<List<SkuDetails>>
 fun debugProductsPref(factory: DiskDataStoreFactory): DebugProductsPref =
     factory.create("billing_products") { emptySet<String>() }
         .lens(
-            lensGet = { strings -> strings.map { SkuDetails(it) } },
-            lensSet = { _, skuDetails -> skuDetails.map { it.originalJson }.toSet() }
+            get = { strings -> strings.map { SkuDetails(it) } },
+            set = { _, skuDetails -> skuDetails.map { it.originalJson }.toSet() }
         )
 
 internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
@@ -40,13 +40,13 @@ internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
 fun debugPurchasesPref(factory: DiskDataStoreFactory): DebugPurchasesPref =
     factory.create("billing_purchases") { emptySet<String>() }
         .lens(
-            lensGet = { strings ->
+            get = { strings ->
                 strings.map { purchase ->
                     val params = purchase.split("=:=")
                     Purchase(params[0], params[1])
                 }
             },
-            lensSet = { _, strings ->
+            set = { _, strings ->
                 strings.map { purchase ->
                     purchase.originalJson + "=:=" + purchase.signature
                 }.toSet()
