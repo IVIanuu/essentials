@@ -17,6 +17,7 @@
 plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
+    id("androidx.compose")
     kotlin("android")
     kotlin("kapt")
 }
@@ -29,8 +30,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.AndroidX.Compose.core)
-    api(Deps.Coroutines.core)
     api(project(":essentials-datastore"))
     api(project(":essentials-ui"))
 }

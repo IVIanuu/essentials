@@ -20,8 +20,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.data.store.invokePersistedState
-import com.ivianuu.essentials.data.store.persistedState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -30,8 +28,6 @@ import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.FunBinding
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
