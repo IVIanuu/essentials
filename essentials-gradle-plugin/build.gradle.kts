@@ -33,6 +33,11 @@ gradlePlugin {
             implementationClass =
                 "com.ivianuu.essentials.gradle.EssentialsGradlePlugin"
         }
+        create("composePlugin") {
+            id = "androidx.compose"
+            implementationClass =
+                "com.ivianuu.essentials.gradle.ComposeGradlePlugin"
+        }
     }
 }
 

@@ -56,7 +56,7 @@ data class AppInitializer(
 typealias AppInitializers = Set<AppInitializer>
 
 @SetElements
-fun defaultAppInitializers(): AppInitializers = emptySet()
+fun defaultAppInitializers(): AppInitializers = setOf()
 
 @FunBinding
 fun runInitializers(

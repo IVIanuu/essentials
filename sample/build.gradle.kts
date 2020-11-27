@@ -17,6 +17,7 @@
 plugins {
     id("com.android.application")
     id("com.ivianuu.essentials")
+    id("androidx.compose")
     kotlin("android")
     kotlin("kapt")
 }

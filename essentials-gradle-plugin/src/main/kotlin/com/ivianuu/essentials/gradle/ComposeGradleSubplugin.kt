@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.LibraryPlugin
 import com.google.auto.service.AutoService
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.AbstractCompile
@@ -31,11 +29,7 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 open class ComposeGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
 
     override fun isApplicable(project: Project, task: AbstractCompile): Boolean =
-        project.plugins.hasPlugin(EssentialsGradlePlugin::class.java) &&
-                (
-                        project.plugins.hasPlugin(AppPlugin::class.java) ||
-                                project.plugins.hasPlugin(LibraryPlugin::class.java)
-                        )
+        project.plugins.hasPlugin(ComposeGradlePlugin::class.java)
 
     override fun apply(
         project: Project,
