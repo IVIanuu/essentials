@@ -20,16 +20,17 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.LaunchedTask
+import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
+import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteAmbient
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
+import kotlinx.coroutines.DisposableHandle
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -42,17 +43,20 @@ suspend fun startUi(
 ): Activity {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     return suspendCoroutine { continuation ->
-        var completed = false
         navigator.push(
-            Route(opaque = true) {
-                val route = RouteAmbient.current
+            Route(opaque = true, transition = NoOpStackTransition) {
                 val activity = compositionActivity
-                LaunchedEffect(true) {
-                    if (!completed) {
-                        completed = true
-                        navigator.pop(route)
+                // we use a little hack to ensure that we only run when the route is popped and the animation is finished
+                val retainedObjects = RetainedObjectsAmbient.current
+                retainedObjects[continuation] = object : DisposableHandle {
+                    override fun dispose() {
                         continuation.resume(activity)
                     }
+                }
+
+                val route = RouteAmbient.current
+                LaunchedEffect(true) {
+                    navigator.pop(route)
                 }
             }
         )
