@@ -37,7 +37,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
         component.serviceHolder.value = this
         connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                component.logger.d("on unbind")
+                component.logger.d("disconnected")
                 component.serviceHolder.value = null
             }
         }

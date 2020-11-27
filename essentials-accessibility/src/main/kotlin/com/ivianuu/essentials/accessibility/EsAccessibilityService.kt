@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.android.ServiceComponent
@@ -47,9 +48,13 @@ abstract class EsAccessibilityService : AccessibilityService() {
         _connectedScope = CoroutineScope(component.defaultDispatcher)
     }
 
-    override fun onInterrupt() {
+    override fun onUnbind(intent: Intent?): Boolean {
         _connectedScope?.cancel()
         _connectedScope = null
+        return super.onUnbind(intent)
+    }
+
+    override fun onInterrupt() {
     }
 
     override fun onDestroy() {
