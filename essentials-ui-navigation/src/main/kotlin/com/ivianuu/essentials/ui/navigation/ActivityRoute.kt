@@ -22,9 +22,13 @@ import android.provider.Settings
 import androidx.compose.runtime.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
+import com.ivianuu.essentials.ui.animatedstack.NoOpStackTransition
 import com.ivianuu.essentials.ui.common.compositionActivity
 
-fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(opaque = true) {
+fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
+    opaque = true,
+    transition = NoOpStackTransition
+) {
     val activity = compositionActivity
     val navigator = NavigatorAmbient.current
     onActive {
