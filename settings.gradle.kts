@@ -33,7 +33,6 @@ include(
     ":essentials-boot",
     ":essentials-broadcast",
     ":essentials-coil",
-    ":essentials-compiler",
     ":essentials-core",
     ":essentials-coroutines",
     ":essentials-datastore",
