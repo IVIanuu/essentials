@@ -19,36 +19,20 @@ package com.ivianuu.essentials.datastore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun <T, S> DataStore<T>.select(
-    select: T.() -> S,
-    reduce: T.(S) -> T
+fun <T, S> DataStore<T>.lens(
+    lensGet: (T) -> S,
+    lensSet: (T, S) -> T,
 ): DataStore<S> {
     val original = this
     return object : DataStore<S> {
         override val defaultData: S
-            get() = select(original.defaultData)
+            get() = lensGet(original.defaultData)
+
         override val data: Flow<S>
             get() = original.data
-                .map { select(it) }
+                .map { lensGet(it) }
 
         override suspend fun updateData(transform: suspend S.() -> S): S =
-            select(original.updateData { reduce(transform(select())) })
-    }
-}
-
-fun <T, S> DataStore<T>.map(
-    fromRaw: T.() -> S,
-    toRaw: S.() -> T
-): DataStore<S> {
-    val original = this
-    return object : DataStore<S> {
-        override val defaultData: S
-            get() = fromRaw(original.defaultData)
-        override val data: Flow<S>
-            get() = original.data
-                .map { fromRaw(it) }
-
-        override suspend fun updateData(transform: suspend S.() -> S): S =
-            fromRaw(original.updateData { toRaw(transform(fromRaw())) })
+            lensGet(original.updateData { lensSet(this, transform(lensGet(this))) })
     }
 }

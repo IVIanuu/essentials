@@ -20,7 +20,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.datastore.map
+import com.ivianuu.essentials.datastore.lens
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 
@@ -29,11 +29,9 @@ internal typealias DebugProductsPref = DataStore<List<SkuDetails>>
 @Binding(ApplicationComponent::class)
 fun debugProductsPref(factory: DiskDataStoreFactory): DebugProductsPref =
     factory.create("billing_products") { emptySet<String>() }
-        .map(
-            fromRaw = {
-                map { SkuDetails(it) }
-            },
-            toRaw = { map { it.originalJson }.toSet() }
+        .lens(
+            lensGet = { strings -> strings.map { SkuDetails(it) } },
+            lensSet = { _, skuDetails -> skuDetails.map { it.originalJson }.toSet() }
         )
 
 internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
@@ -41,15 +39,15 @@ internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
 @Binding(ApplicationComponent::class)
 fun debugPurchasesPref(factory: DiskDataStoreFactory): DebugPurchasesPref =
     factory.create("billing_purchases") { emptySet<String>() }
-        .map(
-            fromRaw = {
-                map { purchase ->
+        .lens(
+            lensGet = { strings ->
+                strings.map { purchase ->
                     val params = purchase.split("=:=")
                     Purchase(params[0], params[1])
                 }
             },
-            toRaw = {
-                map { purchase ->
+            lensSet = { _, strings ->
+                strings.map { purchase ->
                     purchase.originalJson + "=:=" + purchase.signature
                 }.toSet()
             }

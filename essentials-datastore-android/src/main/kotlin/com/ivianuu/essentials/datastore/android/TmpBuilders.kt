@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.datastore.map
+import com.ivianuu.essentials.datastore.lens
 import kotlin.time.Duration
 
 // todo remove once moshi supports inline classes
@@ -30,9 +30,9 @@ fun DiskDataStoreFactory.color(
     produceDefaultData: () -> Color
 ): DataStore<Color> {
     return create(name = name, produceDefaultData = { produceDefaultData().toArgb() })
-        .map(
-            fromRaw = { Color(this) },
-            toRaw = { toArgb() }
+        .lens(
+            lensGet = { argb -> Color(argb) },
+            lensSet = { _, color -> color.toArgb() }
         )
 }
 
@@ -41,9 +41,9 @@ fun DiskDataStoreFactory.duration(
     produceDefaultData: () -> Duration
 ): DataStore<Duration> {
     return create(name = name, produceDefaultData = { produceDefaultData().toDouble() })
-        .map(
-            fromRaw = { toDuration() },
-            toRaw = { toDouble() }
+        .lens(
+            lensGet = { raw -> raw.toDuration() },
+            lensSet = { _, duration -> duration.toDouble() }
         )
 }
 
