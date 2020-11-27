@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.data
 
+import JsonSerializerFactory
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.plus
+import kotlinx.serialization.json.Json
 import java.io.File
 
 typealias DataDir = File
@@ -41,14 +41,14 @@ typealias PrefsDir = File
 fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
 @Binding(ApplicationComponent::class)
-fun moshiSerializerFactory(moshi: Moshi) = MoshiSerializerFactory(moshi)
+fun jsonSerializerFactory(json: Json) = JsonSerializerFactory()
 
 @Binding(ApplicationComponent::class)
 fun diskDataStoreFactory(
     globalScope: GlobalScope,
     ioDispatcher: IODispatcher,
     prefsDir: () -> PrefsDir,
-    lazySerializerFactory: () -> MoshiSerializerFactory,
+    lazySerializerFactory: () -> JsonSerializerFactory,
 ) = DiskDataStoreFactory(
     scope = globalScope + ioDispatcher,
     produceDataStoreDirectory = prefsDir,

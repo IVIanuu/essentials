@@ -26,6 +26,7 @@ open class EssentialsGradlePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project.plugins) {
             apply(InjektGradlePlugin::class.java)
+            apply("kotlinx-serialization")
             apply(SpotlessPlugin::class.java)
             apply(VersionsPlugin::class.java)
         }

@@ -37,6 +37,7 @@ buildscript {
         classpath(Deps.dexcountGradlePlugin)
         classpath(Deps.essentialsGradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
+        classpath(Deps.KotlinXSerialization.gradlePlugin)
         classpath(Deps.mavenGradlePlugin)
     }
 }

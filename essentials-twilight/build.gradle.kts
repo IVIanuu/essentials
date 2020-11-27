@@ -18,7 +18,7 @@ plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
     kotlin("android")
-    kotlin("kapt")
+    id("kotlinx-serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -33,5 +33,4 @@ dependencies {
     api(project(":essentials-android-data"))
     api(project(":essentials-broadcast"))
     api(project(":essentials-screen-state"))
-    kapt(project(":essentials-compiler"))
 }

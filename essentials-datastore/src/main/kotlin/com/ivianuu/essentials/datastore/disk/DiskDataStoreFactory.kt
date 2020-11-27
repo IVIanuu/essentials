@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.datastore.disk
 
+import JsonSerializerFactory
 import com.ivianuu.essentials.datastore.DataStore
 import kotlinx.coroutines.CoroutineScope
 import java.io.File
@@ -25,7 +26,7 @@ import kotlin.reflect.typeOf
 class DiskDataStoreFactory(
     private val scope: CoroutineScope,
     produceDataStoreDirectory: () -> File,
-    lazySerializerFactory: () -> MoshiSerializerFactory,
+    lazySerializerFactory: () -> JsonSerializerFactory,
 ) {
 
     @PublishedApi

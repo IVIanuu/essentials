@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore.disk
 
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
+import com.ivianuu.essentials.datastore.disk.Serializer
+import com.ivianuu.essentials.datastore.disk.SerializerException
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
+class JsonSerializer<T>(
+    private val json: Json,
+    private val serializer: KSerializer<T>,
+) : Serializer<T> {
     override fun serialize(data: T): String {
         return try {
-            adapter.toJson(data)
+            json.encodeToString(serializer, data)
         } catch (e: Throwable) {
             throw SerializerException("Failed to serialize $data", e)
         }
@@ -32,14 +37,17 @@ class MoshiSerializer<T>(private val adapter: JsonAdapter<T>) : Serializer<T> {
 
     override fun deserialize(serializedData: String): T {
         return try {
-            adapter.fromJson(serializedData)!!
+            json.decodeFromString(serializer, serializedData)
         } catch (e: Throwable) {
             throw SerializerException("Failed to deserialize $serializedData", e)
         }
     }
 }
 
-class MoshiSerializerFactory(private val moshi: Moshi) {
-    inline fun <reified T> create(): MoshiSerializer<T> = create(typeOf<T>())
-    fun <T> create(type: KType): MoshiSerializer<T> = MoshiSerializer(moshi.adapter(type.asJavaType()))
+class JsonSerializerFactory(private val json: Json = Json) {
+    inline fun <reified T> create() = create<T>(typeOf<T>())
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> create(type: KType): JsonSerializer<T> =
+        JsonSerializer<T>(json, serializer(type) as KSerializer<T>)
 }

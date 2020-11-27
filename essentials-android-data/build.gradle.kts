@@ -31,6 +31,6 @@ dependencies {
     api(Deps.Injekt.android)
     api(project(":essentials-core"))
     api(project(":essentials-datastore-android"))
-    api(project(":essentials-moshi"))
+    api(project(":essentials-serialization"))
     testImplementation(project(":essentials-android-test"))
 }

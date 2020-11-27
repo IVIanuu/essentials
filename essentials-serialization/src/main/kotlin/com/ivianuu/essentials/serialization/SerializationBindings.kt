@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight.data
+package com.ivianuu.essentials.serialization
 
-import com.ivianuu.essentials.datastore.android.PrefBinding
-import kotlinx.serialization.Serializable
+import com.ivianuu.injekt.Binding
+import kotlinx.serialization.json.Json
 
-@PrefBinding("twilight_prefs")
-@Serializable
-data class TwilightPrefsState(
-    val twilightMode: TwilightMode = TwilightMode.System,
-    val useBlackInDarkMode: Boolean = false,
-)
+@Binding
+inline val json: Json
+    get() = Json

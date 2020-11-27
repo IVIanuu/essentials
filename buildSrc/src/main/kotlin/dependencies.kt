@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev723"
+    const val version = "${Build.versionName}-dev724"
 }
 
 object Deps {
@@ -88,7 +88,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev723"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev724"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
@@ -114,24 +114,16 @@ object Deps {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
     }
 
-    const val kotlinxImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
+    const val kotlinXImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
+
+    object KotlinXSerialization {
+        const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:1.4.20"
+        const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    }
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
     const val mockk = "io.mockk:mockk:1.10.0"
-
-    object Moshi {
-        private const val version = "1.9.2"
-        const val adapters = "com.squareup.moshi:moshi-adapters:$version"
-        const val moshi = "com.squareup.moshi:moshi:$version"
-        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:$version"
-    }
-
-    object MoshiSealed {
-        private const val version = "0.1.0"
-        const val annotations = "dev.zacsweers.moshisealed:moshi-sealed-annotations:$version"
-        const val codegen = "dev.zacsweers.moshisealed:moshi-sealed-codegen:$version"
-    }
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 

@@ -18,7 +18,6 @@ plugins {
     id("com.android.application")
     id("com.ivianuu.essentials")
     kotlin("android")
-    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
@@ -63,7 +62,6 @@ dependencies {
     implementation(project(":essentials-twilight"))
     implementation(project(":essentials-unlock"))
     implementation(project(":essentials-work"))
-    kapt(project(":essentials-compiler"))
 
     debugImplementation(Deps.leakCanary)
 

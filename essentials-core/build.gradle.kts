@@ -30,8 +30,8 @@ dependencies {
     compile(project(":essentials-coroutines"))
     compile(project(":essentials-datastore"))
     compile(project(":essentials-memo"))
-    compile(project(":essentials-moshi"))
     compile(project(":essentials-result"))
+    compile(project(":essentials-serialization"))
     compile(project(":essentials-store"))
     compile(project(":essentials-tuples"))
 

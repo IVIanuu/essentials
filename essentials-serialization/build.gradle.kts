@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -14,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
+    id("kotlinx-serialization")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 //apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    implementation(Deps.Moshi.codegen)
-    implementation(Deps.MoshiSealed.annotations)
-    implementation(Deps.MoshiSealed.codegen)
-
-    implementation(Deps.Kotlin.stdlib)
-    implementation(Deps.processingX)
-    kapt(Deps.processingX)
+    compile(Deps.Injekt.core)
+    compile(Deps.Injekt.merge)
+    compile(Deps.Kotlin.stdlib)
+    compile(Deps.KotlinXSerialization.json)
 }

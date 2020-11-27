@@ -18,6 +18,7 @@ package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.twilight.R
 
+//@Serializable
 enum class TwilightMode(
     val titleRes: Int,
     val descRes: Int
