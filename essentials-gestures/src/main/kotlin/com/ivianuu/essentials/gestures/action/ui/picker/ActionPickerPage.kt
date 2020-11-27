@@ -16,9 +16,13 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
@@ -40,7 +44,7 @@ fun ActionPickerPage(
         ResourceLazyColumnFor(state.items) { item ->
             ActionPickerItem(
                 item = item,
-                onClick = { dispatch(ActionPickerAction.PickAction(item)) }
+                onClick = { dispatch(PickAction(item)) }
             )
         }
     }
@@ -52,7 +56,7 @@ private fun ActionPickerItem(
     item: ActionPickerItem
 ) {
     ListItem(
-        leading = { item.icon() },
+        leading = { item.icon(Modifier.size(40.dp)) },
         title = { Text(item.title) },
         onClick = onClick
     )

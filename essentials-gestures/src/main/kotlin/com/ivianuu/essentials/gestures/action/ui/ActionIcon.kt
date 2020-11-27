@@ -16,11 +16,22 @@
 
 package com.ivianuu.essentials.gestures.action.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.Action
 
 @Composable
-fun ActionIcon(action: Action) {
-    action.icon.collectAsState(null).value?.invoke()
+fun ActionIcon(
+    action: Action,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        action.icon.collectAsState(null).value?.invoke()
+    }
 }

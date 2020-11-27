@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
@@ -52,8 +52,8 @@ sealed class ActionPickerItem {
             get() = action.title
 
         @Composable
-        override fun icon() {
-            ActionIcon(action = action)
+        override fun icon(modifier: Modifier) {
+            ActionIcon(action = action, modifier = modifier)
         }
 
         override suspend fun getResult() = ActionPickerResult.Action(action.key)
@@ -68,8 +68,10 @@ sealed class ActionPickerItem {
             get() = delegate.title
 
         @Composable
-        override fun icon() {
-            delegate.icon()
+        override fun icon(modifier: Modifier) {
+            Box(modifier = modifier, contentAlignment = Alignment.Center) {
+                delegate.icon()
+            }
         }
 
         override suspend fun getResult() = delegate.getResult()
@@ -81,8 +83,8 @@ sealed class ActionPickerItem {
     ) : ActionPickerItem() {
 
         @Composable
-        override fun icon() {
-            Spacer(Modifier.size(24.dp))
+        override fun icon(modifier: Modifier) {
+            Spacer(modifier)
         }
 
         override suspend fun getResult() = getResult.invoke()
@@ -91,7 +93,7 @@ sealed class ActionPickerItem {
     abstract val title: String
 
     @Composable
-    abstract fun icon()
+    abstract fun icon(modifier: Modifier = Modifier)
 
     abstract suspend fun getResult(): ActionPickerResult?
 }
