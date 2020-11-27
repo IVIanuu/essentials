@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
@@ -77,7 +78,7 @@ fun DecorateUi(
             .reversed()
             .fold(content) { acc, decorator ->
                 {
-                    logger.d("Decorate ui ${decorator.key}")
+                    logger.d { "Decorate ui ${decorator.key}" }
                     decorator.content(acc)
                 }
             }

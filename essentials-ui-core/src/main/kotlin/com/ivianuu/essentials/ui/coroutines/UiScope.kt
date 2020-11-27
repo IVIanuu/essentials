@@ -21,6 +21,7 @@ import androidx.compose.runtime.onDispose
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -45,7 +46,7 @@ fun CancelUiScope(
     @FunApi content: @Composable () -> Unit
 ) {
     onDispose {
-        logger.d("Cancelling ui scope")
+        logger.d { "Cancelling ui scope" }
         uiScope.cancel()
     }
     content()

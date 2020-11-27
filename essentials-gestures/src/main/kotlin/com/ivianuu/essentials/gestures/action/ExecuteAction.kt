@@ -23,6 +23,7 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runCatching
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -40,22 +41,22 @@ suspend fun executeAction(
     @FunApi key: String,
 ): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
     runCatching {
-        logger.d("execute $key")
+        logger.d { "execute $key" }
         val action = getAction(key)
 
         // check permissions
         if (!requestPermissions(action.permissions)) {
-            logger.d("couldn't get permissions for $key")
+            logger.d { "couldn't get permissions for $key" }
             return@runCatching false
         }
 
         // unlock screen
         if (action.unlockScreen && !unlockScreen()) {
-            logger.d("couldn't unlock screen for $key")
+            logger.d { "couldn't unlock screen for $key" }
             return@runCatching false
         }
 
-        logger.d("fire $key")
+        logger.d { "fire $key" }
 
         // fire
         getActionExecutor(key)()

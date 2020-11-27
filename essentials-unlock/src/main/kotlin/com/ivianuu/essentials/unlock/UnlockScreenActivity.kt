@@ -23,12 +23,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -62,10 +61,10 @@ class UnlockScreenActivity : AppCompatActivity() {
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-        component.logger.d("unlock screen for $requestId")
+        component.logger.d { "unlock screen for $requestId" }
 
         fun finishWithResult(success: Boolean) {
-            component.logger.d("finish with result $success")
+            component.logger.d { "finish with result $success" }
             hasResult = true
             onUnlockScreenResult(requestId, success)
             finish()

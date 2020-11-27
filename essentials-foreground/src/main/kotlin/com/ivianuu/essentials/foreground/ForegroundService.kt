@@ -21,6 +21,7 @@ import android.app.NotificationManager
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -42,7 +43,7 @@ class ForegroundService : EsService() {
 
     override fun onCreate() {
         super.onCreate()
-        component.logger.d("started foreground service")
+        component.logger.d { "started foreground service" }
         component.foregroundManager.jobs
             .flatMapLatest { jobs ->
                 if (jobs.isNotEmpty()) {
@@ -58,14 +59,14 @@ class ForegroundService : EsService() {
 
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                component.logger.d("stopped foreground service")
+                component.logger.d { "stopped foreground service" }
                 update(emptyList())
             }
         }
     }
 
     private fun update(newJobs: List<Pair<ForegroundJob, Notification>>) {
-        component.logger.d("update jobs: $newJobs last: $lastJobs")
+        component.logger.d { "update jobs: $newJobs last: $lastJobs" }
 
         lastJobs
             .filter { prevJob ->

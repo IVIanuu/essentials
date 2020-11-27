@@ -19,6 +19,7 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -42,12 +43,12 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
         super.onListenerConnected()
         connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                component.logger.d("listener disconnected")
+                component.logger.d { "listener disconnected" }
                 component.notificationServiceRef.value = null
             }
         }
         connectedScope.launch {
-            component.logger.d("listener connected")
+            component.logger.d { "listener connected" }
             component.notificationServiceRef.value = this@DefaultNotificationListenerService
             updateNotifications()
             component.runNotificationWorkers()
@@ -56,19 +57,19 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        component.logger.d("notification posted $sbn")
+        component.logger.d { "notification posted $sbn" }
         updateNotifications()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        component.logger.d("notification removed $sbn")
+        component.logger.d { "notification removed $sbn" }
         updateNotifications()
     }
 
     override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
         super.onNotificationRankingUpdate(rankingMap)
-        component.logger.d("ranking update $rankingMap")
+        component.logger.d { "ranking update $rankingMap" }
         updateNotifications()
     }
 

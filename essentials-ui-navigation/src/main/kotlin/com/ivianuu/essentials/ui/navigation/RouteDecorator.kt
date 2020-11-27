@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
@@ -77,7 +78,7 @@ fun DecorateRoute(
         .reversed()
         .fold(content) { acc, decorator ->
             {
-                logger.d("Decorate route $route ${decorator.key}")
+                logger.d { "Decorate route $route ${decorator.key}" }
                 decorator.content(route, acc)
             }
         }()

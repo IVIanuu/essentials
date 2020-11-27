@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
@@ -70,7 +71,7 @@ fun runInitializers(
             dependents = { it.dependents }
         )
         .forEach {
-            logger.d("Initialize ${it.key}")
+            logger.d { "Initialize ${it.key}" }
             it.block()
         }
 }

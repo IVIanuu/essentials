@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunBinding
@@ -43,7 +44,7 @@ fun runAppWorkers(
     globalScope: GlobalScope,
     workers: AppWorkers
 ) {
-    logger.d("run workers")
+    logger.d { "run workers" }
     workers
         .forEach { worker ->
             globalScope.launch {

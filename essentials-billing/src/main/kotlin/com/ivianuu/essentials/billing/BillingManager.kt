@@ -33,11 +33,11 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.util.AppForegroundState
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -45,7 +45,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.concurrent.atomic.AtomicBoolean
@@ -90,7 +89,9 @@ class BillingManagerImpl(
         acknowledge: Boolean,
         consumeOldPurchaseIfUnspecified: Boolean,
     ): Boolean = withContext(defaultDispatcher) {
-        logger.d("purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified")
+        logger.d {
+            "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
+        }
 
         if (consumeOldPurchaseIfUnspecified) {
             val oldPurchase = getPurchase(sku)
@@ -134,7 +135,9 @@ class BillingManagerImpl(
 
         val result = billingClient.consumePurchase(consumeParams)
 
-        logger.d("consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}")
+        logger.d {
+            "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
+        }
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
@@ -153,7 +156,9 @@ class BillingManagerImpl(
 
         val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-        logger.d("acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}")
+        logger.d {
+            "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
+        }
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
@@ -169,14 +174,14 @@ class BillingManagerImpl(
             .onStart { emit(Unit) }
             .map { getIsPurchased(sku) }
             .distinctUntilChanged()
-            .onEach { logger.d("is purchased flow for $sku -> $it") }
+            .onEach { logger.d { "is purchased flow for $sku -> $it" } }
     }
 
     override suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
         withContext(defaultDispatcher) {
             ensureConnected()
             val result = billingClient.isFeatureSupported(feature.value)
-            logger.d("is feature supported $feature ? ${result.responseCode} ${result.debugMessage}")
+            logger.d { "is feature supported $feature ? ${result.responseCode} ${result.debugMessage}" }
             return@withContext result.responseCode == BillingClient.BillingResponseCode.OK
         }
 
@@ -184,7 +189,7 @@ class BillingManagerImpl(
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
         val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
-        logger.d("get is purchased for $sku result is $isPurchased for $purchase")
+        logger.d { "get is purchased for $sku result is $isPurchased for $purchase" }
         return@withContext isPurchased
     }
 
@@ -193,7 +198,7 @@ class BillingManagerImpl(
         billingClient.queryPurchases(sku.type.value)
             .purchasesList
             ?.firstOrNull { it.sku == sku.skuString }
-            .also { logger.d("got purchase $it for $sku") }
+            .also { logger.d { "got purchase $it for $sku" } }
     }
 
     private suspend fun getSkuDetails(sku: Sku): SkuDetails? = withContext(ioDispatcher) {
@@ -201,29 +206,29 @@ class BillingManagerImpl(
         billingClient.querySkuDetails(sku.toSkuDetailsParams())
             .skuDetailsList
             ?.firstOrNull { it.sku == sku.skuString }
-            .also { logger.d("got sku details $it for $sku") }
+            .also { logger.d { "got sku details $it for $sku" } }
     }
 
     private suspend fun ensureConnected() = withContext(ioDispatcher) {
         if (billingClient.isReady) return@withContext
         if (connecting.getAndSet(true)) return@withContext
         suspendCoroutine<Unit> { continuation ->
-            logger.d("start connection")
+            logger.d { "start connection" }
             billingClient.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(result: BillingResult) {
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                            logger.d("connected")
+                            logger.d { "connected" }
                             continuation.resume(Unit)
                         } else {
-                            logger.d("connecting failed ${result.responseCode} ${result.debugMessage}")
+                            logger.d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
                         }
 
                         connecting.set(false)
                     }
 
                     override fun onBillingServiceDisconnected() {
-                        logger.d("on billing service disconnected")
+                        logger.d { "on billing service disconnected" }
                     }
                 }
             )

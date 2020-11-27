@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.ListenableWorker
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.WorkScope
 import com.ivianuu.essentials.work.WorkerBinding
 import com.ivianuu.injekt.FunApi
@@ -29,8 +30,8 @@ const val TEST_WORKER_ID = "test"
 @WorkerBinding(TEST_WORKER_ID)
 @FunBinding
 suspend fun @receiver:FunApi WorkScope.TestWorker(logger: Logger): ListenableWorker.Result {
-    logger.d("start work")
+    logger.d { "start work" }
     delay(5000)
-    logger.d("finish work")
+    logger.d { "finish work" }
     return ListenableWorker.Result.success()
 }

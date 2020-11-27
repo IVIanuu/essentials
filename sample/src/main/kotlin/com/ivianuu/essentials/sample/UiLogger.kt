@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
@@ -28,9 +29,9 @@ import com.ivianuu.injekt.FunBinding
 @Composable
 fun UiLogger(logger: Logger, @FunApi content: @Composable () -> Unit) {
     onActive {
-        logger.d("hello from ui")
+        logger.d { "hello from ui" }
         onDispose {
-            logger.d("bye from ui")
+            logger.d { "bye from ui" }
         }
     }
     content()

@@ -20,6 +20,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 
@@ -32,7 +33,7 @@ suspend fun restartProcess(
 ) {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
-    logger.d("restart process $intent")
+    logger.d { "restart process $intent" }
     ProcessRestartActivity.launch(applicationContext, intent)
     Runtime.getRuntime().exit(0)
 }

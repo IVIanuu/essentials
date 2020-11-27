@@ -19,6 +19,7 @@ package com.ivianuu.essentials.accessibility
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -33,11 +34,11 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        component.logger.d("connected")
+        component.logger.d { "connected" }
         component.serviceHolder.value = this
         connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                component.logger.d("disconnected")
+                component.logger.d { "disconnected" }
                 component.serviceHolder.value = null
             }
         }
@@ -47,7 +48,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        component.logger.d("on accessibility event $event")
+        component.logger.d { "on accessibility event $event" }
         component.accessibilityEvents.emit(
             AccessibilityEvent(
                 type = event.eventType,

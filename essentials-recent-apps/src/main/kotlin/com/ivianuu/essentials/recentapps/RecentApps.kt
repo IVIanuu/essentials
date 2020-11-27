@@ -22,6 +22,7 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
@@ -78,7 +79,7 @@ fun recentApps(
             newRecentApps
         }
         .distinctUntilChanged()
-        .onEach { logger.d("recent apps changed $it") }
+        .onEach { logger.d { "recent apps changed $it" } }
         .shareIn(globalScope, SharingStarted.Eagerly, 1)
 }
 

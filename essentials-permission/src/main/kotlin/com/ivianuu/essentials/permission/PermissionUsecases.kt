@@ -21,6 +21,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -55,7 +56,7 @@ suspend fun requestPermissions(
     startUi: startUi,
     @FunApi permissions: List<Permission>
 ): Boolean = withContext(defaultDispatcher) {
-    logger.d("request permissions $permissions")
+    logger.d { "request permissions $permissions" }
     if (hasPermissions(permissions).first()) return@withContext true
 
     val request = PermissionRequest(permissions = permissions.toList())

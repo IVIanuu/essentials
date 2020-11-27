@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.stringResource
 import java.io.ByteArrayOutputStream
 
@@ -50,9 +51,11 @@ class ShortcutActionFactory(
 ) : ActionFactory {
     override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
-        logger.d("create action from $key")
+        logger.d { "create action from $key" }
         val tmp = key.split(DELIMITER)
         val label = tmp[1]
+
+        @Suppress("DEPRECATION")
         val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)
         val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()

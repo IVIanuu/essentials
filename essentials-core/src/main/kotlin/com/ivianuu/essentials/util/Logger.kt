@@ -16,68 +16,108 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.util.Logger.Kind.DEBUG
+import com.ivianuu.essentials.util.Logger.Kind.ERROR
+import com.ivianuu.essentials.util.Logger.Kind.INFO
+import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
+import com.ivianuu.essentials.util.Logger.Kind.WARN
+import com.ivianuu.essentials.util.Logger.Kind.WTF
 import com.ivianuu.injekt.Binding
 import java.util.regex.Pattern
 
 interface Logger {
-    fun v(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+    val isEnabled: Boolean
 
-    fun d(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+    fun log(
+        kind: Kind,
+        message: String? = null,
+        throwable: Throwable? = null,
+        tag: String? = null,
+    )
 
-    fun i(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+    enum class Kind {
+        VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
+    }
+}
 
-    fun w(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+inline fun Logger.v(
+    tag: String? = null,
+    throwable: Throwable? = null,
+    message: () -> String? = { null },
+) {
+    log(VERBOSE, throwable, tag, message)
+}
 
-    fun e(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+inline fun Logger.d(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    log(DEBUG, throwable, tag, message)
+}
 
-    fun wtf(message: String? = null, throwable: Throwable? = null, tag: String? = null)
+inline fun Logger.i(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    log(INFO, throwable, tag, message)
+}
+
+inline fun Logger.w(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    log(WARN, throwable, tag, message)
+}
+
+inline fun Logger.e(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    log(ERROR, throwable, tag, message)
+}
+
+inline fun Logger.wtf(
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    log(WTF, throwable, tag, message)
+}
+
+inline fun Logger.log(
+    kind: Logger.Kind,
+    throwable: Throwable? = null,
+    tag: String? = null,
+    message: () -> String? = { null },
+) {
+    if (isEnabled) log(kind, message(), throwable, tag)
+}
+
+inline fun Logger.warn(
+    tag: String? = null,
+    throwable: Throwable? = null,
+    message: () -> String? = { null },
+) {
+    log(WARN, throwable, tag, message)
 }
 
 @Binding
 object NoopLogger : Logger {
-    override fun v(message: String?, throwable: Throwable?, tag: String?) {
-    }
+    override val isEnabled: Boolean
+        get() = false
 
-    override fun d(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun i(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun w(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun e(message: String?, throwable: Throwable?, tag: String?) {
-    }
-
-    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
+    override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
     }
 }
 
 @Binding
-class DefaultLogger : Logger {
-    override fun v(message: String?, throwable: Throwable?, tag: String?) {
-        println("[VERBOSE] ${tag ?: stackTraceTag} ${render(message, throwable)}")
-    }
-
-    override fun d(message: String?, throwable: Throwable?, tag: String?) {
-        println("[DEBUG] ${tag ?: stackTraceTag} ${render(message, throwable)}")
-    }
-
-    override fun i(message: String?, throwable: Throwable?, tag: String?) {
-        println("[INFO] ${tag ?: stackTraceTag} ${render(message, throwable)}")
-    }
-
-    override fun w(message: String?, throwable: Throwable?, tag: String?) {
-        println("[WARN] ${tag ?: stackTraceTag} ${render(message, throwable)}")
-    }
-
-    override fun e(message: String?, throwable: Throwable?, tag: String?) {
-        println("[ERROR] ${tag ?: stackTraceTag} ${render(message, throwable)}")
-    }
-
-    override fun wtf(message: String?, throwable: Throwable?, tag: String?) {
-        println("[WTF] ${tag ?: stackTraceTag} ${render(message, throwable)}")
+class DefaultLogger(override val isEnabled: LoggingEnabled) : Logger {
+    override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
+        println("[${kind.name}]${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
     private fun render(message: String?, throwable: Throwable?) {
@@ -110,3 +150,5 @@ private fun createStackElementTag(element: StackTraceElement): String {
 }
 
 private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
+
+typealias LoggingEnabled = Boolean

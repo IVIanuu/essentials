@@ -18,10 +18,11 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.boot.BootListenerBinding
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.FunBinding
 
 @BootListenerBinding
 @FunBinding
 suspend fun logBoot(logger: Logger) {
-    logger.d("booted!")
+    logger.d { "booted!" }
 }

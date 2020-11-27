@@ -22,6 +22,7 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
@@ -61,13 +62,13 @@ fun isOnSecureScreen(
 
             if (!isOnSecureScreen) {
                 isOnSecureScreen = packageName == "com.android.settings" &&
-                    className == "android.app.MaterialDialog"
+                        className == "android.app.MaterialDialog"
             }
 
             isOnSecureScreen
         }
         .onStart { emit(false) }
         .distinctUntilChanged()
-        .onEach { logger.d("on secure screen changed: $it") }
+        .onEach { logger.d { "on secure screen changed: $it" } }
         .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }

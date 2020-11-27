@@ -24,6 +24,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -63,7 +64,7 @@ class NavBarManager(
     private val mutex = Mutex()
 
     suspend fun setNavBarConfig(config: NavBarConfig) = withContext(defaultDispatcher) {
-        logger.d("set nav bar config $config")
+        logger.d { "set nav bar config $config" }
 
         mutex.withLock {
             job?.cancel()
@@ -71,13 +72,13 @@ class NavBarManager(
         }
 
         if (!config.hidden) {
-            logger.d("not hidden")
+            logger.d { "not hidden" }
             if (wasNavBarHiddenPref.data.first()) {
-                logger.d("was hidden")
+                logger.d { "was hidden" }
                 setNavBarConfigInternal(false, config)
                 wasNavBarHiddenPref.updateData { false }
             } else {
-                logger.d("was not hidden")
+                logger.d { "was not hidden" }
             }
 
             return@withContext
@@ -118,7 +119,7 @@ class NavBarManager(
                                 job = null
                             }
 
-                            logger.d("show nav bar because of shutdown")
+                            logger.d { "show nav bar because of shutdown" }
                             setNavBarConfigInternal(false, config)
                         }
                         .collect()
@@ -130,7 +131,7 @@ class NavBarManager(
     }
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        logger.d("set nav bar hidden config $config hidden $hidden")
+        logger.d { "set nav bar hidden config $config hidden $hidden" }
         try {
             try {
                 // ensure that we can access non sdk interfaces

@@ -26,6 +26,7 @@ import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -70,10 +71,10 @@ fun displayRotation(
             .flatMapLatest { currentScreenState ->
                 if (currentScreenState.isOn) {
                     merge(rotationChanges(), configChanges())
-                        .onStart { logger.d("sub for rotation") }
-                        .onCompletion { logger.d("dispose rotation") }
+                        .onStart { logger.d { "sub for rotation" } }
+                        .onCompletion { logger.d { "dispose rotation" } }
                 } else {
-                    logger.d("do not observe rotation while screen is off")
+                    logger.d { "do not observe rotation while screen is off" }
                     emptyFlow()
                 }
             }

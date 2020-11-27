@@ -21,6 +21,7 @@ import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.RouteDecoratorBinding
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
@@ -29,9 +30,9 @@ import com.ivianuu.injekt.FunBinding
 @Composable
 fun RouteLogger(logger: Logger, @FunApi route: Route, @FunApi content: @Composable () -> Unit) {
     onActive {
-        logger.d("hello from route $route")
+        logger.d { "hello from route $route" }
         onDispose {
-            logger.d("bye from route $route")
+            logger.d { "bye from route $route" }
         }
     }
     content()

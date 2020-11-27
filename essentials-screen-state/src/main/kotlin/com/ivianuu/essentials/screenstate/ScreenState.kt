@@ -23,6 +23,7 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -48,8 +49,8 @@ fun screenState(
         broadcasts(Intent.ACTION_SCREEN_ON),
         broadcasts(Intent.ACTION_USER_PRESENT)
     )
-        .onStart { logger.d("sub for screen state") }
-        .onCompletion { logger.d("dispose screen state") }
+        .onStart { logger.d { "sub for screen state" } }
+        .onCompletion { logger.d { "dispose screen state" } }
         .map { Unit }
         .onStart { emit(Unit) }
         .map { getCurrentScreenState() }

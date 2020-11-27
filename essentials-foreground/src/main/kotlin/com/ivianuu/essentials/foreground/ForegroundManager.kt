@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -54,7 +55,7 @@ class ForegroundManager(
             .debounce(300.milliseconds)
             .filter { it.isNotEmpty() }
             .onEach {
-                logger.d("start service $it")
+                logger.d { "start service $it" }
                 ContextCompat.startForegroundService(
                     applicationContext,
                     Intent(applicationContext, ForegroundService::class.java)
@@ -66,7 +67,7 @@ class ForegroundManager(
     internal fun startJob(notification: Notification): ForegroundJob {
         val job = ForegroundJobImpl(ids.incrementAndGet(), notification)
         synchronized(_jobs) { _jobs.value += job }
-        logger.d("start job $job")
+        logger.d { "start job $job" }
         return job
     }
 
@@ -89,7 +90,7 @@ class ForegroundManager(
             if (this !in _jobs.value) return
             scope.cancel()
             _jobs.value -= this
-            logger.d("stop job $this")
+            logger.d { "stop job $this" }
         }
 
         override fun equals(other: Any?): Boolean {
