@@ -56,7 +56,7 @@ private fun ActionPickerItem(
     item: ActionPickerItem
 ) {
     ListItem(
-        leading = { item.icon(Modifier.size(40.dp)) },
+        leading = { item.icon(Modifier.size(24.dp)) },
         title = { Text(item.title) },
         onClick = onClick
     )
