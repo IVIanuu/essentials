@@ -25,12 +25,14 @@ import coil.map.Mapper
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlin.reflect.KClass
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun imageLoader(
     applicationContext: ApplicationContext,
     decoders: Decoders,

@@ -24,6 +24,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,7 +37,8 @@ import kotlinx.coroutines.flow.shareIn
 
 typealias IsOnSecureScreen = Flow<Boolean>
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun isOnSecureScreen(
     accessibilityEvents: AccessibilityEvents,
     applyAccessibilityConfig: applyAccessibilityConfig,

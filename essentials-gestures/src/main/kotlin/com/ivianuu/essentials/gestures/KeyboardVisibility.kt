@@ -24,23 +24,22 @@ import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
 
 typealias KeyboardVisible = Flow<Boolean>
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun keyboardVisible(
     accessibilityEvents: AccessibilityEvents,
     applyAccessibilityConfig: applyAccessibilityConfig,

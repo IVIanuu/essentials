@@ -21,6 +21,7 @@ import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -86,5 +87,7 @@ interface DefaultNotificationListenerServiceComponent {
 }
 
 internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

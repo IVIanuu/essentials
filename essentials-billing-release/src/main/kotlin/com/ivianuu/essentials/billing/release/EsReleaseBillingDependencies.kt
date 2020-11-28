@@ -19,10 +19,12 @@ package com.ivianuu.essentials.billing.release
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun releaseBillingClient(
     applicationContext: ApplicationContext,
     updateListener: PurchasesUpdatedListener,

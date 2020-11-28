@@ -29,10 +29,12 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 class ActionPermissions(applicationContext: ApplicationContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,

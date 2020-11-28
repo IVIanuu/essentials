@@ -26,6 +26,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +38,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun screenState(
     broadcasts: broadcasts,
     getCurrentScreenState: getCurrentScreenState,

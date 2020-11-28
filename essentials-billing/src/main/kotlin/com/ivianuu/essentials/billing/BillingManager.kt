@@ -36,6 +36,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.startUi
 import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -67,7 +68,8 @@ interface BillingManager {
     suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@ImplBinding
 class BillingManagerImpl(
     private val appForegroundState: AppForegroundState,
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,

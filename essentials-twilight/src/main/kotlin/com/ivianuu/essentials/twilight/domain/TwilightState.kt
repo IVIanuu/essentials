@@ -26,6 +26,7 @@ import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
@@ -44,7 +45,8 @@ data class TwilightState(
     val useBlack: Boolean
 )
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun twilightState(
     globalScope: GlobalScope,
     batteryTwilightState: () -> BatteryTwilightState,

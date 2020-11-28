@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.JsonClass
 
@@ -160,6 +161,8 @@ data class Prefs(
 )
 
 typealias PrefsStore = DataStore<Prefs>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun prefsStore(factory: DiskDataStoreFactory): PrefsStore =
     factory.create("prefs") { Prefs() }

@@ -22,6 +22,7 @@ import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +37,9 @@ data class AccessibilityConfig(
 )
 
 internal typealias AccessibilityConfigs = MutableStateFlow<List<AccessibilityConfig>>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
 
 @FunBinding

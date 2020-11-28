@@ -28,6 +28,7 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -52,7 +53,8 @@ interface BillingStore {
     suspend fun clearPurchases()
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@ImplBinding
 class BillingStoreImpl(
     private val defaultDispatcher: DefaultDispatcher,
     private val logger: Logger,

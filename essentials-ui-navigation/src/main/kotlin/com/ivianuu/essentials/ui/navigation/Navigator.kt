@@ -29,6 +29,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
@@ -107,7 +108,8 @@ fun Navigator.pop(route: Route, result: Any? = null) {
     }
 }
 
-@ImplBinding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@ImplBinding
 class NavigatorImpl(
     scope: GlobalScope,
     dispatcher: ImmediateMainDispatcher,

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactor
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.Moshi
@@ -40,10 +41,12 @@ typealias PrefsDir = File
 @Binding
 fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun moshiSerializerFactory(moshi: Moshi) = MoshiSerializerFactory(moshi)
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun diskDataStoreFactory(
     globalScope: GlobalScope,
     ioDispatcher: IODispatcher,
@@ -55,7 +58,8 @@ fun diskDataStoreFactory(
     lazySerializerFactory = lazySerializerFactory
 )
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun settingsDataStoreFactory(
     applicationContext: ApplicationContext,
     ioDispatcher: IODispatcher,

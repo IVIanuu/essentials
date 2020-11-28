@@ -29,6 +29,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.awaitClose
@@ -57,7 +58,8 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     LandscapeRight(false)
 }
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun displayRotation(
     configChanges: () -> ConfigChanges,
     getCurrentDisplayRotation: getCurrentDisplayRotation,

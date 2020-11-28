@@ -18,11 +18,14 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 
 internal typealias MutableEffects<T>  = EventFlow<T>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun <T> mutableEffects(): MutableEffects<T> = EventFlow()
 
 typealias Effects<T> = Flow<T>

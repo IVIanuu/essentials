@@ -19,6 +19,7 @@ package com.ivianuu.essentials.moshi
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.Moshi
@@ -33,7 +34,8 @@ annotation class JsonAdapterBinding {
 
 typealias JsonAdapters = Set<Any>
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
     .apply {
         jsonAdapters

@@ -22,11 +22,13 @@ import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.lens
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 internal typealias DebugProductsPref = DataStore<List<SkuDetails>>
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun debugProductsPref(factory: DiskDataStoreFactory): DebugProductsPref =
     factory.create("billing_products") { emptySet<String>() }
         .lens(
@@ -36,7 +38,8 @@ fun debugProductsPref(factory: DiskDataStoreFactory): DebugProductsPref =
 
 internal typealias DebugPurchasesPref = DataStore<List<Purchase>>
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun debugPurchasesPref(factory: DiskDataStoreFactory): DebugPurchasesPref =
     factory.create("billing_purchases") { emptySet<String>() }
         .lens(

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
 import com.ivianuu.injekt.merge.ApplicationComponent
 
@@ -28,7 +29,8 @@ data class BuildInfo(
     val versionCode: Int,
 ) {
     companion object {
-        @Binding(ApplicationComponent::class)
+        @Scoped(ApplicationComponent::class)
+        @Binding
         fun binding(
             applicationContext: ApplicationContext,
             packageManager: PackageManager,

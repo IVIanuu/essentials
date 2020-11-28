@@ -25,6 +25,7 @@ import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 @Binding
@@ -41,7 +42,8 @@ class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
     }
 
     companion object {
-        @Binding(ApplicationComponent::class)
+        @Scoped(ApplicationComponent::class)
+        @Binding
         fun binding(
             buildInfo: BuildInfo,
             androidLoggerProvider: () -> AndroidLogger,

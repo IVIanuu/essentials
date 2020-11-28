@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.completeWith
-import kotlinx.coroutines.launch
 
 typealias GlobalScope = CoroutineScope
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
     CoroutineScope(defaultDispatcher)

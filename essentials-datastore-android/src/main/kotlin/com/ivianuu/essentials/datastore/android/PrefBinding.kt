@@ -29,6 +29,7 @@ import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,22 +41,24 @@ import kotlinx.coroutines.launch
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.TYPEALIAS)
 annotation class PrefBinding(val name: String) {
     companion object {
-        @Binding(ApplicationComponent::class)
+        @Scoped(ApplicationComponent::class)
+        @Binding
         inline fun <reified T : Any> pref(
             @Arg("name") name: String,
             crossinline initial: () -> @InitialOrFallback T,
-            factory: DiskDataStoreFactory
+            factory: DiskDataStoreFactory,
         ): DataStore<T> = factory.create(name) { initial() }
 
         @Suppress("NOTHING_TO_INLINE")
         @Binding
         inline fun <T : Any> flow(dataStore: DataStore<T>): Flow<T> = dataStore.data
 
-        @Binding(ApplicationComponent::class)
+        @Scoped(ApplicationComponent::class)
+        @Binding
         fun <T : Any> stateFlow(
             scope: GlobalScope,
             flow: Flow<T>,
-            initial: @InitialOrFallback T
+            initial: @InitialOrFallback T,
         ): StateFlow<T> = flow.stateIn(scope, SharingStarted.Eagerly, initial)
 
         // todo inline once compose/kotlin is fixed

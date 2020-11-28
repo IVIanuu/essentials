@@ -25,6 +25,7 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ActivityComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -33,7 +34,8 @@ typealias UiScope = CoroutineScope
 
 // todo should be scoped to the UiComponent but @UiDecoratorBinding installs in ActivityComponent
 // so we also have to scope to ActivityComponent
-@Binding(ActivityComponent::class)
+@Scoped(ActivityComponent::class)
+@Binding
 fun uiScope(mainDispatcher: MainDispatcher): UiScope =
     CoroutineScope(mainDispatcher)
 

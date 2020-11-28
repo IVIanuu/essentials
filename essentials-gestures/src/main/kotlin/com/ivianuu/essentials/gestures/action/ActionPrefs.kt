@@ -19,9 +19,12 @@ package com.ivianuu.essentials.gestures.action
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 
 typealias ActionMediaAppPref = DataStore<String?>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun actionMediaAppPref(factory: DiskDataStoreFactory): ActionMediaAppPref =
     factory.create("action_media_app") { null }

@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
@@ -38,7 +39,8 @@ import kotlin.reflect.typeOf
 @Effect
 annotation class GlobalStateBinding {
     companion object {
-        @Binding(ApplicationComponent::class)
+        @Scoped(ApplicationComponent::class)
+        @Binding
         fun <T : StateFlow<S>, S> globalStore(
             scope: GlobalScope,
             provider: (CoroutineScope) -> @ForEffect T,

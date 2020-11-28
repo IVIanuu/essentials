@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.map
 
@@ -53,7 +54,8 @@ suspend fun toggleAutoRotation(setting: AutoRotationSetting) {
     setting.updateData { if (this != 1) 1 else 0 }
 }
 
-@Binding(ApplicationComponent::class)
+@Scoped(ApplicationComponent::class)
+@Binding
 fun autoRotationSetting(factory: SettingsDataStoreFactory): AutoRotationSetting = factory
     .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
 

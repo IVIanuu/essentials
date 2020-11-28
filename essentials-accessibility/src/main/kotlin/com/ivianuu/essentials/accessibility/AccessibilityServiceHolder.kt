@@ -18,12 +18,15 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal typealias MutableAccessibilityServiceHolder = MutableStateFlow<AccessibilityService?>
-@Binding(ApplicationComponent::class)
+
+@Scoped(ApplicationComponent::class)
+@Binding
 fun mutableAccessibilityServiceHolder(): MutableAccessibilityServiceHolder =
     MutableStateFlow(null)
 
