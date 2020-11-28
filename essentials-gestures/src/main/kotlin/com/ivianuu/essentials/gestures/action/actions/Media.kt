@@ -18,13 +18,16 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
 import android.view.KeyEvent
+import com.ivianuu.essentials.datastore.android.PrefBinding
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionMediaAppPref
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @FunBinding
@@ -52,17 +55,23 @@ suspend fun doMediaAction(
 
 @FunBinding
 suspend fun mediaIntent(
-    mediaAppPref: ActionMediaAppPref,
+    mediaActionPrefs: Flow<MediaActionPrefs>,
     @FunApi keyEvent: Int,
-    @FunApi keycode: Int
+    @FunApi keycode: Int,
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
         Intent.EXTRA_KEY_EVENT,
         KeyEvent(keyEvent, keycode)
     )
 
-    val mediaApp = mediaAppPref.data.first()
+    val mediaApp = mediaActionPrefs.first().mediaApp
     if (mediaApp != null) {
         `package` = mediaApp
     }
 }
+
+@PrefBinding("media_action_prefs")
+@JsonClass(generateAdapter = true)
+data class MediaActionPrefs(
+    @Json(name = "media_app") val mediaApp: String? = null,
+)
