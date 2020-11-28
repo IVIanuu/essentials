@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.shareIn
 
-typealias RecentApps = Flow<List<String>>
+typealias RecentApps = List<String>
 
 @Scoped(ApplicationComponent::class)
 @Binding
@@ -44,8 +44,8 @@ fun recentApps(
     accessibilityEvents: AccessibilityEvents,
     applyAccessibilityConfig: applyAccessibilityConfig,
     globalScope: GlobalScope,
-    logger: Logger
-): RecentApps {
+    logger: Logger,
+): Flow<RecentApps> {
     applyAccessibilityConfig(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -85,10 +85,10 @@ fun recentApps(
         .shareIn(globalScope, SharingStarted.Eagerly, 1)
 }
 
-typealias CurrentApp = Flow<String?>
+typealias CurrentApp = String?
 
 @Binding
-fun currentApp(recentApps: RecentApps): CurrentApp =
+fun currentApp(recentApps: Flow<RecentApps>): Flow<CurrentApp> =
     recentApps
         .map { it.firstOrNull() }
         .distinctUntilChanged()

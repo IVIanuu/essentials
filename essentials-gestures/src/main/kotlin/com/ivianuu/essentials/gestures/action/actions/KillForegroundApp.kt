@@ -30,6 +30,7 @@ import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @ActionBinding("kill_current_app_action")
@@ -47,7 +48,7 @@ fun killCurrentAction(
 @FunBinding
 suspend fun killCurrentApp(
     buildInfo: BuildInfo,
-    currentAppFlow: CurrentApp,
+    currentAppFlow: Flow<CurrentApp>,
     getHomePackage: getHomePackage,
     runRootCommand: runRootCommand,
 ) {

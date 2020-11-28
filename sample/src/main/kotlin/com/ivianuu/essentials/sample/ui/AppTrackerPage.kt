@@ -48,6 +48,7 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -56,10 +57,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppTrackerPage(
     createAppTrackerNotification: createAppTrackerNotification,
-    currentApp: CurrentApp,
+    currentApp: Flow<CurrentApp>,
     requestPermissions: requestPermissions,
     showToast: showToast,
-    startForegroundJob: startForegroundJob
+    startForegroundJob: startForegroundJob,
 ) {
     var trackingEnabled by rememberState { false }
     onCommit(trackingEnabled) {
