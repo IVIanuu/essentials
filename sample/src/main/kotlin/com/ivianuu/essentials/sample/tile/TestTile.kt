@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.tile
 
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.TileAction

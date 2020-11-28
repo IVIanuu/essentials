@@ -20,6 +20,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvents
+import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
