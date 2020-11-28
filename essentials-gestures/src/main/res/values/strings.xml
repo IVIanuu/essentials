@@ -37,6 +37,7 @@
     <string name="es_action_media_play_pause">Media play/pause</string>
     <string name="es_action_media_skip_next">Media skip to next</string>
     <string name="es_action_media_skip_previous">Media skip to previous</string>
+    <string name="es_action_media_stop">Media stop</string>
     <string name="es_action_menu">Menu</string>
     <string name="es_action_none">None</string>
     <string name="es_action_notifications">Notifications</string>
