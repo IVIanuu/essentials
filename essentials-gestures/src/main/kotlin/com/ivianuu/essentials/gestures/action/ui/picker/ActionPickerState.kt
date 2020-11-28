@@ -19,8 +19,9 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
+import com.ivianuu.essentials.gestures.action.getActionSettingsUi
 import com.ivianuu.essentials.gestures.action.getAllActions
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.*
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
@@ -29,6 +30,7 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
@@ -50,6 +52,12 @@ fun actionPickerState(
     requestPermissions: requestPermissions
 ) = scope.state(initial) {
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
+
+    actions
+        .filterIsInstance<OpenActionSettings>()
+        .onEach { action -> navigator.push { action.item.settingsUi!!() } }
+        .launchIn(this)
+
     actions
         .filterIsInstance<PickAction>()
         .onEach { action ->
@@ -68,9 +76,10 @@ fun actionPickerState(
 suspend fun getActionPickerItems(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     getAllActions: getAllActions,
+    getActionSettingsUi: getActionSettingsUi,
     navigator: Navigator,
     params: ActionPickerParams,
-    stringResource: stringResource
+    stringResource: stringResource,
 ) = buildList<ActionPickerItem> {
     val specialOptions = mutableListOf<SpecialOption>()
 
@@ -97,7 +106,9 @@ suspend fun getActionPickerItems(
                                 navigator
                             )
                         }
-                    ) + (getAllActions().map { ActionItem(it) })
+                    ) + (getAllActions().map {
+                ActionItem(it, getActionSettingsUi(it.key))
+            })
             )
         .sortedBy { it.title }
 

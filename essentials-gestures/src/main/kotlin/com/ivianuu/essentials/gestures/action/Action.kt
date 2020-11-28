@@ -72,22 +72,35 @@ fun choosePermissions(
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
 interface ActionFactory {
-    fun handles(key: String): Boolean
+    suspend fun handles(key: String): Boolean
     suspend fun createAction(key: String): Action
     suspend fun createExecutor(key: String): ActionExecutor
+}
+
+@Effect
+annotation class ActionSettingsUi(val key: String) {
+    companion object {
+        @MapEntries
+        fun <T : @Composable () -> Unit> actionSettingsUiIntoMap(
+            @Arg("key") key: String,
+            instance: @ForEffect T,
+        ): Map<String, @Composable () -> Unit> = mapOf(key to instance)
+    }
 }
 
 @Effect
 annotation class ActionFactoryBinding {
     companion object {
         @SetElements
-        fun <T : ActionFactory> actionFactoryIntoSet(instance: @ForEffect T): Set<ActionFactory> = setOf(instance)
+        fun <T : ActionFactory> actionFactoryIntoSet(instance: @ForEffect T): Set<ActionFactory> =
+            setOf(instance)
     }
 }
 
 interface ActionPickerDelegate {
     val title: String
     val icon: @Composable () -> Unit
+    val settingsUi: @Composable (() -> Unit)? get() = null
     suspend fun getResult(): ActionPickerResult?
 }
 

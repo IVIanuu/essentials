@@ -42,7 +42,7 @@ class KeycodeActionFactory(
     private val runRootCommand: runRootCommand,
     private val stringResourceWithArguments: stringResourceWithArguments,
 ) : ActionFactory {
-    override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val keycode = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(

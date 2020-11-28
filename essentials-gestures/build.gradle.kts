@@ -19,6 +19,7 @@ plugins {
     id("com.ivianuu.essentials")
     id("androidx.compose")
     kotlin("android")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -31,6 +32,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials-accessibility"))
     api(project(":essentials-android-util"))
+    api(project(":essentials-apps"))
     api(project(":essentials-apps-ui"))
     api(project(":essentials-hide-nav-bar"))
     api(project(":essentials-permission"))
@@ -39,5 +41,6 @@ dependencies {
     api(project(":essentials-shortcut-picker"))
     api(project(":essentials-torch"))
     api(project(":essentials-unlock"))
+    kapt(project(":essentials-compiler"))
     testImplementation(project(":essentials-android-test"))
 }

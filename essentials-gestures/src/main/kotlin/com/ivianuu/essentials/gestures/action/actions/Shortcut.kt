@@ -49,7 +49,7 @@ class ShortcutActionFactory(
     logger: Logger,
     private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         logger.d { "create action from $key" }
         val tmp = key.split(DELIMITER)

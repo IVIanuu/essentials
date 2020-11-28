@@ -43,11 +43,15 @@ sealed class ActionPickerResult {
 data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
 
 sealed class ActionPickerAction {
+    data class OpenActionSettings(val item: ActionPickerItem) : ActionPickerAction()
     data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
 }
 
 sealed class ActionPickerItem {
-    data class ActionItem(val action: Action) : ActionPickerItem() {
+    data class ActionItem(
+        val action: Action,
+        override val settingsUi: @Composable (() -> Unit)?,
+    ) : ActionPickerItem() {
         override val title: String
             get() = action.title
 
@@ -67,6 +71,9 @@ sealed class ActionPickerItem {
         override val title: String
             get() = delegate.title
 
+        override val settingsUi: @Composable (() -> Unit)?
+            get() = delegate.settingsUi
+
         @Composable
         override fun icon(modifier: Modifier) {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -82,6 +89,9 @@ sealed class ActionPickerItem {
         val getResult: () -> ActionPickerResult?
     ) : ActionPickerItem() {
 
+        override val settingsUi: @Composable (() -> Unit)?
+            get() = null
+
         @Composable
         override fun icon(modifier: Modifier) {
             Spacer(modifier)
@@ -91,6 +101,7 @@ sealed class ActionPickerItem {
     }
 
     abstract val title: String
+    abstract val settingsUi: @Composable (() -> Unit)?
 
     @Composable
     abstract fun icon(modifier: Modifier = Modifier)

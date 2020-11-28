@@ -43,7 +43,7 @@ class AppActionFactory(
     private val packageManager: PackageManager,
     private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(key: String): Action {
         val packageName = key.removePrefix(ACTION_KEY_PREFIX)
         return Action(

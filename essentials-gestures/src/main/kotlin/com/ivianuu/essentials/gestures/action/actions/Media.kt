@@ -17,22 +17,55 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.Intent
+import android.provider.MediaStore
 import android.view.KeyEvent
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.getAppInfo
+import com.ivianuu.essentials.apps.ui.IntentAppFilter
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
 import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.updatePref
+import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsUiAction.*
+import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.resource.Idle
+import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.ui.resource.reduceResource
+import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 
 @FunBinding
 fun mediaAction(
-    doMediaAction: doMediaAction,
     stringResource: stringResource,
     @FunApi key: String,
     @FunApi titleRes: Int,
@@ -75,3 +108,68 @@ suspend fun mediaIntent(
 data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
+
+@FunBinding
+@Composable
+fun MediaActionSettingsUi(
+    dispatch: DispatchAction<MediaActionSettingsUiAction>,
+    state: @UiState MediaActionSettingsUiState,
+) {
+    Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
+        InsettingScrollableColumn {
+            ListItem(
+                title = { Text(R.string.es_pref_media_app) },
+                subtitle = {
+                    Text(
+                        stringResource(
+                            R.string.es_pref_media_app_summary,
+                            state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+                        )
+                    )
+                },
+                onClick = { dispatch(UpdateMediaApp) }
+            )
+        }
+    }
+}
+
+data class MediaActionSettingsUiState(val mediaApp: Resource<AppInfo> = Idle)
+
+sealed class MediaActionSettingsUiAction {
+    object UpdateMediaApp : MediaActionSettingsUiAction()
+}
+
+@UiStateBinding
+fun mediaActionSettingsUiState(
+    scope: CoroutineScope,
+    initial: @Initial MediaActionSettingsUiState = MediaActionSettingsUiState(),
+    actions: Actions<MediaActionSettingsUiAction>,
+    appPickerPageFactory: (AppPickerParams) -> AppPickerPage,
+    getAppInfo: getAppInfo,
+    intentAppFilterFactory: (Intent) -> IntentAppFilter,
+    navigator: Navigator,
+    prefs: Flow<MediaActionPrefs>,
+    updatePrefs: updatePref<MediaActionPrefs>,
+) = scope.state(initial) {
+    prefs
+        .map { it.mediaApp }
+        .mapNotNull { if (it != null) getAppInfo(it) else null }
+        .reduceResource(this) { copy(mediaApp = it) }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<UpdateMediaApp>()
+        .onEach {
+            val newMediaApp = navigator.push<AppInfo>(
+                appPickerPageFactory(
+                    AppPickerParams(
+                        intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+                    )
+                )
+            )
+            if (newMediaApp != null) {
+                updatePrefs { copy(mediaApp = newMediaApp.packageName) }
+            }
+        }
+        .launchIn(this)
+}

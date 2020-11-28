@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -57,4 +58,13 @@ suspend fun getActionExecutor(
             .firstOrNull { it.handles(key) }
             ?.createExecutor(key)
         ?: error("Unsupported action key $key")
+}
+
+@FunBinding
+suspend fun getActionSettingsUi(
+    actionSettings: Map<String, @Composable () -> Unit>,
+    defaultDispatcher: DefaultDispatcher,
+    @FunApi key: String,
+): @Composable (() -> Unit)? = withContext(defaultDispatcher) {
+    actionSettings[key]
 }
