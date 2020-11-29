@@ -26,6 +26,7 @@ import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @AppWorkerBinding
 @FunBinding
@@ -35,14 +36,16 @@ suspend fun updateAndroidTorchState(
     dispatch: DispatchAction<TorchAction>,
     state: Flow<TorchState>
 ) {
-    state.collect { currentState ->
-        val cameraId = cameraManager.cameraIdList[0]
-        runKatching {
-            cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
-        }.onFailure {
-            it.printStackTrace()
-            showToastRes(R.string.es_failed_to_toggle_torch)
-            dispatch(UpdateTorchEnabled(false))
+    state
+        .onEach { currentState ->
+            val cameraId = cameraManager.cameraIdList[0]
+            runKatching {
+                cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
+            }.onFailure {
+                it.printStackTrace()
+                showToastRes(R.string.es_failed_to_toggle_torch)
+                dispatch(UpdateTorchEnabled(false))
+            }
         }
-    }
+        .collect()
 }
