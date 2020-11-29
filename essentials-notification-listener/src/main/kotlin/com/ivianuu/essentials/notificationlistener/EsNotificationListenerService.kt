@@ -19,6 +19,8 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.result.getOrElse
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -60,13 +62,9 @@ abstract class EsNotificationListenerService : NotificationListenerService() {
         super.onDestroy()
     }
 
-    override fun getActiveNotifications(): Array<StatusBarNotification> {
-        return try {
-            super.getActiveNotifications() ?: emptyArray()
-        } catch (e: Throwable) {
-            emptyArray()
-        }
-    }
+    override fun getActiveNotifications(): Array<StatusBarNotification> =
+        runKatching { super.getActiveNotifications()!! }
+            .getOrElse { emptyArray() }
 }
 
 @MergeInto(ServiceComponent::class)

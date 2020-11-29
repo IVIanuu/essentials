@@ -22,6 +22,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.result.getOrNull
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Scoped
@@ -75,10 +77,8 @@ fun keyboardVisible(
 
 @FunBinding
 fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
-    return try {
+    return runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
-    } catch (e: Throwable) {
-        null
-    }
+    }.getOrNull()
 }

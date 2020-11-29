@@ -48,7 +48,7 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.result.fold
-import com.ivianuu.essentials.result.runCatching
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsPageAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsPageAction.OpenNotification
@@ -230,7 +230,7 @@ private fun StatusBarNotification.toUiNotification(applicationContext: Applicati
         ?.toString() ?: "",
     text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
         ?.toString() ?: "",
-    icon = runCatching {
+    icon = runKatching {
         notification.smallIcon
             .loadDrawable(applicationContext)
             .toImageBitmap()

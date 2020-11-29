@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.result
 
+import kotlinx.coroutines.CancellationException
+
 sealed class Result<out V, out E>
 
 data class Ok<V>(val value: V) : Result<V, Nothing>()
@@ -24,14 +26,10 @@ data class Err<E>(val error: E) : Result<Nothing, E>()
 operator fun <V> Result<V, *>.component1(): V? = (this as? Ok)?.value
 operator fun <E> Result<*, E>.component2(): E? = (this as? Err)?.error
 
-inline fun <V> runCatching(block: () -> V): Result<V, Throwable> = try {
+inline fun <V> runKatching(block: () -> V): Result<V, Throwable> = try {
     Ok(block())
-} catch (e: Throwable) {
-    Err(e)
-}
-
-inline fun <T, V> T.runCatching(block: T.() -> V): Result<V, Throwable> = try {
-    Ok(block())
+} catch (e: CancellationException) {
+    throw e
 } catch (e: Throwable) {
     Err(e)
 }

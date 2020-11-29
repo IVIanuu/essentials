@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.showToastRes
@@ -46,12 +48,11 @@ suspend fun runRootCommand(
     showToastRes: showToastRes,
     @FunApi command: String
 ) {
-    try {
-        runShellCommand(command)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        showToastRes(R.string.es_no_root)
-    }
+    runKatching { runShellCommand(command) }
+        .onFailure {
+            it.printStackTrace()
+            showToastRes(R.string.es_no_root)
+        }
 }
 
 @FunBinding
@@ -61,12 +62,12 @@ fun sendIntent(
     @FunApi intent: Intent
 ) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    try {
+    runKatching {
         PendingIntent.getActivity(
             applicationContext, 99, intent, 0, null
         ).send()
-    } catch (e: Throwable) {
-        e.printStackTrace()
+    }.onFailure {
+        it.printStackTrace()
         showToastRes(R.string.es_activity_not_found)
     }
 }

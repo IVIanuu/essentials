@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
@@ -46,15 +48,16 @@ fun shortcutPickerState(
     actions
         .filterIsInstance<PickShortcut>()
         .onEach { action ->
-            try {
+            runKatching {
                 val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
                     .data ?: return@onEach
                 val shortcut = extractShortcut(shortcutRequestResult)
                 navigator.popTop(result = shortcut)
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                showToastRes(R.string.es_failed_to_pick_shortcut)
             }
+                .onFailure {
+                    it.printStackTrace()
+                    showToastRes(R.string.es_failed_to_pick_shortcut)
+                }
         }
         .launchIn(this)
 }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.torch
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runCatching
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.showToastRes
@@ -37,7 +37,7 @@ suspend fun updateAndroidTorchState(
 ) {
     state.collect { currentState ->
         val cameraId = cameraManager.cameraIdList[0]
-        runCatching {
+        runKatching {
             cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
         }.onFailure {
             it.printStackTrace()

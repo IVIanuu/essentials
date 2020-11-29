@@ -21,6 +21,8 @@ import android.graphics.Rect
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.util.Logger
@@ -134,20 +136,16 @@ class NavBarManager(
 
     private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
         logger.d { "set nav bar hidden config $config hidden $hidden" }
-        try {
-            try {
+        runKatching {
+            runKatching {
                 // ensure that we can access non sdk interfaces
                 disableNonSdkInterfaceDetection()
-            } catch (e: Throwable) {
-                e.printStackTrace()
-            }
+            }.onFailure { it.printStackTrace() }
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             setOverscan(rect)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+        }.onFailure { it.printStackTrace() }
     }
 
     private suspend fun getNavigationBarHeight(): Int {

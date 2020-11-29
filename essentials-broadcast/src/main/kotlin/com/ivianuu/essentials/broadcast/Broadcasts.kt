@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -41,20 +42,15 @@ fun broadcasts(
             offerSafe(intent)
         }
     }
-    try {
-        applicationContext.registerReceiver(
-            broadcastReceiver,
-            IntentFilter().apply {
-                addAction(action)
-            }
-        )
-    } catch (e: Throwable) {
-    }
-
+    applicationContext.registerReceiver(
+        broadcastReceiver,
+        IntentFilter().apply {
+            addAction(action)
+        }
+    )
     awaitClose {
-        try {
+        runKatching {
             applicationContext.unregisterReceiver(broadcastReceiver)
-        } catch (e: Throwable) {
         }
     }
 }.flowOn(mainDispatcher)

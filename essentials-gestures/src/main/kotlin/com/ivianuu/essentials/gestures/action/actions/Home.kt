@@ -25,6 +25,8 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -55,12 +57,10 @@ suspend fun openHomeScreen(
     if (!needsHomeIntentWorkaround) {
         performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {
-        try {
+        runKatching {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
             applicationContext.sendBroadcast(intent)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+        }.onFailure { it.printStackTrace() }
 
         sendIntent(
             Intent(Intent.ACTION_MAIN).apply {

@@ -22,6 +22,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.GlobalStateBinding
@@ -62,10 +63,7 @@ fun notificationState(
     actions
         .filterIsInstance<OpenNotification>()
         .onEach { action ->
-            try {
-                action.notification.contentIntent.send()
-            } catch (e: Throwable) {
-            }
+            runKatching { action.notification.contentIntent.send() }
         }
         .launchIn(this)
 

@@ -20,7 +20,7 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runCatching
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -40,27 +40,27 @@ suspend fun executeAction(
     showToast: showToast,
     @FunApi key: String,
 ): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
-    runCatching {
+    runKatching {
         logger.d { "execute $key" }
         val action = getAction(key)
 
         // check permissions
         if (!requestPermissions(action.permissions)) {
             logger.d { "couldn't get permissions for $key" }
-            return@runCatching false
+            return@runKatching false
         }
 
         // unlock screen
         if (action.unlockScreen && !unlockScreen()) {
             logger.d { "couldn't unlock screen for $key" }
-            return@runCatching false
+            return@runKatching false
         }
 
         logger.d { "fire $key" }
 
         // fire
         getActionExecutor(key)()
-        return@runCatching true
+        return@runKatching true
     }.onFailure {
         it.printStackTrace()
         showToast("Failed to execute '$key'") // todo res

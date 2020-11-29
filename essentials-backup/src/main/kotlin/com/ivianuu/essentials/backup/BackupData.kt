@@ -20,7 +20,7 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.runCatching
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.ui.navigation.ActivityRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -43,10 +43,11 @@ suspend fun backupData(
     buildInfo: BuildInfo,
     ioDispatcher: IODispatcher,
     navigator: Navigator,
-): Result<Unit, Throwable> = runCatching {
+): Result<Unit, Throwable> = runKatching {
     withContext(ioDispatcher) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
-        val backupFileName = "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+        val backupFileName =
+            "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
         val backupFile = backupDir.resolve("$backupFileName.zip")
             .also {

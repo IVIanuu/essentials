@@ -21,7 +21,7 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.runCatching
+import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.startActivityForIntentResult
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -39,7 +39,7 @@ suspend fun restoreData(
     prefsDir: PrefsDir,
     restartProcess: restartProcess,
     startActivityForIntentResult: startActivityForIntentResult,
-): Result<Unit, Throwable> = runCatching {
+): Result<Unit, Throwable> = runKatching {
     withContext(ioDispatcher) {
         val uri = startActivityForIntentResult(
             Intent.createChooser(
