@@ -19,9 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Icon
@@ -29,7 +27,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 
@@ -80,7 +77,7 @@ fun SecureSettingsPcInstructionsPage(
                 onClick = { dispatch(OpenXdaTutorial) }
             )
 
-            ClipboardListItem(
+            ListItem(
                 title = { Text(R.string.es_pref_secure_settings_step_4) },
                 subtitle = {
                     Text(
@@ -90,7 +87,7 @@ fun SecureSettingsPcInstructionsPage(
                         )
                     )
                 },
-                clipboardText = { state.secureSettingsAdbCommand }
+                onClick = { dispatch(CopyAdbCommand) }
             )
         }
     }

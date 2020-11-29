@@ -32,6 +32,7 @@ include(
     ":essentials-billing-release",
     ":essentials-boot",
     ":essentials-broadcast",
+    ":essentials-clipboard",
     ":essentials-coil",
     ":essentials-compiler",
     ":essentials-core",

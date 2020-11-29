@@ -31,6 +31,7 @@ data class SecureSettingsPcInstructionsState(val packageName: String) {
 }
 
 sealed class SecureSettingsPcInstructionsAction {
+    object CopyAdbCommand : SecureSettingsPcInstructionsAction()
     object OpenGadgetHacksTutorial : SecureSettingsPcInstructionsAction()
     object OpenLifeHackerTutorial : SecureSettingsPcInstructionsAction()
     object OpenXdaTutorial : SecureSettingsPcInstructionsAction()

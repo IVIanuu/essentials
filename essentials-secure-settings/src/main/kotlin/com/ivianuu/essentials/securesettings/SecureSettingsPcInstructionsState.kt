@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
+import com.ivianuu.essentials.clipboard.ClipboardAction
+import com.ivianuu.essentials.clipboard.ClipboardAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlRoute
@@ -27,6 +29,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -36,23 +39,41 @@ fun secureSettingsPcInstructionsState(
     scope: CoroutineScope,
     initial: @Initial SecureSettingsPcInstructionsState,
     actions: Actions<SecureSettingsPcInstructionsAction>,
+    dispatchClipboardAction: DispatchAction<ClipboardAction>,
     navigator: Navigator,
-    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted
+    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
 ) = scope.state(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(false) }
+
     actions
-        .onEach { action ->
-            when (action) {
-                OpenGadgetHacksTutorial -> navigator.push(
-                    UrlRoute("https://youtu.be/CDuxcrrWLnY")
-                )
-                OpenLifeHackerTutorial -> navigator.push(
-                    UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-                )
-                OpenXdaTutorial -> navigator.push(
-                    UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-                )
-            }
+        .filterIsInstance<CopyAdbCommand>()
+        .onEach { dispatchClipboardAction(UpdateClipboard(currentState().secureSettingsAdbCommand)) }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<OpenGadgetHacksTutorial>()
+        .onEach {
+            navigator.push(
+                UrlRoute("https://youtu.be/CDuxcrrWLnY")
+            )
+        }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<OpenLifeHackerTutorial>()
+        .onEach {
+            navigator.push(
+                UrlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+            )
+        }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<OpenXdaTutorial>()
+        .onEach {
+            navigator.push(
+                UrlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+            )
         }
         .launchIn(this)
 }

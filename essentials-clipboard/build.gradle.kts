@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
-    id("androidx.compose")
     kotlin("android")
 }
 
@@ -29,7 +29,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-android-core"))
-    api(project(":essentials-android-util"))
-    api(project(":essentials-clipboard"))
-    api(project(":essentials-shell"))
+    testImplementation(project(":essentials-android-test"))
 }

@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.prefs.ClipboardListItem
 import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
@@ -136,13 +135,6 @@ fun PrefsPage(prefsStore: PrefsStore) {
                     SingleChoiceDialogListItem.Item("B", "B"),
                     SingleChoiceDialogListItem.Item("C", "C")
                 )
-            )
-
-            ClipboardListItem(
-                title = { Text("Clipboard") },
-                subtitle = { Text("This is a clipboard preference") },
-                clipboardText = { "cool clip" },
-                modifier = Modifier.interactive(prefs.switch)
             )
         }
     }
