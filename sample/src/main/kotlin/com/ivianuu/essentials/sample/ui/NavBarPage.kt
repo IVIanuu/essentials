@@ -16,27 +16,42 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
+import com.ivianuu.essentials.permission.Desc
+import com.ivianuu.essentials.permission.Icon
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.hasPermissions
+import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.securesettings.SecureSettingsPage
 import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
 import com.ivianuu.essentials.ui.core.rememberState
+import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,10 +63,10 @@ import kotlinx.coroutines.launch
 @FunBinding
 @Composable
 fun NavBarPage(
-    hasSecureSettingsPermission: hasSecureSettingsPermission,
+    hasPermissions: hasPermissions,
     navBarManager: NavBarManager,
     navigator: Navigator,
-    secureSettingsPage: SecureSettingsPage,
+    requestPermissions: requestPermissions,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -61,7 +76,7 @@ fun NavBarPage(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val scope = rememberCoroutineScope()
+            val scope = rememberRetainedCoroutinesScope()
             fun updateNavBarState(navBarHidden: Boolean) {
                 scope.launch {
                     navBarManager.setNavBarConfig(
@@ -76,7 +91,16 @@ fun NavBarPage(
             // reshow nav bar when exiting the screen
             onDispose { updateNavBarState(false) }
 
-            val hasPermission by produceState(false) { value = hasSecureSettingsPermission() }
+            val secureSettingsPermission = remember {
+                WriteSecureSettingsPermission(
+                    Permission.Title to "Write secure settings",
+                    Permission.Desc to "This is a desc",
+                    Permission.Icon to { Icon(Icons.Default.Menu) }
+                )
+            }
+
+            val hasPermission by remember { hasPermissions(listOf(secureSettingsPermission)) }
+                .collectAsState(false)
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -101,7 +125,9 @@ fun NavBarPage(
                     if (hasPermission) {
                         hideNavBar = !hideNavBar
                     } else {
-                        navigator.push { secureSettingsPage(true) }
+                        scope.launch {
+                            requestPermissions(listOf(secureSettingsPermission))
+                        }
                     }
                 }
             ) {
