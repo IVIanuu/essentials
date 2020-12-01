@@ -21,7 +21,7 @@ import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.DataStore
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Binding
