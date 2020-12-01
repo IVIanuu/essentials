@@ -115,8 +115,4 @@ internal class UiStoreRunner<S>(
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
-annotation class Initial
-
-@Qualifier
-@Target(AnnotationTarget.TYPE)
 annotation class UiState
