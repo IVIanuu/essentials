@@ -35,4 +35,5 @@ dependencies {
     api(project(":essentials-ui-navigation"))
     api(project(":essentials-ui-popup"))
     api(project(":essentials-ui-prefs"))
+    api(project(":essentials-ui-store"))
 }
