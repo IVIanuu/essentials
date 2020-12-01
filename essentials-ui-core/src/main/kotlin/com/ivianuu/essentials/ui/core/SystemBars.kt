@@ -60,7 +60,7 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = AmbientContentColor.current.isDark,
     elevation: Dp = 0.dp,
 ): Modifier = composed {
-    val systemBarManager = SystemBarManagerAmbient.current
+    val systemBarManager = AmbientSystemBarManager.current
     var globalBounds by rememberState<Rect?> { null }
     val density = AmbientDensity.current
 
@@ -89,7 +89,7 @@ fun ProvideSystemBarManager(@FunApi content: @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
-        SystemBarManagerAmbient provides systemBarManager,
+        AmbientSystemBarManager provides systemBarManager,
         content = content
     )
 }
@@ -111,7 +111,7 @@ fun RootSystemBarsStyle(@FunApi content: @Composable () -> Unit) {
     }
 }
 
-private val SystemBarManagerAmbient = staticAmbientOf<SystemBarManager>()
+private val AmbientSystemBarManager = staticAmbientOf<SystemBarManager>()
 
 private data class SystemBarStyle(
     val barColor: Color,
@@ -135,7 +135,7 @@ private class SystemBarManager {
             }
         }
 
-        val windowInsets = InsetsAmbient.current
+        val windowInsets = AmbientInsets.current
         val density = AmbientDensity.current
         val screenHeight = with(density) {
             activity.window.decorView.height.toDp()

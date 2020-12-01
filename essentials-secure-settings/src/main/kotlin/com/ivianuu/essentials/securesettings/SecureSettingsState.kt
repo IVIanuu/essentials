@@ -19,10 +19,10 @@ package com.ivianuu.essentials.securesettings
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import kotlinx.coroutines.CoroutineScope
@@ -33,19 +33,20 @@ import kotlinx.coroutines.launch
 @UiStateBinding
 fun secureSettingsState(
     scope: CoroutineScope,
-    initial: @Initial SecureSettingsState = SecureSettingsState,
+    initial: @Initial SecureSettingsState = SecureSettingsState(),
     actions: Actions<SecureSettingsAction>,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
-    navigator: Navigator,
     popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
-    secureSettingsPcInstructionsPage: SecureSettingsPcInstructionsPage,
-    showToastRes: showToastRes
+    showToastRes: showToastRes,
 ) = scope.state(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }
     actions
         .onEach { action ->
             when (action) {
-                OpenPcInstructions -> navigator.push { secureSettingsPcInstructionsPage() }
+                OpenPcInstructions -> dispatchNavigationAction(
+                    NavigationAction.Push(SecureSettingsPcInstructionsKey())
+                )
                 GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
                     showToastRes(R.string.es_secure_settings_permission_granted)
                 } else {

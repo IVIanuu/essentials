@@ -17,19 +17,17 @@
 package com.ivianuu.essentials.util
 
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.util.UUID
 import kotlin.coroutines.resume
 
 @FunBinding
@@ -40,34 +38,19 @@ suspend fun startActivityForIntentResult(
 
 @FunBinding
 suspend fun <I, O> startActivityForResult(
-    startUi: startUi,
-    navigator: Navigator,
+    openAppUi: openAppUi,
     @FunApi contract: ActivityResultContract<I, O>,
-    @FunApi input: I
+    @FunApi input: I,
 ): O {
-    startUi()
+    val activity = openAppUi()
     return suspendCancellableCoroutine { continuation ->
-        var popped = false
-        fun popIfNeeded() {
-            if (!popped) {
-                popped = true
-                navigator.popTop()
-            }
-        }
-
-        navigator.push(
-            Route(opaque = true) {
-                val launcher = registerActivityResultCallback(
-                    contract,
-                    ActivityResultCallback {
-                        popIfNeeded()
-                        continuation.resume(it)
-                    }
-                )
-
-                onActive { launcher.launch(input) }
-            }
+        val launcher = activity.activityResultRegistry.register(
+            UUID.randomUUID().toString(),
+            activity,
+            contract,
+            { continuation.resume(it) }
         )
-        continuation.invokeOnCancellation { popIfNeeded() }
+        launcher.launch(input)
+        continuation.invokeOnCancellation { launcher.unregister() }
     }
 }

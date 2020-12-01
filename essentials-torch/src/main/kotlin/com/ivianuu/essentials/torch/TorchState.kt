@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.ui.store.GlobalStateBinding
-import com.ivianuu.essentials.ui.store.Initial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance

@@ -21,9 +21,8 @@ import androidx.core.content.FileProvider
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.ui.navigation.ActivityRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
@@ -41,8 +40,8 @@ suspend fun backupData(
     backupDir: BackupDir,
     backupFiles: BackupFiles,
     buildInfo: BuildInfo,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     ioDispatcher: IODispatcher,
-    navigator: Navigator,
 ): Result<Unit, Throwable> = runKatching {
     withContext(ioDispatcher) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
@@ -74,18 +73,11 @@ suspend fun backupData(
 
         out.close()
 
-        val uri =
-            FileProvider.getUriForFile(
-                applicationContext,
-                buildInfo.packageName,
-                backupFile
+        dispatchNavigationAction(
+            NavigationAction.Push(
+                ShareBackupFileKey(backupFile.absolutePath)
             )
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "application/zip"
-        intent.data = uri
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        navigator.push(ActivityRoute { Intent.createChooser(intent, "Share File") })
+        )
     }
 }
 

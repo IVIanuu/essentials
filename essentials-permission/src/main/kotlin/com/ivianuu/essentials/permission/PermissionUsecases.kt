@@ -18,11 +18,11 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.startUi
+import com.ivianuu.essentials.util.openAppUi
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
@@ -49,19 +49,23 @@ fun hasPermissions(
 @FunBinding
 suspend fun requestPermissions(
     defaultDispatcher: DefaultDispatcher,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     hasPermissions: hasPermissions,
     logger: Logger,
-    navigator: Navigator,
-    permissionRequestRouteFactory: PermissionRequestRouteFactory,
-    startUi: startUi,
-    @FunApi permissions: List<Permission>
+    openAppUi: openAppUi,
+    permissionRequestKeyFactory: PermissionRequestKeyFactory,
+    @FunApi permissions: List<Permission>,
 ): Boolean = withContext(defaultDispatcher) {
     logger.d { "request permissions $permissions" }
     if (hasPermissions(permissions).first()) return@withContext true
 
     val request = PermissionRequest(permissions = permissions.toList())
-    startUi()
-    navigator.push<Any>(permissionRequestRouteFactory.createRoute(request))
+    openAppUi()
+    dispatchNavigationAction(
+        NavigationAction.Push(
+            permissionRequestKeyFactory(request)
+        )
+    )
 
     hasPermissions(permissions).first()
 }

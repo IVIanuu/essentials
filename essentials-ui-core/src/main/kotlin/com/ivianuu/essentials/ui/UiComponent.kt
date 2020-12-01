@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.merge.MergeChildComponent
 import com.ivianuu.injekt.merge.MergeInto
@@ -29,4 +30,4 @@ interface UiComponentFactoryOwner {
     val uiComponentFactory: () -> UiComponent
 }
 
-val UiComponentAmbient = ambientOf<UiComponent> { error("No UiComponent installed") }
+val AmbientUiComponent = staticAmbientOf<UiComponent> { error("No UiComponent installed") }

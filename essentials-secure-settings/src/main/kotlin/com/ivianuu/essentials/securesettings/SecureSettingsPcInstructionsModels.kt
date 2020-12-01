@@ -16,13 +16,16 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Binding
+
+class SecureSettingsPcInstructionsKey
 
 data class SecureSettingsPcInstructionsState(val packageName: String) {
     val secureSettingsAdbCommand =
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
+
     companion object {
         @Binding
         fun initial(buildInfo: BuildInfo): @Initial SecureSettingsPcInstructionsState =

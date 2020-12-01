@@ -16,19 +16,18 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.popTop
 
 @Composable
 fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
-    val navigator = NavigatorAmbient.current
+    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
     IconButton(
-        onClick = { navigator.popTop() },
+        onClick = { onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed() },
         content = content
     )
 }

@@ -36,7 +36,7 @@ fun ProvideAnimatableRoot(
     content: @Composable () -> Unit
 ) {
     val state = remember { AnimatableRoot() }
-    Providers(AnimatableRootAmbient provides state) {
+    Providers(AmbientAnimatableRoot provides state) {
         Box(modifier = modifier.then(Modifier.animatable(Root))) {
             content()
             state.animationOverlayEntries.forEach { overlay ->
@@ -49,7 +49,7 @@ fun ProvideAnimatableRoot(
 }
 
 @Composable
-fun animatableFor(tag: Any): Animatable = AnimatableRootAmbient.current.animatableFor(tag)
+fun animatableFor(tag: Any): Animatable = AmbientAnimatableRoot.current.animatableFor(tag)
 
 @Stable
 class AnimatableRoot {
@@ -98,7 +98,7 @@ internal class AnimationOverlayEntry(
 fun animationOverlay(overlayContent: @Composable () -> Unit) {
     val entry = remember { AnimationOverlayEntry(overlayContent) }
     entry.content = overlayContent
-    val root = AnimatableRootAmbient.current
+    val root = AmbientAnimatableRoot.current
     onActive {
         root.animationOverlayEntries += entry
         onDispose { root.animationOverlayEntries -= entry }
@@ -107,6 +107,6 @@ fun animationOverlay(overlayContent: @Composable () -> Unit) {
 
 val Root = Any()
 
-val AnimatableRootAmbient = staticAmbientOf<AnimatableRoot> {
+val AmbientAnimatableRoot = staticAmbientOf<AnimatableRoot> {
     error("No AnimatableRoot found")
 }

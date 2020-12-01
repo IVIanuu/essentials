@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.backup
 
+class BackupAndRestoreKey
+
 object BackupAndRestoreState
 
 sealed class BackupAndRestoreAction {

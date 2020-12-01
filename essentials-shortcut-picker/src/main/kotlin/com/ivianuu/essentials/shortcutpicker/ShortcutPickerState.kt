@@ -20,11 +20,10 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
@@ -40,7 +39,7 @@ fun shortcutPickerState(
     actions: Actions<ShortcutPickerAction>,
     extractShortcut: extractShortcut,
     getAllShortcuts: getAllShortcuts,
-    navigator: Navigator,
+    popTopKeyWithResult: popTopKeyWithResult<Shortcut>,
     startActivityForIntentResult: startActivityForIntentResult,
     showToastRes: showToastRes,
 ) = scope.state(initial) {
@@ -52,7 +51,7 @@ fun shortcutPickerState(
                 val shortcutRequestResult = startActivityForIntentResult(action.shortcut.intent)
                     .data ?: return@onEach
                 val shortcut = extractShortcut(shortcutRequestResult)
-                navigator.popTop(result = shortcut)
+                popTopKeyWithResult(shortcut)
             }
                 .onFailure {
                     it.printStackTrace()

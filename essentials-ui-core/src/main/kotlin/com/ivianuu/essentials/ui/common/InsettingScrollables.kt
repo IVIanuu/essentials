@@ -37,7 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.ConsumeInsets
-import com.ivianuu.essentials.ui.core.InsetsAmbient
+import com.ivianuu.essentials.ui.core.AmbientInsets
 
 @OptIn(InternalLayoutApi::class)
 @Composable
@@ -58,7 +58,7 @@ fun InsettingScrollableColumn(
         reverseScrollDirection = reverseScrollDirection,
         isScrollEnabled = isScrollEnabled
     ) {
-        val insets = InsetsAmbient.current
+        val insets = AmbientInsets.current
         Spacer(Modifier.height(insets.top))
         ConsumeInsets(start = false, end = false) {
             content()
@@ -86,7 +86,7 @@ fun InsettingScrollableRow(
         reverseScrollDirection = reverseScrollDirection,
         isScrollEnabled = isScrollEnabled
     ) {
-        val insets = InsetsAmbient.current
+        val insets = AmbientInsets.current
         Spacer(Modifier.width(insets.start))
         ConsumeInsets(top = false, bottom = false) {
             content()
@@ -103,7 +103,7 @@ fun <T> InsettingLazyColumnFor(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    val insets = InsetsAmbient.current
+    val insets = AmbientInsets.current
     ConsumeInsets(start = false, end = false) {
         LazyColumnFor(
             items = remember(items) {
@@ -138,7 +138,7 @@ fun <T> InsettingLazyRowFor(
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    val insets = InsetsAmbient.current
+    val insets = AmbientInsets.current
     ConsumeInsets(top = false, bottom = false) {
         LazyRowFor(
             items = remember(items) {

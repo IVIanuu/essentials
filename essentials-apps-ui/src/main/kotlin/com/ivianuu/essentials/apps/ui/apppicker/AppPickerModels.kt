@@ -19,15 +19,15 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 
-data class AppPickerParams(
+data class AppPickerKey(
     val appFilter: AppFilter = DefaultAppFilter,
-    val title: String? = null
+    val title: String? = null,
 )
 
 data class AppPickerState(
@@ -37,10 +37,9 @@ data class AppPickerState(
 ) {
     val filteredApps = allApps
         .map { it.filter(appFilter) }
-
     companion object {
         @Binding
-        fun initial(params: AppPickerParams): @Initial AppPickerState = AppPickerState(
+        fun initial(params: AppPickerKey): @Initial AppPickerState = AppPickerState(
             appFilter = params.appFilter,
             title = params.title
         )

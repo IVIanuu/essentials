@@ -24,8 +24,12 @@ import com.ivianuu.essentials.sample.work.scheduleTasks
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 
+class WorkKey
+
+@KeyUiBinding<WorkKey>
 @FunBinding
 @Composable
 fun WorkPage(scheduleTasks: scheduleTasks) {

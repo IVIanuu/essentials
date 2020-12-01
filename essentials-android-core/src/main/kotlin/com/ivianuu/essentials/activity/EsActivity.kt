@@ -23,15 +23,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
-import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.UiComponentAmbient
+import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.UiComponentFactoryOwner
+import com.ivianuu.essentials.ui.runUiWorkers
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -46,6 +48,11 @@ abstract class EsActivity : AppCompatActivity() {
 
     private lateinit var composition: Composition
 
+    private val uiComponent by lazy {
+        activityComponent.mergeComponent<UiComponentFactoryOwner>()
+            .uiComponentFactory()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,12 +61,11 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeSavedStateRegistryOwner.set(container, this)
         ViewTreeViewModelStoreOwner.set(container, this)
 
+        uiComponent.mergeComponent<EsActivityComponent>()
+            .runUiWorkers()
+
         composition = container.setContent(Recomposer.current()) {
-            val uiComponent = remember {
-                activityComponent.mergeComponent<UiComponentFactoryOwner>()
-                    .uiComponentFactory()
-            }
-            Providers(UiComponentAmbient provides uiComponent) {
+            Providers(AmbientUiComponent provides uiComponent) {
                 uiComponent.mergeComponent<EsActivityComponent>().decorateUi {
                     Content()
                 }
@@ -88,4 +94,5 @@ abstract class EsActivity : AppCompatActivity() {
 @MergeInto(UiComponent::class)
 interface EsActivityComponent {
     val decorateUi: DecorateUi
+    val runUiWorkers: runUiWorkers
 }

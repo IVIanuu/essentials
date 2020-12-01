@@ -23,9 +23,13 @@ import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsPage
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+class CheckAppsKey
+
+@KeyUiBinding<CheckAppsKey>
 @FunBinding
 @Composable
 fun CheckAppsPage(

@@ -28,30 +28,29 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ambientOf
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
+import com.ivianuu.essentials.ui.navigation.NavigationState
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
+import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {
     Primary, Surface
 }
 
-val TopAppBarStyleAmbient = ambientOf { TopAppBarStyle.Primary }
+val AmbientTopAppBarStyle = ambientOf { TopAppBarStyle.Primary }
 
 @Composable
 fun TopAppBar(
@@ -59,12 +58,12 @@ fun TopAppBar(
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
-    backgroundColor: Color = when (TopAppBarStyleAmbient.current) {
+    backgroundColor: Color = when (AmbientTopAppBarStyle.current) {
         TopAppBarStyle.Primary -> MaterialTheme.colors.primary
         TopAppBarStyle.Surface -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
-    elevation: Dp = DefaultAppBarElevation
+    elevation: Dp = DefaultAppBarElevation,
 ) {
     TopAppBar(
         modifier = modifier,
@@ -103,14 +102,14 @@ fun TopAppBar(
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = when (TopAppBarStyleAmbient.current) {
+    backgroundColor: Color = when (AmbientTopAppBarStyle.current) {
         TopAppBarStyle.Primary -> MaterialTheme.colors.primary
         TopAppBarStyle.Surface -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
     applySystemBarStyle: Boolean = true,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Surface(
         color = backgroundColor,
@@ -141,14 +140,20 @@ private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val navigator = NavigatorAmbient.currentOrNull
-    val canGoBack by remember {
-        (navigator?.backStack ?: emptyFlow())
-            .take(1)
-            .map { it.size > 1 }
-    }.collectAsState(false)
+    val component = AmbientUiComponent.current
+        .mergeComponent<AppBarComponent>()
+    val canGoBack = remember {
+        component.navigationState.value.backStack.size > 1
+    }
     return when {
-        canGoBack -> { { BackButton() } }
+        canGoBack -> {
+            { BackButton() }
+        }
         else -> null
     }
+}
+
+@MergeInto(UiComponent::class)
+interface AppBarComponent {
+    val navigationState: StateFlow<NavigationState>
 }

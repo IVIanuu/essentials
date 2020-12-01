@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.material.Icon
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
@@ -35,23 +36,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
+class DialogsKey
+
+@KeyUiBinding<DialogsKey>
 @FunBinding
 @Composable
 fun DialogsPage() {
@@ -224,7 +233,7 @@ fun DialogsPage() {
                         items = singleChoiceItems,
                         selectedItem = tmpSelectedItem,
                         onSelect = { tmpSelectedItem = it },
-                        dismissOnSelection = false,
+
                         item = { Text("Item: $it") },
                         positiveButton = {
                             DialogCloseButton(
@@ -309,12 +318,12 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val navigator = NavigatorAmbient.current
+    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
     TextButton(
         enabled = enabled,
         onClick = {
             onClick()
-            navigator.popTop()
+            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
         }
     ) {
         Text(text)
@@ -329,16 +338,34 @@ private fun DialogLauncherButton(
 ) {
     Spacer(Modifier.height(8.dp))
 
-    val navigator = NavigatorAmbient.current
+    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+    val component = AmbientUiComponent.current
+        .mergeComponent<DialogLauncherComponent>()
     Button(
         onClick = {
-            navigator.push(
-                DialogRoute(dismissible = dismissible) {
+            component.dispatchNavigationOption(
+                NavigationAction.Push(
                     dialog {
-                        navigator.popTop()
+                        if (dismissible) {
+                            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+                        }
                     }
-                }
+                )
             )
         }
     ) { Text(text) }
+}
+
+data class DialogLauncherKey(val dialog: @Composable () -> Unit)
+
+@KeyUiBinding<DialogLauncherKey>
+@FunBinding
+@Composable
+fun DialogLauncherDialog(key: DialogLauncherKey) {
+    DialogWrapper { key.dialog() }
+}
+
+@MergeInto(UiComponent::class)
+interface DialogLauncherComponent {
+    val dispatchNavigationOption: DispatchAction<NavigationAction>
 }

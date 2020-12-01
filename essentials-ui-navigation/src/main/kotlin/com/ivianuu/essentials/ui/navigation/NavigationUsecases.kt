@@ -16,18 +16,27 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
-import com.ivianuu.essentials.ui.UiDecoratorBinding
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.CompletableDeferred
 
-@UiDecoratorBinding("clear_navigator_backstack")
+@Suppress("UNCHECKED_CAST")
 @FunBinding
-@Composable
-fun ClearBackStackWhenLeavingApp(navigator: Navigator, @FunApi content: @Composable () -> Unit) {
-    onDispose {
-        navigator.setBackStack { emptyList() }
-    }
-    content()
+suspend fun <K : Key, R> pushKeyForResult(
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @FunApi key: K,
+): R? {
+    val result = CompletableDeferred<R?>()
+    dispatchNavigationAction(Push(key, result as CompletableDeferred<Any?>))
+    return result.await()
+}
+
+@FunBinding
+fun <R> popTopKeyWithResult(
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @FunApi result: R?,
+) {
+    dispatchNavigationAction(PopTop(result))
 }

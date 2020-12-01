@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.ripple.RippleIndication
 import androidx.compose.material.ripple.rememberRippleIndication
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,11 +33,16 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 @Composable
 fun PopupMenuButton(
@@ -67,19 +71,27 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indicationFactory: @Composable () -> Indication = AmbientIndication.current,
 ) = composed {
-    val navigator = NavigatorAmbient.current
+    val uiComponent = AmbientUiComponent.current
+        .mergeComponent<PopupClickableComponent>()
 
     var coordinates by rememberRef<LayoutCoordinates?> { null }
 
     onGloballyPositioned { coordinates = it }
         .clickable(indication = indicationFactory()) {
-            navigator.push(
-                PopupRoute(
-                    position = coordinates!!.boundsInRoot,
-                    onCancel = onCancel
-                ) {
-                    PopupMenu(items = items)
-                }
+            uiComponent.dispatchNavigationAction(
+                Push(
+                    PopupKey(
+                        position = coordinates!!.boundsInRoot,
+                        onCancel = onCancel
+                    ) {
+                        PopupMenu(items = items)
+                    }
+                )
             )
         }
+}
+
+@MergeInto(UiComponent::class)
+interface PopupClickableComponent {
+    val dispatchNavigationAction: DispatchAction<NavigationAction>
 }

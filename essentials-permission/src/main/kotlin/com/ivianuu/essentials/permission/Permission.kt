@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.Key
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -62,10 +62,6 @@ interface PermissionRequestHandler {
     suspend fun request(permission: Permission)
 }
 
-interface PermissionRequestRouteFactory {
-    fun createRoute(
-        request: PermissionRequest
-    ): Route
-}
+typealias PermissionRequestKeyFactory = (PermissionRequest) -> Key
 
 data class PermissionRequest(val permissions: List<Permission>)

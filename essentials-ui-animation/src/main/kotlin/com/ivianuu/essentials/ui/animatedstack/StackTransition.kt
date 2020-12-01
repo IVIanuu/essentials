@@ -46,7 +46,7 @@ val NoOpStackTransition: StackTransition
         }
     }
 
-val DefaultStackTransitionAmbient =
+val AmbientDefaultStackTransition =
     staticAmbientOf { NoOpStackTransition }
 
 operator fun StackTransition.plus(other: StackTransition): StackTransition = { context ->

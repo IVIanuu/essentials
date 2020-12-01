@@ -18,11 +18,17 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.merge.mergeComponent
 
 @Composable
 fun DialogListItem(
@@ -33,7 +39,8 @@ fun DialogListItem(
     dialog: @Composable (dismiss: () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val navigator = NavigatorAmbient.current
+    val component = AmbientUiComponent.current
+        .mergeComponent<DialogListItemComponent>()
     ListItem(
         modifier = modifier,
         title = title?.let { { title() } },
@@ -41,11 +48,29 @@ fun DialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         onClick = {
-            navigator.push(
-                DialogRoute {
-                    dialog { navigator.popTop() }
-                }
+            component.dispatchNavigationAction(
+                Push(
+                    DialogListItemKey {
+                        dialog {
+                            component.dispatchNavigationAction(PopTop())
+                        }
+                    }
+                )
             )
         }
     )
+}
+
+data class DialogListItemKey(val dialog: @Composable () -> Unit)
+
+@KeyUiBinding<DialogListItemKey>
+@FunBinding
+@Composable
+fun DialogListPage(key: DialogListItemKey) {
+    DialogWrapper { key.dialog() }
+}
+
+@MergeInto(UiComponent::class)
+interface DialogListItemComponent {
+    val dispatchNavigationAction: DispatchAction<NavigationAction>
 }

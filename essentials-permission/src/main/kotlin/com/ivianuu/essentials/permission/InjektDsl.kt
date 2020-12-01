@@ -42,7 +42,7 @@ annotation class PermissionRequestHandlerBinding {
 annotation class PermissionRequestRouteFactoryBinding {
     companion object {
         @Binding
-        inline val <T : PermissionRequestRouteFactory> @ForEffect T.permissionRequestRouteFactory: PermissionRequestRouteFactory
+        inline val <T : PermissionRequestKeyFactory> @ForEffect T.permissionRequestKeyFactory: PermissionRequestKeyFactory
             get() = this
     }
 }

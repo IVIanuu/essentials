@@ -25,30 +25,37 @@ import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.AmbientConfiguration
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
+import com.ivianuu.injekt.FunApi
+import com.ivianuu.injekt.FunBinding
 
-fun PopupRoute(
-    position: Rect,
-    onCancel: (() -> Unit)? = null,
-    popup: @Composable () -> Unit
-) = Route(
-    opaque = true,
-    enterTransition = FadeStackTransition(),
-    exitTransition = FadeStackTransition()
+data class PopupKey(
+    val position: Rect,
+    val onCancel: (() -> Unit)?,
+    val content: @Composable() () -> Unit,
+)
+
+@KeyUiBinding<PopupKey>
+@FunBinding
+@Composable
+fun PopupUi(
+    key: PopupKey,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
 ) {
-    val navigator = NavigatorAmbient.current
-
     val configuration = AmbientConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator.popTop()
+        dispatchNavigationAction(Pop(key))
     }
 
     var dismissed by rememberRef { false }
@@ -56,13 +63,13 @@ fun PopupRoute(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            navigator.popTop()
-            if (cancelled) onCancel?.invoke()
+            dispatchNavigationAction(Pop(key))
+            if (cancelled) key.onCancel?.invoke()
         }
     }
 
     PopupLayout(
-        position = position,
+        position = key.position,
         modifier = Modifier.tapGestureFilter(
             onTap = { dismiss(true) }
         )
@@ -71,10 +78,18 @@ fun PopupRoute(
             modifier = Modifier.tapGestureFilter(onTap = {})
                 .animatable(PopupTag)
         ) {
-            popup()
+            key.content
         }
     }
 }
+
+@NavigationOptionsFactoryBinding<PopupKey>
+@FunBinding
+fun createPopupNavigationOptions(@FunApi key: PopupKey) = NavigationOptions(
+    opaque = true,
+    enterTransition = FadeStackTransition(),
+    exitTransition = FadeStackTransition()
+)
 
 private val PopupTag = Any()
 
@@ -82,7 +97,7 @@ private val PopupTag = Any()
 private fun PopupLayout(
     position: Rect,
     modifier: Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Layout(content = content, modifier = modifier) { measureables, constraints ->
         val childConstraints = constraints.copy(

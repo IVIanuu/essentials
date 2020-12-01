@@ -27,34 +27,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.launchOnEach
-import com.ivianuu.essentials.coroutines.launchOnEachLatest
-import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.store.Initial
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
 
+class CounterKey
+
+@KeyUiBinding<CounterKey>
 @FunBinding
 @Composable
 fun CounterPage(
     dispatch: DispatchAction<CounterAction>,
-    state: @UiState CounterState
+    state: @UiState CounterState,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }

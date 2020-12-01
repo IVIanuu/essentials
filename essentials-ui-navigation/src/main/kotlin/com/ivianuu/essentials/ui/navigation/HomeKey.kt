@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission.defaultui
+package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 
-data class PermissionState(val permissions: List<Permission> = emptyList())
+typealias HomeKey = Key
 
-sealed class PermissionAction {
-    data class RequestPermission(val permission: Permission) : PermissionAction()
+@Effect
+annotation class HomeKeyBinding {
+    companion object {
+        @Binding
+        inline val <T : Key> @ForEffect T.homeKey: HomeKey
+            get() = this
+    }
 }

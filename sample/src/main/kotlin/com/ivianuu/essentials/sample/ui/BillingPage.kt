@@ -35,9 +35,13 @@ import com.ivianuu.essentials.billing.BillingManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+class BillingKey
+
+@KeyUiBinding<BillingKey>
 @FunBinding
 @Composable
 fun BillingPage(billingManager: BillingManager) {

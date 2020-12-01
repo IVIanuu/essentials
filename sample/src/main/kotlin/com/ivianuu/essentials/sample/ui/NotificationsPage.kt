@@ -55,6 +55,7 @@ import com.ivianuu.essentials.sample.ui.NotificationsPageAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsPageAction.RequestPermissions
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -64,11 +65,11 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Binding
@@ -80,11 +81,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
+class NotificationsKey
+
+@KeyUiBinding<NotificationsKey>
 @FunBinding
 @Composable
 fun NotificationsPage(
     dispatch: DispatchAction<NotificationsPageAction>,
-    pageState: @UiState NotificationsPageState
+    pageState: @UiState NotificationsPageState,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }

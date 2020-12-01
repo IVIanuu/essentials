@@ -37,9 +37,13 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 
+class ChipsKey
+
+@KeyUiBinding<ChipsKey>
 @OptIn(ExperimentalLayout::class)
 @FunBinding
 @Composable

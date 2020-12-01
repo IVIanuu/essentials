@@ -27,25 +27,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
+@KeyUiBinding<ShortcutPickerKey>
 @FunBinding
 @Composable
 fun ShortcutPickerPage(
     dispatch: DispatchAction<ShortcutPickerAction>,
     state: @UiState ShortcutPickerState,
-    @FunApi title: String? = null
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title ?: stringResource(R.string.es_title_shortcut_picker)) }
+                title = { Text(R.string.es_title_shortcut_picker) }
             )
         }
     ) {

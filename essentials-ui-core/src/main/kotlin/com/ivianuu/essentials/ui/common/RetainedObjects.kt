@@ -45,7 +45,7 @@ class RetainedObjects {
     }
 }
 
-val RetainedObjectsAmbient = staticAmbientOf<RetainedObjects>() {
+val AmbientRetainedObjects = staticAmbientOf<RetainedObjects>() {
     error("No RetainedObjects specified")
 }
 
@@ -62,7 +62,7 @@ inline fun <T> rememberRetained(
     key: Any = currentComposer.currentCompoundKeyHash,
     noinline init: () -> T
 ): T {
-    val retainedObjects = RetainedObjectsAmbient.current
+    val retainedObjects = AmbientRetainedObjects.current
     var value: ValueWithInputs<T>? = retainedObjects.getOrNull(key)
     if (value != null && !value.inputs.contentEquals(inputs)) {
         (value as? DisposableHandle)?.dispose()

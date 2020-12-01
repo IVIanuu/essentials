@@ -30,7 +30,11 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 
+class DisplayRotationKey
+
+@KeyUiBinding<DisplayRotationKey>
 @FunBinding
 @Composable
 fun DisplayRotationPage(rotation: Flow<DisplayRotation>) {

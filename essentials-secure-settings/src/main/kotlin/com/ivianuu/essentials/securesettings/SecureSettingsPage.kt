@@ -26,16 +26,17 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
+@KeyUiBinding<SecureSettingsKey>
 @FunBinding
 @Composable
 fun SecureSettingsPage(
-    dispatch: DispatchAction<SecureSettingsAction>,
     state: @UiState SecureSettingsState,
-    @FunApi showHideNavBarHint: Boolean = false
+    dispatch: DispatchAction<SecureSettingsAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
@@ -43,7 +44,7 @@ fun SecureSettingsPage(
         InsettingScrollableColumn {
             SecureSettingsHeader(
                 stringResource(
-                    if (showHideNavBarHint) {
+                    if (state.showHideNavBarHint) {
                         R.string.es_pref_secure_settings_header_hide_nav_bar_summary
                     } else {
                         R.string.es_pref_secure_settings_header_summary

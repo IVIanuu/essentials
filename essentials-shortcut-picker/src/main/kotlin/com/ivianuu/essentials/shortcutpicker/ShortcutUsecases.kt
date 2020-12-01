@@ -70,7 +70,7 @@ suspend fun extractShortcut(
     val iconResource =
         shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
-    val icon = when {
+    @Suppress("DEPRECATION") val icon = when {
         bitmapIcon != null -> bitmapIcon.toImageBitmap()
         iconResource != null -> {
             val resources =
