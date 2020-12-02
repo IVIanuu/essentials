@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui
 
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -41,6 +42,7 @@ fun defaultUiWorkers(): UiWorkers = emptySet()
 
 @FunBinding
 fun runUiWorkers(
+    defaultDispatcher: DefaultDispatcher,
     logger: Logger,
     uiScope: UiScope,
     workers: UiWorkers,
@@ -48,7 +50,7 @@ fun runUiWorkers(
     logger.d { "run ui workers" }
     workers
         .forEach { worker ->
-            uiScope.launch {
+            uiScope.launch(defaultDispatcher) {
                 worker()
             }
         }
