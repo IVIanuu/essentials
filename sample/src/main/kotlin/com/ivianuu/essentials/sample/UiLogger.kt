@@ -18,21 +18,25 @@ package com.ivianuu.essentials.sample
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.UiDecoratorBinding
+import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.awaitCancellation
 
-@UiDecoratorBinding("ui_logger", dependents = ["system_bars"])
+@UiWorkerBinding
 @FunBinding
-@Composable
-fun UiLogger(logger: Logger, @FunApi content: @Composable () -> Unit) {
-    onActive {
-        logger.d { "hello from ui" }
-        onDispose {
+suspend fun UiLogger(logger: Logger) {
+    runWithCleanup(
+        block = {
+            logger.d { "hello from ui" }
+            awaitCancellation()
+        },
+        cleanup = {
             logger.d { "bye from ui" }
         }
-    }
-    content()
+    )
 }

@@ -26,6 +26,7 @@ import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 import kotlin.time.milliseconds
@@ -40,6 +41,7 @@ suspend fun applyAndroidForegroundServiceState(
     state
         .debounce(300.milliseconds)
         .filter { it.isForeground }
+        .distinctUntilChanged()
         .onEach {
             logger.d { "start foreground service $it" }
             ContextCompat.startForegroundService(
