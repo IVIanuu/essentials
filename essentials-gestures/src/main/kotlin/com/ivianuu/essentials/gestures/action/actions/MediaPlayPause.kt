@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
+import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_play_pause")
@@ -39,6 +39,6 @@ suspend fun sendPlayPauseCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@ActionSettingsKey("media_play_pause")
-inline val MediaActionSettingsKey.playPauseMediaActionSettingsKey: MediaActionSettingsKey
-    get() = this
+@ActionSettingsKeyBinding("media_play_pause")
+inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey
+    get() = MediaActionSettingsKey()

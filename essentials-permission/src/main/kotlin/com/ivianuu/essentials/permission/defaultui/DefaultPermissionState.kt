@@ -43,13 +43,13 @@ fun defaultPermissionState(
     actions: Actions<PermissionAction>,
     dispatchNavigationAction: DispatchAction<NavigationAction>,
     hasPermissions: hasPermissions,
+    key: DefaultPermissionKey,
     openAppUi: openAppUi,
-    request: PermissionRequest,
     requestHandler: requestHandler,
 ) = scope.state(initial) {
     state
         .filter {
-            request.permissions
+            key.request.permissions
                 .all { hasPermissions(listOf(it)).first() }
         }
         .take(1)
@@ -57,7 +57,7 @@ fun defaultPermissionState(
         .launchIn(this)
 
     suspend fun updatePermissions() {
-        val permissions = request.permissions
+        val permissions = key.request.permissions
             .filterNot { hasPermissions(listOf(it)).first() }
         reduce { copy(permissions = permissions) }
     }

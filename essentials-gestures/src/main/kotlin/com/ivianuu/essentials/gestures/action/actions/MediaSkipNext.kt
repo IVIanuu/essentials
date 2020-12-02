@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
+import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_skip_next")
@@ -37,6 +37,6 @@ suspend fun sendSkipNextCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_NEXT)
 }
 
-@ActionSettingsKey("media_skip_next")
-inline val MediaActionSettingsKey.skipNextMediaActionSettingsKey: MediaActionSettingsKey
-    get() = this
+@ActionSettingsKeyBinding("media_skip_next")
+inline val skipNextMediaActionSettingsKey: MediaActionSettingsKey
+    get() = MediaActionSettingsKey()

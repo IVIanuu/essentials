@@ -345,9 +345,11 @@ private fun DialogLauncherButton(
         onClick = {
             component.dispatchNavigationOption(
                 NavigationAction.Push(
-                    dialog {
-                        if (dismissible) {
-                            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+                    DialogLauncherKey {
+                        dialog {
+                            if (dismissible) {
+                                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+                            }
                         }
                     }
                 )

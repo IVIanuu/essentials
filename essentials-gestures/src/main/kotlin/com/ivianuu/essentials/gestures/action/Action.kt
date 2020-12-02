@@ -79,7 +79,7 @@ interface ActionFactory {
 }
 
 @Effect
-annotation class ActionSettingsKey(val key: String) {
+annotation class ActionSettingsKeyBinding(val key: String) {
     companion object {
         @MapEntries
         fun <T : Key> actionSettingsUiIntoMap(
