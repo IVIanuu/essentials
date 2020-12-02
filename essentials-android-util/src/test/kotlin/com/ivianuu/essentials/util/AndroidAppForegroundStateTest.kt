@@ -16,43 +16,45 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
-class AppForegroundStateTest {
-
+class AndroidAppForegroundStateTest {
     @Test
-    fun testAppForegroundState() = runCancellingBlockingTest {
-        val lifecycleOwner = object : LifecycleOwner {
-            private val _lifecycle = LifecycleRegistry(this)
-            override fun getLifecycle(): Lifecycle = _lifecycle
-        }
-        val lifecycleRegistry = lifecycleOwner.lifecycle as LifecycleRegistry
-        val collector = appForegroundState(Dispatchers.Main, lifecycleOwner)
-            .testCollect(this)
+    fun testAndroidAppForegroundState() = runCancellingBlockingTest {
+        val activities = MutableStateFlow<ComponentActivity?>(null)
+        val collector = androidAppForegroundState(
+            this,
+            activities
+        ).testCollect(this)
 
-        lifecycleRegistry.currentState = Lifecycle.State.RESUMED
-        lifecycleRegistry.currentState = Lifecycle.State.CREATED
-        lifecycleRegistry.currentState = Lifecycle.State.STARTED
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        activities.emit(mockk())
+        activities.emit(null)
+        activities.emit(mockk())
+        activities.emit(null)
 
         collector.values.shouldContainExactly(
-            false,
-            true,
-            false,
-            true,
-            false
+            AppForegroundState.BACKGROUND,
+            AppForegroundState.FOREGROUND,
+            AppForegroundState.BACKGROUND,
+            AppForegroundState.FOREGROUND,
+            AppForegroundState.BACKGROUND
         )
     }
 }
