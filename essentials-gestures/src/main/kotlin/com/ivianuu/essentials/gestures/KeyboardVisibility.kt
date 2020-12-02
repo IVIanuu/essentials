@@ -28,6 +28,7 @@ import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
@@ -64,15 +66,15 @@ fun keyboardVisible(
         .map { Unit }
         .onStart { emit(Unit) }
         .transformLatest {
-            while (coroutineContext.isActive) {
-                emit(Unit)
+            emit(true)
+            while ((getKeyboardHeight() ?: 0) > 0) {
                 delay(100)
             }
+            emit(false)
+            awaitCancellation()
         }
-        .mapNotNull { getKeyboardHeight() }
-        .map { it > 0 }
         .distinctUntilChanged()
-        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
+        .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
 }
 
 @FunBinding
