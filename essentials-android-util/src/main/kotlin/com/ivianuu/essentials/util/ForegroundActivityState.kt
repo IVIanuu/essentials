@@ -21,12 +21,16 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ivianuu.essentials.activity.EsActivity
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Eager
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.shareIn
 
 typealias ForegroundActivity = ComponentActivity?
 
@@ -35,18 +39,22 @@ typealias ForegroundActivity = ComponentActivity?
 @Binding
 fun foregroundActivityState(
     application: Application,
-): Flow<ForegroundActivity> = callbackFlow {
+    globalScope: GlobalScope,
+): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {
     application.registerActivityLifecycleCallbacks(
         object : Application.ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            override fun onActivityStarted(activity: Activity) {
                 if (activity is EsActivity) offer(activity)
             }
 
-            override fun onActivityDestroyed(activity: Activity) {
+            override fun onActivityStopped(activity: Activity) {
                 if (activity is EsActivity) offer(null)
             }
 
-            override fun onActivityStarted(activity: Activity) {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
             }
 
             override fun onActivityResumed(activity: Activity) {
@@ -55,11 +63,10 @@ fun foregroundActivityState(
             override fun onActivityPaused(activity: Activity) {
             }
 
-            override fun onActivityStopped(activity: Activity) {
-            }
-
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
             }
         }
     )
-}
+
+    awaitClose()
+}.shareIn(globalScope, SharingStarted.Eagerly, 1)
