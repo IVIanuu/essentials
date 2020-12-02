@@ -46,20 +46,29 @@ import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.ui.coroutines.UiScope
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.launch
 import kotlin.time.milliseconds
 
+class ScaffoldKey
+
+@KeyUiBinding<ScaffoldKey>
 @FunBinding
 @Composable
-fun ScaffoldPage(navigator: Navigator) {
+fun ScaffoldPage(
+    pickFabPosition: pushKeyForResult<FabPositionKey, FabPosition>,
+    uiScope: UiScope,
+) {
     val controls = remember { ScaffoldControls() }
 
     Scaffold(
@@ -142,16 +151,10 @@ fun ScaffoldPage(navigator: Navigator) {
             ListItem(
                 title = { Text("Fab location") },
                 onClick = {
-                    navigator.push(
-                        DialogRoute {
-                            SingleChoiceListDialog(
-                                items = FabPosition.values().toList(),
-                                selectedItem = controls.fabPosition,
-                                onSelect = { controls.fabPosition = it },
-                                item = { Text(it.name) }
-                            )
-                        }
-                    )
+                    uiScope.launch {
+                        pickFabPosition(FabPositionKey(controls.fabPosition))
+                            ?.let { controls.fabPosition = it }
+                    }
                 }
             )
         }

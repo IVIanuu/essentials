@@ -22,10 +22,9 @@ import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.to
-import com.ivianuu.essentials.securesettings.SecureSettingsPage
+import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 
 fun WriteSecureSettingsPermission(vararg metadata: Permission.Pair<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission to Unit,
@@ -49,13 +48,12 @@ class WriteSecureSettingsPermissionStateProvider(
 
 @PermissionRequestHandlerBinding
 class WriteSecureSettingsPermissionRequestHandler(
-    private val navigator: Navigator,
-    private val secureSettingsPage: SecureSettingsPage,
+    private val requestSecureSettings: pushKeyForResult<SecureSettingsKey, Boolean>,
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission
 
     override suspend fun request(permission: Permission) {
-        navigator.push<Boolean> { secureSettingsPage(false) }
+        requestSecureSettings(SecureSettingsKey())
     }
 }

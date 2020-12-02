@@ -23,7 +23,7 @@ import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
 import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjectsAmbient
+import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -36,7 +36,7 @@ fun ProvideActivityRetainedObjects(@FunApi content: @Composable () -> Unit) {
     if (activity != null) {
         val retainedObjects = remember { RetainedObjects() }
         Providers(
-            RetainedObjectsAmbient provides retainedObjects,
+            AmbientRetainedObjects provides retainedObjects,
             content = content
         )
         onDispose { retainedObjects.dispose() }

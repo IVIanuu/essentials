@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,24 +45,23 @@ import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.securesettings.SecureSettingsPage
-import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+class NavBarKey
+
+@KeyUiBinding<NavBarKey>
 @FunBinding
 @Composable
 fun NavBarPage(
     hasPermissions: hasPermissions,
     navBarManager: NavBarManager,
-    navigator: Navigator,
     requestPermissions: requestPermissions,
 ) {
     Scaffold(

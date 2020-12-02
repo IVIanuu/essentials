@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.action.ui.picker
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.getAction
-import com.ivianuu.essentials.gestures.action.getActionSettingsUi
+import com.ivianuu.essentials.gestures.action.getActionSettingsKey
 import com.ivianuu.essentials.gestures.action.getAllActions
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.*
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.ActionItem
@@ -27,12 +27,12 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.PickerD
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerItem.SpecialOption
 import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
@@ -46,16 +46,21 @@ fun actionPickerState(
     scope: CoroutineScope,
     initial: @Initial ActionPickerState = ActionPickerState(),
     actions: Actions<ActionPickerAction>,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     getActionPickerItems: getActionPickerItems,
     getAction: getAction,
-    navigator: Navigator,
-    requestPermissions: requestPermissions
+    popTopKeyWithResult: popTopKeyWithResult<ActionPickerResult>,
+    requestPermissions: requestPermissions,
 ) = scope.state(initial) {
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
 
     actions
         .filterIsInstance<OpenActionSettings>()
-        .onEach { action -> navigator.push { action.item.settingsUi!!() } }
+        .onEach { action ->
+            dispatchNavigationAction(
+                NavigationAction.Push(action.item.settingsKey!!)
+            )
+        }
         .launchIn(this)
 
     actions
@@ -67,7 +72,7 @@ fun actionPickerState(
                 if (!requestPermissions(pickedAction.permissions)) return@onEach
             }
 
-            navigator.popTop(result = result)
+            popTopKeyWithResult(result)
         }
         .launchIn(this)
 }
@@ -76,21 +81,20 @@ fun actionPickerState(
 suspend fun getActionPickerItems(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     getAllActions: getAllActions,
-    getActionSettingsUi: getActionSettingsUi,
-    navigator: Navigator,
-    params: ActionPickerParams,
+    getActionSettingsKey: getActionSettingsKey,
+    key: ActionPickerKey,
     stringResource: stringResource,
 ) = buildList<ActionPickerItem> {
     val specialOptions = mutableListOf<SpecialOption>()
 
-    if (params.showDefaultOption) {
+    if (key.showDefaultOption) {
         specialOptions += SpecialOption(
             title = stringResource(R.string.es_default),
             getResult = { ActionPickerResult.Default }
         )
     }
 
-    if (params.showNoneOption) {
+    if (key.showNoneOption) {
         specialOptions += SpecialOption(
             title = stringResource(R.string.es_none),
             getResult = { ActionPickerResult.None }
@@ -98,17 +102,9 @@ suspend fun getActionPickerItems(
     }
 
     val actionsAndDelegates = (
-            (
-                    actionPickerDelegates
-                        .map {
-                            PickerDelegate(
-                                it,
-                                navigator
-                            )
-                        }
-                    ) + (getAllActions().map {
-                ActionItem(it, getActionSettingsUi(it.key))
-            })
+            (actionPickerDelegates
+                .map { PickerDelegate(it) }) + (getAllActions()
+                .map { ActionItem(it, getActionSettingsKey(it.key)) })
             )
         .sortedBy { it.title }
 

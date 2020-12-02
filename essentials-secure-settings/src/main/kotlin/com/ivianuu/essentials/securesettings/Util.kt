@@ -23,8 +23,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -43,17 +43,17 @@ internal fun SecureSettingsHeader(text: String) {
 
 @FunBinding
 suspend fun popNavigatorOnceSecureSettingsGranted(
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     hasSecureSettingsPermission: hasSecureSettingsPermission,
     showToastRes: showToastRes,
-    navigator: Navigator,
-    @FunApi toast: Boolean = true
+    @FunApi toast: Boolean = true,
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
     while (coroutineContext.isActive) {
         if (hasSecureSettingsPermission()) {
             if (toast) showToastRes(R.string.es_secure_settings_permission_granted)
-            navigator.popTop(result = true)
+            dispatchNavigationAction(NavigationAction.PopTop(true))
             break
         }
         delay(100)

@@ -16,7 +16,18 @@
 
 package com.ivianuu.essentials.securesettings
 
-object SecureSettingsState
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.injekt.Binding
+
+data class SecureSettingsKey(val showHideNavBarHint: Boolean = false)
+
+data class SecureSettingsState(val showHideNavBarHint: Boolean = false) {
+    companion object {
+        @Binding
+        fun initial(key: SecureSettingsKey): @Initial SecureSettingsState =
+            SecureSettingsState(key.showHideNavBarHint)
+    }
+}
 
 sealed class SecureSettingsAction {
     object GrantPermissionsViaRoot : SecureSettingsAction()

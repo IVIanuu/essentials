@@ -30,6 +30,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(Deps.Injekt.android)
+    api(project(":essentials-android-core"))
     api(project(":essentials-core"))
     api(project(":essentials-ui"))
     testImplementation(project(":essentials-android-test"))

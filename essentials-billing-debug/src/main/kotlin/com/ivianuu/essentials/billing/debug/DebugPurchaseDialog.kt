@@ -20,48 +20,99 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonConstants
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.resource.ResourceBox
+import com.ivianuu.essentials.ui.resource.produceResource
+import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+data class DebugPurchaseKey(val params: BillingFlowParams)
+
+@KeyUiBinding<DebugPurchaseKey>
+@FunBinding
 @Composable
-internal fun DebugPurchaseDialog(
-    onPurchaseClick: () -> Unit,
-    skuDetails: SkuDetails
+fun DebugPurchaseDialog(
+    billingStore: BillingStore,
+    defaultDispatcher: DefaultDispatcher,
+    key: DebugPurchaseKey,
+    popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
 ) {
-    Dialog(
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = skuDetails.title)
-
-                Spacer(Modifier.weight(1f))
-
-                Text(
-                    text = skuDetails.price,
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        color = GooglePlayGreen
-                    )
+    DialogWrapper {
+        ResourceBox(
+            resource = produceResource {
+                withContext(defaultDispatcher) {
+                    billingStore.getSkuDetails(
+                        SkuDetailsParams.newBuilder()
+                            .setType(key.params.skuType)
+                            .setSkusList(listOf(key.params.sku))
+                            .build()
+                    ).firstOrNull()
+                }
+            },
+            loading = {
+                Dialog(
+                    content = {
+                        CircularProgressIndicator(
+                            modifier = Modifier.center()
+                        )
+                    }
                 )
             }
-        },
-        content = { Text(skuDetails.description) },
-        positiveButton = {
-            Button(
-                colors = ButtonConstants.defaultButtonColors(
-                    backgroundColor = GooglePlayGreen,
-                    contentColor = guessingContentColorFor(GooglePlayGreen),
-                ),
-                onClick = onPurchaseClick
-            ) { Text(R.string.purchase) }
+        ) { skuDetails ->
+            if (skuDetails == null) {
+                popTopKeyWithResult(null)
+                return@ResourceBox
+            }
+            Dialog(
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = skuDetails.title)
+
+                        Spacer(Modifier.weight(1f))
+
+                        Text(
+                            text = skuDetails.price,
+                            style = MaterialTheme.typography.subtitle1.copy(
+                                color = GooglePlayGreen
+                            )
+                        )
+                    }
+                },
+                content = { Text(skuDetails.description) },
+                positiveButton = {
+                    Button(
+                        colors = ButtonConstants.defaultButtonColors(
+                            backgroundColor = GooglePlayGreen,
+                            contentColor = guessingContentColorFor(GooglePlayGreen),
+                        ),
+                        onClick = {
+                            popTopKeyWithResult(skuDetails)
+                        }
+                    ) { Text(R.string.purchase) }
+                }
+            )
         }
-    )
+    }
 }
 
 private val GooglePlayGreen = Color(0xFF00A273)

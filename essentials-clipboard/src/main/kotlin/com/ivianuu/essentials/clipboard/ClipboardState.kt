@@ -20,9 +20,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.GlobalStateBinding
-import com.ivianuu.essentials.ui.store.Initial
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterIsInstance

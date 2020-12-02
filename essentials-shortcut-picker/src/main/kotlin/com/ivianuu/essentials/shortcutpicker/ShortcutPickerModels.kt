@@ -16,11 +16,15 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.injekt.Binding
+
+class ShortcutPickerKey
 
 data class ShortcutPickerState(
-    val shortcuts: Resource<List<Shortcut>> = Idle
+    val shortcuts: Resource<List<Shortcut>> = Idle,
 )
 
 sealed class ShortcutPickerAction {

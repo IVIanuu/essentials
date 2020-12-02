@@ -19,10 +19,10 @@ package com.ivianuu.essentials.apps.ui.checkableapps
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.flow.Flow
 

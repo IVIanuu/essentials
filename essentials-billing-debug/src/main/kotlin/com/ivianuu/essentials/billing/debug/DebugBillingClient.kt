@@ -42,29 +42,24 @@ import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNE
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.ui.dialog.DialogRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.resource.ResourceBox
-import com.ivianuu.essentials.ui.resource.produceResource
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.startUi
+import com.ivianuu.essentials.util.openAppUi
 import com.ivianuu.injekt.Binding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.util.Date
 
 @Binding
 class DebugBillingClient(
     private val billingStore: BillingStore,
     private val buildInfo: BuildInfo,
-    private val defaultDispatcher: DefaultDispatcher,
     private val globalScope: GlobalScope,
-    private val startUi: startUi,
-    private val navigator: Navigator,
-    private val purchasesUpdatedListener: PurchasesUpdatedListener
+    private val openAppUi: openAppUi,
+    private val purchasesUpdatedListener: PurchasesUpdatedListener,
+    private val getPurchaseResult: pushKeyForResult<DebugPurchaseKey, SkuDetails>,
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -154,62 +149,27 @@ class DebugBillingClient(
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
         globalScope.launch {
-            startUi()
+            openAppUi()
+            val purchasedSkuDetails = getPurchaseResult(DebugPurchaseKey(params))
 
-            navigator.push(
-                DialogRoute(
-                    onDismiss = {
-                        globalScope.launch {
-                            purchasesUpdatedListener.onPurchasesUpdated(
-                                BillingResult.newBuilder().setResponseCode(
-                                    BillingResponseCode.USER_CANCELED
-                                ).build(),
-                                null
-                            )
+            if (purchasedSkuDetails != null) {
+                val purchaseData = purchasedSkuDetails.toPurchaseData()
+                billingStore.addPurchase(purchasedSkuDetails.toPurchaseData())
+                purchasesUpdatedListener.onPurchasesUpdated(
+                    BillingResult.newBuilder().setResponseCode(
+                        BillingResponseCode.OK
+                    ).build(),
+                    listOf(purchaseData)
+                )
 
-                            navigator.popTop()
-                        }
-                    }
-                ) {
-                    ResourceBox(
-                        resource = produceResource {
-                            withContext(defaultDispatcher) {
-                                billingStore.getSkuDetails(
-                                    SkuDetailsParams.newBuilder()
-                                        .setType(params.skuType)
-                                        .setSkusList(listOf(params.sku))
-                                        .build()
-                                ).firstOrNull()
-                            }
-                        }
-                    ) { skuDetails ->
-                        if (skuDetails == null) {
-                            navigator.popTop()
-                        } else {
-                            DebugPurchaseDialog(
-                                skuDetails = skuDetails,
-                                onPurchaseClick = {
-                                    globalScope.launch {
-                                        val purchases = listOf(skuDetails.toPurchaseData())
-                                        purchases.forEach {
-                                            billingStore.addPurchase(it)
-                                        }
-
-                                        purchasesUpdatedListener.onPurchasesUpdated(
-                                            BillingResult.newBuilder().setResponseCode(
-                                                BillingResponseCode.OK
-                                            ).build(),
-                                            purchases
-                                        )
-
-                                        navigator.popTop()
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
-            )
+            } else {
+                purchasesUpdatedListener.onPurchasesUpdated(
+                    BillingResult.newBuilder().setResponseCode(
+                        BillingResponseCode.USER_CANCELED
+                    ).build(),
+                    null
+                )
+            }
         }
 
         return BillingResult.newBuilder().setResponseCode(BillingResponseCode.OK).build()

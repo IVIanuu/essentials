@@ -21,24 +21,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerPage
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerParams
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+class ActionsKey
+
+@KeyUiBinding<ActionsKey>
 @FunBinding
 @Composable
 fun ActionsPage(
-    actionPickerPage: (ActionPickerParams) -> ActionPickerPage,
     executeAction: executeAction,
-    navigator: Navigator,
+    pushKeyForResult: pushKeyForResult<ActionPickerKey, ActionPickerResult>,
     uiScope: UiScope,
 ) {
     Scaffold(
@@ -48,9 +49,7 @@ fun ActionsPage(
             modifier = Modifier.center(),
             onClick = {
                 uiScope.launch {
-                    val action = navigator.push<ActionPickerResult> {
-                        actionPickerPage(ActionPickerParams())()
-                    }
+                    val action = pushKeyForResult(ActionPickerKey())
                         ?.let { it as? ActionPickerResult.Action }
                         ?.actionKey ?: return@launch
 

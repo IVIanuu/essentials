@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample
+package com.ivianuu.essentials.permission.defaultui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.RouteDecoratorBinding
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.permission.PermissionRequest
+import com.ivianuu.essentials.permission.PermissionRequestKeyFactory
+import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-@RouteDecoratorBinding("logger")
+@PermissionRequestRouteFactoryBinding
 @FunBinding
-@Composable
-fun RouteLogger(logger: Logger, @FunApi route: Route, @FunApi content: @Composable () -> Unit) {
-    onActive {
-        logger.d { "hello from route $route" }
-        onDispose {
-            logger.d { "bye from route $route" }
-        }
-    }
-    content()
-}
+fun createDefaultPermissionRequestUiKey(@FunApi request: PermissionRequest): Key =
+    DefaultPermissionKey(request)

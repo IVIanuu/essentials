@@ -18,7 +18,7 @@ package com.ivianuu.essentials.activity
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.UiComponentAmbient
+import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.merge.mergeComponent
 class DefaultActivity : EsActivity() {
     @Composable
     override fun Content() {
-        UiComponentAmbient.current
+        AmbientUiComponent.current
             .mergeComponent<DefaultActivityComponent>()
             .appUi()
     }

@@ -29,10 +29,8 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.dialog.TextInputRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.dialog.TextInputKey
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.essentials.util.stringResourceWithArguments
 
@@ -63,7 +61,7 @@ class KeycodeActionFactory(
 
 @ActionPickerDelegateBinding
 class KeycodeActionPickerDelegate(
-    private val navigator: Navigator,
+    private val pickActionKeycode: pushKeyForResult<TextInputKey, String>,
     private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
@@ -72,10 +70,10 @@ class KeycodeActionPickerDelegate(
         get() = { Icon(R.drawable.es_ic_keyboard) }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val keycode = navigator.push<String>(
-            TextInputRoute(
-                title = { Text(R.string.es_keycode_picker_title) },
-                label = { Text(R.string.es_keycode_input_hint) },
+        val keycode = pickActionKeycode(
+            TextInputKey(
+                title = stringResource(R.string.es_keycode_picker_title),
+                label = stringResource(R.string.es_keycode_input_hint),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 allowEmpty = false
             )

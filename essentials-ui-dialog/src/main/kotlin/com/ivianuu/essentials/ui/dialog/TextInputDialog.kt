@@ -19,51 +19,13 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
-import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.popTop
-
-fun TextInputRoute(
-    initial: String = "",
-    label: @Composable () -> Unit,
-    keyboardOptions: KeyboardOptions,
-    title: @Composable (() -> Unit)? = null,
-    allowEmpty: Boolean = true
-) = DialogRoute {
-    val navigator = NavigatorAmbient.current
-
-    var currentValue by rememberState { initial }
-
-    TextInputDialog(
-        value = currentValue,
-        onValueChange = { currentValue = it },
-        label = label,
-        keyboardOptions = keyboardOptions,
-        title = title,
-        positiveButton = {
-            TextButton(
-                enabled = allowEmpty || currentValue.isNotEmpty(),
-                onClick = { navigator.popTop(result = currentValue) }
-            ) { Text(R.string.es_ok) }
-        },
-        negativeButton = {
-            TextButton(
-                onClick = { navigator.popTop() }
-            ) { Text(R.string.es_cancel) }
-        }
-    )
-}
 
 @Composable
 fun TextInputDialog(

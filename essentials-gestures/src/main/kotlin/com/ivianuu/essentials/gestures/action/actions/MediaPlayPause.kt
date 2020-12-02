@@ -19,12 +19,11 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.KeyEvent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionSettingsUi
+import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_play_pause")
@@ -40,6 +39,6 @@ suspend fun sendPlayPauseCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@ActionSettingsUi("media_play_pause")
-inline val MediaActionSettingsUi.playPauseMediaActionSettingsUi: MediaActionSettingsUi
-    get() = this
+@ActionSettingsKeyBinding("media_play_pause")
+inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey
+    get() = MediaActionSettingsKey()

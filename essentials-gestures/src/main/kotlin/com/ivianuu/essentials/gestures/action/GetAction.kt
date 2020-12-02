@@ -18,6 +18,7 @@ package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.withContext
@@ -61,10 +62,10 @@ suspend fun getActionExecutor(
 }
 
 @FunBinding
-suspend fun getActionSettingsUi(
-    actionSettings: Map<String, @Composable () -> Unit>,
+suspend fun getActionSettingsKey(
+    actionSettings: Map<String, Key>,
     defaultDispatcher: DefaultDispatcher,
     @FunApi key: String,
-): @Composable (() -> Unit)? = withContext(defaultDispatcher) {
+): Key? = withContext(defaultDispatcher) {
     actionSettings[key]
 }

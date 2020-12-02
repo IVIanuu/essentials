@@ -32,9 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
+import com.ivianuu.essentials.ui.core.AmbientInsets
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.ProvideInsets
-import com.ivianuu.essentials.ui.core.currentInsets
 
 @Composable
 fun Scaffold(
@@ -81,7 +81,7 @@ fun Scaffold(
             backgroundColor = backgroundColor
         ) { bodyPadding ->
             val insets =
-                if (applyInsets) currentInsets() else PaddingValues()
+                if (applyInsets) AmbientInsets.current else PaddingValues()
             ProvideInsets(
                 PaddingValues(
                     start = max(bodyPadding.start, insets.start),

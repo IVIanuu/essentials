@@ -25,11 +25,11 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 
-data class ActionPickerParams(
+data class ActionPickerKey(
     val showDefaultOption: Boolean = false,
     val showNoneOption: Boolean = false,
 )
@@ -50,7 +50,7 @@ sealed class ActionPickerAction {
 sealed class ActionPickerItem {
     data class ActionItem(
         val action: Action,
-        override val settingsUi: @Composable (() -> Unit)?,
+        override val settingsKey: Key?,
     ) : ActionPickerItem() {
         override val title: String
             get() = action.title
@@ -64,14 +64,11 @@ sealed class ActionPickerItem {
     }
 
     @Immutable
-    data class PickerDelegate(
-        val delegate: ActionPickerDelegate,
-        val navigator: Navigator
-    ) : ActionPickerItem() {
+    data class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem() {
         override val title: String
             get() = delegate.title
 
-        override val settingsUi: @Composable (() -> Unit)?
+        override val settingsKey: @Composable (() -> Unit)?
             get() = delegate.settingsUi
 
         @Composable
@@ -89,7 +86,7 @@ sealed class ActionPickerItem {
         val getResult: () -> ActionPickerResult?
     ) : ActionPickerItem() {
 
-        override val settingsUi: @Composable (() -> Unit)?
+        override val settingsKey: @Composable (() -> Unit)?
             get() = null
 
         @Composable
@@ -101,7 +98,7 @@ sealed class ActionPickerItem {
     }
 
     abstract val title: String
-    abstract val settingsUi: @Composable (() -> Unit)?
+    abstract val settingsKey: Key?
 
     @Composable
     abstract fun icon(modifier: Modifier = Modifier)

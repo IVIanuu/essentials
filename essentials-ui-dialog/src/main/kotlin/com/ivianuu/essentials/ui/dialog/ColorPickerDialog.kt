@@ -42,7 +42,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.ripple.RippleIndication
 import androidx.compose.material.ripple.rememberRippleIndication
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -69,27 +68,6 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.popTop
-
-fun ColorPickerRoute(
-    initialColor: Color,
-    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
-    allowCustomArgb: Boolean = true,
-    showAlphaSelector: Boolean = false,
-    title: String? = null
-) = DialogRoute {
-    val navigator = NavigatorAmbient.current
-    ColorPickerDialog(
-        initialColor = initialColor,
-        colorPalettes = colorPalettes,
-        onColorSelected = { navigator.popTop(result = it) },
-        onCancel = { navigator.popTop() },
-        allowCustomArgb = allowCustomArgb,
-        showAlphaSelector = showAlphaSelector,
-        title = { Text(title ?: stringResource(R.string.es_color_picker_title)) }
-    )
-}
 
 @Composable
 fun ColorPickerDialog(

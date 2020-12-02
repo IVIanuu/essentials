@@ -16,20 +16,4 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
-
-// todo move to ui-navigation-test
-class TestNavigator(initial: List<Route>) : Navigator {
-    override val backStack = MutableStateFlow(initial)
-
-    private val _backStacks = mutableListOf(initial)
-    val backStacks: List<List<Route>> by this::_backStacks
-
-    override fun setBackStack(transform: suspend (List<Route>) -> List<Route>) {
-        runBlocking {
-            backStack.value = transform(backStack.value)
-                .also { _backStacks += it }
-        }
-    }
-}
+typealias Key = Any

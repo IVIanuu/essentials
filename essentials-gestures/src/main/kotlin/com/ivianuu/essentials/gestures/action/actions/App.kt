@@ -22,8 +22,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -33,8 +32,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.stringResource
 
 @ActionFactoryBinding
@@ -69,9 +67,8 @@ class AppActionFactory(
 
 @ActionPickerDelegateBinding
 class AppActionPickerDelegate(
-    private val appPickerPage: (AppPickerParams) -> AppPickerPage,
     private val launchableAppFilter: LaunchableAppFilter,
-    private val navigator: Navigator,
+    private val pickApp: pushKeyForResult<AppPickerKey, AppInfo>,
     private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
@@ -80,9 +77,7 @@ class AppActionPickerDelegate(
         get() = { Icon(R.drawable.es_ic_apps) }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val app = navigator.push<AppInfo> {
-            appPickerPage(AppPickerParams(launchableAppFilter))()
-        } ?: return null
+        val app = pickApp(AppPickerKey(launchableAppFilter)) ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

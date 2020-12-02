@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunApi
@@ -53,6 +54,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+class AppTrackerKey
+
+@KeyUiBinding<AppTrackerKey>
 @FunBinding
 @Composable
 fun AppTrackerPage(

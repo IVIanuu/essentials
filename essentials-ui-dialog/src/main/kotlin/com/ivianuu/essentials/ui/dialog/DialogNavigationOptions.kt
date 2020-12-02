@@ -19,23 +19,26 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.navigation.NavigatorAmbient
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactories
+import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.injekt.Arg
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.MapEntries
+import kotlin.reflect.KClass
 
-fun DialogRoute(
-    enterTransition: StackTransition? = FadeStackTransition(),
-    exitTransition: StackTransition? = FadeStackTransition(),
-    opaque: Boolean = true,
-    dismissible: Boolean = true,
-    onDismiss: @Composable () -> Unit = {
-        NavigatorAmbient.current.popTop()
-    },
-    dialog: @Composable () -> Unit
-) = Route(enterTransition, exitTransition, opaque) {
-    DialogWrapper(
-        dismissible = dismissible,
-        onDismiss = onDismiss,
-        dialog = dialog
-    )
+@Effect
+annotation class DialogNavigationOptions<K> {
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        @MapEntries
+        inline fun <@Arg("K") reified K, T> bind(): NavigationOptionFactories = mapOf(
+            K::class as KClass<out Key> to {
+                NavigationOptions(
+                    opaque = true,
+                    transition = FadeStackTransition()
+                )
+            }
+        )
+    }
 }

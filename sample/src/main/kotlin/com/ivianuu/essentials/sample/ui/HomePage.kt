@@ -29,12 +29,12 @@ import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.about.AboutPage
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
-import com.ivianuu.essentials.backup.BackupAndRestorePage
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerPage
-import com.ivianuu.essentials.twilight.ui.TwilightSettingsPage
+import com.ivianuu.essentials.about.AboutKey
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.backup.BackupAndRestoreKey
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.twilight.ui.TwilightSettingsKey
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
@@ -43,20 +43,25 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.HomeRouteUiBinding
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 
-@HomeRouteUiBinding
+@HomeKeyBinding
+class HomeKey
+
+@KeyUiBinding<HomeKey>
 @FunBinding
 @Composable
-fun HomePage(dependencies: HomePageDependencies) {
+fun HomePage(
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
+    showToast: showToast,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,9 +73,7 @@ fun HomePage(dependencies: HomePageDependencies) {
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            PopupMenu.Item(onSelected = {
-                                dependencies.showToast("Selected $title")
-                            }) {
+                            PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
                                 Text(title)
                             }
                         }
@@ -96,47 +99,40 @@ fun HomePage(dependencies: HomePageDependencies) {
                 item = item,
                 color = color,
                 onClick = {
-                    val route = when (item) {
-                        HomeItem.About -> Route { dependencies.aboutPage() }
-                        HomeItem.Actions -> Route { dependencies.actionsPage() }
-                        HomeItem.AppPicker -> Route {
-                            dependencies.appPickerPage(AppPickerParams())()
-                        }
-                        HomeItem.AppTracker -> Route { dependencies.appTrackerPage() }
-                        HomeItem.BackupRestore -> Route { dependencies.backupAndRestorePage() }
-                        HomeItem.Billing -> Route { dependencies.billingPage() }
-                        HomeItem.BottomNavigation -> Route { dependencies.bottomNavigationPage() }
-                        HomeItem.CheckApps -> Route { dependencies.checkAppsPage() }
-                        HomeItem.Chips -> Route { dependencies.chipsPage() }
-                        HomeItem.Counter -> Route { dependencies.counterPage() }
-                        HomeItem.Dialogs -> Route { dependencies.dialogsPage() }
-                        HomeItem.DisplayRotation -> Route { dependencies.displayRotationPage() }
-                        HomeItem.Drawer -> Route { dependencies.drawerPage() }
-                        HomeItem.DynamicSystemBars -> Route { dependencies.dynamicSystemBarsPage() }
-                        HomeItem.ForegroundJob -> Route { dependencies.foregroundJobPage() }
-                        HomeItem.NavBar -> Route { dependencies.navBarPage() }
-                        HomeItem.Notifications -> Route { dependencies.notificationsPage() }
-                        HomeItem.Permission -> Route { dependencies.permissionsPage() }
-                        HomeItem.Prefs -> Route { dependencies.prefsPage() }
-                        HomeItem.RestartProcess -> Route { dependencies.restartProcessPage() }
-                        HomeItem.Scaffold -> Route { dependencies.scaffoldPage() }
-                        HomeItem.SharedElement -> Route(
-                            enterTransition = SharedElementStackTransition(item to "b"),
-                            exitTransition = SharedElementStackTransition(item to "b")
-                        ) {
-                            dependencies.sharedElementPage(color)
-                        }
-                        HomeItem.ShortcutPicker -> Route { dependencies.shortcutPickerPage(null) }
-                        HomeItem.Tabs -> Route { dependencies.tabsPage() }
-                        HomeItem.TextInput -> Route { dependencies.textInputPage() }
-                        HomeItem.Timer -> Route { dependencies.timerPage() }
-                        HomeItem.Torch -> Route { dependencies.torchPage() }
-                        HomeItem.Twilight -> Route { dependencies.twilightSettingsPage() }
-                        HomeItem.Unlock -> Route { dependencies.unlockPage() }
-                        HomeItem.Work -> Route { dependencies.workPage() }
+                    val key: Key = when (item) {
+                        HomeItem.About -> AboutKey()
+                        HomeItem.Actions -> ActionsKey()
+                        HomeItem.AppPicker -> AppPickerKey()
+                        HomeItem.AppTracker -> AppTrackerKey()
+                        HomeItem.BackupRestore -> BackupAndRestoreKey()
+                        HomeItem.Billing -> BillingKey()
+                        HomeItem.BottomNavigation -> BottomNavigationKey()
+                        HomeItem.CheckApps -> CheckAppsKey()
+                        HomeItem.Chips -> ChipsKey()
+                        HomeItem.Counter -> CounterKey()
+                        HomeItem.Dialogs -> DialogsKey()
+                        HomeItem.DisplayRotation -> DisplayRotationKey()
+                        HomeItem.Drawer -> DrawerKey()
+                        HomeItem.DynamicSystemBars -> DynamicSystemBarsKey()
+                        HomeItem.ForegroundJob -> ForegroundJobKey()
+                        HomeItem.NavBar -> NavBarKey()
+                        HomeItem.Notifications -> NotificationsKey()
+                        HomeItem.Permissions -> PermissionsKey()
+                        HomeItem.Prefs -> PrefsKey()
+                        HomeItem.RestartProcess -> RestartProcessKey()
+                        HomeItem.Scaffold -> ScaffoldKey()
+                        HomeItem.SharedElement -> SharedElementKey(item, color)
+                        HomeItem.ShortcutPicker -> ShortcutPickerKey()
+                        HomeItem.Tabs -> TabsKey()
+                        HomeItem.TextInput -> TextInputKey()
+                        HomeItem.Timer -> TimerKey()
+                        HomeItem.Torch -> TorchKey()
+                        HomeItem.Twilight -> TwilightSettingsKey()
+                        HomeItem.Unlock -> UnlockKey()
+                        HomeItem.Work -> WorkKey()
                     }
 
-                    dependencies.navigator.push(route)
+                    dispatchNavigationAction(NavigationAction.Push(key))
                 }
             )
 
@@ -146,43 +142,6 @@ fun HomePage(dependencies: HomePageDependencies) {
         }
     }
 }
-
-// todo @Composable functions with > 30 parameters causes a crash
-@Binding
-class HomePageDependencies(
-    val aboutPage: AboutPage,
-    val actionsPage: ActionsPage,
-    val appPickerPage: (AppPickerParams) -> AppPickerPage,
-    val appTrackerPage: AppTrackerPage,
-    val backupAndRestorePage: BackupAndRestorePage,
-    val billingPage: BillingPage,
-    val bottomNavigationPage: BottomNavigationPage,
-    val checkAppsPage: CheckAppsPage,
-    val chipsPage: ChipsPage,
-    val counterPage: CounterPage,
-    val dialogsPage: DialogsPage,
-    val displayRotationPage: DisplayRotationPage,
-    val drawerPage: DrawerPage,
-    val dynamicSystemBarsPage: DynamicSystemBarsPage,
-    val foregroundJobPage: ForegroundJobPage,
-    val navigator: Navigator,
-    val navBarPage: NavBarPage,
-    val notificationsPage: NotificationsPage,
-    val permissionsPage: PermissionsPage,
-    val prefsPage: PrefsPage,
-    val restartProcessPage: RestartProcessPage,
-    val scaffoldPage: ScaffoldPage,
-    val sharedElementPage: SharedElementPage,
-    val shortcutPickerPage: ShortcutPickerPage,
-    val showToast: showToast,
-    val tabsPage: TabsPage,
-    val textInputPage: TextInputPage,
-    val timerPage: TimerPage,
-    val torchPage: TorchPage,
-    val twilightSettingsPage: TwilightSettingsPage,
-    val unlockPage: UnlockPage,
-    val workPage: WorkPage,
-)
 
 @Composable
 private fun HomeItem(
@@ -234,7 +193,7 @@ enum class HomeItem(val title: String) {
     ForegroundJob(title = "Foreground job"),
     NavBar(title = "Nav bar"),
     Notifications(title = "Notifications"),
-    Permission(title = "Permission"),
+    Permissions(title = "Permission"),
     Prefs(title = "Prefs"),
     RestartProcess(title = "Restart process"),
     Scaffold(title = "Scaffold"),

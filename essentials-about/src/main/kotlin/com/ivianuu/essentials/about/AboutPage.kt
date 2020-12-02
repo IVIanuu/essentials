@@ -17,19 +17,24 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.UrlRoute
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
+class AboutKey
+
+@KeyUiBinding<AboutKey>
 @FunBinding
 @Composable
 fun AboutPage(
@@ -51,10 +56,10 @@ fun AboutPage(
 @FunBinding
 @Composable
 fun AboutSection(
-    navigator: Navigator,
+    dispatchNavigationAction: DispatchAction<NavigationAction>,
     @FunApi packageName: String,
     @FunApi showHeader: Boolean = false,
-    @FunApi privacyPolicyUrl: PrivacyPolicyUrl? = null
+    @FunApi privacyPolicyUrl: PrivacyPolicyUrl? = null,
 ) {
     if (showHeader) {
         Subheader {
@@ -66,42 +71,42 @@ fun AboutSection(
         titleRes = R.string.about_rate,
         descRes = R.string.about_rate_desc,
         url = { "https://play.google.com/store/apps/details?id=$packageName" },
-        navigator = navigator
+        dispatch = dispatchNavigationAction
     )
 
     AboutItem(
         titleRes = R.string.about_more_apps,
         descRes = R.string.about_more_apps_desc,
         url = { "https://play.google.com/store/apps/developer?id=Manuel+Wrage" },
-        navigator = navigator
+        dispatch = dispatchNavigationAction
     )
 
     AboutItem(
         titleRes = R.string.about_reddit,
         descRes = R.string.about_reddit_desc,
         url = { "https://www.reddit.com/r/manuelwrageapps" },
-        navigator = navigator
+        dispatch = dispatchNavigationAction
     )
 
     AboutItem(
         titleRes = R.string.about_github,
         descRes = R.string.about_github_desc,
         url = { "https://github.com/IVIanuu" },
-        navigator = navigator
+        dispatch = dispatchNavigationAction
     )
 
     AboutItem(
         titleRes = R.string.about_twitter,
         descRes = R.string.about_twitter_desc,
         url = { "https://twitter.com/IVIanuu" },
-        navigator = navigator
+        dispatch = dispatchNavigationAction
     )
 
     if (privacyPolicyUrl != null) {
         AboutItem(
             titleRes = R.string.about_privacy_policy,
             url = { privacyPolicyUrl },
-            navigator = navigator
+            dispatch = dispatchNavigationAction
         )
     }
 }
@@ -111,7 +116,7 @@ private fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String,
-    navigator: Navigator
+    dispatch: DispatchAction<NavigationAction>,
 ) {
     ListItem(
         title = { Text(titleRes) },
@@ -120,6 +125,6 @@ private fun AboutItem(
                 Text(it)
             }
         },
-        onClick = { navigator.push(UrlRoute(url())) }
+        onClick = { dispatch(Push(UrlKey(url()))) }
     )
 }

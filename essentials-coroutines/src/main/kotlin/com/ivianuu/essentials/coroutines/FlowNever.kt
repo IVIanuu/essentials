@@ -21,6 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 // todo better name
-fun <T> flowNever(): Flow<T> = flow {
+fun <T> neverFlow(): Flow<T> = flow {
     awaitCancellation()
 }

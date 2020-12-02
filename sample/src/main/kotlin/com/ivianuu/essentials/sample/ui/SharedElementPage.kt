@@ -26,15 +26,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
+import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
+class SharedElementKey(val item: HomeItem, val color: Color)
+
+@KeyUiBinding<SharedElementKey>
 @FunBinding
 @Composable
-fun SharedElementPage(@FunApi color: Color) {
+fun SharedElementPage(key: SharedElementKey) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
@@ -43,9 +50,16 @@ fun SharedElementPage(@FunApi color: Color) {
                 Box(
                     modifier = Modifier
                         .size(150.dp)
-                        .background(color, CircleShape)
+                        .background(key.color, CircleShape)
                 )
             }
         }
     }
 }
+
+@NavigationOptionsFactoryBinding<SharedElementKey>
+@FunBinding
+fun createSharedElementNavigationOptions(@FunApi key: SharedElementKey) = NavigationOptions(
+    enterTransition = SharedElementStackTransition(key.item to "b"),
+    exitTransition = SharedElementStackTransition(key.item to "b")
+)

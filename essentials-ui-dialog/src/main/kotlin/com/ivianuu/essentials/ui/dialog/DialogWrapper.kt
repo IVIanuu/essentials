@@ -16,50 +16,41 @@
 
 package com.ivianuu.essentials.ui.dialog
 
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.common.OnBackPressed
+import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.rememberState
 
 @Composable
 fun DialogWrapper(
     dismissible: Boolean = true,
-    onDismiss: @Composable () -> Unit,
-    dialog: @Composable () -> Unit
+    modifier: Modifier = Modifier,
+    dialog: @Composable () -> Unit,
 ) {
+    val backPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
     if (!dismissible) {
         OnBackPressed { }
-    }
-
-    var dismissed by rememberState { false }
-    var dismissCalled by rememberState { false }
-    if (dismissed) {
-        if (!dismissCalled) {
-            dismissCalled = true
-            onDismiss()
-        }
     }
 
     Box(
         modifier = Modifier.tapGestureFilter(
             onTap = {
-                if (dismissible) {
-                    dismissed = true
-                }
+                backPressedDispatcherOwner.onBackPressedDispatcher
+                    .onBackPressed()
             }
         )
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f)),
+            .background(Color.Black.copy(alpha = 0.6f))
+            .then(modifier),
         contentAlignment = Alignment.Center
     ) {
         InsetsPadding {

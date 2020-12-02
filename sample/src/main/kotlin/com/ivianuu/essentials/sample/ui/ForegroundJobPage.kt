@@ -48,13 +48,17 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.delay
 
+class ForegroundJobKey
+
 @SuppressLint("NewApi")
+@KeyUiBinding<ForegroundJobKey>
 @FunBinding
 @Composable
 fun ForegroundJobPage(

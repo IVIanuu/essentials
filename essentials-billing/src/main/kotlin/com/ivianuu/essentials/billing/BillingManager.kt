@@ -28,13 +28,13 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
+import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.util.AppForegroundState
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.startUi
+import com.ivianuu.essentials.util.openAppUi
 import com.ivianuu.injekt.ImplBinding
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -71,12 +71,12 @@ interface BillingManager {
 @Scoped(ApplicationComponent::class)
 @ImplBinding
 class BillingManagerImpl(
-    private val appForegroundState: AppForegroundState,
+    private val appForegroundState: Flow<AppForegroundState>,
     billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
     private val defaultDispatcher: DefaultDispatcher,
     private val ioDispatcher: IODispatcher,
     private val logger: Logger,
-    private val startUi: startUi,
+    private val openAppUi: openAppUi,
 ) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
@@ -104,7 +104,7 @@ class BillingManagerImpl(
             }
         }
 
-        val activity = startUi()
+        val activity = openAppUi()
 
         ensureConnected()
 
@@ -170,7 +170,7 @@ class BillingManagerImpl(
     override fun isPurchased(sku: Sku): Flow<Boolean> {
         return merge(
             appForegroundState
-                .filter { it },
+                .filter { it == AppForegroundState.FOREGROUND },
             refreshes
         )
             .onStart { emit(Unit) }

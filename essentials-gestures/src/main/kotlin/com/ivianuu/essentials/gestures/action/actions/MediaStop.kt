@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionSettingsUi
+import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.FunBinding
 
 @ActionBinding("media_stop")
@@ -37,6 +37,6 @@ suspend fun sendStopCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
-@ActionSettingsUi("media_stop")
-inline val MediaActionSettingsUi.stopMediaActionSettingsUi: MediaActionSettingsUi
-    get() = this
+@ActionSettingsKeyBinding("media_stop")
+inline val stopeMediaActionSettingsKey: MediaActionSettingsKey
+    get() = MediaActionSettingsKey()

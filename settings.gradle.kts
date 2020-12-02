@@ -71,6 +71,7 @@ include(
     ":essentials-ui-navigation",
     ":essentials-ui-popup",
     ":essentials-ui-prefs",
+    ":essentials-ui-store",
     ":essentials-unlock",
     ":essentials-work",
     ":sample"

@@ -44,7 +44,7 @@ fun runAppWorkers(
     globalScope: GlobalScope,
     workers: AppWorkers
 ) {
-    logger.d { "run workers" }
+    logger.d { "run app workers" }
     workers
         .forEach { worker ->
             globalScope.launch {

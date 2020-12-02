@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Arg
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
@@ -78,13 +79,13 @@ interface ActionFactory {
 }
 
 @Effect
-annotation class ActionSettingsUi(val key: String) {
+annotation class ActionSettingsKeyBinding(val key: String) {
     companion object {
         @MapEntries
-        fun <T : @Composable () -> Unit> actionSettingsUiIntoMap(
+        fun <T : Key> actionSettingsUiIntoMap(
             @Arg("key") key: String,
             instance: @ForEffect T,
-        ): Map<String, @Composable () -> Unit> = mapOf(key to instance)
+        ): Map<String, Key> = mapOf(key to instance)
     }
 }
 

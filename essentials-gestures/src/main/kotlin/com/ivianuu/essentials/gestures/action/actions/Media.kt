@@ -25,28 +25,27 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerPage
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerParams
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.datastore.android.PrefBinding
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsUiAction.*
+import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.*
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
@@ -109,11 +108,14 @@ data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
 
+class MediaActionSettingsKey
+
+@KeyUiBinding<MediaActionSettingsKey>
 @FunBinding
 @Composable
-fun MediaActionSettingsUi(
-    dispatch: DispatchAction<MediaActionSettingsUiAction>,
-    state: @UiState MediaActionSettingsUiState,
+fun MediaActionSettingsPage(
+    dispatch: DispatchAction<MediaActionSettingsAction>,
+    state: @UiState MediaActionSettingsState,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
         InsettingScrollableColumn {
@@ -133,22 +135,21 @@ fun MediaActionSettingsUi(
     }
 }
 
-data class MediaActionSettingsUiState(val mediaApp: Resource<AppInfo> = Idle)
+data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle)
 
-sealed class MediaActionSettingsUiAction {
-    object UpdateMediaApp : MediaActionSettingsUiAction()
+sealed class MediaActionSettingsAction {
+    object UpdateMediaApp : MediaActionSettingsAction()
 }
 
 @UiStateBinding
-fun mediaActionSettingsUiState(
+fun mediaActionSettingsState(
     scope: CoroutineScope,
-    initial: @Initial MediaActionSettingsUiState = MediaActionSettingsUiState(),
-    actions: Actions<MediaActionSettingsUiAction>,
-    appPickerPageFactory: (AppPickerParams) -> AppPickerPage,
+    initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
+    actions: Actions<MediaActionSettingsAction>,
     getAppInfo: getAppInfo,
     intentAppFilterFactory: (Intent) -> IntentAppFilter,
-    navigator: Navigator,
     prefs: Flow<MediaActionPrefs>,
+    pickMediaApp: pushKeyForResult<AppPickerKey, AppInfo>,
     updatePrefs: updatePref<MediaActionPrefs>,
 ) = scope.state(initial) {
     prefs
@@ -160,11 +161,9 @@ fun mediaActionSettingsUiState(
     actions
         .filterIsInstance<UpdateMediaApp>()
         .onEach {
-            val newMediaApp = navigator.push<AppInfo>(
-                appPickerPageFactory(
-                    AppPickerParams(
-                        intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
-                    )
+            @Suppress("DEPRECATION") val newMediaApp = pickMediaApp(
+                AppPickerKey(
+                    intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
                 )
             )
             if (newMediaApp != null) {

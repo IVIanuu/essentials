@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
+import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.getInstalledApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.popTop
+import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.Initial
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
@@ -37,7 +37,7 @@ fun appPickerState(
     initial: @Initial AppPickerState,
     actions: Actions<AppPickerAction>,
     getInstalledApps: getInstalledApps,
-    navigator: Navigator
+    popTopKeyWithResult: popTopKeyWithResult<AppInfo>,
 ) = scope.state(initial) {
     reduceResource({ getInstalledApps() }) { copy(allApps = it) }
     actions
@@ -46,6 +46,6 @@ fun appPickerState(
         .launchIn(this)
     actions
         .filterIsInstance<PickApp>()
-        .onEach { navigator.popTop(result = it.app) }
+        .onEach { popTopKeyWithResult(it.app) }
         .launchIn(this)
 }

@@ -17,20 +17,20 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUiBinding
-import com.ivianuu.essentials.ui.navigation.Content
-import com.ivianuu.essentials.ui.navigation.HomeRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.setRootIfEmpty
+import com.ivianuu.essentials.ui.navigation.NavigationState
+import com.ivianuu.essentials.ui.navigation.NavigationStateContent
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.StateFlow
 
 @AppUiBinding
 @FunBinding
 @Composable
 fun DefaultAppUi(
-    homeRoute: HomeRoute,
-    navigator: Navigator
+    navigationState: @UiState NavigationState,
+    navigationStateContent: NavigationStateContent,
 ) {
-    navigator.setRootIfEmpty(homeRoute)
-    navigator.Content()
+    navigationStateContent(navigationState, Modifier)
 }

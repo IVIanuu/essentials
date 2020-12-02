@@ -46,7 +46,7 @@ fun InsetsPadding(
     bottom: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val padding = InsetsAmbient.current
+    val padding = AmbientInsets.current
     Box(
         modifier = Modifier.absolutePadding(
             if (start) padding.start else 0.dp,
@@ -59,10 +59,7 @@ fun InsetsPadding(
     }
 }
 
-internal val InsetsAmbient = ambientOf { PaddingValues() }
-
-@Composable
-fun currentInsets(): PaddingValues = InsetsAmbient.current
+val AmbientInsets = ambientOf { PaddingValues() }
 
 @Composable
 fun ConsumeInsets(
@@ -72,7 +69,7 @@ fun ConsumeInsets(
     bottom: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val currentInsets = InsetsAmbient.current
+    val currentInsets = AmbientInsets.current
     ProvideInsets(
         PaddingValues(
             if (start) 0.dp else currentInsets.start,
@@ -89,7 +86,7 @@ fun ProvideInsets(
     insets: PaddingValues,
     content: @Composable () -> Unit,
 ) {
-    Providers(InsetsAmbient provides insets, content = content)
+    Providers(AmbientInsets provides insets, content = content)
 }
 
 @UiDecoratorBinding("window_insets")
