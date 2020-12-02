@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+@HomeItemBinding("Check apps")
 class CheckAppsKey
 
 @KeyUiBinding<CheckAppsKey>

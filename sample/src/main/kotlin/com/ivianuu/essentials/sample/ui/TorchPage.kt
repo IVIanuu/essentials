@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
 
+@HomeItemBinding("Torch")
 class TorchKey
 
 @KeyUiBinding<TorchKey>

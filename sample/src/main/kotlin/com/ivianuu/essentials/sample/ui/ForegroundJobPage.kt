@@ -55,6 +55,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.delay
 
+@HomeItemBinding("Foreground")
 class ForegroundJobKey
 
 @SuppressLint("NewApi")

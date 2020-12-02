@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@HomeItemBinding("Unlock")
 class UnlockKey
 
 @KeyUiBinding<UnlockKey>

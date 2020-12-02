@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 
+@HomeItemBinding("Dynamic system bars")
 class DynamicSystemBarsKey
 
 @KeyUiBinding<DynamicSystemBarsKey>

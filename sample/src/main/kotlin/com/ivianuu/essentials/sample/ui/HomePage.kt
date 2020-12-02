@@ -44,13 +44,19 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
+import com.ivianuu.essentials.ui.navigation.HomeKeyBinding.Companion.homeKey
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Arg
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.SetElements
 
 @HomeKeyBinding
 class HomeKey
@@ -60,8 +66,10 @@ class HomeKey
 @Composable
 fun HomePage(
     dispatchNavigationAction: DispatchAction<NavigationAction>,
+    items: Set<HomeItem>,
     showToast: showToast,
 ) {
+    val finalItems = remember(items) { items.sortedBy { it.title } }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -82,9 +90,7 @@ fun HomePage(
             )
         }
     ) {
-        val items = remember { HomeItem.values().toList().sortedBy { it.name } }
-
-        InsettingLazyColumnFor(items = items) { item ->
+        InsettingLazyColumnFor(items = finalItems) { item ->
             val color = key(item) {
                 rememberSavedInstanceState(item) {
                     ColorPickerPalette.values()
@@ -99,44 +105,11 @@ fun HomePage(
                 item = item,
                 color = color,
                 onClick = {
-                    val key: Key = when (item) {
-                        HomeItem.About -> AboutKey()
-                        HomeItem.Actions -> ActionsKey()
-                        HomeItem.AppPicker -> AppPickerKey()
-                        HomeItem.AppTracker -> AppTrackerKey()
-                        HomeItem.BackupRestore -> BackupAndRestoreKey()
-                        HomeItem.Billing -> BillingKey()
-                        HomeItem.BottomNavigation -> BottomNavigationKey()
-                        HomeItem.CheckApps -> CheckAppsKey()
-                        HomeItem.Chips -> ChipsKey()
-                        HomeItem.Counter -> CounterKey()
-                        HomeItem.Dialogs -> DialogsKey()
-                        HomeItem.DisplayRotation -> DisplayRotationKey()
-                        HomeItem.Drawer -> DrawerKey()
-                        HomeItem.DynamicSystemBars -> DynamicSystemBarsKey()
-                        HomeItem.ForegroundJob -> ForegroundJobKey()
-                        HomeItem.NavBar -> NavBarKey()
-                        HomeItem.Notifications -> NotificationsKey()
-                        HomeItem.Permissions -> PermissionsKey()
-                        HomeItem.Prefs -> PrefsKey()
-                        HomeItem.RestartProcess -> RestartProcessKey()
-                        HomeItem.Scaffold -> ScaffoldKey()
-                        HomeItem.SharedElement -> SharedElementKey(item, color)
-                        HomeItem.ShortcutPicker -> ShortcutPickerKey()
-                        HomeItem.Tabs -> TabsKey()
-                        HomeItem.TextInput -> TextInputKey()
-                        HomeItem.Timer -> TimerKey()
-                        HomeItem.Torch -> TorchKey()
-                        HomeItem.Twilight -> TwilightSettingsKey()
-                        HomeItem.Unlock -> UnlockKey()
-                        HomeItem.Work -> WorkKey()
-                    }
-
-                    dispatchNavigationAction(NavigationAction.Push(key))
+                    dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
                 }
             )
 
-            if (items.indexOf(item) != items.lastIndex) {
+            if (finalItems.indexOf(item) != finalItems.lastIndex) {
                 HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
             }
         }
@@ -149,11 +122,10 @@ private fun HomeItem(
     onClick: () -> Unit,
     item: HomeItem,
 ) {
-    println()
     ListItem(
         title = { Text(item.title) },
         leading = {
-            SharedElement(item) {
+            SharedElement(item.title) {
                 Box(
                     modifier = Modifier
                         .size(40.dp)
@@ -175,35 +147,15 @@ private fun HomeItem(
     )
 }
 
-enum class HomeItem(val title: String) {
-    About(title = "About"),
-    Actions(title = "Actions"),
-    AppPicker(title = "App picker"),
-    AppTracker(title = "App tracker"),
-    BackupRestore(title = "Backup/Restore"),
-    Billing(title = "Billing"),
-    BottomNavigation(title = "Bottom navigation"),
-    CheckApps(title = "Check apps"),
-    Chips(title = "Chips"),
-    Counter(title = "Counter"),
-    Dialogs(title = "Dialogs"),
-    DisplayRotation(title = "Display rotation"),
-    Drawer(title = "Drawer"),
-    DynamicSystemBars(title = "Dynamic system bars"),
-    ForegroundJob(title = "Foreground job"),
-    NavBar(title = "Nav bar"),
-    Notifications(title = "Notifications"),
-    Permissions(title = "Permission"),
-    Prefs(title = "Prefs"),
-    RestartProcess(title = "Restart process"),
-    Scaffold(title = "Scaffold"),
-    SharedElement(title = "Shared element"),
-    ShortcutPicker(title = "Shortcut picker"),
-    Tabs(title = "Tabs"),
-    TextInput(title = "Text input"),
-    Timer(title = "Timer"),
-    Torch(title = "Torch"),
-    Twilight(title = "Twilight"),
-    Unlock(title = "Unlock"),
-    Work(title = "Work")
+data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
+
+@Effect
+annotation class HomeItemBinding(val title: String) {
+    companion object {
+        @SetElements
+        fun <T : Any> bind(
+            @Arg("title") title: String,
+            keyFactory: (Color) -> @ForEffect T,
+        ): Set<HomeItem> = setOf(HomeItem(title, keyFactory))
+    }
 }

@@ -81,6 +81,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
+@HomeItemBinding("Notifications")
 class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>

@@ -60,6 +60,7 @@ import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 import kotlin.time.milliseconds
 
+@HomeItemBinding("Scaffold")
 class ScaffoldKey
 
 @KeyUiBinding<ScaffoldKey>

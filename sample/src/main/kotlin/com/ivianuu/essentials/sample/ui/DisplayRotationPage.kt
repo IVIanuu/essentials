@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 
+@HomeItemBinding("Display rotation")
 class DisplayRotationKey
 
 @KeyUiBinding<DisplayRotationKey>

@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 
+@HomeItemBinding("Tabs")
 class TabsKey
 
 @KeyUiBinding<TabsKey>

@@ -36,7 +36,8 @@ import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 
-class SharedElementKey(val item: HomeItem, val color: Color)
+@HomeItemBinding("Shared element")
+class SharedElementKey(val color: Color)
 
 @KeyUiBinding<SharedElementKey>
 @FunBinding
@@ -60,6 +61,6 @@ fun SharedElementPage(key: SharedElementKey) {
 @NavigationOptionsFactoryBinding<SharedElementKey>
 @FunBinding
 fun createSharedElementNavigationOptions(@FunApi key: SharedElementKey) = NavigationOptions(
-    enterTransition = SharedElementStackTransition(key.item to "b"),
-    exitTransition = SharedElementStackTransition(key.item to "b")
+    enterTransition = SharedElementStackTransition("Shared element" to "b"),
+    exitTransition = SharedElementStackTransition("Shared element" to "b")
 )

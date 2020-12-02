@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.FunBinding
 
+@HomeItemBinding("Chips")
 class ChipsKey
 
 @KeyUiBinding<ChipsKey>

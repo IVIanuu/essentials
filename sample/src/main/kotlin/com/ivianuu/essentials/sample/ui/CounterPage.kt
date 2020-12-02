@@ -46,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@HomeItemBinding("Counter")
 class CounterKey
 
 @KeyUiBinding<CounterKey>

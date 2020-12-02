@@ -48,6 +48,7 @@ import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.JsonClass
 
+@HomeItemBinding("Prefs")
 class PrefsKey
 
 @KeyUiBinding<PrefsKey>

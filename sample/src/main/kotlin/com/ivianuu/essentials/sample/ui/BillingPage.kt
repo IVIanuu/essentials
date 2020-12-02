@@ -39,6 +39,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+@HomeItemBinding("Billing")
 class BillingKey
 
 @KeyUiBinding<BillingKey>

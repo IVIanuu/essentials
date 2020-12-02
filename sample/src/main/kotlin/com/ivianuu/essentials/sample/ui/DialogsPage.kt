@@ -58,6 +58,7 @@ import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 
+@HomeItemBinding("Dialogs")
 class DialogsKey
 
 @KeyUiBinding<DialogsKey>

@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
 
+@HomeItemBinding("Actions")
 class ActionsKey
 
 @KeyUiBinding<ActionsKey>
