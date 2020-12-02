@@ -17,13 +17,12 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
+import com.ivianuu.essentials.ui.navigation.invokeNavigationStateContent
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.flow.StateFlow
 
 @AppUiBinding
 @FunBinding
@@ -32,5 +31,5 @@ fun DefaultAppUi(
     navigationState: @UiState NavigationState,
     navigationStateContent: NavigationStateContent,
 ) {
-    navigationStateContent(navigationState, Modifier)
+    navigationStateContent.invokeNavigationStateContent(navigationState)
 }

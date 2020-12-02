@@ -38,16 +38,18 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun NavigationStateContent(
-    optionFactories: NavigationOptionFactories,
-    uiFactories: KeyUiFactories,
+    optionFactoriesFactory: () -> NavigationOptionFactories,
+    uiFactoriesFactory: () -> KeyUiFactories,
     @FunApi state: NavigationState,
     @FunApi modifier: Modifier = Modifier,
 ) {
     val contentState =
-        remember { NavigationContentState(optionFactories, uiFactories, state.backStack) }
-    onCommit(optionFactories, uiFactories, state.backStack) {
-        contentState.optionFactories = optionFactories
-        contentState.uiFactories = uiFactories
+        remember {
+            NavigationContentState(optionFactoriesFactory(),
+                uiFactoriesFactory(),
+                state.backStack)
+        }
+    onCommit(state.backStack) {
         contentState.updateBackStack(state.backStack)
     }
     AnimatedStack(modifier = modifier, children = contentState.stackChildren)
