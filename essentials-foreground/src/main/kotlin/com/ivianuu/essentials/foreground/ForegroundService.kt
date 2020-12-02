@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
 import android.app.NotificationManager
 import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -26,10 +26,9 @@ import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.merge.MergeInto
 import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -39,51 +38,40 @@ class ForegroundService : EsService() {
         serviceComponent.mergeComponent<ForegroundServiceComponent>()
     }
 
-    private var lastJobs = listOf<ForegroundJob>()
-
     override fun onCreate() {
         super.onCreate()
         component.logger.d { "started foreground service" }
-        component.foregroundManager.jobs
-            .flatMapLatest { jobs ->
-                if (jobs.isNotEmpty()) {
-                    combine(jobs.map { it.notification }) { notifications ->
-                        jobs.zip(notifications)
-                    }
-                } else {
-                    flowOf(emptyList())
-                }
-            }
-            .onEach { update(it) }
+        component.internalForegroundState
+            .map { it.infos }
+            .onEach { applyState(it) }
             .launchIn(scope)
 
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
                 component.logger.d { "stopped foreground service" }
-                update(emptyList())
+                applyState(emptyList())
             }
         }
     }
 
-    private fun update(newJobs: List<Pair<ForegroundJob, Notification>>) {
-        component.logger.d { "update jobs: $newJobs last: $lastJobs" }
+    private fun applyState(infos: List<ForegroundInfo>) {
+        component.logger.d { "update infos: $infos" }
 
-        lastJobs
-            .filter { prevJob ->
-                newJobs.none { prevJob == it.first }
-            }
-            .forEach { job -> component.notificationManager.cancel(job.id) }
+        infos
+            .filter { it.state is Background }
+            .forEach { component.notificationManager.cancel(it.id) }
 
-        lastJobs = newJobs.map { it.first }
-
-        if (newJobs.isNotEmpty()) {
-            newJobs.forEachIndexed { index, (job, notification) ->
-                if (index == 0) {
-                    startForeground(job.id, notification)
-                } else {
-                    component.notificationManager.notify(job.id, notification)
+        if (infos.any { it.state is Foreground }) {
+            infos
+                .filter { it.state is Foreground }
+                .map { it.id to (it.state as Foreground).notification }
+                .forEachIndexed { index, (id, notification) ->
+                    if (index == 0) {
+                        startForeground(id, notification)
+                    } else {
+                        component.notificationManager.notify(id, notification)
+                    }
                 }
-            }
         } else {
             stopForeground(true)
             stopSelf()
@@ -93,7 +81,7 @@ class ForegroundService : EsService() {
 
 @MergeInto(ServiceComponent::class)
 interface ForegroundServiceComponent {
-    val foregroundManager: ForegroundManager
+    val internalForegroundState: Flow<InternalForegroundState>
     val notificationManager: NotificationManager
     val logger: Logger
 }

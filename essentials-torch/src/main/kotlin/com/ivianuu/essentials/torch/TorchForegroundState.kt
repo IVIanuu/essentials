@@ -24,40 +24,27 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.app.AppWorkerBinding
-import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.coroutines.applyState
-import com.ivianuu.essentials.foreground.ForegroundJob
-import com.ivianuu.essentials.foreground.startForegroundJob
+import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-@AppWorkerBinding
-@FunBinding
-suspend fun updateTorchForegroundState(
+@ForegroundStateBinding
+fun torchForegroundState(
     createTorchNotification: createTorchNotification,
-    startForegroundJob: startForegroundJob,
-    state: Flow<TorchState>
-) {
-    state
-        .map { it.torchEnabled }
-        .distinctUntilChanged()
-        .onCancel { emit(false) }
-        .applyState(null as ForegroundJob?) { torchEnabled ->
-            if (torchEnabled) {
-                startForegroundJob(createTorchNotification())
-            } else {
-                this?.stop()
-                null
-            }
-        }
-        .collect()
-}
+    state: Flow<TorchState>,
+): Flow<ForegroundState> = state
+    .map { it.torchEnabled }
+    .distinctUntilChanged()
+    .map { torchEnabled ->
+        if (torchEnabled) ForegroundState.Foreground(createTorchNotification())
+        else ForegroundState.Background
+    }
 
 @SuppressLint("NewApi")
 @FunBinding

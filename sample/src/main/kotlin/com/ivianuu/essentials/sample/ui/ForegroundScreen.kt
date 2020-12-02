@@ -30,10 +30,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.LaunchedTask
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onActive
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,8 +41,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.foreground.ForegroundJob
-import com.ivianuu.essentials.foreground.startForegroundJob
+import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundState.*
+import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -51,23 +51,29 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.isActive
 
 @HomeItemBinding("Foreground")
-class ForegroundJobKey
+class ForegroundKey
 
 @SuppressLint("NewApi")
-@KeyUiBinding<ForegroundJobKey>
+@KeyUiBinding<ForegroundKey>
 @FunBinding
 @Composable
-fun ForegroundJobScreen(
-    buildForegroundNotification: buildForegroundNotification,
+fun ForegroundScreen(
+    createForegroundNotification: createForegroundNotification,
+    foregroundState: ForegroundScreenState,
     notificationManager: NotificationManager,
-    startForegroundJob: startForegroundJob,
     systemBuildInfo: SystemBuildInfo,
 ) {
+    val currentForegroundState by foregroundState.collectAsState()
     if (systemBuildInfo.sdk >= 26) {
         onActive {
             notificationManager.createNotificationChannel(
@@ -79,29 +85,25 @@ fun ForegroundJobScreen(
         }
     }
 
+    onDispose { foregroundState.value = Background }
+
     val primaryColor = MaterialTheme.colors.primary
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Foreground") }) }
     ) {
-        var foregroundJob by rememberState<ForegroundJob?> { null }
-        var count by rememberState(foregroundJob) { 0 }
+        var count by rememberState(currentForegroundState is Foreground) { 0 }
 
-        foregroundJob?.let { currentJob ->
-            onCommit(count) {
-                currentJob.updateNotification(
-                    buildForegroundNotification(count, primaryColor)
-                )
-            }
-
-            LaunchedEffect(currentJob) {
-                while (true) {
-                    delay(1000)
+        if (currentForegroundState is Foreground) {
+            LaunchedEffect(true) {
+                while (isActive) {
                     count++
+                    foregroundState.value = Foreground(
+                        createForegroundNotification(count, primaryColor)
+                    )
+                    delay(1000)
                 }
             }
-
-            onDispose { foregroundJob?.stop() }
         }
 
         Column(
@@ -109,7 +111,7 @@ fun ForegroundJobScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (foregroundJob != null) {
+            if (currentForegroundState is Foreground) {
                 Text(
                     text = "Current progress $count",
                     style = MaterialTheme.typography.h5
@@ -118,16 +120,12 @@ fun ForegroundJobScreen(
             Spacer(Modifier.height(8.dp))
             Button(
                 onClick = {
-                    foregroundJob = if (foregroundJob != null) {
-                        foregroundJob?.stop()
-                        null
-                    } else {
-                        startForegroundJob(buildForegroundNotification(count, primaryColor))
-                    }
+                    foregroundState.value = (if (currentForegroundState is Foreground) Background
+                    else Foreground(createForegroundNotification(count, primaryColor)))
                 }
             ) {
                 Text(
-                    if (foregroundJob != null) {
+                    if (currentForegroundState is Foreground) {
                         "Stop foreground"
                     } else {
                         "Start foreground"
@@ -138,16 +136,25 @@ fun ForegroundJobScreen(
     }
 }
 
-typealias buildForegroundNotification = (Int, Color) -> Notification
+typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
+@Scoped(ApplicationComponent::class)
 @Binding
-internal fun buildForegroundNotification(
+fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
+
+// todo remove once injekt fixes effect scoping issues
+@ForegroundStateBinding
+inline val ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
+    get() = this
+
+@FunBinding
+fun createForegroundNotification(
     applicationContext: ApplicationContext,
-): buildForegroundNotification = { count, color ->
-    NotificationCompat.Builder(applicationContext, "foreground")
-        .setSmallIcon(R.drawable.ic_home)
-        .setContentTitle("Foreground")
-        .setContentText("Current progress $count")
-        .setColor(color.toArgb())
-        .build()
-}
+    @FunApi count: Int,
+    @FunApi color: Color,
+): Notification = NotificationCompat.Builder(applicationContext, "foreground")
+    .setSmallIcon(R.drawable.ic_home)
+    .setContentTitle("Foreground")
+    .setContentText("Current progress $count")
+    .setColor(color.toArgb())
+    .build()

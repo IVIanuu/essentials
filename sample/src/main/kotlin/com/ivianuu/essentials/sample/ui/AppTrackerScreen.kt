@@ -23,6 +23,8 @@ import android.app.NotificationManager
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,7 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.foreground.startForegroundJob
+import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundState.*
+import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
@@ -39,18 +43,21 @@ import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -63,23 +70,21 @@ class AppTrackerKey
 fun AppTrackerScreen(
     createAppTrackerNotification: createAppTrackerNotification,
     currentApp: Flow<CurrentApp>,
+    foregroundState: AppTrackerForegroundState,
     requestPermissions: requestPermissions,
     showToast: showToast,
-    startForegroundJob: startForegroundJob,
 ) {
-    var trackingEnabled by rememberState { false }
-    onCommit(trackingEnabled) {
-        val foregroundJob = if (!trackingEnabled) null else {
-            val foregroundJob = startForegroundJob(createAppTrackerNotification(null))
+    val currentForegroundState by foregroundState.collectAsState()
+
+    if (currentForegroundState is Foreground) {
+        LaunchedEffect(true) {
             currentApp
                 .onEach {
                     showToast("App changed $it")
-                    foregroundJob.updateNotification(createAppTrackerNotification(it))
+                    foregroundState.value = Foreground(createAppTrackerNotification(it))
                 }
-                .launchIn(foregroundJob.scope)
-            foregroundJob
+                .collect()
         }
-        onDispose { foregroundJob?.stop() }
     }
 
     Scaffold(
@@ -100,7 +105,8 @@ fun AppTrackerScreen(
                             )
                         )
                     ) {
-                        trackingEnabled = !trackingEnabled
+                        foregroundState.value = if (currentForegroundState is Foreground) Background
+                        else Foreground(createAppTrackerNotification(null))
                     }
                 }
             }
@@ -109,6 +115,17 @@ fun AppTrackerScreen(
         }
     }
 }
+
+typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
+
+@Scoped(ApplicationComponent::class)
+@Binding
+fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
+
+// todo remove once injekt fixes effect scoping issues
+@ForegroundStateBinding
+inline val AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
+    get() = this
 
 @SuppressLint("NewApi")
 @FunBinding
