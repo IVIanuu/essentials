@@ -31,7 +31,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(Deps.AndroidX.appCompat)
     api(Deps.AndroidX.core)
-    api(Deps.AndroidX.Lifecycle.extensions)
     api(Deps.AndroidX.Lifecycle.runtime)
 
     api(Deps.Coroutines.android)
