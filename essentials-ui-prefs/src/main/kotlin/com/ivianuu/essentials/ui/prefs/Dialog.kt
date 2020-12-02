@@ -68,7 +68,7 @@ data class DialogListItemKey(val dialog: @Composable () -> Unit)
 @KeyUiBinding<DialogListItemKey>
 @FunBinding
 @Composable
-fun DialogListPage(key: DialogListItemKey) {
+fun DialogListScreen(key: DialogListItemKey) {
     DialogWrapper { key.dialog() }
 }
 

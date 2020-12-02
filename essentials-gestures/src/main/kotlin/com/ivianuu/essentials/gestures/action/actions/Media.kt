@@ -113,7 +113,7 @@ class MediaActionSettingsKey
 @KeyUiBinding<MediaActionSettingsKey>
 @FunBinding
 @Composable
-fun MediaActionSettingsPage(
+fun MediaActionSettingsScreen(
     dispatch: DispatchAction<MediaActionSettingsAction>,
     state: @UiState MediaActionSettingsState,
 ) {

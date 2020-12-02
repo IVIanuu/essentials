@@ -52,7 +52,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMap
 import androidx.compose.ui.text.input.TransformedText
@@ -60,6 +59,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.core.toColorOrNull
 import com.ivianuu.essentials.ui.core.toHexString
@@ -82,14 +82,14 @@ fun ColorPickerDialog(
     modifier: Modifier = Modifier
 ) {
     var currentColor by rememberState { initialColor }
-    var currentPage by rememberState { ColorPickerPage.Colors }
-    val otherPage = when (currentPage) {
-        ColorPickerPage.Colors -> ColorPickerPage.Editor
-        ColorPickerPage.Editor -> ColorPickerPage.Colors
+    var currentScreen by rememberState { ColorPickerTab.Colors }
+    val otherScreen = when (currentScreen) {
+        ColorPickerTab.Colors -> ColorPickerTab.Editor
+        ColorPickerTab.Editor -> ColorPickerTab.Colors
     }
 
-    if (!allowCustomArgb && currentPage == ColorPickerPage.Editor) {
-        currentPage = ColorPickerPage.Colors
+    if (!allowCustomArgb && currentScreen == ColorPickerTab.Editor) {
+        currentScreen = ColorPickerTab.Colors
     }
 
     Dialog(
@@ -108,17 +108,17 @@ fun ColorPickerDialog(
             }
         },
         negativeButton = {
-            TextButton(onClick = onCancel) { Text("Cancel") }
+            TextButton(onClick = onCancel) { Text(R.string.es_cancel) }
         },
         neutralButton = {
             if (allowCustomArgb) {
                 TextButton(
-                    onClick = { currentPage = otherPage },
+                    onClick = { currentScreen = otherScreen },
                     colors = ButtonConstants.defaultTextButtonColors(
                         contentColor = currentColor
                     )
                 ) {
-                    Text(otherPage.title)
+                    Text(otherScreen.title)
                 }
             }
         },
@@ -126,11 +126,11 @@ fun ColorPickerDialog(
             AnimatedBox(
                 modifier = Modifier.height(300.dp)
                     .padding(start = 24.dp, end = 24.dp),
-                current = currentPage,
+                current = currentScreen,
                 transition = FadeStackTransition()
-            ) { currentPage ->
-                when (currentPage) {
-                    ColorPickerPage.Colors -> {
+            ) { currentScreen ->
+                when (currentScreen) {
+                    ColorPickerTab.Colors -> {
                         ColorGrid(
                             modifier = Modifier.fillMaxSize(),
                             currentColor = currentColor,
@@ -138,7 +138,7 @@ fun ColorPickerDialog(
                             onColorSelected = { currentColor = it }
                         )
                     }
-                    ColorPickerPage.Editor -> {
+                    ColorPickerTab.Editor -> {
                         ColorEditor(
                             modifier = Modifier.fillMaxSize(),
                             color = currentColor,
@@ -432,8 +432,8 @@ private enum class ColorComponent(
 }
 
 // todo title convert to resource
-private enum class ColorPickerPage(
-    val title: String
+private enum class ColorPickerTab(
+    val title: String,
 ) {
     Colors("Colors"), Editor("Custom")
 }
