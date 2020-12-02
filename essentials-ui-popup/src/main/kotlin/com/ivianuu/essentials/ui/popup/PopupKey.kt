@@ -78,7 +78,7 @@ fun PopupUi(
             modifier = Modifier.tapGestureFilter(onTap = {})
                 .animatable(PopupTag)
         ) {
-            key.content
+            key.content()
         }
     }
 }
