@@ -23,10 +23,12 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.onActive
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.util.UUID
 import kotlin.coroutines.resume
 
@@ -38,19 +40,22 @@ suspend fun startActivityForIntentResult(
 
 @FunBinding
 suspend fun <I, O> startActivityForResult(
+    mainDispatcher: MainDispatcher,
     openAppUi: openAppUi,
     @FunApi contract: ActivityResultContract<I, O>,
     @FunApi input: I,
 ): O {
     val activity = openAppUi()
-    return suspendCancellableCoroutine { continuation ->
-        val launcher = activity.activityResultRegistry.register(
-            UUID.randomUUID().toString(),
-            activity,
-            contract,
-            { continuation.resume(it) }
-        )
-        launcher.launch(input)
-        continuation.invokeOnCancellation { launcher.unregister() }
+    return withContext(mainDispatcher) {
+        suspendCancellableCoroutine { continuation ->
+            val launcher = activity.activityResultRegistry.register(
+                UUID.randomUUID().toString(),
+                activity,
+                contract,
+                { continuation.resume(it) }
+            )
+            launcher.launch(input)
+            continuation.invokeOnCancellation { launcher.unregister() }
+        }
     }
 }
