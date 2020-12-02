@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
@@ -63,6 +64,7 @@ fun DialogListItem(
 
 data class DialogListItemKey(val dialog: @Composable () -> Unit)
 
+@DialogNavigationOptionsBinding<DialogListItemKey>
 @KeyUiBinding<DialogListItemKey>
 @FunBinding
 @Composable
