@@ -33,11 +33,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @TileStateBinding(1)
-fun TestTile(
+fun testTileState(
     scope: CoroutineScope,
     actions: Actions<TileAction>,
     update: updatePref<TwilightPrefsState>,
-    twilightPrefsState: Flow<TwilightPrefsState>
+    twilightPrefsState: Flow<TwilightPrefsState>,
 ) = scope.state(TwilightPrefsState().toTileState()) {
     twilightPrefsState
         .reduce { it.toTileState() }
