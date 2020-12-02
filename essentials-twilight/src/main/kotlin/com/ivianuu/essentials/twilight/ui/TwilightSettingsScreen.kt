@@ -19,6 +19,7 @@ package com.ivianuu.essentials.twilight.ui
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
@@ -38,7 +39,7 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun TwilightSettingsScreen(
-    update: updatePref<TwilightPrefs>,
+    dispatchUpdate: dispatchPrefUpdate<TwilightPrefs>,
     prefs: @UiState TwilightPrefs,
 ) {
     Scaffold(
@@ -49,7 +50,7 @@ fun TwilightSettingsScreen(
                 TwilightModeItem(
                     mode = mode,
                     isSelected = prefs.twilightMode == mode,
-                    onClick = { update { copy(twilightMode = mode) } }
+                    onClick = { dispatchUpdate { copy(twilightMode = mode) } }
                 )
             }
 
@@ -57,7 +58,7 @@ fun TwilightSettingsScreen(
 
             CheckboxListItem(
                 value = prefs.useBlackInDarkMode,
-                onValueChange = { update { copy(useBlackInDarkMode = it) } },
+                onValueChange = { dispatchUpdate { copy(useBlackInDarkMode = it) } },
                 title = { Text(R.string.es_twilight_use_black) }
             )
         }

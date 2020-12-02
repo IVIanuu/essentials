@@ -18,11 +18,11 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
@@ -30,7 +30,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 @HomeItemBinding("Check apps")
 class CheckAppsKey
@@ -42,14 +41,14 @@ fun CheckAppsScreen(
     checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
     launchableAppFilter: LaunchableAppFilter,
     prefs: Flow<CheckAppsPrefs>,
-    updatePrefs: updatePref<CheckAppsPrefs>,
+    dispatchUpdate: dispatchPrefUpdate<CheckAppsPrefs>,
 ) {
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
                 prefs.map { it.checkedApps },
                 { checkedApps ->
-                    updatePrefs {
+                    dispatchUpdate {
                         copy(checkedApps = checkedApps)
                     }
                 },

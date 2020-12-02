@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
+import com.ivianuu.essentials.android.settings.AndroidSettingAction.*
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -32,6 +33,7 @@ import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -74,7 +76,7 @@ annotation class AndroidSettingsStateBinding<T>(
                     .reduce { it }
                     .launchIn(this)
                 actions
-                    .filterIsInstance<AndroidSettingAction.Update<S>>()
+                    .filterIsInstance<Update<S>>()
                     .onEach { action ->
                         adapter.set(action.reducer(adapter.get()))
                     }
@@ -89,13 +91,26 @@ annotation class AndroidSettingsStateBinding<T>(
 }
 
 sealed class AndroidSettingAction<T> {
-    data class Update<T>(val reducer: T.() -> T) : AndroidSettingAction<T>()
+    data class Update<T>(
+        val reducer: T.() -> T,
+        val result: CompletableDeferred<T>?,
+    ) : AndroidSettingAction<T>()
 }
 
 @FunBinding
-fun <T> updateAndroidSetting(
+suspend fun <T> updateAndroidSetting(
+    dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @FunApi reducer: T.() -> T,
+): T {
+    val result = CompletableDeferred<T>()
+    dispatch(Update(reducer, result))
+    return result.await()
+}
+
+@FunBinding
+fun <T> dispatchAndroidSettingUpdate(
     dispatch: DispatchAction<AndroidSettingAction<T>>,
     @FunApi reducer: T.() -> T,
 ) {
-    dispatch(AndroidSettingAction.Update(reducer))
+    dispatch(Update(reducer, null))
 }

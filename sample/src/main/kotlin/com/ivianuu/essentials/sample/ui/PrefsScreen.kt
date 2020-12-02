@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.android.PrefBinding
-import com.ivianuu.essentials.datastore.android.updatePref
+import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -51,7 +51,7 @@ class PrefsKey
 @Composable
 fun PrefsScreen(
     prefs: @UiState SamplePrefs,
-    updatePrefs: updatePref<SamplePrefs>,
+    dispatchUpdate: dispatchPrefUpdate<SamplePrefs>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
@@ -59,7 +59,7 @@ fun PrefsScreen(
         InsettingScrollableColumn {
             SwitchListItem(
                 value = prefs.switch,
-                onValueChange = { updatePrefs { copy(switch = it) } },
+                onValueChange = { dispatchUpdate { copy(switch = it) } },
                 title = { Text("Switch") }
             )
 
@@ -67,7 +67,7 @@ fun PrefsScreen(
 
             CheckboxListItem(
                 value = prefs.checkbox,
-                onValueChange = { updatePrefs { copy(checkbox = it) } },
+                onValueChange = { dispatchUpdate { copy(checkbox = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Checkbox") },
                 subtitle = { Text("This is a checkbox preference") }
@@ -75,7 +75,7 @@ fun PrefsScreen(
 
             RadioButtonListItem(
                 value = prefs.radioButton,
-                onValueChange = { updatePrefs { copy(radioButton = it) } },
+                onValueChange = { dispatchUpdate { copy(radioButton = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Radio Button") },
                 subtitle = { Text("This is a radio button preference") }
@@ -83,7 +83,7 @@ fun PrefsScreen(
 
             IntSliderListItem(
                 value = prefs.slider,
-                onValueChange = { updatePrefs { copy(slider = it) } },
+                onValueChange = { dispatchUpdate { copy(slider = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Slider") },
                 subtitle = { Text("This is a slider preference") },
@@ -98,7 +98,7 @@ fun PrefsScreen(
 
             TextInputDialogListItem(
                 value = prefs.textInput,
-                onValueChange = { updatePrefs { copy(textInput = it) } },
+                onValueChange = { dispatchUpdate { copy(textInput = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Text input") },
                 subtitle = { Text("This is a text input preference") },
@@ -107,7 +107,7 @@ fun PrefsScreen(
 
             ColorDialogListItem(
                 value = Color(prefs.color),
-                onValueChange = { updatePrefs { copy(color = it.toArgb()) } },
+                onValueChange = { dispatchUpdate { copy(color = it.toArgb()) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Color") },
                 subtitle = { Text("This is a color preference") }
@@ -115,7 +115,7 @@ fun PrefsScreen(
 
             MultiChoiceDialogListItem(
                 value = prefs.multiChoice,
-                onValueChange = { updatePrefs { copy(multiChoice = it) } },
+                onValueChange = { dispatchUpdate { copy(multiChoice = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Multi select list") },
                 subtitle = { Text("This is a multi select list preference") },
@@ -129,7 +129,7 @@ fun PrefsScreen(
             SingleChoiceDialogListItem(
                 value = prefs.singleChoice,
                 modifier = Modifier.interactive(prefs.switch),
-                onValueChange = { updatePrefs { copy(singleChoice = it) } },
+                onValueChange = { dispatchUpdate { copy(singleChoice = it) } },
                 title = { Text("Single item list") },
                 subtitle = { Text("This is a single item list preference") },
                 items = listOf(

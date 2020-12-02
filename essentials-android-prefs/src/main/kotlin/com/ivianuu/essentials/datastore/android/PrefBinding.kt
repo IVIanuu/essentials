@@ -109,15 +109,22 @@ annotation class PrefBinding(val name: String) {
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 internal annotation class InitialOrFallback
+
 @Binding
 inline fun <reified T : Any> initialOrFallback(initial: @Initial T?): @InitialOrFallback T =
     initial ?: T::class.java.newInstance()
 
 @FunBinding
-fun <T> updatePref(
+suspend fun <T> updatePref(
+    pref: DataStore<T>,
+    @FunApi reducer: T.() -> T,
+): T = pref.updateData { reducer(it) }
+
+@FunBinding
+fun <T> dispatchPrefUpdate(
     pref: DataStore<T>,
     scope: GlobalScope,
-    @FunApi reducer: suspend T.() -> T
+    @FunApi reducer: T.() -> T,
 ) {
     scope.launch {
         pref.updateData { reducer(it) }
