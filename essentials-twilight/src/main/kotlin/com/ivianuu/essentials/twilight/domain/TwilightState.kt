@@ -26,6 +26,7 @@ import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Eager
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationResources
 import com.ivianuu.injekt.merge.ApplicationComponent
@@ -41,10 +42,11 @@ import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
 
 data class TwilightState(
-    val isDark: Boolean,
-    val useBlack: Boolean
+    val isDark: Boolean = false,
+    val useBlack: Boolean = false,
 )
 
+@Eager
 @Scoped(ApplicationComponent::class)
 @Binding
 fun twilightState(
