@@ -43,7 +43,8 @@ fun NavigationStateContent(
     @FunApi state: NavigationState,
     @FunApi modifier: Modifier = Modifier,
 ) {
-    val contentState = remember { NavigationContentState() }
+    val contentState =
+        remember { NavigationContentState(optionFactories, uiFactories, state.backStack) }
     onCommit(optionFactories, uiFactories, state.backStack) {
         contentState.optionFactories = optionFactories
         contentState.uiFactories = uiFactories
@@ -52,15 +53,20 @@ fun NavigationStateContent(
     AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-private class NavigationContentState {
+private class NavigationContentState(
+    var optionFactories: NavigationOptionFactories = emptyMap(),
+    var uiFactories: KeyUiFactories = emptyMap(),
+    backStack: List<Key>,
+) {
 
     private var children by mutableStateOf(emptyList<Child>())
 
     val stackChildren: List<AnimatedStackChild<Key>>
         get() = children.map { it.stackChild }
 
-    var optionFactories: NavigationOptionFactories = emptyMap()
-    var uiFactories: KeyUiFactories = emptyMap()
+    init {
+        updateBackStack(backStack)
+    }
 
     fun updateBackStack(backStack: List<Key>) {
         val removedChildren = children
