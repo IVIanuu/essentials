@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev731"
+    const val version = "${Build.versionName}-dev732"
 }
 
 object Deps {
@@ -41,7 +41,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Compose {
-            const val version = "1.0.0-SNAPSHOT"
+            const val version = "1.0.0-alpha08"
             const val snapshot = "6994167"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
@@ -90,7 +90,7 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev730"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev732"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
