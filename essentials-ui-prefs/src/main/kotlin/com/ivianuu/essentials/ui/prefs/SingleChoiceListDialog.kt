@@ -45,7 +45,10 @@ fun <T> SingleChoiceDialogListItem(
             SingleChoiceListDialog(
                 items = items,
                 selectedItem = items.first { it.value == value },
-                onSelect = { onValueChange(it.value) },
+                onSelect = {
+                    onValueChange(it.value)
+                    dismiss()
+                },
                 item = { Text(it.title) },
                 title = dialogTitle,
                 negativeButton = {
