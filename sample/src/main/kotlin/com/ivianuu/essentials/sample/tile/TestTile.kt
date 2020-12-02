@@ -20,7 +20,7 @@ import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.TileAction
-import com.ivianuu.essentials.tile.TileBinding
+import com.ivianuu.essentials.tile.TileStateBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefsState
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@TileBinding(1)
+@TileStateBinding(1)
 fun TestTile(
     scope: CoroutineScope,
     actions: Actions<TileAction>,

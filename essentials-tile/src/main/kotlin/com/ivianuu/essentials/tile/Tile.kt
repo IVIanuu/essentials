@@ -50,12 +50,12 @@ sealed class TileAction {
 }
 
 @Effect
-annotation class TileBinding(val slot: Int) {
+annotation class TileStateBinding(val slot: Int) {
     companion object {
         @MapEntries
         fun <T : StateFlow<TileState>> intoTileMap(
             @Arg("slot") slot: Int,
-            provider: (CoroutineScope, Actions<TileAction>) -> @ForEffect T
+            provider: (CoroutineScope, Actions<TileAction>) -> @ForEffect T,
         ): TileStores = mapOf(slot to provider)
     }
 }
