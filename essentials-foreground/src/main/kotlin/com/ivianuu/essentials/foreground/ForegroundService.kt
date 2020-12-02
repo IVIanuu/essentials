@@ -55,7 +55,7 @@ class ForegroundService : EsService() {
     }
 
     private fun applyState(infos: List<ForegroundInfo>) {
-        component.logger.d { "update infos: $infos" }
+        component.logger.d { "apply infos: $infos" }
 
         infos
             .filter { it.state is Background }

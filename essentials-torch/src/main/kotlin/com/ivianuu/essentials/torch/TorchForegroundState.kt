@@ -25,6 +25,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
@@ -42,8 +43,8 @@ fun torchForegroundState(
     .map { it.torchEnabled }
     .distinctUntilChanged()
     .map { torchEnabled ->
-        if (torchEnabled) ForegroundState.Foreground(createTorchNotification())
-        else ForegroundState.Background
+        if (torchEnabled) Foreground(createTorchNotification())
+        else Background
     }
 
 @SuppressLint("NewApi")

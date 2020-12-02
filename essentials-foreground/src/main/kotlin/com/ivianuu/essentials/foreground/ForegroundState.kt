@@ -30,6 +30,7 @@ import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -69,7 +70,8 @@ fun internalForegroundState(
             .mapIndexed { index, foregroundState ->
                 foregroundState
                     .onStart { emit(Background) }
-                    .map { ForegroundInfo(index, it) }
+                    .map { ForegroundInfo(index + 1, it) }
+                    .distinctUntilChanged()
             }
     ) { currentForegroundStates -> InternalForegroundState(currentForegroundStates.toList()) }
         .onEach { current ->

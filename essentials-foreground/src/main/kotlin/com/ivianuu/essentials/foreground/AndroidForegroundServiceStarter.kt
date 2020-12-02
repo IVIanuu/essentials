@@ -41,7 +41,6 @@ suspend fun applyAndroidForegroundServiceState(
     state
         .debounce(300.milliseconds)
         .filter { it.isForeground }
-        .distinctUntilChanged()
         .onEach {
             logger.d { "start foreground service $it" }
             ContextCompat.startForegroundService(
