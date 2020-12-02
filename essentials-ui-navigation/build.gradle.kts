@@ -32,4 +32,5 @@ dependencies {
     api(project(":essentials-ui-animation"))
     api(project(":essentials-ui-core"))
     api(project(":essentials-ui-store"))
+    testImplementation(project(":essentials-test"))
 }

@@ -20,6 +20,7 @@ import android.content.Intent
 import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.android.ApplicationContext
@@ -42,3 +43,19 @@ annotation class KeyIntentFactoryBinding {
 typealias KeyIntentFactory<K> = (K) -> Intent
 
 typealias KeyIntentFactories = Map<KClass<out Key>, () -> KeyIntentFactory<Key>>
+
+@FunBinding
+fun intentKeyHandler(
+    applicationContext: ApplicationContext,
+    intentFactories: KeyIntentFactories,
+    @FunApi key: Key,
+): Boolean {
+    val intentFactory = intentFactories[key::class]?.invoke()
+    if (intentFactory != null) {
+        val intent = intentFactory(key)
+        applicationContext.startActivity(
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+    }
+    return intentFactory != null
+}

@@ -33,8 +33,7 @@ import kotlinx.coroutines.flow.onEach
 
 @GlobalStateBinding
 fun navigationState(
-    applicationContext: ApplicationContext,
-    intentFactories: KeyIntentFactories,
+    intentKeyHandler: intentKeyHandler,
     scope: CoroutineScope,
     initial: @Initial NavigationState = NavigationState(),
     actions: Actions<NavigationAction>,
@@ -44,13 +43,7 @@ fun navigationState(
             .onEach { action ->
                 when (action) {
                     is Push -> {
-                        val intentFactory = intentFactories[action.key::class]?.invoke()
-                        if (intentFactory != null) {
-                            val intent = intentFactory(action.key)
-                            applicationContext.startActivity(
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            )
-                        } else {
+                        if (!intentKeyHandler(action.key)) {
                             reduce {
                                 copy(
                                     backStack = backStack + action.key,
@@ -62,12 +55,7 @@ fun navigationState(
                         }
                     }
                     is ReplaceTop -> {
-                        val intentFactory = intentFactories[action.key::class]?.invoke()
-                        if (intentFactory != null) {
-                            val intent = intentFactory(action.key)
-                            applicationContext.startActivity(
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            )
+                        if (intentKeyHandler(action.key)) {
                             reduce {
                                 copy(
                                     backStack = backStack.dropLast(1),
@@ -87,26 +75,10 @@ fun navigationState(
                             }
                         }
                     }
-                    is Pop -> {
-                        val deferredResult = currentState().results[action.key]
-                        deferredResult?.complete(action.result)
-                        reduce {
-                            copy(
-                                backStack = backStack - action.key,
-                                results = results - action.key
-                            )
-                        }
-                    }
+                    is Pop -> reduce { popKey(action.key, action.result) }
                     is PopTop -> {
                         val topKey = currentState().backStack.last()
-                        val deferredResult = currentState().results[topKey]
-                        deferredResult?.complete(action.result)
-                        reduce {
-                            copy(
-                                backStack = backStack - topKey,
-                                results = results - topKey
-                            )
-                        }
+                        reduce { popKey(topKey, action.result) }
                     }
                 }
             }
@@ -114,7 +86,20 @@ fun navigationState(
     }.lens { NavigationState(it.backStack) }
 }
 
+private fun InternalNavigationState.popKey(
+    key: Key,
+    result: Any?,
+): InternalNavigationState {
+    @Suppress("UNCHECKED_CAST")
+    val deferredResult = results[key] as? CompletableDeferred<Any?>
+    deferredResult?.complete(result)
+    return copy(
+        backStack = backStack - key,
+        results = results - key
+    )
+}
+
 private data class InternalNavigationState(
     val backStack: List<Key>,
-    val results: Map<Key, CompletableDeferred<Any?>>,
+    val results: Map<Key, CompletableDeferred<out Any?>>,
 )

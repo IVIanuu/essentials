@@ -32,12 +32,12 @@ data class NavigationState(val backStack: List<Key> = emptyList()) {
 sealed class NavigationAction {
     data class Push(
         val key: Key,
-        val deferredResult: CompletableDeferred<Any?>? = null,
+        val deferredResult: CompletableDeferred<out Any?>? = null,
     ) : NavigationAction()
 
     data class ReplaceTop(
         val key: Key,
-        val deferredResult: CompletableDeferred<Any?>? = null,
+        val deferredResult: CompletableDeferred<out Any?>? = null,
     ) : NavigationAction()
 
     data class Pop(
