@@ -22,7 +22,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.ui.TwilightTheme
 import com.ivianuu.essentials.twilight.ui.invokeTwilightTheme
 import com.ivianuu.essentials.ui.AppThemeBinding
-import com.ivianuu.essentials.ui.animatedstack.AmbientDefaultStackTransition
+import com.ivianuu.essentials.ui.animatedstack.AmbientStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
@@ -36,7 +36,7 @@ fun SampleTheme(
 ) {
     twilightTheme.invokeTwilightTheme {
         Providers(
-            AmbientDefaultStackTransition provides remember { HorizontalStackTransition() },
+            AmbientStackTransition provides remember { HorizontalStackTransition() },
             content = content
         )
     }

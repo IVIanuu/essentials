@@ -76,7 +76,7 @@ fun <T> AnimatedStack(
 ) {
     ProvideAnimatableRoot {
         val state = remember { AnimatedStackState(children) }
-        state.defaultTransition = AmbientDefaultStackTransition.current
+        state.defaultTransition = AmbientStackTransition.current
         state.setChildren(children)
         state.runningTransactions.values.toList().forEach {
             key(it) {
