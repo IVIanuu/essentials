@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 
 typealias ForegroundActivity = ComponentActivity?
 
@@ -69,4 +70,4 @@ fun foregroundActivityState(
     )
 
     awaitClose()
-}.shareIn(globalScope, SharingStarted.Eagerly, 1)
+}.stateIn(globalScope, SharingStarted.Eagerly, null)
