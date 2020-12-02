@@ -32,11 +32,12 @@ import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.android.ApplicationContext
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-internal fun coilActionIcon(data: Any): ActionIcon = flowOf { CoilImage(data = data) }
+internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf { CoilImage(data = data) }
 
-internal fun singleActionIcon(icon: @Composable () -> Unit): ActionIcon = flowOf(icon)
+internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
 internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon) }
 

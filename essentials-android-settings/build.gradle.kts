@@ -19,6 +19,7 @@ plugins {
     id("com.ivianuu.essentials")
     id("androidx.compose")
     kotlin("android")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -29,9 +30,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(project(":essentials-android-core"))
-    api(project(":essentials-android-settings"))
-    api(project(":essentials-datastore-android"))
-    api(project(":essentials-screen-state"))
-    api(project(":essentials-secure-settings"))
+    api(project(":essentials-datastore"))
+    api(project(":essentials-android-util"))
 }

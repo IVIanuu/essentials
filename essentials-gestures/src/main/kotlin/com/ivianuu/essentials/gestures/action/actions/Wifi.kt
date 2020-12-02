@@ -26,13 +26,14 @@ import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @ActionBinding("wifi")
 fun wifiAction(
     stringResource: stringResource,
-    wifiIcon: WifiIcon,
+    wifiIcon: Flow<WifiIcon>,
 ): Action = Action(
     key = "wifi",
     title = stringResource(R.string.es_action_wifi),
@@ -42,15 +43,17 @@ fun wifiAction(
 @ActionExecutorBinding("wifi")
 @FunBinding
 suspend fun toggleWifi(wifiManager: WifiManager) {
+    @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
 typealias WifiIcon = ActionIcon
+
 @Binding
 fun wifiIcon(
     broadcasts: broadcasts,
     wifiManager: WifiManager,
-): WifiIcon = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
+): Flow<WifiIcon> = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =
             it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)

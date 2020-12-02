@@ -35,10 +35,10 @@ data class Action(
     val permissions: List<Permission> = emptyList(),
     val unlockScreen: Boolean = false,
     val enabled: Boolean = true,
-    val icon: ActionIcon,
+    val icon: Flow<ActionIcon>,
 )
 
-typealias ActionIcon = Flow<@Composable () -> Unit>
+typealias ActionIcon = @Composable () -> Unit
 
 @Effect
 annotation class ActionBinding(val key: String) {

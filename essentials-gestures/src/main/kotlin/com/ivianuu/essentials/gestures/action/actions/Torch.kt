@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.map
 @ActionBinding("torch")
 fun torchAction(
     stringResource: stringResource,
-    torchIcon: TorchIcon,
+    torchIcon: Flow<TorchIcon>,
 ): Action = Action(
     key = "torch",
     title = stringResource(R.string.es_action_torch),
@@ -55,7 +55,7 @@ suspend fun toggleTorch(
 private typealias TorchIcon = ActionIcon
 
 @Binding
-fun torchIcon(torchState: Flow<TorchState>): TorchIcon = torchState
+fun torchIcon(torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     .map {
         if (it.torchEnabled) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off

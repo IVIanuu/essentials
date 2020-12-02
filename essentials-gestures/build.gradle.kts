@@ -31,6 +31,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-accessibility"))
+    api(project(":essentials-android-settings"))
     api(project(":essentials-android-util"))
     api(project(":essentials-apps"))
     api(project(":essentials-apps-ui"))

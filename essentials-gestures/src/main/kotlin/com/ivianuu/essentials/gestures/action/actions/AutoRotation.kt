@@ -17,27 +17,26 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.settings.SettingDataStore
-import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
-import com.ivianuu.essentials.datastore.android.settings.int
+import com.ivianuu.essentials.android.settings.AndroidSettingsStateBinding
+import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.android.settings.updateAndroidSetting
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @ActionBinding("auto_rotation")
 fun autoRotationAction(
-    autoRotationIcon: AutoRotationIcon,
+    autoRotationIcon: Flow<AutoRotationIcon>,
     choosePermissions: choosePermissions,
     stringResource: stringResource,
 ): Action = Action(
@@ -50,19 +49,16 @@ fun autoRotationAction(
 
 @ActionExecutorBinding("auto_rotation")
 @FunBinding
-suspend fun toggleAutoRotation(setting: AutoRotationSetting) {
-    setting.updateData { if (this != 1) 1 else 0 }
+suspend fun toggleAutoRotation(
+    updateAutoRotation: updateAndroidSetting<AutoRotation>,
+) {
+    updateAutoRotation { if (this != 1) 1 else 0 }
 }
 
-@Scoped(ApplicationComponent::class)
-@Binding
-fun autoRotationSetting(factory: SettingsDataStoreFactory): AutoRotationSetting = factory
-    .int(Settings.System.ACCELEROMETER_ROTATION, SettingDataStore.Type.System, 1)
-
-typealias AutoRotationIcon = ActionIcon
+internal typealias AutoRotationIcon = ActionIcon
 
 @Binding
-fun AutoRotationIcon(setting: AutoRotationSetting): AutoRotationIcon = setting.data
+fun AutoRotationIcon(autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> = autoRotation
     .map { it == 1 }
     .map {
         if (it) R.drawable.es_ic_screen_rotation
@@ -70,4 +66,9 @@ fun AutoRotationIcon(setting: AutoRotationSetting): AutoRotationIcon = setting.d
     }
     .map { { Icon(it) } }
 
-typealias AutoRotationSetting = DataStore<Int>
+@AndroidSettingsStateBinding<Int>(Settings.System.ACCELEROMETER_ROTATION,
+    AndroidSettingsType.SYSTEM)
+internal typealias AutoRotation = Int
+
+@Binding
+fun defaultAutoRotation(): @Initial AutoRotation = 1

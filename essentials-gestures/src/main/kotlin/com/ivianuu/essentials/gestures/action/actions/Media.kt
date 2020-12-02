@@ -68,7 +68,7 @@ fun mediaAction(
     stringResource: stringResource,
     @FunApi key: String,
     @FunApi titleRes: Int,
-    @FunApi icon: ActionIcon
+    @FunApi icon: Flow<ActionIcon>,
 ) = Action(
     key = key,
     title = stringResource(titleRes),

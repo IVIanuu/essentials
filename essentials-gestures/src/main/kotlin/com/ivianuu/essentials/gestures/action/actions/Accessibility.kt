@@ -22,6 +22,7 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import kotlinx.coroutines.flow.Flow
 
 @FunBinding
 fun accessibilityAction(
@@ -29,7 +30,7 @@ fun accessibilityAction(
     stringResource: stringResource,
     @FunApi key: String,
     @FunApi titleRes: Int,
-    @FunApi icon: ActionIcon
+    @FunApi icon: Flow<ActionIcon>,
 ) = Action(
     key = key,
     title = stringResource(titleRes),

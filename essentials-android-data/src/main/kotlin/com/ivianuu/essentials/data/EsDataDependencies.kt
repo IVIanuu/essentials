@@ -19,7 +19,6 @@ package com.ivianuu.essentials.data
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.datastore.android.settings.SettingsDataStoreFactory
 import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
 import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
 import com.ivianuu.injekt.Binding
@@ -56,19 +55,6 @@ fun diskDataStoreFactory(
     scope = globalScope + ioDispatcher,
     produceDataStoreDirectory = prefsDir,
     lazySerializerFactory = lazySerializerFactory
-)
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun settingsDataStoreFactory(
-    applicationContext: ApplicationContext,
-    ioDispatcher: IODispatcher,
-    mainDispatcher: MainDispatcher,
-    globalScope: GlobalScope,
-) = SettingsDataStoreFactory(
-    context = applicationContext,
-    mainDispatcher = mainDispatcher,
-    scope = globalScope + ioDispatcher
 )
 
 @Binding
