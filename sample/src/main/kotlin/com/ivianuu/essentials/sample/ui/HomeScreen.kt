@@ -35,6 +35,7 @@ import com.ivianuu.essentials.backup.BackupAndRestoreKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsKey
+import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
@@ -66,7 +67,7 @@ class HomeKey
 @Composable
 fun HomeScreen(
     dispatchNavigationAction: DispatchAction<NavigationAction>,
-    items: Set<HomeItem>,
+    items: @Remembered Set<HomeItem>,
     showToast: showToast,
 ) {
     val finalItems = remember(items) { items.sortedBy { it.title } }

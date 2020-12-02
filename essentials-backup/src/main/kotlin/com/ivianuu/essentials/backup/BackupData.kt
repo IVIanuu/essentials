@@ -36,7 +36,6 @@ import java.util.zip.ZipOutputStream
 
 @FunBinding
 suspend fun backupData(
-    applicationContext: ApplicationContext,
     backupDir: BackupDir,
     backupFiles: BackupFiles,
     buildInfo: BuildInfo,

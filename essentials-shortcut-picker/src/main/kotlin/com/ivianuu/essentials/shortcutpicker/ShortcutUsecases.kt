@@ -58,10 +58,10 @@ suspend fun getAllShortcuts(
 
 @FunBinding
 suspend fun extractShortcut(
-    defaultDispatcher: DefaultDispatcher,
+    ioDispatcher: IODispatcher,
     packageManager: PackageManager,
-    @FunApi shortcutRequestResult: Intent
-): Shortcut = withContext(defaultDispatcher) {
+    @FunApi shortcutRequestResult: Intent,
+): Shortcut = withContext(ioDispatcher) {
     val intent =
         shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
     val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!

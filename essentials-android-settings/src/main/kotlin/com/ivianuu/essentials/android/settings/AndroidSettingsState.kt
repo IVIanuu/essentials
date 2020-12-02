@@ -18,6 +18,8 @@ package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
@@ -51,13 +53,14 @@ annotation class AndroidSettingsStateBinding<T>(
             @Arg("name") name: String,
             @Arg("type") type: AndroidSettingsType,
             scope: GlobalScope,
+            ioDispatcher: IODispatcher,
             adapterFactory: (String, AndroidSettingsType, T) -> AndroidSettingsAdapter<T>,
             contentChanges: contentChanges,
             initial: @Initial S,
             actions: Actions<AndroidSettingAction<S>>,
         ): StateFlow<S> {
             @Suppress("UNCHECKED_CAST")
-            return scope.state(initial) {
+            return scope.childCoroutineScope(ioDispatcher).state(initial) {
                 val adapter = adapterFactory(name, type, initial) as AndroidSettingsAdapter<S>
                 contentChanges(
                     when (type) {
@@ -68,7 +71,6 @@ annotation class AndroidSettingsStateBinding<T>(
                 )
                     .onStart { emit(Unit) }
                     .map { adapter.get() }
-                    .onEach { println("new value $it") }
                     .reduce { it }
                     .launchIn(this)
                 actions

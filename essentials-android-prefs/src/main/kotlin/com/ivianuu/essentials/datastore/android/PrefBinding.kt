@@ -23,6 +23,8 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.createDataStore
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
@@ -53,6 +55,7 @@ annotation class PrefBinding(val name: String) {
         fun <T : Any> pref(
             @Arg("name") name: String,
             scope: GlobalScope,
+            ioDispatcher: IODispatcher,
             initialFactory: () -> @InitialOrFallback T,
             adapterFactory: () -> JsonAdapter<T>,
             prefsDir: () -> PrefsDir,
@@ -71,7 +74,7 @@ annotation class PrefBinding(val name: String) {
                             output.write(adapter.toJson(t)!!.toByteArray())
                         }
                     },
-                    scope = scope
+                    scope = scope.childCoroutineScope(ioDispatcher)
                 )
             }
             return object : DataStore<T> {

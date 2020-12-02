@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.backup
 
+import android.content.ContentResolver
 import android.content.Intent
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.data.PrefsDir
@@ -34,7 +35,7 @@ import java.util.zip.ZipInputStream
 
 @FunBinding
 suspend fun restoreData(
-    applicationContext: ApplicationContext,
+    contentResolver: ContentResolver,
     ioDispatcher: IODispatcher,
     prefsDir: PrefsDir,
     restartProcess: restartProcess,
@@ -52,9 +53,7 @@ suspend fun restoreData(
 
         val buffer = ByteArray(8192)
 
-        val zipInputStream = ZipInputStream(
-            applicationContext.contentResolver.openInputStream(uri)!!.buffered()
-        )
+        val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!.buffered())
 
         var entry: ZipEntry? = zipInputStream.nextEntry
         while (entry != null) {
