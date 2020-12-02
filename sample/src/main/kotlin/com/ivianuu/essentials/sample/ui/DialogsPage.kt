@@ -45,6 +45,7 @@ import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -361,6 +362,7 @@ private fun DialogLauncherButton(
 
 data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 
+@DialogNavigationOptionsBinding<DialogLauncherKey>
 @KeyUiBinding<DialogLauncherKey>
 @FunBinding
 @Composable

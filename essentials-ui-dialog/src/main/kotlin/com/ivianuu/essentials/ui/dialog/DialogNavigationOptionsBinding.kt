@@ -32,7 +32,7 @@ annotation class DialogNavigationOptionsBinding<K> {
     companion object {
         @Suppress("UNCHECKED_CAST")
         @MapEntries
-        inline fun <@Arg("K") reified K, T : Any?> bind(): NavigationOptionFactories = mapOf(
+        inline fun <@Arg("K") reified K, T> bind(): NavigationOptionFactories = mapOf(
             K::class as KClass<out Key> to {
                 NavigationOptions(
                     opaque = true,
