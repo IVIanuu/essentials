@@ -88,8 +88,8 @@ class NotificationsKey
 @FunBinding
 @Composable
 fun NotificationsScreen(
-    dispatch: DispatchAction<NotificationsScreenAction>,
     pageState: @UiState NotificationsScreenState,
+    dispatch: DispatchAction<NotificationsScreenAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }

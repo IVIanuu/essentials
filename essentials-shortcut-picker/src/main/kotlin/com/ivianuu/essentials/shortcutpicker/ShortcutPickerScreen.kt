@@ -41,8 +41,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun ShortcutPickerScreen(
-    dispatch: DispatchAction<ShortcutPickerAction>,
     state: @UiState ShortcutPickerState,
+    dispatch: DispatchAction<ShortcutPickerAction>,
 ) {
     Scaffold(
         topBar = {

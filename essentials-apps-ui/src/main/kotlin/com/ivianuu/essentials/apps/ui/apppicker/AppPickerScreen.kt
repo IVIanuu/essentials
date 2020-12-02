@@ -41,8 +41,8 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @FunBinding
 @Composable
 fun AppPickerScreen(
-    dispatch: DispatchAction<AppPickerAction>,
     state: @UiState AppPickerState,
+    dispatch: DispatchAction<AppPickerAction>,
 ) {
     Scaffold(
         topBar = {

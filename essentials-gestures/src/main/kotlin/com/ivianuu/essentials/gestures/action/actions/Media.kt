@@ -114,8 +114,8 @@ class MediaActionSettingsKey
 @FunBinding
 @Composable
 fun MediaActionSettingsScreen(
-    dispatch: DispatchAction<MediaActionSettingsAction>,
     state: @UiState MediaActionSettingsState,
+    dispatch: DispatchAction<MediaActionSettingsAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
         InsettingScrollableColumn {

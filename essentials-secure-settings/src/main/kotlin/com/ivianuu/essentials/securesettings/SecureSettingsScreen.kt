@@ -35,8 +35,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun SecureSettingsScreen(
-    state: @UiState SecureSettingsState,
     dispatch: DispatchAction<SecureSettingsAction>,
+    state: @UiState SecureSettingsState,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }

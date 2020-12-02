@@ -35,8 +35,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun SecureSettingsPcInstructionsScreen(
-    dispatch: DispatchAction<SecureSettingsPcInstructionsAction>,
     state: @UiState SecureSettingsPcInstructionsState,
+    dispatch: DispatchAction<SecureSettingsPcInstructionsAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }

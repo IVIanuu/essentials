@@ -39,8 +39,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun ActionPickerScreen(
-    dispatch: DispatchAction<ActionPickerAction>,
     state: @UiState ActionPickerState,
+    dispatch: DispatchAction<ActionPickerAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }

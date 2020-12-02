@@ -42,8 +42,8 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @FunBinding
 @Composable
 fun CheckableAppsScreen(
-    dispatch: DispatchAction<CheckableAppsAction>,
     state: @UiState CheckableAppsState,
+    dispatch: DispatchAction<CheckableAppsAction>,
 ) {
     Scaffold(
         topBar = {

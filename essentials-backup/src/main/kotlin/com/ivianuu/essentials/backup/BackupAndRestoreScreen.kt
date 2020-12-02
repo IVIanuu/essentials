@@ -33,8 +33,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun BackupAndRestoreScreen(
-    dispatch: DispatchAction<BackupAndRestoreAction>,
     state: @UiState BackupAndRestoreState,
+    dispatch: DispatchAction<BackupAndRestoreAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }

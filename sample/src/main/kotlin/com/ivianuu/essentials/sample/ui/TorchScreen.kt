@@ -44,8 +44,8 @@ class TorchKey
 @FunBinding
 @Composable
 fun TorchScreen(
-    dispatch: DispatchAction<TorchAction>,
     state: @UiState TorchState,
+    dispatch: DispatchAction<TorchAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(

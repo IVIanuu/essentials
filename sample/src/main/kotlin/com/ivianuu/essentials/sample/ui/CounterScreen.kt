@@ -54,8 +54,8 @@ class CounterKey
 @FunBinding
 @Composable
 fun CounterScreen(
-    dispatch: DispatchAction<CounterAction>,
     state: @UiState CounterState,
+    dispatch: DispatchAction<CounterAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }

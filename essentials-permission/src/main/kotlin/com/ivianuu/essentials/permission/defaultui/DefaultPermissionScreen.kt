@@ -39,8 +39,8 @@ import com.ivianuu.injekt.FunBinding
 @FunBinding
 @Composable
 fun DefaultPermissionScreen(
-    dispatch: DispatchAction<PermissionAction>,
     state: @UiState PermissionState,
+    dispatch: DispatchAction<PermissionAction>,
 ) {
     Scaffold(
         topBar = {
