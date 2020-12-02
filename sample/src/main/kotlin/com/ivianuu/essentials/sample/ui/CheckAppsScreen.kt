@@ -22,9 +22,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
-import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.FunBinding
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @HomeItemBinding("Check apps")
@@ -35,18 +40,17 @@ class CheckAppsKey
 @Composable
 fun CheckAppsScreen(
     checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
-    factory: DiskDataStoreFactory,
     launchableAppFilter: LaunchableAppFilter,
+    prefs: Flow<CheckAppsPrefs>,
+    updatePrefs: updatePref<CheckAppsPrefs>,
 ) {
-    val checkedAppsStore = remember { factory.create("checked_apps") { emptySet<String>() } }
-    val scope = rememberCoroutineScope()
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
-                checkedAppsStore.data,
+                prefs.map { it.checkedApps },
                 { checkedApps ->
-                    scope.launch {
-                        checkedAppsStore.updateData { checkedApps }
+                    updatePrefs {
+                        copy(checkedApps = checkedApps)
                     }
                 },
                 launchableAppFilter,
@@ -55,3 +59,9 @@ fun CheckAppsScreen(
         )
     }()
 }
+
+@PrefBinding("check_apps_prefs")
+@JsonClass(generateAdapter = true)
+data class CheckAppsPrefs(
+    @Json(name = "checked_apps") val checkedApps: Set<String> = emptySet(),
+)

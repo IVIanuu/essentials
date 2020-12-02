@@ -22,6 +22,7 @@ import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 
 @Effect
@@ -45,3 +46,6 @@ fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
 
 @SetElements
 fun defaultAdapters(): JsonAdapters = emptySet()
+
+@Binding
+inline fun <reified T> jsonAdapter(moshi: Moshi): JsonAdapter<T> = moshi.adapter()

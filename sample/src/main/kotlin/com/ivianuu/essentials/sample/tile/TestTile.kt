@@ -23,7 +23,7 @@ import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileStateBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsState
+import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -36,16 +36,16 @@ import kotlinx.coroutines.flow.onEach
 fun testTileState(
     scope: CoroutineScope,
     actions: Actions<TileAction>,
-    update: updatePref<TwilightPrefsState>,
-    twilightPrefsState: Flow<TwilightPrefsState>,
-) = scope.state(TwilightPrefsState().toTileState()) {
-    twilightPrefsState
+    update: updatePref<TwilightPrefs>,
+    twilightPrefs: Flow<TwilightPrefs>,
+) = scope.state(TwilightPrefs().toTileState()) {
+    twilightPrefs
         .reduce { it.toTileState() }
         .launchIn(this)
     actions
         .filterIsInstance<TileAction>()
         .map {
-            if (twilightPrefsState.first().twilightMode == TwilightMode.Light) TwilightMode.Dark
+            if (twilightPrefs.first().twilightMode == TwilightMode.Light) TwilightMode.Dark
             else TwilightMode.Light
         }
         .onEach { twilightMode ->
@@ -56,7 +56,7 @@ fun testTileState(
         .launchIn(this)
 }
 
-private fun TwilightPrefsState.toTileState() = TileState(
+private fun TwilightPrefs.toTileState() = TileState(
     label = twilightMode.name,
     status = if (twilightMode == TwilightMode.Light) TileState.Status.Active
     else TileState.Status.Inactive

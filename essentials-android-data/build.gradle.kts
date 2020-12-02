@@ -28,9 +28,9 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    api(Deps.AndroidX.dataStore)
     api(Deps.Injekt.android)
     api(project(":essentials-core"))
-    api(project(":essentials-datastore-android"))
     api(project(":essentials-moshi"))
     testImplementation(project(":essentials-android-test"))
 }

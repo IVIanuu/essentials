@@ -28,7 +28,6 @@ dependencies {
     compile(Deps.Coroutines.core)
 
     compile(project(":essentials-coroutines"))
-    compile(project(":essentials-datastore"))
     compile(project(":essentials-memo"))
     compile(project(":essentials-moshi"))
     compile(project(":essentials-result"))

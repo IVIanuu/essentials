@@ -18,6 +18,7 @@ plugins {
     id("com.ivianuu.essentials")
     id("androidx.compose")
     kotlin("android")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -29,5 +30,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-billing"))
+    api(project(":essentials-android-prefs"))
     api(project(":essentials-ui"))
+    kapt(project(":essentials-compiler"))
 }

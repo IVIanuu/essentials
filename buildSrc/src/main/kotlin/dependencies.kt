@@ -51,6 +51,8 @@ object Deps {
             const val test = "androidx.compose.test:test-core:$version"
         }
 
+        const val dataStore = "androidx.datastore:datastore:1.0.0-alpha04"
+
         object Lifecycle {
             private const val version = "2.2.0"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"

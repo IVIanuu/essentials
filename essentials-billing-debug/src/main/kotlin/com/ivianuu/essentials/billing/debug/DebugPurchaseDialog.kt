@@ -35,6 +35,7 @@ import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
@@ -43,30 +44,30 @@ import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.injekt.FunBinding
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 data class DebugPurchaseKey(val params: BillingFlowParams)
 
+@DialogNavigationOptionsBinding<DebugPurchaseKey>
 @KeyUiBinding<DebugPurchaseKey>
 @FunBinding
 @Composable
 fun DebugPurchaseDialog(
-    billingStore: BillingStore,
     defaultDispatcher: DefaultDispatcher,
     key: DebugPurchaseKey,
     popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
+    prefs: Flow<DebugBillingPrefs>,
 ) {
     DialogWrapper {
         ResourceBox(
             resource = produceResource {
                 withContext(defaultDispatcher) {
-                    billingStore.getSkuDetails(
-                        SkuDetailsParams.newBuilder()
-                            .setType(key.params.skuType)
-                            .setSkusList(listOf(key.params.sku))
-                            .build()
-                    ).firstOrNull()
+                    prefs.first().products.firstOrNull() {
+                        it.type == key.params.skuType &&
+                                it.sku == key.params.sku
+                    }
                 }
             },
             loading = {

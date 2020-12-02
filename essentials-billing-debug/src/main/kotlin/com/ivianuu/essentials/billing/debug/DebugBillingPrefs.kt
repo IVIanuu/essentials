@@ -1,0 +1,52 @@
+/*
+ * Copyright 2020 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.billing.debug
+
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.moshi.JsonAdapterBinding
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.ToJson
+
+@PrefBinding("debug_billing_prefs")
+@JsonClass(generateAdapter = true)
+data class DebugBillingPrefs(
+    @Json(name = "billing_products") val products: List<SkuDetails> = emptyList(),
+    @Json(name = "billing_purchases") val purchases: List<Purchase> = emptyList(),
+)
+
+@JsonAdapterBinding
+class PurchaseAdapter {
+    @ToJson
+    fun toJson(purchase: Purchase) = "${purchase.originalJson}=:=${purchase.signature}"
+    @FromJson
+    fun fromJson(value: String): Purchase {
+        val tmp = value.split("=:=")
+        return Purchase(tmp[0], tmp[1])
+    }
+}
+
+@JsonAdapterBinding
+class SkuDetailsAdapter {
+    @ToJson
+    fun toJson(skuDetails: SkuDetails) = skuDetails.originalJson
+    @FromJson
+    fun fromJson(value: String): SkuDetails = SkuDetails(value)
+}

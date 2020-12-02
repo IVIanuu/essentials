@@ -16,17 +16,9 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
-import com.ivianuu.essentials.datastore.disk.MoshiSerializerFactory
+import androidx.datastore.core.DataStore
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.squareup.moshi.Moshi
-import kotlinx.coroutines.plus
 import java.io.File
 
 typealias DataDir = File
@@ -39,23 +31,6 @@ typealias PrefsDir = File
 
 @Binding
 fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun moshiSerializerFactory(moshi: Moshi) = MoshiSerializerFactory(moshi)
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun diskDataStoreFactory(
-    globalScope: GlobalScope,
-    ioDispatcher: IODispatcher,
-    prefsDir: () -> PrefsDir,
-    lazySerializerFactory: () -> MoshiSerializerFactory,
-) = DiskDataStoreFactory(
-    scope = globalScope + ioDispatcher,
-    produceDataStoreDirectory = prefsDir,
-    lazySerializerFactory = lazySerializerFactory
-)
 
 @Binding
 fun packageManager(applicationContext: ApplicationContext) = applicationContext.packageManager!!

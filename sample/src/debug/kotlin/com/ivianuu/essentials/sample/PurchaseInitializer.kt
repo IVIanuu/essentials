@@ -17,9 +17,10 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.essentials.billing.debug.BillingStore
+import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
 import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.FunBinding
 import kotlinx.coroutines.launch
@@ -27,10 +28,12 @@ import kotlinx.coroutines.launch
 @AppInitializerBinding("purchases")
 @FunBinding
 fun initializePurchases(
-    billingStore: BillingStore,
     globalScope: GlobalScope,
+    updateDebugPrefs: updatePref<DebugBillingPrefs>,
 ) {
     globalScope.launch {
-        billingStore.addProduct(SkuDetails(DummySku))
+        updateDebugPrefs {
+            copy(products = products + SkuDetails(DummySku))
+        }
     }
 }

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefsState
+import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationResources
@@ -52,10 +52,10 @@ fun twilightState(
     batteryTwilightState: () -> BatteryTwilightState,
     systemTwilightState: () -> SystemTwilightState,
     timeTwilightState: () -> TimeTwilightState,
-    twilightPrefsState: () -> Flow<TwilightPrefsState>,
+    twilightPrefs: () -> Flow<TwilightPrefs>,
 ): StateFlow<TwilightState> {
     return deferredFlow {
-        twilightPrefsState().flatMapLatest { (mode, useBlack) ->
+        twilightPrefs().flatMapLatest { (mode, useBlack) ->
             (when (mode) {
                 TwilightMode.System -> systemTwilightState()
                 TwilightMode.Light -> flowOf(false)

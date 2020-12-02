@@ -18,14 +18,11 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.datastore.DataStore
-import com.ivianuu.essentials.datastore.android.asState
-import com.ivianuu.essentials.datastore.disk.DiskDataStoreFactory
+import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -42,10 +39,8 @@ import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
 import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
-import com.ivianuu.injekt.Binding
+import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
 import com.squareup.moshi.JsonClass
 
 @HomeItemBinding("Prefs")
@@ -54,15 +49,17 @@ class PrefsKey
 @KeyUiBinding<PrefsKey>
 @FunBinding
 @Composable
-fun PrefsScreen(prefsStore: PrefsStore) {
+fun PrefsScreen(
+    prefs: @UiState SamplePrefs,
+    updatePrefs: updatePref<SamplePrefs>,
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
         InsettingScrollableColumn {
-            var prefs by prefsStore.asState()
             SwitchListItem(
                 value = prefs.switch,
-                onValueChange = { prefs = prefs.copy(switch = it) },
+                onValueChange = { updatePrefs { copy(switch = it) } },
                 title = { Text("Switch") }
             )
 
@@ -70,7 +67,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             CheckboxListItem(
                 value = prefs.checkbox,
-                onValueChange = { prefs = prefs.copy(checkbox = it) },
+                onValueChange = { updatePrefs { copy(checkbox = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Checkbox") },
                 subtitle = { Text("This is a checkbox preference") }
@@ -78,7 +75,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             RadioButtonListItem(
                 value = prefs.radioButton,
-                onValueChange = { prefs = prefs.copy(radioButton = it) },
+                onValueChange = { updatePrefs { copy(radioButton = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Radio Button") },
                 subtitle = { Text("This is a radio button preference") }
@@ -86,7 +83,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             IntSliderListItem(
                 value = prefs.slider,
-                onValueChange = { prefs = prefs.copy(slider = it) },
+                onValueChange = { updatePrefs { copy(slider = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Slider") },
                 subtitle = { Text("This is a slider preference") },
@@ -101,7 +98,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             TextInputDialogListItem(
                 value = prefs.textInput,
-                onValueChange = { prefs = prefs.copy(textInput = it) },
+                onValueChange = { updatePrefs { copy(textInput = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Text input") },
                 subtitle = { Text("This is a text input preference") },
@@ -110,7 +107,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             ColorDialogListItem(
                 value = Color(prefs.color),
-                onValueChange = { prefs = prefs.copy(color = it.toArgb()) },
+                onValueChange = { updatePrefs { copy(color = it.toArgb()) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Color") },
                 subtitle = { Text("This is a color preference") }
@@ -118,7 +115,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
 
             MultiChoiceDialogListItem(
                 value = prefs.multiChoice,
-                onValueChange = { prefs = prefs.copy(multiChoice = it) },
+                onValueChange = { updatePrefs { copy(multiChoice = it) } },
                 modifier = Modifier.interactive(prefs.switch),
                 title = { Text("Multi select list") },
                 subtitle = { Text("This is a multi select list preference") },
@@ -132,7 +129,7 @@ fun PrefsScreen(prefsStore: PrefsStore) {
             SingleChoiceDialogListItem(
                 value = prefs.singleChoice,
                 modifier = Modifier.interactive(prefs.switch),
-                onValueChange = { prefs = prefs.copy(singleChoice = it) },
+                onValueChange = { updatePrefs { copy(singleChoice = it) } },
                 title = { Text("Single item list") },
                 subtitle = { Text("This is a single item list preference") },
                 items = listOf(
@@ -145,8 +142,9 @@ fun PrefsScreen(prefsStore: PrefsStore) {
     }
 }
 
+@PrefBinding("sample_prefs")
 @JsonClass(generateAdapter = true)
-data class Prefs(
+data class SamplePrefs(
     val switch: Boolean = false,
     val checkbox: Boolean = false,
     val radioButton: Boolean = false,
@@ -154,12 +152,5 @@ data class Prefs(
     val textInput: String = "",
     val color: Int = Color.Red.toArgb(),
     val multiChoice: Set<String> = setOf("A", "B", "C"),
-    val singleChoice: String = "C"
+    val singleChoice: String = "C",
 )
-
-typealias PrefsStore = DataStore<Prefs>
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun prefsStore(factory: DiskDataStoreFactory): PrefsStore =
-    factory.create("prefs") { Prefs() }

@@ -30,8 +30,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-android-core"))
+    api(project(":essentials-android-prefs"))
     api(project(":essentials-android-settings"))
-    api(project(":essentials-datastore-android"))
     api(project(":essentials-screen-state"))
     api(project(":essentials-secure-settings"))
 }

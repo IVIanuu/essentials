@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -15,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore.disk
+package com.ivianuu.essentials.moshi
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

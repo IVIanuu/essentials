@@ -21,6 +21,7 @@ import android.graphics.Rect
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -61,7 +62,8 @@ class NavBarManager(
     private val logger: Logger,
     private val screenState: Flow<ScreenState>,
     private val setOverscan: setOverscan,
-    private val wasNavBarHiddenPref: WasNavBarHiddenPref,
+    private val wasNavBarHidden: Flow<WasNavBarHidden>,
+    private val updateWasNavBarHidden: updatePref<WasNavBarHidden>,
 ) {
 
     private var job: Job? = null
@@ -77,10 +79,10 @@ class NavBarManager(
 
         if (!config.hidden) {
             logger.d { "not hidden" }
-            if (wasNavBarHiddenPref.data.first()) {
+            if (wasNavBarHidden.first()) {
                 logger.d { "was hidden" }
                 setNavBarConfigInternal(false, config)
-                wasNavBarHiddenPref.updateData { false }
+                updateWasNavBarHidden { false }
             } else {
                 logger.d { "was not hidden" }
             }
@@ -109,7 +111,7 @@ class NavBarManager(
                                     screenState.first() == ScreenState.Unlocked
                         }
                         .onEach { navBarHidden ->
-                            wasNavBarHiddenPref.updateData { navBarHidden }
+                            updateWasNavBarHidden { navBarHidden }
                             setNavBarConfigInternal(navBarHidden, config)
                         }
                         .collect()

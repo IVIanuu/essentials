@@ -14,27 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore
+package com.ivianuu.essentials.moshi
 
-import kotlinx.coroutines.flow.Flow
+import com.squareup.moshi.Moshi
+import kotlin.reflect.typeOf
 
-/**
- * A lightweight reactive thread safe persistence model
- */
-interface DataStore<T> {
-    /**
-     * The default data
-     */
-    val defaultData: T
-
-    /**
-     * A flow of the current data
-     */
-    val data: Flow<T>
-
-    /**
-     * Updates the data with the result of the [transform] block
-     * And returns the result of [transform]
-     */
-    suspend fun updateData(transform: suspend T.() -> T): T
-}
+inline fun <reified T> Moshi.adapter() = adapter<T>(typeOf<T>().asJavaType())
