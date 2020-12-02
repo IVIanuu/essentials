@@ -28,27 +28,30 @@ import androidx.compose.runtime.savedinstancestate.AmbientUiSavedStateRegistry
 import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
+import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Qualifier
 
 @FunBinding
 @Composable
 fun NavigationStateContent(
-    optionFactoriesFactory: () -> NavigationOptionFactories,
-    uiFactoriesFactory: () -> KeyUiFactories,
+    optionFactories: @Remembered NavigationOptionFactories,
+    uiFactories: @Remembered KeyUiFactories,
     @FunApi state: NavigationState,
     @FunApi modifier: Modifier = Modifier,
 ) {
-    val contentState =
-        remember {
-            NavigationContentState(optionFactoriesFactory(),
-                uiFactoriesFactory(),
-                state.backStack)
-        }
+    val contentState = remember {
+        NavigationContentState(optionFactories,
+            uiFactories,
+            state.backStack
+        )
+    }
     onCommit(state.backStack) {
         contentState.updateBackStack(state.backStack)
     }
