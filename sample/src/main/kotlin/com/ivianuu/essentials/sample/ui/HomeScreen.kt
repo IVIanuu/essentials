@@ -29,15 +29,9 @@ import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.about.AboutKey
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.backup.BackupAndRestoreKey
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.twilight.ui.TwilightSettingsKey
 import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
-import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTransition
 import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -45,7 +39,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
-import com.ivianuu.essentials.ui.navigation.HomeKeyBinding.Companion.homeKey
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -53,7 +46,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Binding
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunBinding
