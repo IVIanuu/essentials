@@ -33,12 +33,6 @@ class KeyboardVisibilityTest {
         var keyboardHeight = 0
         val collector = keyboardVisible(
             accessibilityEvents,
-            {
-                object : DisposableHandle {
-                    override fun dispose() {
-                    }
-                }
-            },
             { keyboardHeight },
             this
         ).testCollect(this)

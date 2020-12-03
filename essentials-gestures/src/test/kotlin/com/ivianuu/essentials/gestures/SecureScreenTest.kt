@@ -34,12 +34,6 @@ class SecureScreenTest {
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
         val collector = isOnSecureScreen(
             accessibilityEvents,
-            {
-                object : DisposableHandle {
-                    override fun dispose() {
-                    }
-                }
-            },
             this,
             NoopLogger
         ).testCollect(this)
