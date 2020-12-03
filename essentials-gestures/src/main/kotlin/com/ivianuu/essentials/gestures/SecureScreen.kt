@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 
 typealias IsOnSecureScreen = Flow<Boolean>
 
@@ -53,15 +54,9 @@ fun isOnSecureScreen(
     return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .map { it.packageName to it.className }
-        .filter { it.first != null && it.second != null }
-        .map { it.first!! to it.second!! }
         .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
         .map { (packageName, className) ->
-            // val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
-            // val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
-
-            var isOnSecureScreen = "packageinstaller" in packageName
-
+            var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
             if (!isOnSecureScreen) {
                 isOnSecureScreen = packageName == "com.android.settings" &&
                         className == "android.app.MaterialDialog"
@@ -69,8 +64,7 @@ fun isOnSecureScreen(
 
             isOnSecureScreen
         }
-        .onStart { emit(false) }
         .distinctUntilChanged()
         .onEach { logger.d { "on secure screen changed: $it" } }
-        .shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
+        .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
 }
