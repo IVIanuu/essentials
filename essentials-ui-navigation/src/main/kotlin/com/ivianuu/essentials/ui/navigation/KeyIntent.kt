@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
-import com.ivianuu.injekt.Decorator
 import com.ivianuu.injekt.Effect
 import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.MapEntries
 import com.ivianuu.injekt.android.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
 
 @Effect
