@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.recentapps
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
@@ -30,6 +32,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -42,16 +46,9 @@ typealias RecentApps = List<String>
 @Binding
 fun recentApps(
     accessibilityEvents: AccessibilityEvents,
-    applyAccessibilityConfig: applyAccessibilityConfig,
     globalScope: GlobalScope,
     logger: Logger,
 ): Flow<RecentApps> {
-    applyAccessibilityConfig(
-        AccessibilityConfig(
-            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
-    )
-
     return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
         .filter { it.isFullScreen }
@@ -83,6 +80,13 @@ fun recentApps(
         .distinctUntilChanged()
         .onEach { logger.d { "recent apps changed $it" } }
         .shareIn(globalScope, SharingStarted.Eagerly, 1)
+}
+
+@AccessibilityConfigBinding
+fun recentAppsAccessibilityConfig() = flowOf {
+    AccessibilityConfig(
+        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+    )
 }
 
 typealias CurrentApp = String?

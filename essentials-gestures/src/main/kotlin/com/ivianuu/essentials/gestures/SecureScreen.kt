@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvents
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Binding
@@ -36,35 +38,34 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
-typealias IsOnSecureScreen = Flow<Boolean>
+typealias IsOnSecureScreen = Boolean
 
 @Scoped(ApplicationComponent::class)
 @Binding
 fun isOnSecureScreen(
     accessibilityEvents: AccessibilityEvents,
-    applyAccessibilityConfig: applyAccessibilityConfig,
     globalScope: GlobalScope,
     logger: Logger,
-): IsOnSecureScreen {
-    applyAccessibilityConfig(
-        AccessibilityConfig(
-            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
-    )
-    return accessibilityEvents
-        .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-        .map { it.packageName to it.className }
-        .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
-        .map { (packageName, className) ->
-            var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
-            if (!isOnSecureScreen) {
-                isOnSecureScreen = packageName == "com.android.settings" &&
-                        className == "android.app.MaterialDialog"
-            }
-
-            isOnSecureScreen
+): Flow<IsOnSecureScreen> = accessibilityEvents
+    .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
+    .map { it.packageName to it.className }
+    .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
+    .map { (packageName, className) ->
+        var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
+        if (!isOnSecureScreen) {
+            isOnSecureScreen = packageName == "com.android.settings" &&
+                    className == "android.app.MaterialDialog"
         }
-        .distinctUntilChanged()
-        .onEach { logger.d { "on secure screen changed: $it" } }
-        .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
+
+        isOnSecureScreen
+    }
+    .distinctUntilChanged()
+    .onEach { logger.d { "on secure screen changed: $it" } }
+    .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
+
+@AccessibilityConfigBinding
+fun isOnSecureScreenAccessibilityConfig() = flowOf {
+    AccessibilityConfig(
+        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+    )
 }

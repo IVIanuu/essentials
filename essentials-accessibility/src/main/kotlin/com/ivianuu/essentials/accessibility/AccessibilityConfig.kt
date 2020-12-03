@@ -17,70 +17,90 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.essentials.coroutines.neverFlow
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Effect
+import com.ivianuu.injekt.ForEffect
 import com.ivianuu.injekt.FunApi
 import com.ivianuu.injekt.FunBinding
 import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.SetElements
 import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 
 data class AccessibilityConfig(
     val eventTypes: Int = 0,
     val flags: Int = 0,
     val packageNames: Set<String>? = null,
     val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
-    val notificationTimeout: Long = 0L
+    val notificationTimeout: Long = 0L,
 )
 
-internal typealias AccessibilityConfigs = MutableStateFlow<List<AccessibilityConfig>>
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun accessibilityConfigs(): AccessibilityConfigs = MutableStateFlow(emptyList())
-
-@FunBinding
-fun applyAccessibilityConfig(
-    configs: AccessibilityConfigs,
-    @FunApi config: AccessibilityConfig
-): DisposableHandle {
-    synchronized(configs) { configs.value += config }
-    return object : DisposableHandle {
-        override fun dispose() {
-            synchronized(configs) { configs.value -= config }
-        }
+@Effect
+annotation class AccessibilityConfigBinding {
+    companion object {
+        @SetElements
+        fun <T : Flow<AccessibilityConfig>> bind(instance: @ForEffect T): AccessibilityConfigs =
+            setOf(instance)
     }
 }
 
+internal typealias AccessibilityConfigs = Set<Flow<AccessibilityConfig>>
+
 @AccessibilityWorkerBinding
 @FunBinding
-suspend fun manageAccessibilityConfig(
+suspend fun applyAccessibilityConfig(
     configs: AccessibilityConfigs,
-    serviceHolder: MutableAccessibilityServiceHolder
+    serviceHolder: MutableAccessibilityServiceHolder,
 ) {
-    combine(serviceHolder, configs)
-        .collect { (service, configs) ->
-            service?.serviceInfo = service?.serviceInfo?.apply {
-                eventTypes = configs
-                    .map { it.eventTypes }
-                    .fold(0) { acc, events -> acc.addFlag(events) }
-
-                flags = configs
-                    .map { it.flags }
-                    .fold(0) { acc, flags -> acc.addFlag(flags) }
-
-                // first one wins
-                configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
-                feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-
-                notificationTimeout = configs
-                    .map { it.notificationTimeout }
-                    .maxOrNull() ?: 0L
-
-                packageNames = null
+    coroutineScope {
+        serviceHolder
+            .flatMapLatest { service ->
+                if (service != null) {
+                    combine(
+                        configs.map { config ->
+                            config
+                                .stateIn(this, SharingStarted.Eagerly, null)
+                        }
+                    ) { it.filterNotNull() }
+                        .map { service to it }
+                } else {
+                    neverFlow()
+                }
             }
-        }
+            .onEach { (service, configs) ->
+                service.serviceInfo = service.serviceInfo?.apply {
+                    eventTypes = configs
+                        .map { it.eventTypes }
+                        .fold(0) { acc, events -> acc.addFlag(events) }
+
+                    flags = configs
+                        .map { it.flags }
+                        .fold(0) { acc, flags -> acc.addFlag(flags) }
+
+                    // first one wins
+                    configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+                    feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+
+                    notificationTimeout = configs
+                        .map { it.notificationTimeout }
+                        .maxOrNull() ?: 0L
+
+                    packageNames = null
+                }
+            }
+            .collect()
+    }
 }

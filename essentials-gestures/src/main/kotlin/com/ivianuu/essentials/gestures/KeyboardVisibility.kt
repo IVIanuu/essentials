@@ -19,9 +19,12 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvents
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
+import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Binding
@@ -43,38 +46,37 @@ import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
 
-typealias KeyboardVisible = Flow<Boolean>
+typealias KeyboardVisible = Boolean
 
 @Scoped(ApplicationComponent::class)
 @Binding
 fun keyboardVisible(
     accessibilityEvents: AccessibilityEvents,
-    applyAccessibilityConfig: applyAccessibilityConfig,
     getKeyboardHeight: getKeyboardHeight,
-    globalScope: GlobalScope
-): KeyboardVisible {
-    applyAccessibilityConfig(
-        AccessibilityConfig(
-            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
-    )
-    return accessibilityEvents
-        .filter {
-            it.isFullScreen &&
+    globalScope: GlobalScope,
+): Flow<KeyboardVisible> = accessibilityEvents
+    .filter {
+        it.isFullScreen &&
                 it.className == "android.inputmethodservice.SoftInputWindow"
+    }
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .transformLatest {
+        emit(true)
+        while ((getKeyboardHeight() ?: 0) > 0) {
+            delay(100)
         }
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .transformLatest {
-            emit(true)
-            while ((getKeyboardHeight() ?: 0) > 0) {
-                delay(100)
-            }
-            emit(false)
-            awaitCancellation()
-        }
-        .distinctUntilChanged()
-        .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
+        emit(false)
+        awaitCancellation()
+    }
+    .distinctUntilChanged()
+    .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
+
+@AccessibilityConfigBinding
+fun keyboardVisibilityAccessibilityConfig() = flowOf {
+    AccessibilityConfig(
+        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+    )
 }
 
 @FunBinding
