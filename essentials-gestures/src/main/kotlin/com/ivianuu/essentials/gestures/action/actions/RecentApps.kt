@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("recent_apps")
 fun recentAppsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
@@ -32,7 +32,7 @@ fun recentAppsAction(accessibilityAction: accessibilityAction): Action = accessi
 )
 
 @ActionExecutorBinding("recent_apps")
-@FunBinding
+@GivenFun
 suspend fun showRecentApps(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

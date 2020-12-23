@@ -23,8 +23,6 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.android.ReceiverComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

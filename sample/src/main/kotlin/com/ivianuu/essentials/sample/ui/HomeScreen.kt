@@ -40,22 +40,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
-
+import com.ivianuu.injekt.GivenFun
 @HomeKeyBinding
 class HomeKey
 
 @KeyUiBinding<HomeKey>
-@FunBinding
+@GivenFun
 @Composable
 fun HomeScreen(
     dispatchNavigationAction: DispatchAction<NavigationAction>,

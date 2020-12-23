@@ -18,18 +18,22 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.componentElementBinding
+import com.ivianuu.essentials.givenGroupOf
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.AmbientUiComponent
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
+import com.ivianuu.essentials.ui.UiScoped
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
+import com.ivianuu.essentials.ui.dialog.dialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.essentials.ui.navigation.keyUiBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 
 @Composable
 fun DialogListItem(
@@ -40,8 +44,7 @@ fun DialogListItem(
     dialog: @Composable (dismiss: () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val component = AmbientUiComponent.current
-        .mergeComponent<DialogListItemComponent>()
+    val component = AmbientUiComponent.current[DialogListItemDependencies]
     ListItem(
         modifier = modifier,
         title = title?.let { { title() } },
@@ -64,15 +67,20 @@ fun DialogListItem(
 
 data class DialogListItemKey(val dialog: @Composable () -> Unit)
 
-@DialogNavigationOptionsBinding<DialogListItemKey>
-@KeyUiBinding<DialogListItemKey>
-@FunBinding
-@Composable
-fun DialogListScreen(key: DialogListItemKey) {
+@GivenGroup val dialogListScreenBindings = givenGroupOf(
+    keyUiBinding<DialogListItemKey, DialogListScreen>(),
+    dialogNavigationOptionsBinding<DialogListItemKey>()
+)
+
+@GivenFun @Composable
+fun DialogListScreen(@Given key: DialogListItemKey) {
     DialogWrapper { key.dialog() }
 }
 
-@MergeInto(UiComponent::class)
-interface DialogListItemComponent {
-    val dispatchNavigationAction: DispatchAction<NavigationAction>
+@Given class DialogListItemDependencies(
+    @Given val dispatchNavigationAction: DispatchAction<NavigationAction>
+) {
+    companion object : Component.Key<DialogListItemDependencies> {
+        @GivenGroup val binding = componentElementBinding(UiScoped, this)
+    }
 }

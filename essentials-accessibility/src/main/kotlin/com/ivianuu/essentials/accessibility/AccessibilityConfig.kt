@@ -18,16 +18,12 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.coroutines.neverFlow
+import com.ivianuu.essentials.setElement
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenGroup
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -48,32 +44,27 @@ data class AccessibilityConfig(
     val notificationTimeout: Long = 0L,
 )
 
-@Effect
-annotation class AccessibilityConfigBinding {
-    companion object {
-        @SetElements
-        fun <T : Flow<AccessibilityConfig>> bind(instance: @ForEffect T): AccessibilityConfigs =
-            setOf(instance)
-    }
-}
+fun <T : () -> Flow<AccessibilityConfig>> accessibilityConfigProviderBinding() =
+    setElement<() -> Flow<AccessibilityConfig>, T>()
 
-internal typealias AccessibilityConfigs = Set<Flow<AccessibilityConfig>>
+@GivenGroup val applyAccessibilityConfigBinding =
+    accessibilityWorker<applyAccessibilityConfig>()
 
-@AccessibilityWorkerBinding
-@FunBinding
-suspend fun applyAccessibilityConfig(
-    configs: AccessibilityConfigs,
-    serviceHolder: MutableAccessibilityServiceHolder,
+@GivenFun suspend fun applyAccessibilityConfig(
+    @Given configs: Set<() -> Flow<AccessibilityConfig>>,
+    @Given serviceHolder: MutableAccessibilityServiceHolder,
 ) {
     coroutineScope {
         serviceHolder
             .flatMapLatest { service ->
                 if (service != null) {
                     combine(
-                        configs.map { config ->
-                            config
-                                .stateIn(this, SharingStarted.Eagerly, null)
-                        }
+                        configs
+                            .map { it() }
+                            .map { config ->
+                                config
+                                    .stateIn(this, SharingStarted.Eagerly, null)
+                            }
                     ) { it.filterNotNull() }
                         .map { service to it }
                 } else {

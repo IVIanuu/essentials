@@ -24,10 +24,8 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,7 +37,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun screenState(
     broadcasts: broadcasts,
     getCurrentScreenState: getCurrentScreenState,
@@ -60,7 +58,7 @@ fun screenState(
         .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 }
 
-@FunBinding
+@GivenFun
 suspend fun getCurrentScreenState(
     defaultDispatcher: DefaultDispatcher,
     keyguardManager: KeyguardManager,

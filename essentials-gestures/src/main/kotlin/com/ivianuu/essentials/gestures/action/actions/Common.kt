@@ -28,8 +28,7 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +42,7 @@ internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon)
 
 internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
 
-@FunBinding
+@GivenFun
 suspend fun runRootCommand(
     runShellCommand: runShellCommand,
     showToastRes: showToastRes,
@@ -56,7 +55,7 @@ suspend fun runRootCommand(
         }
 }
 
-@FunBinding
+@GivenFun
 fun sendIntent(
     applicationContext: ApplicationContext,
     showToastRes: showToastRes,

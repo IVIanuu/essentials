@@ -35,15 +35,14 @@ import com.ivianuu.essentials.billing.BillingManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding("Billing")
 class BillingKey
 
 @KeyUiBinding<BillingKey>
-@FunBinding
+@GivenFun
 @Composable
 fun BillingScreen(billingManager: BillingManager) {
     val isPurchased = remember { billingManager.isPurchased(DummySku) }

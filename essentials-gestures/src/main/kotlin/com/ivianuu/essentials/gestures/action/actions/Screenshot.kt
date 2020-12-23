@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
 @ActionBinding("screenshot")
@@ -48,7 +48,7 @@ fun screenshotAction(
 
 @SuppressLint("InlinedApi")
 @ActionExecutorBinding("screenshot")
-@FunBinding
+@GivenFun
 suspend fun takeScreenshot(
     performGlobalAction: performGlobalAction,
     runRootCommand: runRootCommand,

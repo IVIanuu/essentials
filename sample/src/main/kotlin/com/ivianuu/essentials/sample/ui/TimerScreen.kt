@@ -25,10 +25,9 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -37,7 +36,7 @@ import kotlinx.coroutines.isActive
 class TimerKey
 
 @KeyUiBinding<TimerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TimerScreen(state: @UiState TimerState) {
     Scaffold(

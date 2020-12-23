@@ -24,8 +24,8 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -41,7 +41,7 @@ fun wifiAction(
 )
 
 @ActionExecutorBinding("wifi")
-@FunBinding
+@GivenFun
 suspend fun toggleWifi(wifiManager: WifiManager) {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
@@ -49,7 +49,7 @@ suspend fun toggleWifi(wifiManager: WifiManager) {
 
 typealias WifiIcon = ActionIcon
 
-@Binding
+@Given
 fun wifiIcon(
     broadcasts: broadcasts,
     wifiManager: WifiManager,

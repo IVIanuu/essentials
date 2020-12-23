@@ -16,36 +16,28 @@
 
 package com.ivianuu.essentials.moshi
 
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.squareup.moshi.JsonAdapter
+import com.ivianuu.essentials.sourcekey.memo
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Storage
 import com.squareup.moshi.Moshi
 
-@Effect
-annotation class JsonAdapterBinding {
-    companion object {
-        @SetElements
-        fun <T : Any> invoke(instance: @ForEffect T): JsonAdapters = setOf(instance)
-    }
+fun <T : Any> jsonAdapterBinding(): @GivenSetElement (@Given T) -> JsonAdapter = { it }
+
+typealias JsonAdapter = Any
+
+@Given
+fun moshi(
+    @Given jsonAdapters: Set<JsonAdapter>,
+    @Given storage: Storage<ApplicationScoped>
+): Moshi = storage.memo {
+    Moshi.Builder()
+        .apply {
+            jsonAdapters
+                .forEach { adapter -> add(adapter) }
+        }
+        .build()
 }
 
-typealias JsonAdapters = Set<Any>
-
-@Scoped(ApplicationComponent::class)
-@Binding
-fun moshi(jsonAdapters: JsonAdapters): Moshi = Moshi.Builder()
-    .apply {
-        jsonAdapters
-            .forEach { adapter -> add(adapter) }
-    }
-    .build()
-
-@SetElements
-fun defaultAdapters(): JsonAdapters = emptySet()
-
-@Binding
-inline fun <reified T> jsonAdapter(moshi: Moshi): JsonAdapter<T> = moshi.adapter()
+@Given
+inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> = adapter()

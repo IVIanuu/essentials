@@ -25,8 +25,8 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -43,7 +43,7 @@ fun bluetoothAction(
 )
 
 @ActionExecutorBinding("bluetooth")
-@FunBinding
+@GivenFun
 suspend fun toggleBluetooth() {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
@@ -56,7 +56,7 @@ suspend fun toggleBluetooth() {
 
 internal typealias BluetoothIcon = ActionIcon
 
-@Binding
+@Given
 fun bluetoothIcon(broadcasts: broadcasts): Flow<BluetoothIcon> {
     return broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)
         .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }

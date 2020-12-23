@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -40,14 +39,14 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.squareup.moshi.JsonClass
 
 @HomeItemBinding("Prefs")
 class PrefsKey
 
 @KeyUiBinding<PrefsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun PrefsScreen(
     prefs: @UiState SamplePrefs,

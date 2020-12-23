@@ -22,46 +22,47 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenGroup
 
 data class AppInfoKey(val packageName: String)
 
-@KeyIntentFactoryBinding
-@FunBinding
-fun createAppInfoKeyIntent(@FunApi key: AppInfoKey): Intent {
-    return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+@GivenGroup val appInfoKeyIntentFactoryBinding =
+    keyIntentFactoryBinding<AppInfoKey, createAppInfoKeyIntent>()
+
+@GivenFun fun createAppInfoKeyIntent(key: AppInfoKey): Intent =
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:${key.packageName}".toUri()
     }
-}
 
 data class AppKey(val packageName: String)
 
-@KeyIntentFactoryBinding
-@FunBinding
-fun createAppKeyIntent(
-    packageManager: PackageManager,
-    @FunApi key: AppInfoKey,
+@GivenGroup val appKeyIntentFactoryBinding =
+    keyIntentFactoryBinding<AppKey, createAppKeyIntent>()
+
+@GivenFun fun createAppKeyIntent(
+    @Given packageManager: PackageManager,
+    key: AppKey,
 ): Intent = packageManager.getLaunchIntentForPackage(key.packageName)!!
 
 data class ShareKey(val text: String)
 
-@KeyIntentFactoryBinding
-@FunBinding
-fun createShareKeyIntent(@FunApi key: ShareKey): Intent {
-    return Intent.createChooser(
-        Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, key.text)
-        },
-        ""
-    )
-}
+@GivenGroup val shareKeyIntentFactoryBinding =
+    keyIntentFactoryBinding<ShareKey, createShareKeyIntent>()
+
+@GivenFun fun createShareKeyIntent(key: ShareKey): Intent = Intent.createChooser(
+    Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, key.text)
+    },
+    ""
+)
 
 data class UrlKey(val url: String)
 
-@KeyIntentFactoryBinding
-@FunBinding
-fun createUrlKeyIntent(@FunApi key: UrlKey): Intent {
-    return Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }
-}
+@GivenGroup val urlKeyIntentFactoryBinding =
+    keyIntentFactoryBinding<UrlKey, createUrlKeyIntent>()
+
+@GivenFun fun createUrlKeyIntent(key: UrlKey): Intent =
+    Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }

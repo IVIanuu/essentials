@@ -19,19 +19,20 @@ package com.ivianuu.essentials.util
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
-@FunBinding
+@GivenFun
 suspend fun openAppUi(
-    applicationContext: ApplicationContext,
-    buildInfo: BuildInfo,
-    foregroundActivity: Flow<ForegroundActivity>,
-    packageManager: PackageManager,
+    @Given applicationContext: ApplicationContext,
+    @Given buildInfo: BuildInfo,
+    @Given foregroundActivity: Flow<ForegroundActivity>,
+    @Given packageManager: PackageManager,
 ): ComponentActivity {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     return foregroundActivity

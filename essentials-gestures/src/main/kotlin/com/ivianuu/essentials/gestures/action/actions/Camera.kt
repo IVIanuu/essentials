@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("camera")
 fun cameraAction(stringResource: stringResource): Action = Action(
@@ -34,7 +34,7 @@ fun cameraAction(stringResource: stringResource): Action = Action(
 )
 
 @ActionExecutorBinding("camera")
-@FunBinding
+@GivenFun
 suspend fun openCamera(sendIntent: sendIntent) {
     sendIntent(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
 }

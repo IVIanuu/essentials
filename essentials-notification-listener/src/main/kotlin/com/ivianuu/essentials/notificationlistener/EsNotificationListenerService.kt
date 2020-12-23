@@ -21,10 +21,7 @@ import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 

@@ -29,14 +29,14 @@ import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
-import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.AmbientUiComponent
-import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.UiComponentFactoryOwner
-import com.ivianuu.essentials.ui.runUiWorkers
+import com.ivianuu.essentials.componentElementBinding
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.componentElement
+import com.ivianuu.injekt.component.get
 
 /**
  * Base activity
@@ -49,8 +49,7 @@ abstract class EsActivity : AppCompatActivity() {
     private lateinit var composition: Composition
 
     private val uiComponent by lazy {
-        activityComponent.mergeComponent<UiComponentFactoryOwner>()
-            .uiComponentFactory()
+        activityComponent[UiComponentFactoryKey]()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +60,12 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeSavedStateRegistryOwner.set(container, this)
         ViewTreeViewModelStoreOwner.set(container, this)
 
-        uiComponent.mergeComponent<EsActivityComponent>()
-            .runUiWorkers()
+        val dependencies = uiComponent[EsActivityDependencies]
+        dependencies.runUiWorkers()
 
         composition = container.setContent(Recomposer.current()) {
             Providers(AmbientUiComponent provides uiComponent) {
-                uiComponent.mergeComponent<EsActivityComponent>().decorateUi {
+                dependencies.decorateUi {
                     Content()
                 }
             }
@@ -91,8 +90,11 @@ abstract class EsActivity : AppCompatActivity() {
     protected abstract fun Content()
 }
 
-@MergeInto(UiComponent::class)
-interface EsActivityComponent {
-    val decorateUi: DecorateUi
-    val runUiWorkers: runUiWorkers
+@Given class EsActivityDependencies(
+    @Given val decorateUi: DecorateUi,
+    @Given val runUiWorkers: runUiWorkers
+) {
+    companion object : Component.Key<EsActivityDependencies> {
+        @GivenGroup val binding = componentElementBinding(UiScoped, this)
+    }
 }

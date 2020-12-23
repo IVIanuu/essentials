@@ -50,15 +50,14 @@ import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding("Nav bar")
 class NavBarKey
 
 @KeyUiBinding<NavBarKey>
-@FunBinding
+@GivenFun
 @Composable
 fun NavBarScreen(
     hasPermissions: hasPermissions,

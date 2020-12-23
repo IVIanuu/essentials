@@ -18,10 +18,7 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
 import java.io.File
 
 @Effect
@@ -34,7 +31,7 @@ annotation class BackupFile {
 
 typealias BackupDir = File
 
-@Binding
+@Given
 fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 
 typealias BackupFiles = Set<File>

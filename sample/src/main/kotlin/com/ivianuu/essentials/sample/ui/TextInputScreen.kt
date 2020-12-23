@@ -41,14 +41,13 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding("Text input")
 class TextInputKey
 
 @KeyUiBinding<TextInputKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TextInputScreen() {
     val state = remember { TextInputState() }

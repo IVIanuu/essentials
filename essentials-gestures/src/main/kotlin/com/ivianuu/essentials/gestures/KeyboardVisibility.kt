@@ -27,10 +27,8 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -49,7 +47,7 @@ import kotlin.coroutines.coroutineContext
 typealias KeyboardVisible = Boolean
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun keyboardVisible(
     accessibilityEvents: AccessibilityEvents,
     getKeyboardHeight: getKeyboardHeight,
@@ -79,7 +77,7 @@ fun keyboardVisibilityAccessibilityConfig() = flowOf {
     )
 }
 
-@FunBinding
+@GivenFun
 fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
     return runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")

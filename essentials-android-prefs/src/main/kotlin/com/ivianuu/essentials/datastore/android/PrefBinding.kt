@@ -26,17 +26,17 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.essentials.sourcekey.memo
+import com.ivianuu.essentials.sourcekey.sourceKeyOf
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.component.memo
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -46,85 +46,70 @@ import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
 
-@Effect
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.TYPEALIAS)
-annotation class PrefBinding(val name: String) {
-    companion object {
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun <T : Any> pref(
-            @Arg("name") name: String,
-            scope: GlobalScope,
-            ioDispatcher: IODispatcher,
-            initialFactory: () -> @InitialOrFallback T,
-            adapterFactory: () -> JsonAdapter<T>,
-            prefsDir: () -> PrefsDir,
-        ): DataStore<T> {
-            val deferredDataStore: DataStore<T> by lazy {
-                DataStoreFactory.create(
-                    produceFile = { prefsDir().resolve(name) },
-                    serializer = object : Serializer<T> {
-                        override val defaultValue: T
-                            get() = initialFactory()
-                        private val adapter by lazy(adapterFactory)
-                        override fun readFrom(input: InputStream): T =
-                            adapter.fromJson(String(input.readBytes()))!!
+fun <T : Any> prefBinding(
+    name: String
+): @Given (
+    @Given GlobalScope,
+    @Given IODispatcher,
+    @Given () -> @InitialOrFallback T,
+    @Given () -> JsonAdapter<T>,
+    @Given () -> PrefsDir,
+    @Given Storage<ApplicationScoped>
+) -> DataStore<T> = { scope, dispatcher, initialFactory, adapterFactory, prefsDir, storage ->
+    storage.memo(sourceKeyOf(name)) {
+        val deferredDataStore: DataStore<T> by lazy {
+            DataStoreFactory.create(
+                produceFile = { prefsDir().resolve(name) },
+                serializer = object : Serializer<T> {
+                    override val defaultValue: T
+                        get() = initialFactory()
+                    private val adapter by lazy(adapterFactory)
+                    override fun readFrom(input: InputStream): T =
+                        adapter.fromJson(String(input.readBytes()))!!
 
-                        override fun writeTo(t: T, output: OutputStream) {
-                            output.write(adapter.toJson(t)!!.toByteArray())
-                        }
-                    },
-                    scope = scope.childCoroutineScope(ioDispatcher)
-                )
-            }
-            return object : DataStore<T> {
-                override val data: Flow<T>
-                    get() = deferredDataStore.data;
-
-                override suspend fun updateData(transform: suspend (t: T) -> T): T =
-                    deferredDataStore.updateData(transform)
-            }
+                    override fun writeTo(t: T, output: OutputStream) {
+                        output.write(adapter.toJson(t)!!.toByteArray())
+                    }
+                },
+                scope = scope.childCoroutineScope(dispatcher)
+            )
         }
+        object : DataStore<T> {
+            override val data: Flow<T>
+                get() = deferredDataStore.data;
 
-        @Suppress("NOTHING_TO_INLINE")
-        @Binding
-        inline fun <T : Any> flow(dataStore: DataStore<T>): Flow<T> = dataStore.data
-
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun <T : Any> stateFlow(
-            scope: GlobalScope,
-            flow: Flow<T>,
-            initial: @InitialOrFallback T,
-        ): StateFlow<T> = flow.stateIn(scope, SharingStarted.Eagerly, initial)
-
-        // todo inline once compose/kotlin is fixed
-        @Binding
-        @Composable
-        fun <T : Any> StateFlow<T>.latest(initial: @InitialOrFallback T): @UiState T =
-            collectAsState(initial).value
+            override suspend fun updateData(transform: suspend (t: T) -> T): T =
+                deferredDataStore.updateData(transform)
+        }
     }
 }
+
+@Given fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
+
+@Given @Composable fun <T : Any> @Given DataStore<T>.uiState(
+    @Given initial: @InitialOrFallback T
+): @UiState T = data.collectAsState(initial).value
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 internal annotation class InitialOrFallback
 
-@Binding
-inline fun <reified T : Any> initialOrFallback(initial: @Initial T?): @InitialOrFallback T =
-    initial ?: T::class.java.newInstance()
+@Given
+inline fun <reified T : Any> initialOrFallback(
+    @Given initial: @Initial T? = null
+): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 
-@FunBinding
+@GivenFun
 suspend fun <T> updatePref(
-    pref: DataStore<T>,
-    @FunApi reducer: T.() -> T,
+    @Given pref: DataStore<T>,
+    reducer: T.() -> T,
 ): T = pref.updateData { reducer(it) }
 
-@FunBinding
+@GivenFun
 fun <T> dispatchPrefUpdate(
-    pref: DataStore<T>,
-    scope: GlobalScope,
-    @FunApi reducer: T.() -> T,
+    @Given pref: DataStore<T>,
+    @Given scope: GlobalScope,
+    reducer: T.() -> T,
 ) {
     scope.launch {
         pref.updateData { reducer(it) }

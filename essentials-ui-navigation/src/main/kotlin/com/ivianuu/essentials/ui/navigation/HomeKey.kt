@@ -16,17 +16,8 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
+import com.ivianuu.essentials.alias
 
 typealias HomeKey = Key
 
-@Effect
-annotation class HomeKeyBinding {
-    companion object {
-        @Binding
-        inline val <T : Key> @ForEffect T.homeKey: HomeKey
-            get() = this
-    }
-}
+fun <T : HomeKey> homeKeyBinding() = alias<T, HomeKey>()

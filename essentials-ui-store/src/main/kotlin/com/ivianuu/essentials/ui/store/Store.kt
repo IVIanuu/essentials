@@ -21,12 +21,8 @@ import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.common.rememberRetained
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
@@ -36,71 +32,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-@Effect
-annotation class GlobalStateBinding {
-    companion object {
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun <T : StateFlow<S>, S> globalStore(
-            scope: GlobalScope,
-            provider: (CoroutineScope) -> @ForEffect T,
-        ): StateFlow<S> = provider(scope)
+typealias UiStateScope = CoroutineScope
 
-        @StateBinding
-        inline fun <T : StateFlow<S>, S> StateFlow<S>.globalStateBindings(): StateFlow<S> = this
-    }
-}
+@Given @Composable inline fun <reified S> uiStateFromFactory(
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given noinline factory: (UiStateScope) -> StateFlow<S>
+): StateFlow<S> = rememberRetained(key = typeOf<S>()) {
+    UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), factory)
+}.store
 
-@Effect
-annotation class UiStateBinding {
-    companion object {
-        @Binding
-        inline fun <reified T : StateFlow<S>, reified S> uiStateProducer(
-            defaultDispatcher: DefaultDispatcher,
-            noinline provider: (CoroutineScope) -> @ForEffect T
-        ): UiStateProducer<S> = {
-            uiStateImpl(defaultDispatcher, typeOf<T>(), provider)
-        }
+@Given inline val <T> @Given StateFlow<T>.flow: Flow<T>
+    get() = this
 
-        @Binding
-        @Composable
-        fun <T : StateFlow<S>, S> uiStateProducer(
-            producer: UiStateProducer<S>
-        ): StateFlow<S> = producer()
+@Qualifier
+@Target(AnnotationTarget.TYPE)
+annotation class UiState
 
-        @StateBinding
-        inline fun <T : StateFlow<S>, S> StateFlow<S>.uiStateBindings(): StateFlow<S> = this
-
-        @PublishedApi
-        @Composable
-        internal fun <S> uiStateImpl(
-            defaultDispatcher: DefaultDispatcher,
-            type: KType,
-            provider: (CoroutineScope) -> StateFlow<S>
-        ): StateFlow<S> {
-            return rememberRetained(key = type) {
-                UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
-            }.store
-        }
-    }
-}
-
-// todo tmp workaround
-typealias UiStateProducer<S> = @Composable () -> StateFlow<S>
-
-@Effect
-annotation class StateBinding {
-    companion object {
-        @Binding
-        inline val <T : StateFlow<S>, S> @ForEffect T.flow: Flow<S>
-            get() = this
-
-        @Binding
-        @Composable
-        inline val <T : StateFlow<S>, S> @ForEffect T.latest: @UiState S
-            get() = collectAsState().value
-    }
-}
+@Given @Composable inline val <T> @Given StateFlow<T>.latest: @UiState T
+    get() = collectAsState().value
 
 @PublishedApi
 internal class UiStoreRunner<S>(
@@ -112,7 +61,3 @@ internal class UiStoreRunner<S>(
         coroutineScope.cancel()
     }
 }
-
-@Qualifier
-@Target(AnnotationTarget.TYPE)
-annotation class UiState

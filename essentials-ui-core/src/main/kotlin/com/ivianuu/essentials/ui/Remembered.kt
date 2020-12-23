@@ -18,13 +18,13 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 
 @Qualifier
 @Target(AnnotationTarget.TYPE)
 annotation class Remembered
 
-@Binding
+@Given
 @Composable
-inline fun <T> remembered(factory: () -> T): @Remembered T = remember(factory)
+inline fun <T> remembered(@Given factory: () -> T): @Remembered T = remember(factory)

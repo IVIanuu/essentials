@@ -23,7 +23,7 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 
 data class CheckableAppsParams(
@@ -34,10 +34,10 @@ data class CheckableAppsParams(
 )
 
 internal typealias CheckedAppsSource = Flow<Set<String>>
-@Binding
+@Given
 fun checkedAppsSource(params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
 internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
-@Binding
+@Given
 fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged = params.onCheckedAppsChanged
 
 data class CheckableAppsState(
@@ -57,7 +57,7 @@ data class CheckableAppsState(
             }
         }
     companion object {
-        @Binding
+        @Given
         fun initial(params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
             appFilter = params.appFilter,
             appBarTitle = params.appBarTitle

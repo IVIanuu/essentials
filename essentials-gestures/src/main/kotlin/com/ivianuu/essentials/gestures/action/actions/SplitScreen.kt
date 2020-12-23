@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("split_screen")
 fun splitScreenAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
@@ -32,7 +32,7 @@ fun splitScreenAction(accessibilityAction: accessibilityAction): Action = access
 )
 
 @ActionExecutorBinding("split_screen")
-@FunBinding
+@GivenFun
 suspend fun toggleSplitScreen(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

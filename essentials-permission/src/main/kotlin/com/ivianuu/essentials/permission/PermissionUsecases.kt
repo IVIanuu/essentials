@@ -23,8 +23,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.openAppUi
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -32,7 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 fun hasPermissions(
     defaultDispatcher: DefaultDispatcher,
     stateProvider: stateProvider,
@@ -46,7 +45,7 @@ fun hasPermissions(
         }
     }.distinctUntilChanged()
 
-@FunBinding
+@GivenFun
 suspend fun requestPermissions(
     defaultDispatcher: DefaultDispatcher,
     dispatchNavigationAction: DispatchAction<NavigationAction>,
@@ -70,13 +69,13 @@ suspend fun requestPermissions(
     hasPermissions(permissions).first()
 }
 
-@FunBinding
+@GivenFun
 fun @receiver:FunApi Permission.stateProvider(
     stateProviders: Set<PermissionStateProvider>,
 ): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
 
-@FunBinding
+@GivenFun
 fun @receiver:FunApi Permission.requestHandler(
     requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {

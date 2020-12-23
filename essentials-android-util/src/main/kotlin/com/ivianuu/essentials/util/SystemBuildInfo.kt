@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.util
 
 import android.os.Build
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 data class SystemBuildInfo(val sdk: Int) {
     companion object {
-        @Binding
-        fun binding() = SystemBuildInfo(Build.VERSION.SDK_INT)
+        @Given
+        val defaultInstance = SystemBuildInfo(Build.VERSION.SDK_INT)
     }
 }

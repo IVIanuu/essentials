@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("quick_settings")
 fun quickSettingsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
@@ -34,7 +34,7 @@ fun quickSettingsAction(accessibilityAction: accessibilityAction): Action = acce
 )
 
 @ActionExecutorBinding("quick_settings")
-@FunBinding
+@GivenFun
 suspend fun showQuickSettings(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
 }

@@ -39,11 +39,10 @@ import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -52,7 +51,7 @@ data class DebugPurchaseKey(val params: BillingFlowParams)
 
 @DialogNavigationOptionsBinding<DebugPurchaseKey>
 @KeyUiBinding<DebugPurchaseKey>
-@FunBinding
+@GivenFun
 @Composable
 fun DebugPurchaseDialog(
     defaultDispatcher: DefaultDispatcher,

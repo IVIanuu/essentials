@@ -17,23 +17,22 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 suspend fun runShellCommand(
     runShellCommands: runShellCommands,
     @FunApi command: String
 ): List<String> = runShellCommands(listOf(command))
 
-@FunBinding
+@GivenFun
 suspend fun runShellCommands(
     ioDispatcher: IODispatcher,
     @FunApi commands: List<String>
 ): List<String> = withContext(ioDispatcher) { SU.run(commands) }
 
-@FunBinding
+@GivenFun
 suspend fun isShellAvailable(ioDispatcher: IODispatcher): Boolean =
     withContext(ioDispatcher) { SU.available() }

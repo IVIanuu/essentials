@@ -65,15 +65,14 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -85,7 +84,7 @@ import kotlinx.coroutines.flow.onEach
 class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun NotificationsScreen(
     pageState: @UiState NotificationsScreenState,
@@ -211,7 +210,7 @@ fun notificationState(
 }
 
 typealias NotificationsPermission = Permission
-@Binding
+@Given
 fun NotificationsPermission(): NotificationsPermission = NotificationListenerPermission(
     DefaultNotificationListenerService::class,
     Permission.Title to "Notifications"
@@ -219,7 +218,7 @@ fun NotificationsPermission(): NotificationsPermission = NotificationListenerPer
 
 typealias UiNotifications = Flow<List<UiNotification>>
 
-@Binding
+@Given
 fun notifications(
     applicationContext: ApplicationContext,
     serviceState: Flow<NotificationsState>,

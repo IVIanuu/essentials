@@ -16,18 +16,30 @@
 
 package com.ivianuu.essentials.ui
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.staticAmbientOf
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.merge.MergeChildComponent
-import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.android.ActivityRetainedScoped
+import com.ivianuu.injekt.android.ActivityScoped
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.ComponentKey
+import com.ivianuu.injekt.component.componentElement
 
-@MergeChildComponent
-interface UiComponent
+object UiScoped : Component.Name
 
-@MergeInto(ActivityComponent::class)
-interface UiComponentFactoryOwner {
-    val uiComponentFactory: () -> UiComponent
+val UiComponentFactoryKey =
+    ComponentKey<() -> Component<UiScoped>>()
+
+@GivenSetElement fun uiComponentFactory(
+    @Given parent: Component<UiScoped>,
+    @Given builderFactory: () -> Component.Builder<UiScoped>,
+) = componentElement(ActivityScoped, UiComponentFactoryKey) {
+    builderFactory()
+        .dependency(parent)
+        .build()
 }
 
-val AmbientUiComponent = staticAmbientOf<UiComponent> { error("No UiComponent installed") }
+val AmbientUiComponent = staticAmbientOf<Component<UiScoped>> { error("No UiComponent installed") }

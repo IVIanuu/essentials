@@ -25,11 +25,10 @@ import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 suspend fun executeAction(
     defaultDispatcher: DefaultDispatcher,
     logger: Logger,

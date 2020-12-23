@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("back")
 fun backAction(
@@ -34,7 +34,7 @@ fun backAction(
 )
 
 @ActionExecutorBinding("back")
-@FunBinding
+@GivenFun
 suspend fun pressBack(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
 }

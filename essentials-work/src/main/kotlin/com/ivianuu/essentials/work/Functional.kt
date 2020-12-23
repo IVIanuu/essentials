@@ -23,10 +23,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.MapEntries
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
@@ -42,16 +40,8 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-@Effect
-annotation class WorkerBinding(val id: String) {
-    companion object {
-        @MapEntries
-        fun <T : Worker> intoWorkerMap(
-            @Arg("id") id: String,
-            workerProvider: () -> @ForEffect T
-        ): Workers = mapOf(id to workerProvider)
-    }
-}
+fun <T : Worker> workerBinding(id: String):
+        @GivenSetElement (@Given () -> T) -> Pair<String, () -> T> = { id to it }
 
 fun OneTimeWorkRequestBuilder(id: String): OneTimeWorkRequest.Builder {
     return OneTimeWorkRequestBuilder<FunctionalWorker>()

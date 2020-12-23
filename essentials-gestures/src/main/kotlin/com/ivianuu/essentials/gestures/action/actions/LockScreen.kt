@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("lock_screen")
 fun lockScreenAction(
@@ -47,7 +47,7 @@ fun lockScreenAction(
 
 @SuppressLint("InlinedApi")
 @ActionExecutorBinding("lock_screen")
-@FunBinding
+@GivenFun
 suspend fun doLockScreen(
     performGlobalAction: performGlobalAction,
     runRootCommand: runRootCommand,

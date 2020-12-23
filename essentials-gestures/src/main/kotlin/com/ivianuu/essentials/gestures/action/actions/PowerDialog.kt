@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("power_dialog")
 fun powerDialogAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
@@ -32,7 +32,7 @@ fun powerDialogAction(accessibilityAction: accessibilityAction): Action = access
 )
 
 @ActionExecutorBinding("power_dialog")
-@FunBinding
+@GivenFun
 suspend fun showPowerDialog(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

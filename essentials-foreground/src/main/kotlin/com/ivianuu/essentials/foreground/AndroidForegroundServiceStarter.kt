@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlin.time.milliseconds
 
 @AppWorkerBinding
-@FunBinding
+@GivenFun
 suspend fun applyAndroidForegroundServiceState(
     applicationContext: ApplicationContext,
     logger: Logger,

@@ -24,8 +24,7 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.datastore.android.PrefBinding
 import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
 import com.ivianuu.essentials.datastore.android.updatePref
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +34,7 @@ import kotlinx.coroutines.flow.map
 class CheckAppsKey
 
 @KeyUiBinding<CheckAppsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun CheckAppsScreen(
     checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,

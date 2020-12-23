@@ -44,11 +44,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Position
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.common.compositionActivity
+import com.ivianuu.essentials.ui.uiDecoratorBinding
 import com.ivianuu.essentials.util.setFlag
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenGroup
 
 @Composable
 fun overlaySystemBarBgColor(color: Color) =
@@ -82,10 +82,10 @@ fun Modifier.systemBarStyle(
     onGloballyPositioned { globalBounds = it.globalBounds }
 }
 
-@UiDecoratorBinding("system_bars")
-@FunBinding
-@Composable
-fun ProvideSystemBarManager(@FunApi content: @Composable () -> Unit) {
+@GivenGroup val provideSystemBarsBinding =
+    uiDecoratorBinding<ProvideSystemBarManager>("system_bars")
+
+@GivenFun @Composable fun ProvideSystemBarManager(content: @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
@@ -94,13 +94,11 @@ fun ProvideSystemBarManager(@FunApi content: @Composable () -> Unit) {
     )
 }
 
-@UiDecoratorBinding(
-    "root_system_bars_style",
-    dependencies = ["app_theme", "system_bars"]
-)
-@FunBinding
-@Composable
-fun RootSystemBarsStyle(@FunApi content: @Composable () -> Unit) {
+@GivenGroup val rootSystemBarsStyleBinding =
+    uiDecoratorBinding<RootSystemBarsStyle>("root_system_bars_style",
+    dependencies = setOf("app_theme", "system_bars"))
+
+@GivenFun @Composable fun RootSystemBarsStyle(content: @Composable () -> Unit) {
     Surface {
         Box(
             modifier = Modifier.fillMaxSize()

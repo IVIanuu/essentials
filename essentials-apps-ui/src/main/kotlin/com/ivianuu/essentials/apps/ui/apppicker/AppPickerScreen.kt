@@ -31,14 +31,13 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @KeyUiBinding<AppPickerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun AppPickerScreen(
     state: @UiState AppPickerState,

@@ -20,20 +20,21 @@ import android.app.KeyguardManager
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-@FunBinding
+@GivenFun
 suspend fun unlockScreen(
-    applicationContext: ApplicationContext,
-    defaultDispatcher: DefaultDispatcher,
-    logger: Logger,
-    keyguardManager: KeyguardManager,
-) = withContext(defaultDispatcher) {
+    @Given applicationContext: ApplicationContext,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given logger: Logger,
+    @Given keyguardManager: KeyguardManager,
+): Boolean = withContext(defaultDispatcher) {
     if (!keyguardManager.isKeyguardLocked) return@withContext true
 
     val result = CompletableDeferred<Boolean>()

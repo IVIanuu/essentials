@@ -29,7 +29,7 @@ import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -45,7 +45,7 @@ fun killCurrentAction(
 )
 
 @ActionExecutorBinding("kill_current_app_action")
-@FunBinding
+@GivenFun
 suspend fun killCurrentApp(
     buildInfo: BuildInfo,
     currentAppFlow: Flow<CurrentApp>,
@@ -62,7 +62,7 @@ suspend fun killCurrentApp(
     }
 }
 
-@FunBinding
+@GivenFun
 fun getHomePackage(packageManager: PackageManager): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)

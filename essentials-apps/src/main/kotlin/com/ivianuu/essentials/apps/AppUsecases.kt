@@ -19,11 +19,10 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.tuples.parMap
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 suspend fun getInstalledApps(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,
@@ -40,7 +39,7 @@ suspend fun getInstalledApps(
         .toList()
 }
 
-@FunBinding
+@GivenFun
 suspend fun getAppInfo(
     ioDispatcher: IODispatcher,
     packageManager: PackageManager,

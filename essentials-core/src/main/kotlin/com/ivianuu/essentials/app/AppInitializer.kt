@@ -19,32 +19,21 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
 
-@Effect
-annotation class AppInitializerBinding(
-    val key: String,
-    val dependencies: Array<String> = [],
-    val dependents: Array<String> = []
-) {
-    companion object {
-        @SetElements
-        fun <T : () -> Unit> appInitializerIntoSet(
-            @Arg("key") key: String,
-            @Arg("dependencies") dependencies: Array<String>?,
-            @Arg("dependents") dependents: Array<String>?,
-            content: @ForEffect T
-        ): AppInitializers = setOf(AppInitializer(
-            key = key,
-            dependencies = dependencies?.toSet() ?: emptySet(),
-            dependents = dependents?.toSet() ?: emptySet(),
-            block = content
-        ))
-    }
+fun <T : () -> Unit> appInitializerBinding(
+    key: String,
+    dependencies: Set<String> = emptySet(),
+    dependents: Set<String> = emptySet()
+): @GivenSetElement (@Given T) -> AppInitializer = { content ->
+    AppInitializer(
+        key = key,
+        dependencies = dependencies,
+        dependents = dependents,
+        block = content
+    )
 }
 
 data class AppInitializer(
@@ -54,15 +43,10 @@ data class AppInitializer(
     val block: () -> Unit
 )
 
-typealias AppInitializers = Set<AppInitializer>
-
-@SetElements
-fun defaultAppInitializers(): AppInitializers = setOf()
-
-@FunBinding
+@GivenFun
 fun runInitializers(
-    initializers: AppInitializers,
-    logger: Logger,
+    @Given initializers: Set<AppInitializer>,
+    @Given logger: Logger,
 ) {
     initializers
         .sortedGraph(

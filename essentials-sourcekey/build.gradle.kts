@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+plugins {
+    kotlin("jvm")
+    id("com.ivianuu.injekt")
+}
 
-package com.ivianuu.essentials.util
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
+//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
-fun _sourceKey(): Any = error("Intrinsic")
-
-inline fun sourceKeyOf(): Any = _sourceKey()
-
-inline fun sourceKeyOf(p1: Any?): Any = JoinedKey(sourceKeyOf(), p1)
-
-inline fun sourceKeyOf(p1: Any?, p2: Any?): Any =
-    JoinedKey(JoinedKey(sourceKeyOf(), p1), p2)
-
-inline fun sourceKeyOf(vararg inputs: Any?): Any =
-    inputs.fold(sourceKeyOf()) { left, right -> JoinedKey(left, right) }
-
-@PublishedApi
-internal data class JoinedKey(val left: Any?, val right: Any?)
+dependencies {
+    compile(Deps.Injekt.core)
+    compile(Deps.Injekt.component)
+    compile(Deps.Kotlin.stdlib)
+}

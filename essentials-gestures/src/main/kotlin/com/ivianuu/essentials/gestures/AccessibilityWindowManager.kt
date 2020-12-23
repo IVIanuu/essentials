@@ -19,10 +19,10 @@ package com.ivianuu.essentials.gestures
 import android.app.Service
 import android.view.WindowManager
 import androidx.core.content.getSystemService
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 typealias AccessibilityWindowManager = WindowManager
 
-@Binding
+@Given
 inline val Service.accessibilityWindowManager: AccessibilityWindowManager
     get() = getSystemService()!!

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.startActivityForIntentResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -33,7 +33,7 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@FunBinding
+@GivenFun
 suspend fun restoreData(
     contentResolver: ContentResolver,
     ioDispatcher: IODispatcher,

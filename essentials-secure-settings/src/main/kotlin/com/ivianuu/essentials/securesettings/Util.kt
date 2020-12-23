@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
@@ -41,7 +40,7 @@ internal fun SecureSettingsHeader(text: String) {
     )
 }
 
-@FunBinding
+@GivenFun
 suspend fun popNavigatorOnceSecureSettingsGranted(
     dispatchNavigationAction: DispatchAction<NavigationAction>,
     hasSecureSettingsPermission: hasSecureSettingsPermission,

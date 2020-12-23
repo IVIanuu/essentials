@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
@@ -48,7 +48,7 @@ fun homeAction(
 )
 
 @ActionExecutorBinding("home")
-@FunBinding
+@GivenFun
 suspend fun openHomeScreen(
     applicationContext: ApplicationContext,
     performGlobalAction: performGlobalAction,

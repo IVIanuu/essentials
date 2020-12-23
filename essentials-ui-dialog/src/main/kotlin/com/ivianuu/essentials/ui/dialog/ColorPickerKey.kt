@@ -19,9 +19,12 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.givenGroupOf
+import com.ivianuu.essentials.ui.navigation.keyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenGroup
 
 data class ColorPickerKey(
     val initialColor: Color,
@@ -31,12 +34,16 @@ data class ColorPickerKey(
     val showAlphaSelector: Boolean = false,
 )
 
-@KeyUiBinding<ColorPickerKey>
-@FunBinding
+@GivenGroup val colorPickerDialogBindings = givenGroupOf(
+    keyUiBinding<ColorPickerKey, ColorPickerDialog>(),
+    dialogNavigationOptionsBinding<ColorPickerKey>()
+)
+
+@GivenFun
 @Composable
 fun ColorPickerDialog(
-    key: ColorPickerKey,
-    popTopKeyWithResult: popTopKeyWithResult<Color>,
+    @Given key: ColorPickerKey,
+    @Given popTopKeyWithResult: popTopKeyWithResult<Color>,
 ) {
     DialogWrapper {
         ColorPickerDialog(

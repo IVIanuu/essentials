@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.Logger.Kind.INFO
 import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import java.util.regex.Pattern
 
 interface Logger {
@@ -105,7 +105,7 @@ inline fun Logger.warn(
     log(WARN, throwable, tag, message)
 }
 
-@Binding
+@Given
 object NoopLogger : Logger {
     override val isEnabled: Boolean
         get() = false
@@ -114,8 +114,7 @@ object NoopLogger : Logger {
     }
 }
 
-@Binding
-class DefaultLogger(override val isEnabled: LoggingEnabled) : Logger {
+@Given class DefaultLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
         println("[${kind.name}]${tag ?: stackTraceTag} ${render(message, throwable)}")
     }

@@ -21,33 +21,21 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
 
-@Effect
-annotation class UiDecoratorBinding(
-    val key: String,
-    val dependencies: Array<String> = [],
-    val dependents: Array<String> = []
-) {
-    companion object {
-        @SetElements
-        fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecoratorIntoSet(
-            @Arg("key") key: String,
-            @Arg("dependencies") dependencies: Array<String>?,
-            @Arg("dependents") dependents: Array<String>?,
-            content: @ForEffect T
-        ): UiDecorators = setOf(UiDecorator(
-            key = key,
-            dependencies = dependencies?.toSet() ?: emptySet(),
-            dependents = dependents?.toSet() ?: emptySet(),
-            content = content as @Composable (@Composable () -> Unit) -> Unit
-        ))
-    }
+fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecoratorBinding(
+    key: String,
+    dependencies: Set<String> = emptySet(),
+    dependents: Set<String> = emptySet()
+): @GivenSetElement (@Given T) -> UiDecorator = { content ->
+    UiDecorator(
+        key = key,
+        dependencies = dependencies,
+        dependents = dependents,
+        content = content as @Composable (@Composable () -> Unit) -> Unit
+    )
 }
 
 data class UiDecorator(
@@ -57,16 +45,12 @@ data class UiDecorator(
     val content: @Composable (@Composable () -> Unit) -> Unit
 )
 
-typealias UiDecorators = Set<UiDecorator>
-@SetElements
-fun defaultUiDecorators(): UiDecorators = emptySet()
-
-@FunBinding
+@GivenFun
 @Composable
 fun DecorateUi(
-    decorators: UiDecorators,
-    logger: Logger,
-    @FunApi content: @Composable () -> Unit
+    @Given decorators: Set<UiDecorator>,
+    @Given logger: Logger,
+    content: @Composable () -> Unit
 ) {
     remember {
         decorators
@@ -85,14 +69,10 @@ fun DecorateUi(
     }()
 }
 
-@Effect
-annotation class AppThemeBinding {
-    companion object {
+fun <T : @Composable (@Composable () -> Unit) -> Unit> appThemeBinding() =
+    uiDecoratorBinding<T>(
+        key = "app_theme",
         // The theme typically uses EsMaterialTheme which itself uses the SystemBarManager
         // So we ensure that were running after the system bars decorator
-        @UiDecoratorBinding("app_theme", dependencies = ["system_bars"])
-        fun <T : @Composable (@Composable () -> Unit) -> Unit> uiDecorator(
-            instance: @ForEffect T
-        ): T = instance
-    }
-}
+        dependencies = setOf("system_bars")
+    )

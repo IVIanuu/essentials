@@ -17,39 +17,42 @@
 package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.android.ServiceScoped
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class DefaultAccessibilityService : EsAccessibilityService() {
 
-    private val component by lazy {
-        serviceComponent.mergeComponent<DefaultAccessibilityServiceComponent>()
+    private val dependencies by lazy {
+        serviceComponent[DefaultAccessibilityServiceDependencies]
     }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        component.logger.d { "connected" }
-        component.serviceHolder.value = this
+        dependencies.logger.d { "connected" }
+        dependencies.serviceHolder.value = this
         connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                component.logger.d { "disconnected" }
-                component.serviceHolder.value = null
+                dependencies.logger.d { "disconnected" }
+                dependencies.serviceHolder.value = null
             }
         }
         connectedScope.launch {
-            component.runAccessibilityWorkers()
+            dependencies.runAccessibilityWorkers()
         }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        component.logger.d { "on accessibility event $event" }
-        component.accessibilityEvents.emit(
+        dependencies.logger.d { "on accessibility event $event" }
+        dependencies.accessibilityEvents.emit(
             AccessibilityEvent(
                 type = event.eventType,
                 packageName = event.packageName?.toString(),
@@ -61,10 +64,13 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
 }
 
-@MergeInto(ServiceComponent::class)
-interface DefaultAccessibilityServiceComponent {
-    val accessibilityEvents: MutableAccessibilityEvents
-    val logger: Logger
-    val runAccessibilityWorkers: runAccessibilityWorkers
-    val serviceHolder: MutableAccessibilityServiceHolder
+@Given class DefaultAccessibilityServiceDependencies(
+    @Given val accessibilityEvents: MutableAccessibilityEvents,
+    @Given val logger: Logger,
+    @Given val runAccessibilityWorkers: runAccessibilityWorkers,
+    @Given val serviceHolder: MutableAccessibilityServiceHolder
+) {
+    companion object : Component.Key<DefaultAccessibilityServiceDependencies> {
+        @GivenGroup val binding = componentElementBinding(ServiceScoped, this)
+    }
 }

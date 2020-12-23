@@ -22,17 +22,12 @@ import coil.decode.Decoder
 import coil.fetch.Fetcher
 import coil.intercept.Interceptor
 import coil.map.Mapper
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlin.reflect.KClass
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun imageLoader(
     applicationContext: ApplicationContext,
     decoders: Decoders,

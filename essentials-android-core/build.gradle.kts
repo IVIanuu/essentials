@@ -35,6 +35,8 @@ dependencies {
 
     api(Deps.Coroutines.android)
     api(Deps.Injekt.android)
+    api(Deps.Injekt.core)
+    api(Deps.Injekt.component)
 
     api(project(":essentials-ui"))
     api(project(":essentials-core"))

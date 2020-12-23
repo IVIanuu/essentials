@@ -17,17 +17,20 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
+import com.ivianuu.essentials.componentElementBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
 import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 
 /**
  * App
  */
 abstract class EsApp : Application() {
     override fun onCreate() {
-        with(applicationComponent.mergeComponent<EsAppComponent>()) {
+        with(applicationComponent[EsAppDependencies]) {
             runInitializers()
             runAppWorkers()
         }
@@ -35,8 +38,11 @@ abstract class EsApp : Application() {
     }
 }
 
-@MergeInto(ApplicationComponent::class)
-interface EsAppComponent {
-    val runInitializers: runInitializers
-    val runAppWorkers: runAppWorkers
+@Given class EsAppDependencies(
+    @Given val runInitializers: runInitializers,
+    @Given val runAppWorkers: runAppWorkers
+) {
+    companion object : Component.Key<EsAppDependencies> {
+        @GivenGroup val binding = componentElementBinding(ApplicationScoped, this)
+    }
 }

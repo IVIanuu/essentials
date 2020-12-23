@@ -20,11 +20,11 @@ import com.ivianuu.essentials.accessibility.AccessibilityWorkerBinding
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
 @AccessibilityWorkerBinding
-@FunBinding
+@GivenFun
 suspend fun logAccessibility(logger: Logger) {
     runWithCleanup(
         block = {

@@ -28,11 +28,10 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@FunBinding
+@GivenFun
 suspend fun disableNonSdkInterfaceDetection(
     logger: Logger,
     systemBuildInfo: SystemBuildInfo,
@@ -53,23 +52,23 @@ suspend fun disableNonSdkInterfaceDetection(
 @AndroidSettingsStateBinding<Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 internal typealias HiddenApiPolicy = Int
 
-@Binding
+@Given
 fun defaultHiddenApiPolicy(): @Initial HiddenApiPolicy = 0
 
 @AndroidSettingsStateBinding<Int>("hidden_api_policy_pre_p_apps", AndroidSettingsType.GLOBAL)
 internal typealias HiddenApiPolicyPrePieApps = Int
 
-@Binding
+@Given
 fun defaultHiddenApiPolicyPrePieApps(): @Initial HiddenApiPolicyPrePieApps = 0
 
 @AndroidSettingsStateBinding<Int>("hidden_api_policy_p_apps", AndroidSettingsType.GLOBAL)
 internal typealias HiddenApiPolicyPieApps = Int
 
-@Binding
+@Given
 fun defaultHiddenApiPolicyPieApps(): @Initial HiddenApiPolicyPieApps = 0
 
 @SuppressLint("PrivateApi")
-@FunBinding
+@GivenFun
 fun setOverscan(logger: Logger, @FunApi rect: Rect) {
     logger.d { "set overscan $rect" }
 

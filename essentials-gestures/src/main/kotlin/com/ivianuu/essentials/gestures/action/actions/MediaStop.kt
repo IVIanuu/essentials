@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("media_stop")
 fun stopMediaAction(mediaAction: mediaAction): Action = mediaAction(
@@ -32,7 +32,7 @@ fun stopMediaAction(mediaAction: mediaAction): Action = mediaAction(
 )
 
 @ActionExecutorBinding("media_stop")
-@FunBinding
+@GivenFun
 suspend fun sendStopCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
 }

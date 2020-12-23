@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 data class SecureSettingsKey(val showHideNavBarHint: Boolean = false)
 
 data class SecureSettingsState(val showHideNavBarHint: Boolean = false) {
     companion object {
-        @Binding
+        @Given
         fun initial(key: SecureSettingsKey): @Initial SecureSettingsState =
             SecureSettingsState(key.showHideNavBarHint)
     }

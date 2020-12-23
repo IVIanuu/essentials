@@ -27,8 +27,8 @@ import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -44,7 +44,7 @@ fun torchAction(
 )
 
 @ActionExecutorBinding("torch")
-@FunBinding
+@GivenFun
 suspend fun toggleTorch(
     torchState: Flow<TorchState>,
     dispatchTorchAction: DispatchAction<TorchAction>,
@@ -54,7 +54,7 @@ suspend fun toggleTorch(
 
 private typealias TorchIcon = ActionIcon
 
-@Binding
+@Given
 fun torchIcon(torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     .map {
         if (it.torchEnabled) R.drawable.es_ic_flash_on

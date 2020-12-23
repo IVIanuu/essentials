@@ -28,10 +28,8 @@ import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +49,7 @@ import kotlinx.coroutines.withContext
  * Handles the state of the navigation bar
  */
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 class NavBarManager(
     private val applicationContext: ApplicationContext,
     private val broadcasts: broadcasts,

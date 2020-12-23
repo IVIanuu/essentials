@@ -25,9 +25,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -43,7 +41,7 @@ import kotlinx.coroutines.flow.shareIn
 typealias RecentApps = List<String>
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun recentApps(
     accessibilityEvents: AccessibilityEvents,
     globalScope: GlobalScope,
@@ -91,7 +89,7 @@ fun recentAppsAccessibilityConfig() = flowOf {
 
 typealias CurrentApp = String?
 
-@Binding
+@Given
 fun currentApp(recentApps: Flow<RecentApps>): Flow<CurrentApp> =
     recentApps
         .map { it.firstOrNull() }

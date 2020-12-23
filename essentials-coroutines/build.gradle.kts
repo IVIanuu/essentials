@@ -25,9 +25,10 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    testCompile(project(":essentials-test"))
+    compile(project(":essentials-sourcekey"))
     compile(Deps.Coroutines.core)
     compile(Deps.Injekt.core)
-    compile(Deps.Injekt.merge)
+    compile(Deps.Injekt.component)
     compile(Deps.Kotlin.stdlib)
+    testCompile(project(":essentials-test"))
 }

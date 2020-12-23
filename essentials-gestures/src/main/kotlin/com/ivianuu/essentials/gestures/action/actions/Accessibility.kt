@@ -20,11 +20,10 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 
-@FunBinding
+@GivenFun
 fun accessibilityAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,

@@ -46,15 +46,11 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -65,7 +61,7 @@ import kotlinx.coroutines.launch
 class AppTrackerKey
 
 @KeyUiBinding<AppTrackerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun AppTrackerScreen(
     createAppTrackerNotification: createAppTrackerNotification,
@@ -119,7 +115,7 @@ fun AppTrackerScreen(
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
 
 // todo remove once injekt fixes effect scoping issues
@@ -128,7 +124,7 @@ inline val AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerFo
     get() = this
 
 @SuppressLint("NewApi")
-@FunBinding
+@GivenFun
 fun createAppTrackerNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,

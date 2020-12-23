@@ -17,18 +17,8 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
+import com.ivianuu.essentials.alias
 
-@Effect
-annotation class AppUiBinding {
-    companion object {
-        @Suppress("USELESS_CAST")
-        @Binding
-        fun <T : @Composable () -> Unit> appUi(instance: @ForEffect T): AppUi =
-            instance as @Composable () -> Unit
-    }
-}
+fun <T : AppUi> appUiBinding() = alias<T, AppUi>()
 
 typealias AppUi = @Composable () -> Unit

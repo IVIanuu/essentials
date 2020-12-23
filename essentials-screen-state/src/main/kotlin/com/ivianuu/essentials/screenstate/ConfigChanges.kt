@@ -20,7 +20,7 @@ import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 typealias ConfigChanges = Flow<Unit>
-@Binding
+@Given
 fun configChanges(
     applicationContext: ApplicationContext,
     mainDispatcher: MainDispatcher,

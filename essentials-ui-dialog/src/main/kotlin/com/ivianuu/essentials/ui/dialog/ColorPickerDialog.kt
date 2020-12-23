@@ -42,7 +42,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.ripple.rememberRippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -269,7 +269,8 @@ private fun BaseColorGridItem(
         modifier = Modifier.squared(SquareFit.MatchWidth)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
-            .clickable(onClick = onClick, indication = rememberRippleIndication(bounded = false)),
+            .clickable(onClick = onClick, indication = rememberRipple(bounded = false)
+            ),
         contentAlignment = Alignment.Center
     ) {
         content()

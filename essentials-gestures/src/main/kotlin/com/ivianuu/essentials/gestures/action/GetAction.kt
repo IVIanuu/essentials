@@ -19,11 +19,10 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 suspend fun getAllActions(
     actions: Map<String, () -> Action>,
     defaultDispatcher: DefaultDispatcher,
@@ -32,7 +31,7 @@ suspend fun getAllActions(
         .map { it() }
 }
 
-@FunBinding
+@GivenFun
 suspend fun getAction(
     actions: Map<String, () -> Action>,
     actionFactories: () -> Set<ActionFactory>,
@@ -47,7 +46,7 @@ suspend fun getAction(
         ?: error("Unsupported action key $key")
 }
 
-@FunBinding
+@GivenFun
 suspend fun getActionExecutor(
     actionsExecutors: Map<String, ActionExecutor>,
     actionFactories: () -> Set<ActionFactory>,
@@ -61,7 +60,7 @@ suspend fun getActionExecutor(
         ?: error("Unsupported action key $key")
 }
 
-@FunBinding
+@GivenFun
 suspend fun getActionSettingsKey(
     actionSettings: Map<String, Key>,
     defaultDispatcher: DefaultDispatcher,

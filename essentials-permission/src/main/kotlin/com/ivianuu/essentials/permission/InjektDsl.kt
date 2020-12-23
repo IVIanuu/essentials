@@ -16,11 +16,7 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.SetElements
-
+import com.ivianuu.injekt.Given
 @Effect
 annotation class PermissionStateProviderBinding {
     companion object {
@@ -41,7 +37,7 @@ annotation class PermissionRequestHandlerBinding {
 @Effect
 annotation class PermissionRequestRouteFactoryBinding {
     companion object {
-        @Binding
+        @Given
         inline val <T : PermissionRequestKeyFactory> @ForEffect T.permissionRequestKeyFactory: PermissionRequestKeyFactory
             get() = this
     }

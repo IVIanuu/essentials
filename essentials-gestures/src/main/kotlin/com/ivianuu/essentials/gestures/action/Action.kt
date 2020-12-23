@@ -21,12 +21,8 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.MapEntries
-import com.ivianuu.injekt.SetElements
 import kotlinx.coroutines.flow.Flow
 
 data class Action(
@@ -64,7 +60,7 @@ annotation class ActionExecutorBinding(val key: String) {
     }
 }
 
-@FunBinding
+@GivenFun
 fun choosePermissions(
     permissions: ActionPermissions,
     @FunApi chooser: ActionPermissions.() -> List<Permission>,

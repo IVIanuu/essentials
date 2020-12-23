@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("menu")
 fun menuAction(
@@ -39,7 +39,7 @@ fun menuAction(
 )
 
 @ActionExecutorBinding("menu")
-@FunBinding
+@GivenFun
 suspend fun simulateMenuButtonPress(runRootCommand: runRootCommand) {
     runRootCommand("input keyevent 82")
 }

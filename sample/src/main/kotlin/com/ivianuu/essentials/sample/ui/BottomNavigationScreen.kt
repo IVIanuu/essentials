@@ -40,14 +40,13 @@ import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding("Bottom navigation")
 class BottomNavigationKey
 
 @KeyUiBinding<BottomNavigationKey>
-@FunBinding
+@GivenFun
 @Composable
 fun BottomNavigationScreen() {
     var selectedItem by savedInstanceState { BottomNavItem.values().first() }

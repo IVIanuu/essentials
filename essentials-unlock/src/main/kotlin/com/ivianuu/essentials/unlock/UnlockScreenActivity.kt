@@ -25,13 +25,17 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.android.ActivityScoped
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -46,10 +50,6 @@ class UnlockScreenActivity : AppCompatActivity() {
     private var valid = true
     private lateinit var requestId: String
 
-    private val component by lazy {
-        activityComponent.mergeComponent<UnlockScreenActivityComponent>()
-    }
-
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,17 +61,19 @@ class UnlockScreenActivity : AppCompatActivity() {
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-        component.logger.d { "unlock screen for $requestId" }
+        val dependencies = activityComponent[UnlockScreenDependencies]
+
+        dependencies.logger.d { "unlock screen for $requestId" }
 
         fun finishWithResult(success: Boolean) {
-            component.logger.d { "finish with result $success" }
+            dependencies.logger.d { "finish with result $success" }
             hasResult = true
             onUnlockScreenResult(requestId, success)
             finish()
         }
 
-        if (component.systemBuildInfo.sdk >= 26) {
-            component.keyguardManager.requestDismissKeyguard(
+        if (dependencies.systemBuildInfo.sdk >= 26) {
+            dependencies.keyguardManager.requestDismissKeyguard(
                 this,
                 object :
                     KeyguardManager.KeyguardDismissCallback() {
@@ -94,9 +96,9 @@ class UnlockScreenActivity : AppCompatActivity() {
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
             merge(
-                component.broadcasts(Intent.ACTION_SCREEN_OFF),
-                component.broadcasts(Intent.ACTION_SCREEN_ON),
-                component.broadcasts(Intent.ACTION_USER_PRESENT)
+                dependencies.broadcasts(Intent.ACTION_SCREEN_OFF),
+                dependencies.broadcasts(Intent.ACTION_SCREEN_ON),
+                dependencies.broadcasts(Intent.ACTION_USER_PRESENT)
             )
                 .take(1)
                 .onEach {
@@ -127,10 +129,14 @@ class UnlockScreenActivity : AppCompatActivity() {
     }
 }
 
-@MergeInto(ActivityComponent::class)
-interface UnlockScreenActivityComponent {
-    val broadcasts: broadcasts
-    val keyguardManager: KeyguardManager
-    val logger: Logger
-    val systemBuildInfo: SystemBuildInfo
+@Given class UnlockScreenDependencies(
+    @Given val broadcasts: broadcasts,
+    @Given val keyguardManager: KeyguardManager,
+    @Given val logger: Logger,
+    @Given val systemBuildInfo: SystemBuildInfo
+) {
+    companion object : Component.Key<UnlockScreenDependencies> {
+        @GivenGroup val binding =
+            componentElementBinding(ActivityScoped, UnlockScreenDependencies)
+    }
 }

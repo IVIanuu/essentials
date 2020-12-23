@@ -33,14 +33,13 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding("Tabs")
 class TabsKey
 
 @KeyUiBinding<TabsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TabsScreen() {
     var selectedIndex by savedInstanceState { 0 }

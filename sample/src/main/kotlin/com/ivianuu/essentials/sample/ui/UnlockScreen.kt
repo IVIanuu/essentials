@@ -25,10 +25,9 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -38,7 +37,7 @@ import kotlinx.coroutines.launch
 class UnlockKey
 
 @KeyUiBinding<UnlockKey>
-@FunBinding
+@GivenFun
 @Composable
 fun UnlockScreen(
     screenState: Flow<ScreenState>,

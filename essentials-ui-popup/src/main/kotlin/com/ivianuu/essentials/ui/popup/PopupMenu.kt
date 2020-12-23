@@ -27,13 +27,16 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.UiScoped
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 
 object PopupMenu {
     data class Item(
@@ -46,12 +49,12 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val component = AmbientUiComponent.current.mergeComponent<PopupMenuComponent>()
+            val dependencies = AmbientUiComponent.current[PopupMenuDependencies]
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            component.dispatchNavigationAction(PopTop())
+                            dependencies.dispatchNavigationAction(PopTop())
                             item.onSelected()
                         },
                         content = item.content
@@ -62,9 +65,12 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
     }
 }
 
-@MergeInto(UiComponent::class)
-interface PopupMenuComponent {
-    val dispatchNavigationAction: DispatchAction<NavigationAction>
+@Given class PopupMenuDependencies(
+    @Given val dispatchNavigationAction: DispatchAction<NavigationAction>
+) {
+    companion object : Component.Key<PopupMenuDependencies> {
+        @GivenGroup val binding = componentElementBinding(UiScoped, this)
+    }
 }
 
 @Composable

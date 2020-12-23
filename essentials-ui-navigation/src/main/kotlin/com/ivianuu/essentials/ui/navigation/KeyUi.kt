@@ -17,24 +17,15 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.MapEntries
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
 import kotlin.reflect.KClass
 
-@Effect
-annotation class KeyUiBinding<K> {
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        @MapEntries
-        inline fun <@Arg("K") reified K, T : @Composable () -> Unit> bind(
-            noinline factory: (K) -> @ForEffect T,
-        ): KeyUiFactories = mapOf(K::class as KClass<out Key> to
-                factory as (Key) -> @Composable () -> Unit)
-    }
+@Suppress("UNCHECKED_CAST")
+inline fun <reified K : Key, T : @Composable () -> Unit> keyUiBinding():
+        @GivenSetElement (@Given (K) -> T) -> KeyUiFactoryBinding = {
+            K::class to it as (Key) -> @Composable () -> Unit
 }
 
-typealias KeyUiFactories = Map<KClass<out Key>, KeyUiFactory<Key>>
+typealias KeyUiFactoryBinding = Pair<KClass<out Key>, (Key) -> @Composable () -> Unit>
 
-typealias KeyUiFactory<T> = (T) -> @Composable () -> Unit

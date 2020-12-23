@@ -35,13 +35,12 @@ import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-@FunBinding
+@GivenFun
 @Composable
 fun TwilightTheme(
     twilightState: StateFlow<TwilightState>,

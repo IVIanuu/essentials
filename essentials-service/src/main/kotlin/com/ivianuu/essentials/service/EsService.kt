@@ -19,11 +19,14 @@ package com.ivianuu.essentials.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.android.ServiceScoped
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -36,7 +39,7 @@ abstract class EsService : Service() {
 
     val scope by lazy {
         CoroutineScope(
-            serviceComponent.mergeComponent<EsServiceComponent>()
+            serviceComponent[EsServiceDependencies]
                 .defaultDispatcher
         )
     }
@@ -49,7 +52,10 @@ abstract class EsService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 }
 
-@MergeInto(ServiceComponent::class)
-interface EsServiceComponent {
-    val defaultDispatcher: DefaultDispatcher
+@Given class EsServiceDependencies(
+    @Given val defaultDispatcher: DefaultDispatcher
+) {
+    companion object : Component.Key<EsServiceDependencies> {
+        @GivenGroup val binding = componentElementBinding(ServiceScoped, this)
+    }
 }

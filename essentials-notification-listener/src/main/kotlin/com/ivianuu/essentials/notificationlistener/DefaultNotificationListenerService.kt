@@ -20,12 +20,7 @@ import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,5 +84,5 @@ interface DefaultNotificationListenerServiceComponent {
 internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

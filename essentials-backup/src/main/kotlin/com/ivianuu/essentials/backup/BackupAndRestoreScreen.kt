@@ -25,12 +25,11 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<BackupAndRestoreKey>
-@FunBinding
+@GivenFun
 @Composable
 fun BackupAndRestoreScreen(
     state: @UiState BackupAndRestoreState,

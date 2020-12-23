@@ -17,41 +17,31 @@
 package com.ivianuu.essentials.ui
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.setElement
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@Effect
-annotation class UiWorkerBinding {
-    companion object {
-        @SetElements
-        fun <T : suspend () -> Unit> workerIntoSet(instance: @ForEffect T): UiWorkers =
-            setOf(instance)
-    }
-}
+fun <T : UiWorker> uiWorkerBinding() = setElement<UiWorker, T>()
 
-typealias UiWorkers = Set<suspend () -> Unit>
+// todo change signature once kotlin is fixed
+typealias UiWorker = () -> suspend () -> Unit
 
-@SetElements
-fun defaultUiWorkers(): UiWorkers = emptySet()
-
-@FunBinding
+@GivenFun
 fun runUiWorkers(
-    defaultDispatcher: DefaultDispatcher,
-    logger: Logger,
-    uiScope: UiScope,
-    workers: UiWorkers,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given logger: Logger,
+    @Given uiScope: UiScope,
+    @Given workers: Set<UiWorker>,
 ) {
     logger.d { "run ui workers" }
     workers
         .forEach { worker ->
             uiScope.launch(defaultDispatcher) {
-                worker()
+                worker()()
             }
         }
 }

@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("search")
 fun searchAction(stringResource: stringResource): Action = Action(
@@ -35,7 +35,7 @@ fun searchAction(stringResource: stringResource): Action = Action(
 )
 
 @ActionExecutorBinding("search")
-@FunBinding
+@GivenFun
 suspend fun showSearch(sendIntent: sendIntent) {
     sendIntent(
         Intent(Intent.ACTION_MAIN).apply {

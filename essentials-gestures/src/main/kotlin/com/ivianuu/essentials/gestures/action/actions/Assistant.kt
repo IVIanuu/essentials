@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("assistant")
 fun assistantAction(
@@ -39,7 +39,7 @@ fun assistantAction(
 
 @SuppressLint("DiscouragedPrivateApi")
 @ActionExecutorBinding("assistant")
-@FunBinding
+@GivenFun
 suspend fun launchAssistant(searchManager: SearchManager) {
     val launchAssist = searchManager.javaClass
         .getDeclaredMethod("launchAssist", Bundle::class.java)

@@ -27,16 +27,15 @@ import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding("Actions")
 class ActionsKey
 
 @KeyUiBinding<ActionsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun ActionsScreen(
     executeAction: executeAction,

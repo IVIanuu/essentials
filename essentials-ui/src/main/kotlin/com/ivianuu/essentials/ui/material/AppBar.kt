@@ -34,16 +34,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.UiScoped
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigationState
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.given
+import com.ivianuu.injekt.withGiven
 import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {
@@ -141,9 +146,9 @@ private val DefaultAppBarElevation = 4.dp
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     val component = AmbientUiComponent.current
-        .mergeComponent<AppBarComponent>()
     val canGoBack = remember {
-        component.navigationState.value.backStack.size > 1
+        component[AutoTopAppBarDependencies]
+            .navigationState.value.backStack.size > 1
     }
     return when {
         canGoBack -> {
@@ -153,7 +158,10 @@ private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     }
 }
 
-@MergeInto(UiComponent::class)
-interface AppBarComponent {
-    val navigationState: StateFlow<NavigationState>
+@Given class AutoTopAppBarDependencies(
+    @Given val navigationState: StateFlow<NavigationState>
+) {
+    companion object : Component.Key<AutoTopAppBarDependencies> {
+        @GivenGroup val binding = componentElementBinding(UiScoped, this)
+    }
 }

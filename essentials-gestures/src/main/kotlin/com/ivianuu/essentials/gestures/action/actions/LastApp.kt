@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
 @ActionBinding("last_app")
@@ -40,7 +40,7 @@ fun lastAppAction(
 )
 
 @ActionExecutorBinding("last_app")
-@FunBinding
+@GivenFun
 suspend fun goToLastApp(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
     delay(250)

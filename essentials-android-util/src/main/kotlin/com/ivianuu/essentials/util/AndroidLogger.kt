@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
+import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.essentials.util.Logger.Kind
 import com.ivianuu.essentials.util.Logger.Kind.DEBUG
 import com.ivianuu.essentials.util.Logger.Kind.ERROR
@@ -24,12 +25,11 @@ import com.ivianuu.essentials.util.Logger.Kind.INFO
 import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Storage
 
-@Binding
-class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
+@Given class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
         when (kind) {
             VERBOSE -> Log.v(tag ?: stackTraceTag, message, throwable)
@@ -42,18 +42,16 @@ class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
     }
 
     companion object {
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun binding(
-            buildInfo: BuildInfo,
-            androidLoggerProvider: () -> AndroidLogger,
-            noopLoggerProvider: () -> NoopLogger,
-        ): Logger {
-            return if (buildInfo.isDebug) androidLoggerProvider() else noopLoggerProvider()
+        @Given fun impl(
+            @Given buildInfo: BuildInfo,
+            @Given androidLoggerFactory: () -> AndroidLogger,
+            @Given noopLoggerFactory: () -> NoopLogger,
+            @Given storage: Storage<ApplicationScoped>
+        ): Logger = storage.memo {
+            if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
         }
     }
 }
 
-@Binding
-inline val BuildInfo.defaultLoggingEnabled: LoggingEnabled
+@Given inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled
     get() = isDebug

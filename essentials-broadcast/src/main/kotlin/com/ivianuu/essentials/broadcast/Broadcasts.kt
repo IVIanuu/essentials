@@ -23,15 +23,14 @@ import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@FunBinding
+@GivenFun
 fun broadcasts(
     applicationContext: ApplicationContext,
     mainDispatcher: MainDispatcher,

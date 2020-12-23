@@ -36,10 +36,10 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@FunBinding
+@GivenFun
 @Composable
 fun CheckableAppsScreen(
     state: @UiState CheckableAppsState,

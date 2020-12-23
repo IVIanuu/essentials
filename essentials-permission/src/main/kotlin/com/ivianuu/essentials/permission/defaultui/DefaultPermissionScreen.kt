@@ -31,12 +31,11 @@ import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<DefaultPermissionKey>
-@FunBinding
+@GivenFun
 @Composable
 fun DefaultPermissionScreen(
     state: @UiState PermissionState,

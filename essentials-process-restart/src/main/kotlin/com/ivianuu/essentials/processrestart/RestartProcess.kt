@@ -21,10 +21,10 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 
-@FunBinding
+@GivenFun
 suspend fun restartProcess(
     applicationContext: ApplicationContext,
     buildInfo: BuildInfo,

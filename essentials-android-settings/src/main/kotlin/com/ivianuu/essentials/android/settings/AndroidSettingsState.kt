@@ -26,13 +26,8 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.contentChanges
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,51 +37,34 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPEALIAS)
-@Effect
-annotation class AndroidSettingsStateBinding<T>(
-    val name: String,
-    val type: AndroidSettingsType,
-) {
-    companion object {
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun <@Arg("T") T, S : T> state(
-            @Arg("name") name: String,
-            @Arg("type") type: AndroidSettingsType,
-            scope: GlobalScope,
-            ioDispatcher: IODispatcher,
-            adapterFactory: (String, AndroidSettingsType, T) -> AndroidSettingsAdapter<T>,
-            contentChanges: contentChanges,
-            initial: @Initial S,
-            actions: Actions<AndroidSettingAction<S>>,
-        ): StateFlow<S> {
-            @Suppress("UNCHECKED_CAST")
-            return scope.childCoroutineScope(ioDispatcher).state(initial) {
-                val adapter = adapterFactory(name, type, initial) as AndroidSettingsAdapter<S>
-                contentChanges(
-                    when (type) {
-                        AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
-                        AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)
-                        AndroidSettingsType.SYSTEM -> Settings.System.getUriFor(name)
-                    }
-                )
-                    .onStart { emit(Unit) }
-                    .map { adapter.get() }
-                    .reduce { it }
-                    .launchIn(this)
-                actions
-                    .filterIsInstance<Update<S>>()
-                    .onEach { action ->
-                        adapter.set(action.reducer(adapter.get()))
-                    }
-                    .launchIn(this)
+fun <S> androidSettingStateBinding(name: String, type: AndroidSettingsType): @Given (
+    @Given GlobalScope,
+    @Given IODispatcher,
+    @Given (String, AndroidSettingsType, S) -> AndroidSettingsAdapter<S>,
+    @Given contentChanges,
+    @Given @Initial S,
+    @Given Actions<AndroidSettingAction<S>>
+) -> StateFlow<S> = { scope, dispatcher, adapterFactory, contentChanges, initial, actions ->
+    @Suppress("UNCHECKED_CAST")
+    scope.childCoroutineScope(dispatcher).state(initial) {
+        val adapter = adapterFactory(name, type, initial)
+        contentChanges(
+            when (type) {
+                AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
+                AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)
+                AndroidSettingsType.SYSTEM -> Settings.System.getUriFor(name)
             }
-        }
-
-        @Binding
-        inline val <@Arg("T") T, S : T> StateFlow<S>.androidSettingsFlow: Flow<S>
-            get() = this
+        )
+            .onStart { emit(Unit) }
+            .map { adapter.get() }
+            .reduce { it }
+            .launchIn(this)
+        actions
+            .filterIsInstance<Update<S>>()
+            .onEach { action ->
+                adapter.set(action.reducer(adapter.get()))
+            }
+            .launchIn(this)
     }
 }
 
@@ -97,20 +75,19 @@ sealed class AndroidSettingAction<T> {
     ) : AndroidSettingAction<T>()
 }
 
-@FunBinding
-suspend fun <T> updateAndroidSetting(
-    dispatch: DispatchAction<AndroidSettingAction<T>>,
-    @FunApi reducer: T.() -> T,
+@GivenFun suspend fun <T> updateAndroidSetting(
+    @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    reducer: T.() -> T,
 ): T {
     val result = CompletableDeferred<T>()
     dispatch(Update(reducer, result))
     return result.await()
 }
 
-@FunBinding
+@GivenFun
 fun <T> dispatchAndroidSettingUpdate(
-    dispatch: DispatchAction<AndroidSettingAction<T>>,
-    @FunApi reducer: T.() -> T,
+    @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    reducer: T.() -> T,
 ) {
     dispatch(Update(reducer, null))
 }

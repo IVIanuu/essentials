@@ -24,7 +24,7 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
@@ -34,7 +34,7 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@FunBinding
+@GivenFun
 suspend fun backupData(
     backupDir: BackupDir,
     backupFiles: BackupFiles,

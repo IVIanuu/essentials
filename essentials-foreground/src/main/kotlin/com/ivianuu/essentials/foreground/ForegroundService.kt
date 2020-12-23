@@ -22,9 +22,6 @@ import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn

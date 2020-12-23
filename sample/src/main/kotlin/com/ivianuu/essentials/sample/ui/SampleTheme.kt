@@ -24,11 +24,10 @@ import com.ivianuu.essentials.twilight.ui.invokeTwilightTheme
 import com.ivianuu.essentials.ui.AppThemeBinding
 import com.ivianuu.essentials.ui.animatedstack.AmbientStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @AppThemeBinding
-@FunBinding
+@GivenFun
 @Composable
 fun SampleTheme(
     twilightTheme: TwilightTheme,

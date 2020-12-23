@@ -25,11 +25,9 @@ import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.screenstate.ConfigChanges
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Eager
-import com.ivianuu.injekt.Scoped
 import com.ivianuu.injekt.android.ApplicationResources
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -48,7 +46,7 @@ data class TwilightState(
 
 @Eager
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun twilightState(
     globalScope: GlobalScope,
     batteryTwilightState: () -> BatteryTwilightState,
@@ -72,7 +70,7 @@ fun twilightState(
 
 internal typealias BatteryTwilightState = Flow<Boolean>
 
-@Binding
+@Given
 fun batteryTwilightState(
     broadcasts: broadcasts,
     powerManager: PowerManager,
@@ -85,7 +83,7 @@ fun batteryTwilightState(
 
 internal typealias SystemTwilightState = Flow<Boolean>
 
-@Binding
+@Given
 fun systemTwilightState(
     configChanges: ConfigChanges,
     applicationResources: ApplicationResources,
@@ -98,7 +96,7 @@ fun systemTwilightState(
 
 internal typealias TimeTwilightState = Flow<Boolean>
 
-@Binding
+@Given
 fun timeTwilightState(
     broadcasts: broadcasts,
 ): TimeTwilightState = broadcasts(Intent.ACTION_TIME_TICK)

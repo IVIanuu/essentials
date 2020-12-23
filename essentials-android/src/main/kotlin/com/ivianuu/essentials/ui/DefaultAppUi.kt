@@ -17,19 +17,16 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
 import com.ivianuu.essentials.ui.navigation.invokeNavigationStateContent
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
-@AppUiBinding
-@FunBinding
-@Composable
+@GivenFun @Composable
 fun DefaultAppUi(
-    navigationState: @UiState NavigationState,
-    navigationStateContent: NavigationStateContent,
+    @Given navigationState: @UiState NavigationState,
+    @Given navigationStateContent: NavigationStateContent,
 ) {
     navigationStateContent.invokeNavigationStateContent(navigationState)
 }

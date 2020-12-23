@@ -21,16 +21,16 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.runShellCommand
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 
-@FunBinding
+@GivenFun
 suspend fun hasSecureSettingsPermission(
     applicationContext: ApplicationContext,
 ): Boolean = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
         PackageManager.PERMISSION_GRANTED
 
-@FunBinding
+@GivenFun
 suspend fun grantSecureSettingsPermissionViaRoot(
     buildInfo: com.ivianuu.essentials.util.BuildInfo,
     hasSecureSettingsPermission: hasSecureSettingsPermission,

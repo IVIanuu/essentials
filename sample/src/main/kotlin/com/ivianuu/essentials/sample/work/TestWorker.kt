@@ -21,14 +21,13 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.WorkScope
 import com.ivianuu.essentials.work.WorkerBinding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
 const val TEST_WORKER_ID = "test"
 
 @WorkerBinding(TEST_WORKER_ID)
-@FunBinding
+@GivenFun
 suspend fun @receiver:FunApi WorkScope.TestWorker(logger: Logger): ListenableWorker.Result {
     logger.d { "start work" }
     delay(5000)

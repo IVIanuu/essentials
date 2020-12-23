@@ -18,10 +18,10 @@ package com.ivianuu.essentials.sample
 
 import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @AppInitializerBinding("strict_mode")
-@FunBinding
+@GivenFun
 fun initializeStrictModule() {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()

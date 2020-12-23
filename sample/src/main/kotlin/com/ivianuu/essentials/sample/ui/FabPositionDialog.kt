@@ -22,15 +22,14 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 class FabPositionKey(val preselect: FabPosition)
 
 @DialogNavigationOptionsBinding<FabPositionKey>
 @KeyUiBinding<FabPositionKey>
-@FunBinding
+@GivenFun
 @Composable
 fun FabPositionDialog(
     key: FabPositionKey,

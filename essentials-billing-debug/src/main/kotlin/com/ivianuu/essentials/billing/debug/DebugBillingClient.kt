@@ -45,14 +45,14 @@ import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.openAppUi
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Date
 
-@Binding
+@Given
 class DebugBillingClient(
     private val buildInfo: BuildInfo,
     private val globalScope: GlobalScope,

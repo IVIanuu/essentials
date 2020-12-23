@@ -33,22 +33,21 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
+import kotlin.reflect.KClass
 
-@FunBinding
+@GivenFun
 @Composable
 fun NavigationStateContent(
-    optionFactories: @Remembered NavigationOptionFactories,
-    uiFactories: @Remembered KeyUiFactories,
-    @FunApi state: NavigationState,
-    @FunApi modifier: Modifier = Modifier,
+    optionFactories: @Remembered Set<NavigationOptionFactoryBinding>,
+    uiFactories: @Remembered Set<KeyUiFactoryBinding>,
+    @Given state: NavigationState,
+    @Given modifier: Modifier = Modifier,
 ) {
     val contentState = remember {
-        NavigationContentState(optionFactories,
-            uiFactories,
+        NavigationContentState(optionFactories.toMap(), uiFactories.toMap(),
             state.backStack
         )
     }
@@ -59,8 +58,8 @@ fun NavigationStateContent(
 }
 
 private class NavigationContentState(
-    var optionFactories: NavigationOptionFactories = emptyMap(),
-    var uiFactories: KeyUiFactories = emptyMap(),
+    var optionFactories: Map<KClass<*>, (Key) -> NavigationOptions> = emptyMap(),
+    var uiFactories: Map<KClass<*>, (Key) -> @Composable () -> Unit> = emptyMap(),
     backStack: List<Key>,
 ) {
 

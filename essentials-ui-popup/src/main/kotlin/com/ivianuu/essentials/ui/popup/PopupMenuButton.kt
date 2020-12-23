@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.ripple.rememberRippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,16 +33,12 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.get
 
 @Composable
 fun PopupMenuButton(
@@ -56,7 +52,7 @@ fun PopupMenuButton(
             .popupClickable(
                 items = items,
                 onCancel = onCancel,
-                indicationFactory = { rememberRippleIndication(bounded = false) }
+                indicationFactory = { rememberRipple(bounded = false) }
             )
             .then(modifier),
         contentAlignment = Alignment.Center
@@ -71,14 +67,13 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indicationFactory: @Composable () -> Indication = AmbientIndication.current,
 ) = composed {
-    val uiComponent = AmbientUiComponent.current
-        .mergeComponent<PopupClickableComponent>()
+    val dependencies = AmbientUiComponent.current[PopupMenuDependencies]
 
     var coordinates by rememberRef<LayoutCoordinates?> { null }
 
     onGloballyPositioned { coordinates = it }
         .clickable(indication = indicationFactory()) {
-            uiComponent.dispatchNavigationAction(
+            dependencies.dispatchNavigationAction(
                 Push(
                     PopupKey(
                         position = coordinates!!.boundsInRoot,
@@ -89,9 +84,4 @@ fun Modifier.popupClickable(
                 )
             )
         }
-}
-
-@MergeInto(UiComponent::class)
-interface PopupClickableComponent {
-    val dispatchNavigationAction: DispatchAction<NavigationAction>
 }

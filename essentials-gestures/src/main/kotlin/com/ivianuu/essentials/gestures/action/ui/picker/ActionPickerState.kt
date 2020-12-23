@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -77,7 +77,7 @@ fun actionPickerState(
         .launchIn(this)
 }
 
-@FunBinding
+@GivenFun
 suspend fun getActionPickerItems(
     actionPickerDelegates: Set<ActionPickerDelegate>,
     getAllActions: getAllActions,

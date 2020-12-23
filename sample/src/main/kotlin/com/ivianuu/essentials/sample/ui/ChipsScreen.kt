@@ -27,7 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.RippleIndication
-import androidx.compose.material.ripple.rememberRippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -37,16 +37,15 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding("Chips")
 class ChipsKey
 
 @KeyUiBinding<ChipsKey>
 @OptIn(ExperimentalLayout::class)
-@FunBinding
+@GivenFun
 @Composable
 fun ChipsScreen(showToast: showToast) {
     Scaffold(
@@ -89,7 +88,7 @@ private fun Chip(
                     .preferredHeight(32.dp)
                     .clickable(
                         onClick = onClick,
-                        indication = rememberRippleIndication(bounded = false)
+                        indication = rememberRipple(false, null, Color.Unspecified)
                     ),
                 contentAlignment = Alignment.Center
             ) {

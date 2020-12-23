@@ -20,9 +20,6 @@ import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

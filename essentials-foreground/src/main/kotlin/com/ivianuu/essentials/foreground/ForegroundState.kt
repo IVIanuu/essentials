@@ -21,12 +21,7 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.SetElements
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -59,7 +54,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 }
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun internalForegroundState(
     foregroundStates: ForegroundStates,
     globalScope: GlobalScope,

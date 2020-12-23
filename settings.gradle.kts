@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 include(
     ":essentials-about",
     ":essentials-accessibility",
@@ -57,6 +56,7 @@ include(
     ":essentials-service",
     ":essentials-shell",
     ":essentials-shortcut-picker",
+    ":essentials-sourcekey",
     ":essentials-store",
     ":essentials-test",
     ":essentials-tile",

@@ -29,8 +29,8 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -48,7 +48,7 @@ fun autoRotationAction(
 )
 
 @ActionExecutorBinding("auto_rotation")
-@FunBinding
+@GivenFun
 suspend fun toggleAutoRotation(
     updateAutoRotation: updateAndroidSetting<AutoRotation>,
 ) {
@@ -57,7 +57,7 @@ suspend fun toggleAutoRotation(
 
 internal typealias AutoRotationIcon = ActionIcon
 
-@Binding
+@Given
 fun AutoRotationIcon(autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> = autoRotation
     .map { it == 1 }
     .map {
@@ -70,5 +70,5 @@ fun AutoRotationIcon(autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> =
     AndroidSettingsType.SYSTEM)
 internal typealias AutoRotation = Int
 
-@Binding
+@Given
 fun defaultAutoRotation(): @Initial AutoRotation = 1

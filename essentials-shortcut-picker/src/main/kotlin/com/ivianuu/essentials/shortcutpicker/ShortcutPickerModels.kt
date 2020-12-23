@@ -19,7 +19,7 @@ package com.ivianuu.essentials.shortcutpicker
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 class ShortcutPickerKey
 

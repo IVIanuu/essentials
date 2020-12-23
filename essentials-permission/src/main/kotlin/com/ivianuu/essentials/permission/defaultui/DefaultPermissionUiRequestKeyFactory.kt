@@ -20,10 +20,9 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestKeyFactory
 import com.ivianuu.essentials.permission.PermissionRequestRouteFactoryBinding
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @PermissionRequestRouteFactoryBinding
-@FunBinding
+@GivenFun
 fun createDefaultPermissionRequestUiKey(@FunApi request: PermissionRequest): Key =
     DefaultPermissionKey(request)

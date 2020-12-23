@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 
 @ActionBinding("input_method")
 fun inputMethodAction(stringResource: stringResource): Action = Action(
@@ -32,7 +32,7 @@ fun inputMethodAction(stringResource: stringResource): Action = Action(
 )
 
 @ActionExecutorBinding("input_method")
-@FunBinding
+@GivenFun
 suspend fun showInputMethodPicker(inputMethodManager: InputMethodManager) {
     inputMethodManager.showInputMethodPicker()
 }

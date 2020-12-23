@@ -19,13 +19,12 @@ package com.ivianuu.essentials.work
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 
 @AppInitializerBinding("workers")
-@FunBinding
+@GivenFun
 fun initializeWorkers(
     applicationContext: ApplicationContext,
     workerFactory: WorkerFactory,
@@ -38,6 +37,5 @@ fun initializeWorkers(
     )
 }
 
-@Binding
-fun workManager(applicationContext: ApplicationContext) =
+@Given fun workManager(@Given applicationContext: ApplicationContext) =
     WorkManager.getInstance(applicationContext)

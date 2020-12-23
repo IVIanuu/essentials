@@ -27,11 +27,9 @@ import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -59,7 +57,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 }
 
 @Scoped(ApplicationComponent::class)
-@Binding
+@Given
 fun displayRotation(
     configChanges: () -> ConfigChanges,
     getCurrentDisplayRotation: getCurrentDisplayRotation,
@@ -86,7 +84,7 @@ fun displayRotation(
     }.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
-@FunBinding
+@GivenFun
 suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,
     windowManager: WindowManager,
@@ -101,7 +99,7 @@ suspend fun getCurrentDisplayRotation(
 }
 
 typealias RotationChanges = Flow<Unit>
-@Binding
+@Given
 fun rotationChanges(
     applicationContext: ApplicationContext,
     mainDispatcher: MainDispatcher,

@@ -29,7 +29,7 @@ import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -48,7 +48,7 @@ fun torchForegroundState(
     }
 
 @SuppressLint("NewApi")
-@FunBinding
+@GivenFun
 fun createTorchNotification(
     applicationContext: ApplicationContext,
     notificationManager: NotificationManager,

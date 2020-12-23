@@ -17,23 +17,21 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.component.ApplicationScoped
+import com.ivianuu.injekt.component.Storage
 import kotlinx.coroutines.flow.Flow
 
 internal typealias MutableEffects<T>  = EventFlow<T>
 
-@Scoped(ApplicationComponent::class)
-@Binding
-fun <T> mutableEffects(): MutableEffects<T> = EventFlow()
+@Given fun <T> mutableEffects(
+    @Given storage: Storage<ApplicationScoped>
+): MutableEffects<T> = EventFlow()
 
 typealias Effects<T> = Flow<T>
-@Binding
-inline val <T> MutableEffects<T>.effects: Effects<T>
+@Given inline val <T> @Given MutableEffects<T>.effects: Effects<T>
     get() = this
 
 typealias DispatchEffect<T> = (T) -> Unit
-@Binding
-inline val <T> MutableEffects<T>.dispatchEffect: DispatchEffect<T>
+@Given inline val <T> @Given MutableEffects<T>.dispatchEffect: DispatchEffect<T>
     get() = this::emit

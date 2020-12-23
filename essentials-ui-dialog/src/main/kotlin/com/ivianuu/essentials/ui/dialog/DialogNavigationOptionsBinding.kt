@@ -16,29 +16,20 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactories
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.MapEntries
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.GivenSetElement
 
-@Effect
-annotation class DialogNavigationOptionsBinding<K> {
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        @MapEntries
-        inline fun <@Arg("K") reified K, T> bind(): NavigationOptionFactories = mapOf(
-            K::class as KClass<out Key> to {
-                NavigationOptions(
-                    opaque = true,
-                    transition = FadeStackTransition()
-                )
-            }
-        )
-    }
+inline fun <reified K> dialogNavigationOptionsBinding():
+        @GivenSetElement () -> NavigationOptionFactoryBinding = {
+    K::class to createDialogNavigationOptions
+}
+
+@PublishedApi internal val createDialogNavigationOptions = { _: Key ->
+    NavigationOptions(
+        opaque = true,
+        transition = FadeStackTransition()
+    )
 }

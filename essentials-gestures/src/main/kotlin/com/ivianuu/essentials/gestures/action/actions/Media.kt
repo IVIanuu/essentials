@@ -41,7 +41,6 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
@@ -49,8 +48,7 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.ApplicationContext
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -63,7 +61,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-@FunBinding
+@GivenFun
 fun mediaAction(
     stringResource: stringResource,
     @FunApi key: String,
@@ -75,7 +73,7 @@ fun mediaAction(
     icon = icon
 )
 
-@FunBinding
+@GivenFun
 suspend fun doMediaAction(
     applicationContext: ApplicationContext,
     mediaIntent: mediaIntent,
@@ -85,7 +83,7 @@ suspend fun doMediaAction(
     applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
 }
 
-@FunBinding
+@GivenFun
 suspend fun mediaIntent(
     mediaActionPrefs: Flow<MediaActionPrefs>,
     @FunApi keyEvent: Int,
@@ -111,7 +109,7 @@ data class MediaActionPrefs(
 class MediaActionSettingsKey
 
 @KeyUiBinding<MediaActionSettingsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun MediaActionSettingsScreen(
     state: @UiState MediaActionSettingsState,

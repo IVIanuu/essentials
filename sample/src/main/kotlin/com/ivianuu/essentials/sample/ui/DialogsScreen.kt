@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.AmbientUiComponent
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.rememberState
@@ -53,17 +52,13 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
-
+import com.ivianuu.injekt.GivenFun
 @HomeItemBinding("Dialogs")
 class DialogsKey
 
 @KeyUiBinding<DialogsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun DialogsScreen() {
     Scaffold(
@@ -364,7 +359,7 @@ data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 
 @DialogNavigationOptionsBinding<DialogLauncherKey>
 @KeyUiBinding<DialogLauncherKey>
-@FunBinding
+@GivenFun
 @Composable
 fun DialogLauncherDialog(key: DialogLauncherKey) {
     DialogWrapper { key.dialog() }
