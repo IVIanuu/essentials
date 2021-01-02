@@ -27,15 +27,13 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.AmbientUiComponent
-import com.ivianuu.essentials.ui.UiScoped
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
 object PopupMenu {
@@ -49,7 +47,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = AmbientUiComponent.current[PopupMenuDependencies]
+            val dependencies = AmbientUiComponent.current.get<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
@@ -65,13 +63,10 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
     }
 }
 
-@Given class PopupMenuDependencies(
+@ComponentElementBinding<UiComponent>
+@Given class PopupMenuComponent(
     @Given val dispatchNavigationAction: DispatchAction<NavigationAction>
-) {
-    companion object : Component.Key<PopupMenuDependencies> {
-        @GivenGroup val binding = componentElementBinding(UiScoped, this)
-    }
-}
+)
 
 @Composable
 private fun PopupMenuItem(

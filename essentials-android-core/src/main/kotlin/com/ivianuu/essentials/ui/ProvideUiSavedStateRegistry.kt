@@ -24,11 +24,8 @@ import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
 import androidx.compose.ui.platform.AmbientContext
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
 
-@GivenGroup val provideUiSavedStateRegistryBinding =
-    uiDecoratorBinding<ProvideUiSavedStateRegistry>("saved_state_registry")
-
+@UiDecoratorBinding
 @GivenFun @Composable
 fun ProvideUiSavedStateRegistry(content: @Composable () -> Unit) {
     val activity = AmbientContext.currentOrNull as? ComponentActivity

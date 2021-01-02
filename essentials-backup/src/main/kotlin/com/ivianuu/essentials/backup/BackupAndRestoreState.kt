@@ -24,19 +24,19 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@UiStateBinding
-fun backupAndRestoreState(
-    scope: CoroutineScope,
-    initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
-    actions: Actions<BackupAndRestoreAction>,
-    backupData: backupData,
-    restoreData: restoreData,
-    showToastRes: showToastRes
+@UiStateBinding @Given fun backupAndRestoreState(
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
+    @Given actions: Actions<BackupAndRestoreAction>,
+    @Given backupData: backupData,
+    @Given restoreData: restoreData,
+    @Given showToastRes: showToastRes
 ) = scope.state(initial) {
     actions
         .filterIsInstance<BackupData>()

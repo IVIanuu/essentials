@@ -22,7 +22,7 @@ import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -34,7 +34,7 @@ import kotlin.time.milliseconds
 @AppWorkerBinding
 @GivenFun
 suspend fun applyAndroidForegroundServiceState(
-    applicationContext: ApplicationContext,
+    appContext: AppContext,
     logger: Logger,
     state: Flow<InternalForegroundState>,
 ) {
@@ -44,8 +44,8 @@ suspend fun applyAndroidForegroundServiceState(
         .onEach {
             logger.d { "start foreground service $it" }
             ContextCompat.startForegroundService(
-                applicationContext,
-                Intent(applicationContext, ForegroundService::class.java)
+                appContext,
+                Intent(appContext, ForegroundService::class.java)
             )
         }
         .collect()

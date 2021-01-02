@@ -29,10 +29,12 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
-@Scoped(ApplicationComponent::class)
-@Given
-class ActionPermissions(applicationContext: ApplicationContext) {
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
+
+@Scoped<AppComponent> @Given
+class ActionPermissions(@Given appContext: AppContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
         Permission.Title to "Accessibility", // todo res
@@ -49,7 +51,7 @@ class ActionPermissions(applicationContext: ApplicationContext) {
         Permission.Icon to { Icon(R.drawable.es_ic_settings) }
     )
     val writeSettings = WriteSettingsPermission(
-        applicationContext,
+        appContext,
         Permission.Title to "Write Settings", // todo res
         Permission.Desc to "Required to change settings", // todo res
         Permission.Icon to { Icon(R.drawable.es_ic_settings) } // todo change icon

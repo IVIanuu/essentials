@@ -17,8 +17,13 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.alias
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
-fun <T : AppUi> appUiBinding() = alias<T, AppUi>()
+@Qualifier annotation class AppUiBinding
+@Macro @Given
+fun <T : @AppUiBinding @Composable () -> Unit > appUiBindingImpl(@Given instance: T): AppUi =
+    instance as @Composable () -> Unit
 
 typealias AppUi = @Composable () -> Unit

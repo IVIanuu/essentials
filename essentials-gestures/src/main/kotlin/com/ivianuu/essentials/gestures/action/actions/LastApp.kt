@@ -27,19 +27,19 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-@ActionBinding("last_app")
+//@ActionBinding("last_app")
 fun lastAppAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
 ): Action = Action(
-    key = "last_app",
+    id = "last_app",
     title = stringResource(R.string.es_action_last_app),
     permissions = choosePermissions { listOf(accessibility) },
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
-@ActionExecutorBinding("last_app")
+//@ActionExecutorBinding("last_app")
 @GivenFun
 suspend fun goToLastApp(performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)

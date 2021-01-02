@@ -29,22 +29,23 @@ import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-@ActionBinding("kill_current_app_action")
+//@ActionBinding("kill_current_app_action")
 fun killCurrentAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
 ): Action = Action(
-    key = "kill_current_app_action",
+    id = "kill_current_app_action",
     title = stringResource(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
     permissions = choosePermissions { accessibility + root }
 )
 
-@ActionExecutorBinding("kill_current_app_action")
+//@ActionExecutorBinding("kill_current_app_action")
 @GivenFun
 suspend fun killCurrentApp(
     buildInfo: BuildInfo,
@@ -62,8 +63,7 @@ suspend fun killCurrentApp(
     }
 }
 
-@GivenFun
-fun getHomePackage(packageManager: PackageManager): String {
+@GivenFun fun getHomePackage(@Given packageManager: PackageManager): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }

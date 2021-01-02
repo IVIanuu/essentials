@@ -25,7 +25,9 @@ import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotif
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.store.GlobalStateBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -45,11 +47,11 @@ sealed class NotificationsAction {
     object DismissAllNotifications : NotificationsAction()
 }
 
-@GlobalStateBinding
+@Scoped<AppComponent> @Given
 fun notificationState(
-    actions: Actions<NotificationsAction>,
-    serviceRef: NotificationServiceRef,
-    scope: GlobalScope
+    @Given actions: Actions<NotificationsAction>,
+    @Given serviceRef: NotificationServiceRef,
+    @Given scope: GlobalScope
 ) = scope.state(NotificationsState()) {
     serviceRef
         .reduce { copy(isConnected = it != null) }

@@ -40,9 +40,13 @@ import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Bottom navigation")
+@HomeItemBinding @Given
+val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
+
 class BottomNavigationKey
 
 @KeyUiBinding<BottomNavigationKey>

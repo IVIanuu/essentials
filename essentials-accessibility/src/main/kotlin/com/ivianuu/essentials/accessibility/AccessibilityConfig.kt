@@ -18,12 +18,13 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.coroutines.neverFlow
-import com.ivianuu.essentials.setElement
 import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -44,12 +45,13 @@ data class AccessibilityConfig(
     val notificationTimeout: Long = 0L,
 )
 
-fun <T : () -> Flow<AccessibilityConfig>> accessibilityConfigProviderBinding() =
-    setElement<() -> Flow<AccessibilityConfig>, T>()
+@Qualifier annotation class AccessibilityConfigBinding
+@Macro @GivenSetElement
+fun <T : @AccessibilityConfigBinding AccessibilityConfig> accessibilityConfigBindingImpl(
+    @Given instance: () -> T
+): () -> AccessibilityConfig = instance
 
-@GivenGroup val applyAccessibilityConfigBinding =
-    accessibilityWorker<applyAccessibilityConfig>()
-
+@AccessibilityWorkerBinding
 @GivenFun suspend fun applyAccessibilityConfig(
     @Given configs: Set<() -> Flow<AccessibilityConfig>>,
     @Given serviceHolder: MutableAccessibilityServiceHolder,

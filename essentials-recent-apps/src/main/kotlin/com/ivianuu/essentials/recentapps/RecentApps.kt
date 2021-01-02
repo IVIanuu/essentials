@@ -26,6 +26,8 @@ import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -40,12 +42,12 @@ import kotlinx.coroutines.flow.shareIn
 
 typealias RecentApps = List<String>
 
-@Scoped(ApplicationComponent::class)
+@Scoped<AppComponent>
 @Given
 fun recentApps(
-    accessibilityEvents: AccessibilityEvents,
-    globalScope: GlobalScope,
-    logger: Logger,
+    @Given accessibilityEvents: AccessibilityEvents,
+    @Given globalScope: GlobalScope,
+    @Given logger: Logger,
 ): Flow<RecentApps> {
     return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
@@ -89,8 +91,7 @@ fun recentAppsAccessibilityConfig() = flowOf {
 
 typealias CurrentApp = String?
 
-@Given
-fun currentApp(recentApps: Flow<RecentApps>): Flow<CurrentApp> =
+@Given fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
     recentApps
         .map { it.firstOrNull() }
         .distinctUntilChanged()

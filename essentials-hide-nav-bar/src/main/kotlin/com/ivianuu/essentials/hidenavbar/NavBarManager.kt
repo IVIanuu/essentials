@@ -29,7 +29,9 @@ import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -48,20 +50,19 @@ import kotlinx.coroutines.withContext
 /**
  * Handles the state of the navigation bar
  */
-@Scoped(ApplicationComponent::class)
-@Given
-class NavBarManager(
-    private val applicationContext: ApplicationContext,
-    private val broadcasts: broadcasts,
-    private val defaultDispatcher: DefaultDispatcher,
-    private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
-    private val displayRotation: Flow<DisplayRotation>,
-    private val globalScope: GlobalScope,
-    private val logger: Logger,
-    private val screenState: Flow<ScreenState>,
-    private val setOverscan: setOverscan,
-    private val wasNavBarHidden: Flow<WasNavBarHidden>,
-    private val updateWasNavBarHidden: updatePref<WasNavBarHidden>,
+@Scoped<AppComponent>
+@Given class NavBarManager(
+    @Given private val appContext: AppContext,
+    @Given private val broadcasts: broadcasts,
+    @Given private val defaultDispatcher: DefaultDispatcher,
+    @Given private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
+    @Given private val displayRotation: Flow<DisplayRotation>,
+    @Given private val globalScope: GlobalScope,
+    @Given private val logger: Logger,
+    @Given private val screenState: Flow<ScreenState>,
+    @Given private val setOverscan: setOverscan,
+    @Given private val wasNavBarHidden: Flow<WasNavBarHidden>,
+    @Given private val updateWasNavBarHidden: updatePref<WasNavBarHidden>,
 ) {
 
     private var job: Job? = null
@@ -152,8 +153,8 @@ class NavBarManager(
         val name =
             if (displayRotation.first().isPortrait) "navigation_bar_height"
             else "navigation_bar_width"
-        val id = applicationContext.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) applicationContext.resources.getDimensionPixelSize(id) else 0
+        val id = appContext.resources.getIdentifier(name, "dimen", "android")
+        return if (id > 0) appContext.resources.getDimensionPixelSize(id) else 0
     }
 
     private suspend fun getOverscanRect(

@@ -16,21 +16,18 @@
 
 package com.ivianuu.essentials.data
 
-import androidx.datastore.core.DataStore
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
+import com.ivianuu.injekt.android.AppContext
 import java.io.File
 
 typealias DataDir = File
 
-@Given fun dataDir(@Given applicationContext: ApplicationContext): DataDir =
-    File(applicationContext.applicationInfo.dataDir)
+@Given fun dataDir(@Given AppContext: AppContext): DataDir =
+    File(AppContext.applicationInfo.dataDir)
 
 typealias PrefsDir = File
 
 @Given fun prefsDir(@Given dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
-@Given fun packageManager(@Given applicationContext: ApplicationContext) =
-    applicationContext.packageManager!!
+@Given fun packageManager(@Given AppContext: AppContext) =
+    AppContext.packageManager!!

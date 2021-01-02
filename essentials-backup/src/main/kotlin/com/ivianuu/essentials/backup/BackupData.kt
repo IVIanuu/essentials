@@ -24,8 +24,9 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
@@ -34,13 +35,12 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@GivenFun
-suspend fun backupData(
-    backupDir: BackupDir,
-    backupFiles: BackupFiles,
-    buildInfo: BuildInfo,
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    ioDispatcher: IODispatcher,
+@GivenFun suspend fun backupData(
+    @Given backupDir: BackupDir,
+    @Given backupFiles: Set<BackupFile>,
+    @Given buildInfo: BuildInfo,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given ioDispatcher: IODispatcher,
 ): Result<Unit, Throwable> = runKatching {
     withContext(ioDispatcher) {
         val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")

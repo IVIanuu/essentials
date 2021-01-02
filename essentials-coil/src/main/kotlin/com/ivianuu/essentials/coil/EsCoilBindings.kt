@@ -23,92 +23,58 @@ import coil.fetch.Fetcher
 import coil.intercept.Interceptor
 import coil.map.Mapper
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlin.reflect.KClass
 
-@Scoped(ApplicationComponent::class)
-@Given
-fun imageLoader(
-    applicationContext: ApplicationContext,
-    decoders: Decoders,
-    fetchers: Fetchers,
-    interceptors: Interceptors,
-    mappers: Mappers,
-): ImageLoader {
-    return ImageLoader.Builder(applicationContext)
-        .componentRegistry {
-            decoders.forEach { add(it) }
-            interceptors.forEach { add(it) }
-            fetchers
-                .forEach { binding ->
-                    CoilAccessor.add(this, binding.type.java, binding.fetcher)
-                }
-            mappers
-                .forEach { binding ->
-                    CoilAccessor.add(this, binding.type.java, binding.mapper)
-                }
-        }
-        .build()
-}
-
-@Effect
-annotation class DecoderBinding {
-    companion object {
-        @SetElements
-        fun <T : Decoder> intoSet(instance: @ForEffect T): Decoders = setOf(instance)
+@Scoped<AppComponent> @Given fun imageLoader(
+    @Given appContext: AppContext,
+    @Given decoders: Set<Decoder>,
+    @Given fetchers: Set<FetcherPair<Any>>,
+    @Given interceptors: Set<Interceptor>,
+    @Given mappers: Set<MapperPair<Any>>,
+): ImageLoader = ImageLoader.Builder(appContext)
+    .componentRegistry {
+        decoders.forEach { add(it) }
+        interceptors.forEach { add(it) }
+        fetchers
+            .forEach { binding ->
+                CoilAccessor.add(this, binding.type.java, binding.fetcher)
+            }
+        mappers
+            .forEach { binding ->
+                CoilAccessor.add(this, binding.type.java, binding.mapper)
+            }
     }
-}
+    .build()
 
-typealias Decoders = Set<Decoder>
+@Qualifier annotation class DecoderBinding
+@Macro @GivenSetElement
+fun <T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
 
-@SetElements
-fun defaultDecoders(): Decoders = emptySet()
-
-@Effect
-annotation class FetcherBinding {
-    companion object {
-        @SetElements
-        inline fun <reified F : Fetcher<T>, reified T : Any> intoSet(instance: @ForEffect F): Fetchers =
-            setOf(FetcherPair(instance, T::class))
-    }
-}
+@Qualifier annotation class FetcherBinding
+@Macro @GivenSetElement
+inline fun <reified F : Fetcher<T>, reified T : Any> fetcherBindingImpl(@Given instance: F): FetcherPair<Any> =
+    FetcherPair(instance, T::class) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
     val fetcher: Fetcher<T>,
     val type: KClass<T>
 )
 
-typealias Fetchers = Set<FetcherPair<*>>
+@Qualifier annotation class InterceptorBinding
+@Macro @GivenSetElement
+fun <T : @InterceptorBinding Interceptor> interceptorBindingImpl(@Given instance: T): Interceptor =
+    instance
 
-@SetElements
-fun defaultFetchers(): Fetchers = emptySet()
-
-@Effect
-annotation class InterceptorBinding {
-    companion object {
-        @SetElements
-        fun <T : Interceptor> intoSet(instance: @ForEffect T): Interceptors = setOf(instance)
-    }
-}
-
-typealias Interceptors = Set<Interceptor>
-
-@SetElements
-fun defaultInterceptors(): Interceptors = emptySet()
-
-@Effect
-annotation class MapperBinding {
-    companion object {
-        @SetElements
-        inline fun <reified M : Mapper<T, V>, reified T : Any, reified V : Any> intoSet(instance: @ForEffect M): Mappers =
-            setOf(MapperPair(instance, T::class))
-    }
-}
-
-typealias Mappers = Set<MapperPair<*>>
-
-@SetElements
-fun defaultMappers(): Mappers = emptySet()
+@Qualifier annotation class MapperBinding
+@Macro @GivenSetElement
+inline fun <reified M : Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
+    @Given instance: M): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
 
 data class MapperPair<T : Any>(
     val mapper: Mapper<T, *>,

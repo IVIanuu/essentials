@@ -26,7 +26,7 @@ import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.application
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

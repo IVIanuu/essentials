@@ -17,28 +17,22 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.Given
-@Effect
-annotation class PermissionStateProviderBinding {
-    companion object {
-        @SetElements
-        fun <T : PermissionStateProvider> stateProviderIntoSet(instance: @ForEffect T): Set<PermissionStateProvider> = setOf(instance)
-    }
-}
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
-@Effect
-annotation class PermissionRequestHandlerBinding {
-    companion object {
-        @SetElements
-        fun <T : PermissionRequestHandler> requestHandlerIntoSet(instance: @ForEffect T): Set<PermissionRequestHandler> =
-            setOf(instance)
-    }
-}
+@Qualifier annotation class PermissionStateProviderBinding
+@Macro @GivenSetElement
+fun <T : @PermissionStateProviderBinding PermissionStateProvider> stateProviderIntoSet(
+    @Given instance: T): PermissionStateProvider = instance
 
-@Effect
-annotation class PermissionRequestRouteFactoryBinding {
-    companion object {
-        @Given
-        inline val <T : PermissionRequestKeyFactory> @ForEffect T.permissionRequestKeyFactory: PermissionRequestKeyFactory
-            get() = this
-    }
-}
+@Qualifier annotation class PermissionRequestHandlerBinding
+@Macro @GivenSetElement
+fun <T : @PermissionRequestHandlerBinding PermissionRequestHandler> requestHandlerIntoSet(
+    @Given instance: T): PermissionRequestHandler = instance
+
+@Qualifier annotation class PermissionRequestRouteFactoryBinding
+@Macro @Given
+fun <T : @PermissionRequestRouteFactoryBinding PermissionRequestKeyFactory> permissionRequestKeyFactory(
+    @Given instance: T
+): PermissionRequestKeyFactory = instance

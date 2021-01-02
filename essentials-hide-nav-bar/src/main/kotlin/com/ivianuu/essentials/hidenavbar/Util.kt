@@ -21,8 +21,8 @@ import android.graphics.Rect
 import android.os.IBinder
 import android.provider.Settings
 import android.view.Display
-import com.ivianuu.essentials.android.settings.AndroidSettingsStateBinding
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.android.settings.androidSettingStateBinding
 import com.ivianuu.essentials.android.settings.updateAndroidSetting
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
@@ -30,14 +30,14 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Module
 
-@GivenFun
-suspend fun disableNonSdkInterfaceDetection(
-    logger: Logger,
-    systemBuildInfo: SystemBuildInfo,
-    updateHiddenApiPolicy: updateAndroidSetting<HiddenApiPolicy>,
-    updateHiddenApiPolicyPrePieApps: updateAndroidSetting<HiddenApiPolicyPrePieApps>,
-    updateHiddenApiPolicyPieApps: updateAndroidSetting<HiddenApiPolicyPieApps>,
+@GivenFun suspend fun disableNonSdkInterfaceDetection(
+    @Given logger: Logger,
+    @Given systemBuildInfo: SystemBuildInfo,
+    @Given updateHiddenApiPolicy: updateAndroidSetting<HiddenApiPolicy>,
+    @Given updateHiddenApiPolicyPrePieApps: updateAndroidSetting<HiddenApiPolicyPrePieApps>,
+    @Given updateHiddenApiPolicyPieApps: updateAndroidSetting<HiddenApiPolicyPieApps>,
 ) {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
@@ -49,27 +49,31 @@ suspend fun disableNonSdkInterfaceDetection(
     }
 }
 
-@AndroidSettingsStateBinding<Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 internal typealias HiddenApiPolicy = Int
 
-@Given
-fun defaultHiddenApiPolicy(): @Initial HiddenApiPolicy = 0
+@Module val hiddenApiPolicyBinding =
+    androidSettingStateBinding<HiddenApiPolicy>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 
-@AndroidSettingsStateBinding<Int>("hidden_api_policy_pre_p_apps", AndroidSettingsType.GLOBAL)
+@Given val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
+
 internal typealias HiddenApiPolicyPrePieApps = Int
 
-@Given
-fun defaultHiddenApiPolicyPrePieApps(): @Initial HiddenApiPolicyPrePieApps = 0
+@Module val hiddenApiPolicyPrePieAppsBinding =
+    androidSettingStateBinding<HiddenApiPolicyPrePieApps>("hidden_api_policy_pre_p_apps",
+        AndroidSettingsType.GLOBAL)
 
-@AndroidSettingsStateBinding<Int>("hidden_api_policy_p_apps", AndroidSettingsType.GLOBAL)
+@Given val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
+
 internal typealias HiddenApiPolicyPieApps = Int
 
-@Given
-fun defaultHiddenApiPolicyPieApps(): @Initial HiddenApiPolicyPieApps = 0
+@Module val hiddenApiPolicyPieAppsBinding =
+    androidSettingStateBinding<HiddenApiPolicyPieApps>("hidden_api_policy_p_apps",
+        AndroidSettingsType.GLOBAL)
+
+@Given val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
 @SuppressLint("PrivateApi")
-@GivenFun
-fun setOverscan(logger: Logger, @FunApi rect: Rect) {
+@GivenFun fun setOverscan(@Given logger: Logger, rect: Rect) {
     logger.d { "set overscan $rect" }
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")

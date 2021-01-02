@@ -21,27 +21,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import androidx.datastore.createDataStore
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.sourcekey.memo
-import com.ivianuu.essentials.sourcekey.sourceKeyOf
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
-import com.ivianuu.injekt.component.memo
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
@@ -53,34 +45,32 @@ fun <T : Any> prefBinding(
     @Given IODispatcher,
     @Given () -> @InitialOrFallback T,
     @Given () -> JsonAdapter<T>,
-    @Given () -> PrefsDir,
-    @Given Storage<ApplicationScoped>
-) -> DataStore<T> = { scope, dispatcher, initialFactory, adapterFactory, prefsDir, storage ->
-    storage.memo(sourceKeyOf(name)) {
-        val deferredDataStore: DataStore<T> by lazy {
-            DataStoreFactory.create(
-                produceFile = { prefsDir().resolve(name) },
-                serializer = object : Serializer<T> {
-                    override val defaultValue: T
-                        get() = initialFactory()
-                    private val adapter by lazy(adapterFactory)
-                    override fun readFrom(input: InputStream): T =
-                        adapter.fromJson(String(input.readBytes()))!!
+    @Given () -> PrefsDir
+) -> @Scoped<AppComponent> DataStore<T> = {
+        scope, dispatcher, initialFactory, adapterFactory, prefsDir ->
+    val deferredDataStore: DataStore<T> by lazy {
+        DataStoreFactory.create(
+            produceFile = { prefsDir().resolve(name) },
+            serializer = object : Serializer<T> {
+                override val defaultValue: T
+                    get() = initialFactory()
+                private val adapter by lazy(adapterFactory)
+                override fun readFrom(input: InputStream): T =
+                    adapter.fromJson(String(input.readBytes()))!!
 
-                    override fun writeTo(t: T, output: OutputStream) {
-                        output.write(adapter.toJson(t)!!.toByteArray())
-                    }
-                },
-                scope = scope.childCoroutineScope(dispatcher)
-            )
-        }
-        object : DataStore<T> {
-            override val data: Flow<T>
-                get() = deferredDataStore.data;
+                override fun writeTo(t: T, output: OutputStream) {
+                    output.write(adapter.toJson(t)!!.toByteArray())
+                }
+            },
+            scope = scope.childCoroutineScope(dispatcher)
+        )
+    }
+    object : DataStore<T> {
+        override val data: Flow<T>
+            get() = deferredDataStore.data;
 
-            override suspend fun updateData(transform: suspend (t: T) -> T): T =
-                deferredDataStore.updateData(transform)
-        }
+        override suspend fun updateData(transform: suspend (t: T) -> T): T =
+            deferredDataStore.updateData(transform)
     }
 }
 
@@ -90,23 +80,18 @@ fun <T : Any> prefBinding(
     @Given initial: @InitialOrFallback T
 ): @UiState T = data.collectAsState(initial).value
 
-@Qualifier
-@Target(AnnotationTarget.TYPE)
-internal annotation class InitialOrFallback
+@Qualifier internal annotation class InitialOrFallback
 
-@Given
-inline fun <reified T : Any> initialOrFallback(
+@Given inline fun <reified T : Any> initialOrFallback(
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 
-@GivenFun
-suspend fun <T> updatePref(
+@GivenFun suspend fun <T> updatePref(
     @Given pref: DataStore<T>,
     reducer: T.() -> T,
 ): T = pref.updateData { reducer(it) }
 
-@GivenFun
-fun <T> dispatchPrefUpdate(
+@GivenFun fun <T> dispatchPrefUpdate(
     @Given pref: DataStore<T>,
     @Given scope: GlobalScope,
     reducer: T.() -> T,

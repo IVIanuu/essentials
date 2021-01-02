@@ -23,6 +23,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.hasPermissions
 import com.ivianuu.essentials.util.startActivityForIntentResult
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
@@ -33,9 +34,10 @@ val Permission.Companion.Intent by lazy {
 }
 
 @PermissionRequestHandlerBinding
+@Given
 class IntentPermissionRequestHandler(
-    private val hasPermissions: hasPermissions,
-    private val startActivityForIntentResult: startActivityForIntentResult,
+    @Given private val hasPermissions: hasPermissions,
+    @Given private val startActivityForIntentResult: startActivityForIntentResult,
 ) : PermissionRequestHandler {
 
     override fun handles(permission: Permission): Boolean =

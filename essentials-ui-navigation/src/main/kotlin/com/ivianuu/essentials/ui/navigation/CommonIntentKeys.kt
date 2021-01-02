@@ -24,13 +24,10 @@ import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
 
 data class AppInfoKey(val packageName: String)
 
-@GivenGroup val appInfoKeyIntentFactoryBinding =
-    keyIntentFactoryBinding<AppInfoKey, createAppInfoKeyIntent>()
-
+@KeyIntentFactoryBinding<AppInfoKey>
 @GivenFun fun createAppInfoKeyIntent(key: AppInfoKey): Intent =
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:${key.packageName}".toUri()
@@ -38,9 +35,7 @@ data class AppInfoKey(val packageName: String)
 
 data class AppKey(val packageName: String)
 
-@GivenGroup val appKeyIntentFactoryBinding =
-    keyIntentFactoryBinding<AppKey, createAppKeyIntent>()
-
+@KeyIntentFactoryBinding<AppKey>
 @GivenFun fun createAppKeyIntent(
     @Given packageManager: PackageManager,
     key: AppKey,
@@ -48,9 +43,7 @@ data class AppKey(val packageName: String)
 
 data class ShareKey(val text: String)
 
-@GivenGroup val shareKeyIntentFactoryBinding =
-    keyIntentFactoryBinding<ShareKey, createShareKeyIntent>()
-
+@KeyIntentFactoryBinding<ShareKey>
 @GivenFun fun createShareKeyIntent(key: ShareKey): Intent = Intent.createChooser(
     Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
@@ -61,8 +54,6 @@ data class ShareKey(val text: String)
 
 data class UrlKey(val url: String)
 
-@GivenGroup val urlKeyIntentFactoryBinding =
-    keyIntentFactoryBinding<UrlKey, createUrlKeyIntent>()
-
+@KeyIntentFactoryBinding<UrlKey>
 @GivenFun fun createUrlKeyIntent(key: UrlKey): Intent =
     Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }

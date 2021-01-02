@@ -26,11 +26,8 @@ import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
 
-@GivenGroup val provideActivityRetainedObjectsBinding =
-    uiDecoratorBinding<ProvideActivityRetainedObjects>("activity_retained_objects")
-
+@UiDecoratorBinding
 @GivenFun @Composable
 fun ProvideActivityRetainedObjects(content: @Composable () -> Unit) {
     val activity = AmbientContext.currentOrNull as? ComponentActivity

@@ -19,13 +19,14 @@ package com.ivianuu.essentials.apps
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.tuples.parMap
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
 @GivenFun
 suspend fun getInstalledApps(
-    ioDispatcher: IODispatcher,
-    packageManager: PackageManager,
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager,
 ): List<AppInfo> = withContext(ioDispatcher) {
     packageManager.getInstalledApplications(0)
         .parMap {
@@ -41,9 +42,9 @@ suspend fun getInstalledApps(
 
 @GivenFun
 suspend fun getAppInfo(
-    ioDispatcher: IODispatcher,
-    packageManager: PackageManager,
-    @FunApi packageName: String
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager,
+    packageName: String
 ): AppInfo = withContext(ioDispatcher) {
     AppInfo(
         packageName,

@@ -18,11 +18,10 @@ package com.ivianuu.essentials.util
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 
 data class BuildInfo(
     val isDebug: Boolean,
@@ -30,15 +29,14 @@ data class BuildInfo(
     val versionCode: Int,
 ) {
     companion object {
-        @Given fun binding(
-            @Given applicationContext: ApplicationContext,
-            @Given packageManager: PackageManager,
-            @Given storage: Storage<ApplicationScoped>
-        ): BuildInfo = storage.memo {
-            val appInfo = applicationContext.applicationInfo
+        @Scoped<AppComponent> @Given fun default(
+            @Given appContext: AppContext,
+            @Given packageManager: PackageManager
+        ): BuildInfo {
+            val appInfo = appContext.applicationInfo
             val packageInfo = packageManager
                 .getPackageInfo(appInfo.packageName, 0)
-            BuildInfo(
+            return BuildInfo(
                 isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
                 packageName = appInfo.packageName,
                 versionCode = packageInfo.versionCode

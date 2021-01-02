@@ -19,14 +19,17 @@ package com.ivianuu.essentials.billing.release
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
-@Scoped(ApplicationComponent::class)
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
+
+@Scoped<AppComponent>
 @Given
 fun releaseBillingClient(
-    applicationContext: ApplicationContext,
-    updateListener: PurchasesUpdatedListener,
+    @Given appContext: AppContext,
+    @Given updateListener: PurchasesUpdatedListener,
 ) = BillingClient
-    .newBuilder(applicationContext)
+    .newBuilder(appContext)
     .enablePendingPurchases()
     .setListener(updateListener)
     .build()

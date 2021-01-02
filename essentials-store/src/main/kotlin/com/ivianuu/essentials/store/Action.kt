@@ -17,20 +17,17 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.essentials.sourcekey.sourceKeyOf
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
-import com.ivianuu.injekt.component.memo
+import com.ivianuu.injekt.common.ForKey
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
-import kotlin.reflect.typeOf
 
 internal typealias MutableActions<T>  = EventFlow<T>
 
-@Given inline fun <reified T> mutableActions(
-    @Given storage: Storage<ApplicationScoped>
-): MutableActions<T> = storage.memo(sourceKeyOf(typeOf<T>())) { EventFlow() }
+@Scoped<AppComponent> @Given
+fun <T> mutableActions(): MutableActions<T> = EventFlow()
 
 typealias Actions<T> = Flow<T>
 @Given inline val <T> @Given MutableActions<T>.actions: Actions<T>

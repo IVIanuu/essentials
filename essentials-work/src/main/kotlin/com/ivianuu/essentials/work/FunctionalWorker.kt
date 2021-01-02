@@ -21,17 +21,19 @@ import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.android.work.worker
 import java.util.UUID
 
-@GivenGroup val functionalWorkerBinding = worker<FunctionalWorker>()
+abstract class WorkerId(val value: String)
 
 @Given class FunctionalWorker(
-    @Given private val workers: Workers,
+    @Given workers: Set<WorkerElement>,
     @Given context: Context,
     @Given workerParams: WorkerParameters,
 ) : EsWorker(context, workerParams) {
+    private val workers = workers
+        .toMap()
+        .mapKeys { it.key.value }
+
     override suspend fun doWork(): Result {
         val id = tags.first { it.startsWith(WORKER_ID_TAG_PREFIX) }
             .removePrefix(WORKER_ID_TAG_PREFIX)

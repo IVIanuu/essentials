@@ -19,13 +19,11 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.android.ServiceScoped
+import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -37,18 +35,18 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
     val serviceComponent by lazy { createServiceComponent() }
 
-    private val dependencies by lazy {
-        serviceComponent[EsAccessibilityServiceDependencies]
+    private val component by lazy {
+        serviceComponent.get<EsAccessibilityServiceComponent>()
     }
 
-    val scope by lazy { CoroutineScope(dependencies.defaultDispatcher) }
+    val scope by lazy { CoroutineScope(component.defaultDispatcher) }
 
     private var _connectedScope: CoroutineScope? = null
     val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        _connectedScope = CoroutineScope(dependencies.defaultDispatcher)
+        _connectedScope = CoroutineScope(component.defaultDispatcher)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -69,11 +67,7 @@ abstract class EsAccessibilityService : AccessibilityService() {
     }
 }
 
-
-@Given class EsAccessibilityServiceDependencies(
+@ComponentElementBinding<ServiceComponent>
+@Given class EsAccessibilityServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher
-) {
-    companion object : Component.Key<EsAccessibilityServiceDependencies> {
-        @GivenGroup val binding = componentElementBinding(ServiceScoped, this)
-    }
-}
+)

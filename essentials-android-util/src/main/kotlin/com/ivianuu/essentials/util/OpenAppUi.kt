@@ -21,7 +21,7 @@ import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.onStart
 
 @GivenFun
 suspend fun openAppUi(
-    @Given applicationContext: ApplicationContext,
+    @Given appContext: AppContext,
     @Given buildInfo: BuildInfo,
     @Given foregroundActivity: Flow<ForegroundActivity>,
     @Given packageManager: PackageManager,
@@ -37,7 +37,7 @@ suspend fun openAppUi(
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     return foregroundActivity
         .onStart {
-            applicationContext.startActivity(
+            appContext.startActivity(
                 intent.apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }

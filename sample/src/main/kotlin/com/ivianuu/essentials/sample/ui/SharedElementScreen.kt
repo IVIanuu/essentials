@@ -30,8 +30,9 @@ import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTrans
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
-import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
 import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding("Shared element")
@@ -56,9 +57,8 @@ fun SharedElementScreen(key: SharedElementKey) {
     }
 }
 
-@NavigationOptionsFactoryBinding<SharedElementKey>
-@GivenFun
-fun createSharedElementNavigationOptions(@FunApi key: SharedElementKey) = NavigationOptions(
+@NavigationOptionFactoryBinding @GivenFun
+fun createSharedElementNavigationOptions(key: SharedElementKey): NavigationOptions = NavigationOptions(
     enterTransition = SharedElementStackTransition("Shared element" to "b"),
     exitTransition = SharedElementStackTransition("Shared element" to "b")
 )

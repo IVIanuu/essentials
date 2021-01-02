@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @GivenFun
 suspend fun unlockScreen(
-    @Given applicationContext: ApplicationContext,
+    @Given appContext: AppContext,
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
     @Given keyguardManager: KeyguardManager,
@@ -43,7 +43,7 @@ suspend fun unlockScreen(
 
     logger.d { "unlock screen $requestId" }
 
-    UnlockScreenActivity.unlock(applicationContext, requestId)
+    UnlockScreenActivity.unlock(appContext, requestId)
 
     return@withContext result.await().also {
         logger.d { "unlock result $requestId -> $it" }

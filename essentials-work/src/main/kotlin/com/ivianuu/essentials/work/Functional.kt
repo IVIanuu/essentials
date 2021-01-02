@@ -25,6 +25,8 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
@@ -40,21 +42,27 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-fun <T : Worker> workerBinding(id: String):
-        @GivenSetElement (@Given () -> T) -> Pair<String, () -> T> = { id to it }
+typealias WorkerElement = Pair<WorkerId, () -> Worker>
 
-fun OneTimeWorkRequestBuilder(id: String): OneTimeWorkRequest.Builder {
-    return OneTimeWorkRequestBuilder<FunctionalWorker>()
+@Qualifier annotation class WorkerBinding<S>
+
+@Suppress("UNCHECKED_CAST")
+@Macro @GivenSetElement
+fun <P : @WorkerBinding<S> () -> suspend WorkScope.() -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
+    @Given id: S,
+    @Given factory: P
+): WorkerElement = id to factory as () -> Worker
+
+fun OneTimeWorkRequestBuilder(id: WorkerId): OneTimeWorkRequest.Builder =
+    OneTimeWorkRequestBuilder<FunctionalWorker>()
         .addTag(WORKER_ID_TAG_PREFIX + id)
-}
 
 fun PeriodicWorkRequestBuilder(
-    id: String,
+    id: WorkerId,
     repeatInterval: Duration,
     flexTimeInterval: Duration? = null
-): PeriodicWorkRequest.Builder {
-    return (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
+): PeriodicWorkRequest.Builder =
+    (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
         repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
     ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
         .addTag(WORKER_ID_TAG_PREFIX + id)
-}

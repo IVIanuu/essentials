@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
-import com.ivianuu.essentials.ui.navigation.invokeNavigationStateContent
 import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 @GivenFun @Composable
@@ -28,5 +28,5 @@ fun DefaultAppUi(
     @Given navigationState: @UiState NavigationState,
     @Given navigationStateContent: NavigationStateContent,
 ) {
-    navigationStateContent.invokeNavigationStateContent(navigationState)
+    navigationStateContent(state = navigationState)
 }

@@ -35,10 +35,11 @@ data class CheckableAppsParams(
 
 internal typealias CheckedAppsSource = Flow<Set<String>>
 @Given
-fun checkedAppsSource(params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
+fun checkedAppsSource(@Given params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
 internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
 @Given
-fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged = params.onCheckedAppsChanged
+fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChanged =
+    params.onCheckedAppsChanged
 
 data class CheckableAppsState(
     val allApps: Resource<List<AppInfo>> = Idle,
@@ -58,7 +59,7 @@ data class CheckableAppsState(
         }
     companion object {
         @Given
-        fun initial(params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
+        fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
             appFilter = params.appFilter,
             appBarTitle = params.appBarTitle
         )

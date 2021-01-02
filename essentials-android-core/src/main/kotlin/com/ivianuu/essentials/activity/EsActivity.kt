@@ -23,19 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
-import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.component.Component
-import com.ivianuu.injekt.component.componentElement
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
 /**
@@ -49,7 +44,7 @@ abstract class EsActivity : AppCompatActivity() {
     private lateinit var composition: Composition
 
     private val uiComponent by lazy {
-        activityComponent[UiComponentFactoryKey]()
+        activityComponent.get<() -> UiComponent>()()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +55,7 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeSavedStateRegistryOwner.set(container, this)
         ViewTreeViewModelStoreOwner.set(container, this)
 
-        val dependencies = uiComponent[EsActivityDependencies]
+        val dependencies = uiComponent.get<EsActivityComponent>()
         dependencies.runUiWorkers()
 
         composition = container.setContent(Recomposer.current()) {
@@ -86,15 +81,11 @@ abstract class EsActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    @Composable
-    protected abstract fun Content()
+    @Composable protected abstract fun Content()
 }
 
-@Given class EsActivityDependencies(
+@ComponentElementBinding<UiComponent>
+@Given class EsActivityComponent(
     @Given val decorateUi: DecorateUi,
     @Given val runUiWorkers: runUiWorkers
-) {
-    companion object : Component.Key<EsActivityDependencies> {
-        @GivenGroup val binding = componentElementBinding(UiScoped, this)
-    }
-}
+)

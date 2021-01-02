@@ -19,17 +19,19 @@ package com.ivianuu.essentials.activity
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 
 class DefaultActivity : EsActivity() {
     @Composable
     override fun Content() {
         AmbientUiComponent.current
-            .mergeComponent<DefaultActivityComponent>()
+            .get<DefaultActivityComponent>()
             .appUi()
     }
 }
 
-@Given class DefaultActivityDependencies(val appUi: AppUi) {
-    companion object {
-    }
-}
+@ComponentElementBinding<ActivityComponent>
+@Given class DefaultActivityComponent(@Given val appUi: AppUi)

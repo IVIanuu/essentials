@@ -22,10 +22,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,39 +34,36 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Given fun foregroundActivityState(
+@Scoped<AppComponent> @Given fun foregroundActivityState(
     @Given application: Application,
-    @Given globalScope: GlobalScope,
-    @Given storage: Storage<ApplicationScoped>
-): Flow<ForegroundActivity> = storage.memo {
-    callbackFlow<ForegroundActivity> {
-        application.registerActivityLifecycleCallbacks(
-            object : Application.ActivityLifecycleCallbacks {
-                override fun onActivityStarted(activity: Activity) {
-                    if (activity is EsActivity) offer(activity)
-                }
-
-                override fun onActivityStopped(activity: Activity) {
-                    if (activity is EsActivity) offer(null)
-                }
-
-                override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                }
-
-                override fun onActivityDestroyed(activity: Activity) {
-                }
-
-                override fun onActivityResumed(activity: Activity) {
-                }
-
-                override fun onActivityPaused(activity: Activity) {
-                }
-
-                override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                }
+    @Given globalScope: GlobalScope
+): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {
+    application.registerActivityLifecycleCallbacks(
+        object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityStarted(activity: Activity) {
+                if (activity is EsActivity) offer(activity)
             }
-        )
 
-        awaitClose()
-    }.stateIn(globalScope, SharingStarted.Eagerly, null)
-}
+            override fun onActivityStopped(activity: Activity) {
+                if (activity is EsActivity) offer(null)
+            }
+
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+            }
+        }
+    )
+
+    awaitClose()
+}.stateIn(globalScope, SharingStarted.Eagerly, null)

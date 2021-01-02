@@ -21,19 +21,19 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.launch
 
 @GivenFun
 fun showToast(
     message: String,
-    @Given applicationContext: ApplicationContext,
+    @Given appContext: AppContext,
     @Given globalScope: GlobalScope,
     @Given mainDispatcher: MainDispatcher
 ) {
     globalScope.launch(mainDispatcher) {
         Toast.makeText(
-            applicationContext,
+            appContext,
             message,
             Toast.LENGTH_SHORT
         ).show()

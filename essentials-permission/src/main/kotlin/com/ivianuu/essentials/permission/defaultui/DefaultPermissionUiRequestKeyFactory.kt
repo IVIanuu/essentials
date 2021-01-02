@@ -24,5 +24,5 @@ import com.ivianuu.injekt.GivenFun
 
 @PermissionRequestRouteFactoryBinding
 @GivenFun
-fun createDefaultPermissionRequestUiKey(@FunApi request: PermissionRequest): Key =
+fun createDefaultPermissionRequestUiKey(request: PermissionRequest): Key =
     DefaultPermissionKey(request)

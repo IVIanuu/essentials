@@ -17,20 +17,17 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal typealias MutableAccessibilityServiceHolder = MutableStateFlow<AccessibilityService?>
 
-@Given fun mutableAccessibilityServiceHolder(
-    @Given storage: Storage<ApplicationScoped>
-): MutableAccessibilityServiceHolder = storage.memo {
+@Scoped<AppComponent> @Given
+fun mutableAccessibilityServiceHolder(): MutableAccessibilityServiceHolder =
     MutableStateFlow(null)
-}
 
 typealias AccessibilityServiceHolder = StateFlow<AccessibilityService?>
 @Given inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder

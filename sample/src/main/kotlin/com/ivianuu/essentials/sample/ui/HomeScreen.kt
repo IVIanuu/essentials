@@ -40,14 +40,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Arg
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-@HomeKeyBinding
-class HomeKey
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+
+@HomeKeyBinding @Given class HomeKey
 
 @KeyUiBinding<HomeKey>
 @GivenFun
@@ -137,13 +140,8 @@ private fun HomeItem(
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
 
-@Effect
-annotation class HomeItemBinding(val title: String) {
-    companion object {
-        @SetElements
-        fun <T : Any> bind(
-            @Arg("title") title: String,
-            keyFactory: (Color) -> @ForEffect T,
-        ): Set<HomeItem> = setOf(HomeItem(title, keyFactory))
-    }
-}
+@Qualifier annotation class HomeItemBinding
+
+@Macro @Given
+fun <T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
+    instance

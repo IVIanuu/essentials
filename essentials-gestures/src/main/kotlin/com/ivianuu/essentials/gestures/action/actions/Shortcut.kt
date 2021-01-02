@@ -33,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
@@ -49,10 +48,10 @@ class ShortcutActionFactory(
     logger: Logger,
     private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(key: String): Action {
-        logger.d { "create action from $key" }
-        val tmp = key.split(DELIMITER)
+    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun createAction(id: String): Action {
+        logger.d { "create action from $id" }
+        val tmp = id.split(DELIMITER)
         val label = tmp[1]
 
         @Suppress("DEPRECATION")
@@ -60,7 +59,7 @@ class ShortcutActionFactory(
         val iconBytes = Base64.decode(tmp[3], 0)
         val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
         return Action(
-            key = key,
+            id = id,
             title = label,
             unlockScreen = true,
             enabled = true,
@@ -68,8 +67,8 @@ class ShortcutActionFactory(
         )
     }
 
-    override suspend fun createExecutor(key: String): ActionExecutor {
-        val tmp = key.split(DELIMITER)
+    override suspend fun createExecutor(id: String): ActionExecutor {
+        val tmp = id.split(DELIMITER)
         val intent = Intent.getIntent(tmp[2])
         return { sendIntent(intent) }
     }

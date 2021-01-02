@@ -27,20 +27,24 @@ import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Actions")
+@HomeItemBinding
+val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
+
 class ActionsKey
 
 @KeyUiBinding<ActionsKey>
 @GivenFun
 @Composable
 fun ActionsScreen(
-    executeAction: executeAction,
-    pushKeyForResult: pushKeyForResult<ActionPickerKey, ActionPickerResult>,
-    uiScope: UiScope,
+    @Given executeAction: executeAction,
+    @Given pushKeyForResult: pushKeyForResult<ActionPickerKey, ActionPickerResult>,
+    @Given uiScope: UiScope,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }

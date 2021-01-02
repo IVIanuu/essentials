@@ -29,16 +29,16 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
 
-@ActionBinding("home")
+//@ActionBinding("home")
 fun homeAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
 ): Action = Action(
-    key = "home",
+    id = "home",
     title = stringResource(R.string.es_action_home),
     permissions = choosePermissions {
         if (needsHomeIntentWorkaround) emptyList()
@@ -47,10 +47,10 @@ fun homeAction(
     icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
-@ActionExecutorBinding("home")
+//@ActionExecutorBinding("home")
 @GivenFun
 suspend fun openHomeScreen(
-    applicationContext: ApplicationContext,
+    appContext: AppContext,
     performGlobalAction: performGlobalAction,
     sendIntent: sendIntent,
 ) {
@@ -59,7 +59,7 @@ suspend fun openHomeScreen(
     } else {
         runKatching {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-            applicationContext.sendBroadcast(intent)
+            appContext.sendBroadcast(intent)
         }.onFailure { it.printStackTrace() }
 
         sendIntent(

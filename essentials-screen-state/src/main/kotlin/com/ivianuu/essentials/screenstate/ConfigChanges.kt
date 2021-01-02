@@ -21,17 +21,18 @@ import android.content.res.Configuration
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 typealias ConfigChanges = Flow<Unit>
+
 @Given
 fun configChanges(
-    applicationContext: ApplicationContext,
-    mainDispatcher: MainDispatcher,
+    @Given appContext: AppContext,
+    @Given mainDispatcher: MainDispatcher,
 ): ConfigChanges = callbackFlow<Unit> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
@@ -44,6 +45,6 @@ fun configChanges(
         override fun onTrimMemory(level: Int) {
         }
     }
-    applicationContext.registerComponentCallbacks(callbacks)
-    awaitClose { applicationContext.unregisterComponentCallbacks(callbacks) }
+    appContext.registerComponentCallbacks(callbacks)
+    awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
 }.flowOn(mainDispatcher)

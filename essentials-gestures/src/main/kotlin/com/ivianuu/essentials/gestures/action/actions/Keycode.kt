@@ -40,11 +40,11 @@ class KeycodeActionFactory(
     private val runRootCommand: runRootCommand,
     private val stringResourceWithArguments: stringResourceWithArguments,
 ) : ActionFactory {
-    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(key: String): Action {
-        val keycode = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun createAction(id: String): Action {
+        val keycode = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
-            key = key,
+            id = id,
             title = stringResourceWithArguments(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
             permissions = listOf(permissions.root),
@@ -53,8 +53,8 @@ class KeycodeActionFactory(
         )
     }
 
-    override suspend fun createExecutor(key: String): ActionExecutor {
-        val keycode = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun createExecutor(id: String): ActionExecutor {
+        val keycode = id.removePrefix(ACTION_KEY_PREFIX)
         return { runRootCommand("input keyevent $keycode") }
     }
 }

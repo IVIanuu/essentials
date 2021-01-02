@@ -21,19 +21,19 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 
-@GivenFun
-suspend fun restartProcess(
-    applicationContext: ApplicationContext,
-    buildInfo: BuildInfo,
-    logger: Logger,
-    packageManager: PackageManager,
+@GivenFun suspend fun restartProcess(
+    @Given appContext: AppContext,
+    @Given buildInfo: BuildInfo,
+    @Given logger: Logger,
+    @Given packageManager: PackageManager,
 ) {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
     logger.d { "restart process $intent" }
-    ProcessRestartActivity.launch(applicationContext, intent)
+    ProcessRestartActivity.launch(appContext, intent)
     Runtime.getRuntime().exit(0)
 }

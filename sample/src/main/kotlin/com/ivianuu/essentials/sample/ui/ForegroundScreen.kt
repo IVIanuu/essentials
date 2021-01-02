@@ -48,10 +48,13 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
@@ -134,8 +137,7 @@ fun ForegroundScreen(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Scoped(ApplicationComponent::class)
-@Given
+@Scoped<AppComponent> @Given
 fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
 
 // todo remove once injekt fixes effect scoping issues
@@ -145,10 +147,10 @@ inline val ForegroundScreenState.bindForegroundScreenState: ForegroundScreenStat
 
 @GivenFun
 fun createForegroundNotification(
-    applicationContext: ApplicationContext,
-    @FunApi count: Int,
-    @FunApi color: Color,
-): Notification = NotificationCompat.Builder(applicationContext, "foreground")
+    count: Int,
+    color: Color,
+    @Given appContext: AppContext
+): Notification = NotificationCompat.Builder(appContext, "foreground")
     .setSmallIcon(R.drawable.ic_home)
     .setContentTitle("Foreground")
     .setContentText("Current progress $count")

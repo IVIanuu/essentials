@@ -25,7 +25,6 @@ import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.AmbientConfiguration
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.givenGroupOf
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -36,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
 
 data class PopupKey(
     val position: Rect,
@@ -44,11 +42,7 @@ data class PopupKey(
     val content: @Composable() () -> Unit,
 )
 
-@GivenGroup val popupUiBindings = givenGroupOf(
-    keyUiBinding<PopupKey, PopupUi>(),
-    navigationOptionFactoryBinding<PopupKey, createPopupNavigationOptions>()
-)
-
+@KeyUiBinding<PopupKey>
 @GivenFun
 @Composable
 fun PopupUi(
@@ -86,6 +80,7 @@ fun PopupUi(
     }
 }
 
+@NavigationOptionFactoryBinding
 @GivenFun fun createPopupNavigationOptions(key: PopupKey): NavigationOptions = NavigationOptions(
     opaque = true,
     enterTransition = FadeStackTransition(),

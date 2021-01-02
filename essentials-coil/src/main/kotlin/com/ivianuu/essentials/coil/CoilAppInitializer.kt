@@ -21,7 +21,7 @@ import coil.ImageLoader
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.GivenFun
 
-@AppInitializerBinding("coil")
+@AppInitializerBinding
 @GivenFun
 fun initializeCoil(imageLoaderFactory: () -> ImageLoader) {
     Coil.setImageLoader(imageLoaderFactory)

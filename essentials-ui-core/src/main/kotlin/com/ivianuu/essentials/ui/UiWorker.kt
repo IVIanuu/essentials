@@ -17,18 +17,21 @@
 package com.ivianuu.essentials.ui
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.setElement
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-fun <T : UiWorker> uiWorkerBinding() = setElement<UiWorker, T>()
+@Qualifier annotation class UiWorkerBinding
+@Macro @GivenSetElement
+fun <T : @UiWorkerBinding UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
 
-// todo change signature once kotlin is fixed
-typealias UiWorker = () -> suspend () -> Unit
+typealias UiWorker = suspend () -> Unit
 
 @GivenFun
 fun runUiWorkers(
@@ -41,7 +44,7 @@ fun runUiWorkers(
     workers
         .forEach { worker ->
             uiScope.launch(defaultDispatcher) {
-                worker()()
+                worker()
             }
         }
 }

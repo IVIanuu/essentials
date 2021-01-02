@@ -39,7 +39,7 @@ data class AppPickerState(
         .map { it.filter(appFilter) }
     companion object {
         @Given
-        fun initial(params: AppPickerKey): @Initial AppPickerState = AppPickerState(
+        fun initial(@Given params: AppPickerKey): @Initial AppPickerState = AppPickerState(
             appFilter = params.appFilter,
             title = params.title
         )

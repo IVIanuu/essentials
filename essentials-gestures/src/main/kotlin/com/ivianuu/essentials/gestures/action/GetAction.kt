@@ -19,24 +19,23 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@GivenFun
-suspend fun getAllActions(
-    actions: Map<String, () -> Action>,
-    defaultDispatcher: DefaultDispatcher,
+@GivenFun suspend fun getAllActions(
+    @Given actions: Map<String, () -> Action>,
+    @Given defaultDispatcher: DefaultDispatcher,
 ): List<Action> = withContext(defaultDispatcher) {
     actions.values
         .map { it() }
 }
 
-@GivenFun
-suspend fun getAction(
-    actions: Map<String, () -> Action>,
-    actionFactories: () -> Set<ActionFactory>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
+@GivenFun suspend fun getAction(
+    key: String,
+    @Given actions: Map<String, () -> Action>,
+    @Given actionFactories: () -> Set<ActionFactory>,
+    @Given defaultDispatcher: DefaultDispatcher
 ): Action = withContext(defaultDispatcher) {
     actions[key]
         ?.invoke()
@@ -46,12 +45,11 @@ suspend fun getAction(
         ?: error("Unsupported action key $key")
 }
 
-@GivenFun
-suspend fun getActionExecutor(
-    actionsExecutors: Map<String, ActionExecutor>,
-    actionFactories: () -> Set<ActionFactory>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
+@GivenFun suspend fun getActionExecutor(
+    key: String,
+    @Given actionsExecutors: Map<String, ActionExecutor>,
+    @Given actionFactories: () -> Set<ActionFactory>,
+    @Given defaultDispatcher: DefaultDispatcher
 ): ActionExecutor = withContext(defaultDispatcher) {
     actionsExecutors[key]
         ?: actionFactories()
@@ -60,11 +58,10 @@ suspend fun getActionExecutor(
         ?: error("Unsupported action key $key")
 }
 
-@GivenFun
-suspend fun getActionSettingsKey(
-    actionSettings: Map<String, Key>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
+@GivenFun suspend fun getActionSettingsKey(
+    id: String,
+    @Given actionSettings: Map<String, Key>,
+    @Given defaultDispatcher: DefaultDispatcher
 ): Key? = withContext(defaultDispatcher) {
-    actionSettings[key]
+    actionSettings[id]
 }

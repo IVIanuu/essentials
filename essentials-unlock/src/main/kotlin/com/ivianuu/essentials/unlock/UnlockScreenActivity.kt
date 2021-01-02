@@ -24,22 +24,15 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.broadcast.broadcasts
-import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.android.ActivityScoped
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 
 /**
  * Requests a screen unlock
@@ -61,19 +54,19 @@ class UnlockScreenActivity : AppCompatActivity() {
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-        val dependencies = activityComponent[UnlockScreenDependencies]
+        val component = activityComponent.get<UnlockScreenComponent>()
 
-        dependencies.logger.d { "unlock screen for $requestId" }
+        component.logger.d { "unlock screen for $requestId" }
 
         fun finishWithResult(success: Boolean) {
-            dependencies.logger.d { "finish with result $success" }
+            component.logger.d { "finish with result $success" }
             hasResult = true
             onUnlockScreenResult(requestId, success)
             finish()
         }
 
-        if (dependencies.systemBuildInfo.sdk >= 26) {
-            dependencies.keyguardManager.requestDismissKeyguard(
+        if (component.systemBuildInfo.sdk >= 26) {
+            component.keyguardManager.requestDismissKeyguard(
                 this,
                 object :
                     KeyguardManager.KeyguardDismissCallback() {
@@ -95,16 +88,16 @@ class UnlockScreenActivity : AppCompatActivity() {
             )
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-            merge(
-                dependencies.broadcasts(Intent.ACTION_SCREEN_OFF),
-                dependencies.broadcasts(Intent.ACTION_SCREEN_ON),
-                dependencies.broadcasts(Intent.ACTION_USER_PRESENT)
+            /*merge(
+                component.broadcasts(Intent.ACTION_SCREEN_OFF),
+                component.broadcasts(Intent.ACTION_SCREEN_ON),
+                component.broadcasts(Intent.ACTION_USER_PRESENT)
             )
                 .take(1)
                 .onEach {
                     finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
                 }
-                .launchIn(lifecycleScope)
+                .launchIn(lifecycleScope)*/
         }
     }
 
@@ -129,14 +122,10 @@ class UnlockScreenActivity : AppCompatActivity() {
     }
 }
 
-@Given class UnlockScreenDependencies(
-    @Given val broadcasts: broadcasts,
+@ComponentElementBinding<ActivityComponent>
+@Given class UnlockScreenComponent(
+    //@Given val broadcasts: broadcasts,
     @Given val keyguardManager: KeyguardManager,
     @Given val logger: Logger,
     @Given val systemBuildInfo: SystemBuildInfo
-) {
-    companion object : Component.Key<UnlockScreenDependencies> {
-        @GivenGroup val binding =
-            componentElementBinding(ActivityScoped, UnlockScreenDependencies)
-    }
-}
+)

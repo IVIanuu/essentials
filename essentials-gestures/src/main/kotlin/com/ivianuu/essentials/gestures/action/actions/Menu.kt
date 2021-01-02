@@ -26,19 +26,19 @@ import com.ivianuu.essentials.gestures.action.choosePermissions
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("menu")
+//@ActionBinding("menu")
 fun menuAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
     simulateMenuButtonPress: simulateMenuButtonPress,
 ): Action = Action(
-    key = "menu",
+    id = "menu",
     title = stringResource(R.string.es_action_menu),
     icon = singleActionIcon(Icons.Default.MoreVert),
     permissions = choosePermissions { listOf(root) }
 )
 
-@ActionExecutorBinding("menu")
+//@ActionExecutorBinding("menu")
 @GivenFun
 suspend fun simulateMenuButtonPress(runRootCommand: runRootCommand) {
     runRootCommand("input keyevent 82")

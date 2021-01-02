@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.about.AboutKey
+import com.ivianuu.injekt.Given
 
-@HomeItemBinding("About")
-inline val AboutHomeItem: AboutKey
-    get() = AboutKey()
+@HomeItemBinding @Given
+val aboutHomeItem = HomeItem("About") { AboutKey() }

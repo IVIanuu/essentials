@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.util
 
 import android.util.Log
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.essentials.util.Logger.Kind
 import com.ivianuu.essentials.util.Logger.Kind.DEBUG
 import com.ivianuu.essentials.util.Logger.Kind.ERROR
@@ -26,8 +25,8 @@ import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 
 @Given class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
@@ -42,14 +41,11 @@ import com.ivianuu.injekt.component.Storage
     }
 
     companion object {
-        @Given fun impl(
+        @Scoped<AppComponent> @Given fun impl(
             @Given buildInfo: BuildInfo,
             @Given androidLoggerFactory: () -> AndroidLogger,
-            @Given noopLoggerFactory: () -> NoopLogger,
-            @Given storage: Storage<ApplicationScoped>
-        ): Logger = storage.memo {
-            if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
-        }
+            @Given noopLoggerFactory: () -> NoopLogger
+        ): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
     }
 }
 

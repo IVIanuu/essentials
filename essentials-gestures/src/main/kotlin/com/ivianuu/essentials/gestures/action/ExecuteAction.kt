@@ -25,19 +25,19 @@ import com.ivianuu.essentials.unlock.unlockScreen
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@GivenFun
-suspend fun executeAction(
-    defaultDispatcher: DefaultDispatcher,
-    logger: Logger,
-    getAction: getAction,
-    getActionExecutor: getActionExecutor,
-    requestPermissions: requestPermissions,
-    unlockScreen: unlockScreen,
-    showToast: showToast,
-    @FunApi key: String,
+@GivenFun suspend fun executeAction(
+    key: String,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given logger: Logger,
+    @Given getAction: getAction,
+    @Given getActionExecutor: getActionExecutor,
+    @Given requestPermissions: requestPermissions,
+    @Given unlockScreen: unlockScreen,
+    @Given showToast: showToast
 ): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
     runKatching {
         logger.d { "execute $key" }

@@ -24,14 +24,14 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("input_method")
+//@ActionBinding("input_method")
 fun inputMethodAction(stringResource: stringResource): Action = Action(
-    key = "input_method",
+    id = "input_method",
     title = stringResource(R.string.es_action_input_method),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
 )
 
-@ActionExecutorBinding("input_method")
+//@ActionExecutorBinding("input_method")
 @GivenFun
 suspend fun showInputMethodPicker(inputMethodManager: InputMethodManager) {
     inputMethodManager.showInputMethodPicker()

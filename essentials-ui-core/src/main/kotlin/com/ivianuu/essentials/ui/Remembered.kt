@@ -21,9 +21,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 
-@Qualifier
-@Target(AnnotationTarget.TYPE)
-annotation class Remembered
+@Qualifier annotation class Remembered
 
 @Given
 @Composable

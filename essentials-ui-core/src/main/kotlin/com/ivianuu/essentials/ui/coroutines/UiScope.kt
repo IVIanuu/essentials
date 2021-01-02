@@ -19,15 +19,14 @@ package com.ivianuu.essentials.ui.coroutines
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onDispose
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.sourcekey.memo
-import com.ivianuu.essentials.ui.uiDecoratorBinding
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.android.ActivityScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -35,12 +34,11 @@ typealias UiScope = CoroutineScope
 
 // todo should be scoped to the UiComponent but @UiDecoratorBinding installs in ActivityComponent
 // so we also have to scope to ActivityComponent
-@Given fun uiScope(
-    @Given mainDispatcher: MainDispatcher,
-    @Given storage: Storage<ActivityScoped>
-): UiScope = storage.memo { CoroutineScope(mainDispatcher) }
+@Scoped<UiComponent> @Given fun uiScope(
+    @Given mainDispatcher: MainDispatcher
+): UiScope = CoroutineScope(mainDispatcher)
 
-@GivenGroup val cancelUiScopeBinding = uiDecoratorBinding<CancelUiScope>("cancel_ui_scope")
+@UiDecoratorBinding
 @GivenFun @Composable fun CancelUiScope(
     @Given logger: Logger,
     @Given uiScope: UiScope,

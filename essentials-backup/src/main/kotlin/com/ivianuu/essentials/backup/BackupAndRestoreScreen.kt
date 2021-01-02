@@ -25,15 +25,17 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<BackupAndRestoreKey>
 @GivenFun
 @Composable
 fun BackupAndRestoreScreen(
-    state: @UiState BackupAndRestoreState,
-    dispatch: DispatchAction<BackupAndRestoreAction>,
+    @Given state: @UiState BackupAndRestoreState,
+    @Given dispatch: DispatchAction<BackupAndRestoreAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }

@@ -17,12 +17,10 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.componentElementBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenGroup
-import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.appComponent
 import com.ivianuu.injekt.component.get
 
 /**
@@ -30,7 +28,7 @@ import com.ivianuu.injekt.component.get
  */
 abstract class EsApp : Application() {
     override fun onCreate() {
-        with(applicationComponent[EsAppDependencies]) {
+        with(appComponent.get<EsAppComponent>()) {
             runInitializers()
             runAppWorkers()
         }
@@ -38,11 +36,8 @@ abstract class EsApp : Application() {
     }
 }
 
-@Given class EsAppDependencies(
+@ComponentElementBinding<AppComponent>
+@Given class EsAppComponent(
     @Given val runInitializers: runInitializers,
     @Given val runAppWorkers: runAppWorkers
-) {
-    companion object : Component.Key<EsAppDependencies> {
-        @GivenGroup val binding = componentElementBinding(ApplicationScoped, this)
-    }
-}
+)

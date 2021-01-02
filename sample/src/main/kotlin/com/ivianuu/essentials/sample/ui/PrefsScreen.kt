@@ -21,14 +21,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.datastore.android.PrefBinding
 import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
+import com.ivianuu.essentials.datastore.android.prefBinding
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -39,18 +40,22 @@ import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
 
-@HomeItemBinding("Prefs")
+@HomeItemBinding @Given
+val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
+
 class PrefsKey
 
 @KeyUiBinding<PrefsKey>
 @GivenFun
 @Composable
 fun PrefsScreen(
-    prefs: @UiState SamplePrefs,
-    dispatchUpdate: dispatchPrefUpdate<SamplePrefs>,
+    @Given prefs: @UiState SamplePrefs,
+    @Given dispatchUpdate: dispatchPrefUpdate<SamplePrefs>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
@@ -141,7 +146,6 @@ fun PrefsScreen(
     }
 }
 
-@PrefBinding("sample_prefs")
 @JsonClass(generateAdapter = true)
 data class SamplePrefs(
     val switch: Boolean = false,
@@ -153,3 +157,5 @@ data class SamplePrefs(
     val multiChoice: Set<String> = setOf("A", "B", "C"),
     val singleChoice: String = "C",
 )
+
+@Module val samplePrefsModule = prefBinding<SamplePrefs>("sample_prefs")

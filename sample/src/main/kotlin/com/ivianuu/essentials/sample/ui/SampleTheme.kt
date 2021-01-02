@@ -20,20 +20,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.ui.TwilightTheme
-import com.ivianuu.essentials.twilight.ui.invokeTwilightTheme
 import com.ivianuu.essentials.ui.AppThemeBinding
 import com.ivianuu.essentials.ui.animatedstack.AmbientStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 @AppThemeBinding
 @GivenFun
 @Composable
 fun SampleTheme(
-    twilightTheme: TwilightTheme,
-    @FunApi content: @Composable () -> Unit
+    @Given twilightTheme: TwilightTheme,
+    content: @Composable () -> Unit
 ) {
-    twilightTheme.invokeTwilightTheme {
+    twilightTheme {
         Providers(
             AmbientStackTransition provides remember { HorizontalStackTransition() },
             content = content

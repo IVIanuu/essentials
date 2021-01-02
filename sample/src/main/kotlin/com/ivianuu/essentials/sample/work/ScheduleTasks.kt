@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample.work
 
 import androidx.work.WorkManager
 import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-@GivenFun
-fun scheduleTasks(workManager: WorkManager) {
-    workManager.enqueue(OneTimeWorkRequestBuilder(TEST_WORKER_ID).build())
+@GivenFun fun scheduleTasks(@Given workManager: WorkManager) {
+    workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
 }

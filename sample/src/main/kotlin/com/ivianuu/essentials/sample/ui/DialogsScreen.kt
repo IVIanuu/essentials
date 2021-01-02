@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.rememberState
@@ -52,9 +53,16 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-@HomeItemBinding("Dialogs")
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
+
+@HomeItemBinding @Given
+val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
+
 class DialogsKey
 
 @KeyUiBinding<DialogsKey>
@@ -336,8 +344,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
-    val component = AmbientUiComponent.current
-        .mergeComponent<DialogLauncherComponent>()
+    val component = AmbientUiComponent.current.get<DialogLauncherComponent>()
     Button(
         onClick = {
             component.dispatchNavigationOption(
@@ -365,7 +372,7 @@ fun DialogLauncherDialog(key: DialogLauncherKey) {
     DialogWrapper { key.dialog() }
 }
 
-@MergeInto(UiComponent::class)
-interface DialogLauncherComponent {
-    val dispatchNavigationOption: DispatchAction<NavigationAction>
-}
+@ComponentElementBinding<UiComponent> @Given
+class DialogLauncherComponent(
+    @Given val dispatchNavigationOption: DispatchAction<NavigationAction>
+)

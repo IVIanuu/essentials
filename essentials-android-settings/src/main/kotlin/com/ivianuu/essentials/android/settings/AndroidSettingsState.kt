@@ -84,8 +84,7 @@ sealed class AndroidSettingAction<T> {
     return result.await()
 }
 
-@GivenFun
-fun <T> dispatchAndroidSettingUpdate(
+@GivenFun fun <T> dispatchAndroidSettingUpdate(
     @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
     reducer: T.() -> T,
 ) {

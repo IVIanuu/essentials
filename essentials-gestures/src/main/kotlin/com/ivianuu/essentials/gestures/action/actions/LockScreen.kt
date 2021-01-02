@@ -28,13 +28,13 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("lock_screen")
+//@ActionBinding("lock_screen")
 fun lockScreenAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
     systemBuildInfo: SystemBuildInfo,
 ): Action = Action(
-    key = "lock_screen",
+    id = "lock_screen",
     title = stringResource(R.string.es_action_lock_screen),
     icon = singleActionIcon(R.drawable.es_ic_power_settings),
     permissions = choosePermissions {
@@ -46,7 +46,7 @@ fun lockScreenAction(
 )
 
 @SuppressLint("InlinedApi")
-@ActionExecutorBinding("lock_screen")
+//@ActionExecutorBinding("lock_screen")
 @GivenFun
 suspend fun doLockScreen(
     performGlobalAction: performGlobalAction,

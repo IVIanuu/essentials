@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.twilight.ui.TwilightSettingsKey
+import com.ivianuu.injekt.Given
 
-@HomeItemBinding("Twilight")
-inline val TwilightHomeItem: TwilightSettingsKey
-    get() = TwilightSettingsKey()
+@HomeItemBinding @Given
+val TwilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey() }

@@ -24,7 +24,7 @@ data class SecureSettingsKey(val showHideNavBarHint: Boolean = false)
 data class SecureSettingsState(val showHideNavBarHint: Boolean = false) {
     companion object {
         @Given
-        fun initial(key: SecureSettingsKey): @Initial SecureSettingsState =
+        fun initial(@Given key: SecureSettingsKey): @Initial SecureSettingsState =
             SecureSettingsState(key.showHideNavBarHint)
     }
 }

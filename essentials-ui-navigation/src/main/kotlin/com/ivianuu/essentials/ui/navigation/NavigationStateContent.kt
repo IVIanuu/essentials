@@ -38,13 +38,11 @@ import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
 import kotlin.reflect.KClass
 
-@GivenFun
-@Composable
-fun NavigationStateContent(
-    optionFactories: @Remembered Set<NavigationOptionFactoryBinding>,
-    uiFactories: @Remembered Set<KeyUiFactoryBinding>,
-    @Given state: NavigationState,
-    @Given modifier: Modifier = Modifier,
+@GivenFun @Composable fun NavigationStateContent(
+    @Given optionFactories: @Remembered Set<NavigationOptionFactory>,
+    @Given uiFactories: @Remembered Set<KeyUiFactoryBinding>,
+    state: NavigationState,
+    modifier: Modifier = Modifier,
 ) {
     val contentState = remember {
         NavigationContentState(optionFactories.toMap(), uiFactories.toMap(),

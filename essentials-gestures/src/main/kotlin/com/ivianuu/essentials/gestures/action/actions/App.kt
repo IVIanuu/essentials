@@ -41,11 +41,11 @@ class AppActionFactory(
     private val packageManager: PackageManager,
     private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(key: String): Action {
-        val packageName = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun createAction(id: String): Action {
+        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
-            key = key,
+            id = id,
             title = getAppInfo(packageName).appName,
             unlockScreen = true,
             enabled = true,
@@ -53,8 +53,8 @@ class AppActionFactory(
         )
     }
 
-    override suspend fun createExecutor(key: String): ActionExecutor {
-        val packageName = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun createExecutor(id: String): ActionExecutor {
+        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return {
             sendIntent(
                 packageManager.getLaunchIntentForPackage(

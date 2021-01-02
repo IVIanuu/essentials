@@ -28,6 +28,7 @@ dependencies {
     compile(project(":essentials-sourcekey"))
     compile(Deps.Coroutines.core)
     compile(Deps.Injekt.core)
+    compile(Deps.Injekt.common)
     compile(Deps.Injekt.component)
     compile(Deps.Kotlin.stdlib)
     testCompile(project(":essentials-test"))

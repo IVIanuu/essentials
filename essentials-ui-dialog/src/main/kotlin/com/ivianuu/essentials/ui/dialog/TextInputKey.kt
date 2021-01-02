@@ -22,14 +22,12 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.givenGroupOf
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.ui.navigation.keyUiBinding
+import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenGroup
 
 data class TextInputKey(
     val initial: String = "",
@@ -41,11 +39,8 @@ data class TextInputKey(
 
 typealias TextInputResult = String
 
-@GivenGroup val textInputDialogKeyBindings = givenGroupOf(
-    keyUiBinding<TextInputKey, TextInputDialog>(),
-    dialogNavigationOptionsBinding<TextInputKey>()
-)
-
+@DialogNavigationOptionsBinding<TextInputKey>
+@KeyUiBinding<TextInputKey>
 @GivenFun
 @Composable
 fun TextInputDialog(

@@ -35,6 +35,9 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.openAppUi
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -65,16 +68,15 @@ interface BillingManager {
     suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
 }
 
-@Scoped(ApplicationComponent::class)
-@ImplBinding
+@Scoped<AppComponent> @Given
 class BillingManagerImpl(
-    private val appForegroundState: Flow<AppForegroundState>,
-    billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
-    private val defaultDispatcher: DefaultDispatcher,
-    private val ioDispatcher: IODispatcher,
-    private val logger: Logger,
-    private val openAppUi: openAppUi,
-) : BillingManager {
+    @Given private val appForegroundState: Flow<AppForegroundState>,
+    @Given billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
+    @Given private val defaultDispatcher: DefaultDispatcher,
+    @Given private val ioDispatcher: IODispatcher,
+    @Given private val logger: Logger,
+    @Given private val openAppUi: openAppUi,
+) : @Given BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
         refreshes.emit(Unit)

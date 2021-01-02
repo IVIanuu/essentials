@@ -1,8 +1,5 @@
 package com.ivianuu.essentials.sourcekey
 
-import com.ivianuu.injekt.component.Storage
-import com.ivianuu.injekt.component.memo
-
 fun _sourceKey(): Any = error("Intrinsic")
 
 inline fun sourceKeyOf(): Any = _sourceKey()
@@ -17,5 +14,3 @@ inline fun sourceKeyOf(vararg inputs: Any?): Any =
 
 @PublishedApi
 internal data class JoinedKey(val left: Any?, val right: Any?)
-
-inline fun <T : Any> Storage<*>.memo(init: () -> T): T = memo(key = sourceKeyOf(), block = init)

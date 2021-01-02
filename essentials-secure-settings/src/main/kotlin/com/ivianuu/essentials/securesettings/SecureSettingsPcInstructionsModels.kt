@@ -28,7 +28,7 @@ data class SecureSettingsPcInstructionsState(val packageName: String) {
 
     companion object {
         @Given
-        fun initial(buildInfo: BuildInfo): @Initial SecureSettingsPcInstructionsState =
+        fun initial(@Given buildInfo: BuildInfo): @Initial SecureSettingsPcInstructionsState =
             SecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
     }
 }

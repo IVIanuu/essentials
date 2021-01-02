@@ -20,16 +20,17 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
-inline fun <reified K> dialogNavigationOptionsBinding():
-        @GivenSetElement () -> NavigationOptionFactoryBinding = {
-    K::class to createDialogNavigationOptions
-}
+@Qualifier annotation class DialogNavigationOptionsBinding<K : Key>
 
-@PublishedApi internal val createDialogNavigationOptions = { _: Key ->
-    NavigationOptions(
-        opaque = true,
-        transition = FadeStackTransition()
-    )
-}
+@NavigationOptionFactoryBinding
+@Macro @Given
+fun <T : @DialogNavigationOptionsBinding<K> (K) -> NavigationOptions, K : Key>
+        dialogNavigationOptionsBindingImpl() = NavigationOptions(
+    opaque = true,
+    transition = FadeStackTransition()
+)

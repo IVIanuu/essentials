@@ -20,27 +20,32 @@ import android.content.Intent
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-inline fun <reified K : Any, T : (K) -> Intent> keyIntentFactoryBinding():
-        @GivenSetElement (@Given () -> T) -> KeyIntentFactoryBinding = {
-    @Suppress("UNCHECKED_CAST")
-    K::class to it as () -> (Key) -> Intent
-}
+@Qualifier annotation class KeyIntentFactoryBinding<K : Any>
+@Suppress("UNCHECKED_CAST")
+@Macro @GivenSetElement
+inline fun <
+        T : @KeyIntentFactoryBinding<K> (K) -> Intent,
+        reified K : Any> keyIntentFactoryBindingImpl(
+    @Given instance: T
+): KeyIntentFactoryElement = (K::class to instance) as KeyIntentFactoryElement
 
-typealias KeyIntentFactoryBinding = Pair<KClass<*>, () -> (Key) -> Intent>
+typealias KeyIntentFactoryElement = Pair<KClass<*>, (Key) -> Intent>
 
 @GivenFun
 fun intentKeyHandler(
     key: Key,
-    @Given applicationContext: ApplicationContext,
-    @Given intentFactories: Set<KeyIntentFactoryBinding>
+    @Given appContext: AppContext,
+    @Given intentFactories: Set<KeyIntentFactoryElement>
 ): Boolean {
-    val intentFactory = intentFactories.toMap()[key::class]?.invoke()
+    val intentFactory = intentFactories.toMap()[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
-        applicationContext.startActivity(
+        appContext.startActivity(
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }

@@ -67,7 +67,7 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indicationFactory: @Composable () -> Indication = AmbientIndication.current,
 ) = composed {
-    val dependencies = AmbientUiComponent.current[PopupMenuDependencies]
+    val dependencies = AmbientUiComponent.current.get<PopupMenuComponent>()
 
     var coordinates by rememberRef<LayoutCoordinates?> { null }
 

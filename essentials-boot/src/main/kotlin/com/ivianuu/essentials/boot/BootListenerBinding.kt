@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.boot
 
-@Effect
-annotation class BootListenerBinding {
-    companion object {
-        @SetElements
-        fun <T : suspend () -> Unit> listenerIntoSet(instance: @ForEffect T): BootListeners =
-            setOf(instance)
-    }
-}
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
-typealias BootListeners = Set<suspend () -> Unit>
+@Qualifier annotation class BootListenerBinding
+@Macro @GivenSetElement
+fun <T : @BootListenerBinding BootListener> bootListenerBindingImpl(
+    @Given instance: T): BootListener = instance
 
-@SetElements
-fun defaultBootListeners(): BootListeners = emptySet()
+typealias BootListener = suspend () -> Unit

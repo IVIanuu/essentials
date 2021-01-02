@@ -17,17 +17,21 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.setElement
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-fun <T : AppWorker> appWorkerBinding() = setElement<AppWorker, T>()
+@Qualifier annotation class AppWorkerBinding
+@Macro @GivenSetElement
+fun <T : @AppWorkerBinding AppWorker> appWorkerBindingImpl(@Given instance: T): AppWorker =
+    instance
 
-// todo change signature once kotlin is fixed
-typealias AppWorker = () -> suspend () -> Unit
+typealias AppWorker = suspend () -> Unit
 
 @GivenFun
 fun runAppWorkers(
@@ -39,7 +43,7 @@ fun runAppWorkers(
     workers
         .forEach { worker ->
             globalScope.launch {
-                worker()()
+                worker()
             }
         }
 }

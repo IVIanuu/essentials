@@ -52,15 +52,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Date
 
-@Given
-class DebugBillingClient(
-    private val buildInfo: BuildInfo,
-    private val globalScope: GlobalScope,
-    private val openAppUi: openAppUi,
-    private val prefs: Flow<DebugBillingPrefs>,
-    private val updatePrefs: updatePref<DebugBillingPrefs>,
-    private val purchasesUpdatedListener: PurchasesUpdatedListener,
-    private val getPurchaseResult: pushKeyForResult<DebugPurchaseKey, SkuDetails>,
+@Given class DebugBillingClient(
+    @Given private val buildInfo: BuildInfo,
+    @Given private val globalScope: GlobalScope,
+    @Given private val openAppUi: openAppUi,
+    @Given private val prefs: Flow<DebugBillingPrefs>,
+    @Given private val updatePrefs: updatePref<DebugBillingPrefs>,
+    @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
+    @Given private val getPurchaseResult: pushKeyForResult<DebugPurchaseKey, SkuDetails>,
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null

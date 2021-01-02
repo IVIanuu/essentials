@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.sourcekey.memo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ApplicationScoped
-import com.ivianuu.injekt.component.Storage
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CoroutineScope
 
 typealias GlobalScope = CoroutineScope
 
-@Given
-fun globalScope(
-    @Given defaultDispatcher: DefaultDispatcher,
-    @Given storage: Storage<ApplicationScoped>
-): GlobalScope = storage.memo { CoroutineScope(defaultDispatcher) }
+@Scoped<AppComponent> @Given
+fun globalScope(@Given dispatcher: DefaultDispatcher): GlobalScope =
+    CoroutineScope(dispatcher)

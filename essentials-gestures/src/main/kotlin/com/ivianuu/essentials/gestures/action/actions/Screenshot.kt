@@ -29,13 +29,13 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-@ActionBinding("screenshot")
+//@ActionBinding("screenshot")
 fun screenshotAction(
     choosePermissions: choosePermissions,
     stringResource: stringResource,
     systemBuildInfo: SystemBuildInfo,
 ): Action = Action(
-    key = "screenshot",
+    id = "screenshot",
     title = stringResource(R.string.es_action_screenshot),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
     permissions = choosePermissions {
@@ -47,7 +47,7 @@ fun screenshotAction(
 )
 
 @SuppressLint("InlinedApi")
-@ActionExecutorBinding("screenshot")
+//@ActionExecutorBinding("screenshot")
 @GivenFun
 suspend fun takeScreenshot(
     performGlobalAction: performGlobalAction,

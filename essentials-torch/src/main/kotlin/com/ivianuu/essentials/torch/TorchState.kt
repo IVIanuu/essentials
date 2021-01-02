@@ -20,16 +20,17 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
-import com.ivianuu.essentials.ui.store.GlobalStateBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
-@GlobalStateBinding
-fun torchState(
-    scope: CoroutineScope,
-    initial: @Initial TorchState = TorchState(),
-    actions: Actions<TorchAction>
+@Scoped<AppComponent> @Given fun torchState(
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial TorchState = TorchState(),
+    @Given actions: Actions<TorchAction>
 ): StateFlow<TorchState> = actions
     .filterIsInstance<UpdateTorchEnabled>()
     .state(scope, initial) { copy(torchEnabled = it.value) }

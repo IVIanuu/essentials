@@ -19,6 +19,8 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlin.reflect.KClass
 
 data class NavigationOptions(
@@ -32,10 +34,11 @@ data class NavigationOptions(
     ) : this(opaque, transition, transition)
 }
 
-typealias NavigationOptionFactoryBinding = Pair<KClass<*>, (Key) -> NavigationOptions>
+typealias NavigationOptionFactory = Pair<KClass<*>, (Key) -> NavigationOptions>
 
+@Qualifier annotation class NavigationOptionFactoryBinding
 @Suppress("UNCHECKED_CAST")
-inline fun <reified K : Key, T : (K) -> NavigationOptions> navigationOptionFactoryBinding():
-        @GivenSetElement (@Given (K) -> NavigationOptions) -> NavigationOptionFactoryBinding = {
-    K::class to it as (Key) -> NavigationOptions
-}
+@Macro @NavigationOptionFactoryBinding
+inline fun <T : (K) -> NavigationOptions, reified K : Key> navigationOptionFactoryBindingImpl(
+    @Given instance: T
+): NavigationOptionFactory = (K::class to instance) as NavigationOptionFactory
