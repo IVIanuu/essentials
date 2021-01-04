@@ -92,7 +92,7 @@ private fun Chip(
                     .preferredHeight(32.dp)
                     .clickable(
                         onClick = onClick,
-                        indication = rememberRipple(false, null, Color.Unspecified)
+                        indication = rememberRipple(bounded = false, color = Color.Unspecified)
                     ),
                 contentAlignment = Alignment.Center
             ) {

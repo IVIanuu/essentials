@@ -33,7 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding("Timer")
+//@HomeItemBinding("Timer")
 class TimerKey
 
 @KeyUiBinding<TimerKey>

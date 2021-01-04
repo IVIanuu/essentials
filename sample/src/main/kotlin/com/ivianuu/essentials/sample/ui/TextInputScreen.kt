@@ -44,7 +44,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Text input")
+//@HomeItemBinding("Text input")
 class TextInputKey
 
 @KeyUiBinding<TextInputKey>

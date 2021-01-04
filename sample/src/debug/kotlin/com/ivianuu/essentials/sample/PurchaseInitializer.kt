@@ -25,7 +25,7 @@ import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@AppInitializerBinding("purchases")
+@AppInitializerBinding
 @GivenFun
 fun initializePurchases(
     globalScope: GlobalScope,

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Drawer")
+//@HomeItemBinding("Drawer")
 class DrawerKey
 
 @KeyUiBinding<DrawerKey>

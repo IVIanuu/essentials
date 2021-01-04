@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Restart process")
+//@HomeItemBinding("Restart process")
 class RestartProcessKey
 
 @KeyUiBinding<RestartProcessKey>

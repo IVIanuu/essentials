@@ -81,7 +81,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@HomeItemBinding("Notifications")
+//@HomeItemBinding("Notifications")
 class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>
@@ -219,10 +219,9 @@ fun NotificationsPermission(): NotificationsPermission = NotificationListenerPer
 
 typealias UiNotifications = Flow<List<UiNotification>>
 
-@Given
-fun notifications(
-    appContext: AppContext,
-    serviceState: Flow<NotificationsState>,
+@Given fun notifications(
+    @Given appContext: AppContext,
+    @Given serviceState: Flow<NotificationsState>,
 ): UiNotifications = serviceState
     .map { it.notifications }
     .map { notifications ->

@@ -59,7 +59,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding("Foreground")
+//@HomeItemBinding("Foreground")
 class ForegroundKey
 
 @SuppressLint("NewApi")

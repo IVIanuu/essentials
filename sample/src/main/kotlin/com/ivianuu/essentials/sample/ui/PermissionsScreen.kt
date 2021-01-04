@@ -47,7 +47,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Permissions")
+//@HomeItemBinding("Permissions")
 class PermissionsKey
 
 @KeyUiBinding<PermissionsKey>
