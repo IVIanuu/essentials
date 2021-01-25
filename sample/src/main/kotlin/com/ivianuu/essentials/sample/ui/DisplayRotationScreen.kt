@@ -31,6 +31,7 @@ import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.injekt.Given
 
 //@HomeItemBinding("Display rotation")
 class DisplayRotationKey
@@ -38,7 +39,7 @@ class DisplayRotationKey
 @KeyUiBinding<DisplayRotationKey>
 @GivenFun
 @Composable
-fun DisplayRotationScreen(rotation: Flow<DisplayRotation>) {
+fun DisplayRotationScreen(@Given rotation: Flow<DisplayRotation>) {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)

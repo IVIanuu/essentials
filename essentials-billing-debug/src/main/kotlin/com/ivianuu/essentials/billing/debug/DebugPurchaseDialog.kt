@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -55,10 +56,10 @@ data class DebugPurchaseKey(val params: BillingFlowParams)
 @GivenFun
 @Composable
 fun DebugPurchaseDialog(
-    defaultDispatcher: DefaultDispatcher,
-    key: DebugPurchaseKey,
-    popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
-    prefs: Flow<DebugBillingPrefs>,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given key: DebugPurchaseKey,
+    @Given popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
+    @Given prefs: Flow<DebugBillingPrefs>,
 ) {
     DialogWrapper {
         ResourceBox(

@@ -35,7 +35,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@TileStateBinding<FunTileService1> @Given
+@TileStateBinding<FunTileService1>
+@Given
 fun testTileState(
     @Given scope: CoroutineScope,
     @Given actions: Actions<TileAction>,

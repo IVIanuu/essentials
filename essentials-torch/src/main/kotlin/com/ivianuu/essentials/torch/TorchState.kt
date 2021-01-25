@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.torch
 
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
 @Scoped<AppComponent> @Given fun torchState(
-    @Given scope: CoroutineScope,
+    @Given scope: GlobalScope,
     @Given initial: @Initial TorchState = TorchState(),
     @Given actions: Actions<TorchAction>
 ): StateFlow<TorchState> = actions
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.filterIsInstance
     .state(scope, initial) { copy(torchEnabled = it.value) }
 
 data class TorchState(val torchEnabled: Boolean = false)
+
 sealed class TorchAction {
     data class UpdateTorchEnabled(val value: Boolean) : TorchAction()
 }

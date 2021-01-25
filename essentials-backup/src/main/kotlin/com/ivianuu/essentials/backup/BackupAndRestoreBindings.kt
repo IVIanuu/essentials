@@ -25,7 +25,9 @@ import com.ivianuu.injekt.Qualifier
 import java.io.File
 
 @Qualifier annotation class BackupFileBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <T : @BackupFileBinding File> backupFileImpl(@Given instance: T): BackupFile = instance
 
 typealias BackupFile = File

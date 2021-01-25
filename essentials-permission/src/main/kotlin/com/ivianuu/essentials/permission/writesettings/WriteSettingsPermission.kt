@@ -25,6 +25,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.to
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
 fun WriteSettingsPermission(
@@ -44,8 +45,9 @@ val Permission.Companion.IsWriteSettingsPermission by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class WriteSettingsPermissionStateProvider(
-    private val appContext: AppContext,
+    @Given private val appContext: AppContext,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

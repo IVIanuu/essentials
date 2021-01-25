@@ -26,19 +26,22 @@ import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
+@Given
 fun checkableAppsState(
-    scope: CoroutineScope,
-    initial: @Initial CheckableAppsState,
-    actions: Actions<CheckableAppsAction>,
-    checkedAppsSource: CheckedAppsSource,
-    getInstalledApps: getInstalledApps,
-    onCheckedAppsChanged: OnCheckedAppsChanged
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial CheckableAppsState,
+    @Given actions: Actions<CheckableAppsAction>,
+    @Given checkedAppsSource: CheckedAppsSource,
+    @Given getInstalledApps: getInstalledApps,
+    @Given onCheckedAppsChanged: OnCheckedAppsChanged
+): StateFlow<CheckableAppsState> = scope.state(initial) {
     checkedAppsSource
         .reduce { copy(checkedApps = it) }
         .launchIn(this)

@@ -60,7 +60,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
 class AppTrackerKey

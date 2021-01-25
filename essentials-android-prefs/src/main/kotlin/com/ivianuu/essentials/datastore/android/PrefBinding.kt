@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
+
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
@@ -37,40 +38,40 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
+import kotlin.reflect.KClass
 
-fun <T : Any> prefBinding(
-    name: String
-): @Given (
-    @Given GlobalScope,
-    @Given IODispatcher,
-    @Given () -> @InitialOrFallback T,
-    @Given () -> JsonAdapter<T>,
-    @Given () -> PrefsDir
-) -> @Scoped<AppComponent> DataStore<T> = {
-        scope, dispatcher, initialFactory, adapterFactory, prefsDir ->
-    val deferredDataStore: DataStore<T> by lazy {
-        DataStoreFactory.create(
-            produceFile = { prefsDir().resolve(name) },
-            serializer = object : Serializer<T> {
-                override val defaultValue: T
-                    get() = initialFactory()
-                private val adapter by lazy(adapterFactory)
-                override fun readFrom(input: InputStream): T =
-                    adapter.fromJson(String(input.readBytes()))!!
+class PrefModule<T : Any>(private val name: String) {
+    @Given operator fun invoke(
+        @Given scope: GlobalScope,
+        @Given dispatcher: IODispatcher,
+        @Given initialFactory: () -> @InitialOrFallback T,
+        @Given adapterFactory: () -> JsonAdapter<T>,
+        @Given prefsDir: () -> PrefsDir
+    ): @Scoped<AppComponent> DataStore<T> {
+        val deferredDataStore: DataStore<T> by lazy {
+            DataStoreFactory.create(
+                produceFile = { prefsDir().resolve(name) },
+                serializer = object : Serializer<T> {
+                    override val defaultValue: T
+                        get() = initialFactory()
+                    private val adapter by lazy(adapterFactory)
+                    override fun readFrom(input: InputStream): T =
+                        adapter.fromJson(String(input.readBytes()))!!
 
-                override fun writeTo(t: T, output: OutputStream) {
-                    output.write(adapter.toJson(t)!!.toByteArray())
-                }
-            },
-            scope = scope.childCoroutineScope(dispatcher)
-        )
-    }
-    object : DataStore<T> {
-        override val data: Flow<T>
-            get() = deferredDataStore.data;
+                    override fun writeTo(t: T, output: OutputStream) {
+                        output.write(adapter.toJson(t)!!.toByteArray())
+                    }
+                },
+                scope = scope.childCoroutineScope(dispatcher)
+            )
+        }
+        return object : DataStore<T> {
+            override val data: Flow<T>
+                get() = deferredDataStore.data;
 
-        override suspend fun updateData(transform: suspend (t: T) -> T): T =
-            deferredDataStore.updateData(transform)
+            override suspend fun updateData(transform: suspend (t: T) -> T): T =
+                deferredDataStore.updateData(transform)
+        }
     }
 }
 

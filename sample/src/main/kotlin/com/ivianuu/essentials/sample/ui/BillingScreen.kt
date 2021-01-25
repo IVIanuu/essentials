@@ -40,7 +40,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val billingHomeItem = HomeItem("Billing") { BillingKey() }
 
 class BillingKey

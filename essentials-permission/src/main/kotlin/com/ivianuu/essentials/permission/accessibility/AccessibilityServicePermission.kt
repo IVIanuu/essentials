@@ -26,6 +26,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.to
+import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 
 fun AccessibilityServicePermission(
@@ -44,9 +45,10 @@ val Permission.Companion.AccessibilityServiceClass by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class AccessibilityServicePermissionStateProvider(
-    private val accessibilityManager: AccessibilityManager,
-    private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    @Given private val accessibilityManager: AccessibilityManager,
+    @Given private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

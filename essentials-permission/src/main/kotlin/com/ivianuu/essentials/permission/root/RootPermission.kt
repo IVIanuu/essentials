@@ -36,7 +36,8 @@ val Permission.Companion.IsRootPermission by lazy {
     Permission.Key<Unit>("IsRootPermission")
 }
 
-@PermissionStateProviderBinding @Given
+@PermissionStateProviderBinding
+@Given
 class RootPermissionStateProvider(
     @Given private val isShellAvailable: isShellAvailable,
 ) : PermissionStateProvider {
@@ -46,7 +47,8 @@ class RootPermissionStateProvider(
     override suspend fun isGranted(permission: Permission): Boolean = isShellAvailable()
 }
 
-@PermissionRequestHandlerBinding @Given
+@PermissionRequestHandlerBinding
+@Given
 class RootPermissionRequestHandler(
     @Given private val isShellAvailable: isShellAvailable,
     @Given private val showToastRes: showToastRes,

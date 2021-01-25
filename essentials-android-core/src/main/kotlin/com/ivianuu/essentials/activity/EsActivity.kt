@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
@@ -84,7 +85,7 @@ abstract class EsActivity : AppCompatActivity() {
     @Composable protected abstract fun Content()
 }
 
-@ComponentElementBinding<UiComponent>
+@ComponentElementBinding<ActivityComponent>
 @Given class EsActivityComponent(
     @Given val decorateUi: DecorateUi,
     @Given val runUiWorkers: runUiWorkers

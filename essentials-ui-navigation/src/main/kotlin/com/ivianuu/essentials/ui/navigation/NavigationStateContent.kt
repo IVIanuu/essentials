@@ -33,14 +33,15 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
 import kotlin.reflect.KClass
 
 @GivenFun @Composable fun NavigationStateContent(
-    @Given optionFactories: @Remembered Set<NavigationOptionFactory>,
-    @Given uiFactories: @Remembered Set<KeyUiFactoryBinding>,
+    @Given optionFactories: Set<NavigationOptionFactory>,
+    @Given uiFactories: Set<KeyUiFactoryBinding>,
     state: NavigationState,
     modifier: Modifier = Modifier,
 ) {

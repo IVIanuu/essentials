@@ -38,7 +38,9 @@ typealias NavigationOptionFactory = Pair<KClass<*>, (Key) -> NavigationOptions>
 
 @Qualifier annotation class NavigationOptionFactoryBinding
 @Suppress("UNCHECKED_CAST")
-@Macro @NavigationOptionFactoryBinding
-inline fun <T : (K) -> NavigationOptions, reified K : Key> navigationOptionFactoryBindingImpl(
+
+@Macro
+@GivenSetElement
+inline fun <T : @NavigationOptionFactoryBinding (K) -> NavigationOptions, reified K : Key> navigationOptionFactoryBindingImpl(
     @Given instance: T
 ): NavigationOptionFactory = (K::class to instance) as NavigationOptionFactory

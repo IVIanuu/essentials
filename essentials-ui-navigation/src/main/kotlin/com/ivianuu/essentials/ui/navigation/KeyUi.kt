@@ -24,10 +24,12 @@ import com.ivianuu.injekt.Qualifier
 import kotlin.reflect.KClass
 
 @Qualifier annotation class KeyUiBinding<K : Key>
+
 @Suppress("UNCHECKED_CAST")
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 inline fun <T : @KeyUiBinding<K> @Composable () -> Unit, reified K : Key> keyUiBindingImpl(
-    @Given noinline instanceFactory: (K) -> T
+    @Given noinline instanceFactory: (@Given K) -> T
 ): KeyUiFactoryBinding = K::class to instanceFactory as (Key) -> @Composable () -> Unit
 
 typealias KeyUiFactoryBinding = Pair<KClass<out Key>, (Key) -> @Composable () -> Unit>

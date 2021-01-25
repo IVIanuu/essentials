@@ -52,7 +52,8 @@ sealed class TileAction {
 
 @Qualifier annotation class TileStateBinding<T : AbstractFunTileService>
 
-@Macro @Given
+@Macro
+@Given
 fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForKey S : AbstractFunTileService> intoTileMap(
     @Given provider: (CoroutineScope, Actions<TileAction>) -> T,
 ): TileStateElement = keyOf<S>() to provider

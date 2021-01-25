@@ -16,24 +16,31 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.lens
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@Given fun navigationState(
+@Scoped<AppComponent>
+@Given
+fun navigationState(
     @Given intentKeyHandler: intentKeyHandler,
-    @Given scope: CoroutineScope,
-    @Given initial: NavigationState = NavigationState(),
+    @Given scope: GlobalScope,
+    @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Actions<NavigationAction>
-) = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
+): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
     actions
         .filterIsInstance<Push>()
         .onEach { action ->

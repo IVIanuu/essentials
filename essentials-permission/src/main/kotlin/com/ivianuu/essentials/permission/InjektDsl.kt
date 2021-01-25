@@ -16,23 +16,30 @@
 
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
 @Qualifier annotation class PermissionStateProviderBinding
-@Macro @GivenSetElement
-fun <T : @PermissionStateProviderBinding PermissionStateProvider> stateProviderIntoSet(
+
+@Macro
+@GivenSetElement
+fun <T : @PermissionStateProviderBinding S, S : PermissionStateProvider> stateProviderIntoSet(
     @Given instance: T): PermissionStateProvider = instance
 
 @Qualifier annotation class PermissionRequestHandlerBinding
-@Macro @GivenSetElement
-fun <T : @PermissionRequestHandlerBinding PermissionRequestHandler> requestHandlerIntoSet(
+
+@Macro
+@GivenSetElement
+fun <T : @PermissionRequestHandlerBinding S, S : PermissionRequestHandler> requestHandlerIntoSet(
     @Given instance: T): PermissionRequestHandler = instance
 
 @Qualifier annotation class PermissionRequestRouteFactoryBinding
-@Macro @Given
-fun <T : @PermissionRequestRouteFactoryBinding PermissionRequestKeyFactory> permissionRequestKeyFactory(
+
+@Macro
+@Given
+fun <T : @PermissionRequestRouteFactoryBinding (PermissionRequest) -> Key> permissionRequestKeyFactory(
     @Given instance: T
 ): PermissionRequestKeyFactory = instance

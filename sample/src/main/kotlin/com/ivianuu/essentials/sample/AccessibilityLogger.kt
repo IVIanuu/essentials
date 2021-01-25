@@ -24,7 +24,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
-@AccessibilityWorkerBinding @GivenFun
+@AccessibilityWorkerBinding
+@GivenFun
 suspend fun logAccessibility(@Given logger: Logger) {
     runWithCleanup(
         block = {

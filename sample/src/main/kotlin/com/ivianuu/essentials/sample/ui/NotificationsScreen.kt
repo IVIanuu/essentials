@@ -76,10 +76,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 //@HomeItemBinding("Notifications")
 class NotificationsKey
@@ -88,8 +85,8 @@ class NotificationsKey
 @GivenFun
 @Composable
 fun NotificationsScreen(
-    pageState: @UiState NotificationsScreenState,
-    dispatch: DispatchAction<NotificationsScreenAction>,
+    @Given pageState: @UiState NotificationsScreenState,
+    @Given dispatch: DispatchAction<NotificationsScreenAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
@@ -178,7 +175,8 @@ private fun NotificationPermissions(
     }
 }
 
-@UiStateBinding @Given
+@UiStateBinding
+@Given
 fun notificationState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial NotificationsScreenState = NotificationsScreenState(),
@@ -188,7 +186,7 @@ fun notificationState(
     @Given notifications: UiNotifications,
     @Given permission: NotificationsPermission,
     @Given requestPermissions: requestPermissions,
-) = scope.state(initial) {
+): StateFlow<NotificationsScreenState> = scope.state(initial) {
     hasPermissions(listOf(permission))
         .reduce { copy(hasPermissions = it) }
         .launchIn(this)

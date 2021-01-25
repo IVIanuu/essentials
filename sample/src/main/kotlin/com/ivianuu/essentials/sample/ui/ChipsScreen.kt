@@ -42,7 +42,8 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val chipsHomeItem = HomeItem("Chips") { ChipsKey() }
 
 class ChipsKey
@@ -51,7 +52,7 @@ class ChipsKey
 @OptIn(ExperimentalLayout::class)
 @GivenFun
 @Composable
-fun ChipsScreen(showToast: showToast) {
+fun ChipsScreen(@Given showToast: showToast) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Chips") }) }
     ) {

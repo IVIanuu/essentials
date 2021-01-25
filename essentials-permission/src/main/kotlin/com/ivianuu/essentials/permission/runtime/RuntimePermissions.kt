@@ -25,6 +25,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.util.startActivityForResult
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
 fun RuntimePermission(
@@ -40,8 +41,9 @@ val Permission.Companion.RuntimePermissionName by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class RuntimePermissionStateProvider(
-    private val appContext: AppContext,
+    @Given private val appContext: AppContext,
 ) : PermissionStateProvider {
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission
@@ -52,8 +54,9 @@ class RuntimePermissionStateProvider(
 }
 
 @PermissionRequestHandlerBinding
+@Given
 class RuntimePermissionRequestHandler(
-    private val startActivityForResult: startActivityForResult<String, Boolean>,
+    @Given private val startActivityForResult: startActivityForResult<String, Boolean>,
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.RuntimePermissionName in permission

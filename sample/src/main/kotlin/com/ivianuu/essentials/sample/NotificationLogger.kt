@@ -24,7 +24,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
-@NotificationWorkerBinding @GivenFun
+@NotificationWorkerBinding
+@GivenFun
 suspend fun logNotifications(@Given logger: Logger) {
     runWithCleanup(
         block = {

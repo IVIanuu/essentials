@@ -28,7 +28,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val workHomeItem = HomeItem("Work") { WorkKey() }
 
 class WorkKey

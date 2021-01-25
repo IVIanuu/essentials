@@ -34,6 +34,7 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 
 @ActionFactoryBinding
 class AppActionFactory(
@@ -66,10 +67,11 @@ class AppActionFactory(
 }
 
 @ActionPickerDelegateBinding
+@Given
 class AppActionPickerDelegate(
-    private val launchableAppFilter: LaunchableAppFilter,
-    private val pickApp: pushKeyForResult<AppPickerKey, AppInfo>,
-    private val stringResource: stringResource,
+    @Given private val launchableAppFilter: LaunchableAppFilter,
+    @Given private val pickApp: pushKeyForResult<AppPickerKey, AppInfo>,
+    @Given private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_app)

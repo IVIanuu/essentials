@@ -27,17 +27,13 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import com.ivianuu.essentials.util.openAppUi
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 
-@UiStateBinding @Given
+@UiStateBinding
+@Given
 fun defaultPermissionState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial PermissionState = PermissionState(),
@@ -47,7 +43,7 @@ fun defaultPermissionState(
     @Given key: DefaultPermissionKey,
     @Given openAppUi: openAppUi,
     @Given requestHandler: requestHandler,
-) = scope.state(initial) {
+): StateFlow<PermissionState> = scope.state(initial) {
     state
         .filter {
             key.request.permissions

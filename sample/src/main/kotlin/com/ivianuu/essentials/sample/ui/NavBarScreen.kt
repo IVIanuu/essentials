@@ -88,7 +88,7 @@ fun NavBarScreen(
             var hideNavBar by rememberState { false }
             onCommit(hideNavBar) { updateNavBarState(hideNavBar) }
 
-            // reshow nav bar when exiting the screen
+            // reshow nav bar when leaving the screen
             onDispose { updateNavBarState(false) }
 
             val secureSettingsPermission = remember {

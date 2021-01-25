@@ -25,6 +25,7 @@ import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.injekt.Given
 
 fun WriteSecureSettingsPermission(vararg metadata: Permission.Pair<*>) = Permission(
     Permission.IsWriteSecureSettingsPermission to Unit,
@@ -36,8 +37,9 @@ val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class WriteSecureSettingsPermissionStateProvider(
-    private val hasSecureSettingsPermission: hasSecureSettingsPermission,
+    @Given private val hasSecureSettingsPermission: hasSecureSettingsPermission,
 ) : PermissionStateProvider {
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission
@@ -47,8 +49,9 @@ class WriteSecureSettingsPermissionStateProvider(
 }
 
 @PermissionRequestHandlerBinding
+@Given
 class WriteSecureSettingsPermissionRequestHandler(
-    private val requestSecureSettings: pushKeyForResult<SecureSettingsKey, Boolean>,
+    @Given private val requestSecureSettings: pushKeyForResult<SecureSettingsKey, Boolean>,
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsWriteSecureSettingsPermission in permission

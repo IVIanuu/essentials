@@ -22,14 +22,15 @@ import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.sample.ui.DummySku
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @AppInitializerBinding
 @GivenFun
 fun initializePurchases(
-    globalScope: GlobalScope,
-    updateDebugPrefs: updatePref<DebugBillingPrefs>,
+    @Given globalScope: GlobalScope,
+    @Given updateDebugPrefs: updatePref<DebugBillingPrefs>,
 ) {
     globalScope.launch {
         updateDebugPrefs {

@@ -26,8 +26,8 @@ import com.ivianuu.injekt.android.AppContext
 
 @AppInitializerBinding @GivenFun
 fun initializeWorkers(
-    appContext: AppContext,
-    workerFactory: WorkerFactory,
+    @Given appContext: AppContext,
+    @Given workerFactory: WorkerFactory,
 ) {
     WorkManager.initialize(
         appContext,

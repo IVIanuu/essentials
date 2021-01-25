@@ -5,7 +5,7 @@ import com.ivianuu.injekt.component.initializeApp
 
 class App : EsApp() {
     override fun onCreate() {
-        super.onCreate()
         initializeApp()
+        super.onCreate()
     }
 }

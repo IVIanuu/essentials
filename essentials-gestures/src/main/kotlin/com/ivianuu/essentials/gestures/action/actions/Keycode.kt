@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.essentials.util.stringResourceWithArguments
+import com.ivianuu.injekt.Given
 
 @ActionFactoryBinding
 class KeycodeActionFactory(
@@ -60,9 +61,10 @@ class KeycodeActionFactory(
 }
 
 @ActionPickerDelegateBinding
+@Given
 class KeycodeActionPickerDelegate(
-    private val pickActionKeycode: pushKeyForResult<TextInputKey, String>,
-    private val stringResource: stringResource,
+    @Given private val pickActionKeycode: pushKeyForResult<TextInputKey, String>,
+    @Given private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_keycode)

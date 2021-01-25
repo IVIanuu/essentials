@@ -25,8 +25,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Qualifier annotation class AccessibilityWorkerBinding
-@Macro @GivenSetElement
-fun <T : @AccessibilityWorkerBinding AccessibilityWorker> accessibilityWorkerBindingImpl(
+
+@Macro
+@GivenSetElement
+fun <T : @AccessibilityWorkerBinding suspend () -> Unit> accessibilityWorkerBindingImpl(
     @Given instance: T
 ): AccessibilityWorker = instance
 

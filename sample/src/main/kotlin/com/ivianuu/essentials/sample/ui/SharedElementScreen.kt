@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 //@HomeItemBinding("Shared element")
@@ -41,7 +42,7 @@ class SharedElementKey(val color: Color)
 @KeyUiBinding<SharedElementKey>
 @GivenFun
 @Composable
-fun SharedElementScreen(key: SharedElementKey) {
+fun SharedElementScreen(@Given key: SharedElementKey) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
@@ -57,7 +58,8 @@ fun SharedElementScreen(key: SharedElementKey) {
     }
 }
 
-@NavigationOptionFactoryBinding @GivenFun
+@NavigationOptionFactoryBinding
+@GivenFun
 fun createSharedElementNavigationOptions(key: SharedElementKey): NavigationOptions = NavigationOptions(
     enterTransition = SharedElementStackTransition("Shared element" to "b"),
     exitTransition = SharedElementStackTransition("Shared element" to "b")

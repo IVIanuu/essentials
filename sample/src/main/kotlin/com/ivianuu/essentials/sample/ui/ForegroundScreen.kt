@@ -67,10 +67,10 @@ class ForegroundKey
 @GivenFun
 @Composable
 fun ForegroundScreen(
-    createForegroundNotification: createForegroundNotification,
-    foregroundState: ForegroundScreenState,
-    notificationManager: NotificationManager,
-    systemBuildInfo: SystemBuildInfo,
+    @Given createForegroundNotification: createForegroundNotification,
+    @Given foregroundState: ForegroundScreenState,
+    @Given notificationManager: NotificationManager,
+    @Given systemBuildInfo: SystemBuildInfo,
 ) {
     val currentForegroundState by foregroundState.collectAsState()
     if (systemBuildInfo.sdk >= 26) {

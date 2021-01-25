@@ -21,11 +21,14 @@ import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.work.WorkerBinding
 import java.util.UUID
 
 abstract class WorkerId(val value: String)
 
-@Given class FunctionalWorker(
+@WorkerBinding
+@Given
+class FunctionalWorker(
     @Given workers: Set<WorkerElement>,
     @Given context: Context,
     @Given workerParams: WorkerParameters,

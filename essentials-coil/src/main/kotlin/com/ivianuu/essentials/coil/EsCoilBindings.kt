@@ -53,12 +53,16 @@ import kotlin.reflect.KClass
     .build()
 
 @Qualifier annotation class DecoderBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
 
 @Qualifier annotation class FetcherBinding
-@Macro @GivenSetElement
-inline fun <reified F : Fetcher<T>, reified T : Any> fetcherBindingImpl(@Given instance: F): FetcherPair<Any> =
+
+@Macro
+@GivenSetElement
+inline fun <reified F : @FetcherBinding Fetcher<T>, reified T : Any> fetcherBindingImpl(@Given instance: F): FetcherPair<Any> =
     FetcherPair(instance, T::class) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
@@ -67,13 +71,17 @@ data class FetcherPair<T : Any>(
 )
 
 @Qualifier annotation class InterceptorBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <T : @InterceptorBinding Interceptor> interceptorBindingImpl(@Given instance: T): Interceptor =
     instance
 
 @Qualifier annotation class MapperBinding
-@Macro @GivenSetElement
-inline fun <reified M : Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
+
+@Macro
+@GivenSetElement
+inline fun <reified M : @MapperBinding Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
     @Given instance: M): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
 
 data class MapperPair<T : Any>(

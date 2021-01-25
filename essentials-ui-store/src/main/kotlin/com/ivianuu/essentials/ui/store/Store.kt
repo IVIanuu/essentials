@@ -37,10 +37,12 @@ import kotlin.reflect.typeOf
 
 @Qualifier annotation class UiStateBinding
 
-@Macro @Given
-@Composable fun <@ForKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
+@Macro
+@Given
+@Composable
+fun <@ForKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
     @Given defaultDispatcher: DefaultDispatcher,
-    @Given provider: (CoroutineScope) -> T
+    @Given provider: (@Given CoroutineScope) -> T
 ): StateFlow<S> = rememberRetained(keyOf<T>()) {
     UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
 }.store

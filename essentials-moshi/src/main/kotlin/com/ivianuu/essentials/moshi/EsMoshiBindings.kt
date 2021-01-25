@@ -23,7 +23,8 @@ import com.squareup.moshi.Moshi
 
 @Qualifier annotation class JsonAdapterBinding
 
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 fun <T : @JsonAdapterBinding Any> jsonAdapterImpl(@Given instance: T): JsonAdapter = instance
 
 typealias JsonAdapter = Any

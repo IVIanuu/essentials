@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
-import com.ivianuu.essentials.datastore.android.prefBinding
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -45,7 +45,8 @@ import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 
 class PrefsKey
@@ -158,4 +159,4 @@ data class SamplePrefs(
     val singleChoice: String = "C",
 )
 
-@Module val samplePrefsModule = prefBinding<SamplePrefs>("sample_prefs")
+@Module val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")

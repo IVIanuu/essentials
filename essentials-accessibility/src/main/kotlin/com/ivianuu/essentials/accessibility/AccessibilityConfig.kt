@@ -46,7 +46,9 @@ data class AccessibilityConfig(
 )
 
 @Qualifier annotation class AccessibilityConfigBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <T : @AccessibilityConfigBinding AccessibilityConfig> accessibilityConfigBindingImpl(
     @Given instance: () -> T
 ): () -> AccessibilityConfig = instance

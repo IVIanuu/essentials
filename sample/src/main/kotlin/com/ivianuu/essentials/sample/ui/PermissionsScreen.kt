@@ -44,16 +44,20 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-//@HomeItemBinding("Permissions")
+@HomeItemBinding
+@Given
+val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
+
 class PermissionsKey
 
 @KeyUiBinding<PermissionsKey>
 @GivenFun
 @Composable
-fun PermissionsScreen(requestPermissions: requestPermissions) {
+fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {

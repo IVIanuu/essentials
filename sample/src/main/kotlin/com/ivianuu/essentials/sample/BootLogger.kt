@@ -22,7 +22,8 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-@BootListenerBinding @GivenFun
+@BootListenerBinding
+@GivenFun
 suspend fun logBoot(@Given logger: Logger) {
     logger.d { "booted!" }
 }

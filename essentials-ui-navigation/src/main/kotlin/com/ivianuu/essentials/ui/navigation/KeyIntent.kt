@@ -27,7 +27,8 @@ import kotlin.reflect.KClass
 
 @Qualifier annotation class KeyIntentFactoryBinding<K : Any>
 @Suppress("UNCHECKED_CAST")
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 inline fun <
         T : @KeyIntentFactoryBinding<K> (K) -> Intent,
         reified K : Any> keyIntentFactoryBindingImpl(

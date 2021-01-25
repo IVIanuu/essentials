@@ -29,7 +29,9 @@ import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.keyOf
 
 @Qualifier annotation class AppInitializerBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <@ForKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
     @Given instance: T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT

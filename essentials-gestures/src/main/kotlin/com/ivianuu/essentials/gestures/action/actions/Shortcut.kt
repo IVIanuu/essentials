@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
 @ActionFactoryBinding
@@ -75,9 +76,10 @@ class ShortcutActionFactory(
 }
 
 @ActionPickerDelegateBinding
+@Given
 class ShortcutActionPickerDelegate(
-    private val pickShortcut: pushKeyForResult<ShortcutPickerKey, Shortcut>,
-    private val stringResource: stringResource,
+    @Given private val pickShortcut: pushKeyForResult<ShortcutPickerKey, Shortcut>,
+    @Given private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_shortcut)

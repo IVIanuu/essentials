@@ -35,7 +35,8 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 
 class UnlockKey

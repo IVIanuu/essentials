@@ -28,7 +28,8 @@ import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.GivenFun
 
 @UiDecoratorBinding
-@GivenFun @Composable
+@GivenFun
+@Composable
 fun ProvideActivityRetainedObjects(content: @Composable () -> Unit) {
     val activity = AmbientContext.currentOrNull as? ComponentActivity
     if (activity != null) {

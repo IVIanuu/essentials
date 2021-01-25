@@ -38,11 +38,13 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@UiStateBinding @Given
+@UiStateBinding
+@Given
 fun actionPickerState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial ActionPickerState = ActionPickerState(),
@@ -52,7 +54,7 @@ fun actionPickerState(
     @Given getAction: getAction,
     @Given popTopKeyWithResult: popTopKeyWithResult<ActionPickerResult>,
     @Given requestPermissions: requestPermissions,
-) = scope.state(initial) {
+): StateFlow<ActionPickerState> = scope.state(initial) {
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
 
     actions

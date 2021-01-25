@@ -47,7 +47,8 @@ typealias WorkerElement = Pair<WorkerId, () -> Worker>
 @Qualifier annotation class WorkerBinding<S>
 
 @Suppress("UNCHECKED_CAST")
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 fun <P : @WorkerBinding<S> () -> suspend WorkScope.() -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
     @Given id: S,
     @Given factory: P

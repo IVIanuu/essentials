@@ -25,8 +25,7 @@ import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
 class DefaultActivity : EsActivity() {
-    @Composable
-    override fun Content() {
+    @Composable override fun Content() {
         AmbientUiComponent.current
             .get<DefaultActivityComponent>()
             .appUi()

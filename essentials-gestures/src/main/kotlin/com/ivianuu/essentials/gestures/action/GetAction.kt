@@ -24,20 +24,19 @@ import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
 @GivenFun suspend fun getAllActions(
-    @Given actions: Map<String, () -> Action>,
+    @Given actions: Set<Pair<String, () -> Action>>,
     @Given defaultDispatcher: DefaultDispatcher,
 ): List<Action> = withContext(defaultDispatcher) {
-    actions.values
-        .map { it() }
+    actions.map { it.second() }
 }
 
 @GivenFun suspend fun getAction(
     key: String,
-    @Given actions: Map<String, () -> Action>,
+    @Given actions: Set<Pair<String, () -> Action>>,
     @Given actionFactories: () -> Set<ActionFactory>,
     @Given defaultDispatcher: DefaultDispatcher
 ): Action = withContext(defaultDispatcher) {
-    actions[key]
+    actions.toMap()[key]
         ?.invoke()
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
@@ -47,11 +46,11 @@ import kotlinx.coroutines.withContext
 
 @GivenFun suspend fun getActionExecutor(
     key: String,
-    @Given actionsExecutors: Map<String, ActionExecutor>,
+    @Given actionsExecutors: Set<Pair<String, ActionExecutor>>,
     @Given actionFactories: () -> Set<ActionFactory>,
     @Given defaultDispatcher: DefaultDispatcher
 ): ActionExecutor = withContext(defaultDispatcher) {
-    actionsExecutors[key]
+    actionsExecutors.toMap()[key]
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
             ?.createExecutor(key)
@@ -60,8 +59,8 @@ import kotlinx.coroutines.withContext
 
 @GivenFun suspend fun getActionSettingsKey(
     id: String,
-    @Given actionSettings: Map<String, Key>,
+    @Given actionSettings: Set<Pair<String, Key>>,
     @Given defaultDispatcher: DefaultDispatcher
 ): Key? = withContext(defaultDispatcher) {
-    actionSettings[id]
+    actionSettings.toMap()[id]
 }

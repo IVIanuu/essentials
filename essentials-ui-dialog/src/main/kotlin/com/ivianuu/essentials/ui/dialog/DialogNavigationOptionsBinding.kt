@@ -28,7 +28,8 @@ import com.ivianuu.injekt.Qualifier
 @Qualifier annotation class DialogNavigationOptionsBinding<K : Key>
 
 @NavigationOptionFactoryBinding
-@Macro @Given
+@Macro
+@Given
 fun <T : @DialogNavigationOptionsBinding<K> (K) -> NavigationOptions, K : Key>
         dialogNavigationOptionsBindingImpl() = NavigationOptions(
     opaque = true,

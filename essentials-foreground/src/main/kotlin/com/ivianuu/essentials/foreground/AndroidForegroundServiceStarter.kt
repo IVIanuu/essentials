@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -34,9 +35,9 @@ import kotlin.time.milliseconds
 @AppWorkerBinding
 @GivenFun
 suspend fun applyAndroidForegroundServiceState(
-    appContext: AppContext,
-    logger: Logger,
-    state: Flow<InternalForegroundState>,
+    @Given appContext: AppContext,
+    @Given logger: Logger,
+    @Given state: Flow<InternalForegroundState>,
 ) {
     state
         .debounce(300.milliseconds)

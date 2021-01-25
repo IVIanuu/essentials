@@ -36,7 +36,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @UiWorkerBinding
-@GivenFun suspend fun handleAndroidBackPresses(
+@GivenFun
+suspend fun handleAndroidBackPresses(
     @Given activity: ComponentActivity,
     @Given dispatchNavigation: DispatchAction<NavigationAction>,
     @Given navigationState: Flow<NavigationState>,

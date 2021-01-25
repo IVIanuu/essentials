@@ -27,11 +27,13 @@ import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@UiStateBinding @Given
+@UiStateBinding
+@Given
 fun secureSettingsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial SecureSettingsState = SecureSettingsState(),
@@ -40,7 +42,7 @@ fun secureSettingsState(
     @Given grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
     @Given popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
     @Given showToastRes: showToastRes,
-) = scope.state(initial) {
+): StateFlow<SecureSettingsState> = scope.state(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(true) }
     actions
         .onEach { action ->

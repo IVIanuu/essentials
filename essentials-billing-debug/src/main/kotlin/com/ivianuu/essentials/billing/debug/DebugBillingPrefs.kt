@@ -18,7 +18,7 @@ package com.ivianuu.essentials.billing.debug
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.datastore.android.prefBinding
+import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.moshi.JsonAdapterBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
@@ -33,10 +33,10 @@ data class DebugBillingPrefs(
     @Json(name = "billing_purchases") val purchases: List<Purchase> = emptyList(),
 )
 
-@Module val debugBillingPrefsBinding =
-    prefBinding<DebugBillingPrefs>("debug_billing_prefs")
+@Module val debugBillingPrefsModule = PrefModule<DebugBillingPrefs>("debug_billing_prefs")
 
-@JsonAdapterBinding @Given
+@JsonAdapterBinding
+@Given
 class PurchaseAdapter {
     @ToJson fun toJson(purchase: Purchase) = "${purchase.originalJson}=:=${purchase.signature}"
     @FromJson fun fromJson(value: String): Purchase {
@@ -45,7 +45,8 @@ class PurchaseAdapter {
     }
 }
 
-@JsonAdapterBinding @Given
+@JsonAdapterBinding
+@Given
 class SkuDetailsAdapter {
     @ToJson fun toJson(skuDetails: SkuDetails) = skuDetails.originalJson
     @FromJson fun fromJson(value: String): SkuDetails = SkuDetails(value)

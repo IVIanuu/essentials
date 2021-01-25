@@ -34,14 +34,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<ShortcutPickerKey>
 @GivenFun
 @Composable
 fun ShortcutPickerScreen(
-    state: @UiState ShortcutPickerState,
-    dispatch: DispatchAction<ShortcutPickerAction>,
+    @Given state: @UiState ShortcutPickerState,
+    @Given dispatch: DispatchAction<ShortcutPickerAction>,
 ) {
     Scaffold(
         topBar = {

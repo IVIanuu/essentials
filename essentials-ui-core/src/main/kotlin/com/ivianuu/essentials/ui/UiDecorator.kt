@@ -32,7 +32,9 @@ import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.keyOf
 
 @Qualifier annotation class UiDecoratorBinding
-@Macro @GivenSetElement
+
+@Macro
+@GivenSetElement
 fun <@ForKey T : @UiDecoratorBinding @Composable (@Composable () -> Unit) -> Unit> uiDecoratorBindingImpl(
     @Given instance: T,
     @Given config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
@@ -81,11 +83,12 @@ fun DecorateUi(
 
 @Qualifier annotation class AppThemeBinding
 
-typealias AppTheme = @Composable (@Composable () -> Unit) -> Unit
+typealias AppTheme = @UiDecoratorBinding @Composable (@Composable () -> Unit) -> Unit
 
-@Macro @UiDecoratorBinding
-fun <T : @AppThemeBinding AppTheme> appThemeBindingImpl(@Given instance: T) =
-    instance
+@Macro
+@Given
+fun <T : @AppThemeBinding @Composable (@Composable () -> Unit) -> Unit> appThemeBindingImpl(@Given instance: T): AppTheme =
+    instance as @Composable (@androidx.compose.runtime.Composable () -> Unit) -> Unit
 
 @Given fun appThemeConfigBindingImpl() =
     UiDecoratorConfig<AppTheme>(dependencies = setOf(keyOf<ProvideSystemBarManager>()))

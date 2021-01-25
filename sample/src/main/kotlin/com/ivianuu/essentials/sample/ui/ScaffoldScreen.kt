@@ -56,6 +56,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 import kotlin.time.milliseconds
@@ -67,8 +68,8 @@ class ScaffoldKey
 @GivenFun
 @Composable
 fun ScaffoldScreen(
-    pickFabPosition: pushKeyForResult<FabPositionKey, FabPosition>,
-    uiScope: UiScope,
+    @Given pickFabPosition: pushKeyForResult<FabPositionKey, FabPosition>,
+    @Given uiScope: UiScope,
 ) {
     val controls = remember { ScaffoldControls() }
 

@@ -38,7 +38,7 @@ class AboutKey
 @GivenFun @Composable
 fun AboutScreen(
     @Given buildInfo: BuildInfo,
-    @Given privacyPolicyUrl: PrivacyPolicyUrl?,
+    @Given privacyPolicyUrl: PrivacyPolicyUrl? = null,
     @Given aboutSection: AboutSection,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {

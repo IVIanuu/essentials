@@ -23,6 +23,7 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -31,10 +32,10 @@ import kotlinx.coroutines.flow.onEach
 @AppWorkerBinding
 @GivenFun
 suspend fun updateAndroidTorchState(
-    cameraManager: CameraManager,
-    showToastRes: showToastRes,
-    dispatch: DispatchAction<TorchAction>,
-    state: Flow<TorchState>
+    @Given cameraManager: CameraManager,
+    @Given showToastRes: showToastRes,
+    @Given dispatch: DispatchAction<TorchAction>,
+    @Given state: Flow<TorchState>
 ) {
     state
         .onEach { currentState ->

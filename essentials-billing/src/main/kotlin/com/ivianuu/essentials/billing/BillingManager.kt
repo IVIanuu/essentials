@@ -71,7 +71,7 @@ interface BillingManager {
 @Scoped<AppComponent> @Given
 class BillingManagerImpl(
     @Given private val appForegroundState: Flow<AppForegroundState>,
-    @Given billingClientFactory: (PurchasesUpdatedListener) -> BillingClient,
+    @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val ioDispatcher: IODispatcher,
     @Given private val logger: Logger,

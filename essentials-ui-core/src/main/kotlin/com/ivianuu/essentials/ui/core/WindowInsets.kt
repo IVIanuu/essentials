@@ -89,7 +89,8 @@ fun ProvideInsets(
 }
 
 @UiDecoratorBinding
-@GivenFun @Composable
+@GivenFun
+@Composable
 fun ProvideWindowInsets(content: @Composable () -> Unit) {
     val ownerView = AmbientView.current
     val density = AmbientDensity.current

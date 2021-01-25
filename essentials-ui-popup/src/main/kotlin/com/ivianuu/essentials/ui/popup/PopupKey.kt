@@ -81,7 +81,8 @@ fun PopupUi(
 }
 
 @NavigationOptionFactoryBinding
-@GivenFun fun createPopupNavigationOptions(key: PopupKey): NavigationOptions = NavigationOptions(
+@GivenFun
+fun createPopupNavigationOptions(key: PopupKey): NavigationOptions = NavigationOptions(
     opaque = true,
     enterTransition = FadeStackTransition(),
     exitTransition = FadeStackTransition()

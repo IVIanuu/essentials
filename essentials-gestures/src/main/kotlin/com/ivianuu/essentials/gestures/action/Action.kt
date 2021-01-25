@@ -51,7 +51,8 @@ abstract class ActionId(val value: String)
 
 @Qualifier annotation class ActionBinding<I : ActionId>
 
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 fun <T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
     @Given id: ActionId,
     @Given provider: () -> T,
@@ -61,7 +62,8 @@ typealias ActionExecutor = suspend () -> Unit
 
 @Qualifier annotation class ActionExecutorBinding<I : ActionId>
 
-@Macro @Given
+@Macro
+@Given
 fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorIntoMap(
     @Given id: I,
     @Given instance: T
@@ -90,10 +92,10 @@ fun <T : @ActionSettingsKeyBinding<I> Any, I : ActionId> actionSettingsKeyBindin
 
 @Qualifier annotation class ActionFactoryBinding
 
-@Macro @GivenSetElement
+@Macro
+@GivenSetElement
 fun <T : @ActionFactoryBinding ActionFactory> actionFactoryBindingImpl(
-    @Given instance: T): Set<ActionFactory> =
-    setOf(instance)
+    @Given instance: T): ActionFactory = instance
 
 interface ActionPickerDelegate {
     val title: String
@@ -104,6 +106,7 @@ interface ActionPickerDelegate {
 
 @Qualifier annotation class ActionPickerDelegateBinding
 
-@Macro @GivenSetElement
-fun <T : ActionPickerDelegate> actionPickerDelegateBindingImpl(
+@Macro
+@GivenSetElement
+fun <T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegateBindingImpl(
     @Given instance: T): ActionPickerDelegate = instance

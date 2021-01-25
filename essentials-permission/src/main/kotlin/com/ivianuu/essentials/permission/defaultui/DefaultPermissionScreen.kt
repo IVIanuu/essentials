@@ -33,14 +33,15 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<DefaultPermissionKey>
 @GivenFun
 @Composable
 fun DefaultPermissionScreen(
-    state: @UiState PermissionState,
-    dispatch: DispatchAction<PermissionAction>,
+    @Given state: @UiState PermissionState,
+    @Given dispatch: DispatchAction<PermissionAction>,
 ) {
     Scaffold(
         topBar = {

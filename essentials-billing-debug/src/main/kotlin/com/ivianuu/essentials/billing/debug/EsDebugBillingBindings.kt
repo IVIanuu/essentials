@@ -21,6 +21,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
 
 @Given fun billingClient(
-    @Given debugBillingClientFactory: (PurchasesUpdatedListener) -> DebugBillingClient,
+    @Given debugBillingClientFactory: (@Given PurchasesUpdatedListener) -> DebugBillingClient,
     @Given listener: PurchasesUpdatedListener
 ): BillingClient = debugBillingClientFactory(listener)

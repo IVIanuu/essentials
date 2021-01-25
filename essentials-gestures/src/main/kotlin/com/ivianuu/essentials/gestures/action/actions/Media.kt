@@ -26,7 +26,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.datastore.android.prefBinding
+import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -57,13 +57,7 @@ import com.ivianuu.injekt.android.AppContext
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 @GivenFun fun mediaAction(
     id: ActionId,
@@ -108,7 +102,7 @@ data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
 
-@Module val mediaActionPrefsModule = prefBinding<MediaActionPrefs>("media_action_prefs")
+@Module val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey
 
@@ -116,8 +110,8 @@ class MediaActionSettingsKey
 @GivenFun
 @Composable
 fun MediaActionSettingsScreen(
-    state: @UiState MediaActionSettingsState,
-    dispatch: DispatchAction<MediaActionSettingsAction>,
+    @Given state: @UiState MediaActionSettingsState,
+    @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
         InsettingScrollableColumn {
@@ -143,17 +137,18 @@ sealed class MediaActionSettingsAction {
     object UpdateMediaApp : MediaActionSettingsAction()
 }
 
-@UiStateBinding @Given
+@UiStateBinding
+@Given
 fun mediaActionSettingsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
     @Given actions: Actions<MediaActionSettingsAction>,
     @Given getAppInfo: getAppInfo,
-    @Given intentAppFilterFactory: (Intent) -> IntentAppFilter,
+    @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given prefs: Flow<MediaActionPrefs>,
     @Given pickMediaApp: pushKeyForResult<AppPickerKey, AppInfo>,
     @Given updatePrefs: updatePref<MediaActionPrefs>,
-) = scope.state(initial) {
+): StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }

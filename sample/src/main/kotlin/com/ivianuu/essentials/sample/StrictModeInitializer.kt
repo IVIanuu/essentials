@@ -20,7 +20,8 @@ import android.os.StrictMode
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.GivenFun
 
-@AppInitializerBinding @GivenFun
+@AppInitializerBinding
+@GivenFun
 fun initializeStrictModule() {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()

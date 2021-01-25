@@ -34,6 +34,7 @@ import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
+@Given
 val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
 
 class ActionsKey

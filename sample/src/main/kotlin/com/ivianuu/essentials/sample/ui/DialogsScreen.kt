@@ -60,7 +60,8 @@ import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
 class DialogsKey
@@ -368,7 +369,7 @@ data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 @KeyUiBinding<DialogLauncherKey>
 @GivenFun
 @Composable
-fun DialogLauncherDialog(key: DialogLauncherKey) {
+fun DialogLauncherDialog(@Given key: DialogLauncherKey) {
     DialogWrapper { key.dialog() }
 }
 

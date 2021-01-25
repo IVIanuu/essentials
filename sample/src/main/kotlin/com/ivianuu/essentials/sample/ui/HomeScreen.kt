@@ -45,10 +45,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.*
 
 @HomeKeyBinding @Given class HomeKey
 
@@ -56,9 +53,9 @@ import com.ivianuu.injekt.Qualifier
 @GivenFun
 @Composable
 fun HomeScreen(
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    items: @Remembered Set<HomeItem>,
-    showToast: showToast,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given items: @Remembered Set<HomeItem>,
+    @Given showToast: showToast,
 ) {
     val finalItems = remember(items) { items.sortedBy { it.title } }
     Scaffold(
@@ -142,6 +139,7 @@ data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
 
 @Qualifier annotation class HomeItemBinding
 
-@Macro @Given
+@Macro
+@GivenSetElement
 fun <T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
     instance

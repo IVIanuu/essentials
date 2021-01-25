@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticAmbientOf
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement

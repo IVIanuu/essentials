@@ -27,7 +27,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
-@UiWorkerBinding @GivenFun
+@UiWorkerBinding
+@GivenFun
 suspend fun UiLogger(@Given logger: Logger) {
     runWithCleanup(
         block = {
