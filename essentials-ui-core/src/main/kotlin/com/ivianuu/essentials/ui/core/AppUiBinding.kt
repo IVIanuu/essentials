@@ -22,7 +22,8 @@ import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
 @Qualifier annotation class AppUiBinding
-@Macro @Given
+@Macro
+@Given
 fun <T : @AppUiBinding @Composable () -> Unit> appUiBindingImpl(@Given instance: T): AppUi =
     instance as @Composable () -> Unit
 

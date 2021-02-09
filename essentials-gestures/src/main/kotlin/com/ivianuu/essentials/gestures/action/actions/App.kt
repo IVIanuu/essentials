@@ -37,10 +37,11 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 
 @ActionFactoryBinding
+@Given
 class AppActionFactory(
-    private val getAppInfo: getAppInfo,
-    private val packageManager: PackageManager,
-    private val sendIntent: sendIntent,
+    @Given private val getAppInfo: getAppInfo,
+    @Given private val packageManager: PackageManager,
+    @Given private val sendIntent: sendIntent,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {

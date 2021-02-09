@@ -84,7 +84,8 @@ interface ActionFactory {
 
 @Qualifier annotation class ActionSettingsKeyBinding<I : ActionId>
 
-@Macro @Given
+@Macro
+@Given
 fun <T : @ActionSettingsKeyBinding<I> Any, I : ActionId> actionSettingsKeyBindingImpl(
     @Given id: ActionId,
     @Given instance: T,
@@ -94,7 +95,7 @@ fun <T : @ActionSettingsKeyBinding<I> Any, I : ActionId> actionSettingsKeyBindin
 
 @Macro
 @GivenSetElement
-fun <T : @ActionFactoryBinding ActionFactory> actionFactoryBindingImpl(
+fun <T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
     @Given instance: T): ActionFactory = instance
 
 interface ActionPickerDelegate {

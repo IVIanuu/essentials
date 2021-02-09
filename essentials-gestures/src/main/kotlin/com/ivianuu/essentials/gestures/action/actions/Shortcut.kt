@@ -44,10 +44,10 @@ import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
 @ActionFactoryBinding
+@Given
 class ShortcutActionFactory(
-    private val
-    logger: Logger,
-    private val sendIntent: sendIntent,
+    @Given private val logger: Logger,
+    @Given private val sendIntent: sendIntent,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {

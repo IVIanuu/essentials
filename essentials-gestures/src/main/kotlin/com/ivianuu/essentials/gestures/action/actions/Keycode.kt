@@ -36,10 +36,11 @@ import com.ivianuu.essentials.util.stringResourceWithArguments
 import com.ivianuu.injekt.Given
 
 @ActionFactoryBinding
+@Given
 class KeycodeActionFactory(
-    private val permissions: ActionPermissions,
-    private val runRootCommand: runRootCommand,
-    private val stringResourceWithArguments: stringResourceWithArguments,
+    @Given private val permissions: ActionPermissions,
+    @Given private val runRootCommand: runRootCommand,
+    @Given private val stringResourceWithArguments: stringResourceWithArguments,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
