@@ -28,7 +28,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
-@Scoped<AppComponent> @Given fun torchState(
+@Scoped<AppComponent>
+@Given
+fun torchState(
     @Given scope: GlobalScope,
     @Given initial: @Initial TorchState = TorchState(),
     @Given actions: Actions<TorchAction>

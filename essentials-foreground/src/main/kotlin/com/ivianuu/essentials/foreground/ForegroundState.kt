@@ -22,6 +22,8 @@ import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -40,6 +42,8 @@ sealed class ForegroundState {
 }
 
 @Qualifier annotation class ForegroundStateBinding
+@Macro
+@GivenSetElement
 fun <T : @ForegroundStateBinding Flow<ForegroundState>> foregroundStateBindingImpl(
     @Given instance: T): Flow<ForegroundState> = instance
 

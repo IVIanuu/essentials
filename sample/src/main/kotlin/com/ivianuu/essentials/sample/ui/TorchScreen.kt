@@ -38,7 +38,10 @@ import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@HomeItemBinding("Torch")
+@HomeItemBinding
+@Given
+val torchHomeItem = HomeItem("Torch") { TorchKey() }
+
 class TorchKey
 
 @KeyUiBinding<TorchKey>
