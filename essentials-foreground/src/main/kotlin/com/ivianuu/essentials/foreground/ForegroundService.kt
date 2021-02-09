@@ -81,7 +81,8 @@ class ForegroundService : EsService() {
 }
 
 @ComponentElementBinding<ServiceComponent>
-@Given class ForegroundServiceComponent(
+@Given
+class ForegroundServiceComponent(
     @Given val internalForegroundState: Flow<InternalForegroundState>,
     @Given val notificationManager: NotificationManager,
     @Given val logger: Logger

@@ -25,6 +25,7 @@ import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -91,7 +92,8 @@ abstract class AbstractFunTileService(
     }
 }
 
-@Scoped<ServiceComponent> @Given
+@ComponentElementBinding<ServiceComponent>
+@Given
 class FunTileServiceComponent(
     @Given val stringResource: stringResource,
     @Given tileStores: Set<TileStateElement>

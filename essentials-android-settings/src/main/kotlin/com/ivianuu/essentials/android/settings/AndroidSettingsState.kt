@@ -37,16 +37,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-fun <S> androidSettingStateBinding(name: String, type: AndroidSettingsType): @Given (
-    @Given GlobalScope,
-    @Given IODispatcher,
-    @Given (String, AndroidSettingsType, S) -> AndroidSettingsAdapter<S>,
-    @Given contentChanges,
-    @Given @Initial S,
-    @Given Actions<AndroidSettingAction<S>>
-) -> StateFlow<S> = { scope, dispatcher, adapterFactory, contentChanges, initial, actions ->
+class AndroidSettingStateModule<T : S, S>(
+    private val name: String,
+    private val type: AndroidSettingsType
+) {
     @Suppress("UNCHECKED_CAST")
-    scope.childCoroutineScope(dispatcher).state(initial) {
+    @Given
+    operator fun invoke(
+        @Given scope: GlobalScope,
+        @Given dispatcher: IODispatcher,
+        @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
+        @Given contentChanges: contentChanges,
+        @Given initial: @Initial T,
+        @Given actions: Actions<AndroidSettingAction<T>>
+    ): StateFlow<T> = scope.childCoroutineScope(dispatcher).state(initial) {
         val adapter = adapterFactory(name, type, initial)
         contentChanges(
             when (type) {
@@ -56,7 +60,7 @@ fun <S> androidSettingStateBinding(name: String, type: AndroidSettingsType): @Gi
             }
         )
             .onStart { emit(Unit) }
-            .map { adapter.get() }
+            .map { adapter.get() as T }
             .reduce { it }
             .launchIn(this)
         actions

@@ -21,24 +21,23 @@ import android.content.Intent
 import android.os.Build
 import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
+object HomeActionId : ActionId("home")
 
-//@ActionBinding("home")
+@ActionBinding<HomeActionId>
+@Given
 fun homeAction(
-    choosePermissions: choosePermissions,
-    stringResource: stringResource,
+    @Given choosePermissions: choosePermissions,
+    @Given stringResource: stringResource,
 ): Action = Action(
-    id = "home",
+    id = HomeActionId,
     title = stringResource(R.string.es_action_home),
     permissions = choosePermissions {
         if (needsHomeIntentWorkaround) emptyList()
@@ -47,12 +46,12 @@ fun homeAction(
     icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
-//@ActionExecutorBinding("home")
+@ActionExecutorBinding<HomeActionId>
 @GivenFun
 suspend fun openHomeScreen(
-    appContext: AppContext,
-    performGlobalAction: performGlobalAction,
-    sendIntent: sendIntent,
+    @Given appContext: AppContext,
+    @Given performGlobalAction: performGlobalAction,
+    @Given sendIntent: sendIntent,
 ) {
     if (!needsHomeIntentWorkaround) {
         performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
@@ -71,3 +70,5 @@ suspend fun openHomeScreen(
         )
     }
 }
+
+private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"

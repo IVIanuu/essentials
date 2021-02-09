@@ -52,6 +52,7 @@ abstract class EsService : Service() {
 }
 
 @ComponentElementBinding<ServiceComponent>
-@Given class EsServiceComponent(
+@Given
+class EsServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher
 )

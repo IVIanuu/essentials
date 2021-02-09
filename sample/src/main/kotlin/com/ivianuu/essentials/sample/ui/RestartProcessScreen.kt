@@ -30,7 +30,10 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-//@HomeItemBinding("Restart process")
+@HomeItemBinding
+@Given
+val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
+
 class RestartProcessKey
 
 @KeyUiBinding<RestartProcessKey>

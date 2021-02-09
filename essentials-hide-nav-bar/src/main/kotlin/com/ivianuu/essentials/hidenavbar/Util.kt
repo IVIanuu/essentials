@@ -21,8 +21,8 @@ import android.graphics.Rect
 import android.os.IBinder
 import android.provider.Settings
 import android.view.Display
+import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.android.settings.androidSettingStateBinding
 import com.ivianuu.essentials.android.settings.updateAndroidSetting
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
@@ -51,29 +51,36 @@ import com.ivianuu.injekt.Module
 
 internal typealias HiddenApiPolicy = Int
 
-@Module val hiddenApiPolicyBinding =
-    androidSettingStateBinding<HiddenApiPolicy>("hidden_api_policy", AndroidSettingsType.GLOBAL)
+@Module
+val hiddenApiPolicyModule =
+    AndroidSettingStateModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 
-@Given val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
+@Given
+val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
 
 internal typealias HiddenApiPolicyPrePieApps = Int
 
-@Module val hiddenApiPolicyPrePieAppsBinding =
-    androidSettingStateBinding<HiddenApiPolicyPrePieApps>("hidden_api_policy_pre_p_apps",
+@Module
+val hiddenApiPolicyPrePieAppsModule =
+    AndroidSettingStateModule<HiddenApiPolicyPrePieApps, Int>("hidden_api_policy_pre_p_apps",
         AndroidSettingsType.GLOBAL)
 
-@Given val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
+@Given
+val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
 
 internal typealias HiddenApiPolicyPieApps = Int
 
-@Module val hiddenApiPolicyPieAppsBinding =
-    androidSettingStateBinding<HiddenApiPolicyPieApps>("hidden_api_policy_p_apps",
+@Module
+val hiddenApiPolicyPieAppsBinding =
+    AndroidSettingStateModule<HiddenApiPolicyPieApps, Int>("hidden_api_policy_p_apps",
         AndroidSettingsType.GLOBAL)
 
-@Given val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
+@Given
+val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
 @SuppressLint("PrivateApi")
-@GivenFun fun setOverscan(@Given logger: Logger, rect: Rect) {
+@GivenFun
+fun setOverscan(@Given logger: Logger, rect: Rect) {
     logger.d { "set overscan $rect" }
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")

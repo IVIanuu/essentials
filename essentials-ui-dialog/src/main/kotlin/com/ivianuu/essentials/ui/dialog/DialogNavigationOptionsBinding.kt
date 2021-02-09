@@ -25,13 +25,9 @@ import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
-@Qualifier annotation class DialogNavigationOptionsBinding<K : Key>
-
-@NavigationOptionFactoryBinding
-@Macro
-@Given
-fun <T : @DialogNavigationOptionsBinding<K> (K) -> NavigationOptions, K : Key>
-        dialogNavigationOptionsBindingImpl() = NavigationOptions(
-    opaque = true,
-    transition = FadeStackTransition()
-)
+fun <K> DialogNavigationOptionsFactory(): (K) -> NavigationOptions = {
+    NavigationOptions(
+        opaque = true,
+        transition = FadeStackTransition()
+    )
+}

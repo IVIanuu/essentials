@@ -78,7 +78,10 @@ import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 
-//@HomeItemBinding("Notifications")
+@HomeItemBinding
+@Given
+val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
+
 class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>

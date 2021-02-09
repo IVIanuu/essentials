@@ -23,21 +23,21 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 object BackActionId : ActionId("back")
 
-//@ActionBinding("back")
-fun backAction(
-    accessibilityAction: accessibilityAction,
-): Action = accessibilityAction(
+@ActionBinding<BackActionId>
+@Given
+fun backAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
     BackActionId,
     R.string.es_action_back,
     singleActionIcon(R.drawable.es_ic_action_back)
 )
 
-//@ActionExecutorBinding("back")
+@ActionExecutorBinding<BackActionId>
 @GivenFun
-suspend fun pressBack(performGlobalAction: performGlobalAction) {
+suspend fun pressBack(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
 }

@@ -23,23 +23,26 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 object SkipPreviousActionId : ActionId("media_skip_previous")
 
-//@ActionBinding("media_skip_previous")
-fun skipPreviousMediaAction(mediaAction: mediaAction): Action = mediaAction(
+@ActionBinding<SkipPreviousActionId>
+@Given
+fun skipPreviousMediaAction(@Given mediaAction: mediaAction): Action = mediaAction(
     SkipPreviousActionId,
     R.string.es_action_media_skip_previous,
     singleActionIcon(R.drawable.es_ic_skip_previous)
 )
 
-//@ActionExecutorBinding("media_skip_previous")
+@ActionExecutorBinding<SkipPreviousActionId>
 @GivenFun
-suspend fun sendSkipPreviousCommand(doMediaAction: doMediaAction) {
+suspend fun sendSkipPreviousCommand(@Given doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
 }
 
-//@ActionSettingsKeyBinding("media_skip_previous")
+@ActionSettingsKeyBinding<SkipPreviousActionId>
+@Given
 inline val skipPreviousMediaActionSettingsKey: MediaActionSettingsKey
     get() = MediaActionSettingsKey()

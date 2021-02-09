@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
@@ -32,7 +33,10 @@ import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 
 /**
  * Requests a screen unlock
@@ -88,7 +92,7 @@ class UnlockScreenActivity : AppCompatActivity() {
             )
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-            /*merge(
+            merge(
                 component.broadcasts(Intent.ACTION_SCREEN_OFF),
                 component.broadcasts(Intent.ACTION_SCREEN_ON),
                 component.broadcasts(Intent.ACTION_USER_PRESENT)
@@ -97,7 +101,7 @@ class UnlockScreenActivity : AppCompatActivity() {
                 .onEach {
                     finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
                 }
-                .launchIn(lifecycleScope)*/
+                .launchIn(lifecycleScope)
         }
     }
 
@@ -124,7 +128,7 @@ class UnlockScreenActivity : AppCompatActivity() {
 
 @ComponentElementBinding<ActivityComponent>
 @Given class UnlockScreenComponent(
-    //@Given val broadcasts: broadcasts,
+    @Given val broadcasts: broadcasts,
     @Given val keyguardManager: KeyguardManager,
     @Given val logger: Logger,
     @Given val systemBuildInfo: SystemBuildInfo

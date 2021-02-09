@@ -19,17 +19,17 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 class FabPositionKey(val preselect: FabPosition)
 
-@DialogNavigationOptionsBinding<FabPositionKey>
 @KeyUiBinding<FabPositionKey>
 @GivenFun
 @Composable
@@ -46,3 +46,7 @@ fun FabPositionDialog(
         )
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val fabPositionDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<FabPositionKey>()

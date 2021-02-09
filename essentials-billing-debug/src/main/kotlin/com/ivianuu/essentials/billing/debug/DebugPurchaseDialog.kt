@@ -35,11 +35,12 @@ import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
@@ -51,7 +52,6 @@ import kotlinx.coroutines.withContext
 
 data class DebugPurchaseKey(val params: BillingFlowParams)
 
-@DialogNavigationOptionsBinding<DebugPurchaseKey>
 @KeyUiBinding<DebugPurchaseKey>
 @GivenFun
 @Composable
@@ -116,5 +116,10 @@ fun DebugPurchaseDialog(
         }
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val debugPurchaseDialogNavigationOptionsFactory
+    get() = DialogNavigationOptionsFactory<DebugPurchaseKey>()
 
 private val GooglePlayGreen = Color(0xFF00A273)

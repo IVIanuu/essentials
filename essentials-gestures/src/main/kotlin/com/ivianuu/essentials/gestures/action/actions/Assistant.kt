@@ -23,24 +23,29 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@ActionBinding("assistant")
+object AssistantActionId : ActionId("assistant")
+
+@ActionBinding<AssistantActionId>
+@Given
 fun assistantAction(
-    stringResource: stringResource,
-    searchManager: SearchManager,
+    @Given stringResource: stringResource,
+    @Given searchManager: SearchManager,
 ): Action = Action(
-    id = "assistant",
+    id = AssistantActionId,
     title = stringResource(R.string.es_action_assistant),
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_google)
 )
 
 @SuppressLint("DiscouragedPrivateApi")
-//@ActionExecutorBinding("assistant")
+@ActionExecutorBinding<AssistantActionId>
 @GivenFun
-suspend fun launchAssistant(searchManager: SearchManager) {
+suspend fun launchAssistant(@Given searchManager: SearchManager) {
     val launchAssist = searchManager.javaClass
         .getDeclaredMethod("launchAssist", Bundle::class.java)
     launchAssist.invoke(searchManager, Bundle())

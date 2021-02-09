@@ -44,7 +44,7 @@ sealed class ForegroundState {
 @Qualifier annotation class ForegroundStateBinding
 @Macro
 @GivenSetElement
-fun <T : @ForegroundStateBinding Flow<ForegroundState>> foregroundStateBindingImpl(
+fun <T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(
     @Given instance: T): Flow<ForegroundState> = instance
 
 data class ForegroundInfo(val id: Int, val state: ForegroundState)
@@ -54,7 +54,8 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 }
 
 @Scoped<AppComponent>
-@Given fun internalForegroundState(
+@Given
+fun internalForegroundState(
     @Given foregroundStates: Set<Flow<ForegroundState>>,
     @Given globalScope: GlobalScope,
     @Given logger: Logger,

@@ -24,6 +24,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
@@ -78,7 +79,8 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     }
 }
 
-@Scoped<ServiceComponent> @Given
+@ComponentElementBinding<ServiceComponent>
+@Given
 class DefaultNotificationListenerServiceComponent(
     @Given val notificationServiceRef: NotificationServiceRef,
     @Given val logger: Logger,

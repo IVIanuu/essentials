@@ -22,18 +22,23 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@ActionBinding("camera")
-fun cameraAction(stringResource: stringResource): Action = Action(
-    id = "camera",
+object CameraActionId : ActionId("camera")
+
+@ActionBinding<CameraActionId>
+@Given
+fun cameraAction(@Given stringResource: stringResource): Action = Action(
+    id = CameraActionId,
     title = stringResource(R.string.es_action_camera),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),
     unlockScreen = true
 )
 
-//@ActionExecutorBinding("camera")
+@ActionExecutorBinding<CameraActionId>
 @GivenFun
 suspend fun openCamera(sendIntent: sendIntent) {
     sendIntent(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))

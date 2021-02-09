@@ -33,7 +33,10 @@ import androidx.compose.runtime.getValue
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
 
-//@HomeItemBinding("Display rotation")
+@HomeItemBinding
+@Given
+val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
+
 class DisplayRotationKey
 
 @KeyUiBinding<DisplayRotationKey>

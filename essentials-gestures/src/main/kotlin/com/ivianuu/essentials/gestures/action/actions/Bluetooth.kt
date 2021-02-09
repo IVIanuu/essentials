@@ -19,10 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.bluetooth.BluetoothAdapter
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
@@ -31,18 +28,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-//@ActionBinding("bluetooth")
+object BluetoothActionId : ActionId("bluetooth")
+
+@ActionBinding<BluetoothActionId>
+@Given
 fun bluetoothAction(
-    bluetoothIcon: Flow<BluetoothIcon>,
-    stringResource: stringResource,
+    @Given bluetoothIcon: Flow<BluetoothIcon>,
+    @Given stringResource: stringResource,
 ): Action = Action(
-    id = "bluetooth",
+    id = BluetoothActionId,
     title = stringResource(R.string.es_action_bluetooth),
     icon = bluetoothIcon,
     enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-//@ActionExecutorBinding("bluetooth")
+@ActionExecutorBinding<BluetoothActionId>
 @GivenFun
 suspend fun toggleBluetooth() {
     BluetoothAdapter.getDefaultAdapter()?.let {

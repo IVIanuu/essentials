@@ -22,6 +22,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -62,7 +63,8 @@ abstract class EsTileService : TileService() {
     }
 }
 
-@Scoped<ServiceComponent> @Given
+@ComponentElementBinding<ServiceComponent>
+@Given
 class EsTileServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher
 )

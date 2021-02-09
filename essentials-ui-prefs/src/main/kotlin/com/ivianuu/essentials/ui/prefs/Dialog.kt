@@ -21,12 +21,13 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.component.ComponentElementBinding
@@ -65,12 +66,16 @@ fun DialogListItem(
 data class DialogListItemKey(val dialog: @Composable () -> Unit)
 
 @KeyUiBinding<DialogListItemKey>
-@DialogNavigationOptionsBinding<DialogListItemKey>
 @GivenFun
 @Composable
 fun DialogListScreen(@Given key: DialogListItemKey) {
     DialogWrapper { key.dialog() }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val dialogListScreenNavigationsOptionsFactory get() =
+    DialogNavigationOptionsFactory<DialogListItemKey>()
 
 @ComponentElementBinding<UiComponent>
 @Given class DialogListItemComponent(

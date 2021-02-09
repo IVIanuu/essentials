@@ -25,19 +25,21 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 object NotificationsActionId : ActionId("notifications")
 
-//@ActionBinding("notifications")
-fun notificationsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
+@ActionBinding<NotificationsActionId>
+@Given
+fun notificationsAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
     NotificationsActionId,
     R.string.es_action_notifications,
     singleActionIcon(Icons.Default.Notifications)
 )
 
-//@ActionExecutorBinding("notifications")
+@ActionExecutorBinding<NotificationsActionId>
 @GivenFun
-suspend fun showNotificationsShade(performGlobalAction: performGlobalAction) {
+suspend fun showNotificationsShade(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

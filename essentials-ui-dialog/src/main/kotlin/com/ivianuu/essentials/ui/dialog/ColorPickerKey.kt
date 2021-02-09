@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
@@ -32,7 +33,6 @@ data class ColorPickerKey(
     val showAlphaSelector: Boolean = false,
 )
 
-@DialogNavigationOptionsBinding<ColorPickerKey>
 @KeyUiBinding<ColorPickerKey>
 @GivenFun
 @Composable
@@ -52,3 +52,7 @@ fun ColorPickerDialog(
         )
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val colorPickerDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<ColorPickerKey>()

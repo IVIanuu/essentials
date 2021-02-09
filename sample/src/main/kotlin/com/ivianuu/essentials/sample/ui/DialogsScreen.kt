@@ -42,19 +42,13 @@ import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
-import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
-import com.ivianuu.essentials.ui.dialog.DialogWrapper
-import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
-import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.component.ComponentElementBinding
@@ -63,6 +57,10 @@ import com.ivianuu.injekt.component.get
 @HomeItemBinding
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
+
+@NavigationOptionFactoryBinding
+@Given
+val dialogsScreenNavigationOptionsFactory = DialogNavigationOptionsFactory<DialogsKey>()
 
 class DialogsKey
 
@@ -365,7 +363,6 @@ private fun DialogLauncherButton(
 
 data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 
-@DialogNavigationOptionsBinding<DialogLauncherKey>
 @KeyUiBinding<DialogLauncherKey>
 @GivenFun
 @Composable
@@ -373,7 +370,12 @@ fun DialogLauncherDialog(@Given key: DialogLauncherKey) {
     DialogWrapper { key.dialog() }
 }
 
-@ComponentElementBinding<UiComponent> @Given
+@NavigationOptionFactoryBinding
+@Given
+val dialogLauncherDialogNavigationOptionFactory = DialogNavigationOptionsFactory<DialogLauncherKey>()
+
+@ComponentElementBinding<UiComponent>
+@Given
 class DialogLauncherComponent(
     @Given val dispatchNavigationOption: DispatchAction<NavigationAction>
 )

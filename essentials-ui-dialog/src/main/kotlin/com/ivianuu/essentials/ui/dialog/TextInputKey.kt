@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
@@ -39,7 +40,6 @@ data class TextInputKey(
 
 typealias TextInputResult = String
 
-@DialogNavigationOptionsBinding<TextInputKey>
 @KeyUiBinding<TextInputKey>
 @GivenFun
 @Composable
@@ -69,3 +69,7 @@ fun TextInputDialog(
         )
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val textInputDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<TextInputKey>()

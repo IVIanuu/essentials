@@ -34,9 +34,13 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@HomeItemBinding("Dynamic system bars")
+@HomeItemBinding
+@Given
+val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey() }
+
 class DynamicSystemBarsKey
 
 @KeyUiBinding<DynamicSystemBarsKey>

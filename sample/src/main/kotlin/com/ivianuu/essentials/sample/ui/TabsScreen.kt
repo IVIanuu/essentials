@@ -34,9 +34,13 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@HomeItemBinding("Tabs")
+@HomeItemBinding
+@Given
+val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
+
 class TabsKey
 
 @KeyUiBinding<TabsKey>

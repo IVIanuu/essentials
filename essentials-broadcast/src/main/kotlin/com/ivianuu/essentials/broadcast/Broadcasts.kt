@@ -31,7 +31,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@GivenFun fun broadcasts(
+@GivenFun
+fun broadcasts(
     action: String,
     @Given appContext: AppContext,
     @Given mainDispatcher: MainDispatcher

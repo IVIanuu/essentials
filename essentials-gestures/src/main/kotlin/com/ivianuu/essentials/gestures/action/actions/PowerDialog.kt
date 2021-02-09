@@ -23,19 +23,20 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
 object PowerDialogActionId : ActionId("power_dialog")
 
-//@ActionBinding("power_dialog")
-fun powerDialogAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
+@ActionBinding<PowerDialogActionId>
+fun powerDialogAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
     PowerDialogActionId,
     R.string.es_action_power_dialog,
     singleActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
-//@ActionExecutorBinding("power_dialog")
+@ActionExecutorBinding<PowerDialogActionId>
 @GivenFun
-suspend fun showPowerDialog(performGlobalAction: performGlobalAction) {
+suspend fun showPowerDialog(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

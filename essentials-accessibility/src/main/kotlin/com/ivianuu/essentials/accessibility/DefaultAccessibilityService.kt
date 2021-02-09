@@ -63,7 +63,8 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 }
 
 @ComponentElementBinding<ServiceComponent>
-@Given class DefaultAccessibilityServiceComponent(
+@Given
+class DefaultAccessibilityServiceComponent(
     @Given val accessibilityEvents: MutableAccessibilityEvents,
     @Given val logger: Logger,
     @Given val runAccessibilityWorkers: runAccessibilityWorkers,

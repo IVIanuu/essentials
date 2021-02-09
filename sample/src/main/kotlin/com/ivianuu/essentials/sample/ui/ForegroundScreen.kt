@@ -53,13 +53,17 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.ForKey
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
-//@HomeItemBinding("Foreground")
+@HomeItemBinding
+@Given
+val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
+
 class ForegroundKey
 
 @SuppressLint("NewApi")
@@ -137,12 +141,13 @@ fun ForegroundScreen(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
 
-// todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
-inline val ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
+@Given
+inline val @Given ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
     get() = this
 
 @GivenFun

@@ -68,6 +68,7 @@ abstract class EsAccessibilityService : AccessibilityService() {
 }
 
 @ComponentElementBinding<ServiceComponent>
-@Given class EsAccessibilityServiceComponent(
+@Given
+class EsAccessibilityServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher
 )

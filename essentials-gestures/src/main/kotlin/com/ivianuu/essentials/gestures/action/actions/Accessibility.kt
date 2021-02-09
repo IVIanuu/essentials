@@ -25,7 +25,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 
-@GivenFun fun accessibilityAction(
+@GivenFun
+fun accessibilityAction(
     @Given choosePermissions: choosePermissions,
     @Given stringResource: stringResource,
     id: ActionId,

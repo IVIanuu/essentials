@@ -20,21 +20,22 @@ import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-//@ActionBinding("lock_screen")
+object LockScreenActionId : ActionId("lock_screen")
+
+@ActionBinding<LockScreenActionId>
+@Given
 fun lockScreenAction(
-    choosePermissions: choosePermissions,
-    stringResource: stringResource,
-    systemBuildInfo: SystemBuildInfo,
+    @Given choosePermissions: choosePermissions,
+    @Given stringResource: stringResource,
+    @Given systemBuildInfo: SystemBuildInfo,
 ): Action = Action(
-    id = "lock_screen",
+    id = LockScreenActionId,
     title = stringResource(R.string.es_action_lock_screen),
     icon = singleActionIcon(R.drawable.es_ic_power_settings),
     permissions = choosePermissions {
@@ -46,12 +47,12 @@ fun lockScreenAction(
 )
 
 @SuppressLint("InlinedApi")
-//@ActionExecutorBinding("lock_screen")
+@ActionExecutorBinding<LockScreenActionId>
 @GivenFun
 suspend fun doLockScreen(
-    performGlobalAction: performGlobalAction,
-    runRootCommand: runRootCommand,
-    systemBuildInfo: SystemBuildInfo,
+    @Given performGlobalAction: performGlobalAction,
+    @Given runRootCommand: runRootCommand,
+    @Given systemBuildInfo: SystemBuildInfo,
 ) {
     if (systemBuildInfo.sdk >= 28) {
         performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
