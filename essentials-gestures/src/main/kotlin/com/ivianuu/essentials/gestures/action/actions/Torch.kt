@@ -36,7 +36,8 @@ import kotlinx.coroutines.flow.map
 
 object TorchActionId : ActionId("torch")
 
-@ActionBinding<TorchActionId> @Given
+@ActionBinding<TorchActionId>
+@Given
 fun torchAction(
     @Given stringResource: stringResource,
     @Given torchIcon: Flow<TorchIcon>,
@@ -46,10 +47,11 @@ fun torchAction(
     icon = torchIcon
 )
 
-@ActionExecutorBinding<TorchActionId> @GivenFun
+@ActionExecutorBinding<TorchActionId>
+@GivenFun
 suspend fun toggleTorch(
-    torchState: Flow<TorchState>,
-    dispatchTorchAction: DispatchAction<TorchAction>,
+    @Given torchState: Flow<TorchState>,
+    @Given dispatchTorchAction: DispatchAction<TorchAction>,
 ) {
     dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
 }

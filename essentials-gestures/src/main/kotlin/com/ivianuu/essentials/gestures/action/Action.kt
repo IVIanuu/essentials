@@ -54,20 +54,20 @@ abstract class ActionId(val value: String)
 @Macro
 @GivenSetElement
 fun <T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
-    @Given id: ActionId,
+    @Given id: I,
     @Given provider: () -> T,
-) = id to provider
+): Pair<String, () -> Action> = id.value to provider
 
 typealias ActionExecutor = suspend () -> Unit
 
 @Qualifier annotation class ActionExecutorBinding<I : ActionId>
 
 @Macro
-@Given
-fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorIntoMap(
+@GivenSetElement
+fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorBindingImpl(
     @Given id: I,
     @Given instance: T
-): Pair<ActionId, ActionExecutor> = id to instance
+): Pair<String, ActionExecutor> = id.value to instance
 
 @GivenFun fun choosePermissions(
     @Given permissions: ActionPermissions,

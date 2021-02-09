@@ -28,14 +28,16 @@ import com.ivianuu.injekt.GivenFun
 
 object SplitScreenActionId : ActionId("split_screen")
 
-@ActionBinding<SplitScreenActionId> @Given
+@ActionBinding<SplitScreenActionId>
+@Given
 fun splitScreenAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
     SplitScreenActionId,
     R.string.es_action_split_screen,
     singleActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-@ActionExecutorBinding<SplitScreenActionId> @GivenFun
+@ActionExecutorBinding<SplitScreenActionId>
+@GivenFun
 suspend fun toggleSplitScreen(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

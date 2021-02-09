@@ -33,7 +33,9 @@ import kotlinx.coroutines.flow.onStart
 
 object WifiActionId : ActionId("wifi")
 
-@ActionBinding<WifiActionId> @Given fun wifiAction(
+@ActionBinding<WifiActionId>
+@Given
+fun wifiAction(
     @Given stringResource: stringResource,
     @Given wifiIcon: Flow<WifiIcon>,
 ): Action = Action(
@@ -43,7 +45,8 @@ object WifiActionId : ActionId("wifi")
 )
 
 @ActionExecutorBinding<WifiActionId>
-@GivenFun suspend fun toggleWifi(@Given wifiManager: WifiManager) {
+@GivenFun
+suspend fun toggleWifi(@Given wifiManager: WifiManager) {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }

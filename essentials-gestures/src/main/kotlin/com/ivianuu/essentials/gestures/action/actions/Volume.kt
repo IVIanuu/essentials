@@ -28,14 +28,16 @@ import com.ivianuu.injekt.GivenFun
 
 object VolumeActionId : ActionId("volume")
 
-@ActionBinding<VolumeActionId> @Given
+@ActionBinding<VolumeActionId>
+@Given
 fun volumeAction(@Given stringResource: stringResource): Action = Action(
     id = VolumeActionId,
     title = stringResource(R.string.es_action_volume),
     icon = singleActionIcon(R.drawable.es_ic_volume_up)
 )
 
-@ActionExecutorBinding<VolumeActionId> @GivenFun
+@ActionExecutorBinding<VolumeActionId>
+@GivenFun
 suspend fun showVolume(@Given audioManager: AudioManager) {
     audioManager.adjustStreamVolume(
         AudioManager.STREAM_MUSIC,
