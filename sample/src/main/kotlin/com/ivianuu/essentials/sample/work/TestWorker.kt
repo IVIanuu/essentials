@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-object TestWorkerId : WorkerId("test")
+@Given object TestWorkerId : WorkerId("test")
 
 @WorkerBinding<TestWorkerId>
 @GivenFun
