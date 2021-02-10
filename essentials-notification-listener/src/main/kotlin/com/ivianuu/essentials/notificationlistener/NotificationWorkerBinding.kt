@@ -27,12 +27,13 @@ import kotlinx.coroutines.launch
 
 @Given
 @GivenSetElement
-fun <T : @NotificationWorkerBinding suspend () -> Unit> workerIntoSet(
+fun <T : @NotificationWorkerBinding suspend () -> Unit> notificationWorkerIntoSet(
     @Given instance: T): NotificationWorker = instance
 
 typealias NotificationWorker = suspend () -> Unit
 
-@GivenFun suspend fun runNotificationWorkers(@Given workers: Set<NotificationWorker>) {
+@GivenFun
+suspend fun runNotificationWorkers(@Given workers: Set<NotificationWorker>) {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }
