@@ -69,6 +69,7 @@ fun DialogsScreen() {
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {
         LazyColumn(
+            modifier = Modifier.fillMaxSize(),
             contentPadding = ambientVerticalInsets(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center

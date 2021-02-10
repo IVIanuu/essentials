@@ -21,4 +21,4 @@ import com.ivianuu.injekt.Given
 
 @HomeItemBinding
 @Given
-val TwilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey() }
+val twilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey() }
