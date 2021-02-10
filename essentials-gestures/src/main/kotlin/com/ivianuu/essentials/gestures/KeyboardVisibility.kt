@@ -48,7 +48,8 @@ import kotlin.coroutines.coroutineContext
 
 typealias KeyboardVisible = Boolean
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun keyboardVisible(
     @Given accessibilityEvents: AccessibilityEvents,
     @Given getKeyboardHeight: getKeyboardHeight,
@@ -79,7 +80,8 @@ fun keyboardVisibilityAccessibilityConfig() = flowOf {
     )
 }
 
-@GivenFun fun getKeyboardHeight(@Given inputMethodManager: InputMethodManager): Int? {
+@GivenFun
+fun getKeyboardHeight(@Given inputMethodManager: InputMethodManager): Int? {
     return runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int

@@ -68,7 +68,8 @@ interface BillingManager {
     suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
 }
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 class BillingManagerImpl(
     @Given private val appForegroundState: Flow<AppForegroundState>,
     @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,

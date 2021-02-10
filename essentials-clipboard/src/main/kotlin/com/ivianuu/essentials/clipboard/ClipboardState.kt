@@ -32,7 +32,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@Scoped<AppComponent> @Given fun clipboardState(
+@Scoped<AppComponent>
+@Given
+fun clipboardState(
     @Given scope: GlobalScope,
     @Given initial: @Initial ClipboardState = ClipboardState(),
     @Given actions: Actions<ClipboardAction>,

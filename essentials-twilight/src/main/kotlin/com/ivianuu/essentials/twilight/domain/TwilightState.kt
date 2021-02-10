@@ -46,7 +46,9 @@ data class TwilightState(
     val useBlack: Boolean = false,
 )
 
-@AppInitializerBinding @Given fun initializeTwilightState(
+@AppInitializerBinding
+@Given
+fun initializeTwilightState(
     @Given twilightState: StateFlow<TwilightState>
 ) {
 }
@@ -74,7 +76,8 @@ fun twilightState(
 
 internal typealias BatteryTwilightState = Flow<Boolean>
 
-@Given fun batteryTwilightState(
+@Given
+fun batteryTwilightState(
     @Given broadcasts: broadcasts,
     @Given powerManager: PowerManager,
 ): BatteryTwilightState {
@@ -86,7 +89,8 @@ internal typealias BatteryTwilightState = Flow<Boolean>
 
 internal typealias SystemTwilightState = Flow<Boolean>
 
-@Given fun systemTwilightState(
+@Given
+fun systemTwilightState(
     @Given configChanges: ConfigChanges,
     @Given resources: AppResources,
 ): SystemTwilightState = configChanges
@@ -98,7 +102,8 @@ internal typealias SystemTwilightState = Flow<Boolean>
 
 internal typealias TimeTwilightState = Flow<Boolean>
 
-@Given fun timeTwilightState(
+@Given
+fun timeTwilightState(
     @Given broadcasts: broadcasts,
 ): TimeTwilightState = broadcasts(Intent.ACTION_TIME_TICK)
     .map { Unit }

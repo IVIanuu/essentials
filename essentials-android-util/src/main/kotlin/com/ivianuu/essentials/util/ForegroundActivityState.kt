@@ -34,7 +34,9 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Scoped<AppComponent> @Given fun foregroundActivityState(
+@Scoped<AppComponent>
+@Given
+fun foregroundActivityState(
     @Given application: Application,
     @Given globalScope: GlobalScope
 ): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {

@@ -27,14 +27,16 @@ typealias AppFilter = (AppInfo) -> Boolean
 val DefaultAppFilter: AppFilter = { true }
 
 typealias LaunchableAppFilter = AppFilter
-@Given fun LaunchableAppFilter(
+@Given
+fun LaunchableAppFilter(
     @Given packageManager: PackageManager
 ): LaunchableAppFilter = { app: AppInfo ->
     packageManager.getLaunchIntentForPackage(app.packageName) != null
 }.memoize()
 
 typealias IntentAppFilter = AppFilter
-@Given fun IntentAppFilter(
+@Given
+fun IntentAppFilter(
     @Given packageManager: PackageManager,
     @Given intent: Intent
 ): IntentAppFilter {

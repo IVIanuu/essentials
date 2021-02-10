@@ -28,7 +28,8 @@ import com.ivianuu.injekt.GivenFun
 data class AppInfoKey(val packageName: String)
 
 @KeyIntentFactoryBinding<AppInfoKey>
-@GivenFun fun createAppInfoKeyIntent(key: AppInfoKey): Intent =
+@GivenFun
+fun createAppInfoKeyIntent(key: AppInfoKey): Intent =
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:${key.packageName}".toUri()
     }
@@ -36,7 +37,8 @@ data class AppInfoKey(val packageName: String)
 data class AppKey(val packageName: String)
 
 @KeyIntentFactoryBinding<AppKey>
-@GivenFun fun createAppKeyIntent(
+@GivenFun
+fun createAppKeyIntent(
     @Given packageManager: PackageManager,
     key: AppKey,
 ): Intent = packageManager.getLaunchIntentForPackage(key.packageName)!!
@@ -44,7 +46,8 @@ data class AppKey(val packageName: String)
 data class ShareKey(val text: String)
 
 @KeyIntentFactoryBinding<ShareKey>
-@GivenFun fun createShareKeyIntent(key: ShareKey): Intent = Intent.createChooser(
+@GivenFun
+fun createShareKeyIntent(key: ShareKey): Intent = Intent.createChooser(
     Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, key.text)
@@ -55,5 +58,6 @@ data class ShareKey(val text: String)
 data class UrlKey(val url: String)
 
 @KeyIntentFactoryBinding<UrlKey>
-@GivenFun fun createUrlKeyIntent(key: UrlKey): Intent =
+@GivenFun
+fun createUrlKeyIntent(key: UrlKey): Intent =
     Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }

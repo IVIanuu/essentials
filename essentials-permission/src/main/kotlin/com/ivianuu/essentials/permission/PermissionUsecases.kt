@@ -70,12 +70,14 @@ suspend fun requestPermissions(
     hasPermissions(permissions).first()
 }
 
-@GivenFun fun Permission.stateProvider(
+@GivenFun
+fun Permission.stateProvider(
     @Given stateProviders: Set<PermissionStateProvider>,
 ): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
 
-@GivenFun fun Permission.requestHandler(
+@GivenFun
+fun Permission.requestHandler(
     @Given requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }

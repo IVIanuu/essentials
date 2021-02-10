@@ -50,7 +50,8 @@ fun torchForegroundState(
     }
 
 @SuppressLint("NewApi")
-@GivenFun fun createTorchNotification(
+@GivenFun
+fun createTorchNotification(
     @Given appContext: AppContext,
     @Given notificationManager: NotificationManager,
     @Given stringResource: stringResource,

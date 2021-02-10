@@ -27,7 +27,8 @@ import com.ivianuu.injekt.component.ComponentElementBinding
 typealias UiComponent = Component
 
 @ComponentElementBinding<ActivityComponent>
-@Given fun uiComponentFactory(
+@Given
+fun uiComponentFactory(
     @Given parent: ActivityComponent,
     @Given builderFactory: () -> Component.Builder<UiComponent>,
 ): () -> UiComponent = {

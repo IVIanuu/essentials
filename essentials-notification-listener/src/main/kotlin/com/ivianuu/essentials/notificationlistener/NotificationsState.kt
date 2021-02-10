@@ -47,7 +47,8 @@ sealed class NotificationsAction {
     object DismissAllNotifications : NotificationsAction()
 }
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun notificationState(
     @Given actions: Actions<NotificationsAction>,
     @Given serviceRef: NotificationServiceRef,

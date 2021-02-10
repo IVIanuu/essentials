@@ -59,7 +59,8 @@ import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 
-@GivenFun fun mediaAction(
+@GivenFun
+fun mediaAction(
     id: ActionId,
     titleRes: Int,
     icon: Flow<ActionIcon>,

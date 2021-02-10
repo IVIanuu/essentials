@@ -34,7 +34,8 @@ typealias UiScope = CoroutineScope
 
 // todo should be scoped to the UiComponent but @UiDecoratorBinding installs in ActivityComponent
 // so we also have to scope to ActivityComponent
-@Scoped<ActivityComponent> @Given fun uiScope(
+@Scoped<ActivityComponent> @Given
+fun uiScope(
     @Given mainDispatcher: MainDispatcher
 ): UiScope = CoroutineScope(mainDispatcher)
 

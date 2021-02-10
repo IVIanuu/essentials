@@ -31,7 +31,9 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlin.reflect.KClass
 
-@Scoped<AppComponent> @Given fun imageLoader(
+@Scoped<AppComponent>
+@Given
+fun imageLoader(
     @Given appContext: AppContext,
     @Given decoders: Set<Decoder>,
     @Given fetchers: Set<FetcherPair<Any>>,

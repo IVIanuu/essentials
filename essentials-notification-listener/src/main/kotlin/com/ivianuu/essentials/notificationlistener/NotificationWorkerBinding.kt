@@ -25,8 +25,9 @@ import kotlinx.coroutines.launch
 
 @Qualifier annotation class NotificationWorkerBinding
 
-@Given @GivenSetElement
-fun <T : @NotificationWorkerBinding NotificationWorker> workerIntoSet(
+@Given
+@GivenSetElement
+fun <T : @NotificationWorkerBinding suspend () -> Unit> workerIntoSet(
     @Given instance: T): NotificationWorker = instance
 
 typealias NotificationWorker = suspend () -> Unit

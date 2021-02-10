@@ -75,7 +75,8 @@ class PrefModule<T : Any>(private val name: String) {
     }
 }
 
-@Given fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
+@Given
+fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
 
 @Given @Composable fun <T : Any> @Given DataStore<T>.uiState(
     @Given initial: @InitialOrFallback T
@@ -92,7 +93,8 @@ class PrefModule<T : Any>(private val name: String) {
     reducer: T.() -> T,
 ): T = pref.updateData { reducer(it) }
 
-@GivenFun fun <T> dispatchPrefUpdate(
+@GivenFun
+fun <T> dispatchPrefUpdate(
     @Given pref: DataStore<T>,
     @Given scope: GlobalScope,
     reducer: T.() -> T,

@@ -55,7 +55,8 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
         }
 }
 
-@GivenFun fun sendIntent(
+@GivenFun
+fun sendIntent(
     intent: Intent,
     @Given appContext: AppContext,
     @Given showToastRes: showToastRes

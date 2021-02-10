@@ -38,7 +38,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Scoped<AppComponent> @Given fun screenState(
+@Scoped<AppComponent>
+@Given
+fun screenState(
     @Given broadcasts: broadcasts,
     @Given getCurrentScreenState: getCurrentScreenState,
     @Given globalScope: GlobalScope,

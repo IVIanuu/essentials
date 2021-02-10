@@ -33,7 +33,8 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 class ActionPermissions(@Given appContext: AppContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,

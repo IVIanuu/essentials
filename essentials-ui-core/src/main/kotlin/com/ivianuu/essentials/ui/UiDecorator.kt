@@ -90,5 +90,6 @@ typealias AppTheme = @UiDecoratorBinding @Composable (@Composable () -> Unit) ->
 fun <T : @AppThemeBinding @Composable (@Composable () -> Unit) -> Unit> appThemeBindingImpl(@Given instance: T): AppTheme =
     instance as @Composable (@androidx.compose.runtime.Composable () -> Unit) -> Unit
 
-@Given fun appThemeConfigBindingImpl() =
+@Given
+fun appThemeConfigBindingImpl() =
     UiDecoratorConfig<AppTheme>(dependencies = setOf(keyOf<ProvideSystemBarManager>()))

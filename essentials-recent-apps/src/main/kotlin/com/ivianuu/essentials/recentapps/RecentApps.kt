@@ -91,7 +91,8 @@ fun recentAppsAccessibilityConfig() = flowOf {
 
 typealias CurrentApp = String?
 
-@Given fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
+@Given
+fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
     recentApps
         .map { it.firstOrNull() }
         .distinctUntilChanged()

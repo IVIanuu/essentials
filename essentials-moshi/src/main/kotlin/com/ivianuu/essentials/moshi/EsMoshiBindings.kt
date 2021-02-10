@@ -29,7 +29,8 @@ fun <T : @JsonAdapterBinding Any> jsonAdapterImpl(@Given instance: T): JsonAdapt
 
 typealias JsonAdapter = Any
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun moshi(@Given jsonAdapters: Set<JsonAdapter>): Moshi = Moshi.Builder()
     .apply {
         jsonAdapters

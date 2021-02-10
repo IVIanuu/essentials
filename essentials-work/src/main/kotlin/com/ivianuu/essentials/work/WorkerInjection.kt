@@ -24,7 +24,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-@AppInitializerBinding @GivenFun
+@AppInitializerBinding
+@GivenFun
 fun initializeWorkers(
     @Given appContext: AppContext,
     @Given workerFactory: WorkerFactory,
@@ -37,5 +38,6 @@ fun initializeWorkers(
     )
 }
 
-@Given fun workManager(@Given appContext: AppContext) =
+@Given
+fun workManager(@Given appContext: AppContext) =
     WorkManager.getInstance(appContext)

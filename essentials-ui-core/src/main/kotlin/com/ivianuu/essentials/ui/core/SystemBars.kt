@@ -97,7 +97,8 @@ fun ProvideSystemBarManager(content: @Composable () -> Unit) {
     )
 }
 
-@Given fun RootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
+@Given
+fun RootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
     dependencies = setOf(keyOf<AppTheme>(), keyOf<ProvideSystemBarManager>())
 )
 

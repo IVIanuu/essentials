@@ -20,4 +20,5 @@ import com.ivianuu.injekt.GivenFun
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-@GivenFun fun now(): Duration = System.currentTimeMillis().milliseconds
+@GivenFun
+fun now(): Duration = System.currentTimeMillis().milliseconds

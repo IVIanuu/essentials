@@ -69,7 +69,8 @@ fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecu
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance
 
-@GivenFun fun choosePermissions(
+@GivenFun
+fun choosePermissions(
     @Given permissions: ActionPermissions,
     chooser: ActionPermissions.() -> List<Permission>,
 ): List<Permission> = permissions.chooser()

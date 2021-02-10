@@ -47,7 +47,8 @@ fun <@ForKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
     UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
 }.store
 
-@Given inline val <T> @Given StateFlow<T>.flow: Flow<T>
+@Given
+inline val <T> @Given StateFlow<T>.flow: Flow<T>
     get() = this
 
 @PublishedApi

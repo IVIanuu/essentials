@@ -220,7 +220,8 @@ fun NotificationsPermission(): NotificationsPermission = NotificationListenerPer
 
 typealias UiNotifications = Flow<List<UiNotification>>
 
-@Given fun notifications(
+@Given
+fun notifications(
     @Given appContext: AppContext,
     @Given serviceState: Flow<NotificationsState>,
 ): UiNotifications = serviceState

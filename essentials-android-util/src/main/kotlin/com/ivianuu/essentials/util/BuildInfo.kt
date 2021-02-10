@@ -29,7 +29,9 @@ data class BuildInfo(
     val versionCode: Int,
 ) {
     companion object {
-        @Scoped<AppComponent> @Given fun default(
+        @Scoped<AppComponent>
+@Given
+fun default(
             @Given appContext: AppContext,
             @Given packageManager: PackageManager
         ): BuildInfo {

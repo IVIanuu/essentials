@@ -58,7 +58,8 @@ suspend fun toggleTorch(
 
 private typealias TorchIcon = ActionIcon
 
-@Given fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
+@Given
+fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     .map {
         if (it.torchEnabled) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off

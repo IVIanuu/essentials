@@ -20,7 +20,8 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
 
-@Given fun billingClient(
+@Given
+fun billingClient(
     @Given debugBillingClientFactory: (@Given PurchasesUpdatedListener) -> DebugBillingClient,
     @Given listener: PurchasesUpdatedListener
 ): BillingClient = debugBillingClientFactory(listener)

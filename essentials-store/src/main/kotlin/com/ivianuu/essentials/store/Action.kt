@@ -26,13 +26,16 @@ import kotlinx.coroutines.flow.Flow
 
 internal typealias MutableActions<T>  = EventFlow<T>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun <T> mutableActions(): MutableActions<T> = EventFlow()
 
 typealias Actions<T> = Flow<T>
-@Given inline val <T> @Given MutableActions<T>.actions: Actions<T>
+@Given
+inline val <T> @Given MutableActions<T>.actions: Actions<T>
     get() = this
 
 typealias DispatchAction<T> = (T) -> Unit
-@Given inline val <T> @Given MutableActions<T>.dispatchAction: DispatchAction<T>
+@Given
+inline val <T> @Given MutableActions<T>.dispatchAction: DispatchAction<T>
     get() = this::emit

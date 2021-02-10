@@ -24,7 +24,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-@Given fun androidAppForegroundState(
+@Given
+fun androidAppForegroundState(
     @Given globalScope: GlobalScope,
     @Given foregroundActivity: Flow<ForegroundActivity>,
 ): Flow<AppForegroundState> = foregroundActivity

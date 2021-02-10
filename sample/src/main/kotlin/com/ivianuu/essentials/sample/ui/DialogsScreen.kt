@@ -58,10 +58,6 @@ import com.ivianuu.injekt.component.get
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
-@NavigationOptionFactoryBinding
-@Given
-val dialogsScreenNavigationOptionsFactory = DialogNavigationOptionsFactory<DialogsKey>()
-
 class DialogsKey
 
 @KeyUiBinding<DialogsKey>

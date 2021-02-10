@@ -35,7 +35,8 @@ fun <T : @AccessibilityWorkerBinding suspend () -> Unit> accessibilityWorkerBind
 
 typealias AccessibilityWorker = suspend () -> Unit
 
-@GivenFun suspend fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker>) {
+@GivenFun
+suspend fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker>) {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }

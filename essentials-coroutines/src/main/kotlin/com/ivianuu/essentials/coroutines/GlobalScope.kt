@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 
 typealias GlobalScope = CoroutineScope
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun globalScope(@Given dispatcher: DefaultDispatcher): GlobalScope =
     CoroutineScope(dispatcher)

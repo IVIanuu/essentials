@@ -89,5 +89,6 @@ class DefaultNotificationListenerServiceComponent(
 
 internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

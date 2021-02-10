@@ -56,7 +56,8 @@ suspend fun toggleBluetooth() {
 
 internal typealias BluetoothIcon = ActionIcon
 
-@Given fun bluetoothIcon(@Given broadcasts: broadcasts): Flow<BluetoothIcon> {
+@Given
+fun bluetoothIcon(@Given broadcasts: broadcasts): Flow<BluetoothIcon> {
     return broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)
         .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
         .onStart {

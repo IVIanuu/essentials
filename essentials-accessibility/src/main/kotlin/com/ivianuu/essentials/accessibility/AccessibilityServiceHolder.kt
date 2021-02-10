@@ -25,10 +25,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal typealias MutableAccessibilityServiceHolder = MutableStateFlow<AccessibilityService?>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun mutableAccessibilityServiceHolder(): MutableAccessibilityServiceHolder =
     MutableStateFlow(null)
 
 typealias AccessibilityServiceHolder = StateFlow<AccessibilityService?>
-@Given inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
+@Given
+inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
         get() = this

@@ -24,9 +24,11 @@ import kotlinx.coroutines.flow.Flow
 
 internal typealias MutableAccessibilityEvents = EventFlow<AccessibilityEvent>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun mutableAccessibilityEvents(): MutableAccessibilityEvents = EventFlow()
 
 typealias AccessibilityEvents = Flow<AccessibilityEvent>
-@Given inline val @Given MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
+@Given
+inline val @Given MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
     get() = this

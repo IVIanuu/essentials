@@ -120,16 +120,19 @@ fun AppTrackerScreen(
 
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
 
 // todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
-inline val AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
+@Given
+inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
     get() = this
 
 @SuppressLint("NewApi")
-@GivenFun fun createAppTrackerNotification(
+@GivenFun
+fun createAppTrackerNotification(
     currentApp: String?,
     @Given appContext: AppContext,
     @Given notificationManager: NotificationManager,

@@ -34,10 +34,13 @@ typealias BackupFile = File
 
 typealias BackupDir = File
 
-@Given fun backupDir(@Given dataDir: DataDir): BackupDir =
+@Given
+fun backupDir(@Given dataDir: DataDir): BackupDir =
     dataDir.resolve("files/backups")
 
-@BackupFileBinding @Given fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
+@BackupFileBinding @Given
+fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
 
-@BackupFileBinding @Given fun backupDatabases(@Given dataDir: DataDir) =
+@BackupFileBinding @Given
+fun backupDatabases(@Given dataDir: DataDir) =
     dataDir.resolve("databases")

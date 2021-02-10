@@ -53,7 +53,8 @@ suspend fun toggleWifi(@Given wifiManager: WifiManager) {
 
 typealias WifiIcon = ActionIcon
 
-@Given fun wifiIcon(
+@Given
+fun wifiIcon(
     @Given broadcasts: broadcasts,
     @Given wifiManager: WifiManager,
 ): Flow<WifiIcon> = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)

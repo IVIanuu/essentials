@@ -40,7 +40,8 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias IsOnSecureScreen = Boolean
 
-@Scoped<AppComponent> @Given
+@Scoped<AppComponent>
+@Given
 fun isOnSecureScreen(
     @Given accessibilityEvents: AccessibilityEvents,
     @Given globalScope: GlobalScope,

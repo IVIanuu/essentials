@@ -41,7 +41,9 @@ import com.ivianuu.injekt.component.AppComponent
     }
 
     companion object {
-        @Scoped<AppComponent> @Given fun impl(
+        @Scoped<AppComponent>
+@Given
+fun impl(
             @Given buildInfo: BuildInfo,
             @Given androidLoggerFactory: () -> AndroidLogger,
             @Given noopLoggerFactory: () -> NoopLogger
@@ -49,5 +51,6 @@ import com.ivianuu.injekt.component.AppComponent
     }
 }
 
-@Given inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled
+@Given
+inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled
     get() = isDebug
