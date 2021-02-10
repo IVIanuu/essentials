@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
