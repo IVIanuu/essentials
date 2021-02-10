@@ -33,7 +33,8 @@ data class DebugBillingPrefs(
     @Json(name = "billing_purchases") val purchases: List<Purchase> = emptyList(),
 )
 
-@Module val debugBillingPrefsModule = PrefModule<DebugBillingPrefs>("debug_billing_prefs")
+@Module
+val debugBillingPrefsModule = PrefModule<DebugBillingPrefs>("debug_billing_prefs")
 
 @JsonAdapterBinding
 @Given

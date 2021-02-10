@@ -80,7 +80,7 @@ val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
 @SuppressLint("PrivateApi")
 @GivenFun
-fun setOverscan(@Given logger: Logger, rect: Rect) {
+fun setOverscan(rect: Rect, @Given logger: Logger) {
     logger.d { "set overscan $rect" }
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")

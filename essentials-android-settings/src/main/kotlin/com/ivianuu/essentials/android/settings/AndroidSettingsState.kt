@@ -18,6 +18,7 @@ package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
 import com.ivianuu.essentials.android.settings.AndroidSettingAction.*
+import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -28,20 +29,19 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.contentChanges
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class AndroidSettingStateModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
 ) {
     @Suppress("UNCHECKED_CAST")
+    @Scoped<AppComponent>
     @Given
     operator fun invoke(
         @Given scope: GlobalScope,
@@ -66,7 +66,9 @@ class AndroidSettingStateModule<T : S, S>(
         actions
             .filterIsInstance<Update<S>>()
             .onEach { action ->
-                adapter.set(action.reducer(adapter.get()))
+                val newValue = action.reducer(adapter.get())
+                adapter.set(newValue)
+                action.result?.complete(newValue)
             }
             .launchIn(this)
     }
@@ -79,10 +81,13 @@ sealed class AndroidSettingAction<T> {
     ) : AndroidSettingAction<T>()
 }
 
-@GivenFun suspend fun <T> updateAndroidSetting(
+@GivenFun
+suspend fun <T> updateAndroidSetting(
     @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given state: StateFlow<T>, // workaround to ensure that the state is initialized
     reducer: T.() -> T,
 ): T {
+    state.first()
     val result = CompletableDeferred<T>()
     dispatch(Update(reducer, result))
     return result.await()
@@ -91,7 +96,12 @@ sealed class AndroidSettingAction<T> {
 @GivenFun
 fun <T> dispatchAndroidSettingUpdate(
     @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given scope: GlobalScope,
+    @Given state: StateFlow<T>, // workaround to ensure that the state is initialized
     reducer: T.() -> T,
 ) {
-    dispatch(Update(reducer, null))
+    scope.launch {
+        state.first()
+        dispatch(Update(reducer, null))
+    }
 }
