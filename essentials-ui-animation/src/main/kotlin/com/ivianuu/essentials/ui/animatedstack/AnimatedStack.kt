@@ -54,7 +54,7 @@ fun <T> AnimatedStack(
     transition: StackTransition = FadeStackTransition(),
     item: @Composable (T) -> Unit
 ) {
-    val children = remember(items, item) {
+    val children = remember(items, item as? Any?) {
         items
             .map { item ->
                 AnimatedStackChild(

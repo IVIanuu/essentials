@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.permission.defaultui
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +29,7 @@ import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,8 +50,8 @@ fun DefaultPermissionScreen(
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
         }
     ) {
-        InsettingScrollableColumn {
-            state.permissions.forEach { permission ->
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            items(state.permissions) { permission ->
                 Permission(
                     permission = permission,
                     onClick = { dispatch(RequestPermission(permission)) }

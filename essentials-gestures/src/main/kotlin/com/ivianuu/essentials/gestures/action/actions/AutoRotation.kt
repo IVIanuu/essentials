@@ -64,7 +64,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
         if (it) R.drawable.es_ic_screen_rotation
         else R.drawable.es_ic_screen_lock_rotation
     }
-    .map { { Icon(it) } }
+    .map { { Icon(it, null) } }
 
 internal typealias AutoRotation = Int
 

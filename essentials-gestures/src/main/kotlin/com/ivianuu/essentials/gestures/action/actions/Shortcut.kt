@@ -64,7 +64,7 @@ class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             enabled = true,
-            icon = singleActionIcon { Icon(ImagePainter(icon)) }
+            icon = singleActionIcon { Icon(ImagePainter(icon), null) }
         )
     }
 
@@ -84,7 +84,7 @@ class ShortcutActionPickerDelegate(
     override val title: String
         get() = stringResource(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
-        Icon(R.drawable.es_ic_content_cut)
+        Icon(R.drawable.es_ic_content_cut, null)
     }
 
     override suspend fun getResult(): ActionPickerResult? {

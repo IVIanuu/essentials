@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.Intent
 import android.provider.MediaStore
 import android.view.KeyEvent
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -37,8 +38,8 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -115,19 +116,21 @@ fun MediaActionSettingsScreen(
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
-        InsettingScrollableColumn {
-            ListItem(
-                title = { Text(R.string.es_pref_media_app) },
-                subtitle = {
-                    Text(
-                        stringResource(
-                            R.string.es_pref_media_app_summary,
-                            state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                ListItem(
+                    title = { Text(R.string.es_pref_media_app) },
+                    subtitle = {
+                        Text(
+                            stringResource(
+                                R.string.es_pref_media_app_summary,
+                                state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+                            )
                         )
-                    )
-                },
-                onClick = { dispatch(UpdateMediaApp) }
-            )
+                    },
+                    onClick = { dispatch(UpdateMediaApp) }
+                )
+            }
         }
     }
 }

@@ -70,7 +70,7 @@ class KeycodeActionPickerDelegate(
     override val title: String
         get() = stringResource(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
-        get() = { Icon(R.drawable.es_ic_keyboard) }
+        get() = { Icon(R.drawable.es_ic_keyboard, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val keycode = pickActionKeycode(

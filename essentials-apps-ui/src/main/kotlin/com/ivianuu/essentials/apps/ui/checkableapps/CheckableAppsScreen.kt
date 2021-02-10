@@ -92,7 +92,8 @@ private fun CheckableApp(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.info.packageName),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
+                contentDescription = null
             )
         },
         trailing = {

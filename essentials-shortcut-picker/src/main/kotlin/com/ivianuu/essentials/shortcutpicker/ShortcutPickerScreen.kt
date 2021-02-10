@@ -70,7 +70,8 @@ private fun Shortcut(
             leading = {
                 Image(
                     modifier = Modifier.size(40.dp),
-                    painter = ImagePainter(info.icon)
+                    painter = ImagePainter(info.icon),
+                    contentDescription = null
                 )
             },
             title = { Text(info.name) },

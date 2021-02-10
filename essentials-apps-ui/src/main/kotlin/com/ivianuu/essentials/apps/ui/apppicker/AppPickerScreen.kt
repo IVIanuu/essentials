@@ -73,7 +73,8 @@ private fun AppInfo(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.packageName),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
+                contentDescription = null
             )
         },
         onClick = onClick

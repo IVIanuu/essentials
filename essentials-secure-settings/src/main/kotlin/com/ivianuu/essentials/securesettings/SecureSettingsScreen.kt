@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.securesettings
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -41,28 +42,30 @@ fun SecureSettingsScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
     ) {
-        InsettingScrollableColumn {
-            SecureSettingsHeader(
-                stringResource(
-                    if (state.showHideNavBarHint) {
-                        R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                    } else {
-                        R.string.es_pref_secure_settings_header_summary
-                    }
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                SecureSettingsHeader(
+                    stringResource(
+                        if (state.showHideNavBarHint) {
+                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                        } else {
+                            R.string.es_pref_secure_settings_header_summary
+                        }
+                    )
                 )
-            )
 
-            ListItem(
-                title = { Text(R.string.es_pref_use_pc) },
-                subtitle = { Text(R.string.es_pref_use_pc_summary) },
-                onClick = { dispatch(OpenPcInstructions) }
-            )
+                ListItem(
+                    title = { Text(R.string.es_pref_use_pc) },
+                    subtitle = { Text(R.string.es_pref_use_pc_summary) },
+                    onClick = { dispatch(OpenPcInstructions) }
+                )
 
-            ListItem(
-                title = { Text(R.string.es_pref_use_root) },
-                subtitle = { Text(R.string.es_pref_use_root_summary) },
-                onClick = { dispatch(GrantPermissionsViaRoot) }
-            )
+                ListItem(
+                    title = { Text(R.string.es_pref_use_root) },
+                    subtitle = { Text(R.string.es_pref_use_root_summary) },
+                    onClick = { dispatch(GrantPermissionsViaRoot) }
+                )
+            }
         }
     }
 }

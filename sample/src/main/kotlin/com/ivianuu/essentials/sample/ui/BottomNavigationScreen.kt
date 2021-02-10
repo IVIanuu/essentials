@@ -77,7 +77,7 @@ fun BottomNavigationScreen() {
                             BottomNavigationItem(
                                 selected = item == selectedItem,
                                 onClick = { selectedItem = item },
-                                icon = { Icon(item.icon) },
+                                icon = { Icon(item.icon, null) },
                                 label = { Text(item.title) }
                             )
                         }

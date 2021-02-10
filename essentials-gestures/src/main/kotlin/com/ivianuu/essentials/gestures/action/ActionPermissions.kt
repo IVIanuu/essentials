@@ -40,21 +40,21 @@ class ActionPermissions(@Given appContext: AppContext) {
         DefaultAccessibilityService::class,
         Permission.Title to "Accessibility", // todo res
         Permission.Desc to "Required to click buttons", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_accessibility) }
+        Permission.Icon to { Icon(R.drawable.es_ic_accessibility, null) }
     )
     val root = RootPermission(
         Permission.Title to "Root", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_adb) }
+        Permission.Icon to { Icon(R.drawable.es_ic_adb, null) }
     )
     val writeSecureSettings = WriteSecureSettingsPermission(
         Permission.Title to "Write secure settings", // todo res
         Permission.Desc to "Required to change the navigation bar visibility", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings) }
+        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) }
     )
     val writeSettings = WriteSettingsPermission(
         appContext,
         Permission.Title to "Write Settings", // todo res
         Permission.Desc to "Required to change settings", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings) } // todo change icon
+        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) } // todo change icon
     )
 }

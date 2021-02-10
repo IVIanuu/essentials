@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayout
@@ -93,6 +94,7 @@ private fun Chip(
                     .preferredHeight(32.dp)
                     .clickable(
                         onClick = onClick,
+                        interactionState = remember { InteractionState() },
                         indication = rememberRipple(bounded = false, color = Color.Unspecified)
                     ),
                 contentAlignment = Alignment.Center

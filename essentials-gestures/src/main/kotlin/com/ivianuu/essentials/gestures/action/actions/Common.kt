@@ -35,13 +35,13 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf { CoilImage(data = data) }
+internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf { CoilImage(data = data, contentDescription = null) }
 
 internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
-internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon) }
+internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon, null) }
 
-internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
+internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id, null) }
 
 @GivenFun suspend fun runRootCommand(
     command: String,

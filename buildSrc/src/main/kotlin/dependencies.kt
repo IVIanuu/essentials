@@ -33,7 +33,7 @@ object Publishing {
 
 object Deps {
     const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.4.0"
+        "dev.chrisbanes.accompanist:accompanist-coil:0.5.0"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
     object AndroidX {
@@ -41,7 +41,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
         object Compose {
-            const val version = "1.0.0-alpha09"
+            const val version = "1.0.0-alpha11"
             const val snapshot = "6994167"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
@@ -94,7 +94,7 @@ object Deps {
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev454"
+        private const val version = "0.0.1-dev455"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val component = "com.ivianuu.injekt:injekt-component:$version"
@@ -108,7 +108,7 @@ object Deps {
     const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
 
     object Kotlin {
-        const val version = "1.4.21"
+        const val version = "1.4.21-2"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

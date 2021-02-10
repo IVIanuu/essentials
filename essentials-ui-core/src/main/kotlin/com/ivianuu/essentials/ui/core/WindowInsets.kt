@@ -144,3 +144,9 @@ fun ProvideWindowInsets(content: @Composable () -> Unit) {
 
     ProvideInsets(insets, content)
 }
+
+@Composable
+fun ambientHorizontalInsets() = AmbientInsets.current.copy(top = 0.dp, bottom = 0.dp)
+
+@Composable
+fun ambientVerticalInsets() = AmbientInsets.current.copy(start = 0.dp, end = 0.dp)

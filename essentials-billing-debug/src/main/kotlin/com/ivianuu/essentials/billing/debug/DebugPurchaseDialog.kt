@@ -19,7 +19,7 @@ package com.ivianuu.essentials.billing.debug
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -103,7 +103,7 @@ fun DebugPurchaseDialog(
                 content = { Text(skuDetails.description) },
                 positiveButton = {
                     Button(
-                        colors = ButtonConstants.defaultButtonColors(
+                        colors = ButtonDefaults.buttonColors(
                             backgroundColor = GooglePlayGreen,
                             contentColor = guessingContentColorFor(GooglePlayGreen),
                         ),

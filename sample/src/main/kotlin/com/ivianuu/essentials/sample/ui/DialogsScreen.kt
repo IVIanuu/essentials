@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -39,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.compositionActivity
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.ListItem
@@ -67,12 +68,12 @@ fun DialogsScreen() {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {
-        InsettingScrollableColumn {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        LazyColumn(
+            contentPadding = ambientVerticalInsets(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            item {
                 DialogLauncherButton(
                     text = "Simple"
                 ) {
@@ -85,7 +86,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Simple with neutral"
                 ) {
@@ -103,8 +105,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Title only"
                 ) {
@@ -112,19 +114,21 @@ fun DialogsScreen() {
                         title = { Text("Title only") }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "With icon"
                 ) {
                     Dialog(
                         title = { Text("With icon") },
-                        icon = { Icon(Icons.Default.Settings) },
+                        icon = { Icon(Icons.Default.Settings, null) },
                         positiveButton = {
                             DialogCloseButton(text = "OK")
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Message only"
                 ) {
@@ -132,7 +136,8 @@ fun DialogsScreen() {
                         content = { Text("Message only") }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Buttons only"
                 ) {
@@ -145,7 +150,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Stacked buttons"
                 ) {
@@ -161,7 +167,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "Stacked buttons with neutral"
                 ) {
@@ -180,7 +187,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     dismissible = false,
                     text = "Not cancelable"
@@ -192,7 +200,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 DialogLauncherButton(
                     text = "List"
                 ) {
@@ -220,7 +229,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 val singleChoiceItems = listOf(1, 2, 3, 4, 5)
                 var selectedSingleChoiceItem by rememberState { 1 }
                 DialogLauncherButton(
@@ -246,7 +256,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 val multiChoiceItems = listOf("A", "B", "C")
                 var selectedMultiChoiceItems by rememberState { multiChoiceItems }
                 DialogLauncherButton(
@@ -271,7 +282,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 val primaryColor = MaterialTheme.colors.primary
                 var currentColor by rememberState { primaryColor }
                 DialogLauncherButton(text = "Color Picker") { dismiss ->
@@ -286,7 +298,8 @@ fun DialogsScreen() {
                         }
                     )
                 }
-
+            }
+            item {
                 var textInputValue by rememberState { "" }
                 DialogLauncherButton(text = "Text input") {
                     var tmpTextInputValue by rememberState { textInputValue }

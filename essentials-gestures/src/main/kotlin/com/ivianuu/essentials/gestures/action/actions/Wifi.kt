@@ -70,6 +70,6 @@ fun wifiIcon(
     }
     .map {
         {
-            Icon(it)
+            Icon(it, null)
         }
     }

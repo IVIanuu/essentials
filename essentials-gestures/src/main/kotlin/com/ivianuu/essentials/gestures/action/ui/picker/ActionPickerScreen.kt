@@ -66,7 +66,7 @@ private fun ActionPickerItem(
         leading = { item.icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
             IconButton(onClick = onOpenSettingsClick) {
-                Icon(R.drawable.es_ic_settings)
+                Icon(R.drawable.es_ic_settings, null)
             }
         }) else null,
         title = { Text(item.title) },

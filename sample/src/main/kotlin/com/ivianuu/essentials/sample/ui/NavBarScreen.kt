@@ -95,7 +95,7 @@ fun NavBarScreen(
                 WriteSecureSettingsPermission(
                     Permission.Title to "Write secure settings",
                     Permission.Desc to "This is a desc",
-                    Permission.Icon to { Icon(Icons.Default.Menu) }
+                    Permission.Icon to { Icon(Icons.Default.Menu, null) }
                 )
             }
 

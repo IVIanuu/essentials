@@ -77,7 +77,7 @@ class AppActionPickerDelegate(
     override val title: String
         get() = stringResource(R.string.es_action_app)
     override val icon: @Composable () -> Unit
-        get() = { Icon(R.drawable.es_ic_apps) }
+        get() = { Icon(R.drawable.es_ic_apps, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = pickApp(AppPickerKey(launchableAppFilter)) ?: return null

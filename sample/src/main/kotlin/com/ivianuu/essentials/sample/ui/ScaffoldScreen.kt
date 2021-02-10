@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
@@ -40,12 +41,8 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.isLight
-import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
-import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -113,55 +110,57 @@ fun ScaffoldScreen(
             }
         }) else null
     ) {
-        InsettingScrollableColumn {
-            Subheader { Text("Top bar") }
-            ListItem(
-                title = { Text("Show top bar") },
-                trailing = {
-                    Checkbox(
-                        checked = controls.showTopBar,
-                        modifier = Modifier.absorbPointer(),
-                        onCheckedChange = {}
-                    )
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                Subheader { Text("Top bar") }
+                ListItem(
+                    title = { Text("Show top bar") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showTopBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
 
-                },
-                onClick = { controls.showTopBar = !controls.showTopBar }
-            )
+                    },
+                    onClick = { controls.showTopBar = !controls.showTopBar }
+                )
 
-            Subheader { Text("Bottom bar") }
-            ListItem(
-                title = { Text("Show bottom bar") },
-                trailing = {
-                    Checkbox(
-                        checked = controls.showBottomBar,
-                        modifier = Modifier.absorbPointer(),
-                        onCheckedChange = {}
-                    )
-                },
-                onClick = { controls.showBottomBar = !controls.showBottomBar }
-            )
+                Subheader { Text("Bottom bar") }
+                ListItem(
+                    title = { Text("Show bottom bar") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showBottomBar,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
+                    },
+                    onClick = { controls.showBottomBar = !controls.showBottomBar }
+                )
 
-            Subheader { Text("Fab") }
-            ListItem(
-                title = { Text("Show fab") },
-                trailing = {
-                    Checkbox(
-                        checked = controls.showFab,
-                        modifier = Modifier.absorbPointer(),
-                        onCheckedChange = {}
-                    )
-                },
-                onClick = { controls.showFab = !controls.showFab }
-            )
-            ListItem(
-                title = { Text("Fab location") },
-                onClick = {
-                    uiScope.launch {
-                        pickFabPosition(FabPositionKey(controls.fabPosition))
-                            ?.let { controls.fabPosition = it }
+                Subheader { Text("Fab") }
+                ListItem(
+                    title = { Text("Show fab") },
+                    trailing = {
+                        Checkbox(
+                            checked = controls.showFab,
+                            modifier = Modifier.absorbPointer(),
+                            onCheckedChange = {}
+                        )
+                    },
+                    onClick = { controls.showFab = !controls.showFab }
+                )
+                ListItem(
+                    title = { Text("Fab location") },
+                    onClick = {
+                        uiScope.launch {
+                            pickFabPosition(FabPositionKey(controls.fabPosition))
+                                ?.let { controls.fabPosition = it }
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

@@ -70,5 +70,5 @@ fun bluetoothIcon(@Given broadcasts: broadcasts): Flow<BluetoothIcon> {
             if (it) R.drawable.es_ic_bluetooth
             else R.drawable.es_ic_bluetooth_disabled
         }
-        .map { { Icon(it) } }
+        .map { { Icon(it, null) } }
 }

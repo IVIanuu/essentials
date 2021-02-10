@@ -149,7 +149,7 @@ private fun NotificationsList(
                 trailing = if (notification.isClearable) {
                     {
                         IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                            Icon(R.drawable.es_ic_clear)
+                            Icon(R.drawable.es_ic_clear, null)
                         }
                     }
                 } else null
@@ -246,12 +246,13 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
             {
                 Image(
                     modifier = Modifier.size(24.dp),
-                    bitmap = bitmap
+                    bitmap = bitmap,
+                    contentDescription = null
                 )
             }
         },
         failure = {
-            { Icon(R.drawable.es_ic_error) }
+            { Icon(R.drawable.es_ic_error, null) }
         }
     ),
     color = Color(notification.color),

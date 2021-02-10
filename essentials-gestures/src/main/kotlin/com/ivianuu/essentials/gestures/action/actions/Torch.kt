@@ -66,6 +66,6 @@ fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     }
     .map {
         {
-            Icon(it)
+            Icon(it, null)
         }
     }

@@ -20,6 +20,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -78,27 +80,29 @@ fun HomeScreen(
             )
         }
     ) {
-        InsettingLazyColumnFor(items = finalItems) { item ->
-            val color = key(item) {
-                rememberSavedInstanceState(item) {
-                    ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                        .shuffled()
-                        .first()
-                        .front
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            items(finalItems) { item ->
+                val color = key(item) {
+                    rememberSavedInstanceState(item) {
+                        ColorPickerPalette.values()
+                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                            .shuffled()
+                            .first()
+                            .front
+                    }
                 }
-            }
 
-            HomeItem(
-                item = item,
-                color = color,
-                onClick = {
-                    dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
+                HomeItem(
+                    item = item,
+                    color = color,
+                    onClick = {
+                        dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
+                    }
+                )
+
+                if (finalItems.indexOf(item) != finalItems.lastIndex) {
+                    HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
                 }
-            )
-
-            if (finalItems.indexOf(item) != finalItems.lastIndex) {
-                HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
             }
         }
     }

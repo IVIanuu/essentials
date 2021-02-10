@@ -28,11 +28,13 @@ import androidx.compose.ui.res.vectorResource
 @Composable
 fun Icon(
     iconRes: Int,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     tint: Color = AmbientContentColor.current,
 ) {
     Icon(
         painter = rememberVectorPainter(vectorResource(iconRes)),
+        contentDescription = contentDescription,
         modifier = modifier,
         tint = tint
     )
