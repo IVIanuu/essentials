@@ -56,10 +56,10 @@ import com.ivianuu.injekt.*
 @Composable
 fun HomeScreen(
     @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
-    @Given items: @Remembered Set<HomeItem>,
+    @Given itemsFactory: () -> Set<HomeItem>,
     @Given showToast: showToast,
 ) {
-    val finalItems = remember(items) { items.sortedBy { it.title } }
+    val finalItems = remember { itemsFactory().sortedBy { it.title } }
     Scaffold(
         topBar = {
             TopAppBar(
