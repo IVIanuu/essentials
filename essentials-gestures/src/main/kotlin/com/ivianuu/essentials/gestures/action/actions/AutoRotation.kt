@@ -31,7 +31,7 @@ import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-object AutoRotationActionId : ActionId("auto_rotation")
+@Given object AutoRotationActionId : ActionId("auto_rotation")
 
 @ActionBinding<AutoRotationActionId>
 @Given

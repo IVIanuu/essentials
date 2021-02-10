@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-object WifiActionId : ActionId("wifi")
+@Given object WifiActionId : ActionId("wifi")
 
 @ActionBinding<WifiActionId>
 @Given

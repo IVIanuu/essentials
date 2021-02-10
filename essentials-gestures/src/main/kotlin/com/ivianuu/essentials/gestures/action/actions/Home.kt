@@ -29,7 +29,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-object HomeActionId : ActionId("home")
+@Given object HomeActionId : ActionId("home")
 
 @ActionBinding<HomeActionId>
 @Given

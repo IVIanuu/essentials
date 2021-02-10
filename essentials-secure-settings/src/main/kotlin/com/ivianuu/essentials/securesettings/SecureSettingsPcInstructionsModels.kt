@@ -25,13 +25,12 @@ class SecureSettingsPcInstructionsKey
 data class SecureSettingsPcInstructionsState(val packageName: String) {
     val secureSettingsAdbCommand =
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
-
-    companion object {
-        @Given
-        fun initial(@Given buildInfo: BuildInfo): @Initial SecureSettingsPcInstructionsState =
-            SecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
-    }
 }
+
+@Given
+fun initialSecureSettingsPcInstructionsState(@Given buildInfo: BuildInfo):
+        @Initial SecureSettingsPcInstructionsState =
+    SecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
 
 sealed class SecureSettingsPcInstructionsAction {
     object CopyAdbCommand : SecureSettingsPcInstructionsAction()

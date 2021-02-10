@@ -26,7 +26,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object LockScreenActionId : ActionId("lock_screen")
+@Given object LockScreenActionId : ActionId("lock_screen")
 
 @ActionBinding<LockScreenActionId>
 @Given

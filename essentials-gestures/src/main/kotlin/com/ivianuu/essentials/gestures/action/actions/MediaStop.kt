@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object StopActionId : ActionId("media_stop")
+@Given object StopActionId : ActionId("media_stop")
 
 @ActionBinding<StopActionId>
 @Given

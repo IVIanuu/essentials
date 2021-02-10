@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object MenuActionId : ActionId("menu")
+@Given object MenuActionId : ActionId("menu")
 
 @ActionBinding<MenuActionId>
 @Given

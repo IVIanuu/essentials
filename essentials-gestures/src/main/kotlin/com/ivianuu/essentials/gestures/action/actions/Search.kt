@@ -29,7 +29,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object SearchActionId : ActionId("search")
+@Given object SearchActionId : ActionId("search")
 
 @ActionBinding<SearchActionId>
 @Given

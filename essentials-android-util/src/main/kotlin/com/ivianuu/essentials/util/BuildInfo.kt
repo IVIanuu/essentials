@@ -27,22 +27,20 @@ data class BuildInfo(
     val isDebug: Boolean,
     val packageName: String,
     val versionCode: Int,
-) {
-    companion object {
-        @Scoped<AppComponent>
+)
+
+@Scoped<AppComponent>
 @Given
-fun default(
-            @Given appContext: AppContext,
-            @Given packageManager: PackageManager
-        ): BuildInfo {
-            val appInfo = appContext.applicationInfo
-            val packageInfo = packageManager
-                .getPackageInfo(appInfo.packageName, 0)
-            return BuildInfo(
-                isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-                packageName = appInfo.packageName,
-                versionCode = packageInfo.versionCode
-            )
-        }
-    }
+fun androidBuildInfo(
+    @Given appContext: AppContext,
+    @Given packageManager: PackageManager
+): BuildInfo {
+    val appInfo = appContext.applicationInfo
+    val packageInfo = packageManager
+        .getPackageInfo(appInfo.packageName, 0)
+    return BuildInfo(
+        isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+        packageName = appInfo.packageName,
+        versionCode = packageInfo.versionCode
+    )
 }

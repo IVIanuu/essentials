@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object BackActionId : ActionId("back")
+@Given object BackActionId : ActionId("back")
 
 @ActionBinding<BackActionId>
 @Given

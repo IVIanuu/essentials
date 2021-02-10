@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.*
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Qualifier annotation class NotificationWorkerBinding
 
-@Given
+@Macro
 @GivenSetElement
 fun <T : @NotificationWorkerBinding suspend () -> Unit> notificationWorkerIntoSet(
     @Given instance: T): NotificationWorker = instance

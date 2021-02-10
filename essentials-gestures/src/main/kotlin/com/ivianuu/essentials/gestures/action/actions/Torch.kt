@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-object TorchActionId : ActionId("torch")
+@Given object TorchActionId : ActionId("torch")
 
 @ActionBinding<TorchActionId>
 @Given

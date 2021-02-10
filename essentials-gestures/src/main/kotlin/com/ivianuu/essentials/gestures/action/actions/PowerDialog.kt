@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object PowerDialogActionId : ActionId("power_dialog")
+@Given object PowerDialogActionId : ActionId("power_dialog")
 
 @ActionBinding<PowerDialogActionId>
 fun powerDialogAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(

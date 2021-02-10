@@ -26,7 +26,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object VolumeActionId : ActionId("volume")
+@Given object VolumeActionId : ActionId("volume")
 
 @ActionBinding<VolumeActionId>
 @Given

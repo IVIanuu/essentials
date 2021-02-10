@@ -57,10 +57,11 @@ import kotlinx.coroutines.withContext
         ?: error("Unsupported action key $key")
 }
 
-@GivenFun suspend fun getActionSettingsKey(
+@GivenFun
+suspend fun getActionSettingsKey(
     id: String,
-    @Given actionSettings: Set<Pair<String, Key>>,
+    @Given actionSettings: Set<Pair<String, ActionSettingsKey>>,
     @Given defaultDispatcher: DefaultDispatcher
-): Key? = withContext(defaultDispatcher) {
+): ActionSettingsKey? = withContext(defaultDispatcher) {
     actionSettings.toMap()[id]
 }

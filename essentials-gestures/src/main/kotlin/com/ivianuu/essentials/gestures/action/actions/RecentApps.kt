@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object RecentAppsActionId : ActionId("recent_apps")
+@Given object RecentAppsActionId : ActionId("recent_apps")
 
 @ActionBinding<RecentAppsActionId>
 @Given

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object NotificationsActionId : ActionId("notifications")
+@Given object NotificationsActionId : ActionId("notifications")
 
 @ActionBinding<NotificationsActionId>
 @Given

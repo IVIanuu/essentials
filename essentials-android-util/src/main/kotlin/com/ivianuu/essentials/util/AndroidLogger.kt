@@ -39,17 +39,15 @@ import com.ivianuu.injekt.component.AppComponent
             WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
         }
     }
-
-    companion object {
-        @Scoped<AppComponent>
-@Given
-fun impl(
-            @Given buildInfo: BuildInfo,
-            @Given androidLoggerFactory: () -> AndroidLogger,
-            @Given noopLoggerFactory: () -> NoopLogger
-        ): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
-    }
 }
+
+@Scoped<AppComponent>
+@Given
+fun androidLogger(
+    @Given buildInfo: BuildInfo,
+    @Given androidLoggerFactory: () -> AndroidLogger,
+    @Given noopLoggerFactory: () -> NoopLogger
+): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
 
 @Given
 inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled

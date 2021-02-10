@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object SkipPreviousActionId : ActionId("media_skip_previous")
+@Given object SkipPreviousActionId : ActionId("media_skip_previous")
 
 @ActionBinding<SkipPreviousActionId>
 @Given

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object QuickSettingsActionId : ActionId("quick_settings")
+@Given object QuickSettingsActionId : ActionId("quick_settings")
 
 @ActionBinding<QuickSettingsActionId>
 @Given

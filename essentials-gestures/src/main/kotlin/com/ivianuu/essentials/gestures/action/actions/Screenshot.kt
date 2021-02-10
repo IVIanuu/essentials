@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-object ScreenshotActionId : ActionId("screenshot")
+@Given object ScreenshotActionId : ActionId("screenshot")
 
 @ActionBinding<ScreenshotActionId>
 @Given

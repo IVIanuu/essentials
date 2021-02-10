@@ -26,7 +26,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object InputMethodActionId : ActionId("input_method")
+@Given object InputMethodActionId : ActionId("input_method")
 
 @ActionBinding<InputMethodActionId>
 @Given

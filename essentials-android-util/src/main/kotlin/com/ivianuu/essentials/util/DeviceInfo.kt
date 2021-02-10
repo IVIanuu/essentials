@@ -22,9 +22,7 @@ import com.ivianuu.injekt.Given
 data class DeviceInfo(
     val model: String,
     val manufacturer: String,
-) {
-    companion object {
-        @Given
-        val defaultBinding = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
-    }
-}
+)
+
+@Given
+val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)

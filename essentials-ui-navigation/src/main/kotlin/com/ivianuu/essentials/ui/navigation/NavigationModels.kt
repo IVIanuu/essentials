@@ -20,13 +20,11 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CompletableDeferred
 
-data class NavigationState(val backStack: List<Key> = emptyList()) {
-    companion object {
-        @Given
-        fun initial(@Given homeKey: HomeKey? = null): @Initial NavigationState =
-            NavigationState(listOfNotNull(homeKey))
-    }
-}
+data class NavigationState(val backStack: List<Key> = emptyList())
+
+@Given
+fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial NavigationState =
+    NavigationState(listOfNotNull(homeKey))
 
 sealed class NavigationAction {
     data class Push(

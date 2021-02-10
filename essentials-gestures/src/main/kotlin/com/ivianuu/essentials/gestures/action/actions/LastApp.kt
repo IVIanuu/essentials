@@ -25,7 +25,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-object LastAppActionId : ActionId("last_app")
+@Given object LastAppActionId : ActionId("last_app")
 
 @ActionBinding<LastAppActionId>
 @Given

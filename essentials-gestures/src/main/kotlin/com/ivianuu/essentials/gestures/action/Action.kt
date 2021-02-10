@@ -85,12 +85,14 @@ interface ActionFactory {
 
 @Qualifier annotation class ActionSettingsKeyBinding<I : ActionId>
 
+typealias ActionSettingsKey = Key
+
 @Macro
-@Given
-fun <T : @ActionSettingsKeyBinding<I> Any, I : ActionId> actionSettingsKeyBindingImpl(
-    @Given id: ActionId,
+@GivenSetElement
+fun <T : @ActionSettingsKeyBinding<I> S, S : Any, I : ActionId> actionSettingsKeyBindingImpl(
+    @Given id: I,
     @Given instance: T,
-) = id to instance
+): Pair<String, ActionSettingsKey> = id.value to instance
 
 @Qualifier annotation class ActionFactoryBinding
 

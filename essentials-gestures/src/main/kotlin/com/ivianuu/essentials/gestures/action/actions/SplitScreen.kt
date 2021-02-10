@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object SplitScreenActionId : ActionId("split_screen")
+@Given object SplitScreenActionId : ActionId("split_screen")
 
 @ActionBinding<SplitScreenActionId>
 @Given

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object PlayPauseActionId : ActionId("media_play_pause")
+@Given object PlayPauseActionId : ActionId("media_play_pause")
 
 @ActionBinding<PlayPauseActionId>
 @Given

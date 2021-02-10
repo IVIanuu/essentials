@@ -30,7 +30,7 @@ import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-object KillCurrentAppActionId : ActionId("kill_current_app")
+@Given object KillCurrentAppActionId : ActionId("kill_current_app")
 
 @ActionBinding<KillCurrentAppActionId>
 @Given

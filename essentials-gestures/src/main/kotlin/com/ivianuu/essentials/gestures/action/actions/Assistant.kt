@@ -28,7 +28,7 @@ import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 
-object AssistantActionId : ActionId("assistant")
+@Given object AssistantActionId : ActionId("assistant")
 
 @ActionBinding<AssistantActionId>
 @Given
