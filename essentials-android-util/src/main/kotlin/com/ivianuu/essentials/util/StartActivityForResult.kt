@@ -25,25 +25,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.ui.common.registerActivityResultCallback
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import kotlin.coroutines.resume
 
-@FunBinding
+@GivenFun
 suspend fun startActivityForIntentResult(
-    startActivityForResult: startActivityForResult<Intent, ActivityResult>,
-    @FunApi intent: Intent
+    intent: Intent,
+    @Given startActivityForResult: startActivityForResult<Intent, ActivityResult>
 ): ActivityResult = startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
-@FunBinding
+@GivenFun
 suspend fun <I, O> startActivityForResult(
-    mainDispatcher: MainDispatcher,
-    openAppUi: openAppUi,
-    @FunApi contract: ActivityResultContract<I, O>,
-    @FunApi input: I,
+    contract: ActivityResultContract<I, O>,
+    input: I,
+    @Given mainDispatcher: MainDispatcher,
+    @Given openAppUi: openAppUi
 ): O {
     val activity = openAppUi()
     return withContext(mainDispatcher) {

@@ -26,7 +26,8 @@ import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
 fun NotificationListenerPermission(
@@ -45,16 +46,17 @@ val Permission.Companion.NotificationListenerClass by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class NotificationListenerPermissionStateProvider(
-    private val applicationContext: ApplicationContext,
-    private val buildInfo: BuildInfo,
+    @Given private val appContext: AppContext,
+    @Given private val buildInfo: BuildInfo,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
         Permission.NotificationListenerClass in permission
 
     override suspend fun isGranted(permission: Permission): Boolean {
-        return NotificationManagerCompat.getEnabledListenerPackages(applicationContext)
+        return NotificationManagerCompat.getEnabledListenerPackages(appContext)
             .any { it == buildInfo.packageName }
     }
 }

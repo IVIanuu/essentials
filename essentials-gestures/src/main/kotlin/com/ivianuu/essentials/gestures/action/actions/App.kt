@@ -34,18 +34,20 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 
 @ActionFactoryBinding
+@Given
 class AppActionFactory(
-    private val getAppInfo: getAppInfo,
-    private val packageManager: PackageManager,
-    private val sendIntent: sendIntent,
+    @Given private val getAppInfo: getAppInfo,
+    @Given private val packageManager: PackageManager,
+    @Given private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(key: String): Action {
-        val packageName = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun createAction(id: String): Action {
+        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
-            key = key,
+            id = id,
             title = getAppInfo(packageName).appName,
             unlockScreen = true,
             enabled = true,
@@ -53,8 +55,8 @@ class AppActionFactory(
         )
     }
 
-    override suspend fun createExecutor(key: String): ActionExecutor {
-        val packageName = key.removePrefix(ACTION_KEY_PREFIX)
+    override suspend fun createExecutor(id: String): ActionExecutor {
+        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return {
             sendIntent(
                 packageManager.getLaunchIntentForPackage(
@@ -66,15 +68,16 @@ class AppActionFactory(
 }
 
 @ActionPickerDelegateBinding
+@Given
 class AppActionPickerDelegate(
-    private val launchableAppFilter: LaunchableAppFilter,
-    private val pickApp: pushKeyForResult<AppPickerKey, AppInfo>,
-    private val stringResource: stringResource,
+    @Given private val launchableAppFilter: LaunchableAppFilter,
+    @Given private val pickApp: pushKeyForResult<AppPickerKey, AppInfo>,
+    @Given private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_app)
     override val icon: @Composable () -> Unit
-        get() = { Icon(R.drawable.es_ic_apps) }
+        get() = { Icon(R.drawable.es_ic_apps, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = pickApp(AppPickerKey(launchableAppFilter)) ?: return null

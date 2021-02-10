@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CoroutineScope
 
 typealias GlobalScope = CoroutineScope
 
-@Scoped(ApplicationComponent::class)
-@Binding
-fun globalScope(defaultDispatcher: DefaultDispatcher): GlobalScope =
-    CoroutineScope(defaultDispatcher)
+@Scoped<AppComponent>
+@Given
+fun globalScope(@Given dispatcher: DefaultDispatcher): GlobalScope =
+    CoroutineScope(dispatcher)

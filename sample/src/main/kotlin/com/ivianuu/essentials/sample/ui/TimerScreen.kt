@@ -28,18 +28,23 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding("Timer")
+@HomeItemBinding
+@Given
+val timerHomeItem = HomeItem("Timer") { TimerKey() }
+
 class TimerKey
 
 @KeyUiBinding<TimerKey>
-@FunBinding
+@GivenFun
 @Composable
-fun TimerScreen(state: @UiState TimerState) {
+fun TimerScreen(@Given state: @UiState TimerState) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }
     ) {
@@ -54,10 +59,11 @@ fun TimerScreen(state: @UiState TimerState) {
 data class TimerState(val value: Int = 0)
 
 @UiStateBinding
+@Given
 fun timerState(
-    scope: CoroutineScope,
-    initial: @Initial TimerState = TimerState()
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial TimerState = TimerState()
+): StateFlow<TimerState> = scope.state(initial) {
     while (coroutineContext.isActive) {
         reduce { copy(value = value.inc()) }
         delay(1000)

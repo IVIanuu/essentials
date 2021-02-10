@@ -24,8 +24,9 @@ import com.ivianuu.essentials.processrestart.restartProcess
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.startActivityForIntentResult
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -33,13 +34,12 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-@FunBinding
-suspend fun restoreData(
-    contentResolver: ContentResolver,
-    ioDispatcher: IODispatcher,
-    prefsDir: PrefsDir,
-    restartProcess: restartProcess,
-    startActivityForIntentResult: startActivityForIntentResult,
+@GivenFun suspend fun restoreData(
+    @Given contentResolver: ContentResolver,
+    @Given ioDispatcher: IODispatcher,
+    @Given prefsDir: PrefsDir,
+    @Given restartProcess: restartProcess,
+    @Given startActivityForIntentResult: startActivityForIntentResult,
 ): Result<Unit, Throwable> = runKatching {
     withContext(ioDispatcher) {
         val uri = startActivityForIntentResult(

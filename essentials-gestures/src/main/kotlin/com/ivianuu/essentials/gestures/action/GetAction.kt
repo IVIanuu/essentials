@@ -19,27 +19,24 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@FunBinding
-suspend fun getAllActions(
-    actions: Map<String, () -> Action>,
-    defaultDispatcher: DefaultDispatcher,
+@GivenFun suspend fun getAllActions(
+    @Given actions: Set<Pair<String, () -> Action>>,
+    @Given defaultDispatcher: DefaultDispatcher,
 ): List<Action> = withContext(defaultDispatcher) {
-    actions.values
-        .map { it() }
+    actions.map { it.second() }
 }
 
-@FunBinding
-suspend fun getAction(
-    actions: Map<String, () -> Action>,
-    actionFactories: () -> Set<ActionFactory>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
+@GivenFun suspend fun getAction(
+    key: String,
+    @Given actions: Set<Pair<String, () -> Action>>,
+    @Given actionFactories: () -> Set<ActionFactory>,
+    @Given defaultDispatcher: DefaultDispatcher
 ): Action = withContext(defaultDispatcher) {
-    actions[key]
+    actions.toMap()[key]
         ?.invoke()
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
@@ -47,25 +44,24 @@ suspend fun getAction(
         ?: error("Unsupported action key $key")
 }
 
-@FunBinding
-suspend fun getActionExecutor(
-    actionsExecutors: Map<String, ActionExecutor>,
-    actionFactories: () -> Set<ActionFactory>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
+@GivenFun suspend fun getActionExecutor(
+    key: String,
+    @Given actionsExecutors: Set<Pair<String, ActionExecutor>>,
+    @Given actionFactories: () -> Set<ActionFactory>,
+    @Given defaultDispatcher: DefaultDispatcher
 ): ActionExecutor = withContext(defaultDispatcher) {
-    actionsExecutors[key]
+    actionsExecutors.toMap()[key]
         ?: actionFactories()
             .firstOrNull { it.handles(key) }
             ?.createExecutor(key)
         ?: error("Unsupported action key $key")
 }
 
-@FunBinding
+@GivenFun
 suspend fun getActionSettingsKey(
-    actionSettings: Map<String, Key>,
-    defaultDispatcher: DefaultDispatcher,
-    @FunApi key: String,
-): Key? = withContext(defaultDispatcher) {
-    actionSettings[key]
+    id: String,
+    @Given actionSettings: Set<Pair<String, ActionSettingsKey>>,
+    @Given defaultDispatcher: DefaultDispatcher
+): ActionSettingsKey? = withContext(defaultDispatcher) {
+    actionSettings.toMap()[id]
 }

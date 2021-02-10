@@ -17,22 +17,20 @@
 package com.ivianuu.essentials.activity
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.AmbientUiComponent
 import com.ivianuu.essentials.ui.core.AppUi
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 
 class DefaultActivity : EsActivity() {
-    @Composable
-    override fun Content() {
+    @Composable override fun Content() {
         AmbientUiComponent.current
-            .mergeComponent<DefaultActivityComponent>()
+            .get<DefaultActivityComponent>()
             .appUi()
     }
 }
 
-@MergeInto(UiComponent::class)
-interface DefaultActivityComponent {
-    val appUi: AppUi
-}
+@ComponentElementBinding<ActivityComponent>
+@Given class DefaultActivityComponent(@Given val appUi: AppUi)

@@ -49,30 +49,32 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("App tracker")
+@HomeItemBinding
+@Given
+val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
+
 class AppTrackerKey
 
 @KeyUiBinding<AppTrackerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun AppTrackerScreen(
-    createAppTrackerNotification: createAppTrackerNotification,
-    currentApp: Flow<CurrentApp>,
-    foregroundState: AppTrackerForegroundState,
-    requestPermissions: requestPermissions,
-    showToast: showToast,
+    @Given createAppTrackerNotification: createAppTrackerNotification,
+    @Given currentApp: Flow<CurrentApp>,
+    @Given foregroundState: AppTrackerForegroundState,
+    @Given requestPermissions: requestPermissions,
+    @Given showToast: showToast,
 ) {
     val currentForegroundState by foregroundState.collectAsState()
 
@@ -118,22 +120,23 @@ fun AppTrackerScreen(
 
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
 
 // todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
-inline val AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
+@Given
+inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
     get() = this
 
 @SuppressLint("NewApi")
-@FunBinding
+@GivenFun
 fun createAppTrackerNotification(
-    applicationContext: ApplicationContext,
-    notificationManager: NotificationManager,
-    systemBuildInfo: SystemBuildInfo,
-    @FunApi currentApp: String?,
+    currentApp: String?,
+    @Given appContext: AppContext,
+    @Given notificationManager: NotificationManager,
+    @Given systemBuildInfo: SystemBuildInfo
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
@@ -145,7 +148,7 @@ fun createAppTrackerNotification(
         )
     }
 
-    return NotificationCompat.Builder(applicationContext, "app_tracker")
+    return NotificationCompat.Builder(appContext, "app_tracker")
         .apply {
             setSmallIcon(R.mipmap.ic_launcher)
             setContentTitle("Current app: $currentApp")

@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@FunBinding
+@GivenFun
 suspend fun performGlobalAction(
-    holder: MutableAccessibilityServiceHolder,
-    @FunApi action: Int
+    action: Int,
+    @Given holder: MutableAccessibilityServiceHolder,
 ): Boolean = holder.value?.performGlobalAction(action) ?: false

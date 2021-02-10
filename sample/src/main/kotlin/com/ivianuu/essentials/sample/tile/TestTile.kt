@@ -19,11 +19,14 @@ package com.ivianuu.essentials.sample.tile
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileStateBinding
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -32,12 +35,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@TileStateBinding(1)
+@TileStateBinding<FunTileService1>
+@Given
 fun testTileState(
-    scope: CoroutineScope,
-    actions: Actions<TileAction>,
-    update: updatePref<TwilightPrefs>,
-    twilightPrefs: Flow<TwilightPrefs>,
+    @Given scope: CoroutineScope,
+    @Given actions: Actions<TileAction>,
+    @Given update: updatePref<TwilightPrefs>,
+    @Given twilightPrefs: Flow<TwilightPrefs>,
 ) = scope.state(TwilightPrefs().toTileState()) {
     twilightPrefs
         .reduce { it.toTileState() }

@@ -31,18 +31,21 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
-import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Shared element")
+@HomeItemBinding
+@Given
+val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
+
 class SharedElementKey(val color: Color)
 
 @KeyUiBinding<SharedElementKey>
-@FunBinding
+@GivenFun
 @Composable
-fun SharedElementScreen(key: SharedElementKey) {
+fun SharedElementScreen(@Given key: SharedElementKey) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
@@ -58,9 +61,9 @@ fun SharedElementScreen(key: SharedElementKey) {
     }
 }
 
-@NavigationOptionsFactoryBinding<SharedElementKey>
-@FunBinding
-fun createSharedElementNavigationOptions(@FunApi key: SharedElementKey) = NavigationOptions(
+@NavigationOptionFactoryBinding
+@GivenFun
+fun createSharedElementNavigationOptions(key: SharedElementKey): NavigationOptions = NavigationOptions(
     enterTransition = SharedElementStackTransition("Shared element" to "b"),
     exitTransition = SharedElementStackTransition("Shared element" to "b")
 )

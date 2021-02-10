@@ -28,33 +28,33 @@ import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 
-@Scoped(ApplicationComponent::class)
-@Binding
-class ActionPermissions(applicationContext: ApplicationContext) {
+@Scoped<AppComponent>
+@Given
+class ActionPermissions(@Given appContext: AppContext) {
     val accessibility = AccessibilityServicePermission(
         DefaultAccessibilityService::class,
         Permission.Title to "Accessibility", // todo res
         Permission.Desc to "Required to click buttons", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_accessibility) }
+        Permission.Icon to { Icon(R.drawable.es_ic_accessibility, null) }
     )
     val root = RootPermission(
         Permission.Title to "Root", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_adb) }
+        Permission.Icon to { Icon(R.drawable.es_ic_adb, null) }
     )
     val writeSecureSettings = WriteSecureSettingsPermission(
         Permission.Title to "Write secure settings", // todo res
         Permission.Desc to "Required to change the navigation bar visibility", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings) }
+        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) }
     )
     val writeSettings = WriteSettingsPermission(
-        applicationContext,
+        appContext,
         Permission.Title to "Write Settings", // todo res
         Permission.Desc to "Required to change settings", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings) } // todo change icon
+        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) } // todo change icon
     )
 }

@@ -20,26 +20,32 @@ import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class FunTileService1 : AbstractFunTileService(1)
-class FunTileService2 : AbstractFunTileService(2)
-class FunTileService3 : AbstractFunTileService(3)
-class FunTileService4 : AbstractFunTileService(4)
-class FunTileService5 : AbstractFunTileService(5)
-class FunTileService6 : AbstractFunTileService(6)
-class FunTileService7 : AbstractFunTileService(7)
-class FunTileService8 : AbstractFunTileService(8)
-class FunTileService9 : AbstractFunTileService(9)
+class FunTileService1 : AbstractFunTileService(keyOf<FunTileService1>())
+class FunTileService2 : AbstractFunTileService(keyOf<FunTileService2>())
+class FunTileService3 : AbstractFunTileService(keyOf<FunTileService3>())
+class FunTileService4 : AbstractFunTileService(keyOf<FunTileService4>())
+class FunTileService5 : AbstractFunTileService(keyOf<FunTileService5>())
+class FunTileService6 : AbstractFunTileService(keyOf<FunTileService6>())
+class FunTileService7 : AbstractFunTileService(keyOf<FunTileService7>())
+class FunTileService8 : AbstractFunTileService(keyOf<FunTileService8>())
+class FunTileService9 : AbstractFunTileService(keyOf<FunTileService9>())
 
-abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
+abstract class AbstractFunTileService(
+    private val key: Key<AbstractFunTileService>
+) : EsTileService() {
 
     private val component by lazy {
-        serviceComponent.mergeComponent<FunTileServiceComponent>()
+        serviceComponent.get<FunTileServiceComponent>()
     }
 
     private val tileActions = EventFlow<TileAction>()
@@ -47,9 +53,9 @@ abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
     override fun onStartListening() {
         super.onStartListening()
         listeningScope.launch {
-            val store = (component.tileStores[slot]
+            val store = (component.tileStores[key]
                 ?.invoke(this, tileActions)
-                ?: error("No tile found for $slot"))
+                ?: error("No tile found for $key"))
             store.collect { applyState(it) }
         }
     }
@@ -86,8 +92,11 @@ abstract class AbstractFunTileService(private val slot: Int) : EsTileService() {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-interface FunTileServiceComponent {
-    val stringResource: stringResource
-    val tileStores: TileStores
+@ComponentElementBinding<ServiceComponent>
+@Given
+class FunTileServiceComponent(
+    @Given val stringResource: stringResource,
+    @Given tileStores: Set<TileStateElement>
+) {
+    val tileStores = tileStores.toMap()
 }

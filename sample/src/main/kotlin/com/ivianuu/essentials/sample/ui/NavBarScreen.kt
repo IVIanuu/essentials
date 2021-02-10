@@ -51,19 +51,22 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Nav bar")
+@HomeItemBinding @Given
+val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
+
 class NavBarKey
 
 @KeyUiBinding<NavBarKey>
-@FunBinding
+@GivenFun
 @Composable
 fun NavBarScreen(
-    hasPermissions: hasPermissions,
-    navBarManager: NavBarManager,
-    requestPermissions: requestPermissions,
+    @Given hasPermissions: hasPermissions,
+    @Given navBarManager: NavBarManager,
+    @Given requestPermissions: requestPermissions,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -85,14 +88,14 @@ fun NavBarScreen(
             var hideNavBar by rememberState { false }
             onCommit(hideNavBar) { updateNavBarState(hideNavBar) }
 
-            // reshow nav bar when exiting the screen
+            // reshow nav bar when leaving the screen
             onDispose { updateNavBarState(false) }
 
             val secureSettingsPermission = remember {
                 WriteSecureSettingsPermission(
                     Permission.Title to "Write secure settings",
                     Permission.Desc to "This is a desc",
-                    Permission.Icon to { Icon(Icons.Default.Menu) }
+                    Permission.Icon to { Icon(Icons.Default.Menu, null) }
                 )
             }
 

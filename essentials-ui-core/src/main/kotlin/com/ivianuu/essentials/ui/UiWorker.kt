@@ -20,32 +20,27 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-@Effect
-annotation class UiWorkerBinding {
-    companion object {
-        @SetElements
-        fun <T : suspend () -> Unit> workerIntoSet(instance: @ForEffect T): UiWorkers =
-            setOf(instance)
-    }
-}
+@Qualifier annotation class UiWorkerBinding
 
-typealias UiWorkers = Set<suspend () -> Unit>
+@Macro
+@GivenSetElement
+fun <T : @UiWorkerBinding suspend () -> Unit> uiWorkerBinding(@Given instance: T): UiWorker = instance
 
-@SetElements
-fun defaultUiWorkers(): UiWorkers = emptySet()
+typealias UiWorker = suspend () -> Unit
 
-@FunBinding
+@GivenFun
 fun runUiWorkers(
-    defaultDispatcher: DefaultDispatcher,
-    logger: Logger,
-    uiScope: UiScope,
-    workers: UiWorkers,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given logger: Logger,
+    @Given uiScope: UiScope,
+    @Given workers: Set<UiWorker>,
 ) {
     logger.d { "run ui workers" }
     workers

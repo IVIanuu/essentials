@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.util
 
 import android.os.Build
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 data class DeviceInfo(
     val model: String,
     val manufacturer: String,
-) {
-    companion object {
-        @Binding
-        fun binding() = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
-    }
-}
+)
+
+@Given
+val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)

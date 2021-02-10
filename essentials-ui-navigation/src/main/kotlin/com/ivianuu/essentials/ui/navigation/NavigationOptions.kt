@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.MapEntries
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlin.reflect.KClass
 
 data class NavigationOptions(
@@ -34,19 +34,13 @@ data class NavigationOptions(
     ) : this(opaque, transition, transition)
 }
 
-typealias NavigationOptionsFactory<K> = (K) -> NavigationOptions
+typealias NavigationOptionFactory = Pair<KClass<*>, (Key) -> NavigationOptions>
 
-@Effect
-annotation class NavigationOptionsFactoryBinding<K> {
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        @MapEntries
-        inline fun <@Arg("K") reified K, T : NavigationOptionsFactory<K>> bind(
-            factory: @ForEffect T,
-        ): NavigationOptionFactories = mapOf(
-            K::class as KClass<out Key> to factory as (Key) -> NavigationOptions
-        )
-    }
-}
+@Qualifier annotation class NavigationOptionFactoryBinding
+@Suppress("UNCHECKED_CAST")
 
-typealias NavigationOptionFactories = Map<KClass<out Key>, NavigationOptionsFactory<Key>>
+@Macro
+@GivenSetElement
+inline fun <T : @NavigationOptionFactoryBinding (K) -> NavigationOptions, reified K : Key> navigationOptionFactoryBindingImpl(
+    @Given instance: T
+): NavigationOptionFactory = (K::class to instance) as NavigationOptionFactory

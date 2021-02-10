@@ -25,15 +25,19 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Work")
+@HomeItemBinding
+@Given
+val workHomeItem = HomeItem("Work") { WorkKey() }
+
 class WorkKey
 
 @KeyUiBinding<WorkKey>
-@FunBinding
+@GivenFun
 @Composable
-fun WorkScreen(scheduleTasks: scheduleTasks) {
+fun WorkScreen(@Given scheduleTasks: scheduleTasks) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Work") }) }
     ) {

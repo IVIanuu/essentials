@@ -21,20 +21,20 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.runShellCommand
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 
-@FunBinding
-suspend fun hasSecureSettingsPermission(
-    applicationContext: ApplicationContext,
-): Boolean = applicationContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+@GivenFun suspend fun hasSecureSettingsPermission(
+    @Given appContext: AppContext,
+): Boolean = appContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
         PackageManager.PERMISSION_GRANTED
 
-@FunBinding
-suspend fun grantSecureSettingsPermissionViaRoot(
-    buildInfo: com.ivianuu.essentials.util.BuildInfo,
-    hasSecureSettingsPermission: hasSecureSettingsPermission,
-    runShellCommand: runShellCommand,
+@GivenFun suspend fun grantSecureSettingsPermissionViaRoot(
+    @Given buildInfo: BuildInfo,
+    @Given hasSecureSettingsPermission: hasSecureSettingsPermission,
+    @Given runShellCommand: runShellCommand,
 ): Boolean = runKatching {
     runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
     hasSecureSettingsPermission()

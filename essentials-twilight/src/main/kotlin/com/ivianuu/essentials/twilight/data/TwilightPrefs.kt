@@ -16,13 +16,15 @@
 
 package com.ivianuu.essentials.twilight.data
 
-import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.injekt.Module
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@PrefBinding("twilight_prefs")
 @JsonClass(generateAdapter = true)
 data class TwilightPrefs(
     @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.System,
     @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
+
+@Module val twilightPrefsModule = PrefModule<TwilightPrefs>("twilight_prefs")

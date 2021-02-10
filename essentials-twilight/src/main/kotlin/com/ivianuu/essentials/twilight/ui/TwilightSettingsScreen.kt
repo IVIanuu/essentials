@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.twilight.ui
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -24,8 +25,8 @@ import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
@@ -33,34 +34,37 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<TwilightSettingsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TwilightSettingsScreen(
-    dispatchUpdate: dispatchPrefUpdate<TwilightPrefs>,
-    prefs: @UiState TwilightPrefs,
+    @Given dispatchUpdate: dispatchPrefUpdate<TwilightPrefs>,
+    @Given prefs: @UiState TwilightPrefs,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
-        InsettingScrollableColumn {
-            TwilightMode.values().toList().forEach { mode ->
-                TwilightModeItem(
-                    mode = mode,
-                    isSelected = prefs.twilightMode == mode,
-                    onClick = { dispatchUpdate { copy(twilightMode = mode) } }
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                TwilightMode.values().toList().forEach { mode ->
+                    TwilightModeItem(
+                        mode = mode,
+                        isSelected = prefs.twilightMode == mode,
+                        onClick = { dispatchUpdate { copy(twilightMode = mode) } }
+                    )
+                }
+
+                Subheader { Text(R.string.es_twilight_pref_category_more) }
+
+                CheckboxListItem(
+                    value = prefs.useBlackInDarkMode,
+                    onValueChange = { dispatchUpdate { copy(useBlackInDarkMode = it) } },
+                    title = { Text(R.string.es_twilight_use_black) }
                 )
             }
-
-            Subheader { Text(R.string.es_twilight_pref_category_more) }
-
-            CheckboxListItem(
-                value = prefs.useBlackInDarkMode,
-                onValueChange = { dispatchUpdate { copy(useBlackInDarkMode = it) } },
-                title = { Text(R.string.es_twilight_use_black) }
-            )
         }
     }
 }

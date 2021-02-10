@@ -19,12 +19,7 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material.DrawerConstants
-import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.emptyContent
 import androidx.compose.runtime.orEmpty
@@ -46,7 +41,7 @@ fun Scaffold(
     isFloatingActionButtonDocked: Boolean = false,
     drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
     drawerShape: Shape = MaterialTheme.shapes.large,
-    drawerElevation: Dp = DrawerConstants.DefaultElevation,
+    drawerElevation: Dp = DrawerDefaults.Elevation,
     backgroundColor: Color = MaterialTheme.colors.background,
     applyInsets: Boolean = true,
     bodyContent: @Composable () -> Unit

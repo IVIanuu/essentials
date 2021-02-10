@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample
+plugins {
+    kotlin("jvm")
+    id("com.ivianuu.injekt")
+}
 
-import com.ivianuu.injekt.merge.GenerateMergeComponents
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
+//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
-@GenerateMergeComponents
-object InjektInitializer
+dependencies {
+    compile(Deps.Injekt.core)
+    compile(Deps.Injekt.component)
+    compile(Deps.Kotlin.stdlib)
+}

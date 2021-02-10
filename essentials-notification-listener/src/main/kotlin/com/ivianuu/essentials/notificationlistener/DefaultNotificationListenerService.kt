@@ -20,12 +20,12 @@ import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.ApplicationComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
     private val component by lazy {
-        serviceComponent.mergeComponent<DefaultNotificationListenerServiceComponent>()
+        serviceComponent.get<DefaultNotificationListenerServiceComponent>()
     }
 
     override fun onListenerConnected() {
@@ -79,15 +79,16 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-interface DefaultNotificationListenerServiceComponent {
-    val notificationServiceRef: NotificationServiceRef
-    val logger: Logger
-    val runNotificationWorkers: runNotificationWorkers
-}
+@ComponentElementBinding<ServiceComponent>
+@Given
+class DefaultNotificationListenerServiceComponent(
+    @Given val notificationServiceRef: NotificationServiceRef,
+    @Given val logger: Logger,
+    @Given val runNotificationWorkers: runNotificationWorkers
+)
 
 internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

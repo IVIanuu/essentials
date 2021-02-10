@@ -27,6 +27,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.to
+import com.ivianuu.injekt.Given
 
 @SuppressLint("BatteryLife")
 fun IgnoreBatteryOptimizationsPermission(
@@ -46,9 +47,10 @@ val Permission.Companion.IgnoreBatteryOptimizationsPermission by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class IgnoreBatteryOptimizationsPermissionStateProvider(
-    private val powerManager: PowerManager,
-    private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
+    @Given private val powerManager: PowerManager,
+    @Given private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

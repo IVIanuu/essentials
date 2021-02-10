@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 
 internal typealias MutableAccessibilityEvents = EventFlow<AccessibilityEvent>
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun mutableAccessibilityEvents(): MutableAccessibilityEvents = EventFlow()
 
 typealias AccessibilityEvents = Flow<AccessibilityEvent>
-@Binding
-inline val MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
+@Given
+inline val @Given MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
     get() = this

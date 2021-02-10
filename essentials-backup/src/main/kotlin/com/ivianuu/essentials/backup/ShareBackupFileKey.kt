@@ -21,22 +21,22 @@ import androidx.core.content.FileProvider
 import com.ivianuu.essentials.ui.navigation.KeyIntentFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import java.io.File
 
 data class ShareBackupFileKey(val backupFilePath: String)
 
-@KeyIntentFactoryBinding
-@FunBinding
+@KeyIntentFactoryBinding<ShareBackupFileKey>
+@GivenFun
 fun createShareBackupFileKeyIntent(
-    applicationContext: ApplicationContext,
-    buildInfo: BuildInfo,
-    @FunApi key: ShareBackupFileKey,
+    @Given appContext: AppContext,
+    @Given buildInfo: BuildInfo,
+    @Given key: ShareBackupFileKey,
 ): Intent {
     val uri = FileProvider.getUriForFile(
-        applicationContext,
+        appContext,
         buildInfo.packageName,
         File(key.backupFilePath)
     )

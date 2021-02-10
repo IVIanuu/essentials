@@ -33,14 +33,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<ActionPickerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun ActionPickerScreen(
-    state: @UiState ActionPickerState,
-    dispatch: DispatchAction<ActionPickerAction>,
+    @Given state: @UiState ActionPickerState,
+    @Given dispatch: DispatchAction<ActionPickerAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
@@ -65,7 +66,7 @@ private fun ActionPickerItem(
         leading = { item.icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
             IconButton(onClick = onOpenSettingsClick) {
-                Icon(R.drawable.es_ic_settings)
+                Icon(R.drawable.es_ic_settings, null)
             }
         }) else null,
         title = { Text(item.title) },

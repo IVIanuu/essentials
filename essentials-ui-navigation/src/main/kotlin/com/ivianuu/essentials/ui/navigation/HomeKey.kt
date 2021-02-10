@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
 typealias HomeKey = Key
 
-@Effect
-annotation class HomeKeyBinding {
-    companion object {
-        @Binding
-        inline val <T : Key> @ForEffect T.homeKey: HomeKey
-            get() = this
-    }
-}
+@Qualifier annotation class HomeKeyBinding
+
+@Macro
+@Given
+fun <T : @HomeKeyBinding HomeKey> homeKeyBindingImpl(@Given instance: T): HomeKey = instance

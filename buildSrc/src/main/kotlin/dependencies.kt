@@ -28,20 +28,20 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev733"
+    const val version = "${Build.versionName}-dev740"
 }
 
 object Deps {
     const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.4.0"
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
+        "dev.chrisbanes.accompanist:accompanist-coil:0.5.0"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
         object Compose {
-            const val version = "1.0.0-alpha08"
+            const val version = "1.0.0-alpha11"
             const val snapshot = "6994167"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
@@ -89,16 +89,17 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev732"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev740"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev412"
+        private const val version = "0.0.1-dev457"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
+        const val component = "com.ivianuu.injekt:injekt-component:$version"
         const val core = "com.ivianuu.injekt:injekt-core:$version"
-        const val merge = "com.ivianuu.injekt:injekt-merge:$version"
+        const val common = "com.ivianuu.injekt:injekt-common:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
@@ -107,7 +108,7 @@ object Deps {
     const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
 
     object Kotlin {
-        const val version = "1.4.255-SNAPSHOT"
+        const val version = "1.4.21-2"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

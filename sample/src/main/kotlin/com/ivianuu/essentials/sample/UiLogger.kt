@@ -23,13 +23,13 @@ import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
 @UiWorkerBinding
-@FunBinding
-suspend fun UiLogger(logger: Logger) {
+@GivenFun
+suspend fun UiLogger(@Given logger: Logger) {
     runWithCleanup(
         block = {
             logger.d { "hello from ui" }

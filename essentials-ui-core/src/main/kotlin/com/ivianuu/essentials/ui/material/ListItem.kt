@@ -28,11 +28,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.preferredHeightIn
 import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.AmbientEmphasisLevels
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ripple.AmbientRippleTheme
+import androidx.compose.material.ripple.ExperimentalRippleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -40,7 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalRippleApi::class)
 @Composable
 fun ListItem(
     modifier: Modifier = Modifier,

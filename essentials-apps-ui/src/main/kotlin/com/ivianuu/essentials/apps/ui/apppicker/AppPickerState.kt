@@ -26,19 +26,22 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
+@Given
 fun appPickerState(
-    scope: CoroutineScope,
-    initial: @Initial AppPickerState,
-    actions: Actions<AppPickerAction>,
-    getInstalledApps: getInstalledApps,
-    popTopKeyWithResult: popTopKeyWithResult<AppInfo>,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial AppPickerState,
+    @Given actions: Actions<AppPickerAction>,
+    @Given getInstalledApps: getInstalledApps,
+    @Given popTopKeyWithResult: popTopKeyWithResult<AppInfo>,
+): StateFlow<AppPickerState> = scope.state(initial) {
     reduceResource({ getInstalledApps() }) { copy(allApps = it) }
     actions
         .filterIsInstance<FilterApps>()

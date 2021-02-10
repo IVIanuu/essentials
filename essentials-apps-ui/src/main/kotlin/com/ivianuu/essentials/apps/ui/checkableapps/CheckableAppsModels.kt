@@ -23,7 +23,7 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 
 data class CheckableAppsParams(
@@ -34,11 +34,15 @@ data class CheckableAppsParams(
 )
 
 internal typealias CheckedAppsSource = Flow<Set<String>>
-@Binding
-fun checkedAppsSource(params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
+
+@Given
+fun checkedAppsSource(@Given params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
+
 internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
-@Binding
-fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged = params.onCheckedAppsChanged
+
+@Given
+fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChanged =
+    params.onCheckedAppsChanged
 
 data class CheckableAppsState(
     val allApps: Resource<List<AppInfo>> = Idle,
@@ -56,14 +60,13 @@ data class CheckableAppsState(
                 )
             }
         }
-    companion object {
-        @Binding
-        fun initial(params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
-            appFilter = params.appFilter,
-            appBarTitle = params.appBarTitle
-        )
-    }
 }
+
+@Given
+fun initialCheckableAppsState(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
+    appFilter = params.appFilter,
+    appBarTitle = params.appBarTitle
+)
 
 data class CheckableApp(
     val info: AppInfo,

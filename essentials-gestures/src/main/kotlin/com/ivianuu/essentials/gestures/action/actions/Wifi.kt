@@ -22,37 +22,41 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@ActionBinding("wifi")
+@Given object WifiActionId : ActionId("wifi")
+
+@ActionBinding<WifiActionId>
+@Given
 fun wifiAction(
-    stringResource: stringResource,
-    wifiIcon: Flow<WifiIcon>,
+    @Given stringResource: stringResource,
+    @Given wifiIcon: Flow<WifiIcon>,
 ): Action = Action(
-    key = "wifi",
+    id = WifiActionId,
     title = stringResource(R.string.es_action_wifi),
     icon = wifiIcon
 )
 
-@ActionExecutorBinding("wifi")
-@FunBinding
-suspend fun toggleWifi(wifiManager: WifiManager) {
+@ActionExecutorBinding<WifiActionId>
+@GivenFun
+suspend fun toggleWifi(@Given wifiManager: WifiManager) {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
 typealias WifiIcon = ActionIcon
 
-@Binding
+@Given
 fun wifiIcon(
-    broadcasts: broadcasts,
-    wifiManager: WifiManager,
+    @Given broadcasts: broadcasts,
+    @Given wifiManager: WifiManager,
 ): Flow<WifiIcon> = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =
@@ -66,6 +70,6 @@ fun wifiIcon(
     }
     .map {
         {
-            Icon(it)
+            Icon(it, null)
         }
     }

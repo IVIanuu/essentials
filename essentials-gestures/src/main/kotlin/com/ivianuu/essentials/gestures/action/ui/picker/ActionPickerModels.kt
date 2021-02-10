@@ -60,7 +60,7 @@ sealed class ActionPickerItem {
             ActionIcon(action = action, modifier = modifier)
         }
 
-        override suspend fun getResult() = ActionPickerResult.Action(action.key)
+        override suspend fun getResult() = ActionPickerResult.Action(action.id)
     }
 
     @Immutable

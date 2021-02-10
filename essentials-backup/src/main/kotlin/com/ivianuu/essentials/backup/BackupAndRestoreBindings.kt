@@ -18,29 +18,29 @@ package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import java.io.File
 
-@Effect
-annotation class BackupFile {
-    companion object {
-        @SetElements
-        fun <T : File> intoSet(instance: @ForEffect T): BackupFiles = setOf(instance)
-    }
-}
+@Qualifier annotation class BackupFileBinding
+
+@Macro
+@GivenSetElement
+fun <T : @BackupFileBinding File> backupFileImpl(@Given instance: T): BackupFile = instance
+
+typealias BackupFile = File
 
 typealias BackupDir = File
 
-@Binding
-fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+@Given
+fun backupDir(@Given dataDir: DataDir): BackupDir =
+    dataDir.resolve("files/backups")
 
-typealias BackupFiles = Set<File>
+@BackupFileBinding @Given
+fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
 
-@BackupFile
-fun backupPrefs(prefsDir: PrefsDir) = prefsDir
-
-@BackupFile
-fun backupDatabases(dataDir: DataDir) = dataDir.resolve("databases")
+@BackupFileBinding @Given
+fun backupDatabases(@Given dataDir: DataDir) =
+    dataDir.resolve("databases")

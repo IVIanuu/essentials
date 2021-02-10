@@ -23,7 +23,7 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 data class AppPickerKey(
     val appFilter: AppFilter = DefaultAppFilter,
@@ -37,14 +37,13 @@ data class AppPickerState(
 ) {
     val filteredApps = allApps
         .map { it.filter(appFilter) }
-    companion object {
-        @Binding
-        fun initial(params: AppPickerKey): @Initial AppPickerState = AppPickerState(
-            appFilter = params.appFilter,
-            title = params.title
-        )
-    }
 }
+
+@Given
+fun initialAppPickerState(@Given params: AppPickerKey): @Initial AppPickerState = AppPickerState(
+    appFilter = params.appFilter,
+    title = params.title
+)
 
 sealed class AppPickerAction {
     data class FilterApps(val appFilter: AppFilter) : AppPickerAction()

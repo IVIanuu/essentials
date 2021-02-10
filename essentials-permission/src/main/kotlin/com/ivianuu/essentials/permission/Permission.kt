@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class Permission(private val metadata: Map<Key<*>, Any?>) {
+data class Permission(private val metadata: Map<Key<*>, Any?>) {
 
     constructor(vararg metadata: Permission.Pair<*>) : this(
         metadata.associate {

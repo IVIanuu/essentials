@@ -23,8 +23,8 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.openAppUi
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -32,11 +32,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 fun hasPermissions(
-    defaultDispatcher: DefaultDispatcher,
-    stateProvider: stateProvider,
-    @FunApi permissions: List<Permission>
+    permissions: List<Permission>,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given stateProvider: stateProvider,
 ): Flow<Boolean> = permissionChanges
     .map { Unit }
     .onStart { emit(Unit) }
@@ -46,15 +46,15 @@ fun hasPermissions(
         }
     }.distinctUntilChanged()
 
-@FunBinding
+@GivenFun
 suspend fun requestPermissions(
-    defaultDispatcher: DefaultDispatcher,
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    hasPermissions: hasPermissions,
-    logger: Logger,
-    openAppUi: openAppUi,
-    permissionRequestKeyFactory: PermissionRequestKeyFactory,
-    @FunApi permissions: List<Permission>,
+    permissions: List<Permission>,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given hasPermissions: hasPermissions,
+    @Given logger: Logger,
+    @Given openAppUi: openAppUi,
+    @Given permissionRequestKeyFactory: PermissionRequestKeyFactory
 ): Boolean = withContext(defaultDispatcher) {
     logger.d { "request permissions $permissions" }
     if (hasPermissions(permissions).first()) return@withContext true
@@ -70,15 +70,15 @@ suspend fun requestPermissions(
     hasPermissions(permissions).first()
 }
 
-@FunBinding
-fun @receiver:FunApi Permission.stateProvider(
-    stateProviders: Set<PermissionStateProvider>,
+@GivenFun
+fun Permission.stateProvider(
+    @Given stateProviders: Set<PermissionStateProvider>,
 ): PermissionStateProvider = stateProviders.firstOrNull { it.handles(this) }
         ?: error("Couldn't find state provider for $this")
 
-@FunBinding
-fun @receiver:FunApi Permission.requestHandler(
-    requestHandlers: Set<PermissionRequestHandler>,
+@GivenFun
+fun Permission.requestHandler(
+    @Given requestHandlers: Set<PermissionRequestHandler>,
 ): PermissionRequestHandler {
     val original = requestHandlers.firstOrNull { it.handles(this) }
         ?: error("Couldn't find request handler for $this")

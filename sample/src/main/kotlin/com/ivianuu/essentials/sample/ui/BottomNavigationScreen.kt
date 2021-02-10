@@ -41,13 +41,17 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Bottom navigation")
+@HomeItemBinding
+@Given
+val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
+
 class BottomNavigationKey
 
 @KeyUiBinding<BottomNavigationKey>
-@FunBinding
+@GivenFun
 @Composable
 fun BottomNavigationScreen() {
     var selectedItem by savedInstanceState { BottomNavItem.values().first() }
@@ -73,7 +77,7 @@ fun BottomNavigationScreen() {
                             BottomNavigationItem(
                                 selected = item == selectedItem,
                                 onClick = { selectedItem = item },
-                                icon = { Icon(item.icon) },
+                                icon = { Icon(item.icon, null) },
                                 label = { Text(item.title) }
                             )
                         }

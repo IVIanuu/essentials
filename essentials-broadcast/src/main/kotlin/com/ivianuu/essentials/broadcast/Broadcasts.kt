@@ -23,26 +23,26 @@ import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@FunBinding
+@GivenFun
 fun broadcasts(
-    applicationContext: ApplicationContext,
-    mainDispatcher: MainDispatcher,
-    @FunApi action: String
+    action: String,
+    @Given appContext: AppContext,
+    @Given mainDispatcher: MainDispatcher
 ): Flow<Intent> = callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             offerSafe(intent)
         }
     }
-    applicationContext.registerReceiver(
+    appContext.registerReceiver(
         broadcastReceiver,
         IntentFilter().apply {
             addAction(action)
@@ -50,7 +50,7 @@ fun broadcasts(
     )
     awaitClose {
         runKatching {
-            applicationContext.unregisterReceiver(broadcastReceiver)
+            appContext.unregisterReceiver(broadcastReceiver)
         }
     }
 }.flowOn(mainDispatcher)

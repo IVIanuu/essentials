@@ -27,21 +27,24 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @UiStateBinding
+@Given
 fun secureSettingsPcInstructionsState(
-    scope: CoroutineScope,
-    initial: @Initial SecureSettingsPcInstructionsState,
-    actions: Actions<SecureSettingsPcInstructionsAction>,
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    dispatchClipboardAction: DispatchAction<ClipboardAction>,
-    popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial SecureSettingsPcInstructionsState,
+    @Given actions: Actions<SecureSettingsPcInstructionsAction>,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given dispatchClipboardAction: DispatchAction<ClipboardAction>,
+    @Given popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
+): StateFlow<SecureSettingsPcInstructionsState> = scope.state(initial) {
     launch { popNavigatorOnceSecureSettingsGranted(false) }
 
     actions

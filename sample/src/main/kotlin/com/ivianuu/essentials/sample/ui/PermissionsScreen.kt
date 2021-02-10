@@ -44,16 +44,20 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Permissions")
+@HomeItemBinding
+@Given
+val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
+
 class PermissionsKey
 
 @KeyUiBinding<PermissionsKey>
-@FunBinding
+@GivenFun
 @Composable
-fun PermissionsScreen(requestPermissions: requestPermissions) {
+fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {
@@ -61,48 +65,48 @@ fun PermissionsScreen(requestPermissions: requestPermissions) {
             Manifest.permission.CAMERA,
             Permission.Title to "Camera",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val phone = RuntimePermission(
             Manifest.permission.CALL_PHONE,
             Permission.Title to "Call phone",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val accessibility = AccessibilityServicePermission(
             DefaultAccessibilityService::class,
             Permission.Title to "Accessibility",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val notificationListener = NotificationListenerPermission(
             DefaultNotificationListenerService::class,
             Permission.Title to "Notification listener",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val systemOverlay = SystemOverlayPermission(
             AmbientContext.current,
             Permission.Title to "System overlay",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val writeSecureSettings = WriteSecureSettingsPermission(
             Permission.Title to "Write secure settings",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val writeSettings = WriteSettingsPermission(
             AmbientContext.current,
             Permission.Title to "Write settings",
             Permission.Desc to "This is a desc",
-            Permission.Icon to { Icon(Icons.Default.Menu) }
+            Permission.Icon to { Icon(Icons.Default.Menu, null) }
         )
 
         val scope = rememberCoroutineScope()

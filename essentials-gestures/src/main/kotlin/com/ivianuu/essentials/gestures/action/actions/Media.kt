@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.Intent
 import android.provider.MediaStore
 import android.view.KeyEvent
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -26,18 +27,19 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.*
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -49,47 +51,42 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.AppContext
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
-@FunBinding
+@GivenFun
 fun mediaAction(
-    stringResource: stringResource,
-    @FunApi key: String,
-    @FunApi titleRes: Int,
-    @FunApi icon: Flow<ActionIcon>,
-) = Action(
-    key = key,
+    id: ActionId,
+    titleRes: Int,
+    icon: Flow<ActionIcon>,
+    @Given stringResource: stringResource,
+): Action = Action(
+    id = id,
     title = stringResource(titleRes),
     icon = icon
 )
 
-@FunBinding
+@GivenFun
 suspend fun doMediaAction(
-    applicationContext: ApplicationContext,
-    mediaIntent: mediaIntent,
-    @FunApi keycode: Int
+    keycode: Int,
+    @Given appContext: AppContext,
+    @Given mediaIntent: mediaIntent
 ) {
-    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
-    applicationContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
+    appContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
+    appContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
 }
 
-@FunBinding
+@GivenFun
 suspend fun mediaIntent(
-    mediaActionPrefs: Flow<MediaActionPrefs>,
-    @FunApi keyEvent: Int,
-    @FunApi keycode: Int,
+    keyEvent: Int,
+    keycode: Int,
+    @Given mediaActionPrefs: Flow<MediaActionPrefs>,
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
         Intent.EXTRA_KEY_EVENT,
@@ -102,35 +99,38 @@ suspend fun mediaIntent(
     }
 }
 
-@PrefBinding("media_action_prefs")
 @JsonClass(generateAdapter = true)
 data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
 
+@Module val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
+
 class MediaActionSettingsKey
 
 @KeyUiBinding<MediaActionSettingsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun MediaActionSettingsScreen(
-    state: @UiState MediaActionSettingsState,
-    dispatch: DispatchAction<MediaActionSettingsAction>,
+    @Given state: @UiState MediaActionSettingsState,
+    @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
-        InsettingScrollableColumn {
-            ListItem(
-                title = { Text(R.string.es_pref_media_app) },
-                subtitle = {
-                    Text(
-                        stringResource(
-                            R.string.es_pref_media_app_summary,
-                            state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                ListItem(
+                    title = { Text(R.string.es_pref_media_app) },
+                    subtitle = {
+                        Text(
+                            stringResource(
+                                R.string.es_pref_media_app_summary,
+                                state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+                            )
                         )
-                    )
-                },
-                onClick = { dispatch(UpdateMediaApp) }
-            )
+                    },
+                    onClick = { dispatch(UpdateMediaApp) }
+                )
+            }
         }
     }
 }
@@ -142,16 +142,17 @@ sealed class MediaActionSettingsAction {
 }
 
 @UiStateBinding
+@Given
 fun mediaActionSettingsState(
-    scope: CoroutineScope,
-    initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
-    actions: Actions<MediaActionSettingsAction>,
-    getAppInfo: getAppInfo,
-    intentAppFilterFactory: (Intent) -> IntentAppFilter,
-    prefs: Flow<MediaActionPrefs>,
-    pickMediaApp: pushKeyForResult<AppPickerKey, AppInfo>,
-    updatePrefs: updatePref<MediaActionPrefs>,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
+    @Given actions: Actions<MediaActionSettingsAction>,
+    @Given getAppInfo: getAppInfo,
+    @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
+    @Given prefs: Flow<MediaActionPrefs>,
+    @Given pickMediaApp: pushKeyForResult<AppPickerKey, AppInfo>,
+    @Given updatePrefs: updatePref<MediaActionPrefs>,
+): StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }

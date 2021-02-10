@@ -24,10 +24,10 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,13 +38,13 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun screenState(
-    broadcasts: broadcasts,
-    getCurrentScreenState: getCurrentScreenState,
-    globalScope: GlobalScope,
-    logger: Logger,
+    @Given broadcasts: broadcasts,
+    @Given getCurrentScreenState: getCurrentScreenState,
+    @Given globalScope: GlobalScope,
+    @Given logger: Logger,
 ): Flow<ScreenState> {
     return merge(
         broadcasts(Intent.ACTION_SCREEN_OFF),
@@ -60,11 +60,10 @@ fun screenState(
         .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 }
 
-@FunBinding
-suspend fun getCurrentScreenState(
-    defaultDispatcher: DefaultDispatcher,
-    keyguardManager: KeyguardManager,
-    powerManager: PowerManager,
+@GivenFun suspend fun getCurrentScreenState(
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given keyguardManager: KeyguardManager,
+    @Given powerManager: PowerManager,
 ): ScreenState = withContext(defaultDispatcher) {
     if (powerManager.isInteractive) {
         if (keyguardManager.isDeviceLocked) {

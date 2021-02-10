@@ -20,16 +20,17 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class DefaultAccessibilityService : EsAccessibilityService() {
 
     private val component by lazy {
-        serviceComponent.mergeComponent<DefaultAccessibilityServiceComponent>()
+        serviceComponent.get<DefaultAccessibilityServiceComponent>()
     }
 
     override fun onServiceConnected() {
@@ -61,10 +62,11 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
 }
 
-@MergeInto(ServiceComponent::class)
-interface DefaultAccessibilityServiceComponent {
-    val accessibilityEvents: MutableAccessibilityEvents
-    val logger: Logger
-    val runAccessibilityWorkers: runAccessibilityWorkers
-    val serviceHolder: MutableAccessibilityServiceHolder
-}
+@ComponentElementBinding<ServiceComponent>
+@Given
+class DefaultAccessibilityServiceComponent(
+    @Given val accessibilityEvents: MutableAccessibilityEvents,
+    @Given val logger: Logger,
+    @Given val runAccessibilityWorkers: runAccessibilityWorkers,
+    @Given val serviceHolder: MutableAccessibilityServiceHolder
+)

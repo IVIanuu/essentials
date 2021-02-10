@@ -72,24 +72,24 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
-@HomeItemBinding("Notifications")
+@HomeItemBinding
+@Given
+val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
+
 class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>
-@FunBinding
+@GivenFun
 @Composable
 fun NotificationsScreen(
-    pageState: @UiState NotificationsScreenState,
-    dispatch: DispatchAction<NotificationsScreenAction>,
+    @Given pageState: @UiState NotificationsScreenState,
+    @Given dispatch: DispatchAction<NotificationsScreenAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
@@ -149,7 +149,7 @@ private fun NotificationsList(
                 trailing = if (notification.isClearable) {
                     {
                         IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                            Icon(R.drawable.es_ic_clear)
+                            Icon(R.drawable.es_ic_clear, null)
                         }
                     }
                 } else null
@@ -179,16 +179,17 @@ private fun NotificationPermissions(
 }
 
 @UiStateBinding
+@Given
 fun notificationState(
-    scope: CoroutineScope,
-    initial: @Initial NotificationsScreenState = NotificationsScreenState(),
-    actions: Actions<NotificationsScreenAction>,
-    dispatchServiceAction: DispatchAction<NotificationsAction>,
-    hasPermissions: hasPermissions,
-    notifications: UiNotifications,
-    permission: NotificationsPermission,
-    requestPermissions: requestPermissions,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial NotificationsScreenState = NotificationsScreenState(),
+    @Given actions: Actions<NotificationsScreenAction>,
+    @Given dispatchServiceAction: DispatchAction<NotificationsAction>,
+    @Given hasPermissions: hasPermissions,
+    @Given notifications: UiNotifications,
+    @Given permission: NotificationsPermission,
+    @Given requestPermissions: requestPermissions,
+): StateFlow<NotificationsScreenState> = scope.state(initial) {
     hasPermissions(listOf(permission))
         .reduce { copy(hasPermissions = it) }
         .launchIn(this)
@@ -211,7 +212,7 @@ fun notificationState(
 }
 
 typealias NotificationsPermission = Permission
-@Binding
+@Given
 fun NotificationsPermission(): NotificationsPermission = NotificationListenerPermission(
     DefaultNotificationListenerService::class,
     Permission.Title to "Notifications"
@@ -219,25 +220,25 @@ fun NotificationsPermission(): NotificationsPermission = NotificationListenerPer
 
 typealias UiNotifications = Flow<List<UiNotification>>
 
-@Binding
+@Given
 fun notifications(
-    applicationContext: ApplicationContext,
-    serviceState: Flow<NotificationsState>,
+    @Given appContext: AppContext,
+    @Given serviceState: Flow<NotificationsState>,
 ): UiNotifications = serviceState
     .map { it.notifications }
     .map { notifications ->
         notifications
-            .parMap { it.toUiNotification(applicationContext) }
+            .parMap { it.toUiNotification(appContext) }
     }
 
-private fun StatusBarNotification.toUiNotification(applicationContext: ApplicationContext) = UiNotification(
+private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiNotification(
     title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
         ?.toString() ?: "",
     text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
         ?.toString() ?: "",
     icon = runKatching {
         notification.smallIcon
-            .loadDrawable(applicationContext)
+            .loadDrawable(appContext)
             .toImageBitmap()
 
     }.fold(
@@ -245,12 +246,13 @@ private fun StatusBarNotification.toUiNotification(applicationContext: Applicati
             {
                 Image(
                     modifier = Modifier.size(24.dp),
-                    bitmap = bitmap
+                    bitmap = bitmap,
+                    contentDescription = null
                 )
             }
         },
         failure = {
-            { Icon(R.drawable.es_ic_error) }
+            { Icon(R.drawable.es_ic_error, null) }
         }
     ),
     color = Color(notification.color),

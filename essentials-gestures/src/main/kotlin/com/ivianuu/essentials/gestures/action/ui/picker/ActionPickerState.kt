@@ -35,23 +35,26 @@ import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
+@Given
 fun actionPickerState(
-    scope: CoroutineScope,
-    initial: @Initial ActionPickerState = ActionPickerState(),
-    actions: Actions<ActionPickerAction>,
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    getActionPickerItems: getActionPickerItems,
-    getAction: getAction,
-    popTopKeyWithResult: popTopKeyWithResult<ActionPickerResult>,
-    requestPermissions: requestPermissions,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial ActionPickerState = ActionPickerState(),
+    @Given actions: Actions<ActionPickerAction>,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given getActionPickerItems: getActionPickerItems,
+    @Given getAction: getAction,
+    @Given popTopKeyWithResult: popTopKeyWithResult<ActionPickerResult>,
+    @Given requestPermissions: requestPermissions,
+): StateFlow<ActionPickerState> = scope.state(initial) {
     reduceResource({ getActionPickerItems() }) { copy(items = it) }
 
     actions
@@ -77,14 +80,13 @@ fun actionPickerState(
         .launchIn(this)
 }
 
-@FunBinding
-suspend fun getActionPickerItems(
-    actionPickerDelegates: Set<ActionPickerDelegate>,
-    getAllActions: getAllActions,
-    getActionSettingsKey: getActionSettingsKey,
-    key: ActionPickerKey,
-    stringResource: stringResource,
-) = buildList<ActionPickerItem> {
+@GivenFun suspend fun getActionPickerItems(
+    @Given actionPickerDelegates: Set<ActionPickerDelegate>,
+    @Given getAllActions: getAllActions,
+    @Given getActionSettingsKey: getActionSettingsKey,
+    @Given key: ActionPickerKey,
+    @Given stringResource: stringResource,
+): List<ActionPickerItem> = buildList<ActionPickerItem> {
     val specialOptions = mutableListOf<SpecialOption>()
 
     if (key.showDefaultOption) {
@@ -104,7 +106,7 @@ suspend fun getActionPickerItems(
     val actionsAndDelegates = (
             (actionPickerDelegates
                 .map { PickerDelegate(it) }) + (getAllActions()
-                .map { ActionItem(it, getActionSettingsKey(it.key)) })
+                .map { ActionItem(it, getActionSettingsKey(it.id)) })
             )
         .sortedBy { it.title }
 

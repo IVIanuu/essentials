@@ -41,21 +41,26 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@HomeItemBinding("Counter")
+@HomeItemBinding
+@Given
+val counterHomeItem = HomeItem("Counter") { CounterKey() }
+
 class CounterKey
 
 @KeyUiBinding<CounterKey>
-@FunBinding
+@GivenFun
 @Composable
 fun CounterScreen(
-    state: @UiState CounterState,
-    dispatch: DispatchAction<CounterAction>,
+    @Given state: @UiState CounterState,
+    @Given dispatch: DispatchAction<CounterAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
@@ -88,12 +93,13 @@ fun CounterScreen(
 }
 
 @UiStateBinding
+@Given
 fun counterState(
-    scope: CoroutineScope,
-    initial: @Initial CounterState = CounterState(),
-    actions: Actions<CounterAction>,
-    showToast: showToast
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial CounterState = CounterState(),
+    @Given actions: Actions<CounterAction>,
+    @Given showToast: showToast
+): StateFlow<CounterState> = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
         .reduce { copy(count = count.inc()) }

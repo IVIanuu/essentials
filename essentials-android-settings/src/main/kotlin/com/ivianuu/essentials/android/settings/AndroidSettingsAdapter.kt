@@ -18,21 +18,19 @@ package com.ivianuu.essentials.android.settings
 
 import android.content.ContentResolver
 import android.provider.Settings
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.ImplBinding
+import com.ivianuu.injekt.Given
 
 interface AndroidSettingsAdapter<T> {
     fun get(): T
     fun set(value: T)
 }
 
-@ImplBinding
-class FloatAndroidSettingsAdapter(
-    private val contentResolver: ContentResolver,
-    private val defaultValue: Float,
-    private val name: String,
-    private val type: AndroidSettingsType,
-) : AndroidSettingsAdapter<Float> {
+@Given class FloatAndroidSettingsAdapter(
+    @Given private val contentResolver: ContentResolver,
+    @Given private val defaultValue: Float,
+    @Given private val name: String,
+    @Given private val type: AndroidSettingsType,
+) : @Given AndroidSettingsAdapter<Float> {
     override fun get(): Float = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(
             contentResolver, name,
@@ -57,13 +55,12 @@ class FloatAndroidSettingsAdapter(
     }
 }
 
-@ImplBinding
-class IntAndroidSettingsAdapter(
-    private val contentResolver: ContentResolver,
-    private val defaultValue: Int,
-    private val name: String,
-    private val type: AndroidSettingsType,
-) : AndroidSettingsAdapter<Int> {
+@Given class IntAndroidSettingsAdapter(
+    @Given private val contentResolver: ContentResolver,
+    @Given private val defaultValue: Int,
+    @Given private val name: String,
+    @Given private val type: AndroidSettingsType,
+) : @Given AndroidSettingsAdapter<Int> {
     override fun get(): Int = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getInt(
             contentResolver, name,
@@ -88,13 +85,12 @@ class IntAndroidSettingsAdapter(
     }
 }
 
-@ImplBinding
-class LongAndroidSettingsAdapter(
-    private val contentResolver: ContentResolver,
-    private val defaultValue: Long,
-    private val name: String,
-    private val type: AndroidSettingsType,
-) : AndroidSettingsAdapter<Long> {
+@Given class LongAndroidSettingsAdapter(
+    @Given private val contentResolver: ContentResolver,
+    @Given private val defaultValue: Long,
+    @Given private val name: String,
+    @Given private val type: AndroidSettingsType,
+) : @Given AndroidSettingsAdapter<Long> {
     override fun get(): Long = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getLong(
             contentResolver, name,
@@ -119,13 +115,12 @@ class LongAndroidSettingsAdapter(
     }
 }
 
-@ImplBinding
-class StringAndroidSettingsAdapter(
-    private val contentResolver: ContentResolver,
-    private val defaultValue: String,
-    private val name: String,
-    private val type: AndroidSettingsType,
-) : AndroidSettingsAdapter<String> {
+@Given class StringAndroidSettingsAdapter(
+    @Given private val contentResolver: ContentResolver,
+    @Given private val defaultValue: String,
+    @Given private val name: String,
+    @Given private val type: AndroidSettingsType,
+) : @Given AndroidSettingsAdapter<String> {
     override fun get(): String = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getString(contentResolver, name)
         AndroidSettingsType.SECURE -> Settings.Secure.getString(contentResolver, name)

@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.about
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
@@ -29,37 +30,37 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 class AboutKey
 
 @KeyUiBinding<AboutKey>
-@FunBinding
-@Composable
+@GivenFun @Composable
 fun AboutScreen(
-    buildInfo: BuildInfo,
-    privacyPolicyUrl: PrivacyPolicyUrl?,
-    aboutSection: AboutSection,
+    @Given buildInfo: BuildInfo,
+    @Given privacyPolicyUrl: PrivacyPolicyUrl? = null,
+    @Given aboutSection: AboutSection,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
-        InsettingScrollableColumn {
-            aboutSection(
-                buildInfo.packageName,
-                false,
-                privacyPolicyUrl
-            )
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                aboutSection(
+                    buildInfo.packageName,
+                    false,
+                    privacyPolicyUrl
+                )
+            }
         }
     }
 }
 
-@FunBinding
-@Composable
+@GivenFun @Composable
 fun AboutSection(
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    @FunApi packageName: String,
-    @FunApi showHeader: Boolean = false,
-    @FunApi privacyPolicyUrl: PrivacyPolicyUrl? = null,
+    packageName: String,
+    showHeader: Boolean = false,
+    privacyPolicyUrl: PrivacyPolicyUrl? = null,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>
 ) {
     if (showHeader) {
         Subheader {

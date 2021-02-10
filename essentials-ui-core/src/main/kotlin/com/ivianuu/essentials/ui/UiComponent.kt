@@ -16,18 +16,25 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticAmbientOf
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.merge.MergeChildComponent
-import com.ivianuu.injekt.merge.MergeInto
+import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.component.ComponentElementBinding
 
-@MergeChildComponent
-interface UiComponent
+typealias UiComponent = Component
 
-@MergeInto(ActivityComponent::class)
-interface UiComponentFactoryOwner {
-    val uiComponentFactory: () -> UiComponent
+@ComponentElementBinding<ActivityComponent>
+@Given
+fun uiComponentFactory(
+    @Given parent: ActivityComponent,
+    @Given builderFactory: () -> Component.Builder<UiComponent>,
+): () -> UiComponent = {
+    builderFactory()
+        .dependency(parent)
+        .build()
 }
 
 val AmbientUiComponent = staticAmbientOf<UiComponent> { error("No UiComponent installed") }

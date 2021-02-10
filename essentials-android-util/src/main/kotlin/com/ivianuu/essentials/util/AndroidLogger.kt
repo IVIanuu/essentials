@@ -24,12 +24,11 @@ import com.ivianuu.essentials.util.Logger.Kind.INFO
 import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 
-@Binding
-class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
+@Given class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
         when (kind) {
             VERBOSE -> Log.v(tag ?: stackTraceTag, message, throwable)
@@ -40,20 +39,16 @@ class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
             WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
         }
     }
-
-    companion object {
-        @Scoped(ApplicationComponent::class)
-        @Binding
-        fun binding(
-            buildInfo: BuildInfo,
-            androidLoggerProvider: () -> AndroidLogger,
-            noopLoggerProvider: () -> NoopLogger,
-        ): Logger {
-            return if (buildInfo.isDebug) androidLoggerProvider() else noopLoggerProvider()
-        }
-    }
 }
 
-@Binding
-inline val BuildInfo.defaultLoggingEnabled: LoggingEnabled
+@Scoped<AppComponent>
+@Given
+fun androidLogger(
+    @Given buildInfo: BuildInfo,
+    @Given androidLoggerFactory: () -> AndroidLogger,
+    @Given noopLoggerFactory: () -> NoopLogger
+): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
+
+@Given
+inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled
     get() = isDebug

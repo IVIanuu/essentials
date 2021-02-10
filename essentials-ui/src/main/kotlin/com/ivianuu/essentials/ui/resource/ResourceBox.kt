@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
+import com.ivianuu.essentials.ui.core.ambientHorizontalInsets
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 
@@ -50,10 +50,9 @@ fun <T> ResourceLazyColumnFor(
         idle = idle
     ) { items ->
         if (items.isNotEmpty()) {
-            InsettingLazyColumnFor(
-                items = items,
-                itemContent = successItemContent
-            )
+            LazyColumn(
+                contentPadding = ambientVerticalInsets()
+            ) { items(items, successItemContent) }
         } else {
             successEmpty()
         }
@@ -82,10 +81,9 @@ fun <T> ResourceLazyRowFor(
         idle = idle
     ) { items ->
         if (items.isNotEmpty()) {
-            LazyRowFor(
-                items = items,
-                itemContent = successItemContent
-            )
+            LazyRow(contentPadding = ambientHorizontalInsets()) {
+                items(items, successItemContent)
+            }
         } else {
             successEmpty()
         }

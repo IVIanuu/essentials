@@ -31,13 +31,10 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
-import com.ivianuu.essentials.ui.navigation.NavigationOptions
-import com.ivianuu.essentials.ui.navigation.NavigationOptionsFactoryBinding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 data class PopupKey(
     val position: Rect,
@@ -46,11 +43,11 @@ data class PopupKey(
 )
 
 @KeyUiBinding<PopupKey>
-@FunBinding
+@GivenFun
 @Composable
 fun PopupUi(
-    key: PopupKey,
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given key: PopupKey,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
 ) {
     val configuration = AmbientConfiguration.current
     val initialConfiguration = remember { configuration }
@@ -83,9 +80,9 @@ fun PopupUi(
     }
 }
 
-@NavigationOptionsFactoryBinding<PopupKey>
-@FunBinding
-fun createPopupNavigationOptions(@FunApi key: PopupKey) = NavigationOptions(
+@NavigationOptionFactoryBinding
+@GivenFun
+fun createPopupNavigationOptions(key: PopupKey): NavigationOptions = NavigationOptions(
     opaque = true,
     enterTransition = FadeStackTransition(),
     exitTransition = FadeStackTransition()

@@ -24,22 +24,22 @@ import android.os.Handler
 import android.os.Looper
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.application
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 fun contentChanges(
-    contentResolver: ContentResolver,
-    mainDispatcher: MainDispatcher,
-    @FunApi uri: Uri,
-) = callbackFlow<Unit> {
+    uri: Uri,
+    @Given contentResolver: ContentResolver,
+    @Given mainDispatcher: MainDispatcher,
+): Flow<Unit> = callbackFlow<Unit> {
     val observer = withContext(mainDispatcher) {
         object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
@@ -52,6 +52,6 @@ fun contentChanges(
     awaitClose { contentResolver.unregisterContentObserver(observer) }
 }.flowOn(mainDispatcher)
 
-@Binding
-inline val Application.bindContentResolver: ContentResolver
+@Given
+inline val @Given Application.bindContentResolver: ContentResolver
     get() = contentResolver

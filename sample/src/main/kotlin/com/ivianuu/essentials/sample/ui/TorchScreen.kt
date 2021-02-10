@@ -35,17 +35,21 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Torch")
+@HomeItemBinding
+@Given
+val torchHomeItem = HomeItem("Torch") { TorchKey() }
+
 class TorchKey
 
 @KeyUiBinding<TorchKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TorchScreen(
-    state: @UiState TorchState,
-    dispatch: DispatchAction<TorchAction>,
+    @Given state: @UiState TorchState,
+    @Given dispatch: DispatchAction<TorchAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(

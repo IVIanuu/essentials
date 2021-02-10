@@ -20,6 +20,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -30,9 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.Remembered
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -45,24 +46,19 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.*
 
-@HomeKeyBinding
-class HomeKey
+@HomeKeyBinding @Given class HomeKey
 
 @KeyUiBinding<HomeKey>
-@FunBinding
+@GivenFun
 @Composable
 fun HomeScreen(
-    dispatchNavigationAction: DispatchAction<NavigationAction>,
-    items: @Remembered Set<HomeItem>,
-    showToast: showToast,
+    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+    @Given itemsFactory: () -> Set<HomeItem>,
+    @Given showToast: showToast,
 ) {
-    val finalItems = remember(items) { items.sortedBy { it.title } }
+    val finalItems = remember { itemsFactory().sortedBy { it.title } }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -83,27 +79,29 @@ fun HomeScreen(
             )
         }
     ) {
-        InsettingLazyColumnFor(items = finalItems) { item ->
-            val color = key(item) {
-                rememberSavedInstanceState(item) {
-                    ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                        .shuffled()
-                        .first()
-                        .front
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            items(finalItems) { item ->
+                val color = key(item) {
+                    rememberSavedInstanceState(item) {
+                        ColorPickerPalette.values()
+                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                            .shuffled()
+                            .first()
+                            .front
+                    }
                 }
-            }
 
-            HomeItem(
-                item = item,
-                color = color,
-                onClick = {
-                    dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
+                HomeItem(
+                    item = item,
+                    color = color,
+                    onClick = {
+                        dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
+                    }
+                )
+
+                if (finalItems.indexOf(item) != finalItems.lastIndex) {
+                    HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
                 }
-            )
-
-            if (finalItems.indexOf(item) != finalItems.lastIndex) {
-                HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
             }
         }
     }
@@ -142,13 +140,9 @@ private fun HomeItem(
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
 
-@Effect
-annotation class HomeItemBinding(val title: String) {
-    companion object {
-        @SetElements
-        fun <T : Any> bind(
-            @Arg("title") title: String,
-            keyFactory: (Color) -> @ForEffect T,
-        ): Set<HomeItem> = setOf(HomeItem(title, keyFactory))
-    }
-}
+@Qualifier annotation class HomeItemBinding
+
+@Macro
+@GivenSetElement
+fun <T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
+    instance

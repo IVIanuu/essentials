@@ -20,26 +20,25 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.memo.memoize
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 
 typealias AppFilter = (AppInfo) -> Boolean
 
 val DefaultAppFilter: AppFilter = { true }
 
 typealias LaunchableAppFilter = AppFilter
-
-@Binding
+@Given
 fun LaunchableAppFilter(
-    packageManager: PackageManager
+    @Given packageManager: PackageManager
 ): LaunchableAppFilter = { app: AppInfo ->
     packageManager.getLaunchIntentForPackage(app.packageName) != null
 }.memoize()
 
 typealias IntentAppFilter = AppFilter
-@Binding
+@Given
 fun IntentAppFilter(
-    packageManager: PackageManager,
-    intent: Intent
+    @Given packageManager: PackageManager,
+    @Given intent: Intent
 ): IntentAppFilter {
     val apps by lazy {
         packageManager.queryIntentActivities(intent, 0)

@@ -22,9 +22,10 @@ import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 class ForegroundService : EsService() {
 
     private val component by lazy {
-        serviceComponent.mergeComponent<ForegroundServiceComponent>()
+        serviceComponent.get<ForegroundServiceComponent>()
     }
 
     override fun onCreate() {
@@ -79,9 +80,10 @@ class ForegroundService : EsService() {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-interface ForegroundServiceComponent {
-    val internalForegroundState: Flow<InternalForegroundState>
-    val notificationManager: NotificationManager
-    val logger: Logger
-}
+@ComponentElementBinding<ServiceComponent>
+@Given
+class ForegroundServiceComponent(
+    @Given val internalForegroundState: Flow<InternalForegroundState>,
+    @Given val notificationManager: NotificationManager,
+    @Given val logger: Logger
+)

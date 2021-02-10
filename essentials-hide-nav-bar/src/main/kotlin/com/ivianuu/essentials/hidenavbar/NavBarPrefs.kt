@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.datastore.android.PrefBinding
+import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
-@PrefBinding("was_nav_bar_hidden")
 internal typealias WasNavBarHidden = Boolean
 
-@Binding
-fun defaultWasNavBarHidden(): @Initial WasNavBarHidden = false
+@Module val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden")
+
+@Given val defaultWasNavBarHidden: @Initial WasNavBarHidden = false

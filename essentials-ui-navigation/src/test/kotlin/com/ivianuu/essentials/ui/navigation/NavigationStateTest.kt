@@ -63,9 +63,9 @@ class NavigationStateTest {
         ).testCollect(this)
 
         val result = async {
-            pushKeyForResult<String, String>(dispatch::emit, "a")
+            pushKeyForResult<String, String>("a", dispatch::emit)
         }
-        popTopKeyWithResult(dispatch::emit, "b")
+        popTopKeyWithResult("b", dispatch::emit)
         result.await() shouldBe "b"
     }
 
@@ -79,7 +79,7 @@ class NavigationStateTest {
         ).testCollect(this)
 
         val result = async {
-            pushKeyForResult<String, String>(dispatch::emit, "a")
+            pushKeyForResult<String, String>("a", dispatch::emit)
         }
         dispatch.emit(PopTop())
         result.await() shouldBe null

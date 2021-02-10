@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticAmbientOf
 import kotlinx.coroutines.DisposableHandle
 
+@Suppress("UNCHECKED_CAST")
 class RetainedObjects {
     private val backing = mutableMapOf<Any, Any?>()
 

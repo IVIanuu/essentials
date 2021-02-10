@@ -21,47 +21,51 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-@ActionBinding("torch")
+@Given object TorchActionId : ActionId("torch")
+
+@ActionBinding<TorchActionId>
+@Given
 fun torchAction(
-    stringResource: stringResource,
-    torchIcon: Flow<TorchIcon>,
+    @Given stringResource: stringResource,
+    @Given torchIcon: Flow<TorchIcon>,
 ): Action = Action(
-    key = "torch",
+    id = TorchActionId,
     title = stringResource(R.string.es_action_torch),
     icon = torchIcon
 )
 
-@ActionExecutorBinding("torch")
-@FunBinding
+@ActionExecutorBinding<TorchActionId>
+@GivenFun
 suspend fun toggleTorch(
-    torchState: Flow<TorchState>,
-    dispatchTorchAction: DispatchAction<TorchAction>,
+    @Given torchState: Flow<TorchState>,
+    @Given dispatchTorchAction: DispatchAction<TorchAction>,
 ) {
     dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
 }
 
 private typealias TorchIcon = ActionIcon
 
-@Binding
-fun torchIcon(torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
+@Given
+fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     .map {
         if (it.torchEnabled) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off
     }
     .map {
         {
-            Icon(it)
+            Icon(it, null)
         }
     }

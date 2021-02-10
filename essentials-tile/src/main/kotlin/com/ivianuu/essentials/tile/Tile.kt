@@ -18,16 +18,18 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.store.Actions
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.MapEntries
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.ForKey
+import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.keyOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-typealias TileStores = Map<Int, (CoroutineScope, Actions<TileAction>) -> StateFlow<TileState>>
-@MapEntries
-fun defaultTileStores(): TileStores = emptyMap()
+typealias TileStateElement = Pair<Key<AbstractFunTileService>,
+            (CoroutineScope, Actions<TileAction>) -> StateFlow<TileState>>
 
 data class TileState(
     val icon: Icon? = null,
@@ -49,13 +51,10 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-@Effect
-annotation class TileStateBinding(val slot: Int) {
-    companion object {
-        @MapEntries
-        fun <T : StateFlow<TileState>> intoTileMap(
-            @Arg("slot") slot: Int,
-            provider: (CoroutineScope, Actions<TileAction>) -> @ForEffect T,
-        ): TileStores = mapOf(slot to provider)
-    }
-}
+@Qualifier annotation class TileStateBinding<T : AbstractFunTileService>
+
+@Macro
+@GivenSetElement
+fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForKey S : AbstractFunTileService> tileStateBindingImpl(
+    @Given provider: (@Given CoroutineScope, @Given Actions<TileAction>) -> T,
+): TileStateElement = keyOf<S>() to provider

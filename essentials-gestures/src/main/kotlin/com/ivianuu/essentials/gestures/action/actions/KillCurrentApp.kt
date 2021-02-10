@@ -21,36 +21,36 @@ import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.gestures.action.plus
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-@ActionBinding("kill_current_app_action")
+@Given object KillCurrentAppActionId : ActionId("kill_current_app")
+
+@ActionBinding<KillCurrentAppActionId>
+@Given
 fun killCurrentAction(
-    choosePermissions: choosePermissions,
-    stringResource: stringResource,
+    @Given choosePermissions: choosePermissions,
+    @Given stringResource: stringResource,
 ): Action = Action(
-    key = "kill_current_app_action",
+    id = KillCurrentAppActionId,
     title = stringResource(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
     permissions = choosePermissions { accessibility + root }
 )
 
-@ActionExecutorBinding("kill_current_app_action")
-@FunBinding
+@ActionExecutorBinding<KillCurrentAppActionId>
+@GivenFun
 suspend fun killCurrentApp(
-    buildInfo: BuildInfo,
-    currentAppFlow: Flow<CurrentApp>,
-    getHomePackage: getHomePackage,
-    runRootCommand: runRootCommand,
+    @Given buildInfo: BuildInfo,
+    @Given currentAppFlow: Flow<CurrentApp>,
+    @Given getHomePackage: getHomePackage,
+    @Given runRootCommand: runRootCommand,
 ) {
     val currentApp = currentAppFlow.first()
     if (currentApp != "android" &&
@@ -62,8 +62,8 @@ suspend fun killCurrentApp(
     }
 }
 
-@FunBinding
-fun getHomePackage(packageManager: PackageManager): String {
+@GivenFun
+fun getHomePackage(@Given packageManager: PackageManager): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }

@@ -99,7 +99,7 @@ private class SourceKeyClassBuilder(
                 isInterface: Boolean
             ) {
                 if (opcode == Opcodes.INVOKESTATIC &&
-                    owner == "com/ivianuu/essentials/util/SourceKeyKt" &&
+                    owner == "com/ivianuu/essentials/sourcekey/SourceKeyKt" &&
                     name == "_sourceKey" &&
                     descriptor == "()Ljava/lang/Object;"
                 ) {

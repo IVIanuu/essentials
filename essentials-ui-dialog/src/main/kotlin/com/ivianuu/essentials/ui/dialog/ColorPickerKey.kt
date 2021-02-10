@@ -20,8 +20,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 data class ColorPickerKey(
     val initialColor: Color,
@@ -32,11 +34,11 @@ data class ColorPickerKey(
 )
 
 @KeyUiBinding<ColorPickerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun ColorPickerDialog(
-    key: ColorPickerKey,
-    popTopKeyWithResult: popTopKeyWithResult<Color>,
+    @Given key: ColorPickerKey,
+    @Given popTopKeyWithResult: popTopKeyWithResult<Color>,
 ) {
     DialogWrapper {
         ColorPickerDialog(
@@ -50,3 +52,7 @@ fun ColorPickerDialog(
         )
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val colorPickerDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<ColorPickerKey>()

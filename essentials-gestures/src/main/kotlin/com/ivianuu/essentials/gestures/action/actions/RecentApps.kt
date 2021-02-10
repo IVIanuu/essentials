@@ -22,17 +22,22 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("recent_apps")
-fun recentAppsAction(accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    "recent_apps",
+@Given object RecentAppsActionId : ActionId("recent_apps")
+
+@ActionBinding<RecentAppsActionId>
+@Given
+fun recentAppsAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
+    RecentAppsActionId,
     R.string.es_action_recent_apps,
     singleActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
-@ActionExecutorBinding("recent_apps")
-@FunBinding
-suspend fun showRecentApps(performGlobalAction: performGlobalAction) {
+@ActionExecutorBinding<RecentAppsActionId>
+@GivenFun
+suspend fun showRecentApps(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

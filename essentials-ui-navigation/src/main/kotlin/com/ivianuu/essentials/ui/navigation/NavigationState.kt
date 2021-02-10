@@ -16,75 +16,85 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.Intent
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.lens
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
-import com.ivianuu.essentials.ui.store.GlobalStateBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@GlobalStateBinding
+@Scoped<AppComponent>
+@Given
 fun navigationState(
-    intentKeyHandler: intentKeyHandler,
-    scope: CoroutineScope,
-    initial: @Initial NavigationState = NavigationState(),
-    actions: Actions<NavigationAction>,
-): StateFlow<@Initial NavigationState> {
-    return scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
-        actions
-            .onEach { action ->
-                when (action) {
-                    is Push -> {
-                        if (!intentKeyHandler(action.key)) {
-                            reduce {
-                                copy(
-                                    backStack = backStack + action.key,
-                                    results = if (action.deferredResult != null) {
-                                        results + mapOf(action.key to action.deferredResult)
-                                    } else results
-                                )
-                            }
-                        }
-                    }
-                    is ReplaceTop -> {
-                        if (intentKeyHandler(action.key)) {
-                            reduce {
-                                copy(
-                                    backStack = backStack.dropLast(1),
-                                    results = if (action.deferredResult != null) {
-                                        results + mapOf(action.key to action.deferredResult)
-                                    } else results
-                                )
-                            }
-                        } else {
-                            reduce {
-                                copy(
-                                    backStack = backStack.dropLast(1) + action.key,
-                                    results = if (action.deferredResult != null) {
-                                        results + mapOf(action.key to action.deferredResult)
-                                    } else results
-                                )
-                            }
-                        }
-                    }
-                    is Pop -> reduce { popKey(action.key, action.result) }
-                    is PopTop -> {
-                        val topKey = currentState().backStack.last()
-                        reduce { popKey(topKey, action.result) }
-                    }
+    @Given intentKeyHandler: intentKeyHandler,
+    @Given scope: GlobalScope,
+    @Given initial: @Initial NavigationState = NavigationState(),
+    @Given actions: Actions<NavigationAction>
+): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
+    actions
+        .filterIsInstance<Push>()
+        .onEach { action ->
+            if (!intentKeyHandler(action.key)) {
+                reduce {
+                    copy(
+                        backStack = backStack + action.key,
+                        results = if (action.deferredResult != null) {
+                            results + mapOf(action.key to action.deferredResult)
+                        } else results
+                    )
                 }
             }
-            .launchIn(this)
-    }.lens { NavigationState(it.backStack) }
-}
+        }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<ReplaceTop>()
+        .onEach { action ->
+            if (intentKeyHandler(action.key)) {
+                reduce {
+                    copy(
+                        backStack = backStack.dropLast(1),
+                        results = if (action.deferredResult != null) {
+                            results + mapOf(action.key to action.deferredResult)
+                        } else results
+                    )
+                }
+            } else {
+                reduce {
+                    copy(
+                        backStack = backStack.dropLast(1) + action.key,
+                        results = if (action.deferredResult != null) {
+                            results + mapOf(action.key to action.deferredResult)
+                        } else results
+                    )
+                }
+            }
+        }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<Pop>()
+        .reduce { popKey(it.key, it.result) }
+        .launchIn(this)
+
+    actions
+        .filterIsInstance<PopTop>()
+        .onEach { action ->
+            val topKey = currentState().backStack.last()
+            reduce { popKey(topKey, action.result) }
+        }
+        .launchIn(this)
+}.lens { NavigationState(it.backStack) }
 
 private fun InternalNavigationState.popKey(
     key: Key,

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.InteractionState
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SliderConstants
+import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -62,9 +62,9 @@ fun Slider(
     interactionState: InteractionState = remember { InteractionState() },
     thumbColor: Color = MaterialTheme.colors.primary,
     activeTrackColor: Color = MaterialTheme.colors.primary,
-    inactiveTrackColor: Color = activeTrackColor.copy(alpha = SliderConstants.InactiveTrackColorAlpha),
-    activeTickColor: Color = MaterialTheme.colors.onPrimary.copy(alpha = SliderConstants.TickColorAlpha),
-    inactiveTickColor: Color = activeTrackColor.copy(alpha = SliderConstants.TickColorAlpha),
+    inactiveTrackColor: Color = activeTrackColor.copy(alpha = SliderDefaults.InactiveTrackColorAlpha),
+    activeTickColor: Color = MaterialTheme.colors.onPrimary.copy(alpha = SliderDefaults.TickColorAlpha),
+    inactiveTickColor: Color = activeTrackColor.copy(alpha = SliderDefaults.TickColorAlpha),
 ) {
     androidx.compose.material.Slider(
         value,

@@ -19,31 +19,31 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.bluetooth.BluetoothAdapter
 import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@ActionBinding("bluetooth")
+@Given object BluetoothActionId : ActionId("bluetooth")
+
+@ActionBinding<BluetoothActionId>
+@Given
 fun bluetoothAction(
-    bluetoothIcon: Flow<BluetoothIcon>,
-    stringResource: stringResource,
+    @Given bluetoothIcon: Flow<BluetoothIcon>,
+    @Given stringResource: stringResource,
 ): Action = Action(
-    key = "bluetooth",
+    id = BluetoothActionId,
     title = stringResource(R.string.es_action_bluetooth),
     icon = bluetoothIcon,
     enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-@ActionExecutorBinding("bluetooth")
-@FunBinding
+@ActionExecutorBinding<BluetoothActionId>
+@GivenFun
 suspend fun toggleBluetooth() {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
@@ -56,8 +56,8 @@ suspend fun toggleBluetooth() {
 
 internal typealias BluetoothIcon = ActionIcon
 
-@Binding
-fun bluetoothIcon(broadcasts: broadcasts): Flow<BluetoothIcon> {
+@Given
+fun bluetoothIcon(@Given broadcasts: broadcasts): Flow<BluetoothIcon> {
     return broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)
         .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
         .onStart {
@@ -70,5 +70,5 @@ fun bluetoothIcon(broadcasts: broadcasts): Flow<BluetoothIcon> {
             if (it) R.drawable.es_ic_bluetooth
             else R.drawable.es_ic_bluetooth_disabled
         }
-        .map { { Icon(it) } }
+        .map { { Icon(it, null) } }
 }

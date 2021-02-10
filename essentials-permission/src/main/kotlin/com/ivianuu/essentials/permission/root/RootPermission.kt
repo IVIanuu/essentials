@@ -25,6 +25,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.shell.isShellAvailable
 import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.injekt.Given
 
 fun RootPermission(vararg metadata: Permission.Pair<*>) = Permission(
     Permission.IsRootPermission to Unit,
@@ -36,8 +37,9 @@ val Permission.Companion.IsRootPermission by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class RootPermissionStateProvider(
-    private val isShellAvailable: isShellAvailable,
+    @Given private val isShellAvailable: isShellAvailable,
 ) : PermissionStateProvider {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission
@@ -46,9 +48,10 @@ class RootPermissionStateProvider(
 }
 
 @PermissionRequestHandlerBinding
+@Given
 class RootPermissionRequestHandler(
-    private val isShellAvailable: isShellAvailable,
-    private val showToastRes: showToastRes,
+    @Given private val isShellAvailable: isShellAvailable,
+    @Given private val showToastRes: showToastRes,
 ) : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         Permission.IsRootPermission in permission

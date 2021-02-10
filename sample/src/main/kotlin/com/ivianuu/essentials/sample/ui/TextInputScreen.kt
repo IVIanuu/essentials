@@ -20,6 +20,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
@@ -34,21 +36,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
-import com.ivianuu.essentials.ui.common.InsettingLazyColumnFor
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@HomeItemBinding("Text input")
+@HomeItemBinding
+@Given
+val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
+
 class TextInputKey
 
 @KeyUiBinding<TextInputKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TextInputScreen() {
     val state = remember { TextInputState() }
@@ -119,10 +125,10 @@ fun TextInputScreen() {
                 }
             }*/
 
-            InsettingLazyColumnFor(items = items) { item ->
-                ListItem(
-                    title = { Text(item) }
-                )
+            LazyColumn(contentPadding = ambientVerticalInsets()) {
+                items(items) { item ->
+                    ListItem(title = { Text(item) })
+                }
             }
         } else {
             Text(

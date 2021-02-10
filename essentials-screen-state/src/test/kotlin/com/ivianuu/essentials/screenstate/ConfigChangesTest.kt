@@ -20,7 +20,7 @@ import android.content.ComponentCallbacks
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
@@ -35,14 +35,14 @@ class ConfigChangesTest {
     @Test
     fun testConfigChanges() = runCancellingBlockingTest {
         lateinit var callback: ComponentCallbacks
-        val applicationContext = mockk<ApplicationContext> {
+        val appContext = mockk<AppContext> {
             every { registerComponentCallbacks(any()) } answers {
                 callback = arg(0)
                 Unit
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = configChanges(applicationContext, Dispatchers.Main)
+        val collector = configChanges(appContext, Dispatchers.Main)
             .testCollect(this)
 
         callback.onConfigurationChanged(mockk())

@@ -22,7 +22,9 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.store.GlobalStateBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -30,12 +32,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@GlobalStateBinding
+@Scoped<AppComponent>
+@Given
 fun clipboardState(
-    scope: GlobalScope,
-    initial: @Initial ClipboardState = ClipboardState(),
-    actions: Actions<ClipboardAction>,
-    clipboardManager: ClipboardManager,
+    @Given scope: GlobalScope,
+    @Given initial: @Initial ClipboardState = ClipboardState(),
+    @Given actions: Actions<ClipboardAction>,
+    @Given clipboardManager: ClipboardManager,
 ) = scope.state(initial) {
     clipboardManager.clipboardChanges()
         .map { clipboardManager.primaryClip?.getItemAt(0)?.text?.toString() }

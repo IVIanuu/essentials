@@ -27,10 +27,10 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -48,12 +48,12 @@ import kotlin.coroutines.coroutineContext
 
 typealias KeyboardVisible = Boolean
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun keyboardVisible(
-    accessibilityEvents: AccessibilityEvents,
-    getKeyboardHeight: getKeyboardHeight,
-    globalScope: GlobalScope,
+    @Given accessibilityEvents: AccessibilityEvents,
+    @Given getKeyboardHeight: getKeyboardHeight,
+    @Given globalScope: GlobalScope,
 ): Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&
@@ -73,14 +73,15 @@ fun keyboardVisible(
     .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
 
 @AccessibilityConfigBinding
+@Given
 fun keyboardVisibilityAccessibilityConfig() = flowOf {
     AccessibilityConfig(
         eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
     )
 }
 
-@FunBinding
-fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
+@GivenFun
+fun getKeyboardHeight(@Given inputMethodManager: InputMethodManager): Int? {
     return runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int

@@ -18,10 +18,12 @@ package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
@@ -33,7 +35,7 @@ abstract class EsTileService : TileService() {
     val serviceComponent by lazy { createServiceComponent() }
 
     private val defaultDispatcher: DefaultDispatcher by lazy {
-        serviceComponent.mergeComponent<EsTileServiceComponent>()
+        serviceComponent.get<EsTileServiceComponent>()
             .defaultDispatcher
     }
 
@@ -61,7 +63,8 @@ abstract class EsTileService : TileService() {
     }
 }
 
-@MergeInto(ServiceComponent::class)
-interface EsTileServiceComponent {
-    val defaultDispatcher: DefaultDispatcher
-}
+@ComponentElementBinding<ServiceComponent>
+@Given
+class EsTileServiceComponent(
+    @Given val defaultDispatcher: DefaultDispatcher
+)

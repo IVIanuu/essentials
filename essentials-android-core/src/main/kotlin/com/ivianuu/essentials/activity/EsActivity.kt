@@ -23,20 +23,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.ViewTreeSavedStateRegistryOwner
-import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.AmbientUiComponent
-import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.UiComponentFactoryOwner
-import com.ivianuu.essentials.ui.runUiWorkers
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 
 /**
  * Base activity
@@ -49,8 +45,7 @@ abstract class EsActivity : AppCompatActivity() {
     private lateinit var composition: Composition
 
     private val uiComponent by lazy {
-        activityComponent.mergeComponent<UiComponentFactoryOwner>()
-            .uiComponentFactory()
+        activityComponent.get<() -> UiComponent>()()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +56,12 @@ abstract class EsActivity : AppCompatActivity() {
         ViewTreeSavedStateRegistryOwner.set(container, this)
         ViewTreeViewModelStoreOwner.set(container, this)
 
-        uiComponent.mergeComponent<EsActivityComponent>()
-            .runUiWorkers()
+        val dependencies = uiComponent.get<EsActivityComponent>()
+        dependencies.runUiWorkers()
 
         composition = container.setContent(Recomposer.current()) {
             Providers(AmbientUiComponent provides uiComponent) {
-                uiComponent.mergeComponent<EsActivityComponent>().decorateUi {
+                dependencies.decorateUi {
                     Content()
                 }
             }
@@ -87,12 +82,11 @@ abstract class EsActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    @Composable
-    protected abstract fun Content()
+    @Composable protected abstract fun Content()
 }
 
-@MergeInto(UiComponent::class)
-interface EsActivityComponent {
-    val decorateUi: DecorateUi
-    val runUiWorkers: runUiWorkers
-}
+@ComponentElementBinding<ActivityComponent>
+@Given class EsActivityComponent(
+    @Given val decorateUi: DecorateUi,
+    @Given val runUiWorkers: runUiWorkers
+)

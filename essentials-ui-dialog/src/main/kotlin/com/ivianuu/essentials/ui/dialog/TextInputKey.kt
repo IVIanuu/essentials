@@ -25,8 +25,10 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 data class TextInputKey(
     val initial: String = "",
@@ -39,11 +41,11 @@ data class TextInputKey(
 typealias TextInputResult = String
 
 @KeyUiBinding<TextInputKey>
-@FunBinding
+@GivenFun
 @Composable
 fun TextInputDialog(
-    key: TextInputKey,
-    popTopKeyWithResult: popTopKeyWithResult<TextInputResult>,
+    @Given key: TextInputKey,
+    @Given popTopKeyWithResult: popTopKeyWithResult<TextInputResult>,
 ) {
     DialogWrapper {
         var currentValue by rememberState { key.initial }
@@ -67,3 +69,7 @@ fun TextInputDialog(
         )
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val textInputDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<TextInputKey>()

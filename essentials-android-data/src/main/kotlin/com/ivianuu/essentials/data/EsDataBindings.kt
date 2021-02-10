@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.data
 
-import androidx.datastore.core.DataStore
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
 import java.io.File
 
 typealias DataDir = File
 
-@Binding
-fun dataDir(applicationContext: ApplicationContext): DataDir =
-    File(applicationContext.applicationInfo.dataDir)
+@Given
+fun dataDir(@Given AppContext: AppContext): DataDir =
+    File(AppContext.applicationInfo.dataDir)
 
 typealias PrefsDir = File
 
-@Binding
-fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
+@Given
+fun prefsDir(@Given dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
-@Binding
-fun packageManager(applicationContext: ApplicationContext) = applicationContext.packageManager!!
+@Given
+fun packageManager(@Given AppContext: AppContext) =
+    AppContext.packageManager!!

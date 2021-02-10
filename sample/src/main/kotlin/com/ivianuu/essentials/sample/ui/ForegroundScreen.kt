@@ -50,28 +50,31 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.ForKey
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding("Foreground")
+@HomeItemBinding
+@Given
+val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
+
 class ForegroundKey
 
 @SuppressLint("NewApi")
 @KeyUiBinding<ForegroundKey>
-@FunBinding
+@GivenFun
 @Composable
 fun ForegroundScreen(
-    createForegroundNotification: createForegroundNotification,
-    foregroundState: ForegroundScreenState,
-    notificationManager: NotificationManager,
-    systemBuildInfo: SystemBuildInfo,
+    @Given createForegroundNotification: createForegroundNotification,
+    @Given foregroundState: ForegroundScreenState,
+    @Given notificationManager: NotificationManager,
+    @Given systemBuildInfo: SystemBuildInfo,
 ) {
     val currentForegroundState by foregroundState.collectAsState()
     if (systemBuildInfo.sdk >= 26) {
@@ -138,21 +141,21 @@ fun ForegroundScreen(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
 
-// todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
-inline val ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
+@Given
+inline val @Given ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
     get() = this
 
-@FunBinding
+@GivenFun
 fun createForegroundNotification(
-    applicationContext: ApplicationContext,
-    @FunApi count: Int,
-    @FunApi color: Color,
-): Notification = NotificationCompat.Builder(applicationContext, "foreground")
+    count: Int,
+    color: Color,
+    @Given appContext: AppContext
+): Notification = NotificationCompat.Builder(appContext, "foreground")
     .setSmallIcon(R.drawable.ic_home)
     .setContentTitle("Foreground")
     .setContentText("Current progress $count")

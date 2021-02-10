@@ -40,9 +40,9 @@ class ContentChangesTest {
         }
         val dispatcher = TestCoroutineDispatcher()
         val collector = contentChanges(
+            mockk(),
             contentResolver,
-            dispatcher,
-            mockk()
+            dispatcher
         ).testCollect(this)
 
         observer.onChange(false)

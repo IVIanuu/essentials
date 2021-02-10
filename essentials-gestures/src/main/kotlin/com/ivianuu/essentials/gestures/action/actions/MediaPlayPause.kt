@@ -23,22 +23,28 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("media_play_pause")
-fun playPauseMediaAction(mediaAction: mediaAction): Action = mediaAction(
-    "media_play_pause",
+@Given object PlayPauseActionId : ActionId("media_play_pause")
+
+@ActionBinding<PlayPauseActionId>
+@Given
+fun playPauseMediaAction(@Given mediaAction: mediaAction): Action = mediaAction(
+    PlayPauseActionId,
     R.string.es_action_media_play_pause,
     singleActionIcon(Icons.Default.PlayArrow)
 )
 
-@ActionExecutorBinding("media_play_pause")
-@FunBinding
+@ActionExecutorBinding<PlayPauseActionId>
+@GivenFun
 suspend fun sendPlayPauseCommand(doMediaAction: doMediaAction) {
     doMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@ActionSettingsKeyBinding("media_play_pause")
+@ActionSettingsKeyBinding<PlayPauseActionId>
+@Given
 inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey
     get() = MediaActionSettingsKey()

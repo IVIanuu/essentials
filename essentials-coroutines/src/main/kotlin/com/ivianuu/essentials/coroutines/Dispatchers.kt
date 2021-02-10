@@ -18,26 +18,26 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 typealias DefaultDispatcher = CoroutineDispatcher
 
-@Binding
+@Given
 inline fun defaultDispatcher(): DefaultDispatcher = Dispatchers.Default
 
 typealias MainDispatcher = CoroutineDispatcher
 
-@Binding
+@Given
 inline fun mainDispatcher(): MainDispatcher = Dispatchers.Main
 
 typealias ImmediateMainDispatcher = CoroutineDispatcher
 
-@Binding
+@Given
 inline fun immediateMainDispatcher(): ImmediateMainDispatcher = Dispatchers.Main.immediate
 
 typealias IODispatcher = CoroutineDispatcher
 
-@Binding
+@Given
 inline fun ioDispatcher(): IODispatcher = Dispatchers.IO

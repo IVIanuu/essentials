@@ -24,19 +24,24 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("search")
-fun searchAction(stringResource: stringResource): Action = Action(
-    key = "search",
+@Given object SearchActionId : ActionId("search")
+
+@ActionBinding<SearchActionId>
+@Given
+fun searchAction(@Given stringResource: stringResource): Action = Action(
+    id = "search",
     title = stringResource(R.string.es_action_search),
     icon = singleActionIcon(Icons.Default.Search)
 )
 
-@ActionExecutorBinding("search")
-@FunBinding
-suspend fun showSearch(sendIntent: sendIntent) {
+@ActionExecutorBinding<SearchActionId>
+@GivenFun
+suspend fun showSearch(@Given sendIntent: sendIntent) {
     sendIntent(
         Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(

@@ -19,27 +19,28 @@ package com.ivianuu.essentials.gestures.action.actions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
-@ActionBinding("menu")
+@Given object MenuActionId : ActionId("menu")
+
+@ActionBinding<MenuActionId>
+@Given
 fun menuAction(
-    choosePermissions: choosePermissions,
-    stringResource: stringResource,
-    simulateMenuButtonPress: simulateMenuButtonPress,
+    @Given choosePermissions: choosePermissions,
+    @Given stringResource: stringResource,
+    @Given simulateMenuButtonPress: simulateMenuButtonPress,
 ): Action = Action(
-    key = "menu",
+    id = "menu",
     title = stringResource(R.string.es_action_menu),
     icon = singleActionIcon(Icons.Default.MoreVert),
     permissions = choosePermissions { listOf(root) }
 )
 
-@ActionExecutorBinding("menu")
-@FunBinding
-suspend fun simulateMenuButtonPress(runRootCommand: runRootCommand) {
+@ActionExecutorBinding<MenuActionId>
+@GivenFun
+suspend fun simulateMenuButtonPress(@Given runRootCommand: runRootCommand) {
     runRootCommand("input keyevent 82")
 }

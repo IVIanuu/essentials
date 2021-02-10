@@ -28,26 +28,25 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.runShellCommand
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.showToastRes
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf { CoilImage(data = data) }
+internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf { CoilImage(data = data, contentDescription = null) }
 
 internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
-internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon) }
+internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon, null) }
 
-internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id) }
+internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id, null) }
 
-@FunBinding
-suspend fun runRootCommand(
-    runShellCommand: runShellCommand,
-    showToastRes: showToastRes,
-    @FunApi command: String
+@GivenFun suspend fun runRootCommand(
+    command: String,
+    @Given runShellCommand: runShellCommand,
+    @Given showToastRes: showToastRes
 ) {
     runKatching { runShellCommand(command) }
         .onFailure {
@@ -56,16 +55,16 @@ suspend fun runRootCommand(
         }
 }
 
-@FunBinding
+@GivenFun
 fun sendIntent(
-    applicationContext: ApplicationContext,
-    showToastRes: showToastRes,
-    @FunApi intent: Intent
+    intent: Intent,
+    @Given appContext: AppContext,
+    @Given showToastRes: showToastRes
 ) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     runKatching {
         PendingIntent.getActivity(
-            applicationContext, 99, intent, 0, null
+            appContext, 99, intent, 0, null
         ).send()
     }.onFailure {
         it.printStackTrace()

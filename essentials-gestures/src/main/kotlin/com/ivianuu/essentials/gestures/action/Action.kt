@@ -20,83 +20,86 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.MapEntries
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.flow.Flow
 
 data class Action(
-    val key: String,
+    val id: String,
     val title: String,
     val permissions: List<Permission> = emptyList(),
     val unlockScreen: Boolean = false,
     val enabled: Boolean = true,
     val icon: Flow<ActionIcon>,
-)
+) {
+    constructor(
+        id: ActionId,
+        title: String,
+        permissions: List<Permission> = emptyList(),
+        unlockScreen: Boolean = false,
+        enabled: Boolean = true,
+        icon: Flow<ActionIcon>
+    ) : this(id.value, title, permissions, unlockScreen, enabled, icon)
+}
 
 typealias ActionIcon = @Composable () -> Unit
 
-@Effect
-annotation class ActionBinding(val key: String) {
-    companion object {
-        @MapEntries
-        fun <T : Action> actionIntoSet(
-            @Arg("key") key: String,
-            provider: () -> @ForEffect T,
-        ): Map<String, () -> Action> = mapOf(key to provider)
-    }
-}
+abstract class ActionId(val value: String)
+
+@Qualifier annotation class ActionBinding<I : ActionId>
+
+@Macro
+@GivenSetElement
+fun <T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
+    @Given id: I,
+    @Given provider: () -> T,
+): Pair<String, () -> Action> = id.value to provider
 
 typealias ActionExecutor = suspend () -> Unit
 
-@Effect
-annotation class ActionExecutorBinding(val key: String) {
-    companion object {
-        @MapEntries
-        fun <T : ActionExecutor> actionExecutorIntoMap(
-            @Arg("key") key: String,
-            instance: @ForEffect T,
-        ): Map<String, ActionExecutor> = mapOf(key to instance)
-    }
-}
+@Qualifier annotation class ActionExecutorBinding<I : ActionId>
 
-@FunBinding
+@Macro
+@GivenSetElement
+fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorBindingImpl(
+    @Given id: I,
+    @Given instance: T
+): Pair<String, ActionExecutor> = id.value to instance
+
+@GivenFun
 fun choosePermissions(
-    permissions: ActionPermissions,
-    @FunApi chooser: ActionPermissions.() -> List<Permission>,
+    @Given permissions: ActionPermissions,
+    chooser: ActionPermissions.() -> List<Permission>,
 ): List<Permission> = permissions.chooser()
 
 internal operator fun Permission.plus(other: Permission) = listOf(this, other)
 
 interface ActionFactory {
-    suspend fun handles(key: String): Boolean
-    suspend fun createAction(key: String): Action
-    suspend fun createExecutor(key: String): ActionExecutor
+    suspend fun handles(id: String): Boolean
+    suspend fun createAction(id: String): Action
+    suspend fun createExecutor(id: String): ActionExecutor
 }
 
-@Effect
-annotation class ActionSettingsKeyBinding(val key: String) {
-    companion object {
-        @MapEntries
-        fun <T : Key> actionSettingsUiIntoMap(
-            @Arg("key") key: String,
-            instance: @ForEffect T,
-        ): Map<String, Key> = mapOf(key to instance)
-    }
-}
+@Qualifier annotation class ActionSettingsKeyBinding<I : ActionId>
 
-@Effect
-annotation class ActionFactoryBinding {
-    companion object {
-        @SetElements
-        fun <T : ActionFactory> actionFactoryIntoSet(instance: @ForEffect T): Set<ActionFactory> =
-            setOf(instance)
-    }
-}
+typealias ActionSettingsKey = Key
+
+@Macro
+@GivenSetElement
+fun <T : @ActionSettingsKeyBinding<I> S, S : Any, I : ActionId> actionSettingsKeyBindingImpl(
+    @Given id: I,
+    @Given instance: T,
+): Pair<String, ActionSettingsKey> = id.value to instance
+
+@Qualifier annotation class ActionFactoryBinding
+
+@Macro
+@GivenSetElement
+fun <T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
+    @Given instance: T): ActionFactory = instance
 
 interface ActionPickerDelegate {
     val title: String
@@ -105,10 +108,9 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@Effect
-annotation class ActionPickerDelegateBinding {
-    companion object {
-        @SetElements
-        fun <T : ActionPickerDelegate> actionPickerDelegate(instance: @ForEffect T): Set<ActionPickerDelegate> = setOf(instance)
-    }
-}
+@Qualifier annotation class ActionPickerDelegateBinding
+
+@Macro
+@GivenSetElement
+fun <T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegateBindingImpl(
+    @Given instance: T): ActionPickerDelegate = instance

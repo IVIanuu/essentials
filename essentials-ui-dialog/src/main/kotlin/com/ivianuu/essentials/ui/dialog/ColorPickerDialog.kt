@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.InteractionState
 import androidx.compose.material.Icon
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
@@ -33,7 +34,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AmbientContentColor
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -42,7 +43,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.ripple.rememberRippleIndication
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -53,7 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMap
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -100,7 +101,7 @@ fun ColorPickerDialog(
         positiveButton = {
             TextButton(
                 onClick = { onColorSelected(currentColor) },
-                colors = ButtonConstants.defaultTextButtonColors(
+                colors = ButtonDefaults.textButtonColors(
                     contentColor = currentColor
                 )
             ) {
@@ -114,7 +115,7 @@ fun ColorPickerDialog(
             if (allowCustomArgb) {
                 TextButton(
                     onClick = { currentScreen = otherScreen },
-                    colors = ButtonConstants.defaultTextButtonColors(
+                    colors = ButtonDefaults.textButtonColors(
                         contentColor = currentColor
                     )
                 ) {
@@ -241,6 +242,7 @@ private fun ColorGridItem(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Default.Check,
+                    contentDescription = null,
                     modifier = Modifier
                         .center()
                         .size(size = 36.dp)
@@ -255,6 +257,7 @@ private fun ColorGridBackButton(onClick: () -> Unit) {
     BaseColorGridItem(onClick = onClick) {
         Icon(
             imageVector = Icons.Default.ArrowBack,
+            contentDescription = null,
             modifier = Modifier.size(size = 36.dp)
         )
     }
@@ -269,7 +272,11 @@ private fun BaseColorGridItem(
         modifier = Modifier.squared(SquareFit.MatchWidth)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
-            .clickable(onClick = onClick, indication = rememberRippleIndication(bounded = false)),
+            .clickable(
+                onClick = onClick,
+                interactionState = remember { InteractionState() },
+                indication = rememberRipple(bounded = false)
+            ),
         contentAlignment = Alignment.Center
     ) {
         content()
@@ -320,7 +327,7 @@ private fun ColorEditorHeader(
             override fun filter(text: AnnotatedString): TransformedText {
                 return TransformedText(
                     AnnotatedString("#") + text,
-                    object : OffsetMap {
+                    object : OffsetMapping {
                         override fun originalToTransformed(offset: Int): Int {
                             return offset + 1
                         }

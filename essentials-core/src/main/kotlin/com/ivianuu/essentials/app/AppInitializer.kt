@@ -19,59 +19,56 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.ForKey
+import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.keyOf
 
-@Effect
-annotation class AppInitializerBinding(
-    val key: String,
-    val dependencies: Array<String> = [],
-    val dependents: Array<String> = []
+@Qualifier annotation class AppInitializerBinding
+
+@Macro
+@GivenSetElement
+fun <@ForKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
+    @Given instance: T,
+    @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
+): AppInitializerElement = AppInitializerElement(
+    keyOf<T>(), instance, config
+)
+
+@Qualifier annotation class AppInitializerConfigBinding<T : () -> Unit>
+
+data class AppInitializerConfig<out T : () -> Unit>(
+    val dependencies: Set<Key<() -> Unit>> = emptySet(),
+    val dependents: Set<Key<() -> Unit>> = emptySet(),
 ) {
     companion object {
-        @SetElements
-        fun <T : () -> Unit> appInitializerIntoSet(
-            @Arg("key") key: String,
-            @Arg("dependencies") dependencies: Array<String>?,
-            @Arg("dependents") dependents: Array<String>?,
-            content: @ForEffect T
-        ): AppInitializers = setOf(AppInitializer(
-            key = key,
-            dependencies = dependencies?.toSet() ?: emptySet(),
-            dependents = dependents?.toSet() ?: emptySet(),
-            block = content
-        ))
+        val DEFAULT = AppInitializerConfig<Nothing>(emptySet(), emptySet())
     }
 }
 
-data class AppInitializer(
-    val key: String,
-    val dependencies: Set<String>,
-    val dependents: Set<String>,
-    val block: () -> Unit
+data class AppInitializerElement(
+    val key: Key<*>,
+    val instance: () -> Unit,
+    val config: AppInitializerConfig<*>
 )
 
-typealias AppInitializers = Set<AppInitializer>
-
-@SetElements
-fun defaultAppInitializers(): AppInitializers = setOf()
-
-@FunBinding
+@GivenFun
 fun runInitializers(
-    initializers: AppInitializers,
-    logger: Logger,
+    @Given initializers: Set<AppInitializerElement>,
+    @Given logger: Logger,
 ) {
     initializers
         .sortedGraph(
             key = { it.key },
-            dependencies = { it.dependencies },
-            dependents = { it.dependents }
+            dependencies = { it.config.dependencies },
+            dependents = { it.config.dependents }
         )
         .forEach {
             logger.d { "Initialize ${it.key}" }
-            it.block()
+            it.instance()
         }
 }

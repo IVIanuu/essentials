@@ -35,21 +35,21 @@ import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-@FunBinding
+@GivenFun
 @Composable
 fun TwilightTheme(
-    twilightState: StateFlow<TwilightState>,
-    @FunApi lightColors: Colors = lightColors(),
-    @FunApi darkColors: Colors = darkColors(),
-    @FunApi blackColors: Colors = blackColors(),
-    @FunApi typography: Typography = Typography(),
-    @FunApi content: @Composable () -> Unit
+    lightColors: Colors = lightColors(),
+    darkColors: Colors = darkColors(),
+    blackColors: Colors = blackColors(),
+    typography: Typography = Typography(),
+    @Given twilightState: StateFlow<TwilightState>,
+    content: @Composable () -> Unit
 ) {
     val targetColors by twilightState
         .map {

@@ -23,15 +23,15 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import com.ivianuu.injekt.Arg
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.MapEntries
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
-typealias Worker = suspend WorkScope.() -> ListenableWorker.Result
+typealias Worker = suspend () -> ListenableWorker.Result
 
 interface WorkScope {
     val inputData: Data
@@ -42,29 +42,28 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-@Effect
-annotation class WorkerBinding(val id: String) {
-    companion object {
-        @MapEntries
-        fun <T : Worker> intoWorkerMap(
-            @Arg("id") id: String,
-            workerProvider: () -> @ForEffect T
-        ): Workers = mapOf(id to workerProvider)
-    }
-}
+typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker>
 
-fun OneTimeWorkRequestBuilder(id: String): OneTimeWorkRequest.Builder {
-    return OneTimeWorkRequestBuilder<FunctionalWorker>()
-        .addTag(WORKER_ID_TAG_PREFIX + id)
-}
+@Qualifier annotation class WorkerBinding<S>
+
+@Suppress("UNCHECKED_CAST")
+@Macro
+@GivenSetElement
+fun <P : @WorkerBinding<S> suspend () -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
+    @Given id: S,
+    @Given factory: (@Given WorkScope) -> P
+): WorkerElement = id to factory
+
+fun OneTimeWorkRequestBuilder(id: WorkerId): OneTimeWorkRequest.Builder =
+    OneTimeWorkRequestBuilder<FunctionalWorker>()
+        .addTag(WORKER_ID_TAG_PREFIX + id.value)
 
 fun PeriodicWorkRequestBuilder(
-    id: String,
+    id: WorkerId,
     repeatInterval: Duration,
     flexTimeInterval: Duration? = null
-): PeriodicWorkRequest.Builder {
-    return (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
+): PeriodicWorkRequest.Builder =
+    (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
         repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
     ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
-        .addTag(WORKER_ID_TAG_PREFIX + id)
-}
+        .addTag(WORKER_ID_TAG_PREFIX + id.value)

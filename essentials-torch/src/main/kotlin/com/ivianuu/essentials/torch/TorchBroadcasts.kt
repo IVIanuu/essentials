@@ -21,14 +21,18 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.tuples.combine
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @AppWorkerBinding
-@FunBinding
-suspend fun handleTorchBroadcasts(broadcasts: broadcasts, dispatch: DispatchAction<TorchAction>) {
+@GivenFun
+suspend fun handleTorchBroadcasts(
+    @Given broadcasts: broadcasts,
+    @Given dispatch: DispatchAction<TorchAction>
+) {
     broadcasts(ACTION_DISABLE_TORCH)
         .onEach { dispatch(UpdateTorchEnabled(false)) }
         .collect()

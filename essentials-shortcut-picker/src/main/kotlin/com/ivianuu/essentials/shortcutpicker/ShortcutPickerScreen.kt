@@ -34,15 +34,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<ShortcutPickerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun ShortcutPickerScreen(
-    state: @UiState ShortcutPickerState,
-    dispatch: DispatchAction<ShortcutPickerAction>,
+    @Given state: @UiState ShortcutPickerState,
+    @Given dispatch: DispatchAction<ShortcutPickerAction>,
 ) {
     Scaffold(
         topBar = {
@@ -70,7 +70,8 @@ private fun Shortcut(
             leading = {
                 Image(
                     modifier = Modifier.size(40.dp),
-                    painter = ImagePainter(info.icon)
+                    painter = ImagePainter(info.icon),
+                    contentDescription = null
                 )
             },
             title = { Text(info.name) },

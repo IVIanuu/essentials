@@ -27,22 +27,25 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.essentials.util.startActivityForIntentResult
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @UiStateBinding
+@Given
 fun shortcutPickerState(
-    scope: CoroutineScope,
-    initial: @Initial ShortcutPickerState = ShortcutPickerState(),
-    actions: Actions<ShortcutPickerAction>,
-    extractShortcut: extractShortcut,
-    getAllShortcuts: getAllShortcuts,
-    popTopKeyWithResult: popTopKeyWithResult<Shortcut>,
-    startActivityForIntentResult: startActivityForIntentResult,
-    showToastRes: showToastRes,
-) = scope.state(initial) {
+    @Given scope: CoroutineScope,
+    @Given initial: @Initial ShortcutPickerState = ShortcutPickerState(),
+    @Given actions: Actions<ShortcutPickerAction>,
+    @Given extractShortcut: extractShortcut,
+    @Given getAllShortcuts: getAllShortcuts,
+    @Given popTopKeyWithResult: popTopKeyWithResult<Shortcut>,
+    @Given startActivityForIntentResult: startActivityForIntentResult,
+    @Given showToastRes: showToastRes,
+): StateFlow<ShortcutPickerState> = scope.state(initial) {
     reduceResource({ getAllShortcuts() }) { copy(shortcuts = it) }
     actions
         .filterIsInstance<PickShortcut>()

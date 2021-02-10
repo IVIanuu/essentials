@@ -19,29 +19,30 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.performGlobalAction
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
-import com.ivianuu.essentials.gestures.action.choosePermissions
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-@ActionBinding("last_app")
+@Given object LastAppActionId : ActionId("last_app")
+
+@ActionBinding<LastAppActionId>
+@Given
 fun lastAppAction(
-    choosePermissions: choosePermissions,
-    stringResource: stringResource,
+    @Given choosePermissions: choosePermissions,
+    @Given stringResource: stringResource,
 ): Action = Action(
-    key = "last_app",
+    id = "last_app",
     title = stringResource(R.string.es_action_last_app),
     permissions = choosePermissions { listOf(accessibility) },
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
-@ActionExecutorBinding("last_app")
-@FunBinding
-suspend fun goToLastApp(performGlobalAction: performGlobalAction) {
+@ActionExecutorBinding<LastAppActionId>
+@GivenFun
+suspend fun goToLastApp(@Given performGlobalAction: performGlobalAction) {
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
     delay(250)
     performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)

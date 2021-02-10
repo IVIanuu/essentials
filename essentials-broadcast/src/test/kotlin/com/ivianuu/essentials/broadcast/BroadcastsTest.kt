@@ -21,7 +21,7 @@ import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.android.AppContext
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
@@ -37,18 +37,18 @@ class BroadcastsTest {
     @Test
     fun testBroadcasts() = runCancellingBlockingTest {
         lateinit var receiver: BroadcastReceiver
-        val applicationContext = mockk<ApplicationContext> {
+        val appContext = mockk<AppContext> {
             every { registerReceiver(any(), any()) } answers {
                 receiver = arg(0)
                 null
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = broadcasts(applicationContext, Dispatchers.Main, "action")
+        val collector = broadcasts("action", appContext, Dispatchers.Main)
             .testCollect(this)
 
-        receiver.onReceive(applicationContext, Intent("action"))
-        receiver.onReceive(applicationContext, Intent("action"))
+        receiver.onReceive(appContext, Intent("action"))
+        receiver.onReceive(appContext, Intent("action"))
 
         collector.values.shouldHaveSize(2)
     }

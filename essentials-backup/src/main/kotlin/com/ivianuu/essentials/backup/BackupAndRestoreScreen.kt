@@ -16,41 +16,46 @@
 
 package com.ivianuu.essentials.backup
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.common.InsettingScrollableColumn
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.core.ambientVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<BackupAndRestoreKey>
-@FunBinding
+@GivenFun
 @Composable
 fun BackupAndRestoreScreen(
-    state: @UiState BackupAndRestoreState,
-    dispatch: DispatchAction<BackupAndRestoreAction>,
+    @Given state: @UiState BackupAndRestoreState,
+    @Given dispatch: DispatchAction<BackupAndRestoreAction>,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
     ) {
-        InsettingScrollableColumn {
-            ListItem(
-                title = { Text(R.string.es_pref_backup) },
-                subtitle = { Text(R.string.es_pref_backup_summary) },
-                onClick = { dispatch(BackupData) }
-            )
 
-            ListItem(
-                title = { Text(R.string.es_pref_restore) },
-                subtitle = { Text(R.string.es_pref_restore_summary) },
-                onClick = { dispatch(RestoreData) }
-            )
+        LazyColumn(contentPadding = ambientVerticalInsets()) {
+            item {
+                ListItem(
+                    title = { Text(R.string.es_pref_backup) },
+                    subtitle = { Text(R.string.es_pref_backup_summary) },
+                    onClick = { dispatch(BackupData) }
+                )
+
+                ListItem(
+                    title = { Text(R.string.es_pref_restore) },
+                    subtitle = { Text(R.string.es_pref_restore_summary) },
+                    onClick = { dispatch(RestoreData) }
+                )
+            }
         }
     }
 }

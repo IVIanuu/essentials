@@ -25,6 +25,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.to
+import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 
 fun DeviceAdminPermission(
@@ -49,8 +50,9 @@ val Permission.Companion.DeviceAdminComponent by lazy {
 }
 
 @PermissionStateProviderBinding
+@Given
 class DeviceAdminPermissionStateProvider(
-    private val devicePolicyManager: DevicePolicyManager,
+    @Given private val devicePolicyManager: DevicePolicyManager,
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =

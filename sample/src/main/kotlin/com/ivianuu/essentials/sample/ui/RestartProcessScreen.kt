@@ -26,16 +26,20 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
-@HomeItemBinding("Restart process")
+@HomeItemBinding
+@Given
+val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
+
 class RestartProcessKey
 
 @KeyUiBinding<RestartProcessKey>
-@FunBinding
+@GivenFun
 @Composable
-fun RestartProcessScreen(restartProcess: restartProcess) {
+fun RestartProcessScreen(@Given restartProcess: restartProcess) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Restart process") }) }
     ) {

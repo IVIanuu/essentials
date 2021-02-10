@@ -19,30 +19,27 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.SetElements
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-@Effect
-annotation class AppWorkerBinding {
-    companion object {
-        @SetElements
-        fun <T : suspend () -> Unit> workerIntoSet(instance: @ForEffect T): AppWorkers = setOf(instance)
-    }
-}
+@Qualifier annotation class AppWorkerBinding
 
-typealias AppWorkers = Set<suspend () -> Unit>
+@Macro
+@GivenSetElement
+fun <T : @AppWorkerBinding suspend () -> Unit> appWorkerBindingImpl(@Given instance: T): AppWorker =
+    instance
 
-@SetElements
-fun defaultAppWorkers(): AppWorkers = emptySet()
+typealias AppWorker = suspend () -> Unit
 
-@FunBinding
+@GivenFun
 fun runAppWorkers(
-    logger: Logger,
-    globalScope: GlobalScope,
-    workers: AppWorkers
+    @Given logger: Logger,
+    @Given globalScope: GlobalScope,
+    @Given workers: Set<AppWorker>
 ) {
     logger.d { "run app workers" }
     workers

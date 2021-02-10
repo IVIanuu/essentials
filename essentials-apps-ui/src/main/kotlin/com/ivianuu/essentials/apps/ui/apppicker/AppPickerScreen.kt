@@ -34,15 +34,16 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @KeyUiBinding<AppPickerKey>
-@FunBinding
+@GivenFun
 @Composable
 fun AppPickerScreen(
-    state: @UiState AppPickerState,
-    dispatch: DispatchAction<AppPickerAction>,
+    @Given state: @UiState AppPickerState,
+    @Given dispatch: DispatchAction<AppPickerAction>,
 ) {
     Scaffold(
         topBar = {
@@ -72,7 +73,8 @@ private fun AppInfo(
         leading = {
             CoilImage(
                 data = AppIcon(packageName = app.packageName),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp),
+                contentDescription = null
             )
         },
         onClick = onClick

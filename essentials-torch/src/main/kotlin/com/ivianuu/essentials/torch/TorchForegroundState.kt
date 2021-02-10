@@ -29,16 +29,18 @@ import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @ForegroundStateBinding
+@Given
 fun torchForegroundState(
-    createTorchNotification: createTorchNotification,
-    state: Flow<TorchState>,
+    @Given createTorchNotification: createTorchNotification,
+    @Given state: Flow<TorchState>,
 ): Flow<ForegroundState> = state
     .map { it.torchEnabled }
     .distinctUntilChanged()
@@ -48,12 +50,12 @@ fun torchForegroundState(
     }
 
 @SuppressLint("NewApi")
-@FunBinding
+@GivenFun
 fun createTorchNotification(
-    applicationContext: ApplicationContext,
-    notificationManager: NotificationManager,
-    stringResource: stringResource,
-    systemBuildInfo: SystemBuildInfo,
+    @Given appContext: AppContext,
+    @Given notificationManager: NotificationManager,
+    @Given stringResource: stringResource,
+    @Given systemBuildInfo: SystemBuildInfo,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
@@ -65,7 +67,7 @@ fun createTorchNotification(
         )
     }
 
-    return NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+    return NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)
@@ -73,7 +75,7 @@ fun createTorchNotification(
             setContentText(stringResource(R.string.es_notif_text_torch))
             setContentIntent(
                 PendingIntent.getBroadcast(
-                    applicationContext,
+                    appContext,
                     1,
                     Intent(ACTION_DISABLE_TORCH),
                     PendingIntent.FLAG_UPDATE_CURRENT

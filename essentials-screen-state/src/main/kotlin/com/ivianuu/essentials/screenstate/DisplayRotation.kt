@@ -27,11 +27,11 @@ import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.Scoped
-import com.ivianuu.injekt.android.ApplicationContext
-import com.ivianuu.injekt.merge.ApplicationComponent
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,15 +58,15 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     LandscapeRight(false)
 }
 
-@Scoped(ApplicationComponent::class)
-@Binding
+@Scoped<AppComponent>
+@Given
 fun displayRotation(
-    configChanges: () -> ConfigChanges,
-    getCurrentDisplayRotation: getCurrentDisplayRotation,
-    globalScope: GlobalScope,
-    logger: Logger,
-    rotationChanges: () -> RotationChanges,
-    screenState: () -> Flow<ScreenState>,
+    @Given configChanges: () -> ConfigChanges,
+    @Given getCurrentDisplayRotation: getCurrentDisplayRotation,
+    @Given globalScope: GlobalScope,
+    @Given logger: Logger,
+    @Given rotationChanges: () -> RotationChanges,
+    @Given screenState: () -> Flow<ScreenState>,
 ): Flow<DisplayRotation> {
     return deferredFlow {
         screenState()
@@ -86,10 +86,10 @@ fun displayRotation(
     }.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 }
 
-@FunBinding
+@GivenFun
 suspend fun getCurrentDisplayRotation(
-    ioDispatcher: IODispatcher,
-    windowManager: WindowManager,
+    @Given ioDispatcher: IODispatcher,
+    @Given windowManager: WindowManager,
 ): DisplayRotation = withContext(ioDispatcher) {
     when (windowManager.defaultDisplay.rotation) {
         Surface.ROTATION_0 -> DisplayRotation.PortraitUp
@@ -101,13 +101,14 @@ suspend fun getCurrentDisplayRotation(
 }
 
 typealias RotationChanges = Flow<Unit>
-@Binding
+
+@Given
 fun rotationChanges(
-    applicationContext: ApplicationContext,
-    mainDispatcher: MainDispatcher,
+    @Given appContext: AppContext,
+    @Given mainDispatcher: MainDispatcher,
 ): RotationChanges = callbackFlow<Unit> {
     val listener = object :
-        OrientationEventListener(applicationContext, SensorManager.SENSOR_DELAY_NORMAL) {
+        OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
         override fun onOrientationChanged(orientation: Int) {
             offerSafe(Unit)
         }

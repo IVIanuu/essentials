@@ -36,6 +36,10 @@ android {
     }
 }
 
+injekt {
+    generateMergeComponents = true
+}
+
 dependencies {
     implementation(project(":essentials-android"))
     implementation(project(":essentials-android-core"))

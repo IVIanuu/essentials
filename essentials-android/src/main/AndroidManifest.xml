@@ -17,7 +17,7 @@
 <manifest package="com.ivianuu.essentials.android"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name="com.ivianuu.essentials.app.DefaultApp">
+    <application>
         <activity
             android:name="com.ivianuu.essentials.activity.DefaultActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"

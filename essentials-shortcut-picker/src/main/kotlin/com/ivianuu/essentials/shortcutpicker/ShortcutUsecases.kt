@@ -26,14 +26,14 @@ import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@FunBinding
+@GivenFun
 suspend fun getAllShortcuts(
-    ioDispatcher: IODispatcher,
-    packageManager: PackageManager,
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager,
 ): List<Shortcut> = withContext(ioDispatcher) {
     val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
     packageManager.queryIntentActivities(shortcutsIntent, 0)
@@ -56,11 +56,11 @@ suspend fun getAllShortcuts(
         .sortedBy { it.name }
 }
 
-@FunBinding
+@GivenFun
 suspend fun extractShortcut(
-    ioDispatcher: IODispatcher,
-    packageManager: PackageManager,
-    @FunApi shortcutRequestResult: Intent,
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager,
+    shortcutRequestResult: Intent,
 ): Shortcut = withContext(ioDispatcher) {
     val intent =
         shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!

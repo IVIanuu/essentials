@@ -19,7 +19,7 @@ package com.ivianuu.essentials.billing.debug
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -35,30 +35,31 @@ import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsBinding
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
-import com.ivianuu.injekt.FunBinding
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 data class DebugPurchaseKey(val params: BillingFlowParams)
 
-@DialogNavigationOptionsBinding<DebugPurchaseKey>
 @KeyUiBinding<DebugPurchaseKey>
-@FunBinding
+@GivenFun
 @Composable
 fun DebugPurchaseDialog(
-    defaultDispatcher: DefaultDispatcher,
-    key: DebugPurchaseKey,
-    popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
-    prefs: Flow<DebugBillingPrefs>,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given key: DebugPurchaseKey,
+    @Given popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
+    @Given prefs: Flow<DebugBillingPrefs>,
 ) {
     DialogWrapper {
         ResourceBox(
@@ -102,7 +103,7 @@ fun DebugPurchaseDialog(
                 content = { Text(skuDetails.description) },
                 positiveButton = {
                     Button(
-                        colors = ButtonConstants.defaultButtonColors(
+                        colors = ButtonDefaults.buttonColors(
                             backgroundColor = GooglePlayGreen,
                             contentColor = guessingContentColorFor(GooglePlayGreen),
                         ),
@@ -115,5 +116,10 @@ fun DebugPurchaseDialog(
         }
     }
 }
+
+@NavigationOptionFactoryBinding
+@Given
+val debugPurchaseDialogNavigationOptionsFactory
+    get() = DialogNavigationOptionsFactory<DebugPurchaseKey>()
 
 private val GooglePlayGreen = Color(0xFF00A273)

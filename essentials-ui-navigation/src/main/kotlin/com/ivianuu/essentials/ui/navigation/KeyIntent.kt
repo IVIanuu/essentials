@@ -17,41 +17,36 @@
 package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
-import com.ivianuu.injekt.Effect
-import com.ivianuu.injekt.ForEffect
-import com.ivianuu.injekt.FunApi
-import com.ivianuu.injekt.FunBinding
-import com.ivianuu.injekt.MapEntries
-import com.ivianuu.injekt.android.ApplicationContext
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-@Effect
-annotation class KeyIntentFactoryBinding {
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        @MapEntries
-        inline fun <T : KeyIntentFactory<K>, reified K : Key> bind(
-            noinline factoryProvider: () -> @ForEffect T,
-        ): KeyIntentFactories = mapOf(
-            K::class to factoryProvider as () -> KeyIntentFactory<Key>
-        )
-    }
-}
+@Qualifier annotation class KeyIntentFactoryBinding<K : Any>
+@Suppress("UNCHECKED_CAST")
+@Macro
+@GivenSetElement
+inline fun <
+        T : @KeyIntentFactoryBinding<K> (K) -> Intent,
+        reified K : Any> keyIntentFactoryBindingImpl(
+    @Given instance: T
+): KeyIntentFactoryElement = (K::class to instance) as KeyIntentFactoryElement
 
-typealias KeyIntentFactory<K> = (K) -> Intent
+typealias KeyIntentFactoryElement = Pair<KClass<*>, (Key) -> Intent>
 
-typealias KeyIntentFactories = Map<KClass<out Key>, () -> KeyIntentFactory<Key>>
-
-@FunBinding
+@GivenFun
 fun intentKeyHandler(
-    applicationContext: ApplicationContext,
-    intentFactories: KeyIntentFactories,
-    @FunApi key: Key,
+    key: Key,
+    @Given appContext: AppContext,
+    @Given intentFactories: Set<KeyIntentFactoryElement>
 ): Boolean {
-    val intentFactory = intentFactories[key::class]?.invoke()
+    val intentFactory = intentFactories.toMap()[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
-        applicationContext.startActivity(
+        appContext.startActivity(
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }

@@ -33,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
@@ -41,18 +40,19 @@ import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
 @ActionFactoryBinding
+@Given
 class ShortcutActionFactory(
-    private val
-    logger: Logger,
-    private val sendIntent: sendIntent,
+    @Given private val logger: Logger,
+    @Given private val sendIntent: sendIntent,
 ) : ActionFactory {
-    override suspend fun handles(key: String): Boolean = key.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(key: String): Action {
-        logger.d { "create action from $key" }
-        val tmp = key.split(DELIMITER)
+    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+    override suspend fun createAction(id: String): Action {
+        logger.d { "create action from $id" }
+        val tmp = id.split(DELIMITER)
         val label = tmp[1]
 
         @Suppress("DEPRECATION")
@@ -60,30 +60,31 @@ class ShortcutActionFactory(
         val iconBytes = Base64.decode(tmp[3], 0)
         val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
         return Action(
-            key = key,
+            id = id,
             title = label,
             unlockScreen = true,
             enabled = true,
-            icon = singleActionIcon { Icon(ImagePainter(icon)) }
+            icon = singleActionIcon { Icon(ImagePainter(icon), null) }
         )
     }
 
-    override suspend fun createExecutor(key: String): ActionExecutor {
-        val tmp = key.split(DELIMITER)
+    override suspend fun createExecutor(id: String): ActionExecutor {
+        val tmp = id.split(DELIMITER)
         val intent = Intent.getIntent(tmp[2])
         return { sendIntent(intent) }
     }
 }
 
 @ActionPickerDelegateBinding
+@Given
 class ShortcutActionPickerDelegate(
-    private val pickShortcut: pushKeyForResult<ShortcutPickerKey, Shortcut>,
-    private val stringResource: stringResource,
+    @Given private val pickShortcut: pushKeyForResult<ShortcutPickerKey, Shortcut>,
+    @Given private val stringResource: stringResource,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
-        Icon(R.drawable.es_ic_content_cut)
+        Icon(R.drawable.es_ic_content_cut, null)
     }
 
     override suspend fun getResult(): ActionPickerResult? {

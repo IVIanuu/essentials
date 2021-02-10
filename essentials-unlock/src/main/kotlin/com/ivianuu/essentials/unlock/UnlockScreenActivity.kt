@@ -28,10 +28,11 @@ import com.ivianuu.essentials.broadcast.broadcasts
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.merge.MergeInto
-import com.ivianuu.injekt.merge.mergeComponent
+import com.ivianuu.injekt.component.ComponentElementBinding
+import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -46,10 +47,6 @@ class UnlockScreenActivity : AppCompatActivity() {
     private var valid = true
     private lateinit var requestId: String
 
-    private val component by lazy {
-        activityComponent.mergeComponent<UnlockScreenActivityComponent>()
-    }
-
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +57,8 @@ class UnlockScreenActivity : AppCompatActivity() {
         }
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
+
+        val component = activityComponent.get<UnlockScreenComponent>()
 
         component.logger.d { "unlock screen for $requestId" }
 
@@ -127,10 +126,10 @@ class UnlockScreenActivity : AppCompatActivity() {
     }
 }
 
-@MergeInto(ActivityComponent::class)
-interface UnlockScreenActivityComponent {
-    val broadcasts: broadcasts
-    val keyguardManager: KeyguardManager
-    val logger: Logger
-    val systemBuildInfo: SystemBuildInfo
-}
+@ComponentElementBinding<ActivityComponent>
+@Given class UnlockScreenComponent(
+    @Given val broadcasts: broadcasts,
+    @Given val keyguardManager: KeyguardManager,
+    @Given val logger: Logger,
+    @Given val systemBuildInfo: SystemBuildInfo
+)
