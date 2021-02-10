@@ -21,7 +21,9 @@ import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.work.WorkerBinding
+import com.ivianuu.injekt.android.work.WorkerContext
 import java.util.UUID
 
 abstract class WorkerId(val value: String)
@@ -30,7 +32,7 @@ abstract class WorkerId(val value: String)
 @Given
 class FunctionalWorker(
     @Given workers: Set<WorkerElement>,
-    @Given context: Context,
+    @Given context: WorkerContext,
     @Given workerParams: WorkerParameters,
 ) : EsWorker(context, workerParams) {
     private val workers = workers
@@ -40,7 +42,6 @@ class FunctionalWorker(
     override suspend fun doWork(): Result {
         val id = tags.first { it.startsWith(WORKER_ID_TAG_PREFIX) }
             .removePrefix(WORKER_ID_TAG_PREFIX)
-        val worker = workers[id]?.invoke() ?: error("No worker found for $id")
         val scope = object : WorkScope {
             override val id: UUID
                 get() = this@FunctionalWorker.id
@@ -57,8 +58,8 @@ class FunctionalWorker(
                 this@FunctionalWorker.setProgress(data)
             }
         }
-
-        return worker(scope)
+        val worker = workers[id]?.invoke(scope) ?: error("No worker found for $id")
+        return worker()
     }
 }
 

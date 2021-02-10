@@ -31,7 +31,7 @@ import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
-typealias Worker = suspend WorkScope.() -> ListenableWorker.Result
+typealias Worker = suspend () -> ListenableWorker.Result
 
 interface WorkScope {
     val inputData: Data
@@ -42,21 +42,21 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-typealias WorkerElement = Pair<WorkerId, () -> Worker>
+typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker>
 
 @Qualifier annotation class WorkerBinding<S>
 
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-fun <P : @WorkerBinding<S> () -> suspend WorkScope.() -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
+fun <P : @WorkerBinding<S> suspend () -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
     @Given id: S,
-    @Given factory: P
-): WorkerElement = id to factory as () -> Worker
+    @Given factory: (@Given WorkScope) -> P
+): WorkerElement = id to factory
 
 fun OneTimeWorkRequestBuilder(id: WorkerId): OneTimeWorkRequest.Builder =
     OneTimeWorkRequestBuilder<FunctionalWorker>()
-        .addTag(WORKER_ID_TAG_PREFIX + id)
+        .addTag(WORKER_ID_TAG_PREFIX + id.value)
 
 fun PeriodicWorkRequestBuilder(
     id: WorkerId,
@@ -66,4 +66,4 @@ fun PeriodicWorkRequestBuilder(
     (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
         repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
     ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
-        .addTag(WORKER_ID_TAG_PREFIX + id)
+        .addTag(WORKER_ID_TAG_PREFIX + id.value)

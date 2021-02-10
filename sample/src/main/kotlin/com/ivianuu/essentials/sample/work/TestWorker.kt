@@ -28,10 +28,11 @@ import kotlinx.coroutines.delay
 
 object TestWorkerId : WorkerId("test")
 
-@WorkerBinding<TestWorkerId> @GivenFun
-suspend fun WorkScope.TestWorker(@Given logger: Logger): ListenableWorker.Result {
-    logger.d { "start work" }
+@WorkerBinding<TestWorkerId>
+@GivenFun
+suspend fun TestWorker(@Given scope: WorkScope, @Given logger: Logger): ListenableWorker.Result {
+    logger.d { "start work in scope: $scope" }
     delay(5000)
-    logger.d { "finish work" }
+    logger.d { "finish work in scope: $scope" }
     return ListenableWorker.Result.success()
 }
