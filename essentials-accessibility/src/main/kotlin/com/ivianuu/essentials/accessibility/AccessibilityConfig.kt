@@ -49,12 +49,13 @@ data class AccessibilityConfig(
 
 @Macro
 @GivenSetElement
-fun <T : @AccessibilityConfigBinding AccessibilityConfig> accessibilityConfigBindingImpl(
+fun <T : @AccessibilityConfigBinding Flow<AccessibilityConfig>> accessibilityConfigBindingImpl(
     @Given instance: () -> T
-): () -> AccessibilityConfig = instance
+): () -> Flow<AccessibilityConfig> = instance
 
 @AccessibilityWorkerBinding
-@GivenFun suspend fun applyAccessibilityConfig(
+@GivenFun
+suspend fun applyAccessibilityConfig(
     @Given configs: Set<() -> Flow<AccessibilityConfig>>,
     @Given serviceHolder: MutableAccessibilityServiceHolder,
 ) {

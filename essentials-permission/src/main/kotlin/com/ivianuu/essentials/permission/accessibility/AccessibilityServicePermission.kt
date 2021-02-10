@@ -58,9 +58,8 @@ class AccessibilityServicePermissionStateProvider(
     override suspend fun isGranted(permission: Permission): Boolean {
         return accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             .any {
-                val r = it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
+                it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
                     it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
-                r
             }
     }
 }
