@@ -33,7 +33,7 @@ data class ShareBackupFileKey(val backupFilePath: String)
 fun createShareBackupFileKeyIntent(
     @Given appContext: AppContext,
     @Given buildInfo: BuildInfo,
-    @Given key: ShareBackupFileKey,
+    key: ShareBackupFileKey,
 ): Intent {
     val uri = FileProvider.getUriForFile(
         appContext,

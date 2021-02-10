@@ -26,11 +26,11 @@ import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
 @Qualifier annotation class KeyIntentFactoryBinding<K : Any>
+
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-inline fun <
-        T : @KeyIntentFactoryBinding<K> (K) -> Intent,
+inline fun <T : @KeyIntentFactoryBinding<K> (K) -> Intent,
         reified K : Any> keyIntentFactoryBindingImpl(
     @Given instance: T
 ): KeyIntentFactoryElement = (K::class to instance) as KeyIntentFactoryElement

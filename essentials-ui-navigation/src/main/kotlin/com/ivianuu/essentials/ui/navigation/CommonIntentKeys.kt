@@ -39,8 +39,8 @@ data class AppKey(val packageName: String)
 @KeyIntentFactoryBinding<AppKey>
 @GivenFun
 fun createAppKeyIntent(
-    @Given packageManager: PackageManager,
     key: AppKey,
+    @Given packageManager: PackageManager
 ): Intent = packageManager.getLaunchIntentForPackage(key.packageName)!!
 
 data class ShareKey(val text: String)
