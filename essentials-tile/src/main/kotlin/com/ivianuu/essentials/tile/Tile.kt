@@ -55,5 +55,5 @@ sealed class TileAction {
 @Macro
 @Given
 fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForKey S : AbstractFunTileService> intoTileMap(
-    @Given provider: (CoroutineScope, Actions<TileAction>) -> T,
+    @Given provider: (@Given CoroutineScope, @Given Actions<TileAction>) -> T,
 ): TileStateElement = keyOf<S>() to provider
